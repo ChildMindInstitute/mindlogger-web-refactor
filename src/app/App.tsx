@@ -1,9 +1,12 @@
 import { useState } from "react"
 import reactLogo from "../assets/react.svg"
 import "./App.css"
+import i18nManager from "./i18n"
 import Layout from "./providers/layout"
 import ReactQuery from "./providers/react-query"
 import Redux from "./providers/state"
+
+i18nManager.initialize()
 
 function App() {
   const [count, setCount] = useState(0)
