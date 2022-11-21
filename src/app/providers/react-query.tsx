@@ -1,4 +1,4 @@
-import React, { Suspense } from "react"
+import React from "react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 export const queryClient = new QueryClient({
@@ -14,11 +14,7 @@ interface ReactQueryProps {
 }
 
 const ReactQuery = (props: ReactQueryProps) => {
-  return (
-    <Suspense>
-      <QueryClientProvider client={queryClient}>{props.children}</QueryClientProvider>
-    </Suspense>
-  )
+  return <QueryClientProvider client={queryClient}>{props.children}</QueryClientProvider>
 }
 
 export default ReactQuery
