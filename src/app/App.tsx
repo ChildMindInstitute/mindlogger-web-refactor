@@ -1,6 +1,8 @@
 import { useState } from "react"
 import reactLogo from "../assets/react.svg"
+import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
+import "./bootstrap-override.scss"
 import i18nManager from "./i18n"
 import Layout from "./providers/layout"
 import ReactQuery from "./providers/react-query"
