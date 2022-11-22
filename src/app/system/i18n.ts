@@ -2,8 +2,8 @@ import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
 
-import enResources from "../i18n/en/translation.json"
-import frResources from "../i18n/fr/translation.json"
+import enResources from "../../i18n/en/translation.json"
+import frResources from "../../i18n/fr/translation.json"
 
 const i18nManager = {
   initialize() {
