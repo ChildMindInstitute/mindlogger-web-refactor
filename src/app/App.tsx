@@ -3,8 +3,7 @@ import { Suspense, useState } from "react"
 import reactLogo from "../assets/react.svg"
 
 import "./App.css"
-
-import i18nManager from "./i18n"
+import i18nManager from "./system/i18n"
 import Layout from "./layout"
 import { ReactQuery, Redux } from "./providers"
 
