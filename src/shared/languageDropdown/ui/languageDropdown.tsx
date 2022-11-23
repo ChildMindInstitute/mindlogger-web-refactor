@@ -5,7 +5,11 @@ import { SupportableLanguage } from "../../../app/system/locale/constants"
 
 import { languageList } from "../constants/language-list"
 
-const LanguageDropdown = (): JSX.Element | null => {
+interface LanguageDropdownProps {
+  closeExpandedNavbar: () => void
+}
+
+const LanguageDropdown = ({ closeExpandedNavbar }: LanguageDropdownProps): JSX.Element | null => {
   const { t, i18n } = useTranslation("translation", { keyPrefix: "Navbar" })
   const [language, setLanguage] = useState(i18n.language || SupportableLanguage.English)
 
@@ -16,6 +20,7 @@ const LanguageDropdown = (): JSX.Element | null => {
 
     setLanguage(lang)
     i18n.changeLanguage(lang)
+    closeExpandedNavbar()
   }
 
   return (

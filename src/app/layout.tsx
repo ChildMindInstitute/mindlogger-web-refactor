@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
 import { useLocation } from "react-router-dom"
 
-import Header from "../shared/header"
+import Header from "../widgets/header"
 
 interface LayoutProps {
   children: ReactNode
