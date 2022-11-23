@@ -1,20 +1,20 @@
 import { ReactNode } from "react"
-import { useTranslation } from "react-i18next"
-import Header from "../../shared/header"
+import { useLocation } from "react-router-dom"
+
+import Header from "../shared/header"
 
 interface LayoutProps {
   children: ReactNode
 }
 
 const Layout = (props: LayoutProps): null | JSX.Element => {
-  const { t } = useTranslation()
+  const location = useLocation() // TODO: remove it - just for initial steps of development
 
   return (
     <>
       <Header />
-      <div>Translations: {t("Landing.title")}</div>
       <div>{props.children}</div>
-      <div>Some footer</div>
+      <div>Some footer: location - {location.pathname}</div>
     </>
   )
 }
