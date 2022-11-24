@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 import { ROUTES } from "../../../app/system/routes/constants"
-import { useCustomTranslation } from "../../../utils/hooks/useCustomTranslation"
+import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 
 import NavbarButton from "../../../shared/NavbarButton"
 
@@ -10,7 +10,7 @@ export interface LoginButtonProps {
 }
 
 const LoginButton = ({ onClickExtended }: LoginButtonProps) => {
-  const { t } = useCustomTranslation({ keyPrefix: "Navbar" })
+  const { t } = useNavbarTranslation()
   const navigate = useNavigate()
 
   const onLoginButtonClickHandler = () => {

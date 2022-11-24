@@ -6,13 +6,13 @@ import { Navbar, Nav, Col, Row } from "react-bootstrap"
 import "./header.scss"
 
 import { ROUTES } from "../../../app/system/routes/constants"
-import { useCustomTranslation } from "../../../utils/hooks/useCustomTranslation"
+import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 
 import LanguageDropdown from "../../../features/language"
 import LoginButton from "./LoginButton"
 
 const Header = (): JSX.Element | null => {
-  const { t } = useCustomTranslation({ keyPrefix: "Navbar" })
+  const { t } = useNavbarTranslation()
   const navigate = useNavigate()
 
   const [expanded, setExpanded] = useState<boolean>(false)

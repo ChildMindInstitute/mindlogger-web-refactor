@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react"
 
 import { SupportableLanguage } from "../../../app/system/locale/constants"
-import { languageList } from "../lib/language-list"
-import { useCustomTranslation } from "../../../utils/hooks/useCustomTranslation"
+import { useLanguageList } from "../lib/useLanguageList"
+import { useLanguageTranslation } from "../lib/useLanguageTranslation"
 
 import BaseDropdown, { DropdownOptionList } from "../../../shared/Dropdown"
 
@@ -11,8 +11,9 @@ export interface LanguageDropdownProps {
 }
 
 const LanguageDropdown = ({ onSelectExtended }: LanguageDropdownProps) => {
-  const { t, i18n } = useCustomTranslation({ keyPrefix: "Navbar" })
+  const { t, i18n } = useLanguageTranslation()
   const [language, setLanguage] = useState(i18n.language || SupportableLanguage.English)
+  const { preparedLanguageList } = useLanguageList()
 
   const onSelectHandler = (lang: string | null) => {
     if (!lang) {
@@ -28,8 +29,8 @@ const LanguageDropdown = ({ onSelectExtended }: LanguageDropdownProps) => {
   }
 
   const preparedLanguageOptions: DropdownOptionList = useMemo(() => {
-    return languageList.map(lang => ({ value: t(lang.localizeTitlePath), eventKey: lang.eventKey }))
-  }, [t])
+    return preparedLanguageList.map(lang => ({ value: t(lang.localizationPath), eventKey: lang.eventKey }))
+  }, [t, preparedLanguageList])
 
   return (
     <BaseDropdown
