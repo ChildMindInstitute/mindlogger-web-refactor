@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { Navbar, Nav, Col, Row } from "react-bootstrap"
@@ -7,12 +6,13 @@ import { Navbar, Nav, Col, Row } from "react-bootstrap"
 import "./header.scss"
 
 import { ROUTES } from "../../../app/system/routes/constants"
+import { useCustomTranslation } from "../../../utils/hooks/useCustomTranslation"
 
-import LoginButton from "../../../shared/login-button"
 import LanguageDropdown from "../../../features/language"
+import LoginButton from "./LoginButton"
 
 const Header = (): JSX.Element | null => {
-  const { t } = useTranslation("translation", { keyPrefix: "Navbar" })
+  const { t } = useCustomTranslation({ keyPrefix: "Navbar" })
   const navigate = useNavigate()
 
   const [expanded, setExpanded] = useState<boolean>(false)
@@ -44,7 +44,7 @@ const Header = (): JSX.Element | null => {
               <LanguageDropdown onSelectExtended={closeExpandedNavbar} />
             </Col>
             <Col xs={12} md={6} className="container justify-content-center">
-              <LoginButton />
+              <LoginButton onClickExtended={closeExpandedNavbar} />
             </Col>
           </Row>
         </Nav>

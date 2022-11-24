@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react"
 
 import { SupportableLanguage } from "../../../app/system/locale/constants"
+import { languageList } from "../lib/language-list"
+import { useCustomTranslation } from "../../../utils/hooks/useCustomTranslation"
 
 import BaseDropdown, { DropdownOptionList } from "../../../shared/Dropdown"
-import { useCustomTranslation } from "../../../utils/hooks/useCustomTranslation"
-import { languageList } from "../lib/language-list"
 
 export interface LanguageDropdownProps {
-  onSelectExtended: () => void
+  onSelectExtended?: () => void
 }
 
 const LanguageDropdown = ({ onSelectExtended }: LanguageDropdownProps) => {
@@ -21,7 +21,10 @@ const LanguageDropdown = ({ onSelectExtended }: LanguageDropdownProps) => {
 
     setLanguage(lang)
     i18n.changeLanguage(lang)
-    onSelectExtended()
+
+    if (onSelectExtended) {
+      onSelectExtended()
+    }
   }
 
   const preparedLanguageOptions: DropdownOptionList = useMemo(() => {
