@@ -1,17 +1,15 @@
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
-import Navbar from "react-bootstrap/Navbar"
-import Nav from "react-bootstrap/Nav"
-import Col from "react-bootstrap/Col"
-import Row from "react-bootstrap/Row"
-
-import LanguageDropdown from "../../../shared/languageDropdown"
+import { Navbar, Nav, Col, Row } from "react-bootstrap"
 
 import "./header.scss"
-import LoginButton from "../../../shared/loginButton"
+
 import { ROUTES } from "../../../app/system/routes/constants"
-import { useState } from "react"
+
+import LoginButton from "../../../shared/login-button"
+import LanguageDropdown from "../../../features/language"
 
 const Header = (): JSX.Element | null => {
   const { t } = useTranslation("translation", { keyPrefix: "Navbar" })
@@ -43,10 +41,10 @@ const Header = (): JSX.Element | null => {
         <Nav className="ms-auto">
           <Row>
             <Col xs={12} md={6} className="container justify-content-center">
-              <LanguageDropdown closeExpandedNavbar={closeExpandedNavbar} />
+              <LanguageDropdown onSelectExtended={closeExpandedNavbar} />
             </Col>
             <Col xs={12} md={6} className="container justify-content-center">
-              <LoginButton closeExpandedNavbar={closeExpandedNavbar} />
+              <LoginButton />
             </Col>
           </Row>
         </Nav>
