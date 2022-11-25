@@ -1,0 +1,44 @@
+// Override / set color variables
+$dark-blue: #005fa3;
+$dark-dark-blue: darken($dark-blue, 25);
+
+$light-blue: #00c8dd;
+$dark-light-blue: darken($light-blue, 25);
+
+$red: #ff0045;
+$dark-red: darken($red, 25);
+
+$yellow: #f8cc00;
+$orange: #f8ac00;
+$purple: #25286e;
+
+$green: #00bb85;
+$dark-green: darken($green, 25);
+
+// Set brand colors
+$brand-primary: $dark-blue;
+$brand-success: $green;
+$brand-info: $light-blue;
+$brand-warning: $orange;
+$brand-danger: $red;
+
+$theme-colors: (
+  "primary": $dark-blue,
+  "danger": $red,
+  "warning": $orange,
+  "info": $light-blue,
+  "success": $green,
+);
+
+// Set global options
+$enable-shadows: false;
+$enable-gradients: false;
+
+$navbar-brand-padding-y: 15px;
+
+.drop-down {
+  width: 100%;
+}
+
+/* import bootstrap to set changes */
+@import "node_modules/bootstrap/scss/bootstrap";

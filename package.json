@@ -8,20 +8,23 @@
     "build": "tsc && vite build",
     "preview": "npx vite preview",
     "lint:check": "npx eslint src",
-    "lint:fix": "npx run lint -- --fix",
+    "lint:fix": "npx eslint src --fix",
     "prettier:check": "npx prettier src --check",
-    "prettier:fix": "npx run prettier -- --write",
+    "prettier:fix": "npx  prettier src --write",
     "prepare": "husky install"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.0",
     "@tanstack/react-query": "^4.16.1",
+    "bootstrap": "5.2.2",
     "i18next": "^22.0.6",
     "i18next-browser-languagedetector": "^7.0.1",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.6.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.0.0",
     "react-redux": "^8.0.5",
+    "react-router-dom": "^6.4.3",
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
@@ -38,6 +41,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.2",
     "prettier": "^2.7.1",
+    "sass": "^1.56.1",
     "typescript": "^4.6.4",
     "vite": "^3.2.3",
     "vite-plugin-eslint": "^1.8.1"
