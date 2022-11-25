@@ -11,7 +11,9 @@ const Layout = (props: LayoutProps): null | JSX.Element => {
   return (
     <>
       <Header />
-      <div className="content-container">{props.children}</div>
+      <div className="content-container">
+        <div className="content">{props.children}</div>
+      </div>
       <Footer />
     </>
   )
