@@ -1,5 +1,5 @@
-import { SupportableLanguage } from "../../../app/system/locale/constants"
-import { enumToArray } from "../../../utils/enumToArray"
+import { SupportableLanguage } from "~/app/system/locale/constants"
+import { enumToArray } from "~/utils/enumToArray"
 
 export interface ILanguageListItem {
   localizationPath: string

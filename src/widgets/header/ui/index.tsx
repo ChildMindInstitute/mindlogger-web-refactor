@@ -5,10 +5,10 @@ import { Navbar, Nav, Col, Row } from "react-bootstrap"
 
 import "./header.scss"
 
-import { ROUTES } from "../../../app/system/routes/constants"
+import { ROUTES } from "~/app/system/routes/constants"
+import LanguageDropdown from "~/features/language"
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 
-import LanguageDropdown from "../../../features/language"
 import LoginButton from "./LoginButton"
 
 const Header = (): JSX.Element | null => {

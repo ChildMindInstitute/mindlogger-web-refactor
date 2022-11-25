@@ -1,6 +1,6 @@
 import { t } from "i18next"
 
-import { useCustomTranslation } from "./../../../utils/hooks/useCustomTranslation"
+import { useCustomTranslation } from "~/utils/hooks/useCustomTranslation"
 
 export interface UseNavbarTranslationOutput {
   t: typeof t
