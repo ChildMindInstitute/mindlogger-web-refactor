@@ -5,6 +5,8 @@ import Layout from "./Layout"
 import { ReactQuery, Redux, RouteProvider } from "./providers"
 import ApplicationRouter from "./routes"
 
+import "./index.css"
+
 i18nManager.initialize()
 
 function App() {
