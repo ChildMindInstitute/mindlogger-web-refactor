@@ -13,9 +13,9 @@ export interface LanguageDropdownProps {
 const LanguageDropdown = ({ onSelectExtended }: LanguageDropdownProps) => {
   const { t, i18n } = useLanguageTranslation()
   const [language, setLanguage] = useState(i18n.language || SupportableLanguage.English)
-  const { preparedLanguageList } = useLanguageList()
+  const preparedLanguageList = useLanguageList()
 
-  const onSelectHandler = (lang: string | null) => {
+  const onSelect = (lang: string | null) => {
     if (!lang) {
       return
     }
@@ -29,14 +29,14 @@ const LanguageDropdown = ({ onSelectExtended }: LanguageDropdownProps) => {
   }
 
   const preparedLanguageOptions: DropdownOptionList = useMemo(() => {
-    return preparedLanguageList.map(lang => ({ value: t(lang.localizationPath), eventKey: lang.eventKey }))
+    return preparedLanguageList.map(lang => ({ value: t(lang.localizationPath), key: lang.eventKey }))
   }, [t, preparedLanguageList])
 
   return (
     <BaseDropdown
       title={language === SupportableLanguage.English ? t("english") : t("french")}
       options={preparedLanguageOptions}
-      onSelect={onSelectHandler}
+      onSelect={onSelect}
     />
   )
 }

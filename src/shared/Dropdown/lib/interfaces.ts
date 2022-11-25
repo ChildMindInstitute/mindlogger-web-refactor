@@ -1,5 +1,5 @@
 export interface DropdownOption {
-  eventKey: string
+  key: string
   value: string
 }
 

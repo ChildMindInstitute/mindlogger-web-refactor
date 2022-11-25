@@ -12,7 +12,7 @@ const BaseDropdown = ({ title, onSelect, options }: BaseDropdownProps) => {
   return (
     <DropdownButton align="end" title={title} onSelect={onSelect} className="text-center">
       {options?.map(option => (
-        <Dropdown.Item key={option.eventKey} eventKey={option.eventKey}>
+        <Dropdown.Item key={option.key} eventKey={option.key}>
           {option.value}
         </Dropdown.Item>
       ))}

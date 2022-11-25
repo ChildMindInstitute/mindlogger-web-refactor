@@ -8,17 +8,11 @@ export interface ILanguageListItem {
 
 export type LanguageList = ILanguageListItem[]
 
-export interface UseLanguageListOutput {
-  preparedLanguageList: LanguageList
-}
-
-export const useLanguageList = (): UseLanguageListOutput => {
+export const useLanguageList = (): LanguageList => {
   const preparedLanguageList = enumToArray(SupportableLanguage).map(lang => ({
     localizationPath: lang.key.toLocaleLowerCase(), // Enum keys should be equal list of keys in localizations file, because enum key = localization path
     eventKey: lang.value,
   }))
 
-  return {
-    preparedLanguageList,
-  }
+  return preparedLanguageList
 }

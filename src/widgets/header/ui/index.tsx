@@ -21,18 +21,18 @@ const Header = (): JSX.Element | null => {
     setExpanded(false)
   }
 
-  const onLogoClickHandler = () => {
+  const onLogoClick = () => {
     navigate(ROUTES.main.path)
     closeExpandedNavbar()
   }
 
-  const onNavbarToggleHandler = () => {
+  const onNavbarToggle = () => {
     setExpanded(prevValue => !prevValue)
   }
 
   return (
-    <Navbar expand="md" variant="dark" className="header" expanded={expanded} onToggle={onNavbarToggleHandler}>
-      <Navbar.Brand role="button" onClick={onLogoClickHandler}>
+    <Navbar expand="md" variant="dark" className="header" expanded={expanded} onToggle={onNavbarToggle}>
+      <Navbar.Brand role="button" onClick={onLogoClick}>
         {t("mindLogger")}
       </Navbar.Brand>
 
