@@ -1,24 +1,21 @@
+import classnames from "classnames"
+
 import { LOGO_URL } from "../lib/constants"
+import { Dimension } from "../../../utils/types/dimension"
 
 export interface LogoProps {
-  widthPx?: number
-  heightPx?: number
-  classNameExtended?: string
+  size?: Dimension
+  className?: string
 }
 
-const Logo = ({ widthPx, heightPx, classNameExtended }: LogoProps) => {
-  const defaultSize = {
-    height: 50,
-    width: 120,
-  }
-
+const Logo = ({ size = { height: 50, width: 120 }, className }: LogoProps) => {
   const defaultClassName = "mr-1 p-1"
 
   return (
     <img
-      height={heightPx || defaultSize.height}
-      width={widthPx || defaultSize.width}
-      className={classNameExtended ? `${defaultClassName} ${classNameExtended}` : defaultClassName}
+      height={size?.height}
+      width={size?.width}
+      className={classnames(defaultClassName, className)}
       src={LOGO_URL}
       loading="lazy"
     />
