@@ -1,13 +1,8 @@
-import { t } from "i18next"
-
 import { useCustomTranslation } from "~/utils/hooks/useCustomTranslation"
+import { UseTranslationOutput } from "../../../utils/types/useTranslationOutput"
 
-export interface UseNavbarTranslationOutput {
-  t: typeof t
-}
+export const useNavbarTranslation = (): UseTranslationOutput => {
+  const { t, i18n } = useCustomTranslation({ keyPrefix: "Navbar" })
 
-export const useNavbarTranslation = () => {
-  const { t } = useCustomTranslation({ keyPrefix: "Navbar" })
-
-  return { t }
+  return { t, i18n }
 }
