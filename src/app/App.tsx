@@ -1,9 +1,11 @@
 import { Suspense } from "react"
 
 import i18nManager from "./system/locale/i18n"
-import Layout from "./Layout"
+
 import { ReactQuery, Redux, RouteProvider } from "./providers"
+
 import ApplicationRouter from "./routes"
+import Layout from "./Layout"
 
 import "./index.css"
 
