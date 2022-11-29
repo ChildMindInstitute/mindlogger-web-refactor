@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
 import { useLocation } from "react-router-dom"
 
-import Header from "../widgets/Header"
+import { Footer, Header } from "../widgets"
 
 interface LayoutProps {
   children: ReactNode
@@ -15,6 +15,7 @@ const Layout = (props: LayoutProps): null | JSX.Element => {
       <Header />
       <div>{props.children}</div>
       <div>Some footer: location - {location.pathname}</div>
+      <Footer />
     </>
   )
 }
