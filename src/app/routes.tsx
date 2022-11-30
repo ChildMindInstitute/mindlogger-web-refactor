@@ -8,6 +8,7 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.main.path} />
       <Route path={ROUTES.login.path} element={<LoginPage />} />
       <Route path={ROUTES.signup.path} />
+      <Route path={ROUTES.forgotPassword.path} />
     </Routes>
   )
 }

@@ -10,4 +10,7 @@ export const ROUTES = {
   signup: {
     path: "signup",
   },
+  forgotPassword: {
+    path: "forgotpassword",
+  },
 }
