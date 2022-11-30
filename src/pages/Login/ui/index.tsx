@@ -41,13 +41,21 @@ const LoginPage = () => {
             <Controller
               name="email"
               control={control}
-              render={({ field }) => <Input {...field} type="text" placeholder={t("email") || ""} className="mb-3" />}
+              render={({ field }) => (
+                <Input {...field} type="text" placeholder={t("email") || ""} className="mb-3" autoComplete="username" />
+              )}
             />
             <Controller
               name="password"
               control={control}
               render={({ field }) => (
-                <Input {...field} type="password" placeholder={t("password") || ""} className="mb-3" />
+                <Input
+                  {...field}
+                  type="password"
+                  placeholder={t("password") || ""}
+                  className="mb-3"
+                  autoComplete="current-password"
+                />
               )}
             />
 
@@ -57,10 +65,16 @@ const LoginPage = () => {
           </BasicForm>
 
           <p className="mt-3">
-            {t("accountMessage")} <Link to={ROUTES.signup.path}>{t("create")}</Link>
+            {t("accountMessage")}{" "}
+            <Link to={ROUTES.signup.path} relative="path">
+              {t("create")}
+            </Link>
           </p>
           <p className="mt-3">
-            {t("forgotPassword")} <Link to={ROUTES.forgotPassword.path}>{t("reset")}</Link>
+            {t("forgotPassword")}{" "}
+            <Link to={ROUTES.forgotPassword.path} relative="path">
+              {t("reset")}
+            </Link>
           </p>
         </Container>
       </div>
