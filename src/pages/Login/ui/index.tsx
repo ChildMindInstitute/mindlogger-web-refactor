@@ -6,9 +6,7 @@ import AppStore from "~/assets/Appstore.svg"
 import GooglePlay from "~/assets/GooglePlay.svg"
 
 import { ROUTES } from "~/app/system/routes/constants"
-import BasicForm from "~/shared/ui/Form"
-import Input from "~/shared/ui/Input"
-import BasicButton from "~/shared/ui/Button"
+import { Input, BasicButton, BasicForm } from "~/shared/ui/"
 
 import { useCustomForm } from "~/utils/hooks/useCustomForm"
 import { isObjectEmpty } from "~/utils/object"

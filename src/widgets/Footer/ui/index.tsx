@@ -1,4 +1,4 @@
-import Logo from "~/shared/ui/Logo"
+import { Logo } from "~/shared/ui/"
 
 const Footer = () => {
   return (
