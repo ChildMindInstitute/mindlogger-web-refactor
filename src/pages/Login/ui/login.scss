@@ -1,3 +1,5 @@
+@use "../../../app/bootstrap-override.scss" as variables;
+
 .demo {
   display: flex;
   align-items: center;
@@ -10,9 +12,26 @@
 }
 
 #loginForm {
-  width: 400px;
+  max-width: 400px;
   padding: 10px;
   margin-top: 20px;
   background-color: white;
   box-shadow: 0 0 7px 0 #80808036;
+}
+
+.welcomeTitlesContainer {
+  width: 400px;
+}
+
+.title-label {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 32px;
+  color: variables.$dark-blue;
+  margin: 0;
+}
+
+.btn-outline-primary:hover {
+  background-color: rgba(0, 103, 160, 0.08) !important;
 }

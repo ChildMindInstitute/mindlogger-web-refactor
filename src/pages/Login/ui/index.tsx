@@ -1,6 +1,11 @@
 import { Alert, Container } from "react-bootstrap"
 import { Controller } from "react-hook-form"
+import { Link } from "react-router-dom"
 
+import AppStore from "~/assets/Appstore.svg"
+import GooglePlay from "~/assets/GooglePlay.svg"
+
+import { ROUTES } from "~/app/system/routes/constants"
 import BasicForm from "~/shared/Form"
 import Input from "~/shared/Input"
 import BasicButton from "~/shared/Button"
@@ -9,11 +14,10 @@ import { useCustomForm } from "~/utils/hooks/useCustomForm"
 import { isObjectEmpty } from "~/utils/object"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
+import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "../lib/constants"
 import { LoginSchema, TLoginForm } from "../model"
 
 import "./login.scss"
-import { Link } from "react-router-dom"
-import { ROUTES } from "../../../app/system/routes/constants"
 
 const LoginPage = () => {
   const { t } = useLoginTranslation()
@@ -28,9 +32,12 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="demo mp-3 align-self-center w-100">
+    <div className="demo mp-3 align-self-start w-100">
       <div id="login" className="text-center my-2 px-3">
-        <h1>{t("title")}</h1>
+        <Container>
+          <h1 className="title-label">{t("welcomeMessage")}</h1>
+          <h1 className="title-label">{t("appType")}</h1>
+        </Container>
 
         <Container id="loginForm">
           <BasicForm onSubmit={handleSubmit(onLoginSubmit)}>
@@ -59,23 +66,40 @@ const LoginPage = () => {
               )}
             />
 
-            <BasicButton type="submit" variant="primary">
-              {t("title")}
-            </BasicButton>
+            <Container className="d-flex justify-content-start p-0 mb-3">
+              <BasicButton type="submit" variant="link" className="p-0">
+                <Link to={ROUTES.forgotPassword.path} relative="path">
+                  {t("forgotPassword")}
+                </Link>
+              </BasicButton>
+            </Container>
+
+            <Container>
+              <BasicButton type="submit" variant="primary">
+                {t("button")}
+              </BasicButton>
+            </Container>
           </BasicForm>
 
-          <p className="mt-3">
-            {t("accountMessage")}{" "}
+          <BasicButton type="button" variant="outline-primary" className="mb-3">
             <Link to={ROUTES.signup.path} relative="path">
               {t("create")}
             </Link>
-          </p>
-          <p className="mt-3">
-            {t("forgotPassword")}{" "}
-            <Link to={ROUTES.forgotPassword.path} relative="path">
-              {t("reset")}
-            </Link>
-          </p>
+          </BasicButton>
+        </Container>
+
+        <Container>
+          <Container className="mt-3 mb-2">
+            <p>{t("downloadMobile")}</p>
+          </Container>
+          <Container className="d-flex gap-3 justify-content-center">
+            <a href={APPSTORE_LINK} target="_blank" rel="noreferrer">
+              <img src={AppStore} alt="" />
+            </a>
+            <a href={GOOGLEPLAY_LINK} target="_blank" rel="noreferrer">
+              <img src={GooglePlay} alt="" />
+            </a>
+          </Container>
         </Container>
       </div>
     </div>
