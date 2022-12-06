@@ -1,15 +1,17 @@
-import { Container, Form } from "react-bootstrap"
+import { Container } from "react-bootstrap"
+import { FieldValues, FormProvider, FormProviderProps } from "react-hook-form"
 
-export type BasicFormProps = React.FormHTMLAttributes<HTMLFormElement>
-
-const BasicForm = ({ children, ...rest }: BasicFormProps) => {
+const BasicFormProvider = <TFieldValues extends FieldValues>({
+  children,
+  ...rest
+}: FormProviderProps<TFieldValues>) => {
   return (
-    <Form {...rest}>
+    <FormProvider {...rest}>
       <Container fluid className="my-3">
         {children}
       </Container>
-    </Form>
+    </FormProvider>
   )
 }
 
-export default BasicForm
+export default BasicFormProvider
