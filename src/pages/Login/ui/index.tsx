@@ -1,12 +1,11 @@
 import { Alert, Container } from "react-bootstrap"
-import { Controller } from "react-hook-form"
 import { Link } from "react-router-dom"
 
 import AppStore from "~/assets/Appstore.svg"
 import GooglePlay from "~/assets/GooglePlay.svg"
 
 import { ROUTES } from "~/app/system/routes/constants"
-import { Input, BasicButton, BasicForm } from "~/shared/ui/"
+import { Input, BasicButton, BasicFormProvider } from "~/shared/ui/"
 
 import { useCustomForm } from "~/utils/hooks/useCustomForm"
 import { isObjectEmpty } from "~/utils/object"
@@ -19,11 +18,11 @@ import "./login.scss"
 
 const LoginPage = () => {
   const { t } = useLoginTranslation()
+  const form = useCustomForm({ defaultValues: { email: "", password: "" } }, { schema: LoginSchema })
   const {
     handleSubmit,
-    control,
     formState: { errors },
-  } = useCustomForm({ defaultValues: { email: "", password: "" } }, { schema: LoginSchema })
+  } = form
 
   const onLoginSubmit = (data: TLoginForm) => {
     console.log(data) // TODO: Remove console.log and implement real logic
@@ -38,31 +37,13 @@ const LoginPage = () => {
         </Container>
 
         <Container className="loginForm">
-          <BasicForm onSubmit={handleSubmit(onLoginSubmit)}>
+          <BasicFormProvider {...form}>
             {!isObjectEmpty(errors) && (
               <Alert variant="danger">{errors?.email?.message || errors?.password?.message}</Alert>
             )}
 
-            <Controller
-              name="email"
-              control={control}
-              render={({ field }) => (
-                <Input {...field} type="text" placeholder={t("email") || ""} className="mb-3" autoComplete="username" />
-              )}
-            />
-            <Controller
-              name="password"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="password"
-                  placeholder={t("password") || ""}
-                  className="mb-3"
-                  autoComplete="current-password"
-                />
-              )}
-            />
+            <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
+            <Input type="password" name="password" placeholder={t("password") || ""} autoComplete="current-password" />
 
             <Container className="d-flex justify-content-start p-0 mb-3">
               <BasicButton type="submit" variant="link" className="p-0">
@@ -73,11 +54,11 @@ const LoginPage = () => {
             </Container>
 
             <Container>
-              <BasicButton type="submit" variant="primary">
+              <BasicButton type="button" variant="primary" onClick={handleSubmit(onLoginSubmit)}>
                 {t("button")}
               </BasicButton>
             </Container>
-          </BasicForm>
+          </BasicFormProvider>
 
           <BasicButton type="button" variant="outline-primary" className="mb-3">
             <Link to={ROUTES.signup.path} relative="path">
