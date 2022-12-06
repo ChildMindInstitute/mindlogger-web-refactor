@@ -1,7 +1,8 @@
-import { string } from "yup"
-
+import * as z from "zod"
 import { UserSchema } from "~/entities/"
 
-export const LoginSchema = UserSchema.pick(["email"]).shape({
-  password: string().required("Please Enter your password"),
-})
+export const LoginSchema = UserSchema.pick({ email: true })
+  .extend({
+    password: z.string().min(1, "Password required"),
+  })
+  .required()

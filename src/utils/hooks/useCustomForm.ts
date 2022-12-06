@@ -1,9 +1,9 @@
 import { FieldValues, useForm, UseFormProps, UseFormReturn } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import type { AnyObjectSchema } from "yup"
+import { zodResolver } from "@hookform/resolvers/zod"
+import type { ZodSchema } from "zod"
 
 interface HookProps {
-  schema: AnyObjectSchema
+  schema: ZodSchema
 }
 
 export const useCustomForm = <TFieldValues extends FieldValues, TContext = any>(
@@ -12,6 +12,6 @@ export const useCustomForm = <TFieldValues extends FieldValues, TContext = any>(
 ): UseFormReturn<TFieldValues, TContext> => {
   return useForm({
     ...props,
-    resolver: yupResolver(schema),
+    resolver: zodResolver(schema),
   })
 }
