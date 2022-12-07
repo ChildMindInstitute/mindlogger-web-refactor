@@ -4,7 +4,7 @@ import { SupportableLanguage } from "../../../app/system/locale/constants"
 import { useLanguageList } from "../lib/useLanguageList"
 import { useLanguageTranslation } from "../lib/useLanguageTranslation"
 
-import BaseDropdown, { DropdownOptionList } from "../../../shared/Dropdown"
+import BaseDropdown, { DropdownOptionList } from "../../../shared/ui/Dropdown"
 
 export interface LanguageDropdownProps {
   onSelectExtended?: () => void

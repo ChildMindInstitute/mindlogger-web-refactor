@@ -22,7 +22,7 @@ const Header = (): JSX.Element | null => {
   }
 
   const onLogoClick = () => {
-    navigate(ROUTES.main.path)
+    navigate(ROUTES.login.path)
     closeExpandedNavbar()
   }
 

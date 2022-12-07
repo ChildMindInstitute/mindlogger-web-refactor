@@ -4,10 +4,13 @@ export const ROUTES = {
   },
 
   login: {
-    path: "login",
+    path: "/login",
   },
 
   signup: {
-    path: "signup",
+    path: "/signup",
+  },
+  forgotPassword: {
+    path: "/forgotpassword",
   },
 }

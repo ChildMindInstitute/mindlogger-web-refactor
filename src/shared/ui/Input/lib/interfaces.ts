@@ -1,0 +1,11 @@
+import { HTMLInputTypeAttribute } from "react"
+
+export interface IInputCommonProps {
+  type: HTMLInputTypeAttribute
+  autoComplete?: string
+
+  name: string
+  placeholder?: string | number
+  onChange?: (e: string | number) => void
+  className?: string
+}
