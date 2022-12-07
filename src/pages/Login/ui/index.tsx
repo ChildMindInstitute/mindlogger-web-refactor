@@ -37,7 +37,7 @@ const LoginPage = () => {
         </Container>
 
         <Container className="loginForm">
-          <BasicFormProvider {...form}>
+          <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
             {!isObjectEmpty(errors) && (
               <Alert variant="danger">{errors?.email?.message || errors?.password?.message}</Alert>
             )}
@@ -46,7 +46,7 @@ const LoginPage = () => {
             <Input type="password" name="password" placeholder={t("password") || ""} autoComplete="current-password" />
 
             <Container className="d-flex justify-content-start p-0 mb-3">
-              <BasicButton type="submit" variant="link" className="p-0">
+              <BasicButton type="button" variant="link" className="p-0">
                 <Link to={ROUTES.forgotPassword.path} relative="path">
                   {t("forgotPassword")}
                 </Link>
@@ -54,7 +54,7 @@ const LoginPage = () => {
             </Container>
 
             <Container>
-              <BasicButton type="button" variant="primary" onClick={handleSubmit(onLoginSubmit)}>
+              <BasicButton type="submit" variant="primary">
                 {t("button")}
               </BasicButton>
             </Container>
@@ -73,10 +73,10 @@ const LoginPage = () => {
           </Container>
           <Container className="d-flex gap-3 justify-content-center">
             <a href={APPSTORE_LINK} target="_blank" rel="noreferrer">
-              <img src={AppStore} alt="" />
+              <img src={AppStore} alt="App Store Icon" />
             </a>
             <a href={GOOGLEPLAY_LINK} target="_blank" rel="noreferrer">
-              <img src={GooglePlay} alt="" />
+              <img src={GooglePlay} alt="Google Play Icon" />
             </a>
           </Container>
         </Container>
