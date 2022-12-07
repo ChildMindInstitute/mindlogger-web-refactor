@@ -1,6 +1,6 @@
-import { object, string } from "yup"
+import * as z from "zod"
 
-export const UserSchema = object({
-  username: string().required(),
-  email: string().email("Please enter valid email").required("Please Enter your email"),
+export const UserSchema = z.object({
+  username: z.string(),
+  email: z.string({ required_error: "Email required" }).email("Please enter valid email"),
 })
