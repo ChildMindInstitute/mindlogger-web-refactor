@@ -5,7 +5,7 @@ export interface IInputCommonProps {
   autoComplete?: string
 
   name: string
-  placeholder?: string
-  onChange?: (e: string) => void
+  placeholder?: string | number
+  onChange?: (e: string | number) => void
   className?: string
 }
