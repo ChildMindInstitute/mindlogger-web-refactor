@@ -19,6 +19,10 @@ export const authUserSlice = createSlice({
       state = { ...state, ...action.payload }
       return state
     },
+    clearAuth: state => {
+      state = {}
+      return state
+    },
   },
 })
 
@@ -27,6 +31,6 @@ export const authToken = createSelector(userAuthSelector, auth => auth.token)
 export const authTokenScope = createSelector(userAuthSelector, auth => auth.scope)
 export const authTokenExpires = createSelector(userAuthSelector, auth => auth.expires)
 
-export const { setAuth } = authUserSlice.actions
+export const { setAuth, clearAuth } = authUserSlice.actions
 
 export default authUserSlice.reducer
