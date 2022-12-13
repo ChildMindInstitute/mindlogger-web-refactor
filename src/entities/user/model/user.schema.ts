@@ -1,5 +1,4 @@
 import * as z from "zod"
-import { DateSchema } from "~/utils/validation/date.schema"
 
 export const UserSchema = z.object({
   email: z.string({ required_error: "Email required" }).email("Please enter valid email"),
@@ -9,5 +8,19 @@ export const UserSchema = z.object({
   firstName: z.string(),
   displayName: z.string(),
   creatorId: z.string(),
-  created: DateSchema,
+  created: z.string(),
 })
+
+export const UserStateSchema = UserSchema.omit({ email: true })
+  .extend({
+    email: z.string(),
+  })
+  .partial()
+
+export const AuthSchema = z
+  .object({
+    token: z.string(),
+    expires: z.string(),
+    scope: z.string().array(),
+  })
+  .partial()

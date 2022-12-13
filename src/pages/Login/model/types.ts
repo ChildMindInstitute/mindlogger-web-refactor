@@ -12,7 +12,7 @@ export interface ILoginSuccessResponse {
     isDefaultName: boolean
   }
   authToken: {
-    expires: Date
+    expires: string
     scope: string[]
     token: string
   }
