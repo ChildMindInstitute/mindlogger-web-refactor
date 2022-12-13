@@ -7,11 +7,13 @@ import GooglePlay from "~/assets/GooglePlay.svg"
 import { ROUTES } from "~/app/system/routes/constants"
 import { Input, BasicButton, BasicFormProvider } from "~/shared/ui/"
 
+import { UserSchema } from "~/entities"
 import { useCustomForm } from "~/utils/hooks/useCustomForm"
 import { isObjectEmpty } from "~/utils/object"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "../lib/constants"
+import { ResponseData, ResponseError, useFetchAuthorization } from "../lib/api"
 import { LoginSchema, TLoginForm } from "../model"
 
 import "./login.scss"
@@ -24,8 +26,18 @@ const LoginPage = () => {
     formState: { errors },
   } = form
 
+  const onError = (error: ResponseError) => {}
+  const onSuccess = ({ data: { user } }: ResponseData) => {
+    const result = UserSchema.omit({ email: true }).parse(user)
+  }
+
+  const mutation = useFetchAuthorization({
+    onError,
+    onSuccess,
+  })
+
   const onLoginSubmit = (data: TLoginForm) => {
-    console.log(data) // TODO: Remove console.log and implement real logic
+    mutation.mutate(data)
   }
 
   return (
@@ -54,7 +66,11 @@ const LoginPage = () => {
             </Container>
 
             <Container>
-              <BasicButton type="submit" variant="primary">
+              <BasicButton
+                type="submit"
+                variant="primary"
+                disabled={!isObjectEmpty(errors) || mutation.isLoading}
+                loading={mutation.isLoading}>
                 {t("button")}
               </BasicButton>
             </Container>
