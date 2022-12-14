@@ -1,11 +1,10 @@
 import { PropsWithChildren, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { clearAuth, clearUser } from "~/entities/user"
-import { useLocalStorage } from "~/utils/hooks/useLocalStorage"
+import { useAuth } from "~/entities/user"
 
-import { useAppDispatch } from "./store"
 import { ROUTES } from "./system/routes/constants"
+import { useAppDispatch } from "./store"
 
 export type InactivityTrackerProps = PropsWithChildren
 
@@ -20,7 +19,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const { clearStorage } = useLocalStorage()
+  const { clearUserAndAuth } = useAuth()
 
   // this resets the timer if it exists.
   const resetTimer = () => {
@@ -28,9 +27,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   }
 
   const logoutAction = () => {
-    clearStorage()
-    dispatch(clearUser())
-    dispatch(clearAuth())
+    clearUserAndAuth()
     navigate(ROUTES.login.path)
   }
 

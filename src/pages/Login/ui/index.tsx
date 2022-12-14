@@ -4,11 +4,11 @@ import { Link, useNavigate } from "react-router-dom"
 import AppStore from "~/assets/Appstore.svg"
 import GooglePlay from "~/assets/GooglePlay.svg"
 
-import { useAppDispatch } from "~/app/store"
 import { ROUTES } from "~/app/system/routes/constants"
 import { Input, BasicButton, BasicFormProvider } from "~/shared/ui/"
 
-import { UserStateSchema, setUser, AuthSchema, setAuth } from "~/entities"
+import { UserStateSchema, AuthSchema } from "~/entities"
+import { useAuth } from "~/entities/user"
 import { useCustomForm } from "~/utils/hooks/useCustomForm"
 import { isObjectEmpty } from "~/utils/object"
 
@@ -21,8 +21,9 @@ import "./login.scss"
 
 const LoginPage = () => {
   const { t } = useLoginTranslation()
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
+
+  const { setUserAndAuth } = useAuth()
 
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {
@@ -34,8 +35,7 @@ const LoginPage = () => {
     const { user, authToken } = data
     const parsedUser = UserStateSchema.parse(user)
     const parsedAuthUser = AuthSchema.parse(authToken)
-    dispatch(setUser(parsedUser))
-    dispatch(setAuth(parsedAuthUser))
+    setUserAndAuth(parsedUser, parsedAuthUser)
     navigate(ROUTES.dashboard.path)
   }
 

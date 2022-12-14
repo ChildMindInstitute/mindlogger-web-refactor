@@ -1,4 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+
+import { RootState } from "~/app/store"
+
 import { TUserStateSchema } from "./interface"
 
 export type UserState = TUserStateSchema
@@ -26,6 +29,8 @@ export const userSlice = createSlice({
     },
   },
 })
+
+export const userSelector = (state: RootState) => state.user
 
 export const { setUser, clearUser } = userSlice.actions
 

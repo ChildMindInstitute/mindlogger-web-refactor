@@ -11,3 +11,5 @@ export {
   authUserSlice,
   clearAuth,
 } from "./model/auth.slice"
+
+export { useAuth } from "./lib/useAuth"

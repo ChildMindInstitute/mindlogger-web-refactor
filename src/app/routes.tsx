@@ -18,6 +18,8 @@ const ApplicationRouter = (): JSX.Element | null => {
 
       <Route element={<ProtectedRoute token={auth.token} />}>
         <Route path={ROUTES.dashboard.path} element={<div>dashboard</div>} />
+        <Route path={ROUTES.profile.path} element={<div>profile</div>} />
+        <Route path={ROUTES.settings.path} element={<div>settings</div>} />
       </Route>
     </Routes>
   )

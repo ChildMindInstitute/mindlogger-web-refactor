@@ -7,13 +7,18 @@ import "./header.scss"
 
 import { ROUTES } from "~/app/system/routes/constants"
 import LanguageDropdown from "~/features/language"
+import { useAuth } from "~/entities/user"
+
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 
 import LoginButton from "./LoginButton"
+import AccountDropdown from "./AccountDropdown"
 
 const Header = (): JSX.Element | null => {
   const { t } = useNavbarTranslation()
   const navigate = useNavigate()
+
+  const { user, isUserLoggedIn } = useAuth()
 
   const [expanded, setExpanded] = useState<boolean>(false)
 
@@ -44,7 +49,11 @@ const Header = (): JSX.Element | null => {
               <LanguageDropdown onSelectExtended={closeExpandedNavbar} />
             </Col>
             <Col xs={12} md={6} className="container justify-content-center">
-              <LoginButton onClickExtended={closeExpandedNavbar} />
+              {isUserLoggedIn ? (
+                <AccountDropdown title={user.displayName as string} onSelectExtended={closeExpandedNavbar} />
+              ) : (
+                <LoginButton onClickExtended={closeExpandedNavbar} />
+              )}
             </Col>
           </Row>
         </Nav>
