@@ -32,7 +32,14 @@ const AccountDropdown = ({ title, onSelectExtended }: IAccountDropdownProps) => 
     }))
   }, [t, accountDropdownOptions])
 
-  return <BaseDropdown title={title} options={preparedAccountDropdownOptions} onSelect={onSelect} />
+  return (
+    <BaseDropdown
+      title={title}
+      options={preparedAccountDropdownOptions}
+      onSelect={onSelect}
+      beforeIndexDivider={preparedAccountDropdownOptions.length - 1}
+    />
+  )
 }
 
 export default AccountDropdown

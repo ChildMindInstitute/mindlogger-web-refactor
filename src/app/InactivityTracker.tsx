@@ -2,6 +2,7 @@ import { PropsWithChildren, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { useAuth } from "~/entities/user"
+import { useFetchUnauthorization } from "../entities/user/lib/api"
 
 import { ROUTES } from "./system/routes/constants"
 import { useAppDispatch } from "./store"
@@ -19,7 +20,8 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const { clearUserAndAuth } = useAuth()
+  const { clearUserAndAuth, auth } = useAuth()
+  const mutation = useFetchUnauthorization({})
 
   // this resets the timer if it exists.
   const resetTimer = () => {
@@ -27,6 +29,9 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   }
 
   const logoutAction = () => {
+    if (auth.token) {
+      mutation.mutate(auth.token)
+    }
     clearUserAndAuth()
     navigate(ROUTES.login.path)
   }

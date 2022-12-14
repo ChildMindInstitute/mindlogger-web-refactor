@@ -8,13 +8,12 @@ import { ROUTES } from "~/app/system/routes/constants"
 import { Input, BasicButton, BasicFormProvider } from "~/shared/ui/"
 
 import { UserStateSchema, AuthSchema } from "~/entities"
-import { useAuth } from "~/entities/user"
+import { useAuth, ResponseLoginData, useFetchAuthorization } from "~/entities/user"
 import { useCustomForm } from "~/utils/hooks/useCustomForm"
 import { isObjectEmpty } from "~/utils/object"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "../lib/constants"
-import { ResponseData, useFetchAuthorization } from "../lib/api"
 import { LoginSchema, TLoginForm } from "../model"
 
 import "./login.scss"
@@ -31,7 +30,7 @@ const LoginPage = () => {
     formState: { errors, isValid },
   } = form
 
-  const onSuccess = ({ data }: ResponseData) => {
+  const onSuccess = ({ data }: ResponseLoginData) => {
     const { user, authToken } = data
     const parsedUser = UserStateSchema.parse(user)
     const parsedAuthUser = AuthSchema.parse(authToken)
