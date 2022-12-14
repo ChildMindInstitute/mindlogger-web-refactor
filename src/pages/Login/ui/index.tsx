@@ -24,7 +24,7 @@ const LoginPage = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const form = useCustomForm({ defaultValues: { email: "", password: "" } }, { schema: LoginSchema })
+  const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {
     handleSubmit,
     formState: { errors },
