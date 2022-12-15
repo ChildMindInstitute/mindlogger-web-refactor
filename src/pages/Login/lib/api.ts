@@ -3,8 +3,8 @@ import { AxiosError, AxiosResponse } from "axios"
 import api from "~/utils/axios"
 import { encryptBASE64 } from "~/utils/encryption/encryptBASE64"
 
-import { TLoginForm } from "../../../pages/Login/model"
-import { ILoginSuccessResponse, TLoginErrorResponse } from "../../../pages/Login/model/types"
+import { TLoginForm } from "../model"
+import { ILoginSuccessResponse, TLoginErrorResponse } from "../model/types"
 
 export type ResponseLoginData = AxiosResponse<ILoginSuccessResponse>
 export type ResponseError = AxiosError<TLoginErrorResponse>

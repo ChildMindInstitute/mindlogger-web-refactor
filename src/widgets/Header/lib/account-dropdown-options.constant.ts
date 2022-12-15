@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 
 import { ROUTES } from "~/app/system/routes/constants"
 import { useAuth } from "~/entities/user"
-import { useFetchUnauthorization } from "~/entities/user/lib/api"
+import { useFetchUnauthorization } from "~/pages/Login/lib/api"
 
 export const useAccountDropdown = () => {
   const navigate = useNavigate()

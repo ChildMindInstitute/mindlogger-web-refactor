@@ -2,7 +2,7 @@ import { PropsWithChildren, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { useAuth } from "~/entities/user"
-import { useFetchUnauthorization } from "../entities/user/lib/api"
+import { useFetchUnauthorization } from "../pages/Login/lib/api"
 
 import { ROUTES } from "./system/routes/constants"
 import { useAppDispatch } from "./store"

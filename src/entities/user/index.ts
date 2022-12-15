@@ -13,5 +13,5 @@ export {
 } from "./model/auth.slice"
 
 export { useAuth } from "./lib/useAuth"
-export { useFetchAuthorization } from "./lib/api"
-export type { ResponseLoginData } from "./lib/api"
+export { useFetchAuthorization } from "../../pages/Login/lib/api"
+export type { ResponseLoginData } from "../../pages/Login/lib/api"
