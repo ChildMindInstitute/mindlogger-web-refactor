@@ -1,3 +1,4 @@
+import React from "react"
 import { DropdownButton, Dropdown } from "react-bootstrap"
 
 import { DropdownOptionList } from "../lib/interfaces"
@@ -16,12 +17,12 @@ const BaseDropdown = ({ title, onSelect, options, beforeIndexDivider }: BaseDrop
         const beforeThisElement = index === beforeIndexDivider
 
         return (
-          <>
+          <React.Fragment key={option.key}>
             {beforeIndexDivider && beforeThisElement && <Dropdown.Divider key={option.key} />}
             <Dropdown.Item key={option.key} eventKey={option.key}>
               {option.value}
             </Dropdown.Item>
-          </>
+          </React.Fragment>
         )
       })}
     </DropdownButton>

@@ -27,7 +27,12 @@ const Header = (): JSX.Element | null => {
   }
 
   const onLogoClick = () => {
-    navigate(ROUTES.login.path)
+    if (isUserLoggedIn) {
+      navigate(ROUTES.dashboard.path)
+    } else {
+      navigate(ROUTES.login.path)
+    }
+
     closeExpandedNavbar()
   }
 
