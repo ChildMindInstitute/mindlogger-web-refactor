@@ -16,11 +16,9 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.signup.path} element={<div>signup</div>} />
       <Route path={ROUTES.forgotPassword.path} element={<div>forgot password</div>} />
 
-      {auth?.token && (
-        <Route element={<ProtectedRoute token={auth.token} />}>
-          <Route path={ROUTES.dashboard.path} element={<div>dashboard</div>} />
-        </Route>
-      )}
+      <Route element={<ProtectedRoute token={auth.token} />}>
+        <Route path={ROUTES.dashboard.path} element={<div>dashboard</div>} />
+      </Route>
     </Routes>
   )
 }

@@ -1,4 +1,4 @@
-export type { TUserSchema, TUserStateSchema, TUserAuthSchema } from "./model/interface"
+export type { User as TUserSchema, TUserStateSchema, Authorization as TUserAuthSchema } from "./model/interface"
 
 export { UserSchema, UserStateSchema, AuthSchema } from "./model/user.schema"
 export { default as userReducer, setUser, clearUser } from "./model/user.slice"

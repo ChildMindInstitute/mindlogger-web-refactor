@@ -1,11 +1,11 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "~/app/store"
 
-import { TUserAuthSchema } from "./interface"
+import { Authorization } from "./interface"
 
-export type TAuthUserState = TUserAuthSchema
+export type TAuthUserState = Authorization
 
-export const initialState: TUserAuthSchema = {
+export const initialState: Authorization = {
   token: undefined,
   expires: undefined,
   scope: [],
@@ -16,12 +16,10 @@ export const authUserSlice = createSlice({
   initialState,
   reducers: {
     setAuth: (state, action: PayloadAction<TAuthUserState>) => {
-      state = { ...state, ...action.payload }
-      return state
+      return { ...state, ...action.payload }
     },
-    clearAuth: state => {
-      state = {}
-      return state
+    clearAuth: () => {
+      return initialState
     },
   },
 })

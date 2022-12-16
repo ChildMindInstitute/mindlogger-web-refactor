@@ -27,7 +27,7 @@ const LoginPage = () => {
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = form
 
   const onSuccess = ({ data }: ResponseData) => {
@@ -76,7 +76,7 @@ const LoginPage = () => {
               <BasicButton
                 type="submit"
                 variant="primary"
-                disabled={!isObjectEmpty(errors) || mutation.isLoading}
+                disabled={!isValid || mutation.isLoading}
                 loading={mutation.isLoading}>
                 {t("button")}
               </BasicButton>
