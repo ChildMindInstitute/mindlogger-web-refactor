@@ -39,7 +39,9 @@ const SignupPage = () => {
         <Container className="signupForm">
           <BasicFormProvider {...form} onSubmit={handleSubmit(onSignupSubmit)}>
             {!isObjectEmpty(errors) && (
-              <Alert variant="danger">{errors?.email?.message || errors?.password?.message}</Alert>
+              <Alert variant="danger">
+                {errors?.email?.message || errors?.password?.message || errors?.confirmPassword?.message}
+              </Alert>
             )}
 
             <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />

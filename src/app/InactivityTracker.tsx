@@ -5,7 +5,6 @@ import { useAuth } from "~/entities/user"
 import { useFetchUnauthorization } from "../pages/Login/lib/api"
 
 import { ROUTES } from "./system/routes/constants"
-import { useAppDispatch } from "./store"
 
 export type InactivityTrackerProps = PropsWithChildren
 
@@ -17,7 +16,6 @@ const LOGOUT_TIME_LIMIT = 15 * ONE_MIN // 15 min
 
 export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   let timer: number | undefined
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const { clearUserAndAuth, auth } = useAuth()
@@ -58,7 +56,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
         logoutTimer()
       })
     })
-  })
+  }, [])
 
   return children as JSX.Element
 }
