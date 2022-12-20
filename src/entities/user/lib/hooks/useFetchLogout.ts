@@ -1,7 +1,7 @@
 import { MutationOptions, useMutation } from "@tanstack/react-query"
 import { AxiosError, AxiosResponse } from "axios"
 
-import authorizationService from "~/entities/user/lib/authorization.service"
+import { authorizationService } from "~/entities/user/lib/authorization.service"
 import { BaseErrorResponse } from "~/utils/types/httpResponses"
 
 import { ILogoutPayload } from "../../model/api.interfaces"

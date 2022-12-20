@@ -1,15 +1,15 @@
 import { useAppDispatch, useAppSelector } from "~/app/store"
 import { isObjectEmpty } from "~/utils/object"
 
-import { clearAuth, setAuth, TAuthUserState, userAuthSelector } from "../../model/auth.slice"
-import { TUserStateSchema } from "../../model/interface"
-import { clearUser, setUser, userSelector } from "../../model/user.slice"
+import { clearAuth, setAuth, userAuthSelector } from "../../model/state/auth.slice"
+import { clearUser, setUser, userSelector } from "../../model/state/user.slice"
+import { Authorization, UserStore } from "../../model/user.schema"
 
 export interface UseAuthOutput {
-  user: TUserStateSchema
-  auth: TAuthUserState
+  user: UserStore
+  auth: Authorization
   isUserLoggedIn: boolean
-  setUserAndAuth: (user: TUserStateSchema, auth: TAuthUserState) => void
+  setUserAndAuth: (user: UserStore, auth: Authorization) => void
   clearUserAndAuth: () => void
 }
 
@@ -20,7 +20,7 @@ export const useAuth = (): UseAuthOutput => {
 
   const isUserLoggedIn = !!auth.token && !isObjectEmpty(user)
 
-  const setUserAndAuth = (user: TUserStateSchema, auth: TAuthUserState) => {
+  const setUserAndAuth = (user: UserStore, auth: Authorization) => {
     dispatch(setUser(user))
     dispatch(setAuth(auth))
   }

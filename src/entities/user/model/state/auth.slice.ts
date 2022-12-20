@@ -1,9 +1,8 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit"
+
 import { RootState } from "~/app/store"
 
-import { Authorization } from "./interface"
-
-export type TAuthUserState = Authorization
+import { Authorization } from "../user.schema"
 
 export const initialState: Authorization = {
   token: undefined,
@@ -15,7 +14,7 @@ export const authUserSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuth: (state, action: PayloadAction<TAuthUserState>) => {
+    setAuth: (state, action: PayloadAction<Authorization>) => {
       return { ...state, ...action.payload }
     },
     clearAuth: () => {

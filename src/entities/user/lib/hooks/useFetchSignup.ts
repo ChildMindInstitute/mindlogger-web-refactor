@@ -2,7 +2,7 @@ import { AxiosError, AxiosResponse } from "axios"
 import { MutationOptions, useMutation } from "@tanstack/react-query"
 
 import { BaseErrorResponse } from "~/utils/types/httpResponses"
-import authorizationService from "~/entities/user/lib/authorization.service"
+import { authorizationService } from "~/entities/user/lib/authorization.service"
 
 import { ISignupPayload } from "../../model/api.interfaces"
 import { Account, Authorization, User } from "../../model/interface"

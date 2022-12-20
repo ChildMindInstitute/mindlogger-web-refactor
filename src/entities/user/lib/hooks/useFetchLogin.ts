@@ -5,7 +5,7 @@ import { BaseErrorResponse } from "~/utils/types/httpResponses"
 
 import { ILoginPayload } from "../../model/api.interfaces"
 import { Account, Authorization, User } from "../../model/interface"
-import authorizationService from "../authorization.service"
+import { authorizationService } from "../authorization.service"
 
 export interface ILoginSuccessResponse {
   account: Account

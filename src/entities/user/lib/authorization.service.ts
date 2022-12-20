@@ -34,5 +34,4 @@ export class AuthorizationService {
   }
 }
 
-const authorizationService = new AuthorizationService(httpService)
-export default authorizationService
+export const authorizationService = new AuthorizationService(httpService)
