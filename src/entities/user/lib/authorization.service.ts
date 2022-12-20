@@ -1,12 +1,13 @@
 import httpService, { Http } from "~/utils/httpService"
 import { encryptBASE64 } from "~/utils/encryption/encryptBASE64"
-import { TSignupForm } from "~/pages/Signup/model/signup.schema"
+
+import { ILoginPayload, ILogoutPayload, ISignupPayload } from "../model/api.interfaces"
 
 export class AuthorizationService {
   constructor(private httpService: Http) {}
 
-  public login(email: string, password: string) {
-    const encryptedUserInfo = encryptBASE64(`${email}:${password}`)
+  public login(data: ILoginPayload) {
+    const encryptedUserInfo = encryptBASE64(`${data.email}:${data.password}`)
 
     const headers = {
       "Girder-Authorization": `Basic ${encryptedUserInfo}`,
@@ -15,19 +16,17 @@ export class AuthorizationService {
     return this.httpService.GET("/user/authentication", { headers })
   }
 
-  public logout(token: string) {
+  public logout(data: ILogoutPayload) {
     const headers = {
-      "Girder-Token": token,
+      "Girder-Token": data.token,
     }
 
     return this.httpService.DELETE("/user/authentication", { headers })
   }
 
-  public signup(user: TSignupForm) {
-    const { confirmPassword, ...rest } = user
-
+  public signup(user: ISignupPayload) {
     const params = {
-      ...rest,
+      ...user,
       admin: true, // Ask backend why we should set it to true
     }
 

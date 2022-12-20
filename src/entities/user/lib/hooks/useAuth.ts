@@ -1,9 +1,9 @@
 import { useAppDispatch, useAppSelector } from "~/app/store"
 import { isObjectEmpty } from "~/utils/object"
 
-import { clearAuth, setAuth, TAuthUserState, userAuthSelector } from "../model/auth.slice"
-import { TUserStateSchema } from "../model/interface"
-import { clearUser, setUser, userSelector } from "../model/user.slice"
+import { clearAuth, setAuth, TAuthUserState, userAuthSelector } from "../../model/auth.slice"
+import { TUserStateSchema } from "../../model/interface"
+import { clearUser, setUser, userSelector } from "../../model/user.slice"
 
 export interface UseAuthOutput {
   user: TUserStateSchema
