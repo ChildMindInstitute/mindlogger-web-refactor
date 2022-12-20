@@ -7,14 +7,14 @@ import GooglePlay from "~/assets/GooglePlay.svg"
 import { ROUTES } from "~/app/system/routes/constants"
 import { Input, BasicButton, BasicFormProvider } from "~/shared/ui/"
 
-import { UserStateSchema, AuthSchema } from "~/entities"
-import { useAuth, ResponseLoginData, useFetchAuthorization } from "~/entities/user"
+import { AuthSchema, useAuth, UserStoreSchema, useFetchLogin, SuccessLoginResponse, ILoginPayload } from "~/entities"
+
 import { useCustomForm } from "~/utils/hooks/useCustomForm"
 import { isObjectEmpty } from "~/utils/object"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "../lib/constants"
-import { LoginSchema, TLoginForm } from "../model"
+import { LoginSchema, TLoginForm } from "../model/login.schema"
 
 import "./login.scss"
 
@@ -30,20 +30,20 @@ const LoginPage = () => {
     formState: { errors, isValid },
   } = form
 
-  const onSuccess = ({ data }: ResponseLoginData) => {
+  const onSuccess = ({ data }: SuccessLoginResponse) => {
     const { user, authToken } = data
-    const parsedUser = UserStateSchema.parse(user)
+    const parsedUser = UserStoreSchema.parse(user)
     const parsedAuthUser = AuthSchema.parse(authToken)
     setUserAndAuth(parsedUser, parsedAuthUser)
     navigate(ROUTES.dashboard.path)
   }
 
-  const mutation = useFetchAuthorization({
+  const mutation = useFetchLogin({
     onSuccess,
   })
 
   const onLoginSubmit = (data: TLoginForm) => {
-    mutation.mutate(data)
+    mutation.mutate(data as ILoginPayload)
   }
 
   return (

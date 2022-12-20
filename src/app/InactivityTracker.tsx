@@ -1,8 +1,7 @@
 import { PropsWithChildren, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { useAuth } from "~/entities/user"
-import { useFetchLogout } from "~/entities/user/lib/hooks/useFetchLogout"
+import { useAuth, useFetchLogout } from "~/entities"
 
 import { ROUTES } from "./system/routes/constants"
 

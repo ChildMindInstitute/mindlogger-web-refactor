@@ -1,21 +1,21 @@
 import { useState } from "react"
 import { Alert, Container } from "react-bootstrap"
+import { Link, useNavigate } from "react-router-dom"
 
+import { ROUTES } from "~/app/system/routes/constants"
+
+import { AuthSchema, UserStoreSchema, useAuth, SuccessSignupResponse, useFetchSignup } from "~/entities"
 import { BasicButton, BasicFormProvider, Input } from "~/shared/ui"
-import { useCustomForm } from "~/utils/hooks/useCustomForm"
 import Checkbox from "~/shared/ui/Checkbox"
+import { useCustomForm } from "~/utils/hooks/useCustomForm"
 import { isObjectEmpty } from "~/utils/object"
 
 import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"
+
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
 import "./styles.scss"
-import { Link, useNavigate } from "react-router-dom"
-import { TSignupResponseSuccess, useFetchSignup } from "../lib/api"
-import { AuthSchema, UserStateSchema } from "../../../entities"
-import { useAuth } from "../../../entities/user"
-import { ROUTES } from "../../../app/system/routes/constants"
 
 const SignupPage = () => {
   const { t } = useSignupTranslation()
@@ -33,10 +33,10 @@ const SignupPage = () => {
     formState: { errors },
   } = form
 
-  const onSuccess = ({ data }: TSignupResponseSuccess) => {
+  const onSuccess = ({ data }: SuccessSignupResponse) => {
     const { account, authToken, ...rest } = data
 
-    const parsedUser = UserStateSchema.parse(rest)
+    const parsedUser = UserStoreSchema.parse(rest)
     const parsedAuth = AuthSchema.parse(authToken)
     setUserAndAuth(parsedUser, parsedAuth)
     navigate(ROUTES.dashboard.path)

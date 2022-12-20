@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom"
 
-import { userAuthSelector } from "~/entities/user/model/auth.slice"
+import { userAuthSelector } from "~/entities"
 import { LoginPage, SignupPage } from "~/pages"
 
 import { ProtectedRoute } from "./ProtectedRoute"
