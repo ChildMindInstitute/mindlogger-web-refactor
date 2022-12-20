@@ -32,3 +32,10 @@ export const AuthSchema = z
     scope: z.string().array(),
   })
   .partial()
+
+export const UserAccountSchema = z.object({
+  accountId: z.string(),
+  accountName: z.string(),
+  applets: z.unknown(),
+  isDefaultName: z.boolean(),
+})

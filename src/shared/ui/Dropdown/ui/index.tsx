@@ -18,7 +18,7 @@ const BaseDropdown = ({ title, onSelect, options, beforeIndexDivider }: BaseDrop
 
         return (
           <React.Fragment key={option.key}>
-            {beforeIndexDivider && beforeThisElement && <Dropdown.Divider key={option.key} />}
+            {beforeIndexDivider && beforeThisElement && <Dropdown.Divider />}
             <Dropdown.Item key={option.key} eventKey={option.key}>
               {option.value}
             </Dropdown.Item>

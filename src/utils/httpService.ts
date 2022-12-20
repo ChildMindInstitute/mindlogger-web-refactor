@@ -1,7 +1,7 @@
 import { Axios, AxiosRequestConfig } from "axios"
 import api from "./axios"
 
-class Http {
+export class Http {
   constructor(private axios: Axios) {}
 
   public GET(url: string, config?: AxiosRequestConfig) {

@@ -11,11 +11,17 @@ import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
 import "./styles.scss"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { TSignupResponseSuccess, useFetchSignup } from "../lib/api"
+import { AuthSchema, UserStateSchema } from "../../../entities"
+import { useAuth } from "../../../entities/user"
+import { ROUTES } from "../../../app/system/routes/constants"
 
 const SignupPage = () => {
   const { t } = useSignupTranslation()
+  const navigate = useNavigate()
 
+  const { setUserAndAuth } = useAuth()
   const [terms, setTerms] = useState<boolean>(false)
 
   const form = useCustomForm(
@@ -27,8 +33,21 @@ const SignupPage = () => {
     formState: { errors },
   } = form
 
+  const onSuccess = ({ data }: TSignupResponseSuccess) => {
+    const { account, authToken, ...rest } = data
+
+    const parsedUser = UserStateSchema.parse(rest)
+    const parsedAuth = AuthSchema.parse(authToken)
+    setUserAndAuth(parsedUser, parsedAuth)
+    navigate(ROUTES.dashboard.path)
+  }
+
+  const mutation = useFetchSignup({
+    onSuccess,
+  })
+
   const onSignupSubmit = (data: TSignupForm) => {
-    console.log(data) // Implement API logic
+    mutation.mutate(data)
   }
 
   return (

@@ -1,7 +1,6 @@
 import { MutationOptions, useMutation } from "@tanstack/react-query"
 import { AxiosError, AxiosResponse } from "axios"
-import api from "~/utils/axios"
-import { encryptBASE64 } from "~/utils/encryption/encryptBASE64"
+import authorizationService from "~/entities/user/lib/auth.api"
 
 import { TLoginForm } from "../model"
 import { ILoginSuccessResponse, TLoginErrorResponse } from "../model/types"
@@ -9,37 +8,22 @@ import { ILoginSuccessResponse, TLoginErrorResponse } from "../model/types"
 export type ResponseLoginData = AxiosResponse<ILoginSuccessResponse>
 export type ResponseError = AxiosError<TLoginErrorResponse>
 
-export const makeLoginRequest = async (data: TLoginForm): Promise<ResponseLoginData> => {
-  const encryptedUserInfo = encryptBASE64(`${data.email}:${data.password}`)
-
-  const headers = {
-    "Girder-Authorization": `Basic ${encryptedUserInfo}`,
-  }
-
-  const response = await api.get("/user/authentication", { headers })
-  return response
-}
-
-export const makeLogoutRequest = async (token: string) => {
-  const headers = {
-    "Girder-Token": token,
-  }
-
-  const response = await api.delete("/user/authentication", { headers })
-  return response
-}
-
 export const useFetchAuthorization = (options: MutationOptions<ResponseLoginData, ResponseError, TLoginForm>) => {
-  const name = "auth"
+  const name = "login"
 
-  const fetcher = useMutation([name], (data: TLoginForm) => makeLoginRequest(data), options)
+  const fetcher = useMutation(
+    [name],
+    (data: TLoginForm) => authorizationService.login(data.email, data.password),
+    options,
+  )
 
   return fetcher
 }
 
 export const useFetchUnauthorization = (options: MutationOptions<any, any, string>) => {
-  const name = "unauth"
+  // Fix types and check with incorrect token
+  const name = "logout"
 
-  const fetcher = useMutation([name], (data: string) => makeLogoutRequest(data), options)
+  const fetcher = useMutation([name], (data: string) => authorizationService.logout(data), options)
   return fetcher
 }
