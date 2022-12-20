@@ -7,7 +7,7 @@ import "./header.scss"
 
 import { ROUTES } from "~/app/system/routes/constants"
 import LanguageDropdown from "~/features/language"
-import { useAuth } from "~/entities/user"
+import { useAuth } from "~/entities"
 
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 
