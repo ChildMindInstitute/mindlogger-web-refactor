@@ -20,7 +20,7 @@ const i18nManager = {
         interpolation: {
           escapeValue: false,
         },
-        debug: process.env.NODE_ENV !== "production",
+        debug: import.meta.env.NODE_ENV !== "production",
       })
   },
 

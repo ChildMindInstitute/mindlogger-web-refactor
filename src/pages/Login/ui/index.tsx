@@ -1,31 +1,50 @@
 import { Alert, Container } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import AppStore from "~/assets/Appstore.svg"
 import GooglePlay from "~/assets/GooglePlay.svg"
 
+import { useAppDispatch } from "~/app/store"
 import { ROUTES } from "~/app/system/routes/constants"
 import { Input, BasicButton, BasicFormProvider } from "~/shared/ui/"
 
+import { UserStateSchema, setUser, AuthSchema, setAuth } from "~/entities"
 import { useCustomForm } from "~/utils/hooks/useCustomForm"
 import { isObjectEmpty } from "~/utils/object"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "../lib/constants"
+import { ResponseData, useFetchAuthorization } from "../lib/api"
 import { LoginSchema, TLoginForm } from "../model"
 
 import "./login.scss"
 
 const LoginPage = () => {
   const { t } = useLoginTranslation()
-  const form = useCustomForm({ defaultValues: { email: "", password: "" } }, { schema: LoginSchema })
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = form
 
+  const onSuccess = ({ data }: ResponseData) => {
+    const { user, authToken } = data
+    const parsedUser = UserStateSchema.parse(user)
+    const parsedAuthUser = AuthSchema.parse(authToken)
+    dispatch(setUser(parsedUser))
+    dispatch(setAuth(parsedAuthUser))
+    navigate(ROUTES.dashboard.path)
+  }
+
+  const mutation = useFetchAuthorization({
+    onSuccess,
+  })
+
   const onLoginSubmit = (data: TLoginForm) => {
-    console.log(data) // TODO: Remove console.log and implement real logic
+    mutation.mutate(data)
   }
 
   return (
@@ -54,7 +73,11 @@ const LoginPage = () => {
             </Container>
 
             <Container>
-              <BasicButton type="submit" variant="primary">
+              <BasicButton
+                type="submit"
+                variant="primary"
+                disabled={!isValid || mutation.isLoading}
+                loading={mutation.isLoading}>
                 {t("button")}
               </BasicButton>
             </Container>

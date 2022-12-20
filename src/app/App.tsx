@@ -1,4 +1,5 @@
 import { Suspense } from "react"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 import i18nManager from "./system/locale/i18n"
 
@@ -20,6 +21,7 @@ function App() {
             <Layout>
               <ApplicationRouter />
             </Layout>
+            <ReactQueryDevtools initialIsOpen={false} />
           </ReactQuery>
         </Redux>
       </RouteProvider>

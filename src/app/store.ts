@@ -4,18 +4,23 @@ import persistReducer from "redux-persist/es/persistReducer"
 import persistStore from "redux-persist/es/persistStore"
 import storage from "redux-persist/lib/storage"
 
+import { authReducer, userReducer } from "../entities"
+
 const persistConfig = {
   key: "root",
   storage,
 }
 
-const rootReducer = combineReducers({})
+const rootReducer = combineReducers({
+  user: userReducer,
+  auth: authReducer,
+})
 
 const store = configureStore({
   reducer: persistReducer(persistConfig, rootReducer),
 })
 
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof rootReducer>
 export type AppDispatch = typeof store.dispatch
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
