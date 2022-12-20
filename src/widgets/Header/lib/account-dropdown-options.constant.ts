@@ -1,13 +1,12 @@
 import { useNavigate } from "react-router-dom"
 
 import { ROUTES } from "~/app/system/routes/constants"
-import { useAuth } from "~/entities/user"
-import { useFetchUnauthorization } from "~/pages/Login/lib/api"
+import { useAuth, useFetchLogout } from "~/entities"
 
 export const useAccountDropdown = () => {
   const navigate = useNavigate()
   const { clearUserAndAuth, auth } = useAuth()
-  const mutation = useFetchUnauthorization({})
+  const mutation = useFetchLogout({})
 
   const accountDropdownOptions = [
     {
@@ -26,7 +25,7 @@ export const useAccountDropdown = () => {
       tag: "logOut",
       onSelect: () => {
         if (auth.token) {
-          mutation.mutate(auth.token)
+          mutation.mutate({ token: auth.token })
         }
         clearUserAndAuth()
         navigate(ROUTES.login.path)
