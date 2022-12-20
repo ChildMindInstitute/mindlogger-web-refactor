@@ -1,8 +1,8 @@
-import { PropsWithChildren, useState } from "react"
+import { PropsWithChildren, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { useAuth } from "~/entities/user"
-import { useFetchUnauthorization } from "../pages/Login/lib/api"
+import { useFetchLogout } from "~/entities/user/lib/hooks/useFetchLogout"
 
 import { ROUTES } from "./system/routes/constants"
 
@@ -19,7 +19,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   const navigate = useNavigate()
 
   const { clearUserAndAuth, auth } = useAuth()
-  const mutation = useFetchUnauthorization({})
+  const mutation = useFetchLogout({})
 
   // this resets the timer if it exists.
   const resetTimer = () => {
@@ -28,7 +28,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
 
   const logoutAction = () => {
     if (auth.token) {
-      mutation.mutate(auth.token)
+      mutation.mutate({ token: auth.token })
     }
     clearUserAndAuth()
     navigate(ROUTES.login.path)
@@ -49,13 +49,14 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
     }, LOGOUT_TIME_LIMIT)
   }
 
-  useState(() => {
+  useEffect(() => {
     Object.values(events).forEach(item => {
       window.addEventListener(item, () => {
         resetTimer()
         logoutTimer()
       })
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return children as JSX.Element
