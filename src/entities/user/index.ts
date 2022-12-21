@@ -6,14 +6,14 @@ export { authorizationService } from "./lib/authorization.service"
 export type { UseAuthOutput } from "./lib/hooks/useAuth"
 export { useAuth } from "./lib/hooks/useAuth"
 
-export type { ILoginSuccessResponse, SuccessLoginResponse, FailedLoginResponse } from "./lib/hooks/useFetchLogin"
-export { useLoginMutation } from "./lib/hooks/useFetchLogin"
+export type { ILoginSuccessResponse, SuccessLoginResponse, FailedLoginResponse } from "./lib/hooks/useLoginMutation"
+export { useLoginMutation } from "./lib/hooks/useLoginMutation"
 
-export type { SuccessLogoutResponse, FailedLogoutResponse } from "./lib/hooks/useFetchLogout"
-export { useLogoutMutation } from "./lib/hooks/useFetchLogout"
+export type { SuccessLogoutResponse, FailedLogoutResponse } from "./lib/hooks/useLogoutMutation"
+export { useLogoutMutation } from "./lib/hooks/useLogoutMutation"
 
-export type { ISignupSuccess, SuccessSignupResponse, FailedSignupResponse } from "./lib/hooks/useFetchSignup"
-export { useSignupMutation } from "./lib/hooks/useFetchSignup"
+export type { ISignupSuccess, SuccessSignupResponse, FailedSignupResponse } from "./lib/hooks/useSignupMutation"
+export { useSignupMutation } from "./lib/hooks/useSignupMutation"
 
 // Model
 export type { User, UserStore, Authorization, Account } from "./model/user.schema"
