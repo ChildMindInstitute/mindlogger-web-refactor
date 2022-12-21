@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { TUserStateSchema } from "./interface"
 
-export type UserState = TUserStateSchema
+import { RootState } from "~/app/store"
 
-export const initialState: UserState = {
+import { UserStore } from "../user.schema"
+
+export const initialState: UserStore = {
   email: undefined,
   emailVerified: undefined,
   admin: undefined,
@@ -12,13 +13,21 @@ export const initialState: UserState = {
   displayName: undefined,
   creatorId: undefined,
   created: undefined,
+  login: undefined,
+  otp: undefined,
+  public: undefined,
+  size: undefined,
+  status: undefined,
+  _accessLevel: undefined,
+  _id: undefined,
+  _modelType: undefined,
 }
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<UserState>) => {
+    setUser: (state, action: PayloadAction<UserStore>) => {
       return { ...state, ...action.payload }
     },
     clearUser: () => {
@@ -26,6 +35,8 @@ export const userSlice = createSlice({
     },
   },
 })
+
+export const userSelector = (state: RootState) => state.user
 
 export const { setUser, clearUser } = userSlice.actions
 
