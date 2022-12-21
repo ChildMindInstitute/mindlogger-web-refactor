@@ -22,7 +22,5 @@ export const useLoginMutation = (
 ) => {
   const name = "login"
 
-  const fetcher = useMutation([name], (data: ILoginPayload) => authorizationService.login(data), options)
-
-  return fetcher
+  return useMutation([name], (data: ILoginPayload) => authorizationService.login(data), options)
 }

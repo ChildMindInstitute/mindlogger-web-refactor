@@ -14,6 +14,5 @@ export const useLogoutMutation = (
 ) => {
   const name = "logout"
 
-  const fetcher = useMutation([name], (data: ILogoutPayload) => authorizationService.logout(data), options)
-  return fetcher
+  return useMutation([name], (data: ILogoutPayload) => authorizationService.logout(data), options)
 }

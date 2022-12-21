@@ -20,7 +20,5 @@ export const useSignupMutation = (
 ) => {
   const name = "signup"
 
-  const fetcher = useMutation([name], (data: ISignupPayload) => authorizationService.signup(data), options)
-
-  return fetcher
+  return useMutation([name], (data: ISignupPayload) => authorizationService.signup(data), options)
 }
