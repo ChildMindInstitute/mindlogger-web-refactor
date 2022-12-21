@@ -4,7 +4,7 @@ import { AxiosError, AxiosResponse } from "axios"
 import { BaseErrorResponse } from "~/utils/types/httpResponses"
 
 import { ILoginPayload } from "../../model/api.interfaces"
-import { Account, Authorization, User } from "../../model/interface"
+import { Account, Authorization, User } from "../../model/user.schema"
 import { authorizationService } from "../authorization.service"
 
 export interface ILoginSuccessResponse {
@@ -17,7 +17,9 @@ export interface ILoginSuccessResponse {
 export type SuccessLoginResponse = AxiosResponse<ILoginSuccessResponse>
 export type FailedLoginResponse = AxiosError<BaseErrorResponse>
 
-export const useFetchLogin = (options: MutationOptions<SuccessLoginResponse, FailedLoginResponse, ILoginPayload>) => {
+export const useFetchLogin = (
+  options: MutationOptions<SuccessLoginResponse, FailedLoginResponse, ILoginPayload> = {},
+) => {
   const name = "login"
 
   const fetcher = useMutation([name], (data: ILoginPayload) => authorizationService.login(data), options)

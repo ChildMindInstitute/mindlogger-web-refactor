@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect } from "react"
+import { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { useAuth, useFetchLogout } from "~/entities"
@@ -14,27 +14,27 @@ const ONE_MIN = 60 * ONE_SEC
 const LOGOUT_TIME_LIMIT = 15 * ONE_MIN // 15 min
 
 export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
-  let timer: number | undefined
+  const timerRef = useRef<number | undefined>(undefined)
   const navigate = useNavigate()
 
   const { clearUserAndAuth, auth } = useAuth()
-  const mutation = useFetchLogout({})
+  const { mutate: logout } = useFetchLogout()
 
   // this resets the timer if it exists.
-  const resetTimer = () => {
-    if (timer) clearTimeout(timer)
-  }
+  const resetTimer = useCallback(() => {
+    if (timerRef) clearTimeout(timerRef.current)
+  }, [timerRef])
 
-  const logoutAction = () => {
+  const logoutAction = useCallback(() => {
     if (auth.token) {
-      mutation.mutate({ token: auth.token })
+      logout({ token: auth.token })
+      clearUserAndAuth()
+      navigate(ROUTES.login.path)
     }
-    clearUserAndAuth()
-    navigate(ROUTES.login.path)
-  }
+  }, [navigate, auth.token, logout, clearUserAndAuth])
 
-  const logoutTimer = () => {
-    timer = setTimeout(() => {
+  const logoutTimer = useCallback(() => {
+    timerRef.current = setTimeout(() => {
       // clears any pending timer.
       resetTimer()
 
@@ -46,17 +46,24 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
       // logs out user
       logoutAction()
     }, LOGOUT_TIME_LIMIT)
-  }
+  }, [resetTimer, logoutAction])
+
+  const onActivityEventHandler = useCallback(() => {
+    resetTimer()
+    logoutTimer()
+  }, [resetTimer, logoutTimer])
 
   useEffect(() => {
     Object.values(events).forEach(item => {
-      window.addEventListener(item, () => {
-        resetTimer()
-        logoutTimer()
-      })
+      window.addEventListener(item, onActivityEventHandler)
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+
+    return () => {
+      Object.values(events).forEach(item => {
+        window.removeEventListener(item, onActivityEventHandler)
+      })
+    }
+  }, [onActivityEventHandler])
 
   return children as JSX.Element
 }

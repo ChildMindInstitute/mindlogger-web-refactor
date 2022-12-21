@@ -10,7 +10,7 @@ export type SuccessLogoutResponse = AxiosResponse<{ message: string }>
 export type FailedLogoutResponse = AxiosError<BaseErrorResponse>
 
 export const useFetchLogout = (
-  options: MutationOptions<SuccessLogoutResponse, FailedLogoutResponse, ILogoutPayload>,
+  options: MutationOptions<SuccessLogoutResponse, FailedLogoutResponse, ILogoutPayload> = {},
 ) => {
   const name = "logout"
 
