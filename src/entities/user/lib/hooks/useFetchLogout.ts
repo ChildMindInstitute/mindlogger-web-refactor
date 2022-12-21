@@ -9,7 +9,7 @@ import { ILogoutPayload } from "../../model/api.interfaces"
 export type SuccessLogoutResponse = AxiosResponse<{ message: string }>
 export type FailedLogoutResponse = AxiosError<BaseErrorResponse>
 
-export const useFetchLogout = (
+export const useLogoutMutation = (
   options: MutationOptions<SuccessLogoutResponse, FailedLogoutResponse, ILogoutPayload> = {},
 ) => {
   const name = "logout"

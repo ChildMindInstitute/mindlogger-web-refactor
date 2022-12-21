@@ -7,13 +7,13 @@ export type { UseAuthOutput } from "./lib/hooks/useAuth"
 export { useAuth } from "./lib/hooks/useAuth"
 
 export type { ILoginSuccessResponse, SuccessLoginResponse, FailedLoginResponse } from "./lib/hooks/useFetchLogin"
-export { useFetchLogin } from "./lib/hooks/useFetchLogin"
+export { useLoginMutation } from "./lib/hooks/useFetchLogin"
 
 export type { SuccessLogoutResponse, FailedLogoutResponse } from "./lib/hooks/useFetchLogout"
-export { useFetchLogout } from "./lib/hooks/useFetchLogout"
+export { useLogoutMutation } from "./lib/hooks/useFetchLogout"
 
 export type { ISignupSuccess, SuccessSignupResponse, FailedSignupResponse } from "./lib/hooks/useFetchSignup"
-export { useFetchSignup } from "./lib/hooks/useFetchSignup"
+export { useSignupMutation } from "./lib/hooks/useFetchSignup"
 
 // Model
 export type { User, UserStore, Authorization, Account } from "./model/user.schema"

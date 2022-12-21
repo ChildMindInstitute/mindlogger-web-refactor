@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom"
 
 import { ROUTES } from "~/app/system/routes/constants"
 
-import { AuthSchema, UserStoreSchema, useAuth, SuccessSignupResponse, useFetchSignup } from "~/entities"
+import { AuthSchema, UserStoreSchema, useAuth, SuccessSignupResponse, useSignupMutation } from "~/entities"
 import { BasicButton, BasicFormProvider, Input } from "~/shared/ui"
 import Checkbox from "~/shared/ui/Checkbox"
 import { useCustomForm } from "~/utils/hooks/useCustomForm"
@@ -42,12 +42,12 @@ const SignupPage = () => {
     navigate(ROUTES.dashboard.path)
   }
 
-  const mutation = useFetchSignup({
+  const { mutate: signup } = useSignupMutation({
     onSuccess,
   })
 
   const onSignupSubmit = (data: TSignupForm) => {
-    mutation.mutate(data)
+    signup(data)
   }
 
   return (

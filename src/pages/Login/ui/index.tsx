@@ -7,7 +7,7 @@ import GooglePlay from "~/assets/GooglePlay.svg"
 import { ROUTES } from "~/app/system/routes/constants"
 import { Input, BasicButton, BasicFormProvider } from "~/shared/ui/"
 
-import { AuthSchema, useAuth, UserStoreSchema, useFetchLogin, SuccessLoginResponse, ILoginPayload } from "~/entities"
+import { AuthSchema, useAuth, UserStoreSchema, useLoginMutation, SuccessLoginResponse, ILoginPayload } from "~/entities"
 
 import { useCustomForm } from "~/utils/hooks/useCustomForm"
 import { isObjectEmpty } from "~/utils/object"
@@ -38,12 +38,12 @@ const LoginPage = () => {
     navigate(ROUTES.dashboard.path)
   }
 
-  const mutation = useFetchLogin({
+  const { mutate: login, isLoading } = useLoginMutation({
     onSuccess,
   })
 
   const onLoginSubmit = (data: TLoginForm) => {
-    mutation.mutate(data as ILoginPayload)
+    login(data as ILoginPayload)
   }
 
   return (
@@ -72,11 +72,7 @@ const LoginPage = () => {
             </Container>
 
             <Container>
-              <BasicButton
-                type="submit"
-                variant="primary"
-                disabled={!isValid || mutation.isLoading}
-                loading={mutation.isLoading}>
+              <BasicButton type="submit" variant="primary" disabled={!isValid || isLoading} loading={isLoading}>
                 {t("button")}
               </BasicButton>
             </Container>

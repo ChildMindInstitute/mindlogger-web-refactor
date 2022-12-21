@@ -15,7 +15,7 @@ export interface ISignupSuccess extends User {
 export type SuccessSignupResponse = AxiosResponse<ISignupSuccess>
 export type FailedSignupResponse = AxiosError<BaseErrorResponse>
 
-export const useFetchSignup = (
+export const useSignupMutation = (
   options: MutationOptions<SuccessSignupResponse, FailedSignupResponse, ISignupPayload> = {},
 ) => {
   const name = "signup"

@@ -17,7 +17,7 @@ export interface ILoginSuccessResponse {
 export type SuccessLoginResponse = AxiosResponse<ILoginSuccessResponse>
 export type FailedLoginResponse = AxiosError<BaseErrorResponse>
 
-export const useFetchLogin = (
+export const useLoginMutation = (
   options: MutationOptions<SuccessLoginResponse, FailedLoginResponse, ILoginPayload> = {},
 ) => {
   const name = "login"
