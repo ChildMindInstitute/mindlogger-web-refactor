@@ -1,7 +1,7 @@
 import { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { useAuth, useFetchLogout } from "~/entities"
+import { useAuth, useLogoutMutation } from "~/entities"
 
 import { ROUTES } from "./system/routes/constants"
 
@@ -18,7 +18,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   const navigate = useNavigate()
 
   const { clearUserAndAuth, auth } = useAuth()
-  const { mutate: logout } = useFetchLogout()
+  const { mutate: logout } = useLogoutMutation()
 
   // this resets the timer if it exists.
   const resetTimer = useCallback(() => {
