@@ -5,10 +5,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { ROUTES } from "~/app/system/routes/constants"
 
 import { AuthSchema, UserStoreSchema, useAuth, SuccessSignupResponse, useSignupMutation } from "~/entities"
-import { BasicButton, BasicFormProvider, Input } from "~/shared/ui"
-import Checkbox from "~/shared/ui/Checkbox"
-import { useCustomForm } from "~/shared/utils/hooks/useCustomForm"
-import { isObjectEmpty } from "~/shared/utils/object"
+import { BasicButton, BasicFormProvider, Input, isObjectEmpty, useCustomForm, Checkbox } from "~/shared"
 
 import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"

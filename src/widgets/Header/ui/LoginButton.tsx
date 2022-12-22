@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 import { ROUTES } from "~/app/system/routes/constants"
-import { NavbarButton } from "~/shared/ui/"
+import { NavbarButton } from "~/shared"
 
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 

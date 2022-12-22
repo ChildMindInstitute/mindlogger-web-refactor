@@ -1,7 +1,6 @@
 import { useMemo } from "react"
 
-import BaseDropdown from "~/shared/ui/Dropdown/ui"
-import { DropdownOptionList } from "~/shared/ui/Dropdown"
+import { Dropdown, DropdownOptionList } from "~/shared"
 
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 import { useAccountDropdown } from "../lib/account-dropdown-options.constant"
@@ -33,7 +32,7 @@ const AccountDropdown = ({ title, onSelectExtended }: IAccountDropdownProps) => 
   }, [t, accountDropdownOptions])
 
   return (
-    <BaseDropdown
+    <Dropdown
       title={title}
       options={preparedAccountDropdownOptions}
       onSelect={onSelect}

@@ -1,5 +1,4 @@
-import { useCustomTranslation } from "~/shared/utils/hooks/useCustomTranslation"
-import { UseTranslationOutput } from "~/shared/utils/types/useTranslationOutput"
+import { UseTranslationOutput, useCustomTranslation } from "~/shared"
 
 export const useNavbarTranslation = (): UseTranslationOutput => {
   const { t, i18n } = useCustomTranslation({ keyPrefix: "Navbar" })

@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react"
 
-import { SupportableLanguage } from "../../../app/system/locale/constants"
+import { SupportableLanguage } from "~/app/system/locale/constants"
+import { DropdownOptionList, Dropdown } from "~/shared"
+
 import { useLanguageList } from "../lib/useLanguageList"
 import { useLanguageTranslation } from "../lib/useLanguageTranslation"
-
-import BaseDropdown, { DropdownOptionList } from "../../../shared/ui/Dropdown"
 
 export interface LanguageDropdownProps {
   onSelectExtended?: () => void
@@ -33,7 +33,7 @@ const LanguageDropdown = ({ onSelectExtended }: LanguageDropdownProps) => {
   }, [t, preparedLanguageList])
 
   return (
-    <BaseDropdown
+    <Dropdown
       title={language === SupportableLanguage.English ? t("english") : t("french")}
       options={preparedLanguageOptions}
       onSelect={onSelect}
