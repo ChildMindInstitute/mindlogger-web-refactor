@@ -1,4 +1,4 @@
-import { useCustomTranslation } from "~/utils/hooks/useCustomTranslation"
+import { useCustomTranslation } from "~/shared/utils/hooks/useCustomTranslation"
 
 export const useLoginTranslation = () => {
   const { t } = useCustomTranslation({ keyPrefix: "Login" })

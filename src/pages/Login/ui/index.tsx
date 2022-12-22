@@ -9,8 +9,8 @@ import { Input, BasicButton, BasicFormProvider } from "~/shared/ui/"
 
 import { AuthSchema, useAuth, UserStoreSchema, useLoginMutation, SuccessLoginResponse, ILoginPayload } from "~/entities"
 
-import { useCustomForm } from "~/utils/hooks/useCustomForm"
-import { isObjectEmpty } from "~/utils/object"
+import { useCustomForm } from "~/shared/utils/hooks/useCustomForm"
+import { isObjectEmpty } from "~/shared/utils/object"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "../lib/constants"

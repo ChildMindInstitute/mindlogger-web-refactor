@@ -1,5 +1,5 @@
 import { Modal } from "react-bootstrap"
-import Button from "../../Button"
+import { BasicButton } from "~/shared/ui"
 
 export interface CustomModalProps {
   show: boolean
@@ -35,14 +35,14 @@ const CustomModal = (props: CustomModalProps) => {
       {(footerPrimaryButton || footerSecondaryButton) && (
         <Modal.Footer>
           {footerPrimaryButton && (
-            <Button variant="primary" onClick={onPrimaryButtonClick}>
+            <BasicButton variant="primary" onClick={onPrimaryButtonClick}>
               {footerPrimaryButton}
-            </Button>
+            </BasicButton>
           )}
           {footerSecondaryButton && (
-            <Button variant="secondary" onClick={onSecondaryButtonClick}>
+            <BasicButton variant="secondary" onClick={onSecondaryButtonClick}>
               {footerSecondaryButton}
-            </Button>
+            </BasicButton>
           )}
         </Modal.Footer>
       )}

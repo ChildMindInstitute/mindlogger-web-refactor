@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 
-import { UseTranslationOutput } from "./../types/useTranslationOutput"
+import { UseTranslationOutput } from "../types/useTranslationOutput"
 
 export interface UseCustomTranslationProps {
   keyPrefix: string

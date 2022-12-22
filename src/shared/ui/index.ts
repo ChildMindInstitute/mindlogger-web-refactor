@@ -1,4 +1,5 @@
 export { default as BasicButton } from "./Button"
+export { default as Checkbox } from "./Checkbox"
 export { default as Dropdown } from "./Dropdown"
 export { default as BasicFormProvider } from "./Form"
 export { default as Input } from "./Input"

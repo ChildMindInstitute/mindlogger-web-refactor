@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "~/app/store"
-import { isObjectEmpty } from "~/utils/object"
+import { isObjectEmpty } from "~/shared/utils/object"
 
 import { clearAuth, setAuth, userAuthSelector } from "../../model/state/auth.slice"
 import { clearUser, setUser, userSelector } from "../../model/state/user.slice"
