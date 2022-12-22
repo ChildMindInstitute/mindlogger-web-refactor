@@ -22,7 +22,4 @@ export type { UseTranslationOutput } from "./types/useTranslationOutput"
 export { DateSchema } from "./validation/date.schema"
 
 // Common
-export { default as api } from "./axios"
 export { enumToArray } from "./enumToArray"
-export { default as httpService } from "./httpService"
-export type { Http } from "./httpService"
