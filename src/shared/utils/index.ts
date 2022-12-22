@@ -10,6 +10,9 @@ export { useLocalStorage } from "./hooks/useLocalStorage"
 // Object helpers
 export { isObjectEmpty } from "./object/isObjectEmpty"
 
+// Routes
+export { ROUTES } from "./routes/constants"
+
 // Types
 export type { Dimension } from "./types/dimension"
 export type { BaseErrorResponse } from "./types/httpResponses"

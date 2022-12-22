@@ -4,8 +4,7 @@ import { Link, useNavigate } from "react-router-dom"
 import AppStore from "~/assets/Appstore.svg"
 import GooglePlay from "~/assets/GooglePlay.svg"
 
-import { ROUTES } from "~/app/system/routes/constants"
-import { Input, BasicButton, BasicFormProvider, isObjectEmpty, useCustomForm } from "~/shared"
+import { Input, BasicButton, BasicFormProvider, isObjectEmpty, useCustomForm, ROUTES } from "~/shared"
 import { AuthSchema, useAuth, UserStoreSchema, useLoginMutation, SuccessLoginResponse, ILoginPayload } from "~/entities"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"

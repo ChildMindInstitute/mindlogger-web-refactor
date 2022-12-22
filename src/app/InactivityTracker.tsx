@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import { useAuth, useLogoutMutation } from "~/entities"
 
-import { ROUTES } from "./system/routes/constants"
+import { ROUTES } from "~/shared"
 
 export type InactivityTrackerProps = PropsWithChildren
 

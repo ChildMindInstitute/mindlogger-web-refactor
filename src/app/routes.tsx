@@ -5,7 +5,7 @@ import { LoginPage, SignupPage } from "~/pages"
 
 import { ProtectedRoute } from "./ProtectedRoute"
 import { useAppSelector } from "./store"
-import { ROUTES } from "./system/routes/constants"
+import { ROUTES } from "~/shared"
 
 const ApplicationRouter = (): JSX.Element | null => {
   const auth = useAppSelector(userAuthSelector)
