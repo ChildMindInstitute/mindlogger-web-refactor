@@ -13,6 +13,11 @@ export { isObjectEmpty } from "./object/isObjectEmpty"
 // Routes
 export { ROUTES } from "./routes/constants"
 
+// Store
+export type { RootState, AppDispatch } from "./store/types"
+export { useAppDispatch } from "./store/useAppDispatch"
+export { useAppSelector } from "./store/useAppSelector"
+
 // Types
 export type { Dimension } from "./types/dimension"
 export type { BaseErrorResponse } from "./types/httpResponses"
