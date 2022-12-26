@@ -33,7 +33,12 @@ const LoginPage = () => {
     navigate(ROUTES.dashboard.path)
   }
 
-  const { mutate: login, isLoading } = useLoginMutation({
+  const {
+    mutate: login,
+    isLoading,
+    isError,
+    error,
+  } = useLoginMutation({
     onSuccess,
   })
 
@@ -53,6 +58,9 @@ const LoginPage = () => {
           <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
             {!isObjectEmpty(errors) && (
               <Alert variant="danger">{errors?.email?.message || errors?.password?.message}</Alert>
+            )}
+            {isError && !isObjectEmpty(error?.response?.data) && (
+              <Alert variant="danger">{error.response?.data?.message}</Alert>
             )}
 
             <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
