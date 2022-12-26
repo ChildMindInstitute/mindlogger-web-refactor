@@ -13,3 +13,7 @@ export interface ISignupPayload {
   firstName: string
   password: string
 }
+
+export interface IForgotPasswordPayload {
+  email: string
+}

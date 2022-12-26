@@ -1,6 +1,6 @@
 import { encryptBASE64, httpService, Http } from "~/shared"
 
-import { ILoginPayload, ILogoutPayload, ISignupPayload } from "../model/api.interfaces"
+import { IForgotPasswordPayload, ILoginPayload, ILogoutPayload, ISignupPayload } from "../model/api.interfaces"
 
 export class AuthorizationService {
   constructor(private httpService: Http) {}
@@ -30,6 +30,12 @@ export class AuthorizationService {
     }
 
     return this.httpService.POST("/user", null, { params })
+  }
+
+  public forgotPassword(data: IForgotPasswordPayload) {
+    const query = new URLSearchParams(data as unknown as Record<string, string>).toString()
+
+    return this.httpService.PUT(`/user/password/temporary?${query}`)
   }
 }
 

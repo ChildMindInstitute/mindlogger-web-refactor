@@ -1,6 +1,5 @@
+import { UserSchema } from "~/entities"
 import { z } from "zod"
 
-export const ForgotPasswordSchema = z.object({
-  email: z.string(),
-})
+export const ForgotPasswordSchema = UserSchema.pick({ email: true })
 export type ForgotPasswordForm = z.infer<typeof ForgotPasswordSchema>

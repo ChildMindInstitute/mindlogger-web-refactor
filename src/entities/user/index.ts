@@ -15,6 +15,13 @@ export { useLogoutMutation } from "./lib/hooks/useLogoutMutation"
 export type { ISignupSuccess, SuccessSignupResponse, FailedSignupResponse } from "./lib/hooks/useSignupMutation"
 export { useSignupMutation } from "./lib/hooks/useSignupMutation"
 
+export type {
+  IForgotPasswordSuccessResponse,
+  SuccessForgotPasswordResponse,
+  FailedForgotPasswordResponse,
+} from "./lib/hooks/useForgotPasswordMutation"
+export { useForgotPasswordMutation } from "./lib/hooks/useForgotPasswordMutation"
+
 // Model
 export type { User, UserStore, Authorization, Account } from "./model/user.schema"
 export { UserSchema, UserStoreSchema, AuthSchema, UserAccountSchema } from "./model/user.schema"
