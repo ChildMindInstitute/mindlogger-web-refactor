@@ -37,7 +37,11 @@ const SignupPage = () => {
     navigate(ROUTES.dashboard.path)
   }
 
-  const { mutate: signup } = useSignupMutation({
+  const {
+    mutate: signup,
+    isError,
+    error,
+  } = useSignupMutation({
     onSuccess,
   })
 
@@ -56,6 +60,10 @@ const SignupPage = () => {
               <Alert variant="danger">
                 {errors?.email?.message || errors?.password?.message || errors?.confirmPassword?.message}
               </Alert>
+            )}
+
+            {isError && !isObjectEmpty(error?.response?.data) && (
+              <Alert variant="danger">{error?.response?.data?.message}</Alert>
             )}
 
             <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
