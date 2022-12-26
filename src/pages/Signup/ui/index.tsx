@@ -26,6 +26,7 @@ const SignupPage = () => {
   const {
     handleSubmit,
     formState: { errors },
+    setError,
   } = form
 
   const onSuccess = ({ data }: SuccessSignupResponse) => {
@@ -46,6 +47,10 @@ const SignupPage = () => {
   })
 
   const onSignupSubmit = (data: TSignupForm) => {
+    if (data.confirmPassword !== data.password) {
+      return setError("confirmPassword", { type: "pattern", message: t("passwordsUnmatched") || "" })
+    }
+
     signup(data)
   }
 
