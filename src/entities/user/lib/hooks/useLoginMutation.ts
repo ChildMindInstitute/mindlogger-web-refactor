@@ -1,7 +1,7 @@
 import { MutationOptions, useMutation } from "@tanstack/react-query"
 import { AxiosError, AxiosResponse } from "axios"
 
-import { BaseErrorResponse } from "~/utils/types/httpResponses"
+import { BaseErrorResponse } from "~/shared"
 
 import { ILoginPayload } from "../../model/api.interfaces"
 import { Account, Authorization, User } from "../../model/user.schema"

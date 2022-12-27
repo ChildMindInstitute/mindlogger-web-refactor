@@ -1,17 +1,16 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit"
-import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
 import persistReducer from "redux-persist/es/persistReducer"
 import persistStore from "redux-persist/es/persistStore"
 import storage from "redux-persist/lib/storage"
 
-import { authReducer, userReducer } from "../entities"
+import { authReducer, userReducer } from "~/entities"
 
 const persistConfig = {
   key: "root",
   storage,
 }
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   user: userReducer,
   auth: authReducer,
 })
@@ -19,13 +18,6 @@ const rootReducer = combineReducers({
 const store = configureStore({
   reducer: persistReducer(persistConfig, rootReducer),
 })
-
-export type RootState = ReturnType<typeof rootReducer>
-export type AppDispatch = typeof store.dispatch
-
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch: () => AppDispatch = useDispatch
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
 export const persistor = persistStore(store)
 

@@ -1,5 +1,4 @@
-import httpService, { Http } from "~/utils/httpService"
-import { encryptBASE64 } from "~/utils/encryption/encryptBASE64"
+import { encryptBASE64, httpService, Http } from "~/shared"
 
 import { ILoginPayload, ILogoutPayload, ISignupPayload } from "../model/api.interfaces"
 

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 
-import { ROUTES } from "~/app/system/routes/constants"
+import { ROUTES } from "~/shared"
 import { useAuth, useLogoutMutation } from "~/entities"
 
 export const useAccountDropdown = () => {

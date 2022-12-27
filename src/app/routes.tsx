@@ -2,10 +2,9 @@ import { Routes, Route } from "react-router-dom"
 
 import { userAuthSelector } from "~/entities"
 import { LoginPage, SignupPage } from "~/pages"
+import { ROUTES, useAppSelector } from "~/shared"
 
 import { ProtectedRoute } from "./ProtectedRoute"
-import { useAppSelector } from "./store"
-import { ROUTES } from "./system/routes/constants"
 
 const ApplicationRouter = (): JSX.Element | null => {
   const auth = useAppSelector(userAuthSelector)

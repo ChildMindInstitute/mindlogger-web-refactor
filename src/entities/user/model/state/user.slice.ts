@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-import { RootState } from "~/app/store"
+import { RootState } from "~/shared"
 
 import { UserStore } from "../user.schema"
 

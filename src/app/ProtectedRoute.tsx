@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom"
 
-import { ROUTES } from "./system/routes/constants"
+import { ROUTES } from "~/shared"
 import { InactivityTracker } from "./InactivityTracker"
 
 export interface ProtectedRouteProps {
