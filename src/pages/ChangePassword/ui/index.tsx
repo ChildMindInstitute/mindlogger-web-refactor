@@ -1,23 +1,28 @@
 import { useEffect } from "react"
 import { Alert, Container } from "react-bootstrap"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 import { ChangePasswordForm, useChangePasswordTranslation } from "~/features"
 import { useCheckTemporaryPasswordMutation } from "~/entities"
-import { Avatar } from "~/shared"
+import { Avatar, ROUTES } from "~/shared"
 
 const ChangePassword = () => {
   const { userId, temporaryToken } = useParams()
+  const navigate = useNavigate()
 
   const { t } = useChangePasswordTranslation()
 
-  const { mutate: checkTemporaryPassword, isError, isSuccess, isLoading } = useCheckTemporaryPasswordMutation()
+  const { mutate: checkTemporaryPassword, isError, isSuccess, isLoading, data } = useCheckTemporaryPasswordMutation()
 
   useEffect(() => {
     if (userId && temporaryToken) {
       checkTemporaryPassword({ userId, temporaryToken })
     }
   }, [userId, temporaryToken, checkTemporaryPassword])
+
+  const onPasswordUpdateSuccess = () => {
+    return navigate(ROUTES.login.path)
+  }
 
   return (
     <div className="d-flex mp-3 align-self-start justify-content-center w-100 pt-3">
@@ -41,7 +46,11 @@ const ChangePassword = () => {
           </Container>
 
           <Container>
-            <ChangePasswordForm userId={userId} temporaryToken={temporaryToken} />
+            <ChangePasswordForm
+              token={data?.data?.authToken?.token}
+              temporaryToken={temporaryToken}
+              onSuccessExtended={onPasswordUpdateSuccess}
+            />
           </Container>
         </div>
       )}

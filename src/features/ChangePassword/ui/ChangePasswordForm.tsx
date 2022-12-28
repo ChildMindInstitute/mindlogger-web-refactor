@@ -2,6 +2,7 @@ import classNames from "classnames"
 import { Col, Form, Row } from "react-bootstrap"
 
 import { BasicButton, BasicFormProvider, Input, useCustomForm } from "~/shared"
+import { useUpdatePasswordMutation } from "~/entities"
 
 import { useChangePasswordTranslation } from "../lib/useChangePasswordTranslation"
 import { ChangePasswordSchema, TChangePassword } from "../model/schema"
@@ -9,11 +10,12 @@ import { ChangePasswordSchema, TChangePassword } from "../model/schema"
 import "./style.scss"
 
 interface ChangePasswordFormProps {
-  userId?: string
+  token?: string
   temporaryToken?: string
+  onSuccessExtended?: () => void
 }
 
-export const ChangePasswordForm = ({ userId, temporaryToken }: ChangePasswordFormProps) => {
+export const ChangePasswordForm = ({ token, temporaryToken, onSuccessExtended }: ChangePasswordFormProps) => {
   const { t } = useChangePasswordTranslation()
 
   const form = useCustomForm(
@@ -22,13 +24,22 @@ export const ChangePasswordForm = ({ userId, temporaryToken }: ChangePasswordFor
   )
   const { handleSubmit } = form
 
-  const onSubmit = (formData: TChangePassword) => {
-    console.log(formData)
+  const onSuccess = () => {
+    if (onSuccessExtended) {
+      onSuccessExtended()
+    }
+  }
+  const { mutate: updatePassword } = useUpdatePasswordMutation({ onSuccess })
+
+  const onSubmit = ({ oldPassword, newPassword }: TChangePassword) => {
+    if (token && temporaryToken && !oldPassword) {
+      return updatePassword({ token, newPassword, oldPassword: temporaryToken })
+    }
   }
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
-      {!userId && !temporaryToken && (
+      {!token && !temporaryToken && (
         <Form.Group as={Row} className="mb-2">
           <Form.Label column sm={3}>
             {`${t("oldPassword")}:`}

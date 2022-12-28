@@ -6,6 +6,7 @@ import {
   ILoginPayload,
   ILogoutPayload,
   ISignupPayload,
+  IUpdatePasswordPayload,
 } from "../model/api.interfaces"
 
 export class AuthorizationService {
@@ -50,6 +51,13 @@ export class AuthorizationService {
     }
 
     return this.httpService.GET(`/user/password/temporary/${data.userId}`, { params })
+  }
+
+  public updatePassword(data: IUpdatePasswordPayload) {
+    const headers = { "Girder-Token": data.token }
+    const params = { old: data.oldPassword, new: data.newPassword }
+
+    return this.httpService.PUT("/user/password", null, { headers, params })
   }
 }
 
