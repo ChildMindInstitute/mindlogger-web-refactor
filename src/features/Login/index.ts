@@ -1,2 +1,2 @@
-export { LoginForm } from "./ui"
+export { LoginForm } from "./ui/LoginForm"
 export { useLoginTranslation } from "./lib/useLoginTranslation"

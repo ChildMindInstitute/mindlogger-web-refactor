@@ -23,7 +23,6 @@ export const SignupForm = () => {
   const {
     handleSubmit,
     formState: { errors },
-    setError,
   } = form
 
   const onSuccess = ({ data }: SuccessSignupResponse) => {
@@ -32,7 +31,7 @@ export const SignupForm = () => {
     const parsedUser = UserStoreSchema.parse(rest)
     const parsedAuth = AuthSchema.parse(authToken)
     setUserAndAuth(parsedUser, parsedAuth)
-    navigate(ROUTES.dashboard.path)
+    return navigate(ROUTES.dashboard.path)
   }
 
   const {
@@ -44,11 +43,7 @@ export const SignupForm = () => {
   })
 
   const onSignupSubmit = (data: TSignupForm) => {
-    if (data.confirmPassword !== data.password) {
-      return setError("confirmPassword", { type: "pattern", message: t("passwordsUnmatched") || "" })
-    }
-
-    signup(data)
+    return signup(data)
   }
 
   return (

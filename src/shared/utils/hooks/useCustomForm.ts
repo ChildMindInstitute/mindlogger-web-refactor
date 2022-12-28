@@ -2,7 +2,9 @@ import { useForm, UseFormProps } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
-export const useCustomForm = <TSchema extends z.AnyZodObject>(
+type CustomZodSchema = z.Schema | z.AnyZodObject
+
+export const useCustomForm = <TSchema extends CustomZodSchema>(
   props: UseFormProps<z.infer<TSchema>>,
   schema: TSchema,
 ) => {
