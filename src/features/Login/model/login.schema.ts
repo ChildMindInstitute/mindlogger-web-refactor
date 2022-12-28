@@ -1,4 +1,5 @@
 import { z } from "zod"
+
 import { UserSchema } from "~/entities"
 
 export const LoginSchema = UserSchema.pick({ email: true }).extend({
