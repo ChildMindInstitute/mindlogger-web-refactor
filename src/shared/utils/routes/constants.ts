@@ -9,6 +9,9 @@ export const ROUTES = {
   forgotPassword: {
     path: "/forgotpassword",
   },
+  changePassword: {
+    path: "/useraccount/:userId/token/:temporaryToken",
+  },
 
   // Protected routes
   dashboard: {

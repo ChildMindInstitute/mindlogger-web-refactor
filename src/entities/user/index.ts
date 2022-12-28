@@ -22,6 +22,13 @@ export type {
 } from "./lib/hooks/useForgotPasswordMutation"
 export { useForgotPasswordMutation } from "./lib/hooks/useForgotPasswordMutation"
 
+export type {
+  ICheckTemporaryPasswordSuccessResponse,
+  SuccessCheckTemporaryPasswordResponse,
+  FailedCheckTemporaryPasswordResponse,
+} from "./lib/hooks/useCheckTemporaryPasswordMutation"
+export { useCheckTemporaryPasswordMutation } from "./lib/hooks/useCheckTemporaryPasswordMutation"
+
 // Model
 export type { User, UserStore, Authorization, Account } from "./model/user.schema"
 export { UserSchema, UserStoreSchema, AuthSchema, UserAccountSchema } from "./model/user.schema"

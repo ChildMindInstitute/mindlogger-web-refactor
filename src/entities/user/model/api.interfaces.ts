@@ -17,3 +17,8 @@ export interface ISignupPayload {
 export interface IForgotPasswordPayload {
   email: string
 }
+
+export interface ICheckTemporaryPasswordPayload {
+  userId: string
+  temporaryToken: string
+}

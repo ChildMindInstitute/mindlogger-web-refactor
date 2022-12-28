@@ -1,6 +1,12 @@
 import { encryptBASE64, httpService, Http } from "~/shared"
 
-import { IForgotPasswordPayload, ILoginPayload, ILogoutPayload, ISignupPayload } from "../model/api.interfaces"
+import {
+  ICheckTemporaryPasswordPayload,
+  IForgotPasswordPayload,
+  ILoginPayload,
+  ILogoutPayload,
+  ISignupPayload,
+} from "../model/api.interfaces"
 
 export class AuthorizationService {
   constructor(private httpService: Http) {}
@@ -36,6 +42,14 @@ export class AuthorizationService {
     const query = new URLSearchParams(data as unknown as Record<string, string>).toString()
 
     return this.httpService.PUT(`/user/password/temporary?${query}`)
+  }
+
+  public checkTemporaryPassword(data: ICheckTemporaryPasswordPayload) {
+    const params = {
+      token: data.temporaryToken,
+    }
+
+    return this.httpService.GET(`/user/password/temporary/${data.userId}`, { params })
   }
 }
 
