@@ -29,7 +29,7 @@ export const ChangePasswordForm = ({ token, temporaryToken, onSuccessExtended }:
       onSuccessExtended()
     }
   }
-  const { mutate: updatePassword } = useUpdatePasswordMutation({ onSuccess })
+  const { mutate: updatePassword, isLoading } = useUpdatePasswordMutation({ onSuccess })
 
   const onSubmit = ({ oldPassword, newPassword }: TChangePassword) => {
     if (token && temporaryToken && !oldPassword) {
@@ -59,12 +59,7 @@ export const ChangePasswordForm = ({ token, temporaryToken, onSuccessExtended }:
           {`${t("newPassword")}:`}
         </Form.Label>
         <Col sm={9}>
-          <Input
-            type="password"
-            name="newPassword"
-            placeholder={t("newPassword") || ""}
-            autoComplete="current-password"
-          />
+          <Input type="password" name="newPassword" placeholder={t("newPassword") || ""} autoComplete="new-password" />
         </Col>
       </Form.Group>
       <Form.Group as={Row} className="mb-2">
@@ -74,12 +69,17 @@ export const ChangePasswordForm = ({ token, temporaryToken, onSuccessExtended }:
             type="password"
             name="confirmNewPassword"
             placeholder={t("confirmPassword") || ""}
-            autoComplete="current-password"
+            autoComplete="new-password"
           />
         </Col>
       </Form.Group>
 
-      <BasicButton type="submit" className={classNames("success-button", "my-3")} variant="success" color="white">
+      <BasicButton
+        type="submit"
+        className={classNames("success-button", "my-3")}
+        variant="success"
+        loading={isLoading}
+        disabled={isLoading}>
         {t("submit")}
       </BasicButton>
     </BasicFormProvider>

@@ -21,7 +21,7 @@ const ChangePassword = () => {
   }, [userId, temporaryToken, checkTemporaryPassword])
 
   const onPasswordUpdateSuccess = () => {
-    return navigate(ROUTES.login.path)
+    return navigate(ROUTES.login.path, { state: { isPasswordUpdatedSuccessfully: true } })
   }
 
   return (
