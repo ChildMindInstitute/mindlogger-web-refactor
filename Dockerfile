@@ -1,10 +1,16 @@
+
 FROM node:18
 
-WORKDIR /usr/src/app
+WORKDIR /home/node
 
-COPY . .
+COPY package*.json ./
+
+COPY yarn*.lock ./
+
+COPY tsconfig*.json ./
 
 RUN yarn install
-RUN yarn build
 
-CMD [ "yarn", "dev" ]
+COPY . ./
+
+RUN yarn run build
