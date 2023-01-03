@@ -14,7 +14,7 @@ export const ForgotPasswordForm = () => {
   const form = useCustomForm({ defaultValues: { email: "" } }, ForgotPasswordSchema)
 
   const onSuccess = () => {
-    navigate(ROUTES.login.path)
+    navigate(ROUTES.login.path, { state: { isForgotPasswordSubmittedSuccessfully: true } })
   }
 
   const { mutate: forgotPassword, error, isError, isLoading } = useForgotPasswordMutation({ onSuccess })
