@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
-import AppStore from "~/assets/Appstore.svg"
+import AppStore from "~/assets/AppStore.svg"
 import GooglePlay from "~/assets/GooglePlay.svg"
 
 import { BasicButton, ROUTES } from "~/shared"

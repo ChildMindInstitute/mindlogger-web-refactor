@@ -10,5 +10,6 @@ export const ChangePasswordSchema = z
     message: "",
     path: ["confirmNewPassword"],
   })
+  .transform(data => ({ old: data.oldPassword, new: data.newPassword, confirm: data.confirmNewPassword }))
 
 export type TChangePassword = z.infer<typeof ChangePasswordSchema>

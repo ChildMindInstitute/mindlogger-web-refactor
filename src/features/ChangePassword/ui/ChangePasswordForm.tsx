@@ -18,10 +18,7 @@ interface ChangePasswordFormProps {
 export const ChangePasswordForm = ({ token, temporaryToken, onSuccessExtended }: ChangePasswordFormProps) => {
   const { t } = useChangePasswordTranslation()
 
-  const form = useCustomForm(
-    { defaultValues: { oldPassword: "", newPassword: "", confirmNewPassword: "" } },
-    ChangePasswordSchema,
-  )
+  const form = useCustomForm({ defaultValues: { old: "", new: "", confirm: "" } }, ChangePasswordSchema)
   const { handleSubmit } = form
 
   const onSuccess = () => {
@@ -31,9 +28,9 @@ export const ChangePasswordForm = ({ token, temporaryToken, onSuccessExtended }:
   }
   const { mutate: updatePassword, isLoading } = useUpdatePasswordMutation({ onSuccess })
 
-  const onSubmit = ({ oldPassword, newPassword }: TChangePassword) => {
-    if (token && temporaryToken && !oldPassword) {
-      return updatePassword({ token, newPassword, oldPassword: temporaryToken })
+  const onSubmit = (data: TChangePassword) => {
+    if (token && temporaryToken && !data.old) {
+      return updatePassword({ token, new: data.new, old: temporaryToken })
     }
 
     if (token && !temporaryToken && oldPassword) {
