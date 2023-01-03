@@ -32,11 +32,15 @@ export const ChangePasswordForm = ({ token, temporaryToken, onSuccessExtended }:
     if (token && temporaryToken && !data.old) {
       return updatePassword({ token, new: data.new, old: temporaryToken })
     }
+
+    if (token && !temporaryToken && data.old) {
+      return updatePassword({ token, new: data.new, old: data.old })
+    }
   }
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
-      {!token && !temporaryToken && (
+      {!temporaryToken && (
         <Form.Group as={Row} className="mb-2">
           <Form.Label column sm={3}>
             {`${t("oldPassword")}:`}
