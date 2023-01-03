@@ -53,9 +53,9 @@ export class AuthorizationService {
     return this.httpService.GET(`/user/password/temporary/${data.userId}`, { params })
   }
 
-  public updatePassword(data: IUpdatePasswordPayload) {
-    const headers = { "Girder-Token": data.token }
-    const params = { old: data.oldPassword, new: data.newPassword }
+  public updatePassword({ token, ...rest }: IUpdatePasswordPayload) {
+    const headers = { "Girder-Token": token }
+    const params = { ...rest }
 
     return this.httpService.PUT("/user/password", null, { headers, params })
   }

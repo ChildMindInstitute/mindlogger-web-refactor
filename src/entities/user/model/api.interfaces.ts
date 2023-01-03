@@ -25,6 +25,6 @@ export interface ICheckTemporaryPasswordPayload {
 
 export interface IUpdatePasswordPayload {
   token: string
-  oldPassword: string
-  newPassword: string
+  old: string
+  new: string
 }
