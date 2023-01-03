@@ -33,8 +33,8 @@ export const ChangePasswordForm = ({ token, temporaryToken, onSuccessExtended }:
       return updatePassword({ token, new: data.new, old: temporaryToken })
     }
 
-    if (token && !temporaryToken && oldPassword) {
-      return updatePassword({ token, newPassword, oldPassword })
+    if (token && !temporaryToken && data.old) {
+      return updatePassword({ token, new: data.new, old: data.old })
     }
   }
 
