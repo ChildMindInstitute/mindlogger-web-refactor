@@ -13,7 +13,7 @@ const Settings = () => {
       <div className="text-center my-2 px-3">
         <div className="d-flex justify-content-center align-items-center">
           <Avatar />
-          <h1>{t("settings", { name: user.firstName })}</h1>
+          <h1>{t("greetings", { name: user.firstName })}</h1>
         </div>
         <hr></hr>
 
