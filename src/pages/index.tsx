@@ -9,6 +9,7 @@ import ForgotPassword from "./ForgotPassword"
 import LoginPage from "./Login"
 import Settings from "./Settings"
 import SignupPage from "./Signup"
+import Profile from "./Profile"
 
 const ApplicationRouter = (): JSX.Element | null => {
   const auth = useAppSelector(userAuthSelector)
@@ -22,7 +23,7 @@ const ApplicationRouter = (): JSX.Element | null => {
 
       <Route element={<ProtectedRoute token={auth.token} />}>
         <Route index path={ROUTES.dashboard.path} element={<div>dashboard</div>} />
-        <Route path={ROUTES.profile.path} element={<div>profile</div>} />
+        <Route path={ROUTES.profile.path} element={<Profile />} />
         <Route path={ROUTES.settings.path} element={<Settings />} />
 
         <Route path="*" element={<Navigate to={ROUTES.dashboard.path} />} />

@@ -1,15 +1,12 @@
 import { Container } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
-import AppStore from "~/assets/AppStore.svg"
-import GooglePlay from "~/assets/GooglePlay.svg"
-
 import { ROUTES } from "~/shared/utils"
 import { BasicButton } from "~/shared/ui"
 
-import { LoginForm, useLoginTranslation } from "~/features/Login"
+import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
 
-import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "../lib/constants"
+import { LoginForm, useLoginTranslation } from "~/features/Login"
 
 import "./login.scss"
 
@@ -34,19 +31,7 @@ const LoginPage = () => {
           </BasicButton>
         </Container>
 
-        <Container>
-          <Container className="mt-3 mb-2">
-            <p>{t("downloadMobile")}</p>
-          </Container>
-          <Container className="d-flex gap-3 justify-content-center">
-            <a href={APPSTORE_LINK} target="_blank" rel="noreferrer">
-              <img src={AppStore} alt="App Store Icon" />
-            </a>
-            <a href={GOOGLEPLAY_LINK} target="_blank" rel="noreferrer">
-              <img src={GooglePlay} alt="Google Play Icon" />
-            </a>
-          </Container>
-        </Container>
+        <DownloadMobileLinks />
       </div>
     </div>
   )
