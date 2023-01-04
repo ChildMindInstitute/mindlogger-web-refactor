@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Alert } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
-import { AuthSchema, SuccessSignupResponse, useAuth, UserStoreSchema, useSignupMutation } from "~/entities"
+import { AuthSchema, SuccessSignupResponse, useAuth, UserStoreSchema, useSignupMutation } from "~/entities/user"
 import { BasicFormProvider, isObjectEmpty, Input, Checkbox, BasicButton, useCustomForm, ROUTES } from "~/shared"
 
 import { TERMS_URL } from "../lib/constants"

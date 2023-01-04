@@ -1,7 +1,7 @@
 import { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { useAuth, useLogoutMutation } from "~/entities"
+import { useAuth, useLogoutMutation } from "~/entities/user"
 
 import { ROUTES } from "~/shared"
 

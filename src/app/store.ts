@@ -3,7 +3,7 @@ import persistReducer from "redux-persist/es/persistReducer"
 import persistStore from "redux-persist/es/persistStore"
 import storage from "redux-persist/lib/storage"
 
-import { authReducer, userReducer } from "~/entities"
+import { authReducer, userReducer } from "~/entities/user"
 
 const persistConfig = {
   key: "root",

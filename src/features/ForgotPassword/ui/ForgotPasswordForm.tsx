@@ -1,7 +1,7 @@
 import { Alert, Container } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
-import { useForgotPasswordMutation } from "~/entities"
+import { useForgotPasswordMutation } from "~/entities/user"
 import { BasicButton, BasicFormProvider, Input, isObjectEmpty, ROUTES, useCustomForm } from "~/shared"
 
 import { useForgotPasswordTranslation } from "../lib/useForgotPasswordTranslation"

@@ -7,7 +7,7 @@ import "./header.scss"
 
 import { ROUTES } from "~/shared"
 import { LanguageDropdown } from "~/features"
-import { useAuth } from "~/entities"
+import { useAuth } from "~/entities/user"
 
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 

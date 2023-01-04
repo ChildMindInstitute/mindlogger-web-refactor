@@ -3,7 +3,7 @@ import { Alert, Container } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router-dom"
 
 import { ChangePasswordForm, useChangePasswordTranslation } from "~/features"
-import { useCheckTemporaryPasswordMutation } from "~/entities"
+import { useCheckTemporaryPasswordMutation } from "~/entities/user"
 import { Avatar, ROUTES } from "~/shared"
 
 const ChangePassword = () => {

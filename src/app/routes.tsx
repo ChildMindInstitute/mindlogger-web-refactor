@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom"
 
-import { userAuthSelector } from "~/entities"
+import { userAuthSelector } from "~/entities/user"
 import { ChangePasswordPage, ForgotPasswordPage, LoginPage, SettingsPage, SignupPage } from "~/pages"
 import { ROUTES, useAppSelector } from "~/shared"
 
