@@ -4,7 +4,9 @@ import { Link } from "react-router-dom"
 import AppStore from "~/assets/AppStore.svg"
 import GooglePlay from "~/assets/GooglePlay.svg"
 
-import { BasicButton, ROUTES } from "~/shared"
+import { ROUTES } from "~/shared/utils"
+import { BasicButton } from "~/shared/ui"
+
 import { LoginForm, useLoginTranslation } from "~/features/Login"
 
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "../lib/constants"

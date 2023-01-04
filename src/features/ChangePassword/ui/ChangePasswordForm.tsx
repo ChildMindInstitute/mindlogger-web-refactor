@@ -1,7 +1,8 @@
 import classNames from "classnames"
 import { Col, Form, Row } from "react-bootstrap"
 
-import { BasicButton, BasicFormProvider, Input, useCustomForm } from "~/shared"
+import { BasicButton, BasicFormProvider, Input } from "~/shared/ui"
+import { useCustomForm } from "~/shared/utils"
 import { useUpdatePasswordMutation } from "~/entities/user"
 
 import { useChangePasswordTranslation } from "../lib/useChangePasswordTranslation"

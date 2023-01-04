@@ -4,7 +4,8 @@ import { useNavigate, useParams } from "react-router-dom"
 
 import { ChangePasswordForm, useChangePasswordTranslation } from "~/features/ChangePassword"
 import { useCheckTemporaryPasswordMutation } from "~/entities/user"
-import { Avatar, ROUTES } from "~/shared"
+import { ROUTES } from "~/shared/utils"
+import { Avatar } from "~/shared/ui"
 
 const ChangePassword = () => {
   const { userId, temporaryToken } = useParams()

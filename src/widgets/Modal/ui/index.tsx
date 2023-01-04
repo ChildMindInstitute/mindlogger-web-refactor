@@ -1,5 +1,6 @@
 import { Modal } from "react-bootstrap"
-import { BasicButton } from "~/shared"
+
+import { BasicButton } from "~/shared/ui"
 
 export interface CustomModalProps {
   show: boolean

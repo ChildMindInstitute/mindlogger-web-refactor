@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 
-import { Dropdown, DropdownOptionList } from "~/shared"
+import { Dropdown, DropdownOptionList } from "~/shared/ui"
 
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 import { useAccountDropdown } from "../lib/account-dropdown-options.constant"

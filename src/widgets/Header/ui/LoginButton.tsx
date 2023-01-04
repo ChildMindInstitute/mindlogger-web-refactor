@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
-import { NavbarButton, ROUTES } from "~/shared"
+import { ROUTES } from "~/shared/utils"
+import { NavbarButton } from "~/shared/ui"
 
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react"
 
 import { SupportableLanguage } from "~/app/system/locale/constants"
-import { DropdownOptionList, Dropdown } from "~/shared"
+import { DropdownOptionList, Dropdown } from "~/shared/ui"
 
 import { useLanguageList } from "../lib/useLanguageList"
 import { useLanguageTranslation } from "../lib/useLanguageTranslation"
