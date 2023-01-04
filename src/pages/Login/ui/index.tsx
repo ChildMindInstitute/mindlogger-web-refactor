@@ -5,7 +5,7 @@ import AppStore from "~/assets/AppStore.svg"
 import GooglePlay from "~/assets/GooglePlay.svg"
 
 import { BasicButton, ROUTES } from "~/shared"
-import { LoginForm, useLoginTranslation } from "~/features"
+import { LoginForm, useLoginTranslation } from "~/features/Login"
 
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "../lib/constants"
 

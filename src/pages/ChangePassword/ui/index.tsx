@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { Alert, Container } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router-dom"
 
-import { ChangePasswordForm, useChangePasswordTranslation } from "~/features"
+import { ChangePasswordForm, useChangePasswordTranslation } from "~/features/ChangePassword"
 import { useCheckTemporaryPasswordMutation } from "~/entities/user"
 import { Avatar, ROUTES } from "~/shared"
 

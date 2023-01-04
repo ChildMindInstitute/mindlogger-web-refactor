@@ -6,7 +6,7 @@ import { Navbar, Nav, Col, Row } from "react-bootstrap"
 import "./header.scss"
 
 import { ROUTES } from "~/shared"
-import { LanguageDropdown } from "~/features"
+import { LanguageDropdown } from "~/features/language"
 import { useAuth } from "~/entities/user"
 
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"

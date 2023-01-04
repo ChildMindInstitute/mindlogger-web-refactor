@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap"
 
-import { ChangePasswordForm, useChangePasswordTranslation } from "~/features"
+import { ChangePasswordForm, useChangePasswordTranslation } from "~/features/ChangePassword"
 import { Avatar } from "~/shared"
 import { useAuth } from "~/entities/user"
 

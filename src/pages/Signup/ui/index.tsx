@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
-import { SignupForm, useSignupTranslation } from "~/features"
+import { SignupForm, useSignupTranslation } from "~/features/Signup"
 import { ROUTES } from "~/shared"
 
 import "./styles.scss"
