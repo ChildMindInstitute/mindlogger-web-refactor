@@ -5,7 +5,7 @@ import i18nManager from "./system/locale/i18n"
 
 import { ReactQuery, Redux, RouteProvider } from "./providers"
 
-import ApplicationRouter from "./routes"
+import ApplicationRouter from "~/pages"
 import Layout from "./Layout"
 
 import "./index.css"
