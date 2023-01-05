@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { UserSchema } from "~/entities"
+import { UserSchema } from "~/entities/user"
 
 export type TSignupForm = z.infer<typeof SignupFormSchema>
 

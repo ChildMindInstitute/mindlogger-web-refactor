@@ -1,5 +1,0 @@
-export { default as LoginPage } from "./Login"
-export { default as SignupPage } from "./Signup"
-export { default as ForgotPasswordPage } from "./ForgotPassword"
-export { default as ChangePasswordPage } from "./ChangePassword"
-export { default as SettingsPage } from "./Settings"

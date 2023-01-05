@@ -2,8 +2,9 @@ import { useState } from "react"
 import { Alert } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
-import { AuthSchema, SuccessSignupResponse, useAuth, UserStoreSchema, useSignupMutation } from "~/entities"
-import { BasicFormProvider, isObjectEmpty, Input, Checkbox, BasicButton, useCustomForm, ROUTES } from "~/shared"
+import { AuthSchema, SuccessSignupResponse, useAuth, UserStoreSchema, useSignupMutation } from "~/entities/user"
+import { isObjectEmpty, useCustomForm, ROUTES } from "~/shared/utils"
+import { Input, Checkbox, BasicButton, BasicFormProvider } from "~/shared/ui"
 
 import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"

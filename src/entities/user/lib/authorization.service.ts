@@ -1,4 +1,5 @@
-import { encryptBASE64, httpService, Http } from "~/shared"
+import { httpService, Http } from "~/shared/api"
+import { encryptBASE64 } from "~/shared/utils"
 
 import {
   ICheckTemporaryPasswordPayload,

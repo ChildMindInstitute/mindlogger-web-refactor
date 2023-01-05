@@ -1,8 +1,16 @@
 import { Alert, Container } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 
-import { AuthSchema, ILoginPayload, SuccessLoginResponse, useAuth, useLoginMutation, UserStoreSchema } from "~/entities"
-import { BasicButton, BasicFormProvider, Input, isObjectEmpty, ROUTES, useCustomForm } from "~/shared"
+import {
+  AuthSchema,
+  ILoginPayload,
+  SuccessLoginResponse,
+  useAuth,
+  useLoginMutation,
+  UserStoreSchema,
+} from "~/entities/user"
+import { isObjectEmpty, ROUTES, useCustomForm } from "~/shared/utils"
+import { BasicButton, BasicFormProvider, Input } from "~/shared/ui"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { LoginSchema, TLoginForm } from "../model/login.schema"

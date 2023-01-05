@@ -1,6 +1,8 @@
 import { Container } from "react-bootstrap"
 import { Link } from "react-router-dom"
-import { BasicButton, ROUTES } from "~/shared"
+
+import { BasicButton } from "~/shared/ui"
+import { ROUTES } from "~/shared/utils"
 
 import { ForgotPasswordForm, useForgotPasswordTranslation } from "~/features/ForgotPassword"
 

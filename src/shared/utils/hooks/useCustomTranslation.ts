@@ -6,8 +6,8 @@ export interface UseCustomTranslationProps {
   keyPrefix: string
 }
 
-export const useCustomTranslation = (props: UseCustomTranslationProps): UseTranslationOutput => {
-  const { t, i18n } = useTranslation("translation", { keyPrefix: props.keyPrefix })
+export const useCustomTranslation = (props?: UseCustomTranslationProps): UseTranslationOutput => {
+  const { t, i18n } = useTranslation("translation", { keyPrefix: props?.keyPrefix })
 
   return {
     i18n,

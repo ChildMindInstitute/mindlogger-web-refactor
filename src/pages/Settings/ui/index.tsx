@@ -1,8 +1,8 @@
 import { Container } from "react-bootstrap"
 
-import { ChangePasswordForm, useChangePasswordTranslation } from "~/features"
-import { Avatar } from "~/shared"
-import { useAuth } from "~/entities"
+import { ChangePasswordForm, useChangePasswordTranslation } from "~/features/ChangePassword"
+import { Avatar } from "~/shared/ui"
+import { useAuth } from "~/entities/user"
 
 const Settings = () => {
   const { t } = useChangePasswordTranslation()

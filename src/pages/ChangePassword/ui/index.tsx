@@ -2,9 +2,10 @@ import { useEffect } from "react"
 import { Alert, Container } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router-dom"
 
-import { ChangePasswordForm, useChangePasswordTranslation } from "~/features"
-import { useCheckTemporaryPasswordMutation } from "~/entities"
-import { Avatar, ROUTES } from "~/shared"
+import { ChangePasswordForm, useChangePasswordTranslation } from "~/features/ChangePassword"
+import { useCheckTemporaryPasswordMutation } from "~/entities/user"
+import { ROUTES } from "~/shared/utils"
+import { Avatar } from "~/shared/ui"
 
 const ChangePassword = () => {
   const { userId, temporaryToken } = useParams()

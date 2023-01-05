@@ -3,16 +3,16 @@ import { useNavigate } from "react-router-dom"
 
 import { Navbar, Nav, Col, Row } from "react-bootstrap"
 
-import "./header.scss"
-
-import { ROUTES } from "~/shared"
-import { LanguageDropdown } from "~/features"
-import { useAuth } from "~/entities"
+import { ROUTES } from "~/shared/utils"
+import { LanguageDropdown } from "~/features/language"
+import { useAuth } from "~/entities/user"
 
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 
 import LoginButton from "./LoginButton"
 import AccountDropdown from "./AccountDropdown"
+
+import "./header.scss"
 
 const Header = (): JSX.Element | null => {
   const { t } = useNavbarTranslation()
