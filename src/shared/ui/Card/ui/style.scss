@@ -1,0 +1,39 @@
+.applet-card {
+  margin: 20px;
+  min-width: 280px !important;
+  width: 280px;
+  box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+  cursor: pointer;
+}
+
+.applet-card-title {
+  text-transform: capitalize;
+}
+
+.applet-card-title:hover {
+  text-decoration: underline;
+}
+
+.applet-header {
+  padding-top: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.applet-header .applet-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.applet-header .applet-image * {
+  position: relative;
+  object-fit: cover;
+  min-height: 100%;
+  min-width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
