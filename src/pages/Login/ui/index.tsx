@@ -24,7 +24,7 @@ const LoginPage = () => {
         <Container className="loginForm">
           <LoginForm />
 
-          <BasicButton type="button" variant="outline-primary" className="mb-3">
+          <BasicButton type="button" variant="outline-primary" className="mb-3" defaultSize>
             <Link to={ROUTES.signup.path} relative="path">
               {t("create")}
             </Link>

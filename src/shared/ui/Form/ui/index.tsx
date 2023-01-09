@@ -14,7 +14,7 @@ const BasicFormProvider = <TFieldValues extends FieldValues>({
   return (
     <FormProvider {...rest}>
       <form onSubmit={onSubmit}>
-        <Container fluid className="my-3">
+        <Container fluid className="mt-3 mb-2">
           {children}
         </Container>
       </form>
