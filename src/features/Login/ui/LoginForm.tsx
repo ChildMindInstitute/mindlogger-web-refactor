@@ -23,7 +23,7 @@ export const LoginForm = () => {
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = form
 
   const onSuccess = ({ data }: SuccessLoginResponse) => {
@@ -49,7 +49,6 @@ export const LoginForm = () => {
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
-      {!isObjectEmpty(errors) && <Alert variant="danger">{errors?.email?.message || errors?.password?.message}</Alert>}
       {isError && !isObjectEmpty(error?.response?.data) && (
         <Alert variant="danger">{error.response?.data?.message}</Alert>
       )}
