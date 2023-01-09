@@ -10,13 +10,11 @@ import {
   useLoginMutation,
   UserStoreSchema,
 } from "~/entities/user"
-import { isObjectEmpty, ROUTES, useCustomForm } from "~/shared/utils"
-import { BasicButton, BasicFormProvider, Input } from "~/shared/ui"
+import { ROUTES, useCustomForm } from "~/shared/utils"
+import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage } from "~/shared/ui"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { LoginSchema, TLoginForm } from "../model/login.schema"
-
-import "./styles.scss"
 
 export const LoginForm = () => {
   const { t } = useLoginTranslation()
@@ -40,7 +38,6 @@ export const LoginForm = () => {
   const {
     mutate: login,
     isLoading,
-    isError,
     error,
   } = useLoginMutation({
     onSuccess,
@@ -63,11 +60,7 @@ export const LoginForm = () => {
         </BasicButton>
       </Container>
 
-      <Container className={classNames("system-message-box")}>
-        {isError && !isObjectEmpty(error?.response?.data) && (
-          <span className={classNames("system-message-label", "failed-message")}>{error.response?.data?.message}</span>
-        )}
-      </Container>
+      <DisplaySystemMessage errorMessage={error?.response?.data?.message} />
 
       <Container>
         <BasicButton type="submit" variant="primary" disabled={!isValid || isLoading} loading={isLoading} defaultSize>
