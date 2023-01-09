@@ -1,6 +1,7 @@
 import { CustomCard } from "~/shared/ui"
 
 const AppletCard = () => {
+  // This mock will be removed
   const appletMock = {
     id: "some-id",
     title: "mock-title",
