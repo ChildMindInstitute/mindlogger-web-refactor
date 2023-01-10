@@ -1,11 +1,11 @@
 import { useEffect } from "react"
 import { Alert, Container } from "react-bootstrap"
+import classNames from "classnames"
 import { useNavigate, useParams } from "react-router-dom"
 
 import { ChangePasswordForm, useChangePasswordTranslation } from "~/features/ChangePassword"
 import { useCheckTemporaryPasswordMutation } from "~/entities/user"
 import { ROUTES } from "~/shared/utils"
-import { Avatar } from "~/shared/ui"
 
 const ChangePassword = () => {
   const { userId, temporaryToken } = useParams()
@@ -22,7 +22,7 @@ const ChangePassword = () => {
   }, [userId, temporaryToken, checkTemporaryPassword])
 
   const onPasswordUpdateSuccess = () => {
-    return navigate(ROUTES.login.path, { state: { isPasswordUpdatedSuccessfully: true } })
+    return navigate(ROUTES.login.path)
   }
 
   return (
@@ -36,23 +36,17 @@ const ChangePassword = () => {
       )}
 
       {isSuccess && (
-        <div className="text-center my-2 px-3">
-          <div className="d-flex justify-content-center align-items-center">
-            <Avatar />
-          </div>
-          <hr></hr>
+        <div className="text-center my-2 px-3 w-100">
           <Container>
-            <h3>{t("title")}</h3>
-            <h5>{t("cautionMessage")}</h5>
+            <h3 className={classNames("text-primary")}>{t("title")}</h3>
           </Container>
 
-          <Container>
-            <ChangePasswordForm
-              token={data?.data?.authToken?.token}
-              temporaryToken={temporaryToken}
-              onSuccessExtended={onPasswordUpdateSuccess}
-            />
-          </Container>
+          <ChangePasswordForm
+            title={t("formTitle", { email: data?.data?.user?.email })}
+            token={data?.data?.authToken?.token}
+            temporaryToken={temporaryToken}
+            onSuccessExtended={onPasswordUpdateSuccess}
+          />
         </div>
       )}
     </div>
