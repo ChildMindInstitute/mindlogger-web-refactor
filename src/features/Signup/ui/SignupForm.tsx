@@ -1,10 +1,9 @@
 import { useState } from "react"
-import { Alert } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
 import { AuthSchema, SuccessSignupResponse, useAuth, UserStoreSchema, useSignupMutation } from "~/entities/user"
 import { isObjectEmpty, useCustomForm, ROUTES } from "~/shared/utils"
-import { Input, Checkbox, BasicButton, BasicFormProvider } from "~/shared/ui"
+import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage } from "~/shared/ui"
 
 import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"
@@ -35,11 +34,7 @@ export const SignupForm = () => {
     return navigate(ROUTES.dashboard.path)
   }
 
-  const {
-    mutate: signup,
-    isError,
-    error,
-  } = useSignupMutation({
+  const { mutate: signup, error } = useSignupMutation({
     onSuccess,
   })
 
@@ -49,20 +44,9 @@ export const SignupForm = () => {
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onSignupSubmit)}>
-      {!isObjectEmpty(errors) && (
-        <Alert variant="danger">
-          {errors?.email?.message || errors?.password?.message || errors?.confirmPassword?.message}
-        </Alert>
-      )}
-
-      {isError && !isObjectEmpty(error?.response?.data) && (
-        <Alert variant="danger">{error?.response?.data?.message}</Alert>
-      )}
-
       <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
       <Input type="text" name="firstName" placeholder={t("firstName") || ""} />
       <Input type="text" name="lastName" placeholder={t("lastName") || ""} />
-
       <Input type="password" name="password" placeholder={t("password") || ""} autoComplete="new-password" />
       <Input
         type="password"
@@ -80,7 +64,9 @@ export const SignupForm = () => {
         </Checkbox>
       </div>
 
-      <BasicButton type="submit" variant="primary" disabled={!isObjectEmpty(errors) || !terms}>
+      <DisplaySystemMessage errorMessage={error?.response?.data?.message} />
+
+      <BasicButton type="submit" variant="primary" disabled={!isObjectEmpty(errors) || !terms} defaultSize>
         {t("title")}
       </BasicButton>
     </BasicFormProvider>

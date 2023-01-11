@@ -1,5 +1,6 @@
-import { Alert, Container } from "react-bootstrap"
+import { Container } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
+import classNames from "classnames"
 
 import {
   AuthSchema,
@@ -9,8 +10,8 @@ import {
   useLoginMutation,
   UserStoreSchema,
 } from "~/entities/user"
-import { isObjectEmpty, ROUTES, useCustomForm } from "~/shared/utils"
-import { BasicButton, BasicFormProvider, Input } from "~/shared/ui"
+import { ROUTES, useCustomForm } from "~/shared/utils"
+import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage } from "~/shared/ui"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { LoginSchema, TLoginForm } from "../model/login.schema"
@@ -23,7 +24,7 @@ export const LoginForm = () => {
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = form
 
   const onSuccess = ({ data }: SuccessLoginResponse) => {
@@ -37,7 +38,6 @@ export const LoginForm = () => {
   const {
     mutate: login,
     isLoading,
-    isError,
     error,
   } = useLoginMutation({
     onSuccess,
@@ -49,24 +49,21 @@ export const LoginForm = () => {
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
-      {!isObjectEmpty(errors) && <Alert variant="danger">{errors?.email?.message || errors?.password?.message}</Alert>}
-      {isError && !isObjectEmpty(error?.response?.data) && (
-        <Alert variant="danger">{error.response?.data?.message}</Alert>
-      )}
-
       <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
       <Input type="password" name="password" placeholder={t("password") || ""} autoComplete="current-password" />
 
       <Container className="d-flex justify-content-start p-0 mb-3">
-        <BasicButton type="button" variant="link" className="p-0">
+        <BasicButton type="button" variant="link" className={classNames("p-0", "ms-3")}>
           <Link to={ROUTES.forgotPassword.path} relative="path">
             {t("forgotPassword")}
           </Link>
         </BasicButton>
       </Container>
 
+      <DisplaySystemMessage errorMessage={error?.response?.data?.message} />
+
       <Container>
-        <BasicButton type="submit" variant="primary" disabled={!isValid || isLoading} loading={isLoading}>
+        <BasicButton type="submit" variant="primary" disabled={!isValid || isLoading} loading={isLoading} defaultSize>
           {t("button")}
         </BasicButton>
       </Container>
