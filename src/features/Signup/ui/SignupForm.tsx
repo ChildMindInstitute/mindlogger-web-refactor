@@ -13,8 +13,8 @@ import { isObjectEmpty, useCustomForm, ROUTES, usePasswordInput } from "~/shared
 export const SignupForm = () => {
   const navigate = useNavigate()
   const { t } = useSignupTranslation()
-  const [isPasswordType, onPasswordIconClick] = usePasswordInput()
-  const [isConfirmPasswordType, onConfirmPasswordIconClick] = usePasswordInput()
+  const [isPasswordType, onPasswordIconClick, PasswordIcon] = usePasswordInput()
+  const [isConfirmPasswordType, onConfirmPasswordIconClick, ConfirmPasswordIcon] = usePasswordInput()
 
   const { setUserAndAuth } = useAuth()
   const [terms, setTerms] = useState<boolean>(false)
@@ -56,6 +56,7 @@ export const SignupForm = () => {
         placeholder={t("password") || ""}
         autoComplete="new-password"
         onIconClick={onPasswordIconClick}
+        Icon={PasswordIcon}
       />
       <Input
         type={isConfirmPasswordType}
@@ -63,6 +64,7 @@ export const SignupForm = () => {
         placeholder={t("confirmPassword") || ""}
         autoComplete="new-password"
         onIconClick={onConfirmPasswordIconClick}
+        Icon={ConfirmPasswordIcon}
       />
 
       <div className="d-flex mb-3">

@@ -1,8 +1,7 @@
-import React, { useMemo } from "react"
+import React from "react"
 
 import classNames from "classnames"
 import { Form } from "react-bootstrap"
-import { Eye, EyeSlash } from "react-bootstrap-icons"
 import { useController, useFormContext } from "react-hook-form"
 
 import { IInputCommonProps } from "../lib/interfaces"
@@ -11,9 +10,7 @@ import { InputIcon } from "./InputIcon"
 import "./style.scss"
 
 const Input = (props: IInputCommonProps) => {
-  const { type, name, placeholder, onChange, className, onIconClick } = props
-
-  const isPasswordInput = useMemo(() => type === "password", [type])
+  const { type, name, placeholder, onChange, className, Icon, onIconClick } = props
 
   const { control } = useFormContext()
   const {
@@ -42,15 +39,9 @@ const Input = (props: IInputCommonProps) => {
         className={classNames("default-input", className, { "input-error-shadow": error })}
       />
 
-      {isPasswordInput && onIconClick && (
+      {Icon && onIconClick && (
         <InputIcon onClick={onIconClick}>
-          <EyeSlash width={20} height={16} />
-        </InputIcon>
-      )}
-
-      {!isPasswordInput && onIconClick && (
-        <InputIcon onClick={onIconClick}>
-          <Eye width={20} height={16} />
+          <Icon />
         </InputIcon>
       )}
 

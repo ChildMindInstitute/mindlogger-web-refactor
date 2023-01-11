@@ -1,9 +1,19 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
+
+import { Eye, EyeSlash, Icon } from "react-bootstrap-icons"
 
 type PasswordInputType = "text" | "password"
 
-export const usePasswordInput = (): [PasswordInputType, () => void] => {
+export const usePasswordInput = (): [PasswordInputType, () => void, Icon] => {
   const [isPasswordType, setIsPasswordType] = useState<PasswordInputType>("password")
+
+  const PasswordIcon = useMemo(() => {
+    if (isPasswordType === "password") {
+      return EyeSlash
+    } else {
+      return Eye
+    }
+  }, [isPasswordType])
 
   const onPasswordIconClick = () => {
     if (isPasswordType === "password") {
@@ -13,5 +23,5 @@ export const usePasswordInput = (): [PasswordInputType, () => void] => {
     }
   }
 
-  return [isPasswordType, onPasswordIconClick]
+  return [isPasswordType, onPasswordIconClick, PasswordIcon]
 }

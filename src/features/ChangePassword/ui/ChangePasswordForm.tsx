@@ -20,9 +20,9 @@ interface ChangePasswordFormProps {
 export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExtended }: ChangePasswordFormProps) => {
   const { t } = useChangePasswordTranslation()
 
-  const [isOldPasswordType, onOldPasswordIconClick] = usePasswordInput()
-  const [isNewPasswordType, onNewPasswordIconClick] = usePasswordInput()
-  const [isConfirmNewPasswordType, onConfirmNewPasswordIconClick] = usePasswordInput()
+  const [isOldPasswordType, onOldPasswordIconClick, OldPasswordIcon] = usePasswordInput()
+  const [isNewPasswordType, onNewPasswordIconClick, NewPasswordIcon] = usePasswordInput()
+  const [isConfirmNewPasswordType, onConfirmNewPasswordIconClick, ConfirmNewPasswordIcon] = usePasswordInput()
 
   const form = useCustomForm({ defaultValues: { old: "", new: "", confirm: "" } }, ChangePasswordSchema)
   const { handleSubmit } = form
@@ -58,6 +58,7 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
             placeholder={t("oldPassword") || ""}
             autoComplete="current-password"
             onIconClick={onOldPasswordIconClick}
+            Icon={OldPasswordIcon}
           />
         )}
         <Input
@@ -66,6 +67,7 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
           placeholder={t("newPassword") || ""}
           autoComplete="new-password"
           onIconClick={onNewPasswordIconClick}
+          Icon={NewPasswordIcon}
         />
         <Input
           type={isConfirmNewPasswordType}
@@ -73,6 +75,7 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
           placeholder={t("confirmPassword") || ""}
           autoComplete="new-password"
           onIconClick={onConfirmNewPasswordIconClick}
+          Icon={ConfirmNewPasswordIcon}
         />
 
         <DisplaySystemMessage successMessage={data?.data?.message} errorMessage={error?.response?.data?.message} />

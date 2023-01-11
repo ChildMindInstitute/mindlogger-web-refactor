@@ -20,7 +20,7 @@ export const LoginForm = () => {
   const { t } = useLoginTranslation()
   const navigate = useNavigate()
 
-  const [isPasswordType, onPasswordIconClick] = usePasswordInput()
+  const [isPasswordType, onPasswordIconClick, Icon] = usePasswordInput()
 
   const { setUserAndAuth } = useAuth()
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
@@ -58,6 +58,7 @@ export const LoginForm = () => {
         placeholder={t("password") || ""}
         autoComplete="current-password"
         onIconClick={onPasswordIconClick}
+        Icon={Icon}
       />
 
       <Container className="d-flex justify-content-start p-0 mb-3">

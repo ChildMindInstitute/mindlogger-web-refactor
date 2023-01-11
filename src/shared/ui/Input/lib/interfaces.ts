@@ -1,5 +1,7 @@
 import { HTMLInputTypeAttribute } from "react"
 
+import { Icon } from "react-bootstrap-icons"
+
 export interface IInputCommonProps {
   type: HTMLInputTypeAttribute
   autoComplete?: string
@@ -9,5 +11,6 @@ export interface IInputCommonProps {
   onChange?: (e: string | number) => void
   className?: string
 
+  Icon?: Icon
   onIconClick?: () => void
 }
