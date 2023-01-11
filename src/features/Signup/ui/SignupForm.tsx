@@ -1,13 +1,14 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 
-import { AuthSchema, SuccessSignupResponse, useAuth, UserStoreSchema, useSignupMutation } from "~/entities/user"
-import { isObjectEmpty, useCustomForm, ROUTES } from "~/shared/utils"
-import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage } from "~/shared/ui"
+import { useNavigate } from "react-router-dom"
 
 import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
+
+import { AuthSchema, SuccessSignupResponse, useAuth, UserStoreSchema, useSignupMutation } from "~/entities/user"
+import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage } from "~/shared/ui"
+import { isObjectEmpty, useCustomForm, ROUTES } from "~/shared/utils"
 
 export const SignupForm = () => {
   const navigate = useNavigate()

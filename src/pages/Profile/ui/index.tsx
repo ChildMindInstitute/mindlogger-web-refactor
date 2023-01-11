@@ -1,10 +1,10 @@
 import { isMobile } from "react-device-detect"
 
+import { useProfileTranslation } from "../lib/useProfileTranslation"
+
 import { useAuth } from "~/entities/user"
 import { Avatar } from "~/shared/ui"
 import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
-
-import { useProfileTranslation } from "../lib/useProfileTranslation"
 
 const ProfilePage = () => {
   const { t } = useProfileTranslation()

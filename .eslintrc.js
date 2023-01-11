@@ -6,7 +6,7 @@ module.exports = {
     jest: true,
   },
   parser: '@typescript-eslint/parser',
-  plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier'],
+  plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier', 'eslint-plugin-import'],
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
@@ -41,7 +41,35 @@ module.exports = {
         'react-hooks/exhaustive-deps': 'warn',
         'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
-        'no-console': "warn"
+        'no-console': "warn",
+        'import/order': [
+          'error',
+          {
+            groups: [
+              ['external', 'builtin'],
+              'internal',
+              ['sibling', 'parent'],
+              'index',
+            ],
+            pathGroups: [
+              {
+                pattern: '@(react)',
+                group: 'external',
+                position: 'before',
+              },
+              {
+                pattern: '@(~app|~shared|~features|~pages|~entities)/**',
+                group: 'internal',
+              },
+            ],
+            pathGroupsExcludedImportTypes: ['internal', 'react'],
+            'newlines-between': 'always',
+            alphabetize: {
+              order: 'asc',
+              caseInsensitive: true,
+            },
+          },
+        ]
       },
     },
   ],

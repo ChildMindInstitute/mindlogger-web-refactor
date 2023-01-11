@@ -1,5 +1,6 @@
-import classNames from "classnames"
 import { PropsWithChildren } from "react"
+
+import classNames from "classnames"
 import { Form } from "react-bootstrap"
 
 export interface CheckboxWithLabelProps extends PropsWithChildren {

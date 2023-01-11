@@ -1,13 +1,14 @@
 import React, { useMemo, useState } from "react"
-import classNames from "classnames"
-import { useController, useFormContext } from "react-hook-form"
-import { Form } from "react-bootstrap"
 
-import { InputIcon } from "./InputIcon"
+import classNames from "classnames"
+import { Form } from "react-bootstrap"
+import { Eye, EyeSlash } from "react-bootstrap-icons"
+import { useController, useFormContext } from "react-hook-form"
+
 import { IInputCommonProps } from "../lib/interfaces"
+import { InputIcon } from "./InputIcon"
 
 import "./style.scss"
-import { Eye, EyeSlash } from "react-bootstrap-icons"
 
 const Input = (props: IInputCommonProps) => {
   const { type, name, placeholder, onChange, className } = props

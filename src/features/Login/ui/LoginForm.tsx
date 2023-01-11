@@ -1,6 +1,9 @@
+import classNames from "classnames"
 import { Container } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
-import classNames from "classnames"
+
+import { useLoginTranslation } from "../lib/useLoginTranslation"
+import { LoginSchema, TLoginForm } from "../model/login.schema"
 
 import {
   AuthSchema,
@@ -10,11 +13,8 @@ import {
   useLoginMutation,
   UserStoreSchema,
 } from "~/entities/user"
-import { ROUTES, useCustomForm } from "~/shared/utils"
 import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage } from "~/shared/ui"
-
-import { useLoginTranslation } from "../lib/useLoginTranslation"
-import { LoginSchema, TLoginForm } from "../model/login.schema"
+import { ROUTES, useCustomForm } from "~/shared/utils"
 
 export const LoginForm = () => {
   const { t } = useLoginTranslation()

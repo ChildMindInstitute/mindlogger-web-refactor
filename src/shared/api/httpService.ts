@@ -1,4 +1,5 @@
 import { Axios, AxiosRequestConfig } from "axios"
+
 import api from "./axios"
 
 export class Http {

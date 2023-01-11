@@ -1,12 +1,12 @@
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
 
-import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input } from "~/shared/ui"
-import { useCustomForm } from "~/shared/utils"
-import { useUpdatePasswordMutation } from "~/entities/user"
-
 import { useChangePasswordTranslation } from "../lib/useChangePasswordTranslation"
 import { ChangePasswordSchema, TChangePassword } from "../model/schema"
+
+import { useUpdatePasswordMutation } from "~/entities/user"
+import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input } from "~/shared/ui"
+import { useCustomForm } from "~/shared/utils"
 
 import "./style.scss"
 

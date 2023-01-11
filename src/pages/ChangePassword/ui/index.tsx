@@ -1,10 +1,11 @@
 import { useEffect } from "react"
-import { Alert, Container } from "react-bootstrap"
+
 import classNames from "classnames"
+import { Alert, Container } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router-dom"
 
-import { ChangePasswordForm, useChangePasswordTranslation } from "~/features/ChangePassword"
 import { useCheckTemporaryPasswordMutation } from "~/entities/user"
+import { ChangePasswordForm, useChangePasswordTranslation } from "~/features/ChangePassword"
 import { ROUTES } from "~/shared/utils"
 
 const ChangePassword = () => {

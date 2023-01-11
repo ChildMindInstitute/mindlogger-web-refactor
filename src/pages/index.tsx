@@ -1,16 +1,16 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 
-import { userAuthSelector } from "~/entities/user"
-import { ROUTES, useAppSelector } from "~/shared/utils"
-import { ProtectedRoute } from "~/features/ProtectedRoute"
-
 import ChangePassword from "./ChangePassword"
+import Dashboard from "./Dashboard"
 import ForgotPassword from "./ForgotPassword"
 import LoginPage from "./Login"
+import Profile from "./Profile"
 import Settings from "./Settings"
 import SignupPage from "./Signup"
-import Profile from "./Profile"
-import Dashboard from "./Dashboard"
+
+import { userAuthSelector } from "~/entities/user"
+import { ProtectedRoute } from "~/features/ProtectedRoute"
+import { ROUTES, useAppSelector } from "~/shared/utils"
 
 const ApplicationRouter = (): JSX.Element | null => {
   const auth = useAppSelector(userAuthSelector)

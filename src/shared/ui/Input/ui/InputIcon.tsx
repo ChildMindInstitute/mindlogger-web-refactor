@@ -1,5 +1,6 @@
-import classNames from "classnames"
 import { PropsWithChildren } from "react"
+
+import classNames from "classnames"
 
 interface InputIconProps extends PropsWithChildren {
   onClick: () => void

@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-import { RootState } from "~/shared/utils"
-
 import { UserStore } from "../user.schema"
+
+import { RootState } from "~/shared/utils"
 
 export const initialState: UserStore = {
   email: undefined,

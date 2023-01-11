@@ -1,11 +1,11 @@
 import { Container } from "react-bootstrap"
 
-import { useForgotPasswordMutation } from "~/entities/user"
-import { useCustomForm } from "~/shared/utils"
-import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input } from "~/shared/ui"
-
 import { useForgotPasswordTranslation } from "../lib/useForgotPasswordTranslation"
 import { ForgotPasswordSchema, TForgotPasswordForm } from "../model/schemas"
+
+import { useForgotPasswordMutation } from "~/entities/user"
+import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input } from "~/shared/ui"
+import { useCustomForm } from "~/shared/utils"
 
 export const ForgotPasswordForm = () => {
   const { t } = useForgotPasswordTranslation()

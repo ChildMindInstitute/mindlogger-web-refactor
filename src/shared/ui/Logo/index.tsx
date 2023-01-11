@@ -1,8 +1,8 @@
 import classnames from "classnames"
 
-import { Dimension } from "~/shared/utils"
-
 import { LOGO_URL } from "./lib/constants"
+
+import { Dimension } from "~/shared/utils"
 
 export interface LogoProps {
   size?: Dimension
