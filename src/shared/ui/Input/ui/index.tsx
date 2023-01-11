@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useMemo } from "react"
 
 import classNames from "classnames"
 import { Form } from "react-bootstrap"
@@ -11,11 +11,9 @@ import { InputIcon } from "./InputIcon"
 import "./style.scss"
 
 const Input = (props: IInputCommonProps) => {
-  const { type, name, placeholder, onChange, className } = props
+  const { type, name, placeholder, onChange, className, onIconClick } = props
 
   const isPasswordInput = useMemo(() => type === "password", [type])
-
-  const [isPasswordType, setIsPasswordType] = useState<"password" | "text" | null>(isPasswordInput ? "password" : null)
 
   const { control } = useFormContext()
   const {
@@ -33,18 +31,10 @@ const Input = (props: IInputCommonProps) => {
     onFormChange(value)
   }
 
-  const onIconClick = () => {
-    if (isPasswordType === "password") {
-      setIsPasswordType("text")
-    } else {
-      setIsPasswordType("password")
-    }
-  }
-
   return (
     <div className={classNames("input-with-icon-wrap")}>
       <Form.Control
-        type={isPasswordType ? isPasswordType : type}
+        type={type}
         name={name}
         placeholder={placeholder}
         value={value}
@@ -52,13 +42,13 @@ const Input = (props: IInputCommonProps) => {
         className={classNames("default-input", className, { "input-error-shadow": error })}
       />
 
-      {isPasswordInput && isPasswordType === "password" && (
+      {isPasswordInput && onIconClick && (
         <InputIcon onClick={onIconClick}>
           <EyeSlash width={20} height={16} />
         </InputIcon>
       )}
 
-      {isPasswordInput && isPasswordType === "text" && (
+      {!isPasswordInput && onIconClick && (
         <InputIcon onClick={onIconClick}>
           <Eye width={20} height={16} />
         </InputIcon>

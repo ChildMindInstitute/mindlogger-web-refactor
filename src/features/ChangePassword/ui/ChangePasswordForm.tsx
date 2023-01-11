@@ -6,7 +6,7 @@ import { ChangePasswordSchema, TChangePassword } from "../model/schema"
 
 import { useUpdatePasswordMutation } from "~/entities/user"
 import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input } from "~/shared/ui"
-import { useCustomForm } from "~/shared/utils"
+import { useCustomForm, usePasswordInput } from "~/shared/utils"
 
 import "./style.scss"
 
@@ -19,6 +19,10 @@ interface ChangePasswordFormProps {
 
 export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExtended }: ChangePasswordFormProps) => {
   const { t } = useChangePasswordTranslation()
+
+  const [isOldPasswordType, onOldPasswordIconClick] = usePasswordInput()
+  const [isNewPasswordType, onNewPasswordIconClick] = usePasswordInput()
+  const [isConfirmNewPasswordType, onConfirmNewPasswordIconClick] = usePasswordInput()
 
   const form = useCustomForm({ defaultValues: { old: "", new: "", confirm: "" } }, ChangePasswordSchema)
   const { handleSubmit } = form
@@ -49,18 +53,26 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
 
         {!temporaryToken && (
           <Input
-            type="password"
+            type={isOldPasswordType}
             name="oldPassword"
             placeholder={t("oldPassword") || ""}
             autoComplete="current-password"
+            onIconClick={onOldPasswordIconClick}
           />
         )}
-        <Input type="password" name="newPassword" placeholder={t("newPassword") || ""} autoComplete="new-password" />
         <Input
-          type="password"
+          type={isNewPasswordType}
+          name="newPassword"
+          placeholder={t("newPassword") || ""}
+          autoComplete="new-password"
+          onIconClick={onNewPasswordIconClick}
+        />
+        <Input
+          type={isConfirmNewPasswordType}
           name="confirmNewPassword"
           placeholder={t("confirmPassword") || ""}
           autoComplete="new-password"
+          onIconClick={onConfirmNewPasswordIconClick}
         />
 
         <DisplaySystemMessage successMessage={data?.data?.message} errorMessage={error?.response?.data?.message} />

@@ -14,11 +14,13 @@ import {
   UserStoreSchema,
 } from "~/entities/user"
 import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage } from "~/shared/ui"
-import { ROUTES, useCustomForm } from "~/shared/utils"
+import { ROUTES, useCustomForm, usePasswordInput } from "~/shared/utils"
 
 export const LoginForm = () => {
   const { t } = useLoginTranslation()
   const navigate = useNavigate()
+
+  const [isPasswordType, onPasswordIconClick] = usePasswordInput()
 
   const { setUserAndAuth } = useAuth()
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
@@ -50,7 +52,13 @@ export const LoginForm = () => {
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
       <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
-      <Input type="password" name="password" placeholder={t("password") || ""} autoComplete="current-password" />
+      <Input
+        type={isPasswordType}
+        name="password"
+        placeholder={t("password") || ""}
+        autoComplete="current-password"
+        onIconClick={onPasswordIconClick}
+      />
 
       <Container className="d-flex justify-content-start p-0 mb-3">
         <BasicButton type="button" variant="link" className={classNames("p-0", "ms-3")}>

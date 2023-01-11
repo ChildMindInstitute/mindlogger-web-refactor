@@ -8,4 +8,6 @@ export interface IInputCommonProps {
   placeholder?: string
   onChange?: (e: string | number) => void
   className?: string
+
+  onIconClick?: () => void
 }
