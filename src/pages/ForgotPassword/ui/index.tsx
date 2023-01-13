@@ -1,8 +1,4 @@
 import { Container } from "react-bootstrap"
-import { Link } from "react-router-dom"
-
-import { BasicButton } from "~/shared/ui"
-import { ROUTES } from "~/shared/utils"
 
 import { ForgotPasswordForm, useForgotPasswordTranslation } from "~/features/ForgotPassword"
 
@@ -18,15 +14,6 @@ const ForgotPassword = () => {
 
         <Container className="loginForm">
           <ForgotPasswordForm />
-
-          <Container className="d-flex justify-content-center p-0 mb-3">
-            {t("rememberPassword")}
-            <BasicButton type="button" variant="link" className="p-0 ms-1 login-link">
-              <Link to={ROUTES.login.path} relative="path" className="login-link">
-                {t("logIn")}
-              </Link>
-            </BasicButton>
-          </Container>
         </Container>
       </div>
     </div>

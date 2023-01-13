@@ -1,10 +1,13 @@
 import { z } from "zod"
+
 import { UserSchema } from "~/entities/user"
 
 export type TSignupForm = z.infer<typeof SignupFormSchema>
 
 export const SignupFormSchema = UserSchema.pick({ email: true, lastName: true, firstName: true })
   .extend({
+    firstName: z.string().min(1, "First name required"),
+    lastName: z.string().min(1, "Last name required"),
     password: z.string().min(1, "Password required"),
     confirmPassword: z.string().min(1, "Password confirmation required"),
   })

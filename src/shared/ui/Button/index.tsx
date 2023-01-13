@@ -1,14 +1,19 @@
 import { PropsWithChildren } from "react"
+
+import classNames from "classnames"
 import { Button, ButtonProps, Spinner } from "react-bootstrap"
+
+import "./styles.scss"
 
 type BasicButtonProps = ButtonProps &
   PropsWithChildren<unknown> & {
     loading?: boolean
+    defaultSize?: boolean
   }
 
-const BasicButton = ({ children, loading, ...rest }: BasicButtonProps) => {
+const BasicButton = ({ children, loading, className, defaultSize, ...rest }: BasicButtonProps) => {
   return (
-    <Button {...rest}>
+    <Button {...rest} className={classNames(className, { "default-button-size": defaultSize })}>
       {!loading ? children : <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />}
     </Button>
   )

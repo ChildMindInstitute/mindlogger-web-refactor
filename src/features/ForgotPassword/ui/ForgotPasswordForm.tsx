@@ -1,50 +1,46 @@
-import { Alert, Container } from "react-bootstrap"
-import { useNavigate } from "react-router-dom"
-
-import { useForgotPasswordMutation } from "~/entities/user"
-import { isObjectEmpty, ROUTES, useCustomForm } from "~/shared/utils"
-import { BasicButton, BasicFormProvider, Input } from "~/shared/ui"
+import { Container } from "react-bootstrap"
 
 import { useForgotPasswordTranslation } from "../lib/useForgotPasswordTranslation"
 import { ForgotPasswordSchema, TForgotPasswordForm } from "../model/schemas"
 
+import { useForgotPasswordMutation } from "~/entities/user"
+import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input } from "~/shared/ui"
+import { useCustomForm } from "~/shared/utils"
+
 export const ForgotPasswordForm = () => {
   const { t } = useForgotPasswordTranslation()
-  const navigate = useNavigate()
 
   const form = useCustomForm({ defaultValues: { email: "" } }, ForgotPasswordSchema)
 
-  const onSuccess = () => {
-    navigate(ROUTES.login.path, { state: { isForgotPasswordSubmittedSuccessfully: true } })
-  }
+  const {
+    handleSubmit,
+    formState: { isValid },
+  } = form
 
-  const { mutate: forgotPassword, error, isError, isLoading } = useForgotPasswordMutation({ onSuccess })
+  const { mutate: forgotPassword, error, isLoading, isSuccess, data } = useForgotPasswordMutation()
 
   const onForgotPasswordSubmit = (data: TForgotPasswordForm) => {
     forgotPassword(data)
   }
 
-  const {
-    handleSubmit,
-    formState: { errors: validationErrors, isValid },
-  } = form
-
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onForgotPasswordSubmit)}>
-      {!isValid && !isObjectEmpty(validationErrors) && (
-        <Alert variant="danger">{validationErrors?.email?.message}</Alert>
-      )}
-
-      {isError && !isObjectEmpty(error?.response?.data) && (
-        <Alert variant="danger">{error?.response?.data?.message}</Alert>
-      )}
+      <Container>
+        <p>{t("formTitle")}</p>
+      </Container>
 
       <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
 
+      <DisplaySystemMessage errorMessage={error?.response?.data?.message} />
+
       <Container>
-        <BasicButton type="submit" variant="primary" disabled={!isValid || isLoading} loading={isLoading}>
-          {t("submit")}
-        </BasicButton>
+        {!isSuccess && (
+          <BasicButton type="submit" variant="primary" disabled={!isValid || isLoading} loading={isLoading} defaultSize>
+            {t("button")}
+          </BasicButton>
+        )}
+
+        {isSuccess && <DisplaySystemMessage successMessage={data?.data?.message} />}
       </Container>
     </BasicFormProvider>
   )

@@ -1,12 +1,10 @@
 import { Container } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
-import { ROUTES } from "~/shared/utils"
-import { BasicButton } from "~/shared/ui"
-
-import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
-
 import { LoginForm, useLoginTranslation } from "~/features/Login"
+import { BasicButton } from "~/shared/ui"
+import { ROUTES } from "~/shared/utils"
+import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
 
 import "./login.scss"
 
@@ -24,7 +22,7 @@ const LoginPage = () => {
         <Container className="loginForm">
           <LoginForm />
 
-          <BasicButton type="button" variant="outline-primary" className="mb-3">
+          <BasicButton type="button" variant="outline-primary" className="mb-3" defaultSize>
             <Link to={ROUTES.signup.path} relative="path">
               {t("create")}
             </Link>

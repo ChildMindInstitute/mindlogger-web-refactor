@@ -1,6 +1,3 @@
-import { httpService, Http } from "~/shared/api"
-import { encryptBASE64 } from "~/shared/utils"
-
 import {
   ICheckTemporaryPasswordPayload,
   IForgotPasswordPayload,
@@ -9,6 +6,9 @@ import {
   ISignupPayload,
   IUpdatePasswordPayload,
 } from "../model/api.interfaces"
+
+import { httpService, Http } from "~/shared/api"
+import { encryptBASE64 } from "~/shared/utils"
 
 export class AuthorizationService {
   constructor(private httpService: Http) {}

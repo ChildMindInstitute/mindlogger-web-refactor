@@ -1,18 +1,20 @@
 import { useState } from "react"
-import { Alert } from "react-bootstrap"
-import { useNavigate } from "react-router-dom"
 
-import { AuthSchema, SuccessSignupResponse, useAuth, UserStoreSchema, useSignupMutation } from "~/entities/user"
-import { isObjectEmpty, useCustomForm, ROUTES } from "~/shared/utils"
-import { Input, Checkbox, BasicButton, BasicFormProvider } from "~/shared/ui"
+import { useNavigate } from "react-router-dom"
 
 import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
+import { AuthSchema, SuccessSignupResponse, useAuth, UserStoreSchema, useSignupMutation } from "~/entities/user"
+import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
+import { isObjectEmpty, useCustomForm, ROUTES, usePasswordType } from "~/shared/utils"
+
 export const SignupForm = () => {
   const navigate = useNavigate()
   const { t } = useSignupTranslation()
+  const [passwordType, onPasswordIconClick] = usePasswordType()
+  const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType()
 
   const { setUserAndAuth } = useAuth()
   const [terms, setTerms] = useState<boolean>(false)
@@ -35,11 +37,7 @@ export const SignupForm = () => {
     return navigate(ROUTES.dashboard.path)
   }
 
-  const {
-    mutate: signup,
-    isError,
-    error,
-  } = useSignupMutation({
+  const { mutate: signup, error } = useSignupMutation({
     onSuccess,
   })
 
@@ -49,26 +47,22 @@ export const SignupForm = () => {
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onSignupSubmit)}>
-      {!isObjectEmpty(errors) && (
-        <Alert variant="danger">
-          {errors?.email?.message || errors?.password?.message || errors?.confirmPassword?.message}
-        </Alert>
-      )}
-
-      {isError && !isObjectEmpty(error?.response?.data) && (
-        <Alert variant="danger">{error?.response?.data?.message}</Alert>
-      )}
-
       <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
       <Input type="text" name="firstName" placeholder={t("firstName") || ""} />
       <Input type="text" name="lastName" placeholder={t("lastName") || ""} />
-
-      <Input type="password" name="password" placeholder={t("password") || ""} autoComplete="new-password" />
       <Input
-        type="password"
+        type={passwordType}
+        name="password"
+        placeholder={t("password") || ""}
+        autoComplete="new-password"
+        Icon={<PasswordIcon isSecure={passwordType === "password"} onClick={onPasswordIconClick} />}
+      />
+      <Input
+        type={confirmPasswordType}
         name="confirmPassword"
         placeholder={t("confirmPassword") || ""}
         autoComplete="new-password"
+        Icon={<PasswordIcon isSecure={confirmPasswordType === "password"} onClick={onConfirmPasswordIconClick} />}
       />
 
       <div className="d-flex mb-3">
@@ -80,7 +74,9 @@ export const SignupForm = () => {
         </Checkbox>
       </div>
 
-      <BasicButton type="submit" variant="primary" disabled={!isObjectEmpty(errors) || !terms}>
+      <DisplaySystemMessage errorMessage={error?.response?.data?.message} />
+
+      <BasicButton type="submit" variant="primary" disabled={!isObjectEmpty(errors) || !terms} defaultSize>
         {t("title")}
       </BasicButton>
     </BasicFormProvider>

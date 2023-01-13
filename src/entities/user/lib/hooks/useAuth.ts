@@ -1,8 +1,8 @@
-import { useAppDispatch, useAppSelector, isObjectEmpty } from "~/shared/utils"
-
 import { clearAuth, setAuth, userAuthSelector } from "../../model/state/auth.slice"
 import { clearUser, setUser, userSelector } from "../../model/state/user.slice"
 import { Authorization, UserStore } from "../../model/user.schema"
+
+import { useAppDispatch, useAppSelector, isObjectEmpty } from "~/shared/utils"
 
 export interface UseAuthOutput {
   user: UserStore
