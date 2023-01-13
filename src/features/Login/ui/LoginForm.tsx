@@ -20,7 +20,7 @@ export const LoginForm = () => {
   const { t } = useLoginTranslation()
   const navigate = useNavigate()
 
-  const [isPasswordType, onPasswordIconClick, Icon] = usePasswordInput()
+  const [passwordType, onPasswordIconClick, Icon] = usePasswordInput()
 
   const { setUserAndAuth } = useAuth()
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
@@ -53,7 +53,7 @@ export const LoginForm = () => {
     <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
       <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
       <Input
-        type={isPasswordType}
+        type={passwordType}
         name="password"
         placeholder={t("password") || ""}
         autoComplete="current-password"

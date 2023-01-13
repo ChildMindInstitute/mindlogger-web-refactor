@@ -1,13 +1,24 @@
-import React from "react"
+import React, { HTMLInputTypeAttribute } from "react"
 
 import classNames from "classnames"
 import { Form } from "react-bootstrap"
+import { Icon } from "react-bootstrap-icons"
 import { useController, useFormContext } from "react-hook-form"
 
-import { IInputCommonProps } from "../lib/interfaces"
-import { InputIcon } from "./InputIcon"
-
 import "./style.scss"
+
+interface IInputCommonProps {
+  type: HTMLInputTypeAttribute
+  autoComplete?: string
+
+  name: string
+  placeholder?: string
+  onChange?: (e: string | number) => void
+  className?: string
+
+  Icon?: Icon
+  onIconClick?: () => void
+}
 
 const Input = (props: IInputCommonProps) => {
   const { type, name, placeholder, onChange, className, Icon, onIconClick } = props
@@ -40,9 +51,9 @@ const Input = (props: IInputCommonProps) => {
       />
 
       {Icon && onIconClick && (
-        <InputIcon onClick={onIconClick}>
+        <div className={classNames("input-icon")} onClick={onIconClick}>
           <Icon />
-        </InputIcon>
+        </div>
       )}
 
       <span className={classNames("input-error-box")}>{error && error.message}</span>

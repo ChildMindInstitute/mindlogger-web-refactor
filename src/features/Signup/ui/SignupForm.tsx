@@ -13,8 +13,8 @@ import { isObjectEmpty, useCustomForm, ROUTES, usePasswordInput } from "~/shared
 export const SignupForm = () => {
   const navigate = useNavigate()
   const { t } = useSignupTranslation()
-  const [isPasswordType, onPasswordIconClick, PasswordIcon] = usePasswordInput()
-  const [isConfirmPasswordType, onConfirmPasswordIconClick, ConfirmPasswordIcon] = usePasswordInput()
+  const [passwordType, onPasswordIconClick, PasswordIcon] = usePasswordInput()
+  const [confirmPasswordType, onConfirmPasswordIconClick, ConfirmPasswordIcon] = usePasswordInput()
 
   const { setUserAndAuth } = useAuth()
   const [terms, setTerms] = useState<boolean>(false)
@@ -51,7 +51,7 @@ export const SignupForm = () => {
       <Input type="text" name="firstName" placeholder={t("firstName") || ""} />
       <Input type="text" name="lastName" placeholder={t("lastName") || ""} />
       <Input
-        type={isPasswordType}
+        type={passwordType}
         name="password"
         placeholder={t("password") || ""}
         autoComplete="new-password"
@@ -59,7 +59,7 @@ export const SignupForm = () => {
         Icon={PasswordIcon}
       />
       <Input
-        type={isConfirmPasswordType}
+        type={confirmPasswordType}
         name="confirmPassword"
         placeholder={t("confirmPassword") || ""}
         autoComplete="new-password"
