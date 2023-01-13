@@ -9,8 +9,7 @@ export interface ILogoutPayload {
 
 export interface ISignupPayload {
   email: string
-  lastName: string
-  firstName: string
+  fullName: string
   password: string
 }
 

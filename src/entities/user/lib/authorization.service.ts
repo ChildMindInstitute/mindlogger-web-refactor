@@ -1,5 +1,4 @@
 import { httpService, Http } from "~/shared/api"
-import { encryptBASE64 } from "~/shared/utils"
 
 import {
   ICheckTemporaryPasswordPayload,
@@ -14,13 +13,11 @@ export class AuthorizationService {
   constructor(private httpService: Http) {}
 
   public login(data: ILoginPayload) {
-    const encryptedUserInfo = encryptBASE64(`${data.email}:${data.password}`)
+    return this.httpService.POST("/auth/token", data)
+  }
 
-    const headers = {
-      "Girder-Authorization": `Basic ${encryptedUserInfo}`,
-    }
-
-    return this.httpService.GET("/user/authentication", { headers })
+  public refreshToken(refreshToken: string) {
+    return this.httpService.POST("auth/token/refresh", { refreshToken })
   }
 
   public logout(data: ILogoutPayload) {
@@ -32,12 +29,11 @@ export class AuthorizationService {
   }
 
   public signup(user: ISignupPayload) {
-    const params = {
+    const body = {
       ...user,
-      admin: true, // Ask backend why we should set it to true
     }
 
-    return this.httpService.POST("/user", null, { params })
+    return this.httpService.POST("/users", body)
   }
 
   public forgotPassword(data: IForgotPasswordPayload) {

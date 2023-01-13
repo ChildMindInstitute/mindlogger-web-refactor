@@ -39,7 +39,8 @@ export const SignupForm = () => {
   })
 
   const onSignupSubmit = (data: TSignupForm) => {
-    return signup(data)
+    const { email, password, firstName, lastName } = data
+    return signup({ email, password, fullName: `${firstName} ${lastName}` })
   }
 
   return (

@@ -15,10 +15,11 @@ export default defineConfig(({ command, mode }) => {
       },
       server: {
         proxy: {
-          "/api/v1/": {
-               target: 'https://api-staging.mindlogger.org',
+          "/api": {
+               target: 'https://api-dev.cmiml.net/',
                changeOrigin: true,
                secure: false,
+               rewrite: (path) => path.replace(/^\/api/, ''),
                ws: true,
                configure: (proxy, options) => {
                 console.log(proxy)
