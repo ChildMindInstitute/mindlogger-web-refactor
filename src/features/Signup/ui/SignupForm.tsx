@@ -7,14 +7,14 @@ import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
 import { AuthSchema, SuccessSignupResponse, useAuth, UserStoreSchema, useSignupMutation } from "~/entities/user"
-import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage } from "~/shared/ui"
-import { isObjectEmpty, useCustomForm, ROUTES, usePasswordInput } from "~/shared/utils"
+import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
+import { isObjectEmpty, useCustomForm, ROUTES, usePasswordType } from "~/shared/utils"
 
 export const SignupForm = () => {
   const navigate = useNavigate()
   const { t } = useSignupTranslation()
-  const [passwordType, onPasswordIconClick, PasswordIcon] = usePasswordInput()
-  const [confirmPasswordType, onConfirmPasswordIconClick, ConfirmPasswordIcon] = usePasswordInput()
+  const [passwordType, onPasswordIconClick] = usePasswordType()
+  const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType()
 
   const { setUserAndAuth } = useAuth()
   const [terms, setTerms] = useState<boolean>(false)
@@ -56,7 +56,7 @@ export const SignupForm = () => {
         placeholder={t("password") || ""}
         autoComplete="new-password"
         onIconClick={onPasswordIconClick}
-        Icon={PasswordIcon}
+        Icon={<PasswordIcon isSecure={passwordType === "password"} />}
       />
       <Input
         type={confirmPasswordType}
@@ -64,7 +64,7 @@ export const SignupForm = () => {
         placeholder={t("confirmPassword") || ""}
         autoComplete="new-password"
         onIconClick={onConfirmPasswordIconClick}
-        Icon={ConfirmPasswordIcon}
+        Icon={<PasswordIcon isSecure={confirmPasswordType === "password"} />}
       />
 
       <div className="d-flex mb-3">

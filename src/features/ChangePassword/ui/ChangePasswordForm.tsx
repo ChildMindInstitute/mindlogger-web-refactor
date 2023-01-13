@@ -5,8 +5,8 @@ import { useChangePasswordTranslation } from "../lib/useChangePasswordTranslatio
 import { ChangePasswordSchema, TChangePassword } from "../model/schema"
 
 import { useUpdatePasswordMutation } from "~/entities/user"
-import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input } from "~/shared/ui"
-import { useCustomForm, usePasswordInput } from "~/shared/utils"
+import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
+import { useCustomForm, usePasswordType } from "~/shared/utils"
 
 import "./style.scss"
 
@@ -20,9 +20,9 @@ interface ChangePasswordFormProps {
 export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExtended }: ChangePasswordFormProps) => {
   const { t } = useChangePasswordTranslation()
 
-  const [oldPasswordType, onOldPasswordIconClick, OldPasswordIcon] = usePasswordInput()
-  const [newPasswordType, onNewPasswordIconClick, NewPasswordIcon] = usePasswordInput()
-  const [confirmNewPasswordType, onConfirmNewPasswordIconClick, ConfirmNewPasswordIcon] = usePasswordInput()
+  const [oldPasswordType, onOldPasswordIconClick] = usePasswordType()
+  const [newPasswordType, onNewPasswordIconClick] = usePasswordType()
+  const [confirmNewPasswordType, onConfirmNewPasswordIconClick] = usePasswordType()
 
   const form = useCustomForm({ defaultValues: { old: "", new: "", confirm: "" } }, ChangePasswordSchema)
   const { handleSubmit } = form
@@ -58,7 +58,7 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
             placeholder={t("oldPassword") || ""}
             autoComplete="current-password"
             onIconClick={onOldPasswordIconClick}
-            Icon={OldPasswordIcon}
+            Icon={<PasswordIcon isSecure={oldPasswordType === "password"} />}
           />
         )}
         <Input
@@ -67,7 +67,7 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
           placeholder={t("newPassword") || ""}
           autoComplete="new-password"
           onIconClick={onNewPasswordIconClick}
-          Icon={NewPasswordIcon}
+          Icon={<PasswordIcon isSecure={newPasswordType === "password"} />}
         />
         <Input
           type={confirmNewPasswordType}
@@ -75,7 +75,7 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
           placeholder={t("confirmPassword") || ""}
           autoComplete="new-password"
           onIconClick={onConfirmNewPasswordIconClick}
-          Icon={ConfirmNewPasswordIcon}
+          Icon={<PasswordIcon isSecure={confirmNewPasswordType === "password"} />}
         />
 
         <DisplaySystemMessage successMessage={data?.data?.message} errorMessage={error?.response?.data?.message} />

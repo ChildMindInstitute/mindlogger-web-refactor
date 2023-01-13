@@ -13,14 +13,14 @@ import {
   useLoginMutation,
   UserStoreSchema,
 } from "~/entities/user"
-import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage } from "~/shared/ui"
-import { ROUTES, useCustomForm, usePasswordInput } from "~/shared/utils"
+import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
+import { ROUTES, useCustomForm, usePasswordType } from "~/shared/utils"
 
 export const LoginForm = () => {
   const { t } = useLoginTranslation()
   const navigate = useNavigate()
 
-  const [passwordType, onPasswordIconClick, Icon] = usePasswordInput()
+  const [passwordType, onPasswordIconClick] = usePasswordType()
 
   const { setUserAndAuth } = useAuth()
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
@@ -58,7 +58,7 @@ export const LoginForm = () => {
         placeholder={t("password") || ""}
         autoComplete="current-password"
         onIconClick={onPasswordIconClick}
-        Icon={Icon}
+        Icon={<PasswordIcon isSecure={passwordType === "password"} />}
       />
 
       <Container className="d-flex justify-content-start p-0 mb-3">
