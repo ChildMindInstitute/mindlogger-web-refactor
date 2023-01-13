@@ -57,8 +57,7 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
             name="oldPassword"
             placeholder={t("oldPassword") || ""}
             autoComplete="current-password"
-            onIconClick={onOldPasswordIconClick}
-            Icon={<PasswordIcon isSecure={oldPasswordType === "password"} />}
+            Icon={<PasswordIcon isSecure={oldPasswordType === "password"} onClick={onOldPasswordIconClick} />}
           />
         )}
         <Input
@@ -66,16 +65,16 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
           name="newPassword"
           placeholder={t("newPassword") || ""}
           autoComplete="new-password"
-          onIconClick={onNewPasswordIconClick}
-          Icon={<PasswordIcon isSecure={newPasswordType === "password"} />}
+          Icon={<PasswordIcon isSecure={newPasswordType === "password"} onClick={onNewPasswordIconClick} />}
         />
         <Input
           type={confirmNewPasswordType}
           name="confirmNewPassword"
           placeholder={t("confirmPassword") || ""}
           autoComplete="new-password"
-          onIconClick={onConfirmNewPasswordIconClick}
-          Icon={<PasswordIcon isSecure={confirmNewPasswordType === "password"} />}
+          Icon={
+            <PasswordIcon isSecure={confirmNewPasswordType === "password"} onClick={onConfirmNewPasswordIconClick} />
+          }
         />
 
         <DisplaySystemMessage successMessage={data?.data?.message} errorMessage={error?.response?.data?.message} />

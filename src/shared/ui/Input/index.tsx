@@ -16,11 +16,10 @@ interface IInputCommonProps {
   className?: string
 
   Icon?: JSX.Element
-  onIconClick?: () => void
 }
 
 const Input = (props: IInputCommonProps) => {
-  const { type, name, placeholder, onChange, className, Icon, onIconClick } = props
+  const { type, name, placeholder, onChange, className, Icon } = props
 
   const { control } = useFormContext()
   const {
@@ -49,11 +48,7 @@ const Input = (props: IInputCommonProps) => {
         className={classNames("default-input", className, { "input-error-shadow": error })}
       />
 
-      {Icon && onIconClick && (
-        <div className={classNames("input-icon")} onClick={onIconClick}>
-          {Icon}
-        </div>
-      )}
+      {Icon && <div className={classNames("input-icon")}>{Icon}</div>}
 
       <span className={classNames("input-error-box")}>{error && error.message}</span>
     </div>

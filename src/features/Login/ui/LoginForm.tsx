@@ -57,8 +57,7 @@ export const LoginForm = () => {
         name="password"
         placeholder={t("password") || ""}
         autoComplete="current-password"
-        onIconClick={onPasswordIconClick}
-        Icon={<PasswordIcon isSecure={passwordType === "password"} />}
+        Icon={<PasswordIcon isSecure={passwordType === "password"} onClick={onPasswordIconClick} />}
       />
 
       <Container className="d-flex justify-content-start p-0 mb-3">

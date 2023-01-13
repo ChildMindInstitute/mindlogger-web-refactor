@@ -55,16 +55,14 @@ export const SignupForm = () => {
         name="password"
         placeholder={t("password") || ""}
         autoComplete="new-password"
-        onIconClick={onPasswordIconClick}
-        Icon={<PasswordIcon isSecure={passwordType === "password"} />}
+        Icon={<PasswordIcon isSecure={passwordType === "password"} onClick={onPasswordIconClick} />}
       />
       <Input
         type={confirmPasswordType}
         name="confirmPassword"
         placeholder={t("confirmPassword") || ""}
         autoComplete="new-password"
-        onIconClick={onConfirmPasswordIconClick}
-        Icon={<PasswordIcon isSecure={confirmPasswordType === "password"} />}
+        Icon={<PasswordIcon isSecure={confirmPasswordType === "password"} onClick={onConfirmPasswordIconClick} />}
       />
 
       <div className="d-flex mb-3">
