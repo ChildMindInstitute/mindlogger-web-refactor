@@ -77,7 +77,7 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
           </BasicButton>
         )}
 
-        {isSuccess && temporaryToken && (
+        {isSuccess && (
           <BasicButton
             type="button"
             className={classNames("success-button", "my-3")}
@@ -86,7 +86,7 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
             loading={isLoading}
             disabled={isLoading}
             defaultSize>
-            {t("backToLogin")}
+            {temporaryToken ? t("backToLogin") : t("submit")}
           </BasicButton>
         )}
       </BasicFormProvider>
