@@ -7,7 +7,7 @@ export const ChangePasswordSchema = z
     confirmNewPassword: z.string(),
   })
   .refine(data => data.newPassword === data.confirmNewPassword, {
-    message: "",
+    message: "Password do not match",
     path: ["confirmNewPassword"],
   })
   .transform(data => ({ old: data.oldPassword, new: data.newPassword, confirm: data.confirmNewPassword }))
