@@ -5,8 +5,10 @@ import classNames from "classnames"
 import {
   AuthSchema,
   ILoginPayload,
+  SuccessGetUserResponse,
   SuccessLoginResponse,
   useAuth,
+  useGetUserMutation,
   useLoginMutation,
   UserStoreSchema,
 } from "~/entities/user"
@@ -20,19 +22,30 @@ export const LoginForm = () => {
   const { t } = useLoginTranslation()
   const navigate = useNavigate()
 
-  const { setUserAndAuth } = useAuth()
+  const { setAuth, setUser } = useAuth()
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {
     handleSubmit,
     formState: { isValid },
   } = form
 
-  const onSuccess = ({ data }: SuccessLoginResponse) => {
-    const { user, authToken } = data
-    const parsedUser = UserStoreSchema.parse(user)
-    const parsedAuthUser = AuthSchema.parse(authToken)
-    setUserAndAuth(parsedUser, parsedAuthUser)
+  const onGetUserSuccess = ({ data }: SuccessGetUserResponse) => {
+    const { result } = data
+    const parsedUser = UserStoreSchema.parse(result)
+    setUser(parsedUser)
     navigate(ROUTES.dashboard.path)
+  }
+
+  const { mutate: getUser } = useGetUserMutation({ onSuccess: onGetUserSuccess })
+
+  const onLoginSuccess = ({ data }: SuccessLoginResponse) => {
+    const { result } = data
+    const parsedAuthUser = AuthSchema.parse(result)
+    setAuth(parsedAuthUser)
+
+    if (parsedAuthUser.accessToken) {
+      getUser(parsedAuthUser.accessToken)
+    }
   }
 
   const {
@@ -40,7 +53,7 @@ export const LoginForm = () => {
     isLoading,
     error,
   } = useLoginMutation({
-    onSuccess,
+    onSuccess: onLoginSuccess,
   })
 
   const onLoginSubmit = (data: TLoginForm) => {

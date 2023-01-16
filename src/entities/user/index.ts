@@ -16,6 +16,13 @@ export type { ISignupSuccess, SuccessSignupResponse, FailedSignupResponse } from
 export { useSignupMutation } from "./lib/hooks/useSignupMutation"
 
 export type {
+  IGetUserSuccessResponse,
+  SuccessGetUserResponse,
+  FailedGetUserResponse,
+} from "./lib/hooks/useGetUserMutation"
+export { useGetUserMutation } from "./lib/hooks/useGetUserMutation"
+
+export type {
   IForgotPasswordSuccessResponse,
   SuccessForgotPasswordResponse,
   FailedForgotPasswordResponse,
@@ -46,6 +53,6 @@ export {
   clearAuth,
   userAuthSelector,
   authToken,
-  authTokenExpires,
-  authTokenScope,
+  authTokenType as authTokenExpires,
+  authRefreshToken as authTokenScope,
 } from "./model/state/auth.slice"

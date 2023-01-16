@@ -20,6 +20,7 @@ export { useAppSelector } from "./store/useAppSelector"
 
 // Types
 export type { Dimension } from "./types/dimension"
+export type { BaseSuccessResponse } from "./types/httpResponses"
 export type { BaseErrorResponse } from "./types/httpResponses"
 export type { UseTranslationOutput } from "./types/useTranslationOutput"
 

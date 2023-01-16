@@ -1,14 +1,15 @@
 import { useAppDispatch, useAppSelector, isObjectEmpty } from "~/shared/utils"
 
-import { clearAuth, setAuth, userAuthSelector } from "../../model/state/auth.slice"
-import { clearUser, setUser, userSelector } from "../../model/state/user.slice"
+import { clearAuth, setAuth as setAuthToStore, userAuthSelector } from "../../model/state/auth.slice"
+import { clearUser, setUser as setUserToStore, userSelector } from "../../model/state/user.slice"
 import { Authorization, UserStore } from "../../model/user.schema"
 
 export interface UseAuthOutput {
   user: UserStore
   auth: Authorization
   isUserLoggedIn: boolean
-  setUserAndAuth: (user: UserStore, auth: Authorization) => void
+  setUser: (user: UserStore) => void
+  setAuth: (auth: Authorization) => void
   clearUserAndAuth: () => void
 }
 
@@ -17,13 +18,15 @@ export const useAuth = (): UseAuthOutput => {
   const user = useAppSelector(userSelector)
   const auth = useAppSelector(userAuthSelector)
 
-  const isUserLoggedIn = !!auth.token && !isObjectEmpty(user)
+  const isUserLoggedIn = !!auth.accessToken && !isObjectEmpty(user)
 
-  const setUserAndAuth = (user: UserStore, auth: Authorization) => {
-    dispatch(setUser(user))
-    dispatch(setAuth(auth))
+  const setUser = (user: UserStore) => {
+    dispatch(setUserToStore(user))
   }
 
+  const setAuth = (auth: Authorization) => {
+    dispatch(setAuthToStore(auth))
+  }
   const clearUserAndAuth = () => {
     localStorage.clear()
     dispatch(clearUser())
@@ -34,7 +37,8 @@ export const useAuth = (): UseAuthOutput => {
     user,
     auth,
     isUserLoggedIn,
-    setUserAndAuth,
+    setUser,
+    setAuth,
     clearUserAndAuth,
   }
 }

@@ -22,7 +22,7 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.forgotPassword.path} element={<ForgotPassword />} />
       <Route path={ROUTES.changePassword.path} element={<ChangePassword />} />
 
-      <Route element={<ProtectedRoute token={auth.token} />}>
+      <Route element={<ProtectedRoute token={auth.accessToken} />}>
         <Route index path={ROUTES.dashboard.path} element={<Dashboard />} />
         <Route path={ROUTES.profile.path} element={<Profile />} />
         <Route path={ROUTES.settings.path} element={<Settings />} />

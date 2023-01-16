@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { Navbar, Nav, Col, Row } from "react-bootstrap"
+import { Navbar, Nav, Col } from "react-bootstrap"
 
 import { ROUTES } from "~/shared/utils"
 import { LanguageDropdown } from "~/features/language"
@@ -49,18 +49,16 @@ const Header = (): JSX.Element | null => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ms-auto">
-          <Row>
-            <Col xs={12} md={6} className="container justify-content-center">
-              <LanguageDropdown onSelectExtended={closeExpandedNavbar} />
-            </Col>
-            <Col xs={12} md={6} className="container justify-content-center">
-              {isUserLoggedIn ? (
-                <AccountDropdown title={user.displayName as string} onSelectExtended={closeExpandedNavbar} />
-              ) : (
-                <LoginButton onClickExtended={closeExpandedNavbar} />
-              )}
-            </Col>
-          </Row>
+          <Col xs={12} md={6} className="container justify-content-center">
+            <LanguageDropdown onSelectExtended={closeExpandedNavbar} />
+          </Col>
+          <Col xs={12} md={6} className="container justify-content-center">
+            {isUserLoggedIn ? (
+              <AccountDropdown title={user.fullName as string} onSelectExtended={closeExpandedNavbar} />
+            ) : (
+              <LoginButton onClickExtended={closeExpandedNavbar} />
+            )}
+          </Col>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

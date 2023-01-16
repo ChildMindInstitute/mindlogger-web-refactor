@@ -1,18 +1,13 @@
 import { MutationOptions, useMutation } from "@tanstack/react-query"
 import { AxiosError, AxiosResponse } from "axios"
 
-import { BaseErrorResponse } from "~/shared/utils"
+import { BaseErrorResponse, BaseSuccessResponse } from "~/shared/utils"
 
 import { ILoginPayload } from "../../model/api.interfaces"
-import { Account, Authorization, User } from "../../model/user.schema"
+import { Authorization } from "../../model/user.schema"
 import { authorizationService } from "../authorization.service"
 
-export interface ILoginSuccessResponse {
-  account: Account
-  authToken: Authorization
-  message: string
-  user: User
-}
+export type ILoginSuccessResponse = BaseSuccessResponse<Authorization>
 
 export type SuccessLoginResponse = AxiosResponse<ILoginSuccessResponse>
 export type FailedLoginResponse = AxiosError<BaseErrorResponse>

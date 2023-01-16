@@ -56,6 +56,14 @@ export class AuthorizationService {
 
     return this.httpService.PUT("/user/password", null, { headers, params })
   }
+
+  public getUser(accessToken: string) {
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    }
+
+    return this.httpService.GET("/users/me", { headers })
+  }
 }
 
 export const authorizationService = new AuthorizationService(httpService)
