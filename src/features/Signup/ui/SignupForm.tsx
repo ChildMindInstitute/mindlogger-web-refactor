@@ -1,8 +1,7 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 
-import { AuthSchema, SuccessSignupResponse, useAuth, UserStoreSchema, useSignupMutation } from "~/entities/user"
-import { isObjectEmpty, useCustomForm, ROUTES } from "~/shared/utils"
+import { useSignupMutation } from "~/entities/user"
+import { isObjectEmpty, useCustomForm } from "~/shared/utils"
 import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage } from "~/shared/ui"
 
 import { TERMS_URL } from "../lib/constants"
@@ -10,10 +9,8 @@ import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
 export const SignupForm = () => {
-  const navigate = useNavigate()
   const { t } = useSignupTranslation()
 
-  const { setUserAndAuth } = useAuth()
   const [terms, setTerms] = useState<boolean>(false)
 
   const form = useCustomForm(
@@ -25,18 +22,7 @@ export const SignupForm = () => {
     formState: { errors },
   } = form
 
-  const onSuccess = ({ data }: SuccessSignupResponse) => {
-    const { account, authToken, ...rest } = data
-
-    const parsedUser = UserStoreSchema.parse(rest)
-    const parsedAuth = AuthSchema.parse(authToken)
-    setUserAndAuth(parsedUser, parsedAuth)
-    return navigate(ROUTES.dashboard.path)
-  }
-
-  const { mutate: signup, error } = useSignupMutation({
-    onSuccess,
-  })
+  const { mutate: signup, error, isSuccess } = useSignupMutation()
 
   const onSignupSubmit = (data: TSignupForm) => {
     const { email, password, firstName, lastName } = data
@@ -65,7 +51,10 @@ export const SignupForm = () => {
         </Checkbox>
       </div>
 
-      <DisplaySystemMessage errorMessage={error?.response?.data?.message} />
+      <DisplaySystemMessage
+        errorMessage={error?.response?.data?.message}
+        successMessage={isSuccess ? t("success") : null}
+      />
 
       <BasicButton type="submit" variant="primary" disabled={!isObjectEmpty(errors) || !terms} defaultSize>
         {t("title")}
