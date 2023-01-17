@@ -23,18 +23,18 @@ export type {
 export { useGetUserMutation } from "./lib/hooks/useGetUserMutation"
 
 export type {
-  IForgotPasswordSuccessResponse,
-  SuccessForgotPasswordResponse,
-  FailedForgotPasswordResponse,
-} from "./lib/hooks/useForgotPasswordMutation"
-export { useForgotPasswordMutation } from "./lib/hooks/useForgotPasswordMutation"
+  IRecoveryPasswordSuccessResponse,
+  SuccessRecoveryPasswordResponse,
+  FailedRecoveryPasswordResponse,
+} from "./lib/hooks/useRevoveryPasswordMutation"
+export { useRecoveryPasswordMutation } from "./lib/hooks/useRevoveryPasswordMutation"
 
 export type {
-  ICheckTemporaryPasswordSuccessResponse,
-  SuccessCheckTemporaryPasswordResponse,
-  FailedCheckTemporaryPasswordResponse,
-} from "./lib/hooks/useCheckTemporaryPasswordMutation"
-export { useCheckTemporaryPasswordMutation } from "./lib/hooks/useCheckTemporaryPasswordMutation"
+  IApproveRecoveryPasswordSuccessResponse,
+  SuccessApproveRecoveryPasswordResponse,
+  FailedApproveRecoveryPasswordResponse,
+} from "./lib/hooks/useApproveRecoveryPasswordMutation"
+export { useApproveRecoveryPasswordMutation } from "./lib/hooks/useApproveRecoveryPasswordMutation"
 
 export type { SuccessUpdatePasswordResponse, FailedUpdatePasswordResponse } from "./lib/hooks/useUpdatePasswordMutation"
 export { useUpdatePasswordMutation } from "./lib/hooks/useUpdatePasswordMutation"

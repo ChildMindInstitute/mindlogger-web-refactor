@@ -6,7 +6,7 @@ import { BaseErrorResponse } from "~/shared/utils"
 import { ILogoutPayload } from "../../model/api.interfaces"
 import { authorizationService } from "../authorization.service"
 
-export type SuccessLogoutResponse = AxiosResponse<{ message: string }>
+export type SuccessLogoutResponse = AxiosResponse<unknown>
 export type FailedLogoutResponse = AxiosError<BaseErrorResponse>
 
 export const useLogoutMutation = (

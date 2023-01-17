@@ -3,21 +3,22 @@ import { Container } from "react-bootstrap"
 
 import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input } from "~/shared/ui"
 import { useCustomForm } from "~/shared/utils"
-import { useUpdatePasswordMutation } from "~/entities/user"
+import { useApproveRecoveryPasswordMutation, useUpdatePasswordMutation } from "~/entities/user"
 
 import { useChangePasswordTranslation } from "../lib/useChangePasswordTranslation"
 import { ChangePasswordSchema, TChangePassword } from "../model/schema"
 
 import "./style.scss"
+import { useMemo } from "react"
 
 interface ChangePasswordFormProps {
   title?: string | null
   token?: string
-  temporaryToken?: string
+  email?: string
   onSuccessExtended?: () => void
 }
 
-export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExtended }: ChangePasswordFormProps) => {
+export const ChangePasswordForm = ({ title, token, email, onSuccessExtended }: ChangePasswordFormProps) => {
   const { t } = useChangePasswordTranslation()
 
   const form = useCustomForm({ defaultValues: { old: "", new: "", confirm: "" } }, ChangePasswordSchema)
@@ -28,17 +29,37 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
       onSuccessExtended()
     }
   }
-  const { mutate: updatePassword, isLoading, data, error, isSuccess } = useUpdatePasswordMutation()
+
+  const {
+    mutate: updatePassword,
+    data: updateData,
+    error: updateError,
+    isLoading: isUpdateLoading,
+    isSuccess: isUpdateSuccess,
+  } = useUpdatePasswordMutation()
+  const {
+    mutate: approveRecoveryPassword,
+    isSuccess: isApproveSuccess,
+    isLoading: isApproveLoading,
+    data: approveData,
+    error: approveError,
+  } = useApproveRecoveryPasswordMutation()
 
   const onSubmit = (data: TChangePassword) => {
-    if (token && temporaryToken && !data.old) {
-      return updatePassword({ token, new: data.new, old: temporaryToken })
+    if (token && email && !data.old) {
+      return approveRecoveryPassword({ key: token, email, password: data.new })
     }
 
-    if (token && !temporaryToken && data.old) {
-      return updatePassword({ token, new: data.new, old: data.old })
+    if (!token && data.old) {
+      return updatePassword({ password: data.new, oldPassword: data.old })
     }
   }
+
+  const approveSuccessMessage = useMemo(() => approveData?.data?.result?.message, [approveData])
+  const approveErrorMessage = useMemo(() => approveError?.response?.data?.message, [approveError])
+
+  const updateSuccessMessage = useMemo(() => updateData?.data?.message, [updateData])
+  const updateErrorMessage = useMemo(() => updateError?.response?.data?.message, [updateError])
 
   return (
     <Container className={classNames("change-password-form-container")}>
@@ -47,7 +68,7 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
           <p>{title}</p>
         </Container>
 
-        {!temporaryToken && (
+        {!token && (
           <Input
             type="password"
             name="oldPassword"
@@ -63,30 +84,33 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
           autoComplete="new-password"
         />
 
-        <DisplaySystemMessage successMessage={data?.data?.message} errorMessage={error?.response?.data?.message} />
+        <DisplaySystemMessage
+          successMessage={approveSuccessMessage || updateSuccessMessage}
+          errorMessage={approveErrorMessage || updateErrorMessage}
+        />
 
-        {!isSuccess && (
+        {(!isApproveSuccess || !isUpdateSuccess) && (
           <BasicButton
             type="submit"
             className={classNames("success-button", "my-3")}
             variant="primary"
-            loading={isLoading}
-            disabled={isLoading}
+            loading={isApproveLoading || isUpdateLoading}
+            disabled={isApproveLoading || isUpdateLoading}
             defaultSize>
             {t("submit")}
           </BasicButton>
         )}
 
-        {isSuccess && (
+        {(isApproveSuccess || isUpdateSuccess) && (
           <BasicButton
             type="button"
             className={classNames("success-button", "my-3")}
             onClick={onSuccess}
             variant="primary"
-            loading={isLoading}
-            disabled={isLoading}
+            loading={isApproveLoading || isUpdateLoading}
+            disabled={isApproveLoading || isUpdateLoading}
             defaultSize>
-            {temporaryToken ? t("backToLogin") : t("submit")}
+            {token ? t("backToLogin") : t("submit")}
           </BasicButton>
         )}
       </BasicFormProvider>

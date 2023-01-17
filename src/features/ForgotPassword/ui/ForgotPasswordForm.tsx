@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap"
 
-import { useForgotPasswordMutation } from "~/entities/user"
+import { useRecoveryPasswordMutation } from "~/entities/user"
 import { useCustomForm } from "~/shared/utils"
 import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input } from "~/shared/ui"
 
@@ -17,10 +17,10 @@ export const ForgotPasswordForm = () => {
     formState: { isValid },
   } = form
 
-  const { mutate: forgotPassword, error, isLoading, isSuccess, data } = useForgotPasswordMutation()
+  const { mutate: recoveryPassword, error, isLoading, isSuccess, data } = useRecoveryPasswordMutation()
 
   const onForgotPasswordSubmit = (data: TForgotPasswordForm) => {
-    forgotPassword(data)
+    recoveryPassword(data)
   }
 
   return (
@@ -40,7 +40,7 @@ export const ForgotPasswordForm = () => {
           </BasicButton>
         )}
 
-        {isSuccess && <DisplaySystemMessage successMessage={data?.data?.message} />}
+        {isSuccess && <DisplaySystemMessage successMessage={data?.data?.result?.message} />}
       </Container>
     </BasicFormProvider>
   )

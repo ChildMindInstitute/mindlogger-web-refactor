@@ -1,8 +1,8 @@
 import { httpService, Http } from "~/shared/api"
 
 import {
-  ICheckTemporaryPasswordPayload,
-  IForgotPasswordPayload,
+  IRecoveryPasswordApprovePayload,
+  IRecoveryPasswordPayload,
   ILoginPayload,
   ILogoutPayload,
   ISignupPayload,
@@ -12,22 +12,26 @@ import {
 export class AuthorizationService {
   constructor(private httpService: Http) {}
 
+  // Migrated to the new API
   public login(data: ILoginPayload) {
     return this.httpService.POST("/auth/token", data)
   }
 
+  // Migrated to the new API
   public refreshToken(refreshToken: string) {
     return this.httpService.POST("auth/token/refresh", { refreshToken })
   }
 
-  public logout(data: ILogoutPayload) {
+  // Migrated to the new API
+  public logout({ token }: ILogoutPayload) {
     const headers = {
-      "Girder-Token": data.token,
+      Authorization: `Bearer ${token}`,
     }
 
-    return this.httpService.DELETE("/user/authentication", { headers })
+    return this.httpService.DELETE("/auth/token", { headers })
   }
 
+  // Migrated to the new API
   public signup(user: ISignupPayload) {
     const body = {
       ...user,
@@ -36,27 +40,22 @@ export class AuthorizationService {
     return this.httpService.POST("/users", body)
   }
 
-  public forgotPassword(data: IForgotPasswordPayload) {
-    const query = new URLSearchParams(data as unknown as Record<string, string>).toString()
-
-    return this.httpService.PUT(`/user/password/temporary?${query}`)
+  // Migrated to the new API
+  public recoveryPassword(data: IRecoveryPasswordPayload) {
+    return this.httpService.POST(`/users/me/password/recover`, data)
   }
 
-  public checkTemporaryPassword(data: ICheckTemporaryPasswordPayload) {
-    const params = {
-      token: data.temporaryToken,
-    }
-
-    return this.httpService.GET(`/user/password/temporary/${data.userId}`, { params })
+  // Migrated to the new API
+  public approveRecoveryPassword(data: IRecoveryPasswordApprovePayload) {
+    return this.httpService.POST(`/users/me/password/recover/approve`, data)
   }
 
-  public updatePassword({ token, ...rest }: IUpdatePasswordPayload) {
-    const headers = { "Girder-Token": token }
-    const params = { ...rest }
-
-    return this.httpService.PUT("/user/password", null, { headers, params })
+  // Migrated to the new API
+  public updatePassword(data: IUpdatePasswordPayload) {
+    return this.httpService.PUT("/users/me/password", data)
   }
 
+  // Migrated to the new API
   public getUser(accessToken: string) {
     const headers = {
       Authorization: `Bearer ${accessToken}`,
