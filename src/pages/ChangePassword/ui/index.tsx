@@ -1,5 +1,5 @@
-import { Container } from "react-bootstrap"
 import classNames from "classnames"
+import { Container } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router-dom"
 
 import { ChangePasswordForm, useChangePasswordTranslation } from "~/features/ChangePassword"

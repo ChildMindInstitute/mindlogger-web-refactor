@@ -1,10 +1,10 @@
 import { Container } from "react-bootstrap"
 
-import AppStore from "~/assets/AppStore.svg"
-import GooglePlay from "~/assets/GooglePlay.svg"
-
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "../lib/constants"
 import { useDownloadMobileTranslation } from "../lib/useDownloadMobileTranslation"
+
+import AppStore from "~/assets/AppStore.svg"
+import GooglePlay from "~/assets/GooglePlay.svg"
 
 const DownloadMobileLinks = () => {
   const { t } = useDownloadMobileTranslation()

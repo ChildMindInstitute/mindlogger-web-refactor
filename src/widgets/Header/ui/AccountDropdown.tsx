@@ -1,9 +1,9 @@
 import { useMemo } from "react"
 
-import { Dropdown, DropdownOptionList } from "~/shared/ui"
-
-import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 import { useAccountDropdown } from "../lib/account-dropdown-options.constant"
+import { useNavbarTranslation } from "../lib/useNavbarTranslation"
+
+import { Dropdown, DropdownOptionList } from "~/shared/ui"
 
 export interface IAccountDropdownProps {
   title: string

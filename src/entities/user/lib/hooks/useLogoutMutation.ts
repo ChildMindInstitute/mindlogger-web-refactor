@@ -1,10 +1,10 @@
 import { MutationOptions, useMutation } from "@tanstack/react-query"
 import { AxiosError, AxiosResponse } from "axios"
 
-import { BaseErrorResponse } from "~/shared/utils"
-
 import { ILogoutPayload } from "../../model/api.interfaces"
 import { authorizationService } from "../authorization.service"
+
+import { BaseErrorResponse } from "~/shared/utils"
 
 export type SuccessLogoutResponse = AxiosResponse<unknown>
 export type FailedLogoutResponse = AxiosError<BaseErrorResponse>

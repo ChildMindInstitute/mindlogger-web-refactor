@@ -6,6 +6,7 @@ export { decryptBASE64 } from "./encryption/decryptBASE64"
 export { useCustomForm } from "./hooks/useCustomForm"
 export { useCustomTranslation } from "./hooks/useCustomTranslation"
 export { useLocalStorage } from "./hooks/useLocalStorage"
+export { usePasswordType } from "./hooks/usePasswordType"
 
 // Object helpers
 export { isObjectEmpty } from "./object/isObjectEmpty"

@@ -1,8 +1,8 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-import { RootState } from "~/shared/utils"
-
 import { Authorization } from "../user.schema"
+
+import { RootState } from "~/shared/utils"
 
 export const initialState: Authorization = {
   accessToken: undefined,

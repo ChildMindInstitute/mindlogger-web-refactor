@@ -1,11 +1,11 @@
-import { AxiosError, AxiosResponse } from "axios"
 import { MutationOptions, useMutation } from "@tanstack/react-query"
-
-import { BaseErrorResponse, BaseSuccessResponse } from "~/shared/utils"
+import { AxiosError, AxiosResponse } from "axios"
 
 import { ISignupPayload } from "../../model/api.interfaces"
 import { User } from "../../model/user.schema"
 import { authorizationService } from "../authorization.service"
+
+import { BaseErrorResponse, BaseSuccessResponse } from "~/shared/utils"
 
 export type ISignupSuccess = BaseSuccessResponse<User>
 

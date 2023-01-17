@@ -1,11 +1,11 @@
 import { MutationOptions, useMutation } from "@tanstack/react-query"
 import { AxiosError, AxiosResponse } from "axios"
 
-import { BaseErrorResponse, BaseSuccessResponse } from "~/shared/utils"
-
 import { IRecoveryPasswordApprovePayload } from "../../model/api.interfaces"
 import { Authorization, User } from "../../model/user.schema"
 import { authorizationService } from "../authorization.service"
+
+import { BaseErrorResponse, BaseSuccessResponse } from "~/shared/utils"
 
 export type IApproveRecoveryPasswordSuccessResponse = BaseSuccessResponse<{
   message: string

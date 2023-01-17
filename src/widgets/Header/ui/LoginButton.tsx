@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom"
 
-import { ROUTES } from "~/shared/utils"
-import { NavbarButton } from "~/shared/ui"
-
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
+
+import { NavbarButton } from "~/shared/ui"
+import { ROUTES } from "~/shared/utils"
 
 export interface LoginButtonProps {
   onClickExtended?: () => void

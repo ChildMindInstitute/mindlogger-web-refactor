@@ -1,5 +1,3 @@
-import { httpService, Http } from "~/shared/api"
-
 import {
   IRecoveryPasswordApprovePayload,
   IRecoveryPasswordPayload,
@@ -8,6 +6,8 @@ import {
   ISignupPayload,
   IUpdatePasswordPayload,
 } from "../model/api.interfaces"
+
+import { httpService, Http } from "~/shared/api"
 
 export class AuthorizationService {
   constructor(private httpService: Http) {}

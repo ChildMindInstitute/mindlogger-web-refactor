@@ -1,6 +1,7 @@
 import { PropsWithChildren } from "react"
-import { Button, ButtonProps, Spinner } from "react-bootstrap"
+
 import classNames from "classnames"
+import { Button, ButtonProps, Spinner } from "react-bootstrap"
 
 import "./styles.scss"
 

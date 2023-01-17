@@ -1,6 +1,9 @@
+import classNames from "classnames"
 import { Container } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
-import classNames from "classnames"
+
+import { useLoginTranslation } from "../lib/useLoginTranslation"
+import { LoginSchema, TLoginForm } from "../model/login.schema"
 
 import {
   AuthSchema,
@@ -12,17 +15,16 @@ import {
   useLoginMutation,
   UserStoreSchema,
 } from "~/entities/user"
-import { ROUTES, useCustomForm } from "~/shared/utils"
-import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage } from "~/shared/ui"
-
-import { useLoginTranslation } from "../lib/useLoginTranslation"
-import { LoginSchema, TLoginForm } from "../model/login.schema"
+import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
+import { ROUTES, useCustomForm, usePasswordType } from "~/shared/utils"
 
 export const LoginForm = () => {
   const { t } = useLoginTranslation()
   const navigate = useNavigate()
 
   const { setAuth, setUser } = useAuth()
+  const [passwordType, onPasswordIconClick] = usePasswordType()
+
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {
     handleSubmit,
@@ -63,7 +65,13 @@ export const LoginForm = () => {
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
       <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
-      <Input type="password" name="password" placeholder={t("password") || ""} autoComplete="current-password" />
+      <Input
+        type={passwordType}
+        name="password"
+        placeholder={t("password") || ""}
+        autoComplete="current-password"
+        Icon={<PasswordIcon isSecure={passwordType === "password"} onClick={onPasswordIconClick} />}
+      />
 
       <Container className="d-flex justify-content-start p-0 mb-3">
         <BasicButton type="button" variant="link" className={classNames("p-0", "ms-3")}>

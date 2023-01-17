@@ -1,16 +1,15 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 
 import { Navbar, Nav, Col } from "react-bootstrap"
-
-import { ROUTES } from "~/shared/utils"
-import { LanguageDropdown } from "~/features/language"
-import { useAuth } from "~/entities/user"
+import { useNavigate } from "react-router-dom"
 
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
-
-import LoginButton from "./LoginButton"
 import AccountDropdown from "./AccountDropdown"
+import LoginButton from "./LoginButton"
+
+import { useAuth } from "~/entities/user"
+import { LanguageDropdown } from "~/features/language"
+import { ROUTES } from "~/shared/utils"
 
 import "./header.scss"
 

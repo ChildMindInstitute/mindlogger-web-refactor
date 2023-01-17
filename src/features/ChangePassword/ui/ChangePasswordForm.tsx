@@ -1,15 +1,16 @@
+import { useMemo } from "react"
+
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
-
-import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input } from "~/shared/ui"
-import { useCustomForm } from "~/shared/utils"
-import { useApproveRecoveryPasswordMutation, useUpdatePasswordMutation } from "~/entities/user"
 
 import { useChangePasswordTranslation } from "../lib/useChangePasswordTranslation"
 import { ChangePasswordSchema, TChangePassword } from "../model/schema"
 
+import { useApproveRecoveryPasswordMutation, useUpdatePasswordMutation } from "~/entities/user"
+import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
+import { useCustomForm, usePasswordType } from "~/shared/utils"
+
 import "./style.scss"
-import { useMemo } from "react"
 
 interface ChangePasswordFormProps {
   title?: string | null
@@ -20,6 +21,10 @@ interface ChangePasswordFormProps {
 
 export const ChangePasswordForm = ({ title, token, email, onSuccessExtended }: ChangePasswordFormProps) => {
   const { t } = useChangePasswordTranslation()
+
+  const [oldPasswordType, onOldPasswordIconClick] = usePasswordType()
+  const [newPasswordType, onNewPasswordIconClick] = usePasswordType()
+  const [confirmNewPasswordType, onConfirmNewPasswordIconClick] = usePasswordType()
 
   const form = useCustomForm({ defaultValues: { old: "", new: "", confirm: "" } }, ChangePasswordSchema)
   const { handleSubmit } = form
@@ -70,18 +75,28 @@ export const ChangePasswordForm = ({ title, token, email, onSuccessExtended }: C
 
         {!token && (
           <Input
-            type="password"
+            type={oldPasswordType}
             name="oldPassword"
             placeholder={t("oldPassword") || ""}
             autoComplete="current-password"
+            Icon={<PasswordIcon isSecure={oldPasswordType === "password"} onClick={onOldPasswordIconClick} />}
           />
         )}
-        <Input type="password" name="newPassword" placeholder={t("newPassword") || ""} autoComplete="new-password" />
         <Input
-          type="password"
+          type={newPasswordType}
+          name="newPassword"
+          placeholder={t("newPassword") || ""}
+          autoComplete="new-password"
+          Icon={<PasswordIcon isSecure={newPasswordType === "password"} onClick={onNewPasswordIconClick} />}
+        />
+        <Input
+          type={confirmNewPasswordType}
           name="confirmNewPassword"
           placeholder={t("confirmPassword") || ""}
           autoComplete="new-password"
+          Icon={
+            <PasswordIcon isSecure={confirmNewPasswordType === "password"} onClick={onConfirmNewPasswordIconClick} />
+          }
         />
 
         <DisplaySystemMessage

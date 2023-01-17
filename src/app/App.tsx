@@ -1,12 +1,12 @@
 import { Suspense } from "react"
+
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
+import Layout from "./Layout"
+import { ReactQuery, Redux, RouteProvider } from "./providers"
 import i18nManager from "./system/locale/i18n"
 
-import { ReactQuery, Redux, RouteProvider } from "./providers"
-
 import ApplicationRouter from "~/pages"
-import Layout from "./Layout"
 
 import "./index.css"
 
