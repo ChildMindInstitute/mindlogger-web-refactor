@@ -1,1 +1,1 @@
-export { default as AppletCard } from "./ui/AppletCard"
+export * from "./ui"
