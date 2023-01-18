@@ -1,6 +1,6 @@
 import { Axios, AxiosRequestConfig } from "axios"
 
-import api from "./axios"
+import axiosService from "./axios"
 
 export class Http {
   constructor(private axios: Axios) {}
@@ -26,6 +26,6 @@ export class Http {
   }
 }
 
-const httpService = new Http(api)
+const httpService = new Http(axiosService)
 
 export default httpService

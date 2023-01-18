@@ -37,7 +37,6 @@ export const ChangePasswordForm = ({ title, token, email, onSuccessExtended }: C
 
   const {
     mutate: updatePassword,
-    data: updateData,
     error: updateError,
     isLoading: isUpdateLoading,
     isSuccess: isUpdateSuccess,
@@ -46,7 +45,6 @@ export const ChangePasswordForm = ({ title, token, email, onSuccessExtended }: C
     mutate: approveRecoveryPassword,
     isSuccess: isApproveSuccess,
     isLoading: isApproveLoading,
-    data: approveData,
     error: approveError,
   } = useApproveRecoveryPasswordMutation()
 
@@ -60,11 +58,8 @@ export const ChangePasswordForm = ({ title, token, email, onSuccessExtended }: C
     }
   }
 
-  const approveSuccessMessage = useMemo(() => approveData?.data?.result?.message, [approveData])
-  const approveErrorMessage = useMemo(() => approveError?.response?.data?.message, [approveError])
-
-  const updateSuccessMessage = useMemo(() => updateData?.data?.message, [updateData])
-  const updateErrorMessage = useMemo(() => updateError?.response?.data?.message, [updateError])
+  const approveErrorMessage = useMemo(() => approveError?.response?.data?.messages[0], [approveError])
+  const updateErrorMessage = useMemo(() => updateError?.response?.data?.messages[0], [updateError])
 
   return (
     <Container className={classNames("change-password-form-container")}>
@@ -99,10 +94,7 @@ export const ChangePasswordForm = ({ title, token, email, onSuccessExtended }: C
           }
         />
 
-        <DisplaySystemMessage
-          successMessage={approveSuccessMessage || updateSuccessMessage}
-          errorMessage={approveErrorMessage || updateErrorMessage}
-        />
+        <DisplaySystemMessage errorMessage={approveErrorMessage || updateErrorMessage} />
 
         {(!isApproveSuccess || !isUpdateSuccess) && (
           <BasicButton

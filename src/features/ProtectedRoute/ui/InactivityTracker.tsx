@@ -27,7 +27,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
 
   const logoutAction = useCallback(() => {
     if (auth.accessToken) {
-      logout({ token: auth.accessToken })
+      logout({ accessToken: auth.accessToken })
       clearUserAndAuth()
       navigate(ROUTES.login.path)
     }

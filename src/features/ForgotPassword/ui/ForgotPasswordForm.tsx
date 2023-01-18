@@ -17,7 +17,7 @@ export const ForgotPasswordForm = () => {
     formState: { isValid },
   } = form
 
-  const { mutate: recoveryPassword, error, isLoading, isSuccess, data } = useRecoveryPasswordMutation()
+  const { mutate: recoveryPassword, isLoading, isSuccess, error } = useRecoveryPasswordMutation()
 
   const onForgotPasswordSubmit = (data: TForgotPasswordForm) => {
     recoveryPassword(data)
@@ -31,7 +31,7 @@ export const ForgotPasswordForm = () => {
 
       <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
 
-      <DisplaySystemMessage errorMessage={error?.response?.data?.message} />
+      <DisplaySystemMessage errorMessage={error?.response?.data?.messages[0]} />
 
       <Container>
         {!isSuccess && (
@@ -40,7 +40,7 @@ export const ForgotPasswordForm = () => {
           </BasicButton>
         )}
 
-        {isSuccess && <DisplaySystemMessage successMessage={data?.data?.result?.message} />}
+        {/* {isSuccess && <DisplaySystemMessage successMessage={data?.data?.result?.message} />} */}
       </Container>
     </BasicFormProvider>
   )

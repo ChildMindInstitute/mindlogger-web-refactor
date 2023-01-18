@@ -61,7 +61,7 @@ export const SignupForm = () => {
       </div>
 
       <DisplaySystemMessage
-        errorMessage={error?.response?.data?.message}
+        errorMessage={error?.response?.data?.messages[0]}
         successMessage={isSuccess ? t("success") : null}
       />
 

@@ -1,28 +1,17 @@
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { LoginSchema, TLoginForm } from "../model/login.schema"
 
-import {
-  AuthSchema,
-  ILoginPayload,
-  SuccessGetUserResponse,
-  SuccessLoginResponse,
-  useAuth,
-  useGetUserMutation,
-  useLoginMutation,
-  UserStoreSchema,
-} from "~/entities/user"
+import { ILoginPayload, useLoginMutation } from "~/entities/user"
 import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
 import { ROUTES, useCustomForm, usePasswordType } from "~/shared/utils"
 
 export const LoginForm = () => {
   const { t } = useLoginTranslation()
-  const navigate = useNavigate()
 
-  const { setAuth, setUser } = useAuth()
   const [passwordType, onPasswordIconClick] = usePasswordType()
 
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
@@ -31,32 +20,7 @@ export const LoginForm = () => {
     formState: { isValid },
   } = form
 
-  const onGetUserSuccess = ({ data }: SuccessGetUserResponse) => {
-    const { result } = data
-    const parsedUser = UserStoreSchema.parse(result)
-    setUser(parsedUser)
-    navigate(ROUTES.dashboard.path)
-  }
-
-  const { mutate: getUser } = useGetUserMutation({ onSuccess: onGetUserSuccess })
-
-  const onLoginSuccess = ({ data }: SuccessLoginResponse) => {
-    const { result } = data
-    const parsedAuthUser = AuthSchema.parse(result)
-    setAuth(parsedAuthUser)
-
-    if (parsedAuthUser.accessToken) {
-      getUser(parsedAuthUser.accessToken)
-    }
-  }
-
-  const {
-    mutate: login,
-    isLoading,
-    error,
-  } = useLoginMutation({
-    onSuccess: onLoginSuccess,
-  })
+  const { mutate: login, isLoading, error } = useLoginMutation()
 
   const onLoginSubmit = (data: TLoginForm) => {
     login(data as ILoginPayload)
@@ -81,7 +45,7 @@ export const LoginForm = () => {
         </BasicButton>
       </Container>
 
-      <DisplaySystemMessage errorMessage={error?.response?.data?.message} />
+      <DisplaySystemMessage errorMessage={error?.response?.data?.messages[0]} />
 
       <Container>
         <BasicButton type="submit" variant="primary" disabled={!isValid || isLoading} loading={isLoading} defaultSize>
