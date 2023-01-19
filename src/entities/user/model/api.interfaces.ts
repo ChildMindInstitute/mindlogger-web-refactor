@@ -9,22 +9,21 @@ export interface ILogoutPayload {
 
 export interface ISignupPayload {
   email: string
-  lastName: string
-  firstName: string
+  fullName: string
   password: string
 }
 
-export interface IForgotPasswordPayload {
+export interface IRecoveryPasswordPayload {
   email: string
 }
 
-export interface ICheckTemporaryPasswordPayload {
-  userId: string
-  temporaryToken: string
+export interface IRecoveryPasswordApprovePayload {
+  email: string
+  key: string
+  password: string
 }
 
 export interface IUpdatePasswordPayload {
-  token: string
-  old: string
-  new: string
+  oldPassword: string
+  password: string
 }

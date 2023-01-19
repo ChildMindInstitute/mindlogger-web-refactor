@@ -1,22 +1,18 @@
 import { useState } from "react"
 
-import { useNavigate } from "react-router-dom"
-
 import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
-import { AuthSchema, SuccessSignupResponse, useAuth, UserStoreSchema, useSignupMutation } from "~/entities/user"
+import { useSignupMutation } from "~/entities/user"
 import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
-import { isObjectEmpty, useCustomForm, ROUTES, usePasswordType } from "~/shared/utils"
+import { isObjectEmpty, useCustomForm, usePasswordType } from "~/shared/utils"
 
 export const SignupForm = () => {
-  const navigate = useNavigate()
   const { t } = useSignupTranslation()
   const [passwordType, onPasswordIconClick] = usePasswordType()
   const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType()
 
-  const { setUserAndAuth } = useAuth()
   const [terms, setTerms] = useState<boolean>(false)
 
   const form = useCustomForm(
@@ -28,21 +24,11 @@ export const SignupForm = () => {
     formState: { errors },
   } = form
 
-  const onSuccess = ({ data }: SuccessSignupResponse) => {
-    const { account, authToken, ...rest } = data
-
-    const parsedUser = UserStoreSchema.parse(rest)
-    const parsedAuth = AuthSchema.parse(authToken)
-    setUserAndAuth(parsedUser, parsedAuth)
-    return navigate(ROUTES.dashboard.path)
-  }
-
-  const { mutate: signup, error } = useSignupMutation({
-    onSuccess,
-  })
+  const { mutate: signup, error, isSuccess } = useSignupMutation()
 
   const onSignupSubmit = (data: TSignupForm) => {
-    return signup(data)
+    const { email, password, firstName, lastName } = data
+    return signup({ email, password, fullName: `${firstName} ${lastName}` })
   }
 
   return (
@@ -74,7 +60,7 @@ export const SignupForm = () => {
         </Checkbox>
       </div>
 
-      <DisplaySystemMessage errorMessage={error?.response?.data?.message} />
+      <DisplaySystemMessage errorMessage={error?.evaluatedMessage} successMessage={isSuccess ? t("success") : null} />
 
       <BasicButton type="submit" variant="primary" disabled={!isObjectEmpty(errors) || !terms} defaultSize>
         {t("title")}

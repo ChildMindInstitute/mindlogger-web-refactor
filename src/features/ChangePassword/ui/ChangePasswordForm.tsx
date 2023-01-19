@@ -1,10 +1,12 @@
+import { useMemo } from "react"
+
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
 
 import { useChangePasswordTranslation } from "../lib/useChangePasswordTranslation"
 import { ChangePasswordSchema, TChangePassword } from "../model/schema"
 
-import { useUpdatePasswordMutation } from "~/entities/user"
+import { useApproveRecoveryPasswordMutation, useUpdatePasswordMutation } from "~/entities/user"
 import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
 import { useCustomForm, usePasswordType } from "~/shared/utils"
 
@@ -13,11 +15,11 @@ import "./style.scss"
 interface ChangePasswordFormProps {
   title?: string | null
   token?: string
-  temporaryToken?: string
+  email?: string
   onSuccessExtended?: () => void
 }
 
-export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExtended }: ChangePasswordFormProps) => {
+export const ChangePasswordForm = ({ title, token, email, onSuccessExtended }: ChangePasswordFormProps) => {
   const { t } = useChangePasswordTranslation()
 
   const [oldPasswordType, onOldPasswordIconClick] = usePasswordType()
@@ -32,17 +34,32 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
       onSuccessExtended()
     }
   }
-  const { mutate: updatePassword, isLoading, data, error, isSuccess } = useUpdatePasswordMutation()
+
+  const {
+    mutate: updatePassword,
+    error: updateError,
+    isLoading: isUpdateLoading,
+    isSuccess: isUpdateSuccess,
+  } = useUpdatePasswordMutation()
+  const {
+    mutate: approveRecoveryPassword,
+    isSuccess: isApproveSuccess,
+    isLoading: isApproveLoading,
+    error: approveError,
+  } = useApproveRecoveryPasswordMutation()
 
   const onSubmit = (data: TChangePassword) => {
-    if (token && temporaryToken && !data.old) {
-      return updatePassword({ token, new: data.new, old: temporaryToken })
+    if (token && email && !data.old) {
+      return approveRecoveryPassword({ key: token, email, password: data.new })
     }
 
-    if (token && !temporaryToken && data.old) {
-      return updatePassword({ token, new: data.new, old: data.old })
+    if (!token && data.old) {
+      return updatePassword({ password: data.new, oldPassword: data.old })
     }
   }
+
+  const approveErrorMessage = useMemo(() => approveError?.evaluatedMessage, [approveError])
+  const updateErrorMessage = useMemo(() => updateError?.evaluatedMessage, [updateError])
 
   return (
     <Container className={classNames("change-password-form-container")}>
@@ -51,7 +68,7 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
           <p>{title}</p>
         </Container>
 
-        {!temporaryToken && (
+        {!token && (
           <Input
             type={oldPasswordType}
             name="oldPassword"
@@ -77,30 +94,30 @@ export const ChangePasswordForm = ({ title, token, temporaryToken, onSuccessExte
           }
         />
 
-        <DisplaySystemMessage successMessage={data?.data?.message} errorMessage={error?.response?.data?.message} />
+        <DisplaySystemMessage errorMessage={approveErrorMessage || updateErrorMessage} />
 
-        {!isSuccess && (
+        {(!isApproveSuccess || !isUpdateSuccess) && (
           <BasicButton
             type="submit"
             className={classNames("success-button", "my-3")}
             variant="primary"
-            loading={isLoading}
-            disabled={isLoading}
+            loading={isApproveLoading || isUpdateLoading}
+            disabled={isApproveLoading || isUpdateLoading}
             defaultSize>
             {t("submit")}
           </BasicButton>
         )}
 
-        {isSuccess && temporaryToken && (
+        {(isApproveSuccess || isUpdateSuccess) && (
           <BasicButton
             type="button"
             className={classNames("success-button", "my-3")}
             onClick={onSuccess}
             variant="primary"
-            loading={isLoading}
-            disabled={isLoading}
+            loading={isApproveLoading || isUpdateLoading}
+            disabled={isApproveLoading || isUpdateLoading}
             defaultSize>
-            {t("backToLogin")}
+            {token ? t("backToLogin") : t("submit")}
           </BasicButton>
         )}
       </BasicFormProvider>

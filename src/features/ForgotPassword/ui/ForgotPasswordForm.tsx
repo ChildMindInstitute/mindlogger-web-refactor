@@ -1,9 +1,11 @@
+import { useState } from "react"
+
 import { Container } from "react-bootstrap"
 
 import { useForgotPasswordTranslation } from "../lib/useForgotPasswordTranslation"
 import { ForgotPasswordSchema, TForgotPasswordForm } from "../model/schemas"
 
-import { useForgotPasswordMutation } from "~/entities/user"
+import { useRecoveryPasswordMutation } from "~/entities/user"
 import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input } from "~/shared/ui"
 import { useCustomForm } from "~/shared/utils"
 
@@ -15,12 +17,13 @@ export const ForgotPasswordForm = () => {
   const {
     handleSubmit,
     formState: { isValid },
+    watch,
   } = form
 
-  const { mutate: forgotPassword, error, isLoading, isSuccess, data } = useForgotPasswordMutation()
+  const { mutate: recoveryPassword, isLoading, isSuccess, error } = useRecoveryPasswordMutation()
 
   const onForgotPasswordSubmit = (data: TForgotPasswordForm) => {
-    forgotPassword(data)
+    recoveryPassword(data)
   }
 
   return (
@@ -31,7 +34,7 @@ export const ForgotPasswordForm = () => {
 
       <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
 
-      <DisplaySystemMessage errorMessage={error?.response?.data?.message} />
+      <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
       <Container>
         {!isSuccess && (
@@ -40,7 +43,7 @@ export const ForgotPasswordForm = () => {
           </BasicButton>
         )}
 
-        {isSuccess && <DisplaySystemMessage successMessage={data?.data?.message} />}
+        {isSuccess && <DisplaySystemMessage successMessage={t("successMessage", { email: watch("email") })} />}
       </Container>
     </BasicFormProvider>
   )

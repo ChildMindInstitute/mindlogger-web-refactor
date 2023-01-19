@@ -1,49 +1,26 @@
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { LoginSchema, TLoginForm } from "../model/login.schema"
 
-import {
-  AuthSchema,
-  ILoginPayload,
-  SuccessLoginResponse,
-  useAuth,
-  useLoginMutation,
-  UserStoreSchema,
-} from "~/entities/user"
+import { ILoginPayload, useLoginMutation } from "~/entities/user"
 import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
 import { ROUTES, useCustomForm, usePasswordType } from "~/shared/utils"
 
 export const LoginForm = () => {
   const { t } = useLoginTranslation()
-  const navigate = useNavigate()
 
   const [passwordType, onPasswordIconClick] = usePasswordType()
 
-  const { setUserAndAuth } = useAuth()
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {
     handleSubmit,
     formState: { isValid },
   } = form
 
-  const onSuccess = ({ data }: SuccessLoginResponse) => {
-    const { user, authToken } = data
-    const parsedUser = UserStoreSchema.parse(user)
-    const parsedAuthUser = AuthSchema.parse(authToken)
-    setUserAndAuth(parsedUser, parsedAuthUser)
-    navigate(ROUTES.dashboard.path)
-  }
-
-  const {
-    mutate: login,
-    isLoading,
-    error,
-  } = useLoginMutation({
-    onSuccess,
-  })
+  const { mutate: login, isLoading, error } = useLoginMutation()
 
   const onLoginSubmit = (data: TLoginForm) => {
     login(data as ILoginPayload)
@@ -68,7 +45,7 @@ export const LoginForm = () => {
         </BasicButton>
       </Container>
 
-      <DisplaySystemMessage errorMessage={error?.response?.data?.message} />
+      <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
       <Container>
         <BasicButton type="submit" variant="primary" disabled={!isValid || isLoading} loading={isLoading} defaultSize>

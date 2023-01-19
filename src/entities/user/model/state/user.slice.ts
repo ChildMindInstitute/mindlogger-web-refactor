@@ -6,21 +6,8 @@ import { RootState } from "~/shared/utils"
 
 export const initialState: UserStore = {
   email: undefined,
-  emailVerified: undefined,
-  admin: undefined,
-  lastName: undefined,
-  firstName: undefined,
-  displayName: undefined,
-  creatorId: undefined,
-  created: undefined,
-  login: undefined,
-  otp: undefined,
-  public: undefined,
-  size: undefined,
-  status: undefined,
-  _accessLevel: undefined,
-  _id: undefined,
-  _modelType: undefined,
+  fullName: undefined,
+  id: undefined,
 }
 
 export const userSlice = createSlice({

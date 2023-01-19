@@ -24,8 +24,8 @@ export const useAccountDropdown = () => {
     {
       tag: "logOut",
       onSelect: () => {
-        if (auth.token) {
-          logout({ token: auth.token })
+        if (auth.accessToken) {
+          logout({ accessToken: auth.accessToken })
         }
         clearUserAndAuth()
         navigate(ROUTES.login.path)

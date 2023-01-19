@@ -10,7 +10,7 @@ export const ROUTES = {
     path: "/forgotpassword",
   },
   changePassword: {
-    path: "/useraccount/:userId/token/:temporaryToken",
+    path: "/useraccount/:email/token/:token",
   },
 
   // Protected routes

@@ -26,12 +26,12 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   }, [timerRef])
 
   const logoutAction = useCallback(() => {
-    if (auth.token) {
-      logout({ token: auth.token })
+    if (auth.accessToken) {
+      logout({ accessToken: auth.accessToken })
       clearUserAndAuth()
       navigate(ROUTES.login.path)
     }
-  }, [navigate, auth.token, logout, clearUserAndAuth])
+  }, [navigate, auth.accessToken, logout, clearUserAndAuth])
 
   const logoutTimer = useCallback(() => {
     timerRef.current = setTimeout(() => {
