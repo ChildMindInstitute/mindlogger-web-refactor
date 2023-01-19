@@ -31,7 +31,7 @@ export const ForgotPasswordForm = () => {
 
       <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
 
-      <DisplaySystemMessage errorMessage={error?.response?.data?.messages[0]} />
+      <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
       <Container>
         {!isSuccess && (

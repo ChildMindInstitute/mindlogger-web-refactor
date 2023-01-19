@@ -58,8 +58,8 @@ export const ChangePasswordForm = ({ title, token, email, onSuccessExtended }: C
     }
   }
 
-  const approveErrorMessage = useMemo(() => approveError?.response?.data?.messages[0], [approveError])
-  const updateErrorMessage = useMemo(() => updateError?.response?.data?.messages[0], [updateError])
+  const approveErrorMessage = useMemo(() => approveError?.evaluatedMessage, [approveError])
+  const updateErrorMessage = useMemo(() => updateError?.evaluatedMessage, [updateError])
 
   return (
     <Container className={classNames("change-password-form-container")}>

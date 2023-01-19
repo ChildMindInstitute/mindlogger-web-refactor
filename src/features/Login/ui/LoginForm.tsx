@@ -45,7 +45,7 @@ export const LoginForm = () => {
         </BasicButton>
       </Container>
 
-      <DisplaySystemMessage errorMessage={error?.response?.data?.messages[0]} />
+      <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
       <Container>
         <BasicButton type="submit" variant="primary" disabled={!isValid || isLoading} loading={isLoading} defaultSize>
