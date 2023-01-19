@@ -11,19 +11,18 @@ import { useCustomForm } from "~/shared/utils"
 
 export const ForgotPasswordForm = () => {
   const { t } = useForgotPasswordTranslation()
-  const [email, setEmail] = useState("")
 
   const form = useCustomForm({ defaultValues: { email: "" } }, ForgotPasswordSchema)
 
   const {
     handleSubmit,
     formState: { isValid },
+    watch,
   } = form
 
   const { mutate: recoveryPassword, isLoading, isSuccess, error } = useRecoveryPasswordMutation()
 
   const onForgotPasswordSubmit = (data: TForgotPasswordForm) => {
-    setEmail(data.email)
     recoveryPassword(data)
   }
 
@@ -44,7 +43,7 @@ export const ForgotPasswordForm = () => {
           </BasicButton>
         )}
 
-        {isSuccess && <DisplaySystemMessage successMessage={t("successMessage", { email })} />}
+        {isSuccess && <DisplaySystemMessage successMessage={t("successMessage", { email: watch("email") })} />}
       </Container>
     </BasicFormProvider>
   )
