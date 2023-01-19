@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 import { Container } from "react-bootstrap"
 
 import { useForgotPasswordTranslation } from "../lib/useForgotPasswordTranslation"
@@ -9,6 +11,7 @@ import { useCustomForm } from "~/shared/utils"
 
 export const ForgotPasswordForm = () => {
   const { t } = useForgotPasswordTranslation()
+  const [email, setEmail] = useState("")
 
   const form = useCustomForm({ defaultValues: { email: "" } }, ForgotPasswordSchema)
 
@@ -20,6 +23,7 @@ export const ForgotPasswordForm = () => {
   const { mutate: recoveryPassword, isLoading, isSuccess, error } = useRecoveryPasswordMutation()
 
   const onForgotPasswordSubmit = (data: TForgotPasswordForm) => {
+    setEmail(data.email)
     recoveryPassword(data)
   }
 
@@ -40,7 +44,7 @@ export const ForgotPasswordForm = () => {
           </BasicButton>
         )}
 
-        {/* {isSuccess && <DisplaySystemMessage successMessage={data?.data?.result?.message} />} */}
+        {isSuccess && <DisplaySystemMessage successMessage={t("successMessage", { email })} />}
       </Container>
     </BasicFormProvider>
   )
