@@ -60,10 +60,7 @@ export const SignupForm = () => {
         </Checkbox>
       </div>
 
-      <DisplaySystemMessage
-        errorMessage={error?.response?.data?.messages[0]}
-        successMessage={isSuccess ? t("success") : null}
-      />
+      <DisplaySystemMessage errorMessage={error?.evaluatedMessage} successMessage={isSuccess ? t("success") : null} />
 
       <BasicButton type="submit" variant="primary" disabled={!isObjectEmpty(errors) || !terms} defaultSize>
         {t("title")}

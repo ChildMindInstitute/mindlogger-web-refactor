@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 import { Container } from "react-bootstrap"
 
 import { useForgotPasswordTranslation } from "../lib/useForgotPasswordTranslation"
@@ -15,6 +17,7 @@ export const ForgotPasswordForm = () => {
   const {
     handleSubmit,
     formState: { isValid },
+    watch,
   } = form
 
   const { mutate: recoveryPassword, isLoading, isSuccess, error } = useRecoveryPasswordMutation()
@@ -31,7 +34,7 @@ export const ForgotPasswordForm = () => {
 
       <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
 
-      <DisplaySystemMessage errorMessage={error?.response?.data?.messages[0]} />
+      <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
       <Container>
         {!isSuccess && (
@@ -40,7 +43,7 @@ export const ForgotPasswordForm = () => {
           </BasicButton>
         )}
 
-        {/* {isSuccess && <DisplaySystemMessage successMessage={data?.data?.result?.message} />} */}
+        {isSuccess && <DisplaySystemMessage successMessage={t("successMessage", { email: watch("email") })} />}
       </Container>
     </BasicFormProvider>
   )
