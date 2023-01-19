@@ -1,6 +1,6 @@
 import { Row } from "react-bootstrap"
 
-import { AppletCard } from "~/entities/applet"
+import AppletCard from "./AppletCard"
 
 const AppletList = () => {
   const testArr = [1, 2, 3]
