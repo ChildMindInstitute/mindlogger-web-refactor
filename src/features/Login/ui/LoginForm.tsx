@@ -20,7 +20,15 @@ export const LoginForm = () => {
     formState: { isValid },
   } = form
 
-  const { mutate: login, isLoading, error } = useLoginMutation()
+  const {
+    mutate: login,
+    isLoading,
+    error,
+  } = useLoginMutation({
+    onSuccess(data, variables, context) {
+      console.log(data)
+    },
+  })
 
   const onLoginSubmit = (data: TLoginForm) => {
     login(data as ILoginPayload)

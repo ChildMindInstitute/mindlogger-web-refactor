@@ -2,10 +2,10 @@ import { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 
 import { useNavigate } from "react-router-dom"
 
-import { useAuth, useLogoutMutation } from "~/entities/user"
+import { useLogoutMutation } from "~/entities/user"
 import { ROUTES } from "~/shared/utils"
 
-export type InactivityTrackerProps = PropsWithChildren
+export type InactivityTrackerProps = PropsWithChildren<{ token: string }>
 
 const events = ["load", "click", "scroll", "keypress"]
 
@@ -13,11 +13,10 @@ const ONE_SEC = 1000
 const ONE_MIN = 60 * ONE_SEC
 const LOGOUT_TIME_LIMIT = 15 * ONE_MIN // 15 min
 
-export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
+export const InactivityTracker = ({ children, token }: InactivityTrackerProps) => {
   const timerRef = useRef<number | undefined>(undefined)
   const navigate = useNavigate()
 
-  const { clearUserAndAuth, auth } = useAuth()
   const { mutate: logout } = useLogoutMutation()
 
   // this resets the timer if it exists.
@@ -26,12 +25,11 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   }, [timerRef])
 
   const logoutAction = useCallback(() => {
-    if (auth.accessToken) {
-      logout({ accessToken: auth.accessToken })
-      clearUserAndAuth()
+    if (token) {
+      logout({ accessToken: token })
       navigate(ROUTES.login.path)
     }
-  }, [navigate, auth.accessToken, logout, clearUserAndAuth])
+  }, [navigate, token, logout])
 
   const logoutTimer = useCallback(() => {
     timerRef.current = setTimeout(() => {

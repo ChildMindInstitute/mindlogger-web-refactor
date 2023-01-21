@@ -3,7 +3,7 @@ import persistReducer from "redux-persist/es/persistReducer"
 import persistStore from "redux-persist/es/persistStore"
 import storage from "redux-persist/lib/storage"
 
-import { authReducer, userReducer } from "~/entities/user"
+import { userModel } from "~/entities/user"
 
 const persistConfig = {
   key: "root",
@@ -11,8 +11,7 @@ const persistConfig = {
 }
 
 export const rootReducer = combineReducers({
-  user: userReducer,
-  auth: authReducer,
+  user: userModel.reducer,
 })
 
 const store = configureStore({
