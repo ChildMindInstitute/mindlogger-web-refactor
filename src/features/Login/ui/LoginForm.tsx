@@ -1,18 +1,21 @@
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { LoginSchema, TLoginForm } from "../model/login.schema"
 
-import { ILoginPayload, useLoginMutation } from "~/entities/user"
+import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
 import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
 import { ROUTES, useCustomForm, usePasswordType } from "~/shared/utils"
 
 export const LoginForm = () => {
   const { t } = useLoginTranslation()
+  const navigate = useNavigate()
 
   const [passwordType, onPasswordIconClick] = usePasswordType()
+
+  const [, setUser] = userModel.hooks.useUserState()
 
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {
@@ -25,8 +28,11 @@ export const LoginForm = () => {
     isLoading,
     error,
   } = useLoginMutation({
-    onSuccess(data, variables, context) {
-      console.log(data)
+    onSuccess(data) {
+      setUser(data.data.result.user)
+
+      userModel.secureTokensStorage.setTokens(data.data.result.token)
+      navigate(ROUTES.dashboard.path)
     },
   })
 

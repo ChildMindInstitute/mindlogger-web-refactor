@@ -16,7 +16,7 @@ import axiosService from "./axios"
 function authorizationService() {
   return {
     login(data: LoginPayload) {
-      return axiosService.post<LoginSuccessResponse>("/auth/token", data)
+      return axiosService.post<LoginSuccessResponse>("/auth/login", data)
     },
 
     logout(data: LogoutPayload) {

@@ -9,3 +9,4 @@ export * from "./validation"
 // Common
 export { enumToArray } from "./enumToArray"
 export { localStorageService } from "./localStorageService"
+export { securelocalStorageService } from "./secureLocalStorage"

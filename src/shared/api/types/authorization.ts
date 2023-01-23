@@ -6,7 +6,7 @@ export interface LoginPayload {
 }
 
 export type LoginSuccessResponse = BaseSuccessResponse<{
-  auth: AuthorizationDTO
+  token: AuthorizationDTO
   user: UserDTO
 }>
 
