@@ -10,7 +10,7 @@ const createSecureTokensStorage = () => {
   }
 
   const getTokens = () => {
-    return securelocalStorageService.getItem(name)
+    return securelocalStorageService.getItem(name) as Tokens | null
   }
 
   return { setTokens, getTokens }
