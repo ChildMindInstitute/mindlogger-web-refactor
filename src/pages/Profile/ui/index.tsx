@@ -8,7 +8,7 @@ import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
 
 const ProfilePage = () => {
   const { t } = useProfileTranslation()
-  const [user] = userModel.hooks.useUserState()
+  const { user } = userModel.hooks.useUserState()
 
   return (
     <div className="d-flex mp-3 align-self-start justify-content-center w-100 pt-3">

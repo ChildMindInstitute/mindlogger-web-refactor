@@ -5,8 +5,15 @@ import { ROUTES } from "~/shared/utils"
 
 export const useAccountDropdown = () => {
   const navigate = useNavigate()
-  const [user] = userModel.hooks.useUserState()
-  const { mutate: logout, isLoading } = useLogoutMutation()
+  const { clearUser } = userModel.hooks.useUserState()
+
+  const { mutate: logout, isLoading } = useLogoutMutation({
+    onSuccess() {
+      clearUser()
+      userModel.secureTokensStorage.clearTokens()
+      navigate(ROUTES.login.path)
+    },
+  })
 
   const accountDropdownOptions = [
     {
@@ -24,10 +31,11 @@ export const useAccountDropdown = () => {
     {
       tag: "logOut",
       onSelect: () => {
-        if (user?.id) {
-          logout({ accessToken: "TODO: add token here" })
+        const tokens = userModel.secureTokensStorage.getTokens()
+
+        if (tokens?.accessToken) {
+          logout({ accessToken: tokens.accessToken })
         }
-        navigate(ROUTES.login.path)
       },
     },
   ]

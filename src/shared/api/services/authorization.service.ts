@@ -23,7 +23,12 @@ function authorizationService() {
       const headers = {
         Authorization: `Bearer ${data.accessToken}`,
       }
-      return axiosService.delete("/auth/token", { headers })
+
+      const body = {
+        deviceId: "someid",
+      }
+
+      return axiosService.post("/auth/logout", body, { headers })
     },
 
     signup(data: SignupPayload) {

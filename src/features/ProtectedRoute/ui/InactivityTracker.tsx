@@ -2,7 +2,7 @@ import { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 
 import { useNavigate } from "react-router-dom"
 
-import { useLogoutMutation } from "~/entities/user"
+import { useLogoutMutation, userModel } from "~/entities/user"
 import { ROUTES } from "~/shared/utils"
 
 export type InactivityTrackerProps = PropsWithChildren<{ token: string }>
@@ -16,8 +16,15 @@ const LOGOUT_TIME_LIMIT = 15 * ONE_MIN // 15 min
 export const InactivityTracker = ({ children, token }: InactivityTrackerProps) => {
   const timerRef = useRef<number | undefined>(undefined)
   const navigate = useNavigate()
+  const { clearUser } = userModel.hooks.useUserState()
 
-  const { mutate: logout } = useLogoutMutation()
+  const { mutate: logout } = useLogoutMutation({
+    onSuccess() {
+      clearUser()
+      userModel.secureTokensStorage.clearTokens()
+      navigate(ROUTES.login.path)
+    },
+  })
 
   // this resets the timer if it exists.
   const resetTimer = useCallback(() => {
@@ -27,9 +34,8 @@ export const InactivityTracker = ({ children, token }: InactivityTrackerProps) =
   const logoutAction = useCallback(() => {
     if (token) {
       logout({ accessToken: token })
-      navigate(ROUTES.login.path)
     }
-  }, [navigate, token, logout])
+  }, [token, logout])
 
   const logoutTimer = useCallback(() => {
     timerRef.current = setTimeout(() => {

@@ -13,7 +13,21 @@ import { ProtectedRoute } from "~/features/ProtectedRoute"
 import { ROUTES } from "~/shared/utils"
 
 const ApplicationRouter = (): JSX.Element | null => {
-  const tokens = userModel.secureTokensStorage.getTokens()
+  const tokens = userModel.hooks.useTokensState()
+
+  if (tokens?.accessToken) {
+    return (
+      <Routes>
+        <Route element={<ProtectedRoute token={tokens?.accessToken} />}>
+          <Route index path={ROUTES.dashboard.path} element={<Dashboard />} />
+          <Route path={ROUTES.profile.path} element={<Profile />} />
+          <Route path={ROUTES.settings.path} element={<Settings />} />
+
+          <Route path="*" element={<Navigate to={ROUTES.dashboard.path} />} />
+        </Route>
+      </Routes>
+    )
+  }
 
   return (
     <Routes>
@@ -21,14 +35,6 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.signup.path} element={<SignupPage />} />
       <Route path={ROUTES.forgotPassword.path} element={<ForgotPassword />} />
       <Route path={ROUTES.changePassword.path} element={<ChangePassword />} />
-
-      <Route element={<ProtectedRoute token={tokens?.accessToken} />}>
-        <Route index path={ROUTES.dashboard.path} element={<Dashboard />} />
-        <Route path={ROUTES.profile.path} element={<Profile />} />
-        <Route path={ROUTES.settings.path} element={<Settings />} />
-
-        <Route path="*" element={<Navigate to={ROUTES.dashboard.path} />} />
-      </Route>
 
       <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
     </Routes>

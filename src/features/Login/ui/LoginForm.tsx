@@ -15,7 +15,7 @@ export const LoginForm = () => {
 
   const [passwordType, onPasswordIconClick] = usePasswordType()
 
-  const [, setUser] = userModel.hooks.useUserState()
+  const { setUser } = userModel.hooks.useUserState()
 
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {

@@ -1,16 +1,31 @@
+import { useCallback } from "react"
+
 import { User } from "../../lib"
 import { userSelector } from "../selectors"
 import { actions, UserStore } from "../user.slice"
 
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
-export const useUserState = (): [UserStore, (data: User) => void] => {
+interface UseUserStateOutput {
+  user: UserStore
+  setUser: (data: User) => void
+  clearUser: () => void
+}
+
+export const useUserState = (): UseUserStateOutput => {
   const dispatch = useAppDispatch()
 
   const user = useAppSelector(userSelector)
-  const setUser = (data: User) => {
-    dispatch(actions.save(data))
-  }
+  const setUser = useCallback(
+    (data: User) => {
+      dispatch(actions.save(data))
+    },
+    [dispatch],
+  )
 
-  return [user, setUser]
+  const clearUser = useCallback(() => {
+    dispatch(actions.clear())
+  }, [dispatch])
+
+  return { user, setUser, clearUser }
 }

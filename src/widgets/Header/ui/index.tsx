@@ -17,7 +17,7 @@ const Header = (): JSX.Element | null => {
   const { t } = useNavbarTranslation()
   const navigate = useNavigate()
 
-  const [user] = userModel.hooks.useUserState()
+  const { user } = userModel.hooks.useUserState()
 
   const [expanded, setExpanded] = useState<boolean>(false)
 
