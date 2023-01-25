@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
 
 import { Tokens } from "../../lib"
-import { secureTokensStorage } from "../secureTokensStorage"
 
-import { eventEmitter } from "~/shared/utils"
+import { eventEmitter, secureTokensStorage } from "~/shared/utils"
 
 export const useTokensState = () => {
   const [tokens, setTokens] = useState<Tokens | null>(secureTokensStorage.getTokens())

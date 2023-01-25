@@ -1,4 +1,4 @@
-import { Tokens } from "../lib"
+import { Tokens } from "../../entities/user/lib"
 
 import { eventEmitter, securelocalStorageService } from "~/shared/utils"
 

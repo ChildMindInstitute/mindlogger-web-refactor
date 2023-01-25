@@ -17,3 +17,7 @@ export type BaseError = {
 export interface BaseSuccessResponse<T> {
   result: T
 }
+
+export interface BaseSuccessListResponse<T> {
+  results: Array<T>
+}
