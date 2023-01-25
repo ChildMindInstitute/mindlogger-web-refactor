@@ -6,6 +6,8 @@ import {
   PasswordRecoverySuccessResponse,
   RecoveryPasswordApprovalPayload,
   RecoveryPasswordPayload,
+  RefreshTokenPayload,
+  RefreshTokenSuccessResponse,
   SignupPayload,
   SignupSuccessResponse,
   UpdatePasswordPayload,
@@ -45,6 +47,9 @@ function authorizationService() {
 
     updatePassword(data: UpdatePasswordPayload) {
       return axiosService.put<UpdatePasswordSuccessResponse>("/users/me/password", data)
+    },
+    refreshToken(data: RefreshTokenPayload) {
+      return axiosService.post<RefreshTokenSuccessResponse>("/auth/token/refresh", data)
     },
   }
 }

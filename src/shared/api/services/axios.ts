@@ -1,6 +1,11 @@
-import axios from "axios"
+import axios, { AxiosError, AxiosRequestConfig } from "axios"
 
 import { secureTokensStorage } from "../../utils"
+import authorizationService from "./authorization.service"
+
+type RequestConfig = AxiosRequestConfig<any> & {
+  retry?: boolean
+}
 
 const axiosService = axios.create({
   baseURL: import.meta.env.VITE_API_HOST,
@@ -20,6 +25,37 @@ axiosService.interceptors.request.use(
     return config
   },
   error => {
+    return Promise.reject(error)
+  },
+)
+
+axiosService.interceptors.response.use(
+  response => response,
+  async (error: AxiosError) => {
+    const config = error?.config as RequestConfig
+
+    if (error.response?.status === 401 && !config?.retry) {
+      config.retry = true
+
+      const tokens = secureTokensStorage.getTokens()
+
+      if (!tokens?.refreshToken || !tokens.tokenType) {
+        return Promise.reject(error)
+      }
+
+      try {
+        const { data } = await authorizationService.refreshToken({ refreshToken: tokens?.refreshToken })
+
+        secureTokensStorage.setTokens(data.result)
+
+        config.headers!.Authorization = `${data.result.tokenType} ${data.result.accessToken}`
+      } catch (e) {
+        Promise.reject(e)
+      }
+
+      return axiosService(config)
+    }
+
     return Promise.reject(error)
   },
 )
