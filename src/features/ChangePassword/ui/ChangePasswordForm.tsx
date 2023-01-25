@@ -61,6 +61,8 @@ export const ChangePasswordForm = ({ title, token, email, onSuccessExtended }: C
   const approveErrorMessage = useMemo(() => approveError?.evaluatedMessage, [approveError])
   const updateErrorMessage = useMemo(() => updateError?.evaluatedMessage, [updateError])
 
+  const approveSuccessMessage = useMemo(() => (isApproveSuccess ? t("success") : null), [isApproveSuccess, t])
+
   return (
     <Container className={classNames("change-password-form-container")}>
       <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
@@ -94,9 +96,12 @@ export const ChangePasswordForm = ({ title, token, email, onSuccessExtended }: C
           }
         />
 
-        <DisplaySystemMessage errorMessage={approveErrorMessage || updateErrorMessage} />
+        <DisplaySystemMessage
+          errorMessage={approveErrorMessage || updateErrorMessage}
+          successMessage={approveSuccessMessage}
+        />
 
-        {(!isApproveSuccess || !isUpdateSuccess) && (
+        {!isApproveSuccess && (
           <BasicButton
             type="submit"
             className={classNames("success-button", "my-3")}

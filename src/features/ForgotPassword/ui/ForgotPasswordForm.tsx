@@ -1,5 +1,4 @@
-import { useState } from "react"
-
+import classNames from "classnames"
 import { Container } from "react-bootstrap"
 
 import { useForgotPasswordTranslation } from "../lib/useForgotPasswordTranslation"
@@ -36,7 +35,7 @@ export const ForgotPasswordForm = () => {
 
       <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
-      <Container>
+      <Container className={classNames("mt-3")}>
         {!isSuccess && (
           <BasicButton type="submit" variant="primary" disabled={!isValid || isLoading} loading={isLoading} defaultSize>
             {t("button")}
