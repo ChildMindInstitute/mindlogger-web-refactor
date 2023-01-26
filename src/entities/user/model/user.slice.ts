@@ -17,7 +17,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     save: (state, action: PayloadAction<UserStore>) => {
-      return { ...state, ...action.payload }
+      return action.payload
     },
     clear: () => {
       return initialState

@@ -18,13 +18,7 @@ export const InactivityTracker = ({ children, token }: InactivityTrackerProps) =
   const navigate = useNavigate()
   const { clearUser } = userModel.hooks.useUserState()
 
-  const { mutate: logout } = useLogoutMutation({
-    onSuccess() {
-      clearUser()
-      userModel.secureTokensStorage.clearTokens()
-      navigate(ROUTES.login.path)
-    },
-  })
+  const { mutate: logout } = useLogoutMutation()
 
   // this resets the timer if it exists.
   const resetTimer = useCallback(() => {
@@ -35,7 +29,11 @@ export const InactivityTracker = ({ children, token }: InactivityTrackerProps) =
     if (token) {
       logout({ accessToken: token })
     }
-  }, [token, logout])
+
+    clearUser()
+    userModel.secureTokensStorage.clearTokens()
+    navigate(ROUTES.login.path)
+  }, [token, clearUser, navigate, logout])
 
   const logoutTimer = useCallback(() => {
     timerRef.current = setTimeout(() => {

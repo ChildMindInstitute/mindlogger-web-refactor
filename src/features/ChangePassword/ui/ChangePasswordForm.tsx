@@ -1,5 +1,3 @@
-import { useMemo } from "react"
-
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
 
@@ -58,10 +56,10 @@ export const ChangePasswordForm = ({ title, token, email, onSuccessExtended }: C
     }
   }
 
-  const approveErrorMessage = useMemo(() => approveError?.evaluatedMessage, [approveError])
-  const updateErrorMessage = useMemo(() => updateError?.evaluatedMessage, [updateError])
+  const approveErrorMessage = approveError?.evaluatedMessage
+  const updateErrorMessage = updateError?.evaluatedMessage
 
-  const approveSuccessMessage = useMemo(() => (isApproveSuccess ? t("success") : null), [isApproveSuccess, t])
+  const approveSuccessMessage = isApproveSuccess ? t("success") : null
 
   return (
     <Container className={classNames("change-password-form-container")}>

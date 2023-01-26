@@ -1,5 +1,6 @@
 export const EVENTS = {
   onTokensChange: "ON_TOKENS_CHANGE",
+  onLogout: "ON_LOGOUT",
 } as const
 
 type Events = keyof typeof EVENTS
@@ -10,6 +11,7 @@ class EventEmitter {
   constructor() {
     this._events = {
       onTokensChange: [],
+      onLogout: [],
     }
   }
 

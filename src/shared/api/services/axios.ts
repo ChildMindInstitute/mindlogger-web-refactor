@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios"
 
-import { secureTokensStorage } from "../../utils"
+import { eventEmitter, secureTokensStorage } from "../../utils"
 import authorizationService from "./authorization.service"
 
 type RequestConfig = AxiosRequestConfig<any> & {
@@ -50,6 +50,7 @@ axiosService.interceptors.response.use(
 
         config.headers!.Authorization = `${data.result.tokenType} ${data.result.accessToken}`
       } catch (e) {
+        eventEmitter.emit("onLogout")
         Promise.reject(e)
       }
 
