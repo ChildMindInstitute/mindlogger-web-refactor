@@ -22,9 +22,18 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
   const [confirmNewPasswordType, onConfirmNewPasswordIconClick] = usePasswordType()
 
   const form = useCustomForm({ defaultValues: { old: "", new: "", confirm: "" } }, ChangePasswordSchema)
-  const { handleSubmit } = form
+  const { handleSubmit, reset } = form
 
-  const { mutate: updatePassword, error, isLoading, isSuccess } = useUpdatePasswordMutation({})
+  const {
+    mutate: updatePassword,
+    error,
+    isLoading,
+    isSuccess,
+  } = useUpdatePasswordMutation({
+    onSuccess() {
+      reset()
+    },
+  })
 
   const onSubmit = (data: TChangePassword) => {
     return updatePassword({ password: data.new, prev_password: data.old })
@@ -39,21 +48,21 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
 
         <Input
           type={oldPasswordType}
-          name="oldPassword"
+          name="old"
           placeholder={t("oldPassword") || ""}
           autoComplete="current-password"
           Icon={<PasswordIcon isSecure={oldPasswordType === "password"} onClick={onOldPasswordIconClick} />}
         />
         <Input
           type={newPasswordType}
-          name="newPassword"
+          name="new"
           placeholder={t("newPassword") || ""}
           autoComplete="new-password"
           Icon={<PasswordIcon isSecure={newPasswordType === "password"} onClick={onNewPasswordIconClick} />}
         />
         <Input
           type={confirmNewPasswordType}
-          name="confirmNewPassword"
+          name="confirm"
           placeholder={t("confirmPassword") || ""}
           autoComplete="new-password"
           Icon={

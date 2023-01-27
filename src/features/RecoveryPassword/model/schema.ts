@@ -2,13 +2,12 @@ import { z } from "zod"
 
 export const RecoveryPasswordSchema = z
   .object({
-    newPassword: z.string(),
-    confirmNewPassword: z.string(),
+    new: z.string(),
+    confirm: z.string(),
   })
-  .refine(data => data.newPassword === data.confirmNewPassword, {
+  .refine(data => data.new === data.confirm, {
     message: "Passwords do not match",
     path: ["confirmNewPassword"],
   })
-  .transform(data => ({ new: data.newPassword, confirm: data.confirmNewPassword }))
 
 export type RecoveryPassword = z.infer<typeof RecoveryPasswordSchema>

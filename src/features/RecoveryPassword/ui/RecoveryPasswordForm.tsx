@@ -19,7 +19,20 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
   const navigate = useNavigate()
   const { t } = useRecoveryPasswordTranslation()
 
-  const { mutate: approveRecoveryPassword, isSuccess, isLoading, error, status } = useApproveRecoveryPasswordMutation()
+  const form = useCustomForm({ defaultValues: { new: "", confirm: "" } }, RecoveryPasswordSchema)
+  const { handleSubmit, reset } = form
+
+  const {
+    mutate: approveRecoveryPassword,
+    isSuccess,
+    isLoading,
+    error,
+    status,
+  } = useApproveRecoveryPasswordMutation({
+    onSuccess() {
+      reset()
+    },
+  })
   const onSubmit = (data: RecoveryPassword) => {
     if (token && email) {
       return approveRecoveryPassword({ key: token, email, password: data.new })
@@ -28,9 +41,6 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
 
   const [newPasswordType, onNewPasswordIconClick] = usePasswordType()
   const [confirmNewPasswordType, onConfirmNewPasswordIconClick] = usePasswordType()
-
-  const form = useCustomForm({ defaultValues: { new: "", confirm: "" } }, RecoveryPasswordSchema)
-  const { handleSubmit } = form
 
   const backToLogin = () => {
     return navigate(ROUTES.login.path)
@@ -45,14 +55,14 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
 
         <Input
           type={newPasswordType}
-          name="newPassword"
+          name="new"
           placeholder={t("newPassword") || ""}
           autoComplete="new-password"
           Icon={<PasswordIcon isSecure={newPasswordType === "password"} onClick={onNewPasswordIconClick} />}
         />
         <Input
           type={confirmNewPasswordType}
-          name="confirmNewPassword"
+          name="confirm"
           placeholder={t("confirmPassword") || ""}
           autoComplete="new-password"
           Icon={
