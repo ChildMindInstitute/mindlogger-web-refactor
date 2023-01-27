@@ -7,7 +7,7 @@ import { LoginSchema, TLoginForm } from "../model/login.schema"
 
 import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
 import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
-import { ROUTES, useCustomForm, usePasswordType } from "~/shared/utils"
+import { ROUTES, secureTokensStorage, useCustomForm, usePasswordType } from "~/shared/utils"
 
 export const LoginForm = () => {
   const { t } = useLoginTranslation()
@@ -31,7 +31,7 @@ export const LoginForm = () => {
     onSuccess(data) {
       setUser(data.data.result.user)
 
-      userModel.secureTokensStorage.setTokens(data.data.result.token)
+      secureTokensStorage.setTokens(data.data.result.token)
       navigate(ROUTES.dashboard.path)
     },
   })
