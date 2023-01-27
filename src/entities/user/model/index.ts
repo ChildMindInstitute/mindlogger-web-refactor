@@ -3,4 +3,4 @@ export * as selectors from "./selectors"
 
 export * as hooks from "./hooks"
 
-export { secureTokensStorage } from "../../../shared/utils/secureTokensStorage"
+export { secureTokensStorage } from "../../../shared/utils/storage/secureTokensStorage"

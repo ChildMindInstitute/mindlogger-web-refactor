@@ -1,13 +1,15 @@
 import { z } from "zod"
 
+import { Dictionary } from "~/shared/utils"
+
 export const ChangePasswordSchema = z
   .object({
-    old: z.string().min(6, { message: "SignUp.passwordErrorMessage" }),
-    new: z.string().min(6, { message: "SignUp.passwordErrorMessage" }),
-    confirm: z.string().min(6, { message: "SignUp.passwordErrorMessage" }),
+    old: z.string().min(6, { message: Dictionary.validation.password.required }),
+    new: z.string().min(6, { message: Dictionary.validation.password.required }),
+    confirm: z.string().min(6, { message: Dictionary.validation.password.required }),
   })
   .refine(data => data.new === data.confirm, {
-    message: "SignUp.passwordsUnmatched",
+    message: Dictionary.validation.password.notMatch,
     path: ["confirmNewPassword"],
   })
 
