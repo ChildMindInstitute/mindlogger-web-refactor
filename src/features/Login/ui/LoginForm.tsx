@@ -62,7 +62,13 @@ export const LoginForm = () => {
       <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
       <Container>
-        <BasicButton type="submit" variant="primary" disabled={!isValid || isLoading} loading={isLoading} defaultSize>
+        <BasicButton
+          className={classNames("mt-3")}
+          type="submit"
+          variant="primary"
+          disabled={!isValid || isLoading}
+          loading={isLoading}
+          defaultSize>
           {t("button")}
         </BasicButton>
       </Container>

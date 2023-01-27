@@ -2,12 +2,12 @@ import { z } from "zod"
 
 export const ChangePasswordSchema = z
   .object({
-    old: z.string(),
-    new: z.string(),
-    confirm: z.string(),
+    old: z.string().min(6, { message: "SignUp.passwordErrorMessage" }),
+    new: z.string().min(6, { message: "SignUp.passwordErrorMessage" }),
+    confirm: z.string().min(6, { message: "SignUp.passwordErrorMessage" }),
   })
   .refine(data => data.new === data.confirm, {
-    message: "Passwords do not match",
+    message: "SignUp.passwordsUnmatched",
     path: ["confirmNewPassword"],
   })
 

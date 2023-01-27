@@ -2,11 +2,11 @@ import { z } from "zod"
 
 export const RecoveryPasswordSchema = z
   .object({
-    new: z.string(),
-    confirm: z.string(),
+    new: z.string().min(6, { message: "SignUp.passwordErrorMessage" }),
+    confirm: z.string().min(6, { message: "SignUp.passwordErrorMessage" }),
   })
   .refine(data => data.new === data.confirm, {
-    message: "Passwords do not match",
+    message: "SignUp.passwordsUnmatched",
     path: ["confirmNewPassword"],
   })
 
