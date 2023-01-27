@@ -1,10 +1,10 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 
-import ChangePassword from "./ChangePassword"
 import Dashboard from "./Dashboard"
 import ForgotPassword from "./ForgotPassword"
 import LoginPage from "./Login"
 import Profile from "./Profile"
+import RecoveryPassword from "./RecoveryPassword"
 import Settings from "./Settings"
 import SignupPage from "./Signup"
 
@@ -37,7 +37,7 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route index path={ROUTES.login.path} element={<LoginPage />} />
       <Route path={ROUTES.signup.path} element={<SignupPage />} />
       <Route path={ROUTES.forgotPassword.path} element={<ForgotPassword />} />
-      <Route path={ROUTES.changePassword.path} element={<ChangePassword />} />
+      <Route path={ROUTES.changePassword.path} element={<RecoveryPassword />} />
 
       <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
     </Routes>
