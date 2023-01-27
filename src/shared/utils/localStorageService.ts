@@ -1,11 +1,11 @@
-export interface IUseLocalStorageOutput {
+interface LocalStorageServiceOutput {
   getItem: (key: string) => string | null
   setItem: (key: string, value: string) => void
   removeItem: (key: string) => void
   clearStorage: () => void
 }
 
-export const useLocalStorage = (): IUseLocalStorageOutput => {
+const createLocalStorageService = (): LocalStorageServiceOutput => {
   const setItem = (key: string, value: string) => {
     localStorage.setItem(key, value)
   }
@@ -29,3 +29,5 @@ export const useLocalStorage = (): IUseLocalStorageOutput => {
     clearStorage,
   }
 }
+
+export const localStorageService = createLocalStorageService()

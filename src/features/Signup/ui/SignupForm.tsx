@@ -1,12 +1,14 @@
 import { useState } from "react"
 
+import classNames from "classnames"
+
 import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
 import { useSignupMutation } from "~/entities/user"
 import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
-import { isObjectEmpty, useCustomForm, usePasswordType } from "~/shared/utils"
+import { useCustomForm, usePasswordType } from "~/shared/utils"
 
 export const SignupForm = () => {
   const { t } = useSignupTranslation()
@@ -21,10 +23,20 @@ export const SignupForm = () => {
   )
   const {
     handleSubmit,
-    formState: { errors },
+    formState: { isValid },
+    reset,
   } = form
 
-  const { mutate: signup, error, isSuccess } = useSignupMutation()
+  const {
+    mutate: signup,
+    error,
+    isSuccess,
+    isLoading,
+  } = useSignupMutation({
+    onSuccess() {
+      reset()
+    },
+  })
 
   const onSignupSubmit = (data: TSignupForm) => {
     const { email, password, firstName, lastName } = data
@@ -62,7 +74,13 @@ export const SignupForm = () => {
 
       <DisplaySystemMessage errorMessage={error?.evaluatedMessage} successMessage={isSuccess ? t("success") : null} />
 
-      <BasicButton type="submit" variant="primary" disabled={!isObjectEmpty(errors) || !terms} defaultSize>
+      <BasicButton
+        className={classNames("mt-3")}
+        type="submit"
+        variant="primary"
+        disabled={!isValid || !terms || isLoading}
+        defaultSize
+        loading={isLoading}>
         {t("title")}
       </BasicButton>
     </BasicFormProvider>

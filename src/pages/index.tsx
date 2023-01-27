@@ -8,12 +8,29 @@ import Profile from "./Profile"
 import Settings from "./Settings"
 import SignupPage from "./Signup"
 
-import { userAuthSelector } from "~/entities/user"
-import { ProtectedRoute } from "~/features/ProtectedRoute"
-import { ROUTES, useAppSelector } from "~/shared/utils"
+import { userModel } from "~/entities/user"
+import { ROUTES } from "~/shared/utils"
+import { LogoutTracker } from "~/widgets/LogoutTracker"
+import { ProtectedRoute } from "~/widgets/ProtectedRoute"
 
 const ApplicationRouter = (): JSX.Element | null => {
-  const auth = useAppSelector(userAuthSelector)
+  const tokens = userModel.hooks.useTokensState()
+
+  if (tokens?.accessToken) {
+    return (
+      <LogoutTracker>
+        <Routes>
+          <Route element={<ProtectedRoute token={tokens?.accessToken} />}>
+            <Route index path={ROUTES.dashboard.path} element={<Dashboard />} />
+            <Route path={ROUTES.profile.path} element={<Profile />} />
+            <Route path={ROUTES.settings.path} element={<Settings />} />
+
+            <Route path="*" element={<Navigate to={ROUTES.dashboard.path} />} />
+          </Route>
+        </Routes>
+      </LogoutTracker>
+    )
+  }
 
   return (
     <Routes>
@@ -21,14 +38,6 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.signup.path} element={<SignupPage />} />
       <Route path={ROUTES.forgotPassword.path} element={<ForgotPassword />} />
       <Route path={ROUTES.changePassword.path} element={<ChangePassword />} />
-
-      <Route element={<ProtectedRoute token={auth.accessToken} />}>
-        <Route index path={ROUTES.dashboard.path} element={<Dashboard />} />
-        <Route path={ROUTES.profile.path} element={<Profile />} />
-        <Route path={ROUTES.settings.path} element={<Settings />} />
-
-        <Route path="*" element={<Navigate to={ROUTES.dashboard.path} />} />
-      </Route>
 
       <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
     </Routes>

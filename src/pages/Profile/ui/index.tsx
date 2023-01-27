@@ -2,13 +2,13 @@ import { isMobile } from "react-device-detect"
 
 import { useProfileTranslation } from "../lib/useProfileTranslation"
 
-import { useAuth } from "~/entities/user"
+import { userModel } from "~/entities/user"
 import { Avatar } from "~/shared/ui"
 import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
 
 const ProfilePage = () => {
   const { t } = useProfileTranslation()
-  const { user } = useAuth()
+  const { user } = userModel.hooks.useUserState()
 
   return (
     <div className="d-flex mp-3 align-self-start justify-content-center w-100 pt-3">

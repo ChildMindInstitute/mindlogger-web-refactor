@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap"
 
-import AppletList from "~/widgets/AppletList"
+import { AppletList } from "~/entities/applet"
 
 const DashboardPage = () => {
   return (

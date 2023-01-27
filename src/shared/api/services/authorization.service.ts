@@ -6,6 +6,8 @@ import {
   PasswordRecoverySuccessResponse,
   RecoveryPasswordApprovalPayload,
   RecoveryPasswordPayload,
+  RefreshTokenPayload,
+  RefreshTokenSuccessResponse,
   SignupPayload,
   SignupSuccessResponse,
   UpdatePasswordPayload,
@@ -16,14 +18,19 @@ import axiosService from "./axios"
 function authorizationService() {
   return {
     login(data: LoginPayload) {
-      return axiosService.post<LoginSuccessResponse>("/auth/token", data)
+      return axiosService.post<LoginSuccessResponse>("/auth/login", data)
     },
 
     logout(data: LogoutPayload) {
       const headers = {
         Authorization: `Bearer ${data.accessToken}`,
       }
-      return axiosService.delete("/auth/token", { headers })
+
+      const body = {
+        deviceId: "someid",
+      }
+
+      return axiosService.post("/auth/logout", body, { headers })
     },
 
     signup(data: SignupPayload) {
@@ -40,6 +47,9 @@ function authorizationService() {
 
     updatePassword(data: UpdatePasswordPayload) {
       return axiosService.put<UpdatePasswordSuccessResponse>("/users/me/password", data)
+    },
+    refreshToken(data: RefreshTokenPayload) {
+      return axiosService.post<RefreshTokenSuccessResponse>("/auth/token/refresh", data)
     },
   }
 }

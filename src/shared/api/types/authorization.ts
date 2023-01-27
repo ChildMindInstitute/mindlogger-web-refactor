@@ -6,7 +6,7 @@ export interface LoginPayload {
 }
 
 export type LoginSuccessResponse = BaseSuccessResponse<{
-  auth: AuthorizationDTO
+  token: AuthorizationDTO
   user: UserDTO
 }>
 
@@ -42,6 +42,12 @@ export interface UpdatePasswordPayload {
 }
 
 export type UpdatePasswordSuccessResponse = BaseSuccessResponse<UserDTO>
+
+export interface RefreshTokenPayload {
+  refreshToken: string
+}
+
+export type RefreshTokenSuccessResponse = BaseSuccessResponse<AuthorizationDTO>
 
 interface AuthorizationDTO {
   accessToken: string

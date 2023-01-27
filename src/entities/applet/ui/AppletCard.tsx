@@ -1,22 +1,21 @@
+import { Applet } from "../lib/applet.schema"
+
 import { CustomCard } from "~/shared/ui"
 
-const AppletCard = () => {
-  // This mock will be removed
-  const appletMock = {
-    id: "some-id",
-    title: "mock-title",
-    description: "mock-description",
-    imageSrc: "https://picsum.photos/200",
-    onClick: () => console.log("click card"),
-  }
+interface AppletCardProps {
+  applet: Applet
+}
+
+const AppletCard = ({ applet }: AppletCardProps) => {
+  const onAppletCardClick = () => {}
 
   return (
     <CustomCard
-      id={appletMock.id}
-      title={appletMock.title}
-      description={appletMock.description}
-      imageSrc={appletMock.imageSrc}
-      onClick={appletMock.onClick}
+      id={applet.id}
+      title={applet.displayName}
+      description={applet.description.en}
+      imageSrc={applet.image}
+      onClick={onAppletCardClick}
     />
   )
 }

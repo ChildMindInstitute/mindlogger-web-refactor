@@ -3,7 +3,7 @@ import { Card } from "react-bootstrap"
 import "./style.scss"
 
 export interface CardProps {
-  id: string
+  id: string | number
   title: string
   description: string
   imageSrc?: string

@@ -2,12 +2,12 @@ import { z } from "zod"
 
 export const ChangePasswordSchema = z
   .object({
-    oldPassword: z.string().optional(),
+    oldPassword: z.string(),
     newPassword: z.string(),
     confirmNewPassword: z.string(),
   })
   .refine(data => data.newPassword === data.confirmNewPassword, {
-    message: "Password do not match",
+    message: "Passwords do not match",
     path: ["confirmNewPassword"],
   })
   .transform(data => ({ old: data.oldPassword, new: data.newPassword, confirm: data.confirmNewPassword }))

@@ -7,7 +7,7 @@ import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 import AccountDropdown from "./AccountDropdown"
 import LoginButton from "./LoginButton"
 
-import { useAuth } from "~/entities/user"
+import { userModel } from "~/entities/user"
 import { LanguageDropdown } from "~/features/language"
 import { ROUTES } from "~/shared/utils"
 
@@ -17,7 +17,7 @@ const Header = (): JSX.Element | null => {
   const { t } = useNavbarTranslation()
   const navigate = useNavigate()
 
-  const { user, isUserLoggedIn } = useAuth()
+  const { user } = userModel.hooks.useUserState()
 
   const [expanded, setExpanded] = useState<boolean>(false)
 
@@ -26,7 +26,7 @@ const Header = (): JSX.Element | null => {
   }
 
   const onLogoClick = () => {
-    if (isUserLoggedIn) {
+    if (user?.id) {
       navigate(ROUTES.dashboard.path)
     } else {
       navigate(ROUTES.login.path)
@@ -52,8 +52,8 @@ const Header = (): JSX.Element | null => {
             <LanguageDropdown onSelectExtended={closeExpandedNavbar} />
           </Col>
           <Col xs={12} md={6} className="container justify-content-center">
-            {isUserLoggedIn ? (
-              <AccountDropdown title={user.fullName as string} onSelectExtended={closeExpandedNavbar} />
+            {user?.id ? (
+              <AccountDropdown title={user?.fullName as string} onSelectExtended={closeExpandedNavbar} />
             ) : (
               <LoginButton onClickExtended={closeExpandedNavbar} />
             )}

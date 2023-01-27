@@ -1,19 +1,6 @@
-// Model
-export type { User, UserStore, Authorization, Account } from "./user.schema"
-export { UserSchema, UserStoreSchema, AuthSchema, UserAccountSchema } from "./user.schema"
+export { reducer, actions } from "./user.slice"
+export * as selectors from "./selectors"
 
-export type { ILoginPayload, ILogoutPayload, ISignupPayload } from "./api.interfaces"
+export * as hooks from "./hooks"
 
-// Store
-export { default as userReducer, setUser, clearUser, userSelector } from "./state/user.slice"
-export {
-  default as authReducer,
-  setAuth,
-  clearAuth,
-  userAuthSelector,
-  authToken,
-  authTokenType as authTokenExpires,
-  authRefreshToken as authTokenScope,
-} from "./state/auth.slice"
-
-export * from "./hooks/useAuth"
+export { secureTokensStorage } from "../../../shared/utils/secureTokensStorage"
