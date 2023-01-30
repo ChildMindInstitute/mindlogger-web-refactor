@@ -1,6 +1,7 @@
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, UseFormProps } from "react-hook-form"
 import { z } from "zod"
+
+import zodResolver from "../validation/zodResolver"
 
 type CustomZodSchema = z.ZodTypeAny
 
