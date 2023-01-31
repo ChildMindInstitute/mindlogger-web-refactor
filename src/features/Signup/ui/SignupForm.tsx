@@ -21,11 +21,7 @@ export const SignupForm = () => {
     { defaultValues: { email: "", firstName: "", lastName: "", password: "", confirmPassword: "" } },
     SignupFormSchema,
   )
-  const {
-    handleSubmit,
-    formState: { isValid },
-    reset,
-  } = form
+  const { handleSubmit, reset } = form
 
   const {
     mutate: signup,
@@ -78,7 +74,7 @@ export const SignupForm = () => {
         className={classNames("mt-3")}
         type="submit"
         variant="primary"
-        disabled={!isValid || !terms || isLoading}
+        disabled={!terms || isLoading}
         defaultSize
         loading={isLoading}>
         {t("title")}

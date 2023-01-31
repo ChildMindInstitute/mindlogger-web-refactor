@@ -1,17 +1,18 @@
 import { z } from "zod"
 
 import { BaseUserSchema } from "~/entities/user"
+import { Dictionary } from "~/shared/utils"
 
 export type TSignupForm = z.infer<typeof SignupFormSchema>
 
 export const SignupFormSchema = BaseUserSchema.pick({ email: true, lastName: true, firstName: true })
   .extend({
-    firstName: z.string().min(1, "First name required"),
-    lastName: z.string().min(1, "Last name required"),
-    password: z.string().min(1, "Password required"),
-    confirmPassword: z.string().min(1, "Password confirmation required"),
+    firstName: z.string().min(1, Dictionary.validation.firstName.required),
+    lastName: z.string().min(1, Dictionary.validation.lastName.required),
+    password: z.string().min(1, Dictionary.validation.password.required),
+    confirmPassword: z.string().min(1, Dictionary.validation.password.required),
   })
   .refine(data => data.confirmPassword === data.password, {
-    message: "Passwords Do Not Match",
+    message: Dictionary.validation.password.notMatch,
     path: ["confirmPassword"],
   })

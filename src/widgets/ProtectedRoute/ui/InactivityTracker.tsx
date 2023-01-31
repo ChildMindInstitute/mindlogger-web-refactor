@@ -3,7 +3,7 @@ import { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { useLogoutMutation, userModel } from "~/entities/user"
-import { ROUTES } from "~/shared/utils"
+import { ROUTES, secureTokensStorage } from "~/shared/utils"
 
 export type InactivityTrackerProps = PropsWithChildren<{ token: string }>
 
@@ -31,7 +31,7 @@ export const InactivityTracker = ({ children, token }: InactivityTrackerProps) =
     }
 
     clearUser()
-    userModel.secureTokensStorage.clearTokens()
+    secureTokensStorage.clearTokens()
     navigate(ROUTES.login.path)
   }, [token, clearUser, navigate, logout])
 

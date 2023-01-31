@@ -37,7 +37,7 @@ export interface RecoveryPasswordApprovalPayload {
 export type PasswordRecoveryApprovalSuccessResponse = BaseSuccessResponse<UserDTO>
 
 export interface UpdatePasswordPayload {
-  oldPassword: string
+  prev_password: string
   password: string
 }
 

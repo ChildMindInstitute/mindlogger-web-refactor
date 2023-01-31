@@ -4,6 +4,8 @@ import classNames from "classnames"
 import { Form } from "react-bootstrap"
 import { useController, useFormContext } from "react-hook-form"
 
+import { useCustomTranslation } from "../../utils"
+
 import "./style.scss"
 
 interface IInputCommonProps {
@@ -20,6 +22,7 @@ interface IInputCommonProps {
 
 const Input = (props: IInputCommonProps) => {
   const { type, name, placeholder, onChange, className, Icon } = props
+  const { t } = useCustomTranslation()
 
   const { control } = useFormContext()
   const {
@@ -50,7 +53,7 @@ const Input = (props: IInputCommonProps) => {
 
       {Icon && <div className={classNames("input-icon")}>{Icon}</div>}
 
-      <span className={classNames("input-error-box")}>{error && error.message}</span>
+      <span className={classNames("input-error-box")}>{error?.message && t(error.message)}</span>
     </div>
   )
 }
