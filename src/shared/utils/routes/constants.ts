@@ -12,6 +12,9 @@ export const ROUTES = {
   changePassword: {
     path: "/email/:email/password-recovery/:token",
   },
+  invitation: {
+    path: "/invite",
+  },
 
   // Protected routes
   dashboard: {

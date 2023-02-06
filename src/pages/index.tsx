@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom"
 
 import Dashboard from "./Dashboard"
 import ForgotPassword from "./ForgotPassword"
+import { InvitationPage } from "./Invitation"
 import LoginPage from "./Login"
 import Profile from "./Profile"
 import RecoveryPassword from "./RecoveryPassword"
@@ -38,6 +39,7 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.signup.path} element={<SignupPage />} />
       <Route path={ROUTES.forgotPassword.path} element={<ForgotPassword />} />
       <Route path={ROUTES.changePassword.path} element={<RecoveryPassword />} />
+      <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
 
       <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
     </Routes>
