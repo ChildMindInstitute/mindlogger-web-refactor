@@ -14,13 +14,17 @@ export const ROUTES = {
   },
 
   // Protected routes
-  dashboard: {
-    path: "/protected/dashboard",
-  },
   profile: {
     path: "/protected/profile",
   },
   settings: {
     path: "/protected/settings",
+  },
+  applets: {
+    path: "/protected/applets",
+  },
+  activityList: {
+    path: "/protected/applets/:appletId",
+    navigateTo: (appletId: string | number) => `/protected/applets/${appletId}`,
   },
 }

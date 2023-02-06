@@ -1,5 +1,6 @@
 interface Messages {
   en: string
+  fr: string
 }
 
 interface Result {
@@ -19,5 +20,5 @@ export interface BaseSuccessResponse<T> {
 }
 
 export interface BaseSuccessListResponse<T> {
-  results: Array<T>
+  result: Array<T>
 }

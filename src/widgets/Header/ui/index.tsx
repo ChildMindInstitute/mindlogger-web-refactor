@@ -27,7 +27,7 @@ const Header = (): JSX.Element | null => {
 
   const onLogoClick = () => {
     if (user?.id) {
-      navigate(ROUTES.dashboard.path)
+      navigate(ROUTES.applets.path)
     } else {
       navigate(ROUTES.login.path)
     }

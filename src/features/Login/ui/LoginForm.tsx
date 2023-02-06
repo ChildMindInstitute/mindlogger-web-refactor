@@ -32,7 +32,7 @@ export const LoginForm = () => {
       setUser(data.data.result.user)
 
       secureTokensStorage.setTokens(data.data.result.token)
-      navigate(ROUTES.dashboard.path)
+      navigate(ROUTES.applets.path)
     },
   })
 
