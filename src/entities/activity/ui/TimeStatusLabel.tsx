@@ -1,19 +1,19 @@
-import { Activity } from "../lib"
+import { ActivityListItem, ActivityStatus } from "../lib"
 
 import { useCustomTranslation } from "~/shared/utils"
 
 interface TimeStatusLabelProps {
-  activity: Activity
+  activity: ActivityListItem
 }
 
 const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
   const { t } = useCustomTranslation()
 
-  const isStatusScheduled = activity.status === "Scheduled"
+  const isStatusScheduled = activity.status === ActivityStatus.Scheduled
 
-  const isStatusPastDue = activity.status === "PastDue"
+  const isStatusPastDue = activity.status === ActivityStatus.PastDue
 
-  const isStatusInProgress = activity.status === "InProgress"
+  const isStatusInProgress = activity.status === ActivityStatus.InProgress
 
   const hasSceduledAt = isStatusScheduled && activity.hasEventContext && !activity.isTimeoutAllow
 

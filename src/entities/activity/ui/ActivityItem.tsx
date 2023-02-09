@@ -1,11 +1,11 @@
 import { Button } from "react-bootstrap"
 
-import { Activity } from "../lib"
+import { ActivityListItem } from "../lib"
 import TimeStatusLabel from "./TimeStatusLabel"
 import "./style.scss"
 
 interface ActivityItemProps {
-  activity: Activity
+  activity: ActivityListItem
   disabled?: boolean
 }
 
@@ -21,7 +21,7 @@ const ActivityItem = ({ activity, disabled }: ActivityItemProps) => {
       <div className="activity-data">
         <div className="activity-name-date">{activity.name}</div>
 
-        {activity.description && <div className="activity-description">{activity.description.en}</div>}
+        {activity.description && <div className="activity-description">{activity.description}</div>}
         <TimeStatusLabel activity={activity} />
       </div>
     </Button>

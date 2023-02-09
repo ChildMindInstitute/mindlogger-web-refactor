@@ -1,8 +1,8 @@
-import { Activity } from "../lib"
+import { ActivityListItem } from "../lib"
 import ActivityItem from "./ActivityItem"
 
 interface ActivityListProps {
-  activities: Activity[]
+  activities: ActivityListItem[]
 }
 
 const ActivityList = ({ activities }: ActivityListProps) => {
