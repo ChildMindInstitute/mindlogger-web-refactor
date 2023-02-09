@@ -3,6 +3,6 @@ import { appletService, QueryOptions, ReturnAwaited, useBaseQuery } from "~/shar
 type FetchFn = typeof appletService.getById
 type Options<TData> = QueryOptions<FetchFn, TData>
 
-export const useAppletByIdQuery = <TData = ReturnAwaited<FetchFn>>(id: string | number, options?: Options<TData>) => {
-  return useBaseQuery(["appletById", id], () => appletService.getById(id), options)
+export const useAppletByIdQuery = <TData = ReturnAwaited<FetchFn>>(appletId: string, options?: Options<TData>) => {
+  return useBaseQuery(["appletById", { appletId }], () => appletService.getById({ appletId }), options)
 }

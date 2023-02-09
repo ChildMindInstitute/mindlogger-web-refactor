@@ -3,8 +3,10 @@ import { useState } from "react"
 import classNames from "classnames"
 import { Col, Container, Row, Spinner } from "react-bootstrap"
 
+import { appletMock } from "../../../shared/mocks"
 import CustomModal from "../../Modal"
-import { useAppletByIdQuery } from "../api"
+import { useActivityGroups } from "../model/hooks"
+import { ActivityGroup } from "./ActivityGroup"
 
 import { CustomCard } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
@@ -13,7 +15,7 @@ interface ActivityListWidgetProps {
   appletId: string | number
 }
 
-export const ActivityListWidget = ({ appletId }: ActivityListWidgetProps) => {
+export const ActivityGroupList = ({ appletId }: ActivityListWidgetProps) => {
   const { t, language } = useCustomTranslation()
   const [isAboutOpen, setIsAboutOpen] = useState(false)
 
@@ -25,13 +27,9 @@ export const ActivityListWidget = ({ appletId }: ActivityListWidgetProps) => {
     setIsAboutOpen(false)
   }
 
-  const {
-    data: appletDetails,
-    isError,
-    isLoading,
-  } = useAppletByIdQuery(appletId, {
-    select: data => data.data.result,
-  })
+  const { groups, isLoading, isError } = useActivityGroups(String(appletId))
+
+  const appletDetails = appletMock
 
   if (isLoading) {
     return (
@@ -67,11 +65,9 @@ export const ActivityListWidget = ({ appletId }: ActivityListWidgetProps) => {
           )}
         </Col>
         <Col lg={7}>
-          {appletDetails.activities &&
-            appletDetails.activities.map(activity => (
-              // <ActivityItem key={activity.id} activity={activity as Activity} />
-              <>Future implementation</>
-            ))}
+          {groups.map(g => (
+            <ActivityGroup group={g} key={g.name} />
+          ))}
         </Col>
       </Row>
       <CustomModal
