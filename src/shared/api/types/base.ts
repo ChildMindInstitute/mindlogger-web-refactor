@@ -10,7 +10,7 @@ interface Result {
 
 export type BaseError = {
   message?: string
-  response: { data: { results: Array<Result> } }
+  response: { data: { result: Array<Result> } }
   evaluatedMessage?: string
 }
 
