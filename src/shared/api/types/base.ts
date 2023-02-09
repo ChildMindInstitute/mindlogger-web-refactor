@@ -19,5 +19,5 @@ export interface BaseSuccessResponse<T> {
 }
 
 export interface BaseSuccessListResponse<T> {
-  results: Array<T>
+  result: Array<T>
 }
