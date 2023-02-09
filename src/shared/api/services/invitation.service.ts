@@ -1,16 +1,21 @@
-import { GetInvitationSuccessResponse } from "../types/invitation"
+import {
+  AcceptInvitationByIdPayload,
+  DeclineInvitationByIdPayload,
+  GetInvitationByIdPayload,
+  GetInvitationSuccessResponse,
+} from "../types/invitation"
 import axiosService from "./axios"
 
 function invitationService() {
   return {
-    getInvitationById(id: string) {
-      return axiosService.get<GetInvitationSuccessResponse>(`/invitations/${id}`)
+    getInvitationById(payload: GetInvitationByIdPayload) {
+      return axiosService.get<GetInvitationSuccessResponse>(`/invitations/${payload.invitationId}`)
     },
-    acceptInvitation(id: string) {
-      return axiosService.get(`/invitations/approve/${id}`)
+    acceptInvitation(payload: AcceptInvitationByIdPayload) {
+      return axiosService.get(`/invitations/approve/${payload.invitationId}`)
     },
-    declineInvitation(id: string) {
-      return axiosService.delete(`/invitations/decline/${id}`)
+    declineInvitation(payload: DeclineInvitationByIdPayload) {
+      return axiosService.delete(`/invitations/decline/${payload.invitationId}`)
     },
   }
 }
