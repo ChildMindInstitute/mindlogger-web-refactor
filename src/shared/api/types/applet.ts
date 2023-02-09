@@ -1,26 +1,43 @@
-import { BaseSuccessListResponse } from "./base"
+import { Language } from "../../utils"
+import { BaseSuccessListResponse, BaseSuccessResponse } from "./base"
 
-export type AppletListSuccessResponse = BaseSuccessListResponse<{
-  id: number | string
-  displayName: string
-  version: string
-  description: {
-    en: string
-    fr: string
-  }
-  about: {
-    en: string
-    fr: string
-  }
+export type GetAppletDetailsByIdPayload = {
+  appletId: string
+}
+
+export type AppletListSuccessResponse = BaseSuccessListResponse<AppletDetailsDto>
+export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDto>
+
+export type ActivityDto = {
+  id: number
+  guid: string
+  name: string
+  description: Record<Language, string>
   image: string
-  watermark: string
-  themeId: string | number | null
-  reportServerIp: string
-  reportPublicKey: string
-  reportRecipients: []
-  reportIncludeUserId: boolean
-  reportIncludeCaseId: boolean
-  reportEmailBody: string
-  activities: []
-  activityFlows: []
-}>
+  isReviewable: boolean
+  isSkippable: boolean
+  ordering: boolean
+  splashScreen: string
+}
+
+export type ActivityFlowDto = {
+  id: number
+  guid: string
+  name: string
+  image: string
+  description: Record<Language, string>
+  hideBadge: boolean
+  isSingleReport: boolean
+  ordering: boolean
+  items: Array<{ activityId: number }>
+}
+
+export type AppletDetailsDto = {
+  id: number
+  name?: string
+  image: string
+  displayName: string
+  description: Record<Language, string>
+  activities: ActivityDto[]
+  activityFlows: ActivityFlowDto[]
+}

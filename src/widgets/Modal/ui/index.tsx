@@ -5,8 +5,8 @@ import { BasicButton } from "~/shared/ui"
 export interface CustomModalProps {
   show: boolean
   onHide: () => void
-  title?: string
-  label?: string
+  title?: string | null
+  label?: string | null
   footerPrimaryButton?: string
   onPrimaryButtonClick?: () => void
   footerSecondaryButton?: string

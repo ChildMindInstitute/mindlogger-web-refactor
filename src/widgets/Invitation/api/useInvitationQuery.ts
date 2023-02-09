@@ -1,7 +1,12 @@
-import { invitationService, QueryOptions, useBaseQuery } from "~/shared/api"
+import { invitationService, QueryOptions, ReturnAwaited, useBaseQuery } from "~/shared/api"
 
-type Options = QueryOptions<typeof invitationService.getInvitationById>
+type FetchFn = typeof invitationService.getInvitationById
+type Options<TData> = QueryOptions<FetchFn, TData>
 
-export const useInvitationQuery = (id: string, options?: Options) => {
-  return useBaseQuery(["invitationDetails", id], () => invitationService.getInvitationById(id), { ...options })
+export const useInvitationQuery = <TData = ReturnAwaited<FetchFn>>(invitationId: string, options?: Options<TData>) => {
+  return useBaseQuery(
+    ["invitationDetails", { invitationId }],
+    () => invitationService.getInvitationById({ invitationId }),
+    options,
+  )
 }
