@@ -10,7 +10,7 @@ export const ROUTES = {
     path: "/forgotpassword",
   },
   changePassword: {
-    path: "/email/:email/password-recovery/:token",
+    path: "/password-recovery",
   },
   invitation: {
     path: "/invite",

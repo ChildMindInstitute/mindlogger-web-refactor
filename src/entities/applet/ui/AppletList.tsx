@@ -14,7 +14,7 @@ const AppletList = () => {
           <Spinner as="div" animation="border" role="status" aria-hidden="true" />
         </Container>
       )}
-      {!isLoading && data?.data?.results?.map(value => <AppletCard key={value.id} applet={value} />)}
+      {!isLoading && data?.data.result.map(value => <AppletCard key={value.id} applet={value} />)}
     </Row>
   )
 }
