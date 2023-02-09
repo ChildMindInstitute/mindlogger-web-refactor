@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 
+import ActivityListPage from "./ActivityList"
 import Dashboard from "./Dashboard"
 import ForgotPassword from "./ForgotPassword"
 import LoginPage from "./Login"
@@ -21,11 +22,12 @@ const ApplicationRouter = (): JSX.Element | null => {
       <LogoutTracker>
         <Routes>
           <Route element={<ProtectedRoute token={tokens?.accessToken} />}>
-            <Route index path={ROUTES.dashboard.path} element={<Dashboard />} />
+            <Route index path={ROUTES.applets.path} element={<Dashboard />} />
             <Route path={ROUTES.profile.path} element={<Profile />} />
             <Route path={ROUTES.settings.path} element={<Settings />} />
+            <Route path={ROUTES.activityList.path} element={<ActivityListPage />} />
 
-            <Route path="*" element={<Navigate to={ROUTES.dashboard.path} />} />
+            <Route path="*" element={<Navigate to={ROUTES.applets.path} />} />
           </Route>
         </Routes>
       </LogoutTracker>

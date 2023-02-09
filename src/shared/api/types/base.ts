@@ -1,5 +1,6 @@
 interface Messages {
   en: string
+  fr: string
 }
 
 interface Result {
