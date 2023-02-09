@@ -11,8 +11,8 @@ import { ROUTES, useCustomForm, usePasswordType } from "~/shared/utils"
 
 interface RecoveryPasswordFormProps {
   title?: string | null
-  token?: string
-  email?: string
+  token?: string | null
+  email?: string | null
 }
 
 export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFormProps) => {
