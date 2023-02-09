@@ -1,4 +1,4 @@
-import { AppletListSuccessResponse, AppletSuccessResponse } from "../types/applet"
+import { AppletListSuccessResponse, AppletSuccessResponse, GetAppletDetailsByIdPayload } from "../types/applet"
 import axiosService from "./axios"
 
 function appletService() {
@@ -7,8 +7,8 @@ function appletService() {
       return axiosService.get<AppletListSuccessResponse>("/applets")
     },
 
-    getById(id: string | number) {
-      return axiosService.get<AppletSuccessResponse>(`/applets/${id}`)
+    getById(payload: GetAppletDetailsByIdPayload) {
+      return axiosService.get<AppletSuccessResponse>(`/applets/${payload.appletId}`)
     },
   }
 }

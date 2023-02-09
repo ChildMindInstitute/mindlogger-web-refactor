@@ -1,58 +1,43 @@
-import { MultiLang } from "../../utils"
+import { Language } from "../../utils"
 import { BaseSuccessListResponse, BaseSuccessResponse } from "./base"
 
-export type AppletListSuccessResponse = BaseSuccessListResponse<AppletResponse>
-export type AppletSuccessResponse = BaseSuccessResponse<AppletResponse>
-
-export type AppletResponse = {
-  id: number | string
-  displayName: string
-  version: string
-  description: MultiLang
-  about: MultiLang
-  image: string
-  watermark: string
-  themeId: string | number | null
-  reportServerIp: string
-  reportPublicKey: string
-  reportRecipients: []
-  reportIncludeUserId: boolean
-  reportIncludeCaseId: boolean
-  reportEmailBody: string
-  activities: Activity[]
-  activityFlows: []
+export type GetAppletDetailsByIdPayload = {
+  appletId: string
 }
 
-export type Activity = {
-  id: number | string
+export type AppletListSuccessResponse = BaseSuccessListResponse<AppletDetailsDto>
+export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDto>
+
+export type ActivityDto = {
+  id: number
   guid: string
   name: string
-  description: MultiLang
-  splashScreen: string
+  description: Record<Language, string>
   image: string
-  showAllAtOnce: boolean
-  isSkippable: boolean
   isReviewable: boolean
-  responseIsEditable: boolean
-  ordering: number
-  items: []
+  isSkippable: boolean
+  ordering: boolean
+  splashScreen: string
 }
 
-export type ActivityFlow = {
-  id: number | string
+export type ActivityFlowDto = {
+  id: number
   guid: string
   name: string
-  description: MultiLang
-  isSingleReport: boolean
+  image: string
+  description: Record<Language, string>
   hideBadge: boolean
-  ordering: number
-  items: Item[]
+  isSingleReport: boolean
+  ordering: boolean
+  items: Array<{ activityId: number }>
 }
 
-export type Item = {
-  id: number | string
-  activityFlowId: number | string
-  activityId: number | string
-  ordering: number
-  activity: Activity
+export type AppletDetailsDto = {
+  id: number
+  name?: string
+  image: string
+  displayName: string
+  description: Record<Language, string>
+  activities: ActivityDto[]
+  activityFlows: ActivityFlowDto[]
 }
