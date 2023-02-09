@@ -1,12 +1,18 @@
-import { ActivityListItem } from "../lib"
-import ActivityItem from "./ActivityItem"
+import { Activity } from "../lib"
+import ActivityCard from "./ActivityItem"
 
 interface ActivityListProps {
-  activities: ActivityListItem[]
+  activities: Activity[]
 }
 
 const ActivityList = ({ activities }: ActivityListProps) => {
-  return <>{activities && activities.map(activity => <ActivityItem key={activity.id} activity={activity} />)}</>
+  return (
+    <>
+      {activities.map(activity => (
+        <ActivityCard key={activity.id} activity={activity} />
+      ))}
+    </>
+  )
 }
 
 export default ActivityList

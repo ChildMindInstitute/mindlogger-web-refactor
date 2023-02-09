@@ -1,9 +1,9 @@
-import { ActivityListItem, ActivityStatus } from "../lib"
+import { Activity, ActivityStatus } from "../lib"
 
 import { useCustomTranslation } from "~/shared/utils"
 
 interface TimeStatusLabelProps {
-  activity: ActivityListItem
+  activity: Activity
 }
 
 const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
@@ -15,11 +15,17 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   const isStatusInProgress = activity.status === ActivityStatus.InProgress
 
-  const hasSceduledAt = isStatusScheduled && activity.hasEventContext && !activity.isTimeoutAllow
+  const hasSceduledAt =
+    isStatusScheduled && activity.hasEventContext && !activity.isTimeoutAllow && activity.scheduledAt
 
-  const hasAvailableFromTo = isStatusScheduled && activity.hasEventContext && activity.isTimeoutAllow
+  const hasAvailableFromTo =
+    isStatusScheduled &&
+    activity.hasEventContext &&
+    activity.isTimeoutAllow &&
+    activity.availableFrom &&
+    activity.availableTo
 
-  const hasAvailableToOnly = isStatusPastDue
+  const hasAvailableToOnly = isStatusPastDue && activity.availableTo
 
   const hasTimeToComplete =
     (isStatusScheduled || isStatusPastDue || isStatusInProgress) &&
@@ -28,11 +34,9 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   return (
     <>
-      {hasSceduledAt && activity.scheduledAt && (
-        <small>{`${t("activity_due_date.scheduled_at")} ${activity.scheduledAt}`}</small>
-      )}
+      {hasSceduledAt && <small>{`${t("activity_due_date.scheduled_at")} ${activity.scheduledAt}`}</small>}
 
-      {hasAvailableFromTo && activity.availableFrom && activity.availableTo && (
+      {hasAvailableFromTo && (
         <small>
           {`${t("activity_due_date.available")} ${activity.availableFrom} ${t("activity_due_date.to")} ${
             activity.availableTo
@@ -40,9 +44,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
         </small>
       )}
 
-      {hasAvailableToOnly && activity.availableTo && (
-        <small>{`${t("activity_due_date.to")} ${activity.availableTo}`}</small>
-      )}
+      {hasAvailableToOnly && <small>{`${t("activity_due_date.to")} ${activity.availableTo}`}</small>}
 
       {hasTimeToComplete && <small>{`${t("time_to_complete_hm", { ...activity.timeToComplete })}`}</small>}
     </>

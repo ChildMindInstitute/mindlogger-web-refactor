@@ -1,15 +1,15 @@
 import { Button } from "react-bootstrap"
 
-import { ActivityListItem } from "../lib"
+import { Activity } from "../lib"
 import TimeStatusLabel from "./TimeStatusLabel"
 import "./style.scss"
 
-interface ActivityItemProps {
-  activity: ActivityListItem
+interface ActivityCardProps {
+  activity: Activity
   disabled?: boolean
 }
 
-const ActivityItem = ({ activity, disabled }: ActivityItemProps) => {
+const ActivityCard = ({ activity, disabled }: ActivityCardProps) => {
   return (
     <Button
       className="button-shadow ds-activity-button w-100"
@@ -28,4 +28,4 @@ const ActivityItem = ({ activity, disabled }: ActivityItemProps) => {
   )
 }
 
-export default ActivityItem
+export default ActivityCard

@@ -2,7 +2,7 @@ import { useAppletByIdQuery } from "../../api"
 import { ActivityGroupType, ActivityGroupTypeNames, ActivityListGroup } from "../../lib"
 import groupMocks from "./mock"
 
-import { ActivityListItem, ActivityStatus, ActivityType } from "~/entities/activity"
+import { Activity, ActivityStatus, ActivityType } from "~/entities/activity"
 import { AppletDetailsDto } from "~/shared/api/"
 import { appletMock } from "~/shared/mocks"
 
@@ -64,7 +64,7 @@ export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => 
 
     const activityDto = activityDtos.find(x => x.id === flowDto.items[0].activityId)
 
-    const item: ActivityListItem = {
+    const item: Activity = {
       id: flowDto.id,
       description: activityDto?.description.en ?? "",
       name: activityDto?.name ?? "",
@@ -90,7 +90,7 @@ export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => 
   }
 
   for (const activityDto of activityDtos) {
-    const item: ActivityListItem = {
+    const item: Activity = {
       id: activityDto.id,
       description: activityDto.description.en,
       name: activityDto.name,

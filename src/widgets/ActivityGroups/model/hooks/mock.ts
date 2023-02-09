@@ -1,11 +1,11 @@
 import { ActivityGroupType, ActivityGroupTypeNames, ActivityListGroup } from "../../lib"
 
-import { ActivityListItem, ActivityStatus, ActivityType } from "~/entities/activity"
+import { Activity, ActivityStatus, ActivityType } from "~/entities/activity"
 
 const groupMocks: ActivityListGroup[] = []
 
 for (let i = 0; i < 3; i++) {
-  const activities: ActivityListItem[] = []
+  const activities: Activity[] = []
 
   groupMocks.push({
     activities,
