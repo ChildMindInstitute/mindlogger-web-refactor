@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 
-import { ActivityListWidget } from "~/widgets/Activity"
+import { ActivityGroupList } from "~/widgets/Activity"
 
 const ActivityListPage = () => {
   const { appletId } = useParams()
@@ -13,7 +13,7 @@ const ActivityListPage = () => {
     )
   }
 
-  return <ActivityListWidget appletId={appletId} />
+  return <ActivityGroupList appletId={appletId} />
 }
 
 export default ActivityListPage
