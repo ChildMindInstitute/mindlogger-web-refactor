@@ -3,7 +3,6 @@ import { useState } from "react"
 import classNames from "classnames"
 import { Col, Container, Row, Spinner } from "react-bootstrap"
 
-import { appletMock } from "../../../shared/mocks"
 import CustomModal from "../../Modal"
 import { useActivityGroups } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
@@ -27,9 +26,7 @@ export const ActivityGroupList = ({ appletId }: ActivityListWidgetProps) => {
     setIsAboutOpen(false)
   }
 
-  const { groups, isLoading, isError } = useActivityGroups(String(appletId))
-
-  const appletDetails = appletMock
+  const { groups, isLoading, isError, appletDetails } = useActivityGroups(String(appletId))
 
   if (isLoading) {
     return (
@@ -74,7 +71,7 @@ export const ActivityGroupList = ({ appletId }: ActivityListWidgetProps) => {
         show={isAboutOpen}
         onHide={onAboutModalClose}
         title={t("about")}
-        label={appletDetails.about[language]}
+        label={appletDetails?.description[language]}
       />
     </Container>
   )

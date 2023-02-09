@@ -4,6 +4,7 @@ import groupMocks from "./mock"
 
 import { ActivityListItem, ActivityStatus, ActivityType } from "~/entities/activity"
 import { AppletDetailsDto } from "~/shared/api/"
+import { appletMock } from "~/shared/mocks"
 
 type UseActivityGroupsReturn = {
   isLoading: boolean
@@ -11,6 +12,7 @@ type UseActivityGroupsReturn = {
   isError: boolean
   error?: ReturnType<typeof useAppletByIdQuery>["error"]
   groups: ActivityListGroup[]
+  appletDetails?: AppletDetailsDto
 }
 
 export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => {
@@ -25,6 +27,7 @@ export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => 
       isLoading: false,
       error,
       isError: false,
+      appletDetails: appletMock,
     }
   }
 
@@ -63,8 +66,8 @@ export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => 
 
     const item: ActivityListItem = {
       id: flowDto.id,
-      description: activityDto!.description.en,
-      name: activityDto!.name,
+      description: activityDto?.description.en ?? "",
+      name: activityDto?.name ?? "",
       image: flowDto.image,
       hasEventContext: false,
       isInActivityFlow: true,
@@ -118,5 +121,6 @@ export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => 
     isError,
     error,
     groups,
+    appletDetails: appletDetails,
   }
 }
