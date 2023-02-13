@@ -1,4 +1,6 @@
-type Status = "ALREADY_ACCEPTED" | "OK"
+import { BaseSuccessResponse } from "./base"
+
+type Status = "approved" | "pending" | "declined"
 
 export interface GetInvitationByIdPayload {
   invitationId: string
@@ -12,15 +14,15 @@ export interface DeclineInvitationByIdPayload {
   invitationId: string
 }
 
-export interface GetInvitationSuccessResponse {
+export type GetInvitationSuccessResponse = BaseSuccessResponse<{
   key: string
   email: string
   status: Status
   role: string
 
-  title: string
-  body: string
+  title: string | null
+  body: string | null
 
   appletName: string
   appletId: string | number
-}
+}>

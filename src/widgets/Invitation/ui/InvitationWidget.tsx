@@ -1,9 +1,13 @@
 import classNames from "classnames"
 import { Spinner } from "react-bootstrap"
 
-import { useInvitationTranslation } from "../lib"
-import { InvitationDetails } from "../lib/types"
-import { Invitation } from "./Invitation"
+import {
+  Invitation,
+  InvitationDetails,
+  InvitationMessage,
+  useInvitationQuery,
+  useInvitationTranslation,
+} from "~/entities/invitation"
 
 import "./style.scss"
 
@@ -14,15 +18,9 @@ interface InvitationWidgetProps {
 const InvitationWidget = ({ keyParams }: InvitationWidgetProps) => {
   const { t } = useInvitationTranslation()
 
-  const isLoading = false
-  const isError = true
-  const mockInvitation: InvitationDetails = {
-    key: "key123",
-    status: "ALREADY_ACCEPTED",
-    title: "Invitation title",
-    body: "Invitation body",
-    email: "vriabkov@scnsoft.com",
-  }
+  const { isLoading, isError, data } = useInvitationQuery(keyParams)
+
+  const invitationDetails = data?.data?.result as InvitationDetails
 
   if (isLoading) {
     return (
@@ -34,14 +32,10 @@ const InvitationWidget = ({ keyParams }: InvitationWidgetProps) => {
   }
 
   if (isError) {
-    return (
-      <div className={classNames("d-flex", "justify-content-center", "align-items-center", "text-center")}>
-        <div className={"invitationMessage"}>{t("invitationAlreadyRemoved")}</div>
-      </div>
-    )
+    return <InvitationMessage message={t("invitationAlreadyRemoved")} />
   }
 
-  return <Invitation invite={mockInvitation} />
+  return <Invitation invite={invitationDetails} />
 }
 
 export default InvitationWidget

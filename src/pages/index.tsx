@@ -27,6 +27,7 @@ const ApplicationRouter = (): JSX.Element | null => {
             <Route path={ROUTES.profile.path} element={<Profile />} />
             <Route path={ROUTES.settings.path} element={<Settings />} />
             <Route path={ROUTES.activityList.path} element={<ActivityListPage />} />
+            <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
 
             <Route path="*" element={<Navigate to={ROUTES.applets.path} />} />
           </Route>

@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 import { LoginForm, useLoginTranslation } from "~/features/Login"
 import { BasicButton } from "~/shared/ui"
@@ -10,6 +10,7 @@ import "./login.scss"
 
 const LoginPage = () => {
   const { t } = useLoginTranslation()
+  const location = useLocation()
 
   return (
     <div className="loginPageContainer mp-3 align-self-start w-100">
@@ -20,7 +21,7 @@ const LoginPage = () => {
         </Container>
 
         <Container className="loginForm">
-          <LoginForm />
+          <LoginForm locationState={location.state} />
 
           <BasicButton type="button" variant="outline-primary" className="mb-3" defaultSize>
             <Link to={ROUTES.signup.path} relative="path">

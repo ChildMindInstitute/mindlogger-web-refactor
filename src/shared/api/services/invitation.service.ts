@@ -12,10 +12,10 @@ function invitationService() {
       return axiosService.get<GetInvitationSuccessResponse>(`/invitations/${payload.invitationId}`)
     },
     acceptInvitation(payload: AcceptInvitationByIdPayload) {
-      return axiosService.get(`/invitations/approve/${payload.invitationId}`)
+      return axiosService.post(`/invitations/approve/${payload.invitationId}`)
     },
     declineInvitation(payload: DeclineInvitationByIdPayload) {
-      return axiosService.delete(`/invitations/decline/${payload.invitationId}`)
+      return axiosService.post(`/invitations/decline/${payload.invitationId}`)
     },
   }
 }
