@@ -6,9 +6,10 @@ import { useAcceptInviteMutation, useDeclineInviteMutation } from "../api"
 import { useInvitationTranslation } from "../lib"
 import { InvitationDetails } from "../lib/types"
 import { InvitationButtons } from "./InvitationButtons"
-import { InvitationMessage } from "./InvitationMessage"
+import { InvitationContent } from "./InvitationContent"
+import { InvitationHeader } from "./InvitationHeader"
 
-import { Logo } from "~/shared/ui"
+import { Logo, PageMessage } from "~/shared/ui"
 
 interface InvitationProps {
   invite: InvitationDetails
@@ -38,28 +39,24 @@ export const Invitation = ({ invite }: InvitationProps) => {
   }
 
   if (invite.status === "approved") {
-    return <InvitationMessage message={t("invitationAlreadyAccepted")} />
+    return <PageMessage message={t("invitationAlreadyAccepted")} />
   }
 
   if (invite.status === "declined") {
-    return <InvitationMessage message={t("invitationAlreadyDeclined")} />
+    return <PageMessage message={t("invitationAlreadyDeclined")} />
   }
 
   if (inviteOnActionStatus === "ACCEPTED") {
-    return <InvitationMessage message={t("invitationAccepted")} />
+    return <PageMessage message={t("invitationAccepted")} />
   }
 
   if (inviteOnActionStatus === "DECLINED") {
-    return <InvitationMessage message={t("invitationRemoved")} />
+    return <PageMessage message={t("invitationRemoved")} />
   }
 
   return (
     <div className={classNames("invitationBody")}>
-      <h3 className={classNames("mb-2")}>
-        {t("inviteContent.welcome")}
-        <strong>{` ${invite.appletName}!`}</strong>
-      </h3>
-      <p>{`${t("inviteContent.title")} ${invite.appletName}. ${t("inviteContent.toAccept")}`}</p>
+      <InvitationHeader appletName={invite.appletName} />
 
       <div className={classNames("mb-3")}>
         <InvitationButtons
@@ -70,19 +67,7 @@ export const Invitation = ({ invite }: InvitationProps) => {
         />
       </div>
 
-      <div
-        className="invitationBody"
-        dangerouslySetInnerHTML={{ __html: t("inviteContent.description", { displayName: invite.appletName }) }}
-      />
-      <div className={classNames("mb-3")}>
-        <ol>
-          <li>{t("inviteContent.step1")}</li>
-          <li>{t("inviteContent.step2")}</li>
-          <li>
-            <div dangerouslySetInnerHTML={{ __html: t("inviteContent.step3", { displayName: invite.appletName }) }} />
-          </li>
-        </ol>
-      </div>
+      <InvitationContent appletName={invite.appletName} />
 
       <div>
         <div>

@@ -1,13 +1,8 @@
 import classNames from "classnames"
 import { Spinner } from "react-bootstrap"
 
-import {
-  Invitation,
-  InvitationDetails,
-  InvitationMessage,
-  useInvitationQuery,
-  useInvitationTranslation,
-} from "~/entities/invitation"
+import { Invitation, InvitationDetails, useInvitationQuery, useInvitationTranslation } from "~/entities/invitation"
+import { PageMessage } from "~/shared/ui"
 
 import "./style.scss"
 
@@ -32,7 +27,7 @@ const InvitationWidget = ({ keyParams }: InvitationWidgetProps) => {
   }
 
   if (isError) {
-    return <InvitationMessage message={t("invitationAlreadyRemoved")} />
+    return <PageMessage message={t("invitationAlreadyRemoved")} />
   }
 
   return <Invitation invite={invitationDetails} />
