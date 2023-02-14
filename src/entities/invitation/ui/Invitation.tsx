@@ -1,42 +1,24 @@
-import { useState } from "react"
-
 import classNames from "classnames"
+import { Spinner } from "react-bootstrap"
 
-import { useAcceptInviteMutation, useDeclineInviteMutation } from "../api"
+import { useInvitationQuery } from "../api"
 import { useInvitationTranslation } from "../lib"
-import { InvitationDetails } from "../lib/types"
-import { InvitationButtons } from "./InvitationButtons"
 import { InvitationContent } from "./InvitationContent"
 import { InvitationHeader } from "./InvitationHeader"
 
 import { Logo, PageMessage } from "~/shared/ui"
 
 interface InvitationProps {
-  invite: InvitationDetails
+  keyParams: string
+  actionComponent: JSX.Element
 }
 
-export const Invitation = ({ invite }: InvitationProps) => {
+export const Invitation = ({ keyParams, actionComponent }: InvitationProps) => {
   const { t } = useInvitationTranslation()
 
-  const [inviteOnActionStatus, setInviteStatus] = useState<"ACCEPTED" | "DECLINED" | null>(null)
+  const { isError, data, isLoading } = useInvitationQuery(keyParams)
 
-  const { mutate: acceptInvite, isLoading: isAcceptLoading } = useAcceptInviteMutation({
-    onSuccess() {
-      setInviteStatus("ACCEPTED")
-    },
-  })
-  const { mutate: declineInvite, isLoading: isDeclineLoading } = useDeclineInviteMutation({
-    onSuccess() {
-      setInviteStatus("DECLINED")
-    },
-  })
-
-  const onInviteAccept = () => {
-    acceptInvite({ invitationId: invite.key })
-  }
-  const onInviteDecline = () => {
-    declineInvite({ invitationId: invite.key })
-  }
+  const invite = data?.data?.result
 
   if (invite?.status === "approved") {
     return <PageMessage message={t("invitationAlreadyAccepted")} />
@@ -46,35 +28,35 @@ export const Invitation = ({ invite }: InvitationProps) => {
     return <PageMessage message={t("invitationAlreadyDeclined")} />
   }
 
-  if (inviteOnActionStatus === "ACCEPTED") {
-    return <PageMessage message={t("invitationAccepted")} />
+  if (isError) {
+    return <PageMessage message={t("invitationAlreadyRemoved")} />
   }
 
-  if (inviteOnActionStatus === "DECLINED") {
-    return <PageMessage message={t("invitationRemoved")} />
+  if (isLoading) {
+    return (
+      <div className={classNames("d-flex", "justify-content-center", "align-items-center", "text-center")}>
+        <div className="loading">{t("loadingInvitation")}</div>
+        <Spinner animation="border" variant="primary" />
+      </div>
+    )
   }
 
   return (
     <div className={classNames("invitationBody")}>
-      {invite && <InvitationHeader appletName={invite.appletName} />}
+      {invite && (
+        <>
+          <InvitationHeader appletName={invite.appletName} />
+          <div className={classNames("mb-3")}>{actionComponent}</div>
+          <InvitationContent appletName={invite.appletName} />
 
-      <div className={classNames("mb-3")}>
-        <InvitationButtons
-          onAcceptInvite={onInviteAccept}
-          onDeclineInvite={onInviteDecline}
-          isAcceptLoading={isAcceptLoading}
-          isDeclineLoading={isDeclineLoading}
-        />
-      </div>
-
-      {invite && <InvitationContent appletName={invite.appletName} />}
-
-      <div>
-        <div>
-          <Logo size={{ width: 200, height: 80 }} />
-        </div>
-        <small>{t("inviteContent.footer")}</small>
-      </div>
+          <div>
+            <div>
+              <Logo size={{ width: 200, height: 80 }} />
+            </div>
+            <small>{t("inviteContent.footer")}</small>
+          </div>
+        </>
+      )}
     </div>
   )
 }

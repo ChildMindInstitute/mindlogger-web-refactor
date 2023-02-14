@@ -30,4 +30,10 @@ export const ROUTES = {
     path: "/protected/applets/:appletId",
     navigateTo: (appletId: string | number) => `/protected/applets/${appletId}`,
   },
+  invitationAccept: {
+    path: "/protected/invite/accepted",
+  },
+  invitationDecline: {
+    path: "/protected/invite/declined",
+  },
 }

@@ -1,2 +1,2 @@
 export * from "./Invitation"
-export * from "./InvitationButtons"
+export * from "../../../features/InvitationButtons/ui/InvitationActionButtons"

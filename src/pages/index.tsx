@@ -4,6 +4,8 @@ import ActivityListPage from "./ActivityList"
 import Dashboard from "./Dashboard"
 import ForgotPassword from "./ForgotPassword"
 import { InvitationPage } from "./Invitation"
+import { InvitationAcceptPage } from "./InvitationAccept"
+import { InvitationDeclinePage } from "./InvitationDecline"
 import LoginPage from "./Login"
 import Profile from "./Profile"
 import RecoveryPassword from "./RecoveryPassword"
@@ -27,7 +29,8 @@ const ApplicationRouter = (): JSX.Element | null => {
             <Route path={ROUTES.profile.path} element={<Profile />} />
             <Route path={ROUTES.settings.path} element={<Settings />} />
             <Route path={ROUTES.activityList.path} element={<ActivityListPage />} />
-            <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
+            <Route path={ROUTES.invitationAccept.path} element={<InvitationAcceptPage />} />
+            <Route path={ROUTES.invitationDecline.path} element={<InvitationDeclinePage />} />
 
             <Route path="*" element={<Navigate to={ROUTES.applets.path} />} />
           </Route>

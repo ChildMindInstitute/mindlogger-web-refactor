@@ -1,11 +1,19 @@
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
-import { useSearchParams } from "react-router-dom"
+import { useLocation, useSearchParams } from "react-router-dom"
 
-import { InvitationGuard } from "~/widgets/Invitation"
+import { Invitation, InvitationButtons } from "~/entities/invitation"
+import { AuthorizationButtons } from "~/features/AuthorizationButtons"
+import { AuthorizationGuard } from "~/features/AuthorizationGuard"
 
 const InvitationPage = () => {
   const [searchParams] = useSearchParams()
+  const location = useLocation()
+
+  const redirectState = {
+    isInvitationFlow: true,
+    backRedirectPath: `${location.pathname}${location.search}`,
+  }
 
   const keyParams = searchParams.get("key")
   const emailParams = searchParams.get("email")
@@ -13,7 +21,9 @@ const InvitationPage = () => {
   return (
     <Container className={classNames("mt-3", "pt-3")}>
       {keyParams && emailParams ? (
-        <InvitationGuard keyParams={keyParams} emailParams={emailParams} />
+        <AuthorizationGuard fallback={<AuthorizationButtons redirectState={redirectState} />}>
+          <Invitation keyParams={keyParams} actionComponent={<InvitationButtons inviteKey={keyParams} />} />
+        </AuthorizationGuard>
       ) : (
         <div>Some invitation error</div>
       )}
