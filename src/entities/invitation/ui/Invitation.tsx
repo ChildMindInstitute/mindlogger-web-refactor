@@ -38,11 +38,11 @@ export const Invitation = ({ invite }: InvitationProps) => {
     declineInvite({ invitationId: invite.key })
   }
 
-  if (invite.status === "approved") {
+  if (invite?.status === "approved") {
     return <PageMessage message={t("invitationAlreadyAccepted")} />
   }
 
-  if (invite.status === "declined") {
+  if (invite?.status === "declined") {
     return <PageMessage message={t("invitationAlreadyDeclined")} />
   }
 
@@ -56,7 +56,7 @@ export const Invitation = ({ invite }: InvitationProps) => {
 
   return (
     <div className={classNames("invitationBody")}>
-      <InvitationHeader appletName={invite.appletName} />
+      {invite && <InvitationHeader appletName={invite.appletName} />}
 
       <div className={classNames("mb-3")}>
         <InvitationButtons
@@ -67,7 +67,7 @@ export const Invitation = ({ invite }: InvitationProps) => {
         />
       </div>
 
-      <InvitationContent appletName={invite.appletName} />
+      {invite && <InvitationContent appletName={invite.appletName} />}
 
       <div>
         <div>

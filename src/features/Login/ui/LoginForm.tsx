@@ -10,7 +10,7 @@ import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIc
 import { ROUTES, secureTokensStorage, useCustomForm, usePasswordType } from "~/shared/utils"
 
 interface LoginFormProps {
-  locationState?: Record<string, string>
+  locationState?: Record<string, unknown>
 }
 
 export const LoginForm = ({ locationState }: LoginFormProps) => {
@@ -37,7 +37,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
       secureTokensStorage.setTokens(data.data.result.token)
 
       if (locationState?.isInvitationFlow) {
-        navigate(locationState.backRedirectPath)
+        navigate(locationState.backRedirectPath as string)
       } else {
         navigate(ROUTES.applets.path)
       }

@@ -1,9 +1,9 @@
-import { Navigate, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
+import { AuthorizationButtons } from "../../AuthorizationButtons"
 import InvitationWidget from "./InvitationWidget"
 
 import { userModel } from "~/entities/user"
-import { ROUTES } from "~/shared/utils"
 
 interface InvitationGuardProps {
   keyParams: string
@@ -24,7 +24,7 @@ const InvitationGuard = ({ keyParams }: InvitationGuardProps) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to={ROUTES.login.path} state={redirectState} />
+    return <AuthorizationButtons redirectState={redirectState} />
   }
 
   return <InvitationWidget keyParams={keyParams} />

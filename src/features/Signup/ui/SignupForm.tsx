@@ -1,27 +1,46 @@
 import { useState } from "react"
 
 import classNames from "classnames"
+import { useNavigate } from "react-router-dom"
 
 import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
-import { useSignupMutation } from "~/entities/user"
+import { useLoginMutation, userModel, useSignupMutation } from "~/entities/user"
 import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
-import { useCustomForm, usePasswordType } from "~/shared/utils"
+import { secureTokensStorage, useCustomForm, usePasswordType } from "~/shared/utils"
 
-export const SignupForm = () => {
+interface SignupFormProps {
+  locationState?: Record<string, unknown>
+}
+
+export const SignupForm = ({ locationState }: SignupFormProps) => {
   const { t } = useSignupTranslation()
+  const navigate = useNavigate()
+
   const [passwordType, onPasswordIconClick] = usePasswordType()
   const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType()
 
   const [terms, setTerms] = useState<boolean>(false)
+  const { setUser } = userModel.hooks.useUserState()
 
   const form = useCustomForm(
     { defaultValues: { email: "", firstName: "", lastName: "", password: "", confirmPassword: "" } },
     SignupFormSchema,
   )
   const { handleSubmit, reset } = form
+
+  const { mutate: login } = useLoginMutation({
+    onSuccess(data) {
+      const { user, token } = data.data.result
+
+      setUser(user)
+      secureTokensStorage.setTokens(token)
+
+      return navigate(locationState?.backRedirectPath as string)
+    },
+  })
 
   const {
     mutate: signup,
@@ -30,6 +49,11 @@ export const SignupForm = () => {
     isLoading,
   } = useSignupMutation({
     onSuccess() {
+      if (locationState?.isInvitationFlow) {
+        const { email, password } = form.getValues()
+        login({ email, password })
+      }
+
       reset()
     },
   })
