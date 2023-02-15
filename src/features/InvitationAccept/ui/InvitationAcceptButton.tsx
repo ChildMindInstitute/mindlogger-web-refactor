@@ -27,7 +27,7 @@ export const InvitationAcceptButton = ({ invitationKey }: InvitationAcceptButton
     <Button
       onClick={onInviteAccept}
       variant="success"
-      className={classNames("mx-2", "mb-2", "invitation-buttons")}
+      className={classNames("mx-2", "mb-2", "invitation-buttons", "color-white")}
       loading={isAcceptLoading}>
       {t("buttons.acceptInvitation")}
     </Button>

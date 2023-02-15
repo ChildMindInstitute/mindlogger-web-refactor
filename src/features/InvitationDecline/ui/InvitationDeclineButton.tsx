@@ -27,7 +27,7 @@ export const InvitationDeclineButton = ({ invitationKey }: InvitationDeclineButt
     <Button
       onClick={onInviteDecline}
       variant="danger"
-      className={classNames("mx-2", "mb-2", "invitation-buttons")}
+      className={classNames("mx-2", "mb-2", "invitation-buttons", "color-white")}
       loading={isDeclineLoading}>
       {t("buttons.declineInvitation")}
     </Button>

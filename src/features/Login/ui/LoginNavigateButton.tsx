@@ -17,7 +17,7 @@ export const LoginNavigateButton = ({ redirectState }: LoginNavigateButtonProps)
   }
 
   return (
-    <Button type="button" className={classNames("btn", "btn-primary", "mx-1")} onClick={onLoginClick}>
+    <Button type="button" className={classNames("btn", "btn-primary", "mx-1", "color-white")} onClick={onLoginClick}>
       {t("login")}
     </Button>
   )
