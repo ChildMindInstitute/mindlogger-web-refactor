@@ -3,10 +3,10 @@ import { Container } from "react-bootstrap"
 import { useLocation, useSearchParams } from "react-router-dom"
 
 import { Invitation } from "~/entities/invitation"
-import { AuthorizationButtons } from "~/features/AuthorizationButtons"
 import { AuthorizationGuard } from "~/features/AuthorizationGuard"
 import { InvitationAcceptButton } from "~/features/InvitationAccept"
 import { InvitationDeclineButton } from "~/features/InvitationDecline"
+import { AuthorizationButtons } from "~/widgets/AuthorizationNavigateButtons"
 
 const InvitationPage = () => {
   const [searchParams] = useSearchParams()
@@ -22,7 +22,7 @@ const InvitationPage = () => {
 
   return (
     <Container className={classNames("mt-3", "pt-3")}>
-      {keyParams && emailParams ? (
+      {keyParams && emailParams && (
         <AuthorizationGuard fallback={<AuthorizationButtons redirectState={redirectState} />}>
           <Invitation
             keyParams={keyParams}
@@ -34,8 +34,6 @@ const InvitationPage = () => {
             }
           />
         </AuthorizationGuard>
-      ) : (
-        <div>Some invitation error</div>
       )}
     </Container>
   )
