@@ -3,9 +3,9 @@ import { Container } from "react-bootstrap"
 import { useLocation, useSearchParams } from "react-router-dom"
 
 import { Invitation } from "~/entities/invitation"
-import { AuthorizationGuard } from "~/features/AuthorizationGuard"
 import { InvitationAcceptButton } from "~/features/InvitationAccept"
 import { InvitationDeclineButton } from "~/features/InvitationDecline"
+import { AuthorizationGuard } from "~/widgets/AuthorizationGuard"
 import { AuthorizationButtons } from "~/widgets/AuthorizationNavigateButtons"
 
 const InvitationPage = () => {
