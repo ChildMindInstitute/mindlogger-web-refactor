@@ -12,6 +12,9 @@ export const ROUTES = {
   changePassword: {
     path: "/password-recovery",
   },
+  invitation: {
+    path: "/invite",
+  },
 
   // Protected routes
   profile: {
@@ -26,5 +29,11 @@ export const ROUTES = {
   activityList: {
     path: "/protected/applets/:appletId",
     navigateTo: (appletId: string | number) => `/protected/applets/${appletId}`,
+  },
+  invitationAccept: {
+    path: "/protected/invite/accepted",
+  },
+  invitationDecline: {
+    path: "/protected/invite/declined",
   },
 }

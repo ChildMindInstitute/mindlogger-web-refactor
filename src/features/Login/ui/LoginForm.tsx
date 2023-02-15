@@ -9,7 +9,11 @@ import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
 import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
 import { ROUTES, secureTokensStorage, useCustomForm, usePasswordType } from "~/shared/utils"
 
-export const LoginForm = () => {
+interface LoginFormProps {
+  locationState?: Record<string, unknown>
+}
+
+export const LoginForm = ({ locationState }: LoginFormProps) => {
   const { t } = useLoginTranslation()
   const navigate = useNavigate()
 
@@ -30,9 +34,13 @@ export const LoginForm = () => {
   } = useLoginMutation({
     onSuccess(data) {
       setUser(data.data.result.user)
-
       secureTokensStorage.setTokens(data.data.result.token)
-      navigate(ROUTES.applets.path)
+
+      if (locationState?.isInvitationFlow) {
+        navigate(locationState.backRedirectPath as string)
+      } else {
+        navigate(ROUTES.applets.path)
+      }
     },
   })
 

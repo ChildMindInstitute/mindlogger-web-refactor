@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 import { SignupForm, useSignupTranslation } from "~/features/Signup"
 import { ROUTES } from "~/shared/utils"
@@ -8,6 +8,7 @@ import "./styles.scss"
 
 const SignupPage = () => {
   const { t } = useSignupTranslation()
+  const location = useLocation()
 
   return (
     <div className="signupPageContainer align-self-start pt-5 mb-3 w-100">
@@ -15,7 +16,7 @@ const SignupPage = () => {
         <h1>{t("title")}</h1>
 
         <Container className="signupForm">
-          <SignupForm />
+          <SignupForm locationState={location.state} />
 
           <p className="my-3">
             {t("account")} <Link to={ROUTES.login.path}> {t("logIn")}</Link>

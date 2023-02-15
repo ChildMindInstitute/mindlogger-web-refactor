@@ -16,7 +16,7 @@ type UseActivityGroupsReturn = {
 }
 
 export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => {
-  const returnMocks = false
+  const returnMocks = true
 
   const { data: detailsResponse, isLoading, isSuccess, error, isError } = useAppletByIdQuery(appletId)
 
