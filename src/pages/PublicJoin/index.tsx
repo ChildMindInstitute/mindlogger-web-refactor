@@ -1,13 +1,17 @@
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
 import { useParams } from "react-router-dom"
+
+import { FetchPublicActivityList } from "../../widgets/ActivityGroups"
 
 export const PublicJoinPage = () => {
   const { joinLinkKey } = useParams()
 
-  return (
-    <Container className={classNames("mt-3", "pt-3")}>
-      <div>{`Public join - ${joinLinkKey}`}</div>
-    </Container>
-  )
+  if (!joinLinkKey) {
+    return (
+      <div className="applet-error">
+        You have reached this URL in error. Please reach out to the organizer of this applet for further assistance.
+      </div>
+    )
+  }
+
+  return <FetchPublicActivityList publicAppletKey={joinLinkKey} />
 }
