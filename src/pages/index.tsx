@@ -32,6 +32,7 @@ const ApplicationRouter = (): JSX.Element | null => {
             <Route path={ROUTES.settings.path} element={<Settings />} />
             <Route path={ROUTES.activityList.path} element={<ActivityListPage />} />
             <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
+            <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
             <Route path={ROUTES.invitationAccept.path} element={<InvitationAcceptPage />} />
             <Route path={ROUTES.invitationDecline.path} element={<InvitationDeclinePage />} />
 
