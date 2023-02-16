@@ -1,4 +1,3 @@
-import { useAppletByIdQuery } from "../../api"
 import { ActivityGroupType, ActivityGroupTypeNames, ActivityListGroup } from "../../lib"
 import groupMocks from "./mock"
 
@@ -7,39 +6,23 @@ import { AppletDetailsDto } from "~/shared/api/"
 import { appletMock } from "~/shared/mocks"
 
 type UseActivityGroupsReturn = {
-  isLoading: boolean
-  isSuccess: boolean
-  isError: boolean
-  error?: ReturnType<typeof useAppletByIdQuery>["error"]
   groups: ActivityListGroup[]
   appletDetails?: AppletDetailsDto
 }
 
-export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => {
+export const useActivityGroups = (appletDetails?: AppletDetailsDto): UseActivityGroupsReturn => {
   const returnMocks = true
-
-  const { data: detailsResponse, isLoading, isSuccess, error, isError } = useAppletByIdQuery(appletId)
 
   if (returnMocks) {
     return {
       groups: groupMocks,
-      isSuccess,
-      isLoading: false,
-      error,
-      isError: false,
       appletDetails: appletMock,
     }
   }
 
-  const appletDetails: AppletDetailsDto | undefined = detailsResponse?.data?.result
-
   if (!appletDetails) {
     return {
       groups: [],
-      isSuccess,
-      isLoading,
-      error,
-      isError,
     }
   }
 
@@ -116,10 +99,6 @@ export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => 
   }
 
   return {
-    isLoading,
-    isSuccess,
-    isError,
-    error,
     groups,
     appletDetails: appletDetails,
   }

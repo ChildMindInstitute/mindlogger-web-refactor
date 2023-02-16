@@ -15,6 +15,12 @@ export const ROUTES = {
   invitation: {
     path: "/invite",
   },
+  publicJoin: {
+    path: "/public/:joinLinkKey",
+  },
+  privateJoin: {
+    path: "/join/:joinLinkKey",
+  },
 
   // Protected routes
   profile: {

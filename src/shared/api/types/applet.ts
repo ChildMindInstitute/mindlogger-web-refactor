@@ -5,6 +5,15 @@ export type GetAppletDetailsByIdPayload = {
   appletId: string
 }
 
+export type GetPublicAppletDetailsByIdPayload = {
+  publicAppletKey: string
+}
+
+export type GetPublicAppletActivityByIdPayload = {
+  publicAppletKey: string
+  activityId: string
+}
+
 export type AppletListSuccessResponse = BaseSuccessListResponse<AppletDetailsDto>
 export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDto>
 

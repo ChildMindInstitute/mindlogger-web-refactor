@@ -7,7 +7,9 @@ import { InvitationPage } from "./Invitation"
 import { InvitationAcceptPage } from "./InvitationAccept"
 import { InvitationDeclinePage } from "./InvitationDecline"
 import LoginPage from "./Login"
+import { PrivateJoinPage } from "./PrivateJoin"
 import Profile from "./Profile"
+import { PublicJoinPage } from "./PublicJoin"
 import RecoveryPassword from "./RecoveryPassword"
 import Settings from "./Settings"
 import SignupPage from "./Signup"
@@ -47,6 +49,8 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.forgotPassword.path} element={<ForgotPassword />} />
       <Route path={ROUTES.changePassword.path} element={<RecoveryPassword />} />
       <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
+      <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
+      <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
 
       <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
     </Routes>
