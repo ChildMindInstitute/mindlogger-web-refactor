@@ -62,9 +62,11 @@ export const ActivityGroupList = ({ appletId }: ActivityListWidgetProps) => {
           )}
         </Col>
         <Col lg={7}>
-          {groups.map(g => (
-            <ActivityGroup group={g} key={g.name} />
-          ))}
+          {groups
+            ?.filter(g => g.activities.length)
+            .map(g => (
+              <ActivityGroup group={g} key={g.name} />
+            ))}
         </Col>
       </Row>
       <CustomModal

@@ -1,4 +1,4 @@
-import { Language } from "../../utils"
+import { HourMinute, Language } from "../../utils"
 import { BaseSuccessListResponse, BaseSuccessResponse } from "./base"
 
 export type GetAppletDetailsByIdPayload = {
@@ -8,9 +8,8 @@ export type GetAppletDetailsByIdPayload = {
 export type AppletListSuccessResponse = BaseSuccessListResponse<AppletDetailsDto>
 export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDto>
 
-export type ActivityDto = {
-  id: number
-  guid: string
+export type ActivityRecordDto = {
+  id: string
   name: string
   description: Record<Language, string>
   image: string
@@ -20,24 +19,61 @@ export type ActivityDto = {
   splashScreen: string
 }
 
-export type ActivityFlowDto = {
-  id: number
-  guid: string
+export type ActivityFlowRecordDto = {
+  id: string
   name: string
   image: string
   description: Record<Language, string>
   hideBadge: boolean
   isSingleReport: boolean
   ordering: boolean
-  items: Array<{ activityId: number }>
+  items: Array<{ activityId: string }>
 }
 
 export type AppletDetailsDto = {
-  id: number
+  id: string
   name?: string
   image: string
   displayName: string
   description: Record<Language, string>
-  activities: ActivityDto[]
-  activityFlows: ActivityFlowDto[]
+  activities: ActivityRecordDto[]
+  activityFlows: ActivityFlowRecordDto[]
+}
+
+export type EventAvailabilityDto = {
+  availabilityType: number
+  oneTimeCompletion: boolean
+  periodicityType: number
+  timeFrom: HourMinute | null
+  timeTo: HourMinute | null
+  allowAccessBeforeFromTime: boolean
+  startDate?: string | null
+  endDate?: string | null
+  selectedDate?: string | null
+}
+
+export type ScheduleEventDto = {
+  entityId: string
+  availability: EventAvailabilityDto
+}
+
+type AppletDto = {
+  id: string
+  image?: string
+  displayName: string
+  description: Record<Language, string>
+  numberOverdue?: number
+
+  theme?: {
+    logo?: string
+    smallLogo?: string
+  } | null
+}
+
+export type AppletsResponse = {
+  result: AppletDto[]
+}
+
+export type AppletDetailsResponse = {
+  result: AppletDetailsDto
 }

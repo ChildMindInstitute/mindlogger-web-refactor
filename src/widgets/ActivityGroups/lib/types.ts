@@ -1,7 +1,7 @@
-import { Activity } from "~/entities/activity"
+import { ActivityListItem } from "~/entities/activity"
 
 export type ActivityListGroup = {
-  activities: Array<Activity>
+  activities: Array<ActivityListItem>
   name: string
   type: ActivityGroupType
 }
