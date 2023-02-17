@@ -1,10 +1,14 @@
 import { useAppletByIdQuery } from "../../api"
-import { ActivityGroupType, ActivityGroupTypeNames, ActivityListGroup } from "../../lib"
-import groupMocks from "./mock"
+import { ActivityListGroup } from "../../lib"
+import { createActivityGroupsBuilder } from "../factories/ActivityGroupsBuilder"
+import {
+  progress as progressMocks,
+  allAppletActivities as allActivityMocks,
+  eventActivities as eventActivityMocks,
+} from "./mocksForEntities"
 
-import { Activity, ActivityStatus, ActivityType } from "~/entities/activity"
-import { AppletDetailsDto } from "~/shared/api/"
-import { appletMock } from "~/shared/mocks"
+import { EventModel } from "~/entities/event"
+import { AppletDetailsDto } from "~/shared/api"
 
 type UseActivityGroupsReturn = {
   isLoading: boolean
@@ -12,115 +16,41 @@ type UseActivityGroupsReturn = {
   isError: boolean
   error?: ReturnType<typeof useAppletByIdQuery>["error"]
   groups: ActivityListGroup[]
-  appletDetails?: AppletDetailsDto
+  appletDetails: AppletDetailsDto
 }
 
 export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => {
-  const returnMocks = true
+  const { data } = useAppletByIdQuery(appletId)
 
-  const { data: detailsResponse, isLoading, isSuccess, error, isError } = useAppletByIdQuery(appletId)
+  const appletDetails = data?.data?.result as AppletDetailsDto
 
-  if (returnMocks) {
-    return {
-      groups: groupMocks,
-      isSuccess,
-      isLoading: false,
-      error,
-      isError: false,
-      appletDetails: appletMock,
-    }
+  const builder = createActivityGroupsBuilder({
+    allAppletActivities: allActivityMocks,
+    appletId: "apid1",
+    progress: progressMocks,
+  })
+
+  const calculator = EventModel.SheduledDateCalculator
+
+  let eventActivities = eventActivityMocks
+
+  for (const eventActivity of eventActivities) {
+    const date = calculator.calculate(eventActivity.event)
+    eventActivity.event.scheduledAt = date
   }
 
-  const appletDetails: AppletDetailsDto | undefined = detailsResponse?.data?.result
+  eventActivities = eventActivities.filter(x => x.event.scheduledAt)
 
-  if (!appletDetails) {
-    return {
-      groups: [],
-      isSuccess,
-      isLoading,
-      error,
-      isError,
-    }
-  }
-
-  const groups: ActivityListGroup[] = [
-    {
-      type: ActivityGroupType.Available,
-      name: ActivityGroupTypeNames[ActivityGroupType.Available],
-      activities: [],
-    },
-  ]
-
-  const activityItems = groups[0].activities
-
-  const activityFlowDtos = appletDetails.activityFlows
-
-  const activityDtos = appletDetails.activities
-
-  for (const flowDto of activityFlowDtos) {
-    if (!flowDto.items.length) {
-      continue
-    }
-
-    const activityDto = activityDtos.find(x => x.id === flowDto.items[0].activityId)
-
-    const item: Activity = {
-      id: flowDto.id,
-      description: activityDto?.description.en ?? "",
-      name: activityDto?.name ?? "",
-      image: flowDto.image,
-      hasEventContext: false,
-      isInActivityFlow: true,
-      activityFlowName: flowDto.name,
-      activityPositionInFlow: 1,
-      numberOfActivitiesInFlow: flowDto.items.length,
-      showActivityFlowBadge: true,
-      isTimedActivityAllow: false,
-      isTimeoutAccess: false,
-      isTimeoutAllow: false,
-      status: ActivityStatus.NotDefined,
-      type: ActivityType.NotDefined,
-      availableFrom: null,
-      availableTo: null,
-      scheduledAt: null,
-      timeToComplete: null,
-    }
-
-    activityItems.push(item)
-  }
-
-  for (const activityDto of activityDtos) {
-    const item: Activity = {
-      id: activityDto.id,
-      description: activityDto.description.en,
-      name: activityDto.name,
-      image: activityDto.image,
-      hasEventContext: false,
-      isInActivityFlow: false,
-      activityFlowName: null,
-      activityPositionInFlow: null,
-      numberOfActivitiesInFlow: null,
-      showActivityFlowBadge: false,
-      isTimedActivityAllow: false,
-      isTimeoutAccess: false,
-      isTimeoutAllow: false,
-      status: ActivityStatus.NotDefined,
-      type: ActivityType.NotDefined,
-      availableFrom: null,
-      availableTo: null,
-      scheduledAt: null,
-      timeToComplete: null,
-    }
-
-    activityItems.push(item)
-  }
+  const groupAvailable = builder.buildAvailable(eventActivities)
+  const groupInProgress = builder.buildInProgress(eventActivities)
+  const groupScheduled = builder.buildScheduled(eventActivities)
 
   return {
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-    groups,
-    appletDetails: appletDetails,
+    groups: [groupAvailable, groupInProgress, groupScheduled],
+    isSuccess: true,
+    isLoading: false,
+    isError: false,
+    error: null,
+    appletDetails,
   }
 }

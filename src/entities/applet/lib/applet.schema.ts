@@ -1,14 +1,13 @@
 import { z } from "zod"
 
 const ActivitySchema = z.object({
-  id: z.number(),
-  guid: z.string(),
+  id: z.string(),
   name: z.string(),
   description: z.object({
     en: z.string(),
     fr: z.string(),
   }),
-  image: z.string(),
+  image: z.string().nullable(),
   isReviewable: z.boolean(),
   isSkippable: z.boolean(),
   ordering: z.boolean(),
@@ -16,8 +15,7 @@ const ActivitySchema = z.object({
 })
 
 const ActivityFlowSchema = z.object({
-  id: z.number(),
-  guid: z.string(),
+  id: z.string(),
   name: z.string(),
   image: z.string(),
   description: z.object({
@@ -27,11 +25,11 @@ const ActivityFlowSchema = z.object({
   hideBadge: z.boolean(),
   isSingleReport: z.boolean(),
   ordering: z.boolean(),
-  items: z.array(z.object({ activityId: z.number() })),
+  items: z.array(z.object({ activityId: z.string() })),
 })
 
 export const AppletSchema = z.object({
-  id: z.number().or(z.string()),
+  id: z.string(),
   name: z.string().nullable(),
   image: z.string(),
   displayName: z.string(),
