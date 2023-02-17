@@ -24,9 +24,6 @@ function invitationService() {
     acceptPrivateInvitation(payload: AcceptInvitationByIdPayload) {
       return axiosService.post(`/invitations/private/${payload.invitationId}/accept`)
     },
-    declinePrivateInvitation(payload: DeclineInvitationByIdPayload) {
-      return axiosService.post(`/invitations/private/${payload.invitationId}/decline`)
-    },
   }
 }
 

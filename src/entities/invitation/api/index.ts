@@ -4,4 +4,3 @@ export * from "./useDeclineInviteMutation"
 
 export * from "./usePrivateInvitationQuery"
 export * from "./useAcceptPrivateInviteMutation"
-export * from "./useDeclinePrivateInviteMutation"

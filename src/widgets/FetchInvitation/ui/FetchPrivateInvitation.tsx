@@ -41,7 +41,7 @@ export const FetchPrivateInvitation = ({ keyParams, redirectState }: FetchPrivat
           {isAuthenticated ? (
             <>
               <PrivateJoinAcceptButton invitationKey={keyParams} />
-              <PrivateJoinDeclineButton invitationKey={keyParams} />
+              <PrivateJoinDeclineButton />
             </>
           ) : (
             <AuthorizationButtons redirectState={redirectState} />
