@@ -1,8 +1,11 @@
 import { Button } from "react-bootstrap"
+import { useNavigate, useParams } from "react-router-dom"
 
 import { ActivityListItem, ActivityStatus } from "../lib"
 import TimeStatusLabel from "./TimeStatusLabel"
+
 import "./style.scss"
+import { ROUTES } from "~/shared/utils"
 
 interface ActivityCardProps {
   activity: ActivityListItem
@@ -10,10 +13,21 @@ interface ActivityCardProps {
 }
 
 const ActivityCard = ({ activity, disabled }: ActivityCardProps) => {
+  const navigate = useNavigate()
+  const { appletId } = useParams()
+
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled
 
+  const onActivityCardClick = () => {
+    navigate(ROUTES.activityDetails.navigateTo(appletId!, activity.activityId))
+  }
+
   return (
-    <Button className="button-shadow ds-activity-button w-100" variant="link" onClick={() => {}} disabled={isDisabled}>
+    <Button
+      className="button-shadow ds-activity-button w-100"
+      variant="link"
+      onClick={onActivityCardClick}
+      disabled={isDisabled}>
       {activity.image && <img className="activity-image" src={activity.image} />}
 
       <div className="activity-data">
