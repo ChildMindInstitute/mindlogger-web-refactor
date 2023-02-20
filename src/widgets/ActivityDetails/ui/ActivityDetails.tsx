@@ -1,6 +1,7 @@
 import classNames from "classnames"
 import { Container, Row, Col, Card, ProgressBar } from "react-bootstrap"
 import { ArrowLeft } from "react-bootstrap-icons"
+import { useNavigate } from "react-router-dom"
 
 import { AllActivityStatusMap } from "./AllActivityStatusMap"
 
@@ -15,6 +16,7 @@ interface ActivityDetailsWidgetProps {
 
 export const ActivityDetailsWidget = ({ appletId, activityId }: ActivityDetailsWidgetProps) => {
   const { t } = useCustomTranslation()
+  const navigate = useNavigate()
 
   const isOnePageAssessment = false // Mock
   const isSummaryScreen = true // Mock
@@ -24,13 +26,17 @@ export const ActivityDetailsWidget = ({ appletId, activityId }: ActivityDetailsW
     { label: "activity 1", percentage: 20 },
     { label: "activity 2", percentage: 0 },
     { label: "activity 3", percentage: 70 },
-  ]
+  ] // Mock
+
+  const onBackButtonClick = () => {
+    navigate(-1)
+  }
 
   return (
     <Container>
       <Row className="mt-5">
         <Col className="" xl={3}>
-          <BasicButton variant="primary" className="mb-2 d-flex align-items-center" onClick={() => {}}>
+          <BasicButton variant="primary" className="mb-2 d-flex align-items-center" onClick={onBackButtonClick}>
             <ArrowLeft className="me-1" />
             {t("Consent.back")}
           </BasicButton>
@@ -45,13 +51,15 @@ export const ActivityDetailsWidget = ({ appletId, activityId }: ActivityDetailsW
       </Row>
       <Row className="mt-2 activity">
         <Col xl={3}>
-          <CustomCard
-            id={"someid"}
-            type="card"
-            title={"title"}
-            imageSrc={"https://picsum.photos/200"}
-            className={classNames("hover", "mb-4")}
-          />
+          <div className={classNames("d-flex", "justify-content-center")}>
+            <CustomCard
+              id={"someid"}
+              type="card"
+              title={"title"}
+              imageSrc={"https://picsum.photos/200"}
+              className={classNames("hover", "mb-4", "activity-details-card")}
+            />
+          </div>
 
           {/* Ask BA what is it? */}
           {/* {headers.map(itemHeader => (
