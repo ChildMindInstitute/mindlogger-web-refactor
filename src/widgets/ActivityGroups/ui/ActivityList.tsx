@@ -15,7 +15,7 @@ interface ActivityListWidgetProps {
 }
 
 export const ActivityGroupList = ({ appletId }: ActivityListWidgetProps) => {
-  const { t, language } = useCustomTranslation()
+  const { t } = useCustomTranslation()
   const [isAboutOpen, setIsAboutOpen] = useState(false)
 
   const onCardAboutClick = () => {
@@ -73,7 +73,7 @@ export const ActivityGroupList = ({ appletId }: ActivityListWidgetProps) => {
         show={isAboutOpen}
         onHide={onAboutModalClose}
         title={t("about")}
-        label={appletDetails?.description[language]}
+        label={appletDetails?.description}
       />
     </Container>
   )

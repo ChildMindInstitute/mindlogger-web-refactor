@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 
+import { ActivityDetailsPage } from "./ActivityDetails"
 import ActivityListPage from "./ActivityList"
 import Dashboard from "./Dashboard"
 import ForgotPassword from "./ForgotPassword"
@@ -25,10 +26,17 @@ const ApplicationRouter = (): JSX.Element | null => {
       <LogoutTracker>
         <Routes>
           <Route element={<ProtectedRoute token={tokens?.accessToken} />}>
-            <Route index path={ROUTES.applets.path} element={<Dashboard />} />
+            <Route path={ROUTES.applets.path}>
+              <Route index element={<Dashboard />} />
+              <Route path={ROUTES.activityList.path}>
+                <Route index element={<ActivityListPage />} />
+                <Route path={ROUTES.activityDetails.path}>
+                  <Route index element={<ActivityDetailsPage />} />
+                </Route>
+              </Route>
+            </Route>
             <Route path={ROUTES.profile.path} element={<Profile />} />
             <Route path={ROUTES.settings.path} element={<Settings />} />
-            <Route path={ROUTES.activityList.path} element={<ActivityListPage />} />
             <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
             <Route path={ROUTES.invitationAccept.path} element={<InvitationAcceptPage />} />
             <Route path={ROUTES.invitationDecline.path} element={<InvitationDeclinePage />} />
@@ -47,6 +55,14 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.forgotPassword.path} element={<ForgotPassword />} />
       <Route path={ROUTES.changePassword.path} element={<RecoveryPassword />} />
       <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
+
+      <Route path="/test">
+        <Route index element={<div>test </div>} />
+        <Route path="some">
+          <Route index element={<div>test/some</div>} />
+          <Route path=":id" element={<div>tes/some/id</div>} />
+        </Route>
+      </Route>
 
       <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
     </Routes>
