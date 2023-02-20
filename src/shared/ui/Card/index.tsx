@@ -15,16 +15,27 @@ export interface CardProps {
   buttonOnClick?: () => void
   imageSrc?: string
   onClick?: () => void
+  className?: string
 }
 
-const CustomCard = ({ id, title, description, imageSrc, onClick, buttonLabel, buttonOnClick, type }: CardProps) => {
+const CustomCard = ({
+  id,
+  title,
+  description,
+  imageSrc,
+  onClick,
+  buttonLabel,
+  buttonOnClick,
+  type,
+  className,
+}: CardProps) => {
   const cardAsLink = type === "link"
   const cardAsCard = type === "card"
 
   const styles = classNames({ "card-link-custom": cardAsLink }, { "card-custom": cardAsCard })
 
   return (
-    <Card className={styles} onClick={onClick} key={id}>
+    <Card className={classNames(styles, className)} onClick={onClick} key={id}>
       {imageSrc ? (
         <Card.Img className="image-card-size image-size" variant="top" src={imageSrc} />
       ) : (
