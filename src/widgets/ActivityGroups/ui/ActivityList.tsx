@@ -49,7 +49,7 @@ export const ActivityGroupList = ({ appletId }: ActivityListWidgetProps) => {
   return (
     <Container fluid>
       <Row className={classNames("mt-5", "mb-3")}>
-        <Col lg={3}>
+        <Col lg={3} className={classNames("d-flex", "justify-content-center")}>
           {appletDetails && (
             <CustomCard
               type="card"
