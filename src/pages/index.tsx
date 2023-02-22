@@ -1,7 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 
-import { CardItem } from "../entities/item/ui/CardItem"
-import { Input } from "../shared/ui"
 import ActivityListPage from "./ActivityList"
 import Dashboard from "./Dashboard"
 import ForgotPassword from "./ForgotPassword"
@@ -34,7 +32,6 @@ const ApplicationRouter = (): JSX.Element | null => {
             <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
             <Route path={ROUTES.invitationAccept.path} element={<InvitationAcceptPage />} />
             <Route path={ROUTES.invitationDecline.path} element={<InvitationDeclinePage />} />
-            <Route path={"protected/markdown"} element={<CardItem>some text</CardItem>} />
 
             <Route path="*" element={<Navigate to={ROUTES.applets.path} />} />
           </Route>
