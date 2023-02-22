@@ -26,6 +26,8 @@ export type ActivityListItem = {
 
   isTimerSet: boolean
   timeLeftToComplete?: HourMinute | null
+
+  items: Array<unknown> // TODO: Change here to actual interface of item
 }
 
 export const enum ActivityStatus {
