@@ -33,10 +33,11 @@ export const CardItem = ({ watermark, isInvalid, children }: CardItemProps) => {
       </Row>
 
       <CardItemNavigator
-        isBackButtonShown={true}
+        isBackButtonShown={false}
         onBackButtonClick={() => {}}
         isNextButtonShown={true}
         onNextButtonClick={() => {}}
+        isNextButtonDisable={true}
       />
     </Card>
   )
