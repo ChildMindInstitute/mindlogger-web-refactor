@@ -1,4 +1,3 @@
-import { useAppletByIdQuery } from "../../api"
 import { ActivityListGroup } from "../../lib"
 import { createActivityGroupsBuilder } from "../factories/ActivityGroupsBuilder"
 import {
@@ -11,19 +10,11 @@ import { EventModel } from "~/entities/event"
 import { AppletDetailsDto } from "~/shared/api"
 
 type UseActivityGroupsReturn = {
-  isLoading: boolean
-  isSuccess: boolean
-  isError: boolean
-  error?: ReturnType<typeof useAppletByIdQuery>["error"]
   groups: ActivityListGroup[]
-  appletDetails: AppletDetailsDto
+  appletDetails?: AppletDetailsDto
 }
 
-export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => {
-  const { data } = useAppletByIdQuery(appletId)
-
-  const appletDetails = data?.data?.result as AppletDetailsDto
-
+export const useActivityGroups = (appletDetails?: AppletDetailsDto): UseActivityGroupsReturn => {
   const builder = createActivityGroupsBuilder({
     allAppletActivities: allActivityMocks,
     appletId: "apid1",
@@ -47,10 +38,6 @@ export const useActivityGroups = (appletId: string): UseActivityGroupsReturn => 
 
   return {
     groups: [groupAvailable, groupInProgress, groupScheduled],
-    isSuccess: true,
-    isLoading: false,
-    isError: false,
-    error: null,
     appletDetails,
   }
 }
