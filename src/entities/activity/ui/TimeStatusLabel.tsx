@@ -1,9 +1,9 @@
-import { Activity, ActivityStatus } from "../lib"
+import { ActivityListItem, ActivityStatus } from "../lib"
 
-import { useCustomTranslation } from "~/shared/utils"
+import { convertToTimeOnNoun, useCustomTranslation } from "~/shared/utils"
 
 interface TimeStatusLabelProps {
-  activity: Activity
+  activity: ActivityListItem
 }
 
 const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
@@ -11,42 +11,42 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   const isStatusScheduled = activity.status === ActivityStatus.Scheduled
 
-  const isStatusPastDue = activity.status === ActivityStatus.PastDue
+  const isStatusAvailable = activity.status === ActivityStatus.Available
 
   const isStatusInProgress = activity.status === ActivityStatus.InProgress
 
-  const hasSceduledAt =
-    isStatusScheduled && activity.hasEventContext && !activity.isTimeoutAllow && activity.scheduledAt
+  const hasScheduledAt = isStatusScheduled && !!activity.scheduledAt
 
-  const hasAvailableFromTo =
-    isStatusScheduled &&
-    activity.hasEventContext &&
-    activity.isTimeoutAllow &&
-    activity.availableFrom &&
-    activity.availableTo
+  const hasAvailableFromTo = isStatusScheduled
 
-  const hasAvailableToOnly = isStatusPastDue && activity.availableTo
+  const hasAvailableToOnly = isStatusAvailable
 
-  const hasTimeToComplete =
-    (isStatusScheduled || isStatusPastDue || isStatusInProgress) &&
-    activity.isTimedActivityAllow &&
-    !!activity.timeToComplete
+  const hasTimeToComplete = isStatusInProgress && activity.isTimerSet && !!activity.timeLeftToComplete
+
+  const convert = (date: Date): string => {
+    const convertResult = convertToTimeOnNoun(date)
+    if (convertResult.translationKey) {
+      return t(convertResult.translationKey)
+    } else {
+      return convertResult.formattedDate!
+    }
+  }
 
   return (
     <>
-      {hasSceduledAt && <small>{`${t("activity_due_date.scheduled_at")} ${activity.scheduledAt}`}</small>}
+      {hasScheduledAt && <small>{`${t("activity_due_date.scheduled_at")} ${convert(activity.scheduledAt!)}`}</small>}
 
       {hasAvailableFromTo && (
         <small>
-          {`${t("activity_due_date.available")} ${activity.availableFrom} ${t("activity_due_date.to")} ${
-            activity.availableTo
-          }`}
+          {`${t("activity_due_date.available")} ${convert(activity.availableFrom!)} ${t(
+            "activity_due_date.to",
+          )} ${convert(activity.availableTo!)}`}
         </small>
       )}
 
-      {hasAvailableToOnly && <small>{`${t("activity_due_date.to")} ${activity.availableTo}`}</small>}
+      {hasAvailableToOnly && <small>{`${t("activity_due_date.to")} ${convert(activity.availableTo!)}`}</small>}
 
-      {hasTimeToComplete && <small>{`${t("time_to_complete_hm", { ...activity.timeToComplete })}`}</small>}
+      {hasTimeToComplete && <small>{`${t("time_to_complete_hm", activity.timeLeftToComplete!)}`}</small>}
     </>
   )
 }

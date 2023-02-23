@@ -8,6 +8,7 @@ export * from "./validation"
 export * from "./storage"
 export * from "./constants"
 export * from "./string"
+export * from "./convert"
 
 // Common
 export { enumToArray } from "./enumToArray"
