@@ -1,20 +1,21 @@
 import { useState } from "react"
 
 import classNames from "classnames"
-import { Col, Container, Row, Spinner } from "react-bootstrap"
+import { Col, Container, Row } from "react-bootstrap"
 
 import CustomModal from "../../Modal"
 import { useActivityGroups } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
+import { AppletDetailsDto } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 
 interface ActivityListWidgetProps {
-  appletId: string | number
+  appletDetails?: AppletDetailsDto
 }
 
-export const ActivityGroupList = ({ appletId }: ActivityListWidgetProps) => {
+export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const [isAboutOpen, setIsAboutOpen] = useState(false)
 
@@ -26,25 +27,7 @@ export const ActivityGroupList = ({ appletId }: ActivityListWidgetProps) => {
     setIsAboutOpen(false)
   }
 
-  const { groups, isLoading, isError, appletDetails } = useActivityGroups(String(appletId))
-
-  if (isLoading) {
-    return (
-      <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
-        <Spinner as="div" animation="border" role="status" aria-hidden="true" />
-      </Container>
-    )
-  }
-
-  if (isError) {
-    return (
-      <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
-        <span>
-          You have reached this URL in error. Please reach out to the organizer of this applet for further assistance.
-        </span>
-      </Container>
-    )
-  }
+  const { groups } = useActivityGroups(appletDetails)
 
   return (
     <Container fluid>

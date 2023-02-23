@@ -1,24 +1,18 @@
 import classNames from "classnames"
-import { Spinner } from "react-bootstrap"
 
-import { useInvitationQuery } from "../api"
-import { useInvitationTranslation } from "../lib"
+import { InvitationDetails, useInvitationTranslation } from "../lib"
 import { InvitationContent } from "./InvitationContent"
 import { InvitationHeader } from "./InvitationHeader"
 
 import { Logo, PageMessage } from "~/shared/ui"
 
 interface InvitationProps {
-  keyParams: string
   actionComponent: JSX.Element
+  invite?: InvitationDetails
 }
 
-export const Invitation = ({ keyParams, actionComponent }: InvitationProps) => {
+export const Invitation = ({ invite, actionComponent }: InvitationProps) => {
   const { t } = useInvitationTranslation()
-
-  const { isError, data, isLoading } = useInvitationQuery(keyParams)
-
-  const invite = data?.data?.result
 
   if (invite?.status === "approved") {
     return <PageMessage message={t("invitationAlreadyAccepted")} />
@@ -26,19 +20,6 @@ export const Invitation = ({ keyParams, actionComponent }: InvitationProps) => {
 
   if (invite?.status === "declined") {
     return <PageMessage message={t("invitationAlreadyDeclined")} />
-  }
-
-  if (isError) {
-    return <PageMessage message={t("invitationAlreadyRemoved")} />
-  }
-
-  if (isLoading) {
-    return (
-      <div className={classNames("d-flex", "justify-content-center", "align-items-center", "text-center")}>
-        <div className="loading">{t("loadingInvitation")}</div>
-        <Spinner animation="border" variant="primary" />
-      </div>
-    )
   }
 
   return (
