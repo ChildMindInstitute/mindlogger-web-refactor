@@ -8,7 +8,9 @@ import { InvitationPage } from "./Invitation"
 import { InvitationAcceptPage } from "./InvitationAccept"
 import { InvitationDeclinePage } from "./InvitationDecline"
 import LoginPage from "./Login"
+import { PrivateJoinPage } from "./PrivateJoin"
 import Profile from "./Profile"
+import { PublicJoinPage } from "./PublicJoin"
 import RecoveryPassword from "./RecoveryPassword"
 import Settings from "./Settings"
 import SignupPage from "./Signup"
@@ -38,6 +40,7 @@ const ApplicationRouter = (): JSX.Element | null => {
             <Route path={ROUTES.profile.path} element={<Profile />} />
             <Route path={ROUTES.settings.path} element={<Settings />} />
             <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
+            <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
             <Route path={ROUTES.invitationAccept.path} element={<InvitationAcceptPage />} />
             <Route path={ROUTES.invitationDecline.path} element={<InvitationDeclinePage />} />
 
@@ -55,6 +58,16 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.forgotPassword.path} element={<ForgotPassword />} />
       <Route path={ROUTES.changePassword.path} element={<RecoveryPassword />} />
       <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
+      <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
+      <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
+
+      <Route path="/test">
+        <Route index element={<div>test </div>} />
+        <Route path="some">
+          <Route index element={<div>test/some</div>} />
+          <Route path=":id" element={<div>tes/some/id</div>} />
+        </Route>
+      </Route>
 
       <Route path="/test">
         <Route index element={<div>test </div>} />

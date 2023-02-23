@@ -12,10 +12,17 @@ function invitationService() {
       return axiosService.get<GetInvitationSuccessResponse>(`/invitations/${payload.invitationId}`)
     },
     acceptInvitation(payload: AcceptInvitationByIdPayload) {
-      return axiosService.post(`/invitations/approve/${payload.invitationId}`)
+      return axiosService.post(`/invitations/${payload.invitationId}/accept`)
     },
     declineInvitation(payload: DeclineInvitationByIdPayload) {
-      return axiosService.post(`/invitations/decline/${payload.invitationId}`)
+      return axiosService.post(`/invitations/${payload.invitationId}/decline`)
+    },
+
+    getPrivateInvitationById(payload: GetInvitationByIdPayload) {
+      return axiosService.get<GetInvitationSuccessResponse>(`/invitations/private/${payload.invitationId}`)
+    },
+    acceptPrivateInvitation(payload: AcceptInvitationByIdPayload) {
+      return axiosService.post(`/invitations/private/${payload.invitationId}/accept`)
     },
   }
 }
