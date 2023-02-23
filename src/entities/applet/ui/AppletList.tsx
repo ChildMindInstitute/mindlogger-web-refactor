@@ -6,9 +6,17 @@ import { Applet } from "../lib/applet.schema"
 import AppletCard from "./AppletCard"
 
 const AppletList = () => {
-  const { data, isLoading } = useAppletListQuery()
+  const { data, isLoading, isError, error } = useAppletListQuery()
 
   const applets = data?.data?.result as Applet[]
+
+  if (isError) {
+    return (
+      <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
+        <span>{error.evaluatedMessage}</span>
+      </Container>
+    )
+  }
 
   return (
     <Row className={classNames("applet-list", "justify-content-center", { "h-100": isLoading })}>
