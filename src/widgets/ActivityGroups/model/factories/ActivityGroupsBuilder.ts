@@ -134,6 +134,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       isTimerSet: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
+      items: [],
     }
 
     if (isFlow) {

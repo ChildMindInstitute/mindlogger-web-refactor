@@ -32,6 +32,7 @@ for (let i = 0; i < 3; i++) {
       availableTo: new Date(),
       scheduledAt: null,
       timeLeftToComplete: null,
+      items: [],
     })
   }
 }
