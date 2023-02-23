@@ -21,7 +21,7 @@ const AppletCard = ({ applet }: AppletCardProps) => {
       type="link"
       id={applet.id}
       title={applet.displayName}
-      description={applet.description.en}
+      description={applet.description}
       imageSrc={applet.image}
       onClick={onAppletCardClick}
     />

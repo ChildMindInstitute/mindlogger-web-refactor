@@ -1,4 +1,4 @@
-import { HourMinute, Language } from "../../utils"
+import { HourMinute } from "../../utils"
 import { BaseSuccessListResponse, BaseSuccessResponse } from "./base"
 
 export type GetAppletDetailsByIdPayload = {
@@ -20,7 +20,7 @@ export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDto>
 export type ActivityRecordDto = {
   id: string
   name: string
-  description: Record<Language, string>
+  description: string
   image: string
   isReviewable: boolean
   isSkippable: boolean
@@ -32,7 +32,7 @@ export type ActivityFlowRecordDto = {
   id: string
   name: string
   image: string
-  description: Record<Language, string>
+  description: string
   hideBadge: boolean
   isSingleReport: boolean
   ordering: boolean
@@ -44,7 +44,7 @@ export type AppletDetailsDto = {
   name?: string
   image: string
   displayName: string
-  description: Record<Language, string>
+  description: string
   activities: ActivityRecordDto[]
   activityFlows: ActivityFlowRecordDto[]
 }
@@ -70,7 +70,7 @@ type AppletDto = {
   id: string
   image?: string
   displayName: string
-  description: Record<Language, string>
+  description: string
   numberOverdue?: number
 
   theme?: {

@@ -16,7 +16,7 @@ interface ActivityListWidgetProps {
 }
 
 export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) => {
-  const { t, language } = useCustomTranslation()
+  const { t } = useCustomTranslation()
   const [isAboutOpen, setIsAboutOpen] = useState(false)
 
   const onCardAboutClick = () => {
@@ -32,7 +32,7 @@ export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) =>
   return (
     <Container fluid>
       <Row className={classNames("mt-5", "mb-3")}>
-        <Col lg={3}>
+        <Col lg={3} className={classNames("d-flex", "justify-content-center")}>
           {appletDetails && (
             <CustomCard
               type="card"
@@ -56,7 +56,7 @@ export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) =>
         show={isAboutOpen}
         onHide={onAboutModalClose}
         title={t("about")}
-        label={appletDetails?.description[language]}
+        label={appletDetails?.description}
       />
     </Container>
   )
