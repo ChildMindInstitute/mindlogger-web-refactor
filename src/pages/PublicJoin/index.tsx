@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 
-import { FetchPublicActivityList } from "../../widgets/ActivityGroups"
+import { FetchActivities } from "../../widgets/ActivityGroups"
 
 export const PublicJoinPage = () => {
   const { joinLinkKey } = useParams()
@@ -13,5 +13,5 @@ export const PublicJoinPage = () => {
     )
   }
 
-  return <FetchPublicActivityList publicAppletKey={joinLinkKey} />
+  return <FetchActivities isPublic={true} publicAppletKey={joinLinkKey} />
 }

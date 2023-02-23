@@ -1,2 +1,2 @@
-export * from "./FetchActivityList"
-export * from "./FetchPublicActivityList"
+export * from "./FetchActivities"
+export * from "./FetchActivities"

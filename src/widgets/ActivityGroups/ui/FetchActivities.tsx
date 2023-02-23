@@ -2,14 +2,22 @@ import classNames from "classnames"
 import { Container, Spinner } from "react-bootstrap"
 
 import { useAppletByIdQuery } from "../api"
-import { ActivityGroupList } from "./ActivityList"
+import { ActivityGroupList } from "./ActivityGroupList"
 
-interface FetchActivityListProps {
+type FetchPublicActivitiesProps = {
+  isPublic: true
+  publicAppletKey: string
+}
+
+type FetchPrivateActivitiesProps = {
+  isPublic: false
   appletId: string
 }
 
-export const FetchActivityList = ({ appletId }: FetchActivityListProps) => {
-  const { isError, isLoading, data } = useAppletByIdQuery(appletId)
+type FetchActivitiesProps = FetchPublicActivitiesProps | FetchPrivateActivitiesProps
+
+export const FetchActivities = (props: FetchActivitiesProps) => {
+  const { isError, isLoading, data, error } = useAppletByIdQuery(props)
 
   if (isLoading) {
     return (
@@ -22,9 +30,7 @@ export const FetchActivityList = ({ appletId }: FetchActivityListProps) => {
   if (isError) {
     return (
       <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
-        <span>
-          You have reached this URL in error. Please reach out to the organizer of this applet for further assistance.
-        </span>
+        <span>{error.evaluatedMessage}</span>
       </Container>
     )
   }
