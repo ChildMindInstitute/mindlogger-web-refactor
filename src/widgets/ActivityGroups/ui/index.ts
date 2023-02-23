@@ -1,2 +1,1 @@
-export * from "./FetchActivities"
-export * from "./FetchActivities"
+export * from "./ActivityGroups"

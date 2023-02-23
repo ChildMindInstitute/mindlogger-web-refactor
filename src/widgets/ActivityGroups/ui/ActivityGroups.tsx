@@ -16,7 +16,7 @@ type FetchPrivateActivitiesProps = {
 
 type FetchActivitiesProps = FetchPublicActivitiesProps | FetchPrivateActivitiesProps
 
-export const FetchActivities = (props: FetchActivitiesProps) => {
+export const ActivityGroups = (props: FetchActivitiesProps) => {
   const { isError, isLoading, data, error } = useAppletByIdQuery(props)
 
   if (isLoading) {

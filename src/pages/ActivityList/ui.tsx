@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 
-import { FetchActivities } from "~/widgets/ActivityGroups"
+import { ActivityGroups } from "~/widgets/ActivityGroups"
 
 const ActivityListPage = () => {
   const { appletId } = useParams()
@@ -13,7 +13,7 @@ const ActivityListPage = () => {
     )
   }
 
-  return <FetchActivities isPublic={false} appletId={appletId} />
+  return <ActivityGroups isPublic={false} appletId={appletId} />
 }
 
 export default ActivityListPage
