@@ -4,5 +4,5 @@ import { PageMessage } from "~/shared/ui"
 export const InvitationDeclinePage = () => {
   const { t } = useInvitationTranslation()
 
-  return <PageMessage message={t("invitationRemoved")} />
+  return <PageMessage message={t("invitationDeclined")} />
 }

@@ -23,11 +23,7 @@ const ActivityCard = ({ activity, disabled }: ActivityCardProps) => {
   }
 
   return (
-    <Button
-      className="button-shadow ds-activity-button w-100"
-      variant="link"
-      onClick={onActivityCardClick}
-      disabled={isDisabled}>
+    <Button className="ds-activity-button w-100" variant="link" onClick={onActivityCardClick} disabled={isDisabled}>
       {activity.image && <img className="activity-image" src={activity.image} />}
 
       <div className="activity-data">
