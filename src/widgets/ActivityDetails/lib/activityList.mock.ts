@@ -1,9 +1,7 @@
 import { ActivityListItem, ActivityStatus, ActivityType } from "~/entities/activity"
 
-export const mockActivityList: ActivityListItem[] = []
-
-for (let i = 0; i < 5; i++) {
-  mockActivityList.push({
+export const createMockActivityDetails = (i: number) => {
+  return {
     activityId: (i * 100 + i).toString(),
     eventId: "",
     activityFlowDetails: null,
@@ -21,6 +19,19 @@ for (let i = 0; i < 5; i++) {
     availableTo: new Date(),
     scheduledAt: null,
     timeLeftToComplete: null,
+    splashScreen: "",
+    showAllAtOnce: false,
+    isSkippable: false,
+    isReviewable: false,
+    responseIsEditable: false,
+    ordering: 0,
     items: [],
-  })
+  }
+}
+
+export const mockActivityList: ActivityListItem[] = []
+export const mockActivityDetails: ActivityListItem = createMockActivityDetails(1)
+
+for (let i = 0; i < 5; i++) {
+  mockActivityList.push(createMockActivityDetails(i))
 }

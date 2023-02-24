@@ -5,9 +5,9 @@ export interface GetActivityByIdPayload {
   activityId: string
 }
 
-export type SuccessResponseActivityById = BaseSuccessResponse<ResponseActivityById>
+export type SuccessResponseActivityById = BaseSuccessResponse<ActivityDetailsDto>
 
-interface ResponseActivityById {
+export interface ActivityDetailsDto {
   id: string
   guid: string
   name: string

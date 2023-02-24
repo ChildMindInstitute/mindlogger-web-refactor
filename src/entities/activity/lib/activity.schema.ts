@@ -1,3 +1,4 @@
+import { ActivityItem } from "~/entities/item/lib/item.schema"
 import { HourMinute } from "~/shared/utils"
 
 export type ActivityListItem = {
@@ -27,7 +28,14 @@ export type ActivityListItem = {
   isTimerSet: boolean
   timeLeftToComplete?: HourMinute | null
 
-  items: Array<unknown> // TODO: Change here to actual interface of item
+  splashScreen: string
+  showAllAtOnce: boolean
+  isSkippable: boolean
+  isReviewable: boolean
+  responseIsEditable: boolean
+  ordering: number
+
+  items: Array<ActivityItem> // TODO: Change here to actual interface of item
 }
 
 export const enum ActivityStatus {

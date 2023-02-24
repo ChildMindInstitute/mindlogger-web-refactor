@@ -1,4 +1,4 @@
-import { GetActivityByIdPayload, SuccessResponseActivityById } from "../types/activity"
+import { GetActivityByIdPayload, SuccessResponseActivityById } from "../types"
 import axiosService from "./axios"
 
 function activityService() {

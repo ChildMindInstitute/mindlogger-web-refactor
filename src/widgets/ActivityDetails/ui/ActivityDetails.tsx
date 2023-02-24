@@ -1,11 +1,13 @@
 import classNames from "classnames"
 import { Container, Row, Col } from "react-bootstrap"
 
-import { ActivityCardItemList } from "../../../entities/item/ui/ActivityCardItemList"
-import { useAppletByIdQuery } from "../../ActivityGroups"
 import { mockActivityList } from "../lib/activityList.mock"
+import { useActivityDetails } from "../lib/useActivityDetails"
+import { ActivityItemList } from "./ActivityItemList"
+import { BackNavigateButton } from "./BackNavigateButton"
 
 import { ActivityProgressPreviewList } from "~/entities/activity"
+import { BaseProgressBar } from "~/shared/ui"
 import CustomCard from "~/shared/ui/Card"
 
 interface ActivityDetailsWidgetProps {
@@ -13,16 +15,19 @@ interface ActivityDetailsWidgetProps {
   activityId: string
 }
 
-export const ActivityDetailsWidget = ({ appletId, activityId }: ActivityDetailsWidgetProps) => {
-  const { data } = useAppletByIdQuery({ isPublic: false, appletId })
+export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
+  const { appletDetails, activityDetails } = useActivityDetails(props)
 
-  const appletDetails = data?.data?.result
-
-  const isOnePageAssessment = true // Mock
-  const isSummaryScreen = false // Mock
+  // const activityDetails = activityById?.data?.result
 
   return (
     <Container>
+      <Row className="mt-5">
+        <Col lg={3}>
+          <BackNavigateButton />
+        </Col>
+        <Col lg={9}>{!activityDetails?.showAllAtOnce && <BaseProgressBar percentage={30} />}</Col>
+      </Row>
       <Row className="mt-2 activity">
         <Col xl={3}>
           <div className={classNames("d-flex", "justify-content-center")}>
@@ -40,10 +45,7 @@ export const ActivityDetailsWidget = ({ appletId, activityId }: ActivityDetailsW
           <ActivityProgressPreviewList activities={mockActivityList} />
         </Col>
         <Col xl={9}>
-          {/* Should be implemented after ITEMs */}
-          {/* {isSummaryScreen && <ActivitySummary />} */}
-          {!isSummaryScreen && isOnePageAssessment && <ActivityCardItemList />}
-          {/* {!isSummaryScreen && !isOnePageAssessment && _.map(items.slice(0, availableItems).reverse())} */}
+          <ActivityItemList activityDetails={mockActivityList[0]} />
         </Col>
       </Row>
     </Container>

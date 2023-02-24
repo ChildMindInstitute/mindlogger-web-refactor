@@ -1,11 +1,15 @@
-import { mockMarkdown } from "../lib/mockMarkDown"
+import { ActivityItem } from "../lib/item.schema"
 
-import { CardItem } from "~/shared/ui/CardItem"
+import { TextItem, CardItem } from "~/shared/ui"
 
 interface ActivityCardItemProps {
-  activityItem: unknown
+  activityItem: ActivityItem
 }
 
-export const ActivityCardItem = () => {
-  return <CardItem markdown={mockMarkdown} />
+export const ActivityCardItem = ({ activityItem }: ActivityCardItemProps) => {
+  return (
+    <CardItem markdown={activityItem.question}>
+      <TextItem />
+    </CardItem>
+  )
 }

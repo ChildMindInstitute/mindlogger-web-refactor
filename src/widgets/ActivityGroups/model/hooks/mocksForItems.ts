@@ -32,6 +32,12 @@ for (let i = 0; i < 3; i++) {
       availableTo: new Date(),
       scheduledAt: null,
       timeLeftToComplete: null,
+      showAllAtOnce: false,
+      splashScreen: "",
+      isReviewable: false,
+      isSkippable: false,
+      responseIsEditable: false,
+      ordering: j,
       items: [],
     })
   }

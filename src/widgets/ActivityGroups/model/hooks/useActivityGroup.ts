@@ -14,7 +14,7 @@ type UseActivityGroupsReturn = {
   appletDetails?: AppletDetailsDto
 }
 
-export const useActivityGroups = (appletDetails?: AppletDetailsDto): UseActivityGroupsReturn => {
+export const useActivityGroups = (appletDetails: AppletDetailsDto): UseActivityGroupsReturn => {
   const builder = createActivityGroupsBuilder({
     allAppletActivities: allActivityMocks,
     appletId: "apid1",

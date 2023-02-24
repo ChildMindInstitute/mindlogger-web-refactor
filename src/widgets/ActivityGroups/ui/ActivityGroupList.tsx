@@ -12,7 +12,7 @@ import { CustomCard } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 
 interface ActivityListWidgetProps {
-  appletDetails?: AppletDetailsDto
+  appletDetails: AppletDetailsDto
 }
 
 export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) => {

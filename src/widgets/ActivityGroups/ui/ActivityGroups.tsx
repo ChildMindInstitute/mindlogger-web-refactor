@@ -35,5 +35,7 @@ export const ActivityGroups = (props: FetchActivitiesProps) => {
     )
   }
 
-  return <ActivityGroupList appletDetails={data?.data?.result} />
+  const appletDetails = data?.data?.result
+
+  return appletDetails && <ActivityGroupList appletDetails={appletDetails} />
 }

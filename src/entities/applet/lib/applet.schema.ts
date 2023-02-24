@@ -24,7 +24,6 @@ const ActivityFlowSchema = z.object({
 
 export const AppletSchema = z.object({
   id: z.string(),
-  name: z.string().nullable(),
   image: z.string(),
   displayName: z.string(),
   description: z.string(),

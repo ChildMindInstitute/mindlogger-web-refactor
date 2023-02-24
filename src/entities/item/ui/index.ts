@@ -1,1 +1,2 @@
-export * from "./CardItem"
+export * from "./ActivityCardItem"
+export * from "./ActivityCardItemList"
