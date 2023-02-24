@@ -41,10 +41,12 @@ export type ActivityFlowRecordDto = {
 
 export type AppletDetailsDto = {
   id: string
-  name?: string
-  image: string
   displayName: string
+  version: string
   description: string
+  about: string
+  image: string
+  watermark: string
   activities: ActivityRecordDto[]
   activityFlows: ActivityFlowRecordDto[]
 }
