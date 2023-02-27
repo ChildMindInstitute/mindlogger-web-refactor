@@ -4,11 +4,11 @@ const ActivitySchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
-  image: z.string().nullable(),
+  image: z.string().optional(),
   isReviewable: z.boolean(),
   isSkippable: z.boolean(),
-  ordering: z.boolean(),
-  splashScreen: z.string(),
+  ordering: z.number(),
+  splashScreen: z.string().optional(),
 })
 
 const ActivityFlowSchema = z.object({
@@ -37,3 +37,4 @@ export const AppletDetailsSchema = AppletBaseSchema.extend({
 })
 
 export type AppletBase = z.infer<typeof AppletBaseSchema>
+export type AppletDetails = z.infer<typeof AppletDetailsSchema>

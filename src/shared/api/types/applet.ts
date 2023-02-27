@@ -19,7 +19,7 @@ export type GetPublicAppletActivityByIdPayload = {
 
 // API Responses
 export type AppletListSuccessResponse = BaseSuccessListResponse<AppletBaseDTO>
-export type AppletSuccessResponse = BaseSuccessResponse<AppletBaseDTO>
+export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDTO>
 
 export type AppletBaseDTO = {
   id: string

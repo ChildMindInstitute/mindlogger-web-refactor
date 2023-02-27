@@ -7,12 +7,12 @@ import CustomModal from "../../Modal"
 import { useActivityGroups } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
-import { AppletBaseDTO } from "~/shared/api"
+import { AppletDetails } from "~/entities/applet"
 import { CustomCard } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 
 interface ActivityListWidgetProps {
-  appletDetails: AppletBaseDTO
+  appletDetails: AppletDetails
 }
 
 export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) => {
