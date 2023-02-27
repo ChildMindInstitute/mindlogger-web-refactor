@@ -1,5 +1,7 @@
+import { useMemo } from "react"
+
 import { ActivityListItem } from "../lib"
-import { getRandomInt } from "../lib/getRandomInt"
+import activityBuilder from "../model/activityBuilder"
 import { ActivityProgressPreviewCard } from "./ActivityProgressPreviewCard"
 
 interface ActivityProgressPreviewListProps {
@@ -7,16 +9,7 @@ interface ActivityProgressPreviewListProps {
 }
 
 export const ActivityProgressPreviewList = ({ activities }: ActivityProgressPreviewListProps) => {
-  const activitiesPreview = activities.map(activity => {
-    const itemsLength = 10 // activity.items.length in the real implementation
-    const currentProgressItem = getRandomInt(10) // TODO: When redux for progress will implemented, add selector to progress activity and get activity order
-
-    return {
-      id: activity.activityId,
-      title: activity.name,
-      progress: (currentProgressItem / itemsLength) * 100,
-    }
-  })
+  const activitiesPreview = useMemo(() => activityBuilder.convertToActivityProgressPreview(activities), [activities])
 
   return (
     <>

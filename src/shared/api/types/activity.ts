@@ -1,11 +1,11 @@
 import { BaseSuccessResponse } from "./base"
-import { Item } from "./item"
+import { ItemBaseDTO } from "./item"
 
 export interface GetActivityByIdPayload {
   activityId: string
 }
 
-export type SuccessResponseActivityById = BaseSuccessResponse<ActivityDetailsDTO>
+export type SuccessResponseActivityById = BaseSuccessResponse<ActivityBaseDTO>
 
 export type ActivityBaseDTO = {
   id: string
@@ -19,8 +19,5 @@ export type ActivityBaseDTO = {
   isReviewable: boolean
   responseIsEditable: boolean
   ordering: number
-}
-
-export type ActivityDetailsDTO = ActivityBaseDTO & {
-  items: Item[]
+  items: ItemBaseDTO[]
 }

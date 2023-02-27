@@ -49,3 +49,9 @@ export const enum ActivityType {
   NotDefined = 0,
   Flanker = 1,
 }
+
+export type ActivityProgressPreview = {
+  id: string
+  title: string
+  progress: number
+}
