@@ -2,7 +2,7 @@ import classNames from "classnames"
 import { Container, Row, Spinner } from "react-bootstrap"
 
 import { useAppletListQuery } from "../api"
-import appletBuilder from "../model/AppletBuilder"
+import { appletBuilder } from "../model"
 import AppletCard from "./AppletCard"
 
 const AppletList = () => {

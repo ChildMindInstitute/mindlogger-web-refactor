@@ -36,5 +36,4 @@ export class AppletBuilder {
   }
 }
 
-const appletBuilder = new AppletBuilder()
-export default appletBuilder
+export const appletBuilder = new AppletBuilder()
