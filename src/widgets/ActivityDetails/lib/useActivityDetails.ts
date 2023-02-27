@@ -2,7 +2,7 @@ import { useAppletByIdQuery } from "../../ActivityGroups"
 import { mockActivityDetails } from "./activityList.mock"
 
 import { ActivityListItem } from "~/entities/activity"
-import { AppletDetailsDto } from "~/shared/api"
+import { AppletBaseDTO } from "~/shared/api"
 
 interface UseActivityDetailsProps {
   appletId: string
@@ -10,7 +10,7 @@ interface UseActivityDetailsProps {
 }
 
 interface UseActivityDetailsReturn {
-  appletDetails: AppletDetailsDto | undefined
+  appletDetails: AppletBaseDTO | undefined
   activityDetails: ActivityListItem | undefined
   isError: boolean
   isLoading: boolean

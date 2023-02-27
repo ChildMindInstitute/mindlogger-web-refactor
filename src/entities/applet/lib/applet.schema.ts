@@ -13,22 +13,27 @@ const ActivitySchema = z.object({
 
 const ActivityFlowSchema = z.object({
   id: z.string(),
+  guid: z.string(),
   name: z.string(),
-  image: z.string(),
   description: z.string(),
-  hideBadge: z.boolean(),
   isSingleReport: z.boolean(),
-  ordering: z.boolean(),
-  items: z.array(z.object({ activityId: z.string() })),
+  hideBadge: z.boolean(),
+  ordering: z.number(),
+  activityIds: z.array(z.string()),
 })
 
-export const AppletSchema = z.object({
+export const AppletBaseSchema = z.object({
   id: z.string(),
-  image: z.string(),
   displayName: z.string(),
   description: z.string(),
+  about: z.string(),
+  image: z.string().optional(),
+  watermark: z.string().optional(),
+})
+
+export const AppletDetailsSchema = AppletBaseSchema.extend({
   activities: z.array(ActivitySchema),
   activityFlows: z.array(ActivityFlowSchema),
 })
 
-export type Applet = z.infer<typeof AppletSchema>
+export type AppletBase = z.infer<typeof AppletBaseSchema>

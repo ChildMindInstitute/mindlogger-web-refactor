@@ -1,9 +1,9 @@
 import {
   AppletListSuccessResponse,
   AppletSuccessResponse,
-  GetAppletDetailsByIdPayload,
+  GetAppletByIdPayload,
   GetPublicAppletActivityByIdPayload,
-  GetPublicAppletDetailsByIdPayload,
+  GetPublicAppletByIdPayload,
 } from "../types/applet"
 import axiosService from "./axios"
 
@@ -13,10 +13,10 @@ function appletService() {
       return axiosService.get<AppletListSuccessResponse>("/applets")
     },
 
-    getById(payload: GetAppletDetailsByIdPayload) {
+    getById(payload: GetAppletByIdPayload) {
       return axiosService.get<AppletSuccessResponse>(`/applets/${payload.appletId}`)
     },
-    getPublicById(payload: GetPublicAppletDetailsByIdPayload) {
+    getPublicById(payload: GetPublicAppletByIdPayload) {
       return axiosService.get<AppletSuccessResponse>(`/public/applet/${payload.publicAppletKey}`)
     },
     getPublicAppletActivityById(payload: GetPublicAppletActivityByIdPayload) {

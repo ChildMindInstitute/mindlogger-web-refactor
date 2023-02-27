@@ -2,13 +2,13 @@ import classNames from "classnames"
 import { Container, Row, Spinner } from "react-bootstrap"
 
 import { useAppletListQuery } from "../api"
-import { Applet } from "../lib/applet.schema"
+import appletBuilder from "../model/AppletBuilder"
 import AppletCard from "./AppletCard"
 
 const AppletList = () => {
   const { data, isLoading, isError, error } = useAppletListQuery()
 
-  const applets = data?.data?.result as Applet[]
+  const applets = appletBuilder.convertToAppletList(data?.data?.result)
 
   if (isError) {
     return (

@@ -1,11 +1,14 @@
 import { HourMinute } from "../../utils"
+import { ActivityBaseDTO } from "./activity"
 import { BaseSuccessListResponse, BaseSuccessResponse } from "./base"
 
-export type GetAppletDetailsByIdPayload = {
+// API payloads
+
+export type GetAppletByIdPayload = {
   appletId: string
 }
 
-export type GetPublicAppletDetailsByIdPayload = {
+export type GetPublicAppletByIdPayload = {
   publicAppletKey: string
 }
 
@@ -14,41 +17,43 @@ export type GetPublicAppletActivityByIdPayload = {
   activityId: string
 }
 
-export type AppletListSuccessResponse = BaseSuccessListResponse<AppletDetailsDto>
-export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDto>
+// API Responses
+export type AppletListSuccessResponse = BaseSuccessListResponse<AppletBaseDTO>
+export type AppletSuccessResponse = BaseSuccessResponse<AppletBaseDTO>
 
-export type ActivityRecordDto = {
-  id: string
-  name: string
-  description: string
-  image: string
-  isReviewable: boolean
-  isSkippable: boolean
-  ordering: boolean
-  splashScreen: string
-}
-
-export type ActivityFlowRecordDto = {
-  id: string
-  name: string
-  image: string
-  description: string
-  hideBadge: boolean
-  isSingleReport: boolean
-  ordering: boolean
-  items: Array<{ activityId: string }>
-}
-
-export type AppletDetailsDto = {
+export type AppletBaseDTO = {
   id: string
   displayName: string
   version: string
   description: string
   about: string
-  image: string
-  watermark: string
-  activities: ActivityRecordDto[]
-  activityFlows: ActivityFlowRecordDto[]
+  image?: string
+  watermark?: string
+  themeId: string
+  reportServerIp: string
+  reportPublicKey: string
+  reportRecipients: Array<string>
+  reportIncludeUserId: boolean
+  reportIncludeCaseId: boolean
+  reportEmailBody: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type AppletDetailsDTO = AppletBaseDTO & {
+  activities: ActivityBaseDTO[]
+  activityFlows: ActivityFlowDTO[]
+}
+
+export type ActivityFlowDTO = {
+  id: string
+  guid: string
+  name: string
+  description: string
+  isSingleReport: boolean
+  hideBadge: boolean
+  ordering: number
+  activityIds: Array<string>
 }
 
 export type EventAvailabilityDto = {
@@ -66,25 +71,4 @@ export type EventAvailabilityDto = {
 export type ScheduleEventDto = {
   entityId: string
   availability: EventAvailabilityDto
-}
-
-type AppletDto = {
-  id: string
-  image?: string
-  displayName: string
-  description: string
-  numberOverdue?: number
-
-  theme?: {
-    logo?: string
-    smallLogo?: string
-  } | null
-}
-
-export type AppletsResponse = {
-  result: AppletDto[]
-}
-
-export type AppletDetailsResponse = {
-  result: AppletDetailsDto
 }
