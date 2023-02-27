@@ -1,5 +1,6 @@
 import { ActivityListItem, ActivityProgressPreview } from "../lib"
-import { getRandomInt } from "../lib/getRandomInt"
+
+import { getRandomInt } from "~/shared/utils"
 
 export class ActivityBuilder {
   public convertToActivityProgressPreview(activities: ActivityListItem[]): ActivityProgressPreview[] {
