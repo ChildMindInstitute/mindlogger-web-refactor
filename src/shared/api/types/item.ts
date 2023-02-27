@@ -1,4 +1,4 @@
-export interface Item {
+export interface ItemBaseDTO {
   id: string
   question: string
   responseType: string

@@ -1,5 +1,5 @@
 import { BaseSuccessResponse } from "./base"
-import { Item } from "./item"
+import { ItemBaseDTO } from "./item"
 
 export interface GetActivityByIdPayload {
   activityId: string
@@ -19,5 +19,5 @@ export interface ActivityDetailsDto {
   isReviewable: boolean
   responseIsEditable: boolean
   ordering: number
-  items: Item[]
+  items: ItemBaseDTO[]
 }

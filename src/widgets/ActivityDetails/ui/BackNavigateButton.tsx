@@ -1,15 +1,14 @@
 import { ArrowLeft } from "react-bootstrap-icons"
-import { useNavigate } from "react-router-dom"
 
 import { BasicButton } from "~/shared/ui"
-import { useCustomTranslation } from "~/shared/utils"
+import { useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 export const BackNavigateButton = () => {
   const { t } = useCustomTranslation()
-  const navigate = useNavigate()
+  const navigator = useCustomNavigation()
 
   const onBackButtonClick = () => {
-    navigate(-1)
+    navigator.goBack()
   }
 
   return (

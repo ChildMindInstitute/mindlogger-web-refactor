@@ -61,22 +61,6 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
       <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
 
-      <Route path="/test">
-        <Route index element={<div>test </div>} />
-        <Route path="some">
-          <Route index element={<div>test/some</div>} />
-          <Route path=":id" element={<div>tes/some/id</div>} />
-        </Route>
-      </Route>
-
-      <Route path="/test">
-        <Route index element={<div>test </div>} />
-        <Route path="some">
-          <Route index element={<div>test/some</div>} />
-          <Route path=":id" element={<div>tes/some/id</div>} />
-        </Route>
-      </Route>
-
       <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
     </Routes>
   )
