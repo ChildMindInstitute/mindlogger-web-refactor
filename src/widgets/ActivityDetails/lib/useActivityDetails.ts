@@ -1,7 +1,7 @@
-import { useAppletByIdQuery } from "../../ActivityGroups"
 import { mockActivityDetails } from "./activityList.mock"
 
 import { ActivityListItem } from "~/entities/activity"
+import { useAppletByIdQuery } from "~/entities/applet"
 import { AppletBaseDTO } from "~/shared/api"
 
 interface UseActivityDetailsProps {
