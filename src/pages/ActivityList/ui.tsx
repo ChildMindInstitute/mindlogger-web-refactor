@@ -1,16 +1,14 @@
 import { useParams } from "react-router-dom"
 
+import { useCustomTranslation } from "~/shared/utils"
 import { ActivityGroups } from "~/widgets/ActivityGroups"
 
 const ActivityListPage = () => {
   const { appletId } = useParams()
+  const { t } = useCustomTranslation()
 
   if (!appletId) {
-    return (
-      <div className="applet-error">
-        You have reached this URL in error. Please reach out to the organizer of this applet for further assistance.
-      </div>
-    )
+    return <div>{t("wrondLinkParametrError")}</div>
   }
 
   return <ActivityGroups isPublic={false} appletId={appletId} />

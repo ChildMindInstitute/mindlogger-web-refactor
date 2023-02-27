@@ -134,6 +134,13 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       isTimerSet: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
+      isReviewable: false,
+      isSkippable: false,
+      splashScreen: "",
+      responseIsEditable: false,
+      showAllAtOnce: false,
+      ordering: 0,
+      items: [],
     }
 
     if (isFlow) {

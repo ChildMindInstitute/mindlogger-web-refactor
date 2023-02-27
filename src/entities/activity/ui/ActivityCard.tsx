@@ -4,8 +4,9 @@ import { useNavigate, useParams } from "react-router-dom"
 import { ActivityListItem, ActivityStatus } from "../lib"
 import TimeStatusLabel from "./TimeStatusLabel"
 
-import "./style.scss"
 import { ROUTES } from "~/shared/utils"
+
+import "./style.scss"
 
 interface ActivityCardProps {
   activity: ActivityListItem
