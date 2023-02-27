@@ -1,4 +1,5 @@
 import { ActivityListItem, ActivityStatus, ActivityType } from "~/entities/activity"
+import { mockItemList } from "~/entities/item"
 
 export const createMockActivityDetails = (i: number) => {
   return {
@@ -25,7 +26,7 @@ export const createMockActivityDetails = (i: number) => {
     isReviewable: false,
     responseIsEditable: false,
     ordering: 0,
-    items: [],
+    items: mockItemList,
   }
 }
 

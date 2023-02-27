@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 
 import { ActivityListItem } from "../lib"
-import activityBuilder from "../model/activityBuilder"
+import { activityBuilder } from "../model"
 import { ActivityProgressPreviewCard } from "./ActivityProgressPreviewCard"
 
 interface ActivityProgressPreviewListProps {

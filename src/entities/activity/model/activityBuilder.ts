@@ -17,5 +17,4 @@ export class ActivityBuilder {
   }
 }
 
-const activityBuilder = new ActivityBuilder()
-export default activityBuilder
+export const activityBuilder = new ActivityBuilder()
