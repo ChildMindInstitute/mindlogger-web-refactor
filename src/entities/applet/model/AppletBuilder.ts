@@ -1,3 +1,4 @@
+import { activityModel } from "../../activity"
 import { AppletBase, AppletDetails } from "../lib"
 
 import { AppletBaseDTO, AppletDetailsDTO } from "~/shared/api"
@@ -30,7 +31,7 @@ export class AppletBuilder {
       about: applet.about,
       watermark: applet.watermark,
       image: applet.image,
-      activities: applet.activities,
+      activities: activityModel.activityBuilder.convertToActivityList(applet.activities),
       activityFlows: applet.activityFlows,
     }
   }

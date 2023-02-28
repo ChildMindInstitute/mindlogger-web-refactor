@@ -1,6 +1,4 @@
-import { mockActivityDetails } from "./activityList.mock"
-
-import { ActivityListItem, useActivityByIdQuery } from "~/entities/activity"
+import { ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
 import { AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
 
 interface UseActivityDetailsProps {
@@ -10,7 +8,7 @@ interface UseActivityDetailsProps {
 
 interface UseActivityDetailsReturn {
   appletDetails: AppletDetails | null
-  activityDetails: ActivityListItem | undefined
+  activityDetails: ActivityListItem | null
   isError: boolean
   isLoading: boolean
 }
@@ -29,7 +27,7 @@ export const useActivityDetails = ({ appletId, activityId }: UseActivityDetailsP
 
   return {
     appletDetails: appletModel.appletBuilder.convertToAppletDetails(appletById?.data?.result),
-    activityDetails: mockActivityDetails,
+    activityDetails: activityModel.activityBuilder.convertToActivityDetails(activityById?.data?.result),
     isError: isAppletError || isActivityError,
     isLoading: isAppletLoading || isActivityLoading,
   }

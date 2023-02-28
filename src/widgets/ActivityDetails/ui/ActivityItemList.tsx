@@ -6,7 +6,7 @@ interface ActivityItemListProps {
 }
 
 export const ActivityItemList = ({ activityDetails }: ActivityItemListProps) => {
-  const isOnePageAssessment = true // mock
+  const isOnePageAssessment = activityDetails.showAllAtOnce
   const isSummaryScreen = false // Mock
   return (
     <>

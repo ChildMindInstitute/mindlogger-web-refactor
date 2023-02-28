@@ -1,7 +1,7 @@
 import { ActivityItem } from "~/entities/item/lib/item.schema"
 import { HourMinute } from "~/shared/utils"
 
-export type ActivityListItem = {
+export type ActivityBase = {
   activityId: string
   eventId: string
 
@@ -28,13 +28,15 @@ export type ActivityListItem = {
   isTimerSet: boolean
   timeLeftToComplete?: HourMinute | null
 
-  splashScreen: string
+  splashScreen?: string
   showAllAtOnce: boolean
   isSkippable: boolean
   isReviewable: boolean
   responseIsEditable: boolean
   ordering: number
+}
 
+export type ActivityListItem = ActivityBase & {
   items: Array<ActivityItem> // TODO: Change here to actual interface of item
 }
 

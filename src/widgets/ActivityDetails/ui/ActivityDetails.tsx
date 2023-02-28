@@ -1,7 +1,6 @@
 import classNames from "classnames"
 import { Container, Row, Col, Spinner } from "react-bootstrap"
 
-import { mockActivityList } from "../lib/activityList.mock"
 import { useActivityDetails } from "../lib/useActivityDetails"
 import { ActivityItemList } from "./ActivityItemList"
 import { BackNavigateButton } from "./BackNavigateButton"
@@ -18,7 +17,7 @@ interface ActivityDetailsWidgetProps {
 export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
   const { appletDetails, activityDetails, isLoading } = useActivityDetails({
     appletId: props.appletId,
-    activityId: "30",
+    activityId: "30", // Hardcoded
   })
 
   if (isLoading) {
@@ -51,11 +50,9 @@ export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
             )}
           </div>
 
-          <ActivityProgressPreviewList activities={mockActivityList} />
+          {appletDetails?.activities && <ActivityProgressPreviewList activities={appletDetails.activities} />}
         </Col>
-        <Col xl={9}>
-          <ActivityItemList activityDetails={mockActivityList[0]} />
-        </Col>
+        <Col xl={9}>{activityDetails && <ActivityItemList activityDetails={activityDetails} />}</Col>
       </Row>
     </Container>
   )

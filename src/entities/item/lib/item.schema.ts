@@ -9,7 +9,7 @@ export type ActivityItem = {
 
   timer: number
 
-  isSkipable: boolean
+  isSkippable: boolean
   isRandom: boolean
   isAbleToMoveToPrevious: boolean
   hasTextResponse: boolean
