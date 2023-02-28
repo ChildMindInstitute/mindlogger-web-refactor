@@ -7,7 +7,7 @@ export type ActivityListItem = {
 
   name: string
   description: string
-  image?: string | null
+  image: string | null
 
   status: ActivityStatus
   type: ActivityType
@@ -27,15 +27,6 @@ export type ActivityListItem = {
 
   isTimerSet: boolean
   timeLeftToComplete?: HourMinute | null
-
-  splashScreen: string
-  showAllAtOnce: boolean
-  isSkippable: boolean
-  isReviewable: boolean
-  responseIsEditable: boolean
-  ordering: number
-
-  items: Array<ActivityItem> // TODO: Change here to actual interface of item
 }
 
 export const enum ActivityStatus {
@@ -48,6 +39,20 @@ export const enum ActivityStatus {
 export const enum ActivityType {
   NotDefined = 0,
   Flanker = 1,
+}
+
+export type ActivityDetails = {
+  id: string
+  name: string
+  description: string
+  image: string | ""
+  splashScreen: string | ""
+  showAllAtOnce: boolean
+  isSkippable: boolean
+  isReviewable: boolean
+  responseIsEditable: boolean
+  ordering: number
+  items: Array<ActivityItem>
 }
 
 export type ActivityProgressPreview = {

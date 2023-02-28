@@ -1,34 +1,31 @@
-import { z } from "zod"
+export type ActivityFlow = {
+  id: string
+  guid: string
+  name: string
+  description: string
+  image: string | ""
+  isSingleReport: boolean
+  hideBadge: boolean
+  ordering: number
+  activityIds: string[]
+}
 
-const ActivitySchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  description: z.string(),
-  image: z.string().nullable(),
-  isReviewable: z.boolean(),
-  isSkippable: z.boolean(),
-  ordering: z.boolean(),
-  splashScreen: z.string(),
-})
+export type AppletListItem = {
+  id: string
+  displayName: string
+  description: string
+  about: string
+  image: string | ""
+  watermark: string | ""
+}
 
-const ActivityFlowSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  image: z.string(),
-  description: z.string(),
-  hideBadge: z.boolean(),
-  isSingleReport: z.boolean(),
-  ordering: z.boolean(),
-  items: z.array(z.object({ activityId: z.string() })),
-})
-
-export const AppletSchema = z.object({
-  id: z.string(),
-  image: z.string(),
-  displayName: z.string(),
-  description: z.string(),
-  activities: z.array(ActivitySchema),
-  activityFlows: z.array(ActivityFlowSchema),
-})
-
-export type Applet = z.infer<typeof AppletSchema>
+export type AppletDetails<TActivity, TActivityFlow> = {
+  id: string
+  displayName: string
+  description: string
+  about: string
+  image: string | ""
+  watermark: string | ""
+  activities: TActivity[]
+  activityFlows: TActivityFlow[]
+}

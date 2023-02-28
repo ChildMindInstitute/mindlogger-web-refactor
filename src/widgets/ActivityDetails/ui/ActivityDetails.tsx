@@ -1,7 +1,6 @@
 import classNames from "classnames"
-import { Container, Row, Col } from "react-bootstrap"
+import { Container, Row, Col, Spinner } from "react-bootstrap"
 
-import { mockActivityList } from "../lib/activityList.mock"
 import { useActivityDetails } from "../lib/useActivityDetails"
 import { ActivityItemList } from "./ActivityItemList"
 import { BackNavigateButton } from "./BackNavigateButton"
@@ -16,9 +15,18 @@ interface ActivityDetailsWidgetProps {
 }
 
 export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
-  const { appletDetails, activityDetails } = useActivityDetails(props)
+  const { appletDetails, activityDetails, isLoading } = useActivityDetails({
+    appletId: props.appletId,
+    activityId: "30", // Hardcoded
+  })
 
-  // const activityDetails = activityById?.data?.result
+  if (isLoading) {
+    return (
+      <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
+        <Spinner as="div" animation="border" role="status" aria-hidden="true" />
+      </Container>
+    )
+  }
 
   return (
     <Container>
@@ -42,11 +50,9 @@ export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
             )}
           </div>
 
-          <ActivityProgressPreviewList activities={mockActivityList} />
+          {appletDetails?.activities && <ActivityProgressPreviewList activities={appletDetails.activities} />}
         </Col>
-        <Col xl={9}>
-          <ActivityItemList activityDetails={mockActivityList[0]} />
-        </Col>
+        <Col xl={9}>{activityDetails && <ActivityItemList activityDetails={activityDetails} />}</Col>
       </Row>
     </Container>
   )

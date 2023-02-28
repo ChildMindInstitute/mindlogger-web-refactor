@@ -1,5 +1,7 @@
-import { ActivityListItem, ActivityProgressPreview } from "../lib"
-import { getRandomInt } from "../lib/getRandomInt"
+import { ActivityDetails, ActivityListItem, ActivityProgressPreview, ActivityStatus, ActivityType } from "../lib"
+
+import { ActivityDTO, AppletDetailsActivityDTO } from "~/shared/api"
+import { getRandomInt } from "~/shared/utils"
 
 export class ActivityBuilder {
   public convertToActivityProgressPreview(activities: ActivityListItem[]): ActivityProgressPreview[] {
@@ -14,7 +16,44 @@ export class ActivityBuilder {
       }
     })
   }
+
+  public convertToActivityList(activities?: AppletDetailsActivityDTO[]): ActivityListItem[] {
+    if (!activities) {
+      return []
+    }
+
+    return activities.map((activity: AppletDetailsActivityDTO, index) => ({
+      activityId: activity.id,
+      eventId: `mock_eventid_${index}`, // Mocked
+      name: activity.name,
+      description: activity.description,
+      image: activity.image,
+      status: ActivityStatus.Available, // Mocked
+      type: ActivityType.NotDefined, // Mocked
+      isInActivityFlow: false, // Mocked
+      isTimerSet: false, // Mocked
+    }))
+  }
+
+  public convertToActivityDetails(activity?: ActivityDTO): ActivityDetails | null {
+    if (!activity) {
+      return null
+    }
+
+    return {
+      id: activity.id,
+      name: activity.name,
+      description: activity.description,
+      image: activity.image,
+      splashScreen: activity.splashScreen,
+      showAllAtOnce: activity.showAllAtOnce,
+      isSkippable: activity.isSkippable,
+      isReviewable: activity.isReviewable,
+      responseIsEditable: activity.responseIsEditable,
+      ordering: activity.ordering,
+      items: activity.items,
+    }
+  }
 }
 
-const activityBuilder = new ActivityBuilder()
-export default activityBuilder
+export const activityBuilder = new ActivityBuilder()

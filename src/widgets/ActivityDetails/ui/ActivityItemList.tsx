@@ -1,12 +1,12 @@
-import { ActivityListItem } from "~/entities/activity"
+import { ActivityDetails } from "~/entities/activity"
 import { ActivityCardItemList } from "~/entities/item"
 
 interface ActivityItemListProps {
-  activityDetails: ActivityListItem
+  activityDetails: ActivityDetails
 }
 
 export const ActivityItemList = ({ activityDetails }: ActivityItemListProps) => {
-  const isOnePageAssessment = true // mock
+  const isOnePageAssessment = activityDetails.showAllAtOnce
   const isSummaryScreen = false // Mock
   return (
     <>

@@ -1,8 +1,5 @@
-import { useAppletByIdQuery } from "../../ActivityGroups"
-import { mockActivityDetails } from "./activityList.mock"
-
-import { ActivityListItem } from "~/entities/activity"
-import { AppletDetailsDto } from "~/shared/api"
+import { ActivityDetails, ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
+import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
 
 interface UseActivityDetailsProps {
   appletId: string
@@ -10,25 +7,28 @@ interface UseActivityDetailsProps {
 }
 
 interface UseActivityDetailsReturn {
-  appletDetails: AppletDetailsDto | undefined
-  activityDetails: ActivityListItem | undefined
+  appletDetails: AppletDetails<ActivityListItem, ActivityFlow> | null
+  activityDetails: ActivityDetails | null
   isError: boolean
   isLoading: boolean
 }
 
-export const useActivityDetails = ({ appletId }: UseActivityDetailsProps): UseActivityDetailsReturn => {
+export const useActivityDetails = ({ appletId, activityId }: UseActivityDetailsProps): UseActivityDetailsReturn => {
   const {
     data: appletById,
     isError: isAppletError,
     isLoading: isAppletLoading,
   } = useAppletByIdQuery({ isPublic: false, appletId })
-  // const { data: activityById } = useActivityByIdQuery({ activityId }) | temporarl
-  const activityById = mockActivityDetails
+  const {
+    data: activityById,
+    isError: isActivityError,
+    isLoading: isActivityLoading,
+  } = useActivityByIdQuery({ activityId })
 
   return {
-    appletDetails: appletById?.data?.result,
-    activityDetails: activityById,
-    isError: isAppletError,
-    isLoading: isAppletLoading,
+    appletDetails: appletModel.appletBuilder.convertToAppletDetails(appletById?.data?.result),
+    activityDetails: activityModel.activityBuilder.convertToActivityDetails(activityById?.data?.result),
+    isError: isAppletError || isActivityError,
+    isLoading: isAppletLoading || isActivityLoading,
   }
 }

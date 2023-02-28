@@ -1,11 +1,12 @@
 import { HourMinute } from "../../utils"
 import { BaseSuccessListResponse, BaseSuccessResponse } from "./base"
 
-export type GetAppletDetailsByIdPayload = {
+// API payloads
+export type GetAppletByIdPayload = {
   appletId: string
 }
 
-export type GetPublicAppletDetailsByIdPayload = {
+export type GetPublicAppletByIdPayload = {
   publicAppletKey: string
 }
 
@@ -14,44 +15,59 @@ export type GetPublicAppletActivityByIdPayload = {
   activityId: string
 }
 
-export type AppletListSuccessResponse = BaseSuccessListResponse<AppletDetailsDto>
-export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDto>
+// API Responses
+export type AppletListSuccessResponse = BaseSuccessListResponse<AppletListDTO>
+export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDTO>
 
-export type ActivityRecordDto = {
-  id: string
-  name: string
-  description: string
-  image: string
-  isReviewable: boolean
-  isSkippable: boolean
-  ordering: boolean
-  splashScreen: string
-}
-
-export type ActivityFlowRecordDto = {
-  id: string
-  name: string
-  image: string
-  description: string
-  hideBadge: boolean
-  isSingleReport: boolean
-  ordering: boolean
-  items: Array<{ activityId: string }>
-}
-
-export type AppletDetailsDto = {
+export type AppletListDTO = {
   id: string
   displayName: string
   version: string
   description: string
   about: string
-  image: string
-  watermark: string
-  activities: ActivityRecordDto[]
-  activityFlows: ActivityFlowRecordDto[]
+  image: string | ""
+  watermark: string | ""
 }
 
-export type EventAvailabilityDto = {
+export type AppletDetailsDTO = {
+  id: string
+  displayName: string
+  version: string
+  description: string
+  about: string
+  image: string | ""
+  watermark: string | ""
+  activities: AppletDetailsActivityDTO[]
+  activityFlows: ActivityFlowDTO[]
+}
+
+export type AppletDetailsActivityDTO = {
+  id: string
+  guid: string
+  name: string
+  description: string
+  splashScreen: string | ""
+  image: string | ""
+  showAllAtOnce: boolean
+  isSkippable: boolean
+  isReviewable: boolean
+  responseIsEditable: boolean
+  ordering: number
+}
+
+export type ActivityFlowDTO = {
+  id: string
+  guid: string
+  name: string
+  description: string
+  image: string | ""
+  isSingleReport: boolean
+  hideBadge: boolean
+  ordering: number
+  activityIds: Array<string>
+}
+
+export type EventAvailabilityDTO = {
   availabilityType: number
   oneTimeCompletion: boolean
   periodicityType: number
@@ -65,26 +81,5 @@ export type EventAvailabilityDto = {
 
 export type ScheduleEventDto = {
   entityId: string
-  availability: EventAvailabilityDto
-}
-
-type AppletDto = {
-  id: string
-  image?: string
-  displayName: string
-  description: string
-  numberOverdue?: number
-
-  theme?: {
-    logo?: string
-    smallLogo?: string
-  } | null
-}
-
-export type AppletsResponse = {
-  result: AppletDto[]
-}
-
-export type AppletDetailsResponse = {
-  result: AppletDetailsDto
+  availability: EventAvailabilityDTO
 }

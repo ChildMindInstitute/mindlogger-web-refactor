@@ -1,8 +1,9 @@
 import classNames from "classnames"
 import { Container, Spinner } from "react-bootstrap"
 
-import { useAppletByIdQuery } from "../api"
 import { ActivityGroupList } from "./ActivityGroupList"
+
+import { useAppletByIdQuery } from "~/entities/applet"
 
 type FetchPublicActivitiesProps = {
   isPublic: true
