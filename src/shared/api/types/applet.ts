@@ -1,9 +1,7 @@
 import { HourMinute } from "../../utils"
-import { ActivityBaseDTO } from "./activity"
 import { BaseSuccessListResponse, BaseSuccessResponse } from "./base"
 
 // API payloads
-
 export type GetAppletByIdPayload = {
   appletId: string
 }
@@ -18,31 +16,43 @@ export type GetPublicAppletActivityByIdPayload = {
 }
 
 // API Responses
-export type AppletListSuccessResponse = BaseSuccessListResponse<AppletBaseDTO>
+export type AppletListSuccessResponse = BaseSuccessListResponse<AppletListDTO>
 export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDTO>
 
-export type AppletBaseDTO = {
+export type AppletListDTO = {
   id: string
   displayName: string
   version: string
   description: string
   about: string
-  image?: string
-  watermark?: string
-  themeId: string
-  reportServerIp: string
-  reportPublicKey: string
-  reportRecipients: Array<string>
-  reportIncludeUserId: boolean
-  reportIncludeCaseId: boolean
-  reportEmailBody: string
-  createdAt: Date
-  updatedAt: Date
+  image: string | ""
+  watermark: string | ""
 }
 
-export type AppletDetailsDTO = AppletBaseDTO & {
-  activities: ActivityBaseDTO[]
+export type AppletDetailsDTO = {
+  id: string
+  displayName: string
+  version: string
+  description: string
+  about: string
+  image: string | ""
+  watermark: string | ""
+  activities: AppletDetailsActivityDTO[]
   activityFlows: ActivityFlowDTO[]
+}
+
+export type AppletDetailsActivityDTO = {
+  id: string
+  guid: string
+  name: string
+  description: string
+  splashScreen: string | ""
+  image: string | ""
+  showAllAtOnce: boolean
+  isSkippable: boolean
+  isReviewable: boolean
+  responseIsEditable: boolean
+  ordering: number
 }
 
 export type ActivityFlowDTO = {
@@ -50,13 +60,14 @@ export type ActivityFlowDTO = {
   guid: string
   name: string
   description: string
+  image: string | ""
   isSingleReport: boolean
   hideBadge: boolean
   ordering: number
   activityIds: Array<string>
 }
 
-export type EventAvailabilityDto = {
+export type EventAvailabilityDTO = {
   availabilityType: number
   oneTimeCompletion: boolean
   periodicityType: number
@@ -70,5 +81,5 @@ export type EventAvailabilityDto = {
 
 export type ScheduleEventDto = {
   entityId: string
-  availability: EventAvailabilityDto
+  availability: EventAvailabilityDTO
 }

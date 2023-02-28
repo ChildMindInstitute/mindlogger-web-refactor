@@ -3,7 +3,7 @@ import { Container, Spinner } from "react-bootstrap"
 
 import { ActivityGroupList } from "./ActivityGroupList"
 
-import { appletModel, useAppletByIdQuery } from "~/entities/applet"
+import { useAppletByIdQuery } from "~/entities/applet"
 
 type FetchPublicActivitiesProps = {
   isPublic: true
@@ -36,7 +36,7 @@ export const ActivityGroups = (props: FetchActivitiesProps) => {
     )
   }
 
-  const appletDetails = appletModel.appletBuilder.convertToAppletDetails(data?.data?.result)
+  const appletDetails = data?.data?.result
 
   return appletDetails && <ActivityGroupList appletDetails={appletDetails} />
 }

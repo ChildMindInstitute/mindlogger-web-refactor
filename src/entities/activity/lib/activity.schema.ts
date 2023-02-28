@@ -1,13 +1,13 @@
 import { ActivityItem } from "~/entities/item/lib/item.schema"
 import { HourMinute } from "~/shared/utils"
 
-export type ActivityBase = {
+export type ActivityListItem = {
   activityId: string
   eventId: string
 
   name: string
   description: string
-  image?: string | null
+  image: string | null
 
   status: ActivityStatus
   type: ActivityType
@@ -27,17 +27,6 @@ export type ActivityBase = {
 
   isTimerSet: boolean
   timeLeftToComplete?: HourMinute | null
-
-  splashScreen?: string
-  showAllAtOnce: boolean
-  isSkippable: boolean
-  isReviewable: boolean
-  responseIsEditable: boolean
-  ordering: number
-}
-
-export type ActivityListItem = ActivityBase & {
-  items: Array<ActivityItem> // TODO: Change here to actual interface of item
 }
 
 export const enum ActivityStatus {
@@ -50,6 +39,20 @@ export const enum ActivityStatus {
 export const enum ActivityType {
   NotDefined = 0,
   Flanker = 1,
+}
+
+export type ActivityDetails = {
+  id: string
+  name: string
+  description: string
+  image: string | ""
+  splashScreen: string | ""
+  showAllAtOnce: boolean
+  isSkippable: boolean
+  isReviewable: boolean
+  responseIsEditable: boolean
+  ordering: number
+  items: Array<ActivityItem>
 }
 
 export type ActivityProgressPreview = {

@@ -1,10 +1,10 @@
-import { ActivityBase, ActivityListItem, ActivityProgressPreview, ActivityStatus, ActivityType } from "../lib"
+import { ActivityDetails, ActivityListItem, ActivityProgressPreview, ActivityStatus, ActivityType } from "../lib"
 
-import { ActivityBaseDTO } from "~/shared/api"
+import { ActivityDTO, AppletDetailsActivityDTO } from "~/shared/api"
 import { getRandomInt } from "~/shared/utils"
 
 export class ActivityBuilder {
-  public convertToActivityProgressPreview(activities: ActivityBase[]): ActivityProgressPreview[] {
+  public convertToActivityProgressPreview(activities: ActivityListItem[]): ActivityProgressPreview[] {
     return activities.map(activity => {
       const itemsLength = 10 // activity.items.length in the real implementation
       const currentProgressItem = getRandomInt(10) // TODO: When redux for progress will implemented, add selector to progress activity and get activity order
@@ -17,12 +17,12 @@ export class ActivityBuilder {
     })
   }
 
-  public convertToActivityList(activities?: ActivityBaseDTO[]): ActivityListItem[] {
+  public convertToActivityList(activities?: AppletDetailsActivityDTO[]): ActivityListItem[] {
     if (!activities) {
       return []
     }
 
-    return activities.map((activity: ActivityBaseDTO, index) => ({
+    return activities.map((activity: AppletDetailsActivityDTO, index) => ({
       activityId: activity.id,
       eventId: `mock_eventid_${index}`, // Mocked
       name: activity.name,
@@ -32,31 +32,19 @@ export class ActivityBuilder {
       type: ActivityType.NotDefined, // Mocked
       isInActivityFlow: false, // Mocked
       isTimerSet: false, // Mocked
-      splashScreen: activity.splashScreen,
-      showAllAtOnce: activity.showAllAtOnce,
-      isSkippable: activity.isSkippable,
-      isReviewable: activity.isReviewable,
-      responseIsEditable: activity.responseIsEditable,
-      ordering: activity.ordering,
-      items: activity.items,
     }))
   }
 
-  public convertToActivityDetails(activity?: ActivityBaseDTO): ActivityListItem | null {
+  public convertToActivityDetails(activity?: ActivityDTO): ActivityDetails | null {
     if (!activity) {
       return null
     }
 
     return {
-      activityId: activity.id,
-      eventId: `mock_eventid_${123}`, // Mocked
+      id: activity.id,
       name: activity.name,
       description: activity.description,
       image: activity.image,
-      status: ActivityStatus.Available, // Mocked
-      type: ActivityType.NotDefined, // Mocked
-      isInActivityFlow: false, // Mocked
-      isTimerSet: false, // Mocked
       splashScreen: activity.splashScreen,
       showAllAtOnce: activity.showAllAtOnce,
       isSkippable: activity.isSkippable,

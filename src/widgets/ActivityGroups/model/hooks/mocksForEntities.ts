@@ -38,7 +38,7 @@ const activity2: Activity = {
   description: "Activity description number 2 Activity description 1 number 1 Activity description number 1",
   pipelineType: ActivityPipelineType.Regular,
   type: ActivityType.NotDefined,
-  image: null,
+  image: "",
 }
 
 const activityFlow1: ActivityFlow = {

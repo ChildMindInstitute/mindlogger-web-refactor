@@ -6,15 +6,15 @@ import {
   eventActivities as eventActivityMocks,
 } from "./mocksForEntities"
 
-import { AppletDetails } from "~/entities/applet"
 import { EventModel } from "~/entities/event"
+import { AppletDetailsDTO } from "~/shared/api"
 
 type UseActivityGroupsReturn = {
   groups: ActivityListGroup[]
-  appletDetails?: AppletDetails
+  appletDetails?: AppletDetailsDTO
 }
 
-export const useActivityGroups = (appletDetails: AppletDetails): UseActivityGroupsReturn => {
+export const useActivityGroups = (appletDetails: AppletDetailsDTO): UseActivityGroupsReturn => {
   const builder = createActivityGroupsBuilder({
     allAppletActivities: allActivityMocks,
     appletId: "apid1",

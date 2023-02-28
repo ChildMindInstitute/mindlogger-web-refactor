@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom"
 
-import { AppletBase } from "../lib"
+import { AppletListItem } from "../lib"
 
 import { CustomCard } from "~/shared/ui"
 import { ROUTES } from "~/shared/utils"
 
 interface AppletCardProps {
-  applet: AppletBase
+  applet: AppletListItem
 }
 
 const AppletCard = ({ applet }: AppletCardProps) => {

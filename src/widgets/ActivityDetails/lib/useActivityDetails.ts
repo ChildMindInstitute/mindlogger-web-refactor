@@ -1,5 +1,5 @@
-import { ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
-import { AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
+import { ActivityDetails, ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
+import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
 
 interface UseActivityDetailsProps {
   appletId: string
@@ -7,8 +7,8 @@ interface UseActivityDetailsProps {
 }
 
 interface UseActivityDetailsReturn {
-  appletDetails: AppletDetails | null
-  activityDetails: ActivityListItem | null
+  appletDetails: AppletDetails<ActivityListItem, ActivityFlow> | null
+  activityDetails: ActivityDetails | null
   isError: boolean
   isLoading: boolean
 }

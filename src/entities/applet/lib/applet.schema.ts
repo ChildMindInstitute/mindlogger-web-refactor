@@ -1,26 +1,31 @@
-import { ActivityBase } from "../../activity"
-
-type ActivityFlowSchema = {
+export type ActivityFlow = {
   id: string
   guid: string
   name: string
   description: string
+  image: string | ""
   isSingleReport: boolean
   hideBadge: boolean
   ordering: number
   activityIds: string[]
 }
 
-export type AppletBase = {
+export type AppletListItem = {
   id: string
   displayName: string
   description: string
   about: string
-  image?: string
-  watermark?: string
+  image: string | ""
+  watermark: string | ""
 }
 
-export type AppletDetails = AppletBase & {
-  activities: ActivityBase[]
-  activityFlows: ActivityFlowSchema[]
+export type AppletDetails<TActivity, TActivityFlow> = {
+  id: string
+  displayName: string
+  description: string
+  about: string
+  image: string | ""
+  watermark: string | ""
+  activities: TActivity[]
+  activityFlows: TActivityFlow[]
 }

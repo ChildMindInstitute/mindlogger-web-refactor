@@ -1,15 +1,15 @@
-import { activityModel } from "../../activity"
-import { AppletBase, AppletDetails } from "../lib"
+import { ActivityListItem, activityModel } from "../../activity"
+import { AppletListItem, AppletDetails, ActivityFlow } from "../lib"
 
-import { AppletBaseDTO, AppletDetailsDTO } from "~/shared/api"
+import { AppletListDTO, AppletDetailsDTO } from "~/shared/api"
 
 export class AppletBuilder {
-  public convertToAppletList(applets?: AppletBaseDTO[]): AppletBase[] {
+  public convertToAppletList(applets?: AppletListDTO[]): AppletListItem[] {
     if (!applets) {
       return []
     }
 
-    return applets.map((applet: AppletBaseDTO) => ({
+    return applets.map((applet: AppletListDTO) => ({
       id: applet.id,
       displayName: applet.displayName,
       description: applet.description,
@@ -19,7 +19,7 @@ export class AppletBuilder {
     }))
   }
 
-  public convertToAppletDetails(applet?: AppletDetailsDTO): AppletDetails | null {
+  public convertToAppletDetails(applet?: AppletDetailsDTO): AppletDetails<ActivityListItem, ActivityFlow> | null {
     if (!applet) {
       return null
     }
