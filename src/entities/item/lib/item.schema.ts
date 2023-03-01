@@ -5,7 +5,6 @@ export type ActivityItem = {
   question: string
 
   responseType: ActivityItemType
-  answers: Record<string, unknown>
 
   timer: number
 

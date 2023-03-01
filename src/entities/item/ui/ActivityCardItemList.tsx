@@ -1,10 +1,14 @@
-import { mockItemList } from "../lib/mockItemList"
+import { ActivityItem } from "../lib"
 import { ActivityCardItem } from "./ActivityCardItem"
 
-export const ActivityCardItemList = () => {
+type ActivityCardItemListProps = {
+  items: ActivityItem[]
+}
+
+export const ActivityCardItemList = ({ items }: ActivityCardItemListProps) => {
   return (
     <>
-      {mockItemList.map(item => (
+      {items.map(item => (
         <ActivityCardItem key={item.id} activityItem={item} />
       ))}
     </>
