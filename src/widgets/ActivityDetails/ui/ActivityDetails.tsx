@@ -1,3 +1,5 @@
+import { useEffect } from "react"
+
 import classNames from "classnames"
 import { Container, Row, Col, Spinner } from "react-bootstrap"
 
@@ -5,7 +7,7 @@ import { useActivityDetails } from "../lib/useActivityDetails"
 import { ActivityItemList } from "./ActivityItemList"
 import { BackNavigateButton } from "./BackNavigateButton"
 
-import { ActivityProgressPreviewList } from "~/entities/activity"
+import { activityModel, ActivityProgressPreviewList } from "~/entities/activity"
 import { BaseProgressBar } from "~/shared/ui"
 import CustomCard from "~/shared/ui/Card"
 
@@ -19,6 +21,14 @@ export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
     appletId: props.appletId,
     activityId: "30", // Hardcoded
   })
+
+  const { setActivityDetails } = activityModel.hooks.useActivityDetailsState()
+
+  useEffect(() => {
+    if (activityDetails) {
+      setActivityDetails(activityDetails)
+    }
+  }, [activityDetails, setActivityDetails])
 
   if (isLoading) {
     return (

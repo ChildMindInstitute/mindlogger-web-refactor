@@ -1,3 +1,5 @@
+import { useMemo } from "react"
+
 import { ActivityDetails, ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
 import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
 
@@ -25,9 +27,17 @@ export const useActivityDetails = ({ appletId, activityId }: UseActivityDetailsP
     isLoading: isActivityLoading,
   } = useActivityByIdQuery({ activityId })
 
+  const appletDetails = useMemo(() => {
+    return appletModel.appletBuilder.convertToAppletDetails(appletById?.data?.result)
+  }, [appletById?.data?.result])
+
+  const activityDetails = useMemo(() => {
+    return activityModel.activityBuilder.convertToActivityDetails(activityById?.data?.result)
+  }, [activityById?.data?.result])
+
   return {
-    appletDetails: appletModel.appletBuilder.convertToAppletDetails(appletById?.data?.result),
-    activityDetails: activityModel.activityBuilder.convertToActivityDetails(activityById?.data?.result),
+    appletDetails,
+    activityDetails,
     isError: isAppletError || isActivityError,
     isLoading: isAppletLoading || isActivityLoading,
   }

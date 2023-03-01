@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 type ActivityItemStore = "text" | "slider" | "radio" | "checkbox"
 
-type ActivityDetails = {
+export type ActivityDetailsState = {
   id: string
   name: string
   description: string
@@ -13,9 +13,10 @@ type ActivityDetails = {
   isReviewable: boolean
   responseIsEditable: boolean
   ordering: number
+  items: Array<ActivityItemsState> | null
 }
 
-type ActivityItems = {
+export type ActivityItemsState = {
   id: string
   question: string
   responseType: ActivityItemStore
@@ -27,20 +28,18 @@ type ActivityItems = {
   ordering: number
 }
 
-type ActivityItemAnswer = {
+export type ActivityItemAnswerState = {
   itemId: string
   answer: Record<string, unknown>
 }
 
 export type ActivityState = {
-  activityDetails: ActivityDetails | null
-  items: Array<ActivityItems> | null
-  itemAnswers: Array<ActivityItemAnswer> | null
+  activityDetails: ActivityDetailsState | null
+  itemAnswers: Array<ActivityItemAnswerState> | null
 }
 
 const initialState: ActivityState = {
   activityDetails: null,
-  items: null,
   itemAnswers: null,
 }
 
@@ -48,12 +47,8 @@ const activitySlice = createSlice({
   name: "activity",
   initialState,
   reducers: {
-    saveActivityDetails: (state, action: PayloadAction<ActivityDetails>) => {
+    saveActivityDetails: (state, action: PayloadAction<ActivityDetailsState>) => {
       state.activityDetails = action.payload
-      return state
-    },
-    saveActivityItems: (state, action: PayloadAction<ActivityItems[]>) => {
-      state.items = action.payload
       return state
     },
     clearActivity: () => {
