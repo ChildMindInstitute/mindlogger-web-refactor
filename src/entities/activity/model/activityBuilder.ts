@@ -3,7 +3,7 @@ import { ActivityDetails, ActivityListItem, ActivityProgressPreview, ActivitySta
 import { ActivityDTO, AppletDetailsActivityDTO } from "~/shared/api"
 import { getRandomInt } from "~/shared/utils"
 
-export class ActivityBuilder {
+class ActivityBuilder {
   public convertToActivityProgressPreview(activities: ActivityListItem[]): ActivityProgressPreview[] {
     return activities.map(activity => {
       const itemsLength = 10 // activity.items.length in the real implementation
