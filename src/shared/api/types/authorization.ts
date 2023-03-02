@@ -16,7 +16,8 @@ export interface LogoutPayload {
 
 export interface SignupPayload {
   email: string
-  fullName: string
+  firstName: string
+  lastName: string
   password: string
 }
 

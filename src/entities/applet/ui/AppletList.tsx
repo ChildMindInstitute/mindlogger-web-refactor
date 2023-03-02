@@ -9,6 +9,7 @@ const AppletList = () => {
   const { data, isLoading, isError, error } = useAppletListQuery()
 
   const applets = appletBuilder.convertToAppletList(data?.data?.result)
+  const isAppletsEmpty = !applets.length
 
   if (isError) {
     return (
@@ -19,13 +20,18 @@ const AppletList = () => {
   }
 
   return (
-    <Row className={classNames("applet-list", "justify-content-center", { "h-100": isLoading })}>
+    <Row className={classNames("justify-content-center", { "h-100": isLoading || isAppletsEmpty })}>
       {isLoading && (
         <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
           <Spinner as="div" animation="border" role="status" aria-hidden="true" />
         </Container>
       )}
-      {!isLoading && applets.map(value => <AppletCard key={value.id} applet={value} />)}
+      {!isLoading && isAppletsEmpty && (
+        <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
+          No applets
+        </Container>
+      )}
+      {!isLoading && !isAppletsEmpty && applets.map(value => <AppletCard key={value.id} applet={value} />)}
     </Row>
   )
 }
