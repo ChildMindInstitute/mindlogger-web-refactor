@@ -9,7 +9,7 @@ import { ActivityGroup } from "./ActivityGroup"
 
 import { AppletDetailsDTO } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
-import { useCustomTranslation } from "~/shared/utils"
+import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 interface ActivityListWidgetProps {
   appletDetails: AppletDetailsDTO
@@ -17,7 +17,10 @@ interface ActivityListWidgetProps {
 
 export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
+  const navigatator = useCustomNavigation()
+
   const [isAboutOpen, setIsAboutOpen] = useState(false)
+  const [isResumeActivityOpen, setIsResumeActivityOpen] = useState(false)
 
   const onCardAboutClick = () => {
     setIsAboutOpen(true)
@@ -27,7 +30,19 @@ export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) =>
     setIsAboutOpen(false)
   }
 
+  const onResumeActivityModalClose = () => {
+    setIsResumeActivityOpen(false)
+  }
+
   const { groups } = useActivityGroups(appletDetails)
+
+  const onActivityCardClick = (activityId: string) => {
+    // Check if activityId exist in progress state
+    // If yes, showResumeModal
+    // if no - redirect to activity details page + add activity in progress
+
+    navigatator.navigate(ROUTES.activityDetails.navigateTo(appletDetails.id, activityId))
+  }
 
   return (
     <Container fluid>
@@ -48,7 +63,7 @@ export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) =>
           {groups
             ?.filter(g => g.activities.length)
             .map(g => (
-              <ActivityGroup group={g} key={g.name} />
+              <ActivityGroup group={g} key={g.name} onActivityCardClick={onActivityCardClick} />
             ))}
         </Col>
       </Row>
@@ -57,6 +72,20 @@ export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) =>
         onHide={onAboutModalClose}
         title={t("about")}
         label={appletDetails?.description}
+      />
+      <CustomModal
+        show={isResumeActivityOpen}
+        onHide={onResumeActivityModalClose}
+        title={t("additional.resume_activity")}
+        label={t("additional.activity_resume_restart")}
+        footerPrimaryButton={t("additional.restart")}
+        onPrimaryButtonClick={() => {
+          console.log("restart")
+        }}
+        footerSecondaryButton={t("additional.resume")}
+        onSecondaryButtonClick={() => {
+          console.log("resume")
+        }}
       />
     </Container>
   )

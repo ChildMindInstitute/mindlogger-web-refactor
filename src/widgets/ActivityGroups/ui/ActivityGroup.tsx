@@ -8,9 +8,10 @@ import { useCustomTranslation } from "~/shared/utils"
 
 interface ActivityGroupProps {
   group: ActivityListGroup
+  onActivityCardClick: (activityId: string) => void
 }
 
-export const ActivityGroup = ({ group }: ActivityGroupProps) => {
+export const ActivityGroup = ({ group, onActivityCardClick }: ActivityGroupProps) => {
   const { t } = useCustomTranslation()
 
   return (
@@ -18,7 +19,7 @@ export const ActivityGroup = ({ group }: ActivityGroupProps) => {
       <p className={classNames("mt-2", "text-capitalize")}>{t(group.name)}</p>
 
       <div>
-        <ActivityList activities={group.activities} />
+        <ActivityList activities={group.activities} onActivityCardClick={onActivityCardClick} />
       </div>
     </Container>
   )
