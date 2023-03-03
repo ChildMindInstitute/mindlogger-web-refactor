@@ -17,7 +17,7 @@ interface ActivityDetailsWidgetProps {
 export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
   const { appletDetails, activityDetails, isLoading } = activityDetailsModel.hooks.useActivityDetails({
     appletId: props.appletId,
-    activityId: "30", // Hardcoded
+    activityId: props.activityId,
   })
 
   if (isLoading) {

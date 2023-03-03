@@ -1,29 +1,34 @@
-import { Activity, ActivityFlow, ActivityPipelineType, EntityProgress, EventActivity } from "../../lib"
-
-import { ActivityType } from "~/entities/activity"
+import {
+  Activity,
+  ActivityFlow,
+  ActivityPipelineType,
+  ActivityType,
+  EntityProgress,
+  EventActivity,
+} from "~/entities/activity"
 import { AvailabilityType, PeriodicityType } from "~/entities/event"
 
 export const progress: EntityProgress = {
-  apid1: {
-    aid1: {
+  "4618904c-f771-4454-9b12-03d89f690477": {
+    "32920983-4052-45a3-9eb0-731029245213": {
       eid1: {
         type: ActivityPipelineType.Regular,
         startAt: new Date(2023, 1, 12, 14, 16, 17),
         endAt: new Date(2023, 1, 12, 15, 26, 17),
       },
     },
-    afid1: {
-      eid2: {
-        currentActivityId: "aid2",
-        startAt: new Date(2023, 1, 12, 14, 16, 17),
-        type: ActivityPipelineType.Flow,
-      },
-    },
+    // afid1: {
+    //   eid2: {
+    //     currentActivityId: "aid2",
+    //     startAt: new Date(2023, 1, 12, 14, 16, 17),
+    //     type: ActivityPipelineType.Flow,
+    //   },
+    // },
   },
 }
 
 const activity1: Activity = {
-  id: "aid1",
+  id: "32920983-4052-45a3-9eb0-731029245213",
   name: "Activity number 1",
   description: "Activity description number 1 Activity description 1 number 1 Activity description number 1",
   pipelineType: ActivityPipelineType.Regular,
@@ -58,16 +63,16 @@ export const eventActivities: EventActivity[] = [
   {
     activity: activity1,
     event: {
-      activityId: "aid1",
+      activityId: "32920983-4052-45a3-9eb0-731029245213",
       availability: {
         allowAccessBeforeFromTime: false,
-        availabilityType: AvailabilityType.ScheduledAccess,
-        endDate: new Date(2023, 1, 15, 23, 59, 0),
+        availabilityType: AvailabilityType.AlwaysAvailable,
+        endDate: null, // new Date(2023, 1, 15, 23, 59, 0)
         oneTimeCompletion: true,
-        periodicityType: PeriodicityType.Monthly,
-        startDate: new Date(2023, 1, 14, 0, 0, 0),
-        timeFrom: { hours: 8, minutes: 0 },
-        timeTo: { hours: 22, minutes: 59 },
+        periodicityType: PeriodicityType.NotDefined,
+        startDate: null, // new Date(2023, 1, 14, 0, 0, 0)
+        timeFrom: null, // { hours: 8, minutes: 0 }
+        timeTo: null, // { hours: 22, minutes: 59 }
       },
       id: "eid1",
       scheduledAt: null,
@@ -81,30 +86,30 @@ export const eventActivities: EventActivity[] = [
       },
     },
   },
-  {
-    activity: activityFlow1,
-    event: {
-      activityId: "afid1",
-      availability: {
-        allowAccessBeforeFromTime: false,
-        availabilityType: AvailabilityType.ScheduledAccess,
-        endDate: new Date(2023, 1, 15, 23, 59, 0),
-        oneTimeCompletion: true,
-        periodicityType: PeriodicityType.Monthly,
-        startDate: new Date(2023, 1, 14, 0, 0, 0),
-        timeFrom: { hours: 8, minutes: 0 },
-        timeTo: { hours: 21, minutes: 59 },
-      },
-      id: "eid2",
-      scheduledAt: null,
-      selectedDate: new Date(2024, 5, 15, 0, 0, 0),
-      timers: {
-        timer: {
-          hours: 11,
-          minutes: 10,
-        },
-        idleTimer: null,
-      },
-    },
-  },
+  // {
+  //   activity: activityFlow1,
+  //   event: {
+  //     activityId: "afid1",
+  //     availability: {
+  //       allowAccessBeforeFromTime: false,
+  //       availabilityType: AvailabilityType.ScheduledAccess,
+  //       endDate: new Date(2023, 1, 15, 23, 59, 0),
+  //       oneTimeCompletion: true,
+  //       periodicityType: PeriodicityType.Monthly,
+  //       startDate: new Date(2023, 1, 14, 0, 0, 0),
+  //       timeFrom: { hours: 8, minutes: 0 },
+  //       timeTo: { hours: 21, minutes: 59 },
+  //     },
+  //     id: "eid2",
+  //     scheduledAt: null,
+  //     selectedDate: new Date(2024, 5, 15, 0, 0, 0),
+  //     timers: {
+  //       timer: {
+  //         hours: 11,
+  //         minutes: 10,
+  //       },
+  //       idleTimer: null,
+  //     },
+  //   },
+  // },
 ]

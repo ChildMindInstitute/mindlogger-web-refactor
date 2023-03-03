@@ -6,6 +6,7 @@ import {
   eventActivities as eventActivityMocks,
 } from "./mocksForEntities"
 
+import { activityModel } from "~/entities/activity"
 import { EventModel } from "~/entities/event"
 import { AppletDetailsDTO } from "~/shared/api"
 
@@ -15,10 +16,12 @@ type UseActivityGroupsReturn = {
 }
 
 export const useActivityGroups = (appletDetails: AppletDetailsDTO): UseActivityGroupsReturn => {
+  const activitiesForBuilder = activityModel.activityBuilder.convertToActivityGroupsBuilder(appletDetails.activities)
+
   const builder = createActivityGroupsBuilder({
-    allAppletActivities: allActivityMocks,
-    appletId: "apid1",
-    progress: progressMocks,
+    allAppletActivities: activitiesForBuilder,
+    appletId: appletDetails.id,
+    progress: {}, // progressMocks
   })
 
   const calculator = EventModel.SheduledDateCalculator

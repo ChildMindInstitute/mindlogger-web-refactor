@@ -1,19 +1,19 @@
 import { isToday } from "date-fns"
 
+import { ActivityGroupType, ActivityGroupTypeNames, ActivityListGroup } from "../../lib"
+
 import {
   Activity,
   ActivityFlow,
   ActivityFlowProgress,
-  ActivityGroupType,
-  ActivityGroupTypeNames,
-  ActivityListGroup,
+  ActivityListItem,
   ActivityPipelineType,
+  ActivityStatus,
+  ActivityType,
   EntityProgress,
   EventActivity,
   ProgressPayload,
-} from "../../lib"
-
-import { ActivityListItem, ActivityStatus, ActivityType } from "~/entities/activity"
+} from "~/entities/activity"
 import { AvailabilityType } from "~/entities/event"
 import {
   HourMinute,
@@ -47,7 +47,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   private getNow = () => new Date()
 
   private getProgressRecord(eventActivity: EventActivity): ProgressPayload | null {
-    const record = this.progress[this.appletId][eventActivity.activity.id][eventActivity.event.id]
+    const record = this.progress[this.appletId]?.[eventActivity.activity.id]?.[eventActivity.event.id]
     return record ?? null
   }
 
