@@ -28,19 +28,26 @@ export type ActivityItemsState = {
   ordering: number
 }
 
-export type ActivityItemAnswerState = {
-  itemId: string
-  answer: Record<string, unknown>
+export type ActivityItemWithAnswerState = ActivityItemsState & {
+  answer: Record<string, unknown> | null
 }
 
+export type ActivityProgressState = {
+  startAt: Date | null
+  endAt: Date | null
+  items: ActivityItemWithAnswerState[]
+}
+
+export type ActivityIdType = string
+
 export type ActivityState = {
+  activitiesInProgress: Record<ActivityIdType, ActivityProgressState> // Activity Progress Example: { activityId: [ActivityItemProgressState] }
   activityDetails: ActivityDetailsState | null
-  itemAnswers: Array<ActivityItemAnswerState> | null
 }
 
 const initialState: ActivityState = {
+  activitiesInProgress: {},
   activityDetails: null,
-  itemAnswers: null,
 }
 
 const activitySlice = createSlice({
@@ -49,10 +56,23 @@ const activitySlice = createSlice({
   reducers: {
     saveActivityDetails: (state, action: PayloadAction<ActivityDetailsState>) => {
       state.activityDetails = action.payload
-      return state
     },
     clearActivity: () => {
       return initialState
+    },
+
+    saveActivityInProgress: (
+      state,
+      action: PayloadAction<{ activityId: string; items: ActivityItemWithAnswerState[] }>,
+    ) => {
+      let activityInProgressById = state.activitiesInProgress[action.payload.activityId]
+
+      if (!activityInProgressById) {
+        activityInProgressById = { items: [], startAt: new Date(), endAt: null }
+      }
+      activityInProgressById.items = action.payload.items
+
+      return state
     },
   },
 })

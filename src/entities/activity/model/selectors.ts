@@ -4,4 +4,4 @@ import { RootState } from "~/shared/utils"
 
 export const activitySelector = (state: RootState) => state.activity
 export const activityDetailsSelector = createSelector(activitySelector, activity => activity.activityDetails)
-export const actionItemAnswersSelector = createSelector(activitySelector, activity => activity.itemAnswers)
+export const activitiesInProgressSelector = createSelector(activitySelector, activity => activity.activitiesInProgress)

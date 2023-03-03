@@ -1,11 +1,10 @@
 import { useCallback } from "react"
 
-import { useDispatch } from "react-redux"
-
-import { useAppSelector } from "../../../../shared/utils"
 import { ActivityDetails } from "../../lib"
 import { actions, ActivityDetailsState } from "../activity.slice"
 import { activityDetailsSelector } from "../selectors"
+
+import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 type UseActivityDetailsStateReturn = {
   activityDetails: ActivityDetailsState | null
@@ -13,7 +12,7 @@ type UseActivityDetailsStateReturn = {
 }
 
 export const useActivityDetailsState = (): UseActivityDetailsStateReturn => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const activityDetails = useAppSelector(activityDetailsSelector)
 
