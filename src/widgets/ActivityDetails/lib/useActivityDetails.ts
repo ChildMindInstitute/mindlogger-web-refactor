@@ -16,6 +16,8 @@ interface UseActivityDetailsReturn {
 }
 
 export const useActivityDetails = ({ appletId, activityId }: UseActivityDetailsProps): UseActivityDetailsReturn => {
+  const { setActivityDetails } = activityModel.hooks.useActivityDetailsState()
+
   const {
     data: appletById,
     isError: isAppletError,
@@ -25,7 +27,16 @@ export const useActivityDetails = ({ appletId, activityId }: UseActivityDetailsP
     data: activityById,
     isError: isActivityError,
     isLoading: isActivityLoading,
-  } = useActivityByIdQuery({ activityId })
+  } = useActivityByIdQuery(
+    { activityId },
+    {
+      onSuccess(data) {
+        if (data?.data?.result) {
+          setActivityDetails(data?.data?.result)
+        }
+      },
+    },
+  )
 
   const appletDetails = useMemo(() => {
     return appletModel.appletBuilder.convertToAppletDetails(appletById?.data?.result)

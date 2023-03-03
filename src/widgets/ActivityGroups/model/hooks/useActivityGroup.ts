@@ -30,6 +30,7 @@ export const useActivityGroups = (appletDetails: AppletDetailsDTO): UseActivityG
     eventActivity.event.scheduledAt = date
   }
 
+  // Here get only future eventActivities
   eventActivities = eventActivities.filter(x => x.event.scheduledAt)
 
   const groupAvailable = builder.buildAvailable(eventActivities)

@@ -7,6 +7,7 @@ import CustomModal from "../../Modal"
 import { useActivityGroups } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
+import { ActivityStatus, ActivityType } from "~/entities/activity"
 import { AppletDetailsDTO } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
@@ -36,10 +37,12 @@ export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) =>
 
   const { groups } = useActivityGroups(appletDetails)
 
-  const onActivityCardClick = (activityId: string) => {
+  const onActivityCardClick = (activityId: string, activityStatus: ActivityStatus) => {
     // Check if activityId exist in progress state
     // If yes, showResumeModal
     // if no - redirect to activity details page + add activity in progress
+
+    console.log(activityId, activityStatus)
 
     navigatator.navigate(ROUTES.activityDetails.navigateTo(appletDetails.id, activityId))
   }
