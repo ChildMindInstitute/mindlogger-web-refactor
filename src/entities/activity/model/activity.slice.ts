@@ -49,7 +49,6 @@ const activitySlice = createSlice({
   reducers: {
     saveActivityDetails: (state, action: PayloadAction<ActivityDetailsState>) => {
       state.activityDetails = action.payload
-      return state
     },
     clearActivity: () => {
       return initialState
