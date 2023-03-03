@@ -1,4 +1,4 @@
-export type ActivityItemType = "text" | "slider" | "radio" | "checkbox" // Need to discus with BE team
+export type ActivityItemType = "text" | "slider" | "radio" | "checkbox"
 
 export type ActivityItem = {
   id: string

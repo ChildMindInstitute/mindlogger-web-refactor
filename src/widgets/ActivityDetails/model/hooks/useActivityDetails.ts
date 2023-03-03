@@ -1,3 +1,5 @@
+import { useMemo } from "react"
+
 import { ActivityDetails, ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
 import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
 
@@ -14,6 +16,8 @@ interface UseActivityDetailsReturn {
 }
 
 export const useActivityDetails = ({ appletId, activityId }: UseActivityDetailsProps): UseActivityDetailsReturn => {
+  const { setActivityDetails } = activityModel.hooks.useActivityDetailsState()
+
   const {
     data: appletById,
     isError: isAppletError,
@@ -23,11 +27,28 @@ export const useActivityDetails = ({ appletId, activityId }: UseActivityDetailsP
     data: activityById,
     isError: isActivityError,
     isLoading: isActivityLoading,
-  } = useActivityByIdQuery({ activityId })
+  } = useActivityByIdQuery(
+    { activityId },
+    {
+      onSuccess(data) {
+        if (data?.data?.result) {
+          setActivityDetails(data?.data?.result)
+        }
+      },
+    },
+  )
+
+  const appletDetails = useMemo(() => {
+    return appletModel.appletBuilder.convertToAppletDetails(appletById?.data?.result)
+  }, [appletById?.data?.result])
+
+  const activityDetails = useMemo(() => {
+    return activityModel.activityBuilder.convertToActivityDetails(activityById?.data?.result)
+  }, [activityById?.data?.result])
 
   return {
-    appletDetails: appletModel.appletBuilder.convertToAppletDetails(appletById?.data?.result),
-    activityDetails: activityModel.activityBuilder.convertToActivityDetails(activityById?.data?.result),
+    appletDetails,
+    activityDetails,
     isError: isAppletError || isActivityError,
     isLoading: isAppletLoading || isActivityLoading,
   }

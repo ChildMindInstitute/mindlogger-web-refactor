@@ -1,7 +1,7 @@
 import classNames from "classnames"
 import { Container, Row, Col, Spinner } from "react-bootstrap"
 
-import { useActivityDetails } from "../lib/useActivityDetails"
+import * as activityDetailsModel from "../model"
 import { ActivityItemList } from "./ActivityItemList"
 import { BackNavigateButton } from "./BackNavigateButton"
 
@@ -15,7 +15,7 @@ interface ActivityDetailsWidgetProps {
 }
 
 export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
-  const { appletDetails, activityDetails, isLoading } = useActivityDetails({
+  const { appletDetails, activityDetails, isLoading } = activityDetailsModel.hooks.useActivityDetails({
     appletId: props.appletId,
     activityId: "30", // Hardcoded
   })
