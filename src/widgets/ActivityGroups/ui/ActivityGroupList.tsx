@@ -7,16 +7,17 @@ import CustomModal from "../../Modal"
 import { useActivityGroups } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
-import { ActivityStatus, ActivityType } from "~/entities/activity"
-import { AppletDetailsDTO } from "~/shared/api"
+import { ActivityStatus } from "~/entities/activity"
+import { AppletDetailsDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 interface ActivityListWidgetProps {
   appletDetails: AppletDetailsDTO
+  eventsDetails: EventsByAppletIdResponseDTO[]
 }
 
-export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) => {
+export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigatator = useCustomNavigation()
 
@@ -35,7 +36,7 @@ export const ActivityGroupList = ({ appletDetails }: ActivityListWidgetProps) =>
     setIsResumeActivityOpen(false)
   }
 
-  const { groups } = useActivityGroups(appletDetails)
+  const { groups } = useActivityGroups(appletDetails, eventsDetails)
 
   const onActivityCardClick = (activityId: string, activityStatus: ActivityStatus) => {
     // Check if activityId exist in progress state

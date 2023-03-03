@@ -4,6 +4,7 @@ import { Container, Spinner } from "react-bootstrap"
 import { ActivityGroupList } from "./ActivityGroupList"
 
 import { useAppletByIdQuery } from "~/entities/applet"
+import { useEventsbyAppletIdQuery } from "~/entities/event"
 
 type FetchPublicActivitiesProps = {
   isPublic: true
@@ -18,9 +19,20 @@ type FetchPrivateActivitiesProps = {
 type FetchActivitiesProps = FetchPublicActivitiesProps | FetchPrivateActivitiesProps
 
 export const ActivityGroups = (props: FetchActivitiesProps) => {
-  const { isError, isLoading, data, error } = useAppletByIdQuery(props)
+  const {
+    isError: isAppletError,
+    isLoading: isAppletLoading,
+    data: appletData,
+    error: appletError,
+  } = useAppletByIdQuery(props)
+  const {
+    isError: isEventsError,
+    isLoading: isEventsLoading,
+    error: eventsError,
+    data: eventsData,
+  } = useEventsbyAppletIdQuery({ appletId: props.isPublic ? props.publicAppletKey : props.appletId })
 
-  if (isLoading) {
+  if (isAppletLoading || isEventsLoading) {
     return (
       <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
         <Spinner as="div" animation="border" role="status" aria-hidden="true" />
@@ -28,15 +40,16 @@ export const ActivityGroups = (props: FetchActivitiesProps) => {
     )
   }
 
-  if (isError) {
+  if (isEventsError || isAppletError) {
     return (
       <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
-        <span>{error.evaluatedMessage}</span>
+        <span>{appletError?.evaluatedMessage || eventsError?.evaluatedMessage}</span>
       </Container>
     )
   }
 
-  const appletDetails = data?.data?.result
+  const appletDetails = appletData?.data?.result
+  const eventsDetails = eventsData?.data?.result
 
-  return appletDetails && <ActivityGroupList appletDetails={appletDetails} />
+  return appletDetails && <ActivityGroupList appletDetails={appletDetails} eventsDetails={eventsDetails} />
 }

@@ -63,7 +63,7 @@ class ActivityBuilder {
     }
   }
 
-  public convertToActivityGroupsBuilder(activities: AppletDetailsActivityDTO[]): Activity[] {
+  public convertToActivitiesGroupsBuilder(activities: AppletDetailsActivityDTO[]): Activity[] {
     return activities.map(activity => ({
       type: ActivityType.NotDefined,
       pipelineType: ActivityPipelineType.Regular,

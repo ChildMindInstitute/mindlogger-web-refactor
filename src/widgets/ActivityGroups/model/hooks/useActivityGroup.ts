@@ -8,15 +8,18 @@ import {
 
 import { activityModel } from "~/entities/activity"
 import { EventModel } from "~/entities/event"
-import { AppletDetailsDTO } from "~/shared/api"
+import { AppletDetailsDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
 
 type UseActivityGroupsReturn = {
   groups: ActivityListGroup[]
   appletDetails?: AppletDetailsDTO
 }
 
-export const useActivityGroups = (appletDetails: AppletDetailsDTO): UseActivityGroupsReturn => {
-  const activitiesForBuilder = activityModel.activityBuilder.convertToActivityGroupsBuilder(appletDetails.activities)
+export const useActivityGroups = (
+  appletDetails: AppletDetailsDTO,
+  eventsDetails: EventsByAppletIdResponseDTO[],
+): UseActivityGroupsReturn => {
+  const activitiesForBuilder = activityModel.activityBuilder.convertToActivitiesGroupsBuilder(appletDetails.activities)
 
   const builder = createActivityGroupsBuilder({
     allAppletActivities: activitiesForBuilder,
@@ -26,14 +29,16 @@ export const useActivityGroups = (appletDetails: AppletDetailsDTO): UseActivityG
 
   const calculator = EventModel.SheduledDateCalculator
 
-  let eventActivities = eventActivityMocks
+  let eventActivities = EventModel.builder.eventsBuilder.convertToEventsGroupBuilder(
+    eventsDetails,
+    activitiesForBuilder,
+  )
 
   for (const eventActivity of eventActivities) {
     const date = calculator.calculate(eventActivity.event)
     eventActivity.event.scheduledAt = date
   }
 
-  // Here get only future eventActivities
   eventActivities = eventActivities.filter(x => x.event.scheduledAt)
 
   const groupAvailable = builder.buildAvailable(eventActivities)
