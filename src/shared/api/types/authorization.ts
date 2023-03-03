@@ -57,7 +57,8 @@ interface AuthorizationDTO {
 }
 
 interface UserDTO {
-  id: number
-  fullName: string
+  id: string
+  firstName: string
+  lastName: string
   email: string
 }
