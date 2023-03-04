@@ -14,27 +14,31 @@ class EventsBuilder {
       }
     })
 
-    return events.map(event => ({
-      activity: activitiesMap.get(event.activityId),
-      event: {
-        id: event.id,
-        activityId: event.activityId,
-        scheduledAt: event.periodicity.type !== "ALWAYS" ? this.convertToDate(event.periodicity.startDate) : null,
-        timers: event.timerType === "NOT_SET" ? null : { timer: null, idleTimer: null },
-        selectedDate: null,
-        availability: {
-          timeFrom: event.allDay ? this.convertToHourMinute(event.startTime) : null,
-          timeTo: event.allDay ? this.convertToHourMinute(event.endTime) : null,
-          allowAccessBeforeFromTime: event.accessBeforeSchedule,
-          startDate: event.periodicity.type !== "ALWAYS" ? this.convertToDate(event.periodicity.startDate) : null,
-          endDate: event.periodicity.type !== "ALWAYS" ? this.convertToDate(event.periodicity.endDate) : null,
-          oneTimeCompletion: event.oneTimeCompletion,
-          availabilityType:
-            event.periodicity.type === "ALWAYS" ? AvailabilityType.AlwaysAvailable : AvailabilityType.ScheduledAccess,
-          periodicityType: this.convertPeriodicitType(event.periodicity.type),
+    return events.map(event => {
+      const isAlwaysAvailable = event.periodicity.type === "ALWAYS"
+      const isTimerSet = event.timerType !== "NOT_SET"
+
+      return {
+        activity: activitiesMap.get(event.activityId),
+        event: {
+          id: event.id,
+          activityId: event.activityId,
+          scheduledAt: !isAlwaysAvailable ? this.convertToDate(event.periodicity.startDate) : null,
+          timers: isTimerSet ? { timer: null, idleTimer: null } : null,
+          selectedDate: null,
+          availability: {
+            oneTimeCompletion: event.oneTimeCompletion,
+            allowAccessBeforeFromTime: event.accessBeforeSchedule,
+            timeFrom: event.allDay ? this.convertToHourMinute(event.startTime) : null,
+            timeTo: event.allDay ? this.convertToHourMinute(event.endTime) : null,
+            startDate: !isAlwaysAvailable ? this.convertToDate(event.periodicity.startDate) : null,
+            endDate: !isAlwaysAvailable ? this.convertToDate(event.periodicity.endDate) : null,
+            availabilityType: isAlwaysAvailable ? AvailabilityType.AlwaysAvailable : AvailabilityType.ScheduledAccess,
+            periodicityType: this.convertPeriodicitType(event.periodicity.type),
+          },
         },
-      },
-    }))
+      }
+    })
   }
 
   private convertPeriodicitType(type: PeriodicityTypeDTO): PeriodicityType | null {

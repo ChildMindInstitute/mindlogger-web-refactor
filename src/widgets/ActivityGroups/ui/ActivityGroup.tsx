@@ -3,12 +3,12 @@ import { Container } from "react-bootstrap"
 
 import { ActivityListGroup } from "../lib/types"
 
-import { ActivityList, ActivityStatus } from "~/entities/activity"
+import { ActivityList, ActivityListItem } from "~/entities/activity"
 import { useCustomTranslation } from "~/shared/utils"
 
 interface ActivityGroupProps {
   group: ActivityListGroup
-  onActivityCardClick: (activityId: string, activityStatus: ActivityStatus) => void
+  onActivityCardClick: (activity: ActivityListItem) => void
 }
 
 export const ActivityGroup = ({ group, onActivityCardClick }: ActivityGroupProps) => {

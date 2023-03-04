@@ -1,10 +1,5 @@
 import { ActivityListGroup } from "../../lib"
 import { createActivityGroupsBuilder } from "../factories/ActivityGroupsBuilder"
-import {
-  progress as progressMocks,
-  allAppletActivities as allActivityMocks,
-  eventActivities as eventActivityMocks,
-} from "./mocksForEntities"
 
 import { activityModel } from "~/entities/activity"
 import { EventModel } from "~/entities/event"

@@ -1,16 +1,29 @@
-import { ActivityProgressState } from "../activity.slice"
-import { activitiesInProgressSelector } from "../selectors"
+import { useCallback } from "react"
 
-import { useAppSelector } from "~/shared/utils"
+import { actions, ActivityProgressState, ProgressPayloadState } from "../activity.slice"
+import { activitySelector } from "../selectors"
+
+import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 type UseActivityInProgressStateReturn = {
-  activitiesInProgress: Record<string, ActivityProgressState>
+  activitiesInProgress: ActivityProgressState
+  pushActivityInProgress: (payload: ProgressPayloadState) => void
 }
 
 export const useActivityInProgressState = (): UseActivityInProgressStateReturn => {
-  const activitiesInProgress = useAppSelector(activitiesInProgressSelector)
+  const dispatch = useAppDispatch()
+
+  const activitiesInProgress = useAppSelector(activitySelector)
+
+  const pushActivityInProgress = useCallback(
+    (payload: ProgressPayloadState) => {
+      dispatch(actions.saveActivityInProgress(payload))
+    },
+    [dispatch],
+  )
 
   return {
     activitiesInProgress,
+    pushActivityInProgress,
   }
 }

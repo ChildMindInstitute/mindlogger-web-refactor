@@ -1,9 +1,9 @@
-import { ActivityListItem, ActivityStatus } from "../lib"
+import { ActivityListItem } from "../lib"
 import ActivityCard from "./ActivityCard"
 
 interface ActivityListProps {
   activities: ActivityListItem[]
-  onActivityCardClick: (activityId: string, activityStatus: ActivityStatus) => void
+  onActivityCardClick: (activity: ActivityListItem) => void
 }
 
 const ActivityList = ({ activities, onActivityCardClick }: ActivityListProps) => {
@@ -13,7 +13,7 @@ const ActivityList = ({ activities, onActivityCardClick }: ActivityListProps) =>
         <ActivityCard
           key={activity.eventId}
           activity={activity}
-          onActivityCardClick={() => onActivityCardClick(activity.activityId, activity.status)}
+          onActivityCardClick={() => onActivityCardClick(activity)}
         />
       ))}
     </>

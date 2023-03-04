@@ -34,9 +34,10 @@ const calculateForMonthly = (selectedDate: Date, availability: EventAvailability
 }
 
 const calculateForSpecificDay = (specificDay: Date, availability: EventAvailability): Date | null => {
-  if (specificDay > startOfDay(new Date())) {
-    return null
-  }
+  // Ask Aleksei about it 06.03.2023, Mon
+  // if (specificDay > startOfDay(new Date())) {
+  //   return null
+  // }
 
   const selectedYear = specificDay.getFullYear()
   const selectedMonth = specificDay.getMonth()
@@ -113,7 +114,7 @@ export const SheduledDateCalculator = {
   calculate: (event: ScheduleEvent): Date | null => {
     const today = new Date().toDateString()
 
-    const key = JSON.stringify(event.availability) + (event.selectedDate?.getTime() ?? "") + today
+    const key = event.id + JSON.stringify(event.availability) + (event.selectedDate?.getTime() ?? "") + today
 
     if (cache.has(key)) {
       return cache.get(key)
