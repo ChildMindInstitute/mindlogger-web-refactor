@@ -24,7 +24,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
   const [isAboutOpen, setIsAboutOpen] = useState(false)
   const [isResumeActivityOpen, setIsResumeActivityOpen] = useState(false)
 
-  const { pushActivityInProgress } = activityModel.hooks.useActivityInProgressState()
+  const { upsertActivityInProgress, activitiesInProgress } = activityModel.hooks.useActivityInProgressState()
 
   const onCardAboutClick = () => {
     setIsAboutOpen(true)
@@ -38,13 +38,13 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     setIsResumeActivityOpen(false)
   }
 
-  const { groups } = useActivityGroups(appletDetails, eventsDetails)
+  const { groups } = useActivityGroups(appletDetails, eventsDetails, activitiesInProgress)
 
   const onActivityCardClick = (activity: ActivityListItem) => {
     if (activity.status === ActivityStatus.InProgress) {
       setIsResumeActivityOpen(true)
     } else {
-      pushActivityInProgress({
+      upsertActivityInProgress({
         appletId: appletDetails.id,
         activityId: activity.activityId,
         eventId: activity.eventId,

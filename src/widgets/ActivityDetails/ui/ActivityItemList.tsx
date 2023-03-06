@@ -1,5 +1,3 @@
-import { useEffect } from "react"
-
 import { ActivityDetails } from "~/entities/activity"
 import { ActivityCardItemList, mockItemList } from "~/entities/item"
 

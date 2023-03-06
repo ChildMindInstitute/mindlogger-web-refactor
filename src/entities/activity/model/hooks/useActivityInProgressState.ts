@@ -1,13 +1,15 @@
 import { useCallback } from "react"
 
-import { actions, ActivityProgressState, ProgressPayloadState } from "../activity.slice"
+import { actions } from "../activity.slice"
 import { activitySelector } from "../selectors"
+import { ActivityProgressState, ProgressPayloadState } from "../types"
 
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 type UseActivityInProgressStateReturn = {
   activitiesInProgress: ActivityProgressState
-  pushActivityInProgress: (payload: ProgressPayloadState) => void
+  upsertActivityInProgress: (payload: ProgressPayloadState) => void
+  clearActivityInProgressState: () => void
 }
 
 export const useActivityInProgressState = (): UseActivityInProgressStateReturn => {
@@ -15,15 +17,20 @@ export const useActivityInProgressState = (): UseActivityInProgressStateReturn =
 
   const activitiesInProgress = useAppSelector(activitySelector)
 
-  const pushActivityInProgress = useCallback(
+  const upsertActivityInProgress = useCallback(
     (payload: ProgressPayloadState) => {
-      dispatch(actions.saveActivityInProgress(payload))
+      dispatch(actions.upsertActivityById(payload))
     },
     [dispatch],
   )
 
+  const clearActivityInProgressState = useCallback(() => {
+    dispatch(actions.clearActivity())
+  }, [dispatch])
+
   return {
     activitiesInProgress,
-    pushActivityInProgress,
+    upsertActivityInProgress,
+    clearActivityInProgressState,
   }
 }

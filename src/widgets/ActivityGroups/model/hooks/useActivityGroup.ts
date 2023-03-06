@@ -1,3 +1,5 @@
+import { useMemo } from "react"
+
 import { ActivityListGroup } from "../../lib"
 import { createActivityGroupsBuilder } from "../factories/ActivityGroupsBuilder"
 
@@ -13,35 +15,57 @@ type UseActivityGroupsReturn = {
 export const useActivityGroups = (
   appletDetails: AppletDetailsDTO,
   eventsDetails: EventsByAppletIdResponseDTO[],
+  activityInProgress: activityModel.types.ActivityProgressState,
 ): UseActivityGroupsReturn => {
-  const activitiesForBuilder = activityModel.activityBuilder.convertToActivitiesGroupsBuilder(appletDetails.activities)
+  const activitiesForBuilder = useMemo(() => {
+    return activityModel.activityBuilder.convertToActivitiesGroupsBuilder(appletDetails.activities)
+  }, [appletDetails.activities])
+  const inProgress = useMemo(() => {
+    return activityModel.activityBuilder.convertToActivityInProgressGroupsBuilder(activityInProgress)
+  }, [activityInProgress])
 
-  const builder = createActivityGroupsBuilder({
-    allAppletActivities: activitiesForBuilder,
-    appletId: appletDetails.id,
-    progress: {}, // progressMocks
-  })
+  const builder = useMemo(() => {
+    return createActivityGroupsBuilder({
+      allAppletActivities: activitiesForBuilder,
+      appletId: appletDetails.id,
+      progress: inProgress,
+    })
+  }, [activitiesForBuilder, appletDetails.id, inProgress])
 
-  const calculator = EventModel.SheduledDateCalculator
+  const calculator = useMemo(() => EventModel.SheduledDateCalculator, [])
 
-  let eventActivities = EventModel.builder.eventsBuilder.convertToEventsGroupBuilder(
-    eventsDetails,
-    activitiesForBuilder,
-  )
+  const eventActivities = useMemo(() => {
+    return EventModel.builder.eventsBuilder.convertToEventsGroupBuilder(eventsDetails, activitiesForBuilder)
+  }, [eventsDetails, activitiesForBuilder])
 
-  for (const eventActivity of eventActivities) {
-    const date = calculator.calculate(eventActivity.event)
-    eventActivity.event.scheduledAt = date
-  }
+  const eventActivityCalculatedScheduleAt = useMemo(() => {
+    return eventActivities.map(eventActivity => {
+      const date = calculator.calculate(eventActivity.event)
 
-  eventActivities = eventActivities.filter(x => x.event.scheduledAt)
+      return { ...eventActivity, event: { ...eventActivity.event, scheduledAt: date } }
+    })
+  }, [eventActivities, calculator])
 
-  const groupAvailable = builder.buildAvailable(eventActivities)
-  const groupInProgress = builder.buildInProgress(eventActivities)
-  const groupScheduled = builder.buildScheduled(eventActivities)
+  const filteredEventActivities = useMemo(() => {
+    return eventActivityCalculatedScheduleAt.filter(x => x.event.scheduledAt)
+  }, [eventActivityCalculatedScheduleAt])
+
+  const groupAvailable = useMemo(() => {
+    return builder.buildAvailable(filteredEventActivities)
+  }, [builder, filteredEventActivities])
+  const groupInProgress = useMemo(() => {
+    return builder.buildInProgress(filteredEventActivities)
+  }, [builder, filteredEventActivities])
+  const groupScheduled = useMemo(() => {
+    return builder.buildScheduled(filteredEventActivities)
+  }, [builder, filteredEventActivities])
+
+  const generatedGroups = useMemo(() => {
+    return [groupInProgress, groupAvailable, groupScheduled]
+  }, [groupAvailable, groupInProgress, groupScheduled])
 
   return {
-    groups: [groupAvailable, groupInProgress, groupScheduled],
+    groups: generatedGroups,
     appletDetails,
   }
 }

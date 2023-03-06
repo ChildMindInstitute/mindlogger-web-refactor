@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react"
+import { PropsWithChildren, ReactNode } from "react"
 
 import classNames from "classnames"
 import { Card, Col, Image, Row } from "react-bootstrap"
@@ -10,7 +10,7 @@ import "./style.scss"
 interface CardItemProps extends PropsWithChildren {
   watermark?: string
   isInvalid?: boolean
-  buttons?: JSX.Element
+  buttons?: ReactNode
   markdown: string
 }
 
