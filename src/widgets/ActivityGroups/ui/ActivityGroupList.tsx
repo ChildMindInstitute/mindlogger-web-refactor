@@ -17,12 +17,23 @@ interface ActivityListWidgetProps {
   eventsDetails: EventsByAppletIdResponseDTO[]
 }
 
+type ResumeActivityState = {
+  isOpen: boolean
+  selectedActivity: ActivityListItem | null
+}
+
 export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigatator = useCustomNavigation()
+  const navigateToActivityDetailsPage = (appletId: string, activityId: string) => {
+    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId))
+  }
 
   const [isAboutOpen, setIsAboutOpen] = useState(false)
-  const [isResumeActivityOpen, setIsResumeActivityOpen] = useState(false)
+  const [resumeActivityState, setResumeActivityState] = useState<ResumeActivityState>({
+    isOpen: false,
+    selectedActivity: null,
+  })
 
   const { upsertActivityInProgress, activitiesInProgress } = activityModel.hooks.useActivityInProgressState()
 
@@ -35,23 +46,44 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
   }
 
   const onResumeActivityModalClose = () => {
-    setIsResumeActivityOpen(false)
+    setResumeActivityState({ isOpen: false, selectedActivity: null })
   }
 
   const { groups } = useActivityGroups(appletDetails, eventsDetails, activitiesInProgress)
 
+  const navigateToActivityDetailsWithEmptyProgress = (activityId: string, eventId: string) => {
+    upsertActivityInProgress({
+      appletId: appletDetails.id,
+      activityId: activityId,
+      eventId: eventId,
+      startAt: new Date(),
+      endAt: null,
+    })
+
+    // clear all answer here (Future implementation)
+
+    return navigateToActivityDetailsPage(appletDetails.id, activityId)
+  }
+
   const onActivityCardClick = (activity: ActivityListItem) => {
     if (activity.status === ActivityStatus.InProgress) {
-      setIsResumeActivityOpen(true)
+      setResumeActivityState({ isOpen: true, selectedActivity: activity })
     } else {
-      upsertActivityInProgress({
-        appletId: appletDetails.id,
-        activityId: activity.activityId,
-        eventId: activity.eventId,
-        startAt: new Date(),
-        endAt: null,
-      })
-      navigatator.navigate(ROUTES.activityDetails.navigateTo(appletDetails.id, activity.activityId))
+      return navigateToActivityDetailsWithEmptyProgress(activity.activityId, activity.eventId)
+    }
+  }
+
+  const onActivityResume = () => {
+    if (resumeActivityState.selectedActivity) {
+      return navigateToActivityDetailsPage(appletDetails.id, resumeActivityState.selectedActivity.activityId)
+    }
+  }
+
+  const onActivityRestart = () => {
+    const { selectedActivity } = resumeActivityState
+
+    if (selectedActivity?.activityId && selectedActivity?.eventId) {
+      return navigateToActivityDetailsWithEmptyProgress(selectedActivity.activityId, selectedActivity.eventId)
     }
   }
 
@@ -85,18 +117,14 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
         label={appletDetails?.description}
       />
       <CustomModal
-        show={isResumeActivityOpen}
+        show={resumeActivityState.isOpen}
         onHide={onResumeActivityModalClose}
         title={t("additional.resume_activity")}
         label={t("additional.activity_resume_restart")}
         footerPrimaryButton={t("additional.restart")}
-        onPrimaryButtonClick={() => {
-          console.log("restart")
-        }}
+        onPrimaryButtonClick={onActivityRestart}
         footerSecondaryButton={t("additional.resume")}
-        onSecondaryButtonClick={() => {
-          console.log("resume")
-        }}
+        onSecondaryButtonClick={onActivityResume}
       />
     </Container>
   )
