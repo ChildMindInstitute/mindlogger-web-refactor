@@ -14,3 +14,11 @@ export type ActivityItem = {
   hasTextResponse: boolean
   ordering: number
 }
+
+export type ItemCardButtonsConfig = {
+  isOnePageAssessment?: boolean
+  isBackShown?: boolean
+  isSubmitShown?: boolean
+  isSkippable?: boolean
+  isNextDisable?: boolean
+}

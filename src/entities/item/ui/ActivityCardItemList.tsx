@@ -1,19 +1,18 @@
 import { PropsWithChildren } from "react"
 
-import { ActivityItem } from "../lib"
+import { ActivityItem, ItemCardButtonsConfig } from "../lib"
 import { ActivityCardItem } from "./ActivityCardItem"
 
 type ActivityCardItemListProps = PropsWithChildren<{
   items: ActivityItem[]
+  itemCardButtonsConfig: ItemCardButtonsConfig
 }>
 
-export const ActivityCardItemList = ({ items, children }: ActivityCardItemListProps) => {
+export const ActivityCardItemList = ({ items, itemCardButtonsConfig }: ActivityCardItemListProps) => {
   return (
     <>
       {items.map(item => (
-        <ActivityCardItem key={item.id} activityItem={item}>
-          {children}
-        </ActivityCardItem>
+        <ActivityCardItem key={item.id} activityItem={item} itemCardButtonsConfig={itemCardButtonsConfig} />
       ))}
     </>
   )

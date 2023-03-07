@@ -1,17 +1,27 @@
-import { PropsWithChildren } from "react"
+import { useState } from "react"
 
-import { ActivityItem } from "../lib/item.schema"
+import { ActivityItem, ItemCardButtonsConfig } from "../lib/item.schema"
+import { ItemCardButton } from "./ItemCardButtons"
 
 import { TextItem, CardItem } from "~/shared/ui"
 
-type ActivityCardItemProps = PropsWithChildren<{
+type ActivityCardItemProps = {
   activityItem: ActivityItem
-}>
+  itemCardButtonsConfig: ItemCardButtonsConfig
+}
 
-export const ActivityCardItem = ({ activityItem, children }: ActivityCardItemProps) => {
+export const ActivityCardItem = ({ activityItem, itemCardButtonsConfig }: ActivityCardItemProps) => {
+  const [value, setValue] = useState<string | undefined>(undefined)
+
+  const buttonConfig: ItemCardButtonsConfig = {
+    ...itemCardButtonsConfig,
+    isNextDisable: !value || !value.length,
+    isSkippable: activityItem.isSkippable || itemCardButtonsConfig.isSkippable,
+  }
+
   return (
-    <CardItem markdown={activityItem.question} buttons={children}>
-      <TextItem />
+    <CardItem markdown={activityItem.question} buttons={<ItemCardButton config={buttonConfig} />}>
+      <TextItem value={value} setValue={setValue} />
     </CardItem>
   )
 }
