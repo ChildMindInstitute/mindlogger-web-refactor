@@ -58,9 +58,8 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
       eventId: eventId,
       startAt: new Date(),
       endAt: null,
+      answers: [],
     })
-
-    // clear all answer here (Future implementation)
 
     return navigateToActivityDetailsPage(appletDetails.id, activityId)
   }
