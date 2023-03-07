@@ -1,27 +1,37 @@
+import { ActivityEvents } from "../model/hooks"
+import { useActivityInProgress } from "../model/hooks/useActivityInProgress"
+
 import { ActivityDetails } from "~/entities/activity"
-import { ActivityCardItemList, mockItemList } from "~/entities/item"
+import { ActivityCardItemList, ItemCardButtonsConfig } from "~/entities/item"
 
 interface ActivityItemListProps {
   activityDetails: ActivityDetails
+  activityEvents: ActivityEvents[]
 }
 
-export const ActivityItemList = ({ activityDetails }: ActivityItemListProps) => {
+export const ActivityItemList = ({ activityDetails, activityEvents }: ActivityItemListProps) => {
+  const { activityInProgress, items } = useActivityInProgress(activityDetails, activityEvents)
+
   const isOnePageAssessment = activityDetails.showAllAtOnce
   const isSummaryScreen = false // Mock
 
-  const isBackShown = activityDetails.items.length > 1
-  const isNextShown = true // Always
-  const isNextDisable = true // Condition if answer value empty or not exist
-
-  const isSubmitShown = false // TRUE when items.length === inProgress.items.length
-  const isSkippable = false // item.skippable || activityDetails.skippable
+  const buttonsConfig: ItemCardButtonsConfig = {
+    isOnePageAssessment,
+    isBackShown: activityDetails.items.length > 1,
+    isSubmitShown: isOnePageAssessment && activityDetails.items.length === activityInProgress?.answers.length,
+    isSkippable: activityDetails.isSkippable,
+    isNextDisable: true, // Default value === TRUE  (Condition if answer value empty or not exist)
+  }
 
   return (
     <>
-      {/* Should be implemented after ITEMs */}
       {/* {isSummaryScreen && <ActivitySummary />} */}
-      {!isSummaryScreen && isOnePageAssessment && <ActivityCardItemList items={activityDetails.items} />}
-      {!isSummaryScreen && !isOnePageAssessment && <ActivityCardItemList items={mockItemList} />}
+      {!isSummaryScreen && isOnePageAssessment && (
+        <ActivityCardItemList items={items} itemCardButtonsConfig={buttonsConfig} />
+      )}
+      {!isSummaryScreen && !isOnePageAssessment && (
+        <ActivityCardItemList items={items} itemCardButtonsConfig={buttonsConfig} />
+      )}
     </>
   )
 }
