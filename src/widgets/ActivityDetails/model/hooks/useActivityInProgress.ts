@@ -28,15 +28,15 @@ export const useActivityInProgress = (
     let items: ActivityItem[] = []
 
     if (isOnePageAssessment) {
-      items = activityDetails.items.map(item => item)
+      items = [...activityDetails.items]
     } else {
-      items = activityDetails.items.reduce((acc, item, index) => {
+      items = activityDetails.items.reduce<ActivityItem[]>((acc, item, index) => {
         if (index < activitiesInProgress.length) {
           acc.push(item)
         }
 
         return acc
-      }, [] as ActivityItem[])
+      }, [])
     }
 
     return items
