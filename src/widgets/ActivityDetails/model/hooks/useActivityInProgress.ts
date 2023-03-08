@@ -1,5 +1,3 @@
-import { ActivityEvents } from "./useActivityDetails"
-
 import { ActivityDetails, activityModel } from "~/entities/activity"
 import { ActivityItem } from "~/entities/item"
 
@@ -10,7 +8,7 @@ type UseActivityInProgressReturn = {
 
 export const useActivityInProgress = (
   activityDetails: ActivityDetails,
-  activityEvents: ActivityEvents[],
+  eventId: string,
 ): UseActivityInProgressReturn => {
   const { activitiesInProgress } = activityModel.hooks.useActivityInProgressState()
 
@@ -18,11 +16,9 @@ export const useActivityInProgress = (
 
   const isOnePageAssessment = activityDetails.showAllAtOnce
 
-  const eventIdByActivityId = activityEvents.find(event => event.activityId === selectedActivityId)?.eventId
-
-  const activityInProgress = activitiesInProgress.find(
-    ({ activityId, eventId }) => activityId === selectedActivityId && eventId === eventIdByActivityId,
-  )
+  const activityInProgress = activitiesInProgress.find(activity => {
+    return activity.activityId === selectedActivityId && activity.eventId === eventId
+  })
 
   const calculateActivityProgress = (): ActivityItem[] => {
     let items: ActivityItem[] = []

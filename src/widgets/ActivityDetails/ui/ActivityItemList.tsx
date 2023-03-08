@@ -1,4 +1,3 @@
-import { ActivityEvents } from "../model/hooks"
 import { useActivityInProgress } from "../model/hooks/useActivityInProgress"
 
 import { ActivityDetails } from "~/entities/activity"
@@ -6,11 +5,11 @@ import { ActivityCardItemList, ItemCardButtonsConfig } from "~/entities/item"
 
 interface ActivityItemListProps {
   activityDetails: ActivityDetails
-  activityEvents: ActivityEvents[]
+  eventId: string
 }
 
-export const ActivityItemList = ({ activityDetails, activityEvents }: ActivityItemListProps) => {
-  const { activityInProgress, items } = useActivityInProgress(activityDetails, activityEvents)
+export const ActivityItemList = ({ activityDetails, eventId }: ActivityItemListProps) => {
+  const { activityInProgress, items } = useActivityInProgress(activityDetails, eventId)
 
   const isOnePageAssessment = activityDetails.showAllAtOnce
   const isSummaryScreen = false // Mock

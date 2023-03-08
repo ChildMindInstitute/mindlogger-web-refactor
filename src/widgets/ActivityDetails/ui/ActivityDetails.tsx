@@ -16,7 +16,7 @@ interface ActivityDetailsWidgetProps {
 }
 
 export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
-  const { appletDetails, activityDetails, activityEvents, isLoading } = activityDetailsModel.hooks.useActivityDetails({
+  const { appletDetails, activityDetails, isLoading } = activityDetailsModel.hooks.useActivityDetails({
     appletId: props.appletId,
     activityId: props.activityId,
   })
@@ -54,7 +54,7 @@ export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
           {appletDetails?.activities && <ActivityProgressPreviewList activities={appletDetails.activities} />}
         </Col>
         <Col xl={9}>
-          {activityDetails && <ActivityItemList activityDetails={activityDetails} activityEvents={activityEvents} />}
+          {activityDetails && <ActivityItemList activityDetails={activityDetails} eventId={props.eventId} />}
         </Col>
       </Row>
     </Container>
