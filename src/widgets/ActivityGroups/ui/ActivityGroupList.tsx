@@ -25,8 +25,8 @@ type ResumeActivityState = {
 export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigatator = useCustomNavigation()
-  const navigateToActivityDetailsPage = (appletId: string, activityId: string) => {
-    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId))
+  const navigateToActivityDetailsPage = (appletId: string, activityId: string, eventId: string) => {
+    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId, eventId))
   }
 
   const [isAboutOpen, setIsAboutOpen] = useState(false)
@@ -61,7 +61,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
       answers: [],
     })
 
-    return navigateToActivityDetailsPage(appletDetails.id, activityId)
+    return navigateToActivityDetailsPage(appletDetails.id, activityId, eventId)
   }
 
   const onActivityCardClick = (activity: ActivityListItem) => {
@@ -74,7 +74,9 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
 
   const onActivityResume = () => {
     if (resumeActivityState.selectedActivity) {
-      return navigateToActivityDetailsPage(appletDetails.id, resumeActivityState.selectedActivity.activityId)
+      const { activityId, eventId } = resumeActivityState.selectedActivity
+
+      return navigateToActivityDetailsPage(appletDetails.id, activityId, eventId)
     }
   }
 
