@@ -1,5 +1,5 @@
 import { ActivityDetails } from "../../activity"
-import { ItemCardButtonsConfig, useActivityInProgress } from "../lib"
+import { ItemCardButtonsConfig, useStepByStepProgress } from "../lib"
 import { ActivityCardItemList } from "./ActivityCardItemList"
 
 type StepByStepAssessmentFlowProps = {
@@ -8,12 +8,12 @@ type StepByStepAssessmentFlowProps = {
 }
 
 export const StepByStepAssessmentFlow = ({ activityDetails, eventId }: StepByStepAssessmentFlowProps) => {
-  const { activityInProgress, items } = useActivityInProgress(activityDetails, eventId)
+  const { items, activityProgressLength } = useStepByStepProgress(activityDetails, eventId)
 
   const buttonsConfig: ItemCardButtonsConfig = {
     isOnePageAssessment: false,
-    isBackShown: activityDetails.items.length > 1,
-    isSubmitShown: activityDetails.items.length === activityInProgress?.answers.length,
+    isBackShown: activityProgressLength > 1,
+    isSubmitShown: activityDetails.items.length === activityProgressLength,
     isSkippable: activityDetails.isSkippable,
     isNextDisable: true, // Default value === TRUE  (Condition if answer value empty or not exist)
   }
