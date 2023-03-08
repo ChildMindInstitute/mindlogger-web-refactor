@@ -12,6 +12,7 @@ import CustomCard from "~/shared/ui/Card"
 interface ActivityDetailsWidgetProps {
   appletId: string
   activityId: string
+  eventId: string
 }
 
 export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
