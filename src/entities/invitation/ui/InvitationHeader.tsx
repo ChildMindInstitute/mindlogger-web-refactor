@@ -13,7 +13,7 @@ export const InvitationHeader = ({ appletName }: InvitationHeaderProps) => {
     <div>
       <h3 className={classNames("mb-2")}>
         {t("inviteContent.welcome")}
-        <strong>{` ${appletName}!`}</strong>
+        <strong>{` ${appletName}`}</strong>
       </h3>
       <p>{`${t("inviteContent.title")} ${appletName}. ${t("inviteContent.toAccept")}`}</p>
     </div>
