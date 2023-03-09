@@ -12,6 +12,10 @@ const setTime = (target: Date, availability: EventAvailability) => {
   }
 }
 
+const isTodayDate = (date: Date): boolean => {
+  return startOfDay(date) === startOfDay(new Date())
+}
+
 const calculateForMonthly = (selectedDate: Date, availability: EventAvailability): Date | null => {
   const today = startOfDay(new Date())
 
@@ -34,7 +38,9 @@ const calculateForMonthly = (selectedDate: Date, availability: EventAvailability
 }
 
 const calculateForSpecificDay = (specificDay: Date, availability: EventAvailability): Date | null => {
-  if (specificDay > startOfDay(new Date())) {
+  const isAlwaysAvailable = availability.availabilityType === AvailabilityType.AlwaysAvailable
+
+  if (!isAlwaysAvailable && !isTodayDate(specificDay)) {
     return null
   }
 
@@ -113,7 +119,7 @@ export const SheduledDateCalculator = {
   calculate: (event: ScheduleEvent): Date | null => {
     const today = new Date().toDateString()
 
-    const key = JSON.stringify(event.availability) + (event.selectedDate?.getTime() ?? "") + today
+    const key = event.id + JSON.stringify(event.availability) + (event.selectedDate?.getTime() ?? "") + today
 
     if (cache.has(key)) {
       return cache.get(key)

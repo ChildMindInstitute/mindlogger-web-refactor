@@ -53,7 +53,7 @@ const Header = (): JSX.Element | null => {
           </Col>
           <Col xs={12} md={6} className="container justify-content-center">
             {user?.id ? (
-              <AccountDropdown title={user?.fullName as string} onSelectExtended={closeExpandedNavbar} />
+              <AccountDropdown title={`${user?.firstName} ${user?.lastName}`} onSelectExtended={closeExpandedNavbar} />
             ) : (
               <LoginButton onClickExtended={closeExpandedNavbar} />
             )}

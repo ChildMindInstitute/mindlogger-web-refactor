@@ -1,27 +1,18 @@
 import { Button } from "react-bootstrap"
-import { useNavigate, useParams } from "react-router-dom"
 
 import { ActivityListItem, ActivityStatus } from "../lib"
 import TimeStatusLabel from "./TimeStatusLabel"
-
-import { ROUTES } from "~/shared/utils"
 
 import "./style.scss"
 
 interface ActivityCardProps {
   activity: ActivityListItem
   disabled?: boolean
+  onActivityCardClick: () => void
 }
 
-const ActivityCard = ({ activity, disabled }: ActivityCardProps) => {
-  const navigate = useNavigate()
-  const { appletId } = useParams()
-
+const ActivityCard = ({ activity, disabled, onActivityCardClick }: ActivityCardProps) => {
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled
-
-  const onActivityCardClick = () => {
-    navigate(ROUTES.activityDetails.navigateTo(appletId!, activity.activityId))
-  }
 
   return (
     <Button className="ds-activity-button w-100" variant="link" onClick={onActivityCardClick} disabled={isDisabled}>

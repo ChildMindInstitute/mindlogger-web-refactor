@@ -1,15 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export interface UserStore {
-  id: string | number | null
+  id: string | null
   email: string | null
-  fullName: string | null
+  firstName: string | null
+  lastName: string | null
 }
 
 const initialState: UserStore = {
-  email: null,
-  fullName: null,
   id: null,
+  email: null,
+  firstName: null,
+  lastName: null,
 }
 
 const userSlice = createSlice({

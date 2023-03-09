@@ -8,6 +8,11 @@ interface UseActivityDetailsProps {
   activityId: string
 }
 
+export interface ActivityEvents {
+  eventId: string
+  activityId: string
+}
+
 interface UseActivityDetailsReturn {
   appletDetails: AppletDetails<ActivityListItem, ActivityFlow> | null
   activityDetails: ActivityDetails | null
@@ -16,8 +21,6 @@ interface UseActivityDetailsReturn {
 }
 
 export const useActivityDetails = ({ appletId, activityId }: UseActivityDetailsProps): UseActivityDetailsReturn => {
-  const { setActivityDetails } = activityModel.hooks.useActivityDetailsState()
-
   const {
     data: appletById,
     isError: isAppletError,
@@ -27,16 +30,7 @@ export const useActivityDetails = ({ appletId, activityId }: UseActivityDetailsP
     data: activityById,
     isError: isActivityError,
     isLoading: isActivityLoading,
-  } = useActivityByIdQuery(
-    { activityId },
-    {
-      onSuccess(data) {
-        if (data?.data?.result) {
-          setActivityDetails(data?.data?.result)
-        }
-      },
-    },
-  )
+  } = useActivityByIdQuery({ activityId })
 
   const appletDetails = useMemo(() => {
     return appletModel.appletBuilder.convertToAppletDetails(appletById?.data?.result)

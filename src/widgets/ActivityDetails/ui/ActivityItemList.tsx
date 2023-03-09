@@ -1,19 +1,37 @@
+import { useActivityInProgress } from "../model/hooks/useActivityInProgress"
+
 import { ActivityDetails } from "~/entities/activity"
-import { ActivityCardItemList } from "~/entities/item"
+import { ActivityCardItemList, ItemCardButtonsConfig } from "~/entities/item"
 
 interface ActivityItemListProps {
+  appletId: string
+  eventId: string
   activityDetails: ActivityDetails
 }
 
-export const ActivityItemList = ({ activityDetails }: ActivityItemListProps) => {
+export const ActivityItemList = ({ appletId, activityDetails, eventId }: ActivityItemListProps) => {
+  const { items, itemsProgressLength } = useActivityInProgress(appletId, eventId, activityDetails)
+
   const isOnePageAssessment = activityDetails.showAllAtOnce
   const isSummaryScreen = false // Mock
+
+  const buttonsConfig: ItemCardButtonsConfig = {
+    isOnePageAssessment,
+    isBackShown: activityDetails.items.length > 1,
+    isSubmitShown: isOnePageAssessment && activityDetails.items.length === itemsProgressLength,
+    isSkippable: activityDetails.isSkippable,
+    isNextDisable: true, // Default value === TRUE  (Condition if answer value empty or not exist)
+  }
+
   return (
     <>
-      {/* Should be implemented after ITEMs */}
       {/* {isSummaryScreen && <ActivitySummary />} */}
-      {!isSummaryScreen && isOnePageAssessment && <ActivityCardItemList />}
-      {/* {!isSummaryScreen && !isOnePageAssessment && _.map(items.slice(0, availableItems).reverse())} */}
+      {!isSummaryScreen && isOnePageAssessment && (
+        <ActivityCardItemList items={items} itemCardButtonsConfig={buttonsConfig} />
+      )}
+      {!isSummaryScreen && !isOnePageAssessment && (
+        <ActivityCardItemList items={items} itemCardButtonsConfig={buttonsConfig} />
+      )}
     </>
   )
 }

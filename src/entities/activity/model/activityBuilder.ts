@@ -1,4 +1,12 @@
-import { ActivityDetails, ActivityListItem, ActivityProgressPreview, ActivityStatus, ActivityType } from "../lib"
+import {
+  Activity,
+  ActivityDetails,
+  ActivityListItem,
+  ActivityPipelineType,
+  ActivityProgressPreview,
+  ActivityStatus,
+  ActivityType,
+} from "../lib"
 
 import { ActivityDTO, AppletDetailsActivityDTO } from "~/shared/api"
 import { getRandomInt } from "~/shared/utils"
@@ -53,6 +61,17 @@ class ActivityBuilder {
       ordering: activity.ordering,
       items: activity.items,
     }
+  }
+
+  public convertToActivitiesGroupsBuilder(activities: AppletDetailsActivityDTO[]): Activity[] {
+    return activities.map(activity => ({
+      type: ActivityType.NotDefined,
+      pipelineType: ActivityPipelineType.Regular,
+      id: activity.id,
+      name: activity.name,
+      description: activity.description,
+      image: activity.image,
+    }))
   }
 }
 

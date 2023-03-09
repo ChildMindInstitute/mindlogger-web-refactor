@@ -59,8 +59,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
   })
 
   const onSignupSubmit = (data: TSignupForm) => {
-    const { email, password, firstName, lastName } = data
-    return signup({ email, password, fullName: `${firstName} ${lastName}` })
+    return signup(data)
   }
 
   return (

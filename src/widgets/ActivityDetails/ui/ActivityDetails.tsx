@@ -12,12 +12,13 @@ import CustomCard from "~/shared/ui/Card"
 interface ActivityDetailsWidgetProps {
   appletId: string
   activityId: string
+  eventId: string
 }
 
 export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
   const { appletDetails, activityDetails, isLoading } = activityDetailsModel.hooks.useActivityDetails({
     appletId: props.appletId,
-    activityId: "30", // Hardcoded
+    activityId: props.activityId,
   })
 
   if (isLoading) {
@@ -52,7 +53,11 @@ export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
 
           {appletDetails?.activities && <ActivityProgressPreviewList activities={appletDetails.activities} />}
         </Col>
-        <Col xl={9}>{activityDetails && <ActivityItemList activityDetails={activityDetails} />}</Col>
+        <Col xl={9}>
+          {activityDetails && (
+            <ActivityItemList appletId={props.appletId} eventId={props.eventId} activityDetails={activityDetails} />
+          )}
+        </Col>
       </Row>
     </Container>
   )

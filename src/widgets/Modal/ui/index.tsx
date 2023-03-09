@@ -7,9 +7,9 @@ export interface CustomModalProps {
   onHide: () => void
   title?: string | null
   label?: string | null
-  footerPrimaryButton?: string
+  footerPrimaryButton?: string | null
   onPrimaryButtonClick?: () => void
-  footerSecondaryButton?: string
+  footerSecondaryButton?: string | null
   onSecondaryButtonClick?: () => void
 }
 
@@ -35,14 +35,14 @@ const CustomModal = (props: CustomModalProps) => {
       {label && <Modal.Body>{label}</Modal.Body>}
       {(footerPrimaryButton || footerSecondaryButton) && (
         <Modal.Footer>
-          {footerPrimaryButton && (
-            <BasicButton variant="primary" onClick={onPrimaryButtonClick}>
-              {footerPrimaryButton}
-            </BasicButton>
-          )}
           {footerSecondaryButton && (
             <BasicButton variant="secondary" onClick={onSecondaryButtonClick}>
               {footerSecondaryButton}
+            </BasicButton>
+          )}
+          {footerPrimaryButton && (
+            <BasicButton variant="primary" onClick={onPrimaryButtonClick}>
+              {footerPrimaryButton}
             </BasicButton>
           )}
         </Modal.Footer>

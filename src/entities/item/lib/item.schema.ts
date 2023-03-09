@@ -5,7 +5,6 @@ export type ActivityItem = {
   question: string
 
   responseType: ActivityItemType
-  answers: Record<string, unknown>
 
   timer: number
 
@@ -14,4 +13,12 @@ export type ActivityItem = {
   isAbleToMoveToPrevious: boolean
   hasTextResponse: boolean
   ordering: number
+}
+
+export type ItemCardButtonsConfig = {
+  isOnePageAssessment?: boolean
+  isBackShown?: boolean
+  isSubmitShown?: boolean
+  isSkippable?: boolean
+  isNextDisable?: boolean
 }

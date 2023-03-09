@@ -1,11 +1,18 @@
-import { mockItemList } from "../lib/mockItemList"
+import { PropsWithChildren } from "react"
+
+import { ActivityItem, ItemCardButtonsConfig } from "../lib"
 import { ActivityCardItem } from "./ActivityCardItem"
 
-export const ActivityCardItemList = () => {
+type ActivityCardItemListProps = PropsWithChildren<{
+  items: ActivityItem[]
+  itemCardButtonsConfig: ItemCardButtonsConfig
+}>
+
+export const ActivityCardItemList = ({ items, itemCardButtonsConfig }: ActivityCardItemListProps) => {
   return (
     <>
-      {mockItemList.map(item => (
-        <ActivityCardItem key={item.id} activityItem={item} />
+      {items.map(item => (
+        <ActivityCardItem key={item.id} activityItem={item} itemCardButtonsConfig={itemCardButtonsConfig} />
       ))}
     </>
   )

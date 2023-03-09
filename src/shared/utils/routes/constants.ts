@@ -37,8 +37,9 @@ export const ROUTES = {
     navigateTo: (appletId: string | number) => `/protected/applets/${appletId}`,
   },
   activityDetails: {
-    path: "/protected/applets/:appletId/activity/:activityId",
-    navigateTo: (appletId: string, activityId: string) => `/protected/applets/${appletId}/activity/${activityId}`,
+    path: "/protected/applets/:appletId/activity/:activityId/event/:eventId",
+    navigateTo: (appletId: string, activityId: string, eventId: string) =>
+      `/protected/applets/${appletId}/activity/${activityId}/event/${eventId}`,
   },
   invitationAccept: {
     path: "/protected/invite/accepted",
