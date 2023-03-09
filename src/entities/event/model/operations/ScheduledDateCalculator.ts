@@ -40,7 +40,7 @@ const calculateForMonthly = (selectedDate: Date, availability: EventAvailability
 const calculateForSpecificDay = (specificDay: Date, availability: EventAvailability): Date | null => {
   const isAlwaysAvailable = availability.availabilityType === AvailabilityType.AlwaysAvailable
 
-  if (!isAlwaysAvailable && isFutureDate(specificDay)) {
+  if (!isAlwaysAvailable && !isFutureDate(specificDay)) {
     return null
   }
 
