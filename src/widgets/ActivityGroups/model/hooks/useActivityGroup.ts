@@ -15,22 +15,20 @@ type UseActivityGroupsReturn = {
 export const useActivityGroups = (
   appletDetails: AppletDetailsDTO,
   eventsDetails: EventsByAppletIdResponseDTO[],
-  activityInProgress: activityModel.types.ActivityProgressState,
 ): UseActivityGroupsReturn => {
+  const { progressState } = activityModel.hooks.useActivityInProgressState()
+
   const activitiesForBuilder = useMemo(() => {
     return activityModel.activityBuilder.convertToActivitiesGroupsBuilder(appletDetails.activities)
   }, [appletDetails.activities])
-  const inProgress = useMemo(() => {
-    return activityModel.activityBuilder.convertToActivityInProgressGroupsBuilder(activityInProgress)
-  }, [activityInProgress])
 
   const builder = useMemo(() => {
     return createActivityGroupsBuilder({
       allAppletActivities: activitiesForBuilder,
       appletId: appletDetails.id,
-      progress: inProgress,
+      progress: progressState,
     })
-  }, [activitiesForBuilder, appletDetails.id, inProgress])
+  }, [activitiesForBuilder, appletDetails.id, progressState])
 
   const calculator = useMemo(() => EventModel.SheduledDateCalculator, [])
 

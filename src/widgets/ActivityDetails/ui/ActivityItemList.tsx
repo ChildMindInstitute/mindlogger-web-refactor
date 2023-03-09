@@ -1,16 +1,16 @@
-import { ActivityEvents } from "../model/hooks"
 import { useActivityInProgress } from "../model/hooks/useActivityInProgress"
 
 import { ActivityDetails } from "~/entities/activity"
 import { ActivityCardItemList, ItemCardButtonsConfig } from "~/entities/item"
 
 interface ActivityItemListProps {
+  appletId: string
+  eventId: string
   activityDetails: ActivityDetails
-  activityEvents: ActivityEvents[]
 }
 
-export const ActivityItemList = ({ activityDetails, activityEvents }: ActivityItemListProps) => {
-  const { activityInProgress, items } = useActivityInProgress(activityDetails, activityEvents)
+export const ActivityItemList = ({ appletId, activityDetails, eventId }: ActivityItemListProps) => {
+  const { items, itemsProgressLength } = useActivityInProgress(appletId, eventId, activityDetails)
 
   const isOnePageAssessment = activityDetails.showAllAtOnce
   const isSummaryScreen = false // Mock
@@ -18,7 +18,7 @@ export const ActivityItemList = ({ activityDetails, activityEvents }: ActivityIt
   const buttonsConfig: ItemCardButtonsConfig = {
     isOnePageAssessment,
     isBackShown: activityDetails.items.length > 1,
-    isSubmitShown: isOnePageAssessment && activityDetails.items.length === activityInProgress?.answers.length,
+    isSubmitShown: isOnePageAssessment && activityDetails.items.length === itemsProgressLength,
     isSkippable: activityDetails.isSkippable,
     isNextDisable: true, // Default value === TRUE  (Condition if answer value empty or not exist)
   }

@@ -6,10 +6,7 @@ import {
   ActivityProgressPreview,
   ActivityStatus,
   ActivityType,
-  EntityProgress,
-  ProgressPayload,
 } from "../lib"
-import { ActivityProgressState } from "./types"
 
 import { ActivityDTO, AppletDetailsActivityDTO } from "~/shared/api"
 import { getRandomInt } from "~/shared/utils"
@@ -75,28 +72,6 @@ class ActivityBuilder {
       description: activity.description,
       image: activity.image,
     }))
-  }
-
-  public convertToActivityInProgressGroupsBuilder(activities: ActivityProgressState): EntityProgress {
-    return activities.reduce((acc, el) => {
-      const entityProgressRecord: ProgressPayload = {
-        startAt: el.startAt,
-        endAt: el.endAt,
-        type: ActivityPipelineType.Regular, // Mocked
-      }
-
-      acc[el.appletId] = {
-        ...(acc[el.appletId] ?? {}),
-        [el.activityId]: {
-          ...(acc[el.appletId]?.[el.activityId] ?? {}),
-          [el.eventId]: {
-            ...entityProgressRecord,
-          },
-        },
-      }
-
-      return acc
-    }, {} as EntityProgress)
   }
 }
 

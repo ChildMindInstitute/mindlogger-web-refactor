@@ -1,4 +1,16 @@
 import { ActivityItemType } from "../../item"
+import { ActivityPipelineType } from "../lib"
+
+type ActivityFlowProgress = {
+  type: ActivityPipelineType.Flow
+  currentActivityId: string
+}
+
+type ActivityProgress = {
+  type: ActivityPipelineType.Regular
+}
+
+type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress
 
 export type ProgressPayloadAnswer = {
   itemId: string
@@ -14,13 +26,21 @@ export type ProgressPayloadAnswer = {
   answer: string | null
 }
 
-export type ProgressPayloadState = {
+export type EventProgressState = ActivityOrFlowProgress & {
+  startAt: Date | null
+  endAt: Date | null
+  itemAnswers: ProgressPayloadAnswer[]
+}
+
+export type ActivityProgressState = Record<string, EventProgressState>
+export type AppletProgressState = Record<string, ActivityProgressState>
+
+export type ProgressState = Record<string, AppletProgressState>
+
+// Payloads
+export type UpsertActionPayload = {
   appletId: string
   activityId: string
   eventId: string
-  startAt: Date | null
-  endAt: Date | null
-  answers: ProgressPayloadAnswer[]
+  progressPayload: EventProgressState
 }
-
-export type ActivityProgressState = Array<ProgressPayloadState>

@@ -7,7 +7,13 @@ import CustomModal from "../../Modal"
 import { useActivityGroups } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
-import { ActivityListItem, activityModel, ActivityStatus } from "~/entities/activity"
+import {
+  ActivityListItem,
+  activityModel,
+  ActivityOrFlowProgress,
+  ActivityPipelineType,
+  ActivityStatus,
+} from "~/entities/activity"
 import { AppletDetailsDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
@@ -25,8 +31,8 @@ type ResumeActivityState = {
 export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigatator = useCustomNavigation()
-  const navigateToActivityDetailsPage = (appletId: string, activityId: string) => {
-    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId))
+  const navigateToActivityDetailsPage = (appletId: string, activityId: string, eventId: string) => {
+    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId, eventId))
   }
 
   const [isAboutOpen, setIsAboutOpen] = useState(false)
@@ -35,7 +41,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     selectedActivity: null,
   })
 
-  const { upsertActivityInProgress, activitiesInProgress } = activityModel.hooks.useActivityInProgressState()
+  const { upsertActivityInProgress } = activityModel.hooks.useActivityInProgressState()
 
   const onCardAboutClick = () => {
     setIsAboutOpen(true)
@@ -49,32 +55,55 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     setResumeActivityState({ isOpen: false, selectedActivity: null })
   }
 
-  const { groups } = useActivityGroups(appletDetails, eventsDetails, activitiesInProgress)
+  const { groups } = useActivityGroups(appletDetails, eventsDetails)
 
-  const navigateToActivityDetailsWithEmptyProgress = (activityId: string, eventId: string) => {
+  const navigateToActivityDetailsWithEmptyProgress = (activity: ActivityListItem) => {
+    const isActivityPipelineFlow = !!activity.activityFlowDetails
+    const isInActivityFlow = activity.isInActivityFlow
+
+    let activityPipelineDetails: ActivityOrFlowProgress | undefined
+
+    if (isActivityPipelineFlow && isInActivityFlow) {
+      activityPipelineDetails = {
+        type: ActivityPipelineType.Flow,
+        currentActivityId: activity.activityId,
+      }
+    } else {
+      activityPipelineDetails = {
+        type: ActivityPipelineType.Regular,
+      }
+    }
+
     upsertActivityInProgress({
       appletId: appletDetails.id,
-      activityId: activityId,
-      eventId: eventId,
-      startAt: new Date(),
-      endAt: null,
-      answers: [],
+      activityId: activity.activityId,
+      eventId: activity.eventId,
+      progressPayload: {
+        ...activityPipelineDetails,
+        startAt: new Date(),
+        endAt: null,
+        itemAnswers: [],
+      },
     })
 
-    return navigateToActivityDetailsPage(appletDetails.id, activityId)
+    return navigateToActivityDetailsPage(appletDetails.id, activity.activityId, activity.eventId)
   }
 
   const onActivityCardClick = (activity: ActivityListItem) => {
     if (activity.status === ActivityStatus.InProgress) {
       setResumeActivityState({ isOpen: true, selectedActivity: activity })
     } else {
-      return navigateToActivityDetailsWithEmptyProgress(activity.activityId, activity.eventId)
+      return navigateToActivityDetailsWithEmptyProgress(activity)
     }
   }
 
   const onActivityResume = () => {
     if (resumeActivityState.selectedActivity) {
-      return navigateToActivityDetailsPage(appletDetails.id, resumeActivityState.selectedActivity.activityId)
+      return navigateToActivityDetailsPage(
+        appletDetails.id,
+        resumeActivityState.selectedActivity.activityId,
+        resumeActivityState.selectedActivity.eventId,
+      )
     }
   }
 
@@ -82,7 +111,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     const { selectedActivity } = resumeActivityState
 
     if (selectedActivity?.activityId && selectedActivity?.eventId) {
-      return navigateToActivityDetailsWithEmptyProgress(selectedActivity.activityId, selectedActivity.eventId)
+      return navigateToActivityDetailsWithEmptyProgress(selectedActivity)
     }
   }
 

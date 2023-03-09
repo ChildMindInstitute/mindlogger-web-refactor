@@ -1,28 +1,28 @@
-import { ActivityEvents } from "./useActivityDetails"
-
 import { ActivityDetails, activityModel } from "~/entities/activity"
 import { ActivityItem } from "~/entities/item"
 
 type UseActivityInProgressReturn = {
-  activityInProgress: activityModel.types.ProgressPayloadState | undefined
+  eventProgressState: activityModel.types.EventProgressState | null
   items: ActivityItem[]
+  itemsProgressLength: number
 }
 
 export const useActivityInProgress = (
+  appletId: string,
+  eventId: string,
   activityDetails: ActivityDetails,
-  activityEvents: ActivityEvents[],
 ): UseActivityInProgressReturn => {
-  const { activitiesInProgress } = activityModel.hooks.useActivityInProgressState()
-
   const selectedActivityId = activityDetails.id
-
   const isOnePageAssessment = activityDetails.showAllAtOnce
+  let itemsProgressLength = 0
 
-  const eventIdByActivityId = activityEvents.find(event => event.activityId === selectedActivityId)?.eventId
+  const { eventProgressByParams } = activityModel.hooks.useActivityInProgressState()
 
-  const activityInProgress = activitiesInProgress.find(
-    ({ activityId, eventId }) => activityId === selectedActivityId && eventId === eventIdByActivityId,
-  )
+  const eventProgressState = eventProgressByParams({ appletId, activityId: selectedActivityId, eventId: eventId })
+
+  if (eventProgressState) {
+    itemsProgressLength = eventProgressState.itemAnswers.length
+  }
 
   const calculateActivityProgress = (): ActivityItem[] => {
     let items: ActivityItem[] = []
@@ -31,7 +31,7 @@ export const useActivityInProgress = (
       items = [...activityDetails.items]
     } else {
       items = activityDetails.items.reduce<ActivityItem[]>((acc, item, index) => {
-        if (index < activitiesInProgress.length) {
+        if (index < itemsProgressLength) {
           acc.push(item)
         }
 
@@ -45,7 +45,8 @@ export const useActivityInProgress = (
   const items = calculateActivityProgress()
 
   return {
-    activityInProgress,
+    eventProgressState,
     items,
+    itemsProgressLength,
   }
 }

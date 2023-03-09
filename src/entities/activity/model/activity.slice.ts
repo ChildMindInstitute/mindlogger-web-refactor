@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-import { ActivityProgressState, ProgressPayloadState } from "./types"
+import { ProgressState, UpsertActionPayload } from "./types"
 
-const initialState: ActivityProgressState = []
+const initialState: ProgressState = {}
 
 const activitySlice = createSlice({
   name: "activityProgress",
@@ -12,15 +12,21 @@ const activitySlice = createSlice({
       return initialState
     },
 
-    upsertActivityById: (state, action: PayloadAction<ProgressPayloadState>) => {
-      const activityIndex = state.findIndex(el => el.activityId === action.payload.activityId)
+    upsertActivityById: (state, action: PayloadAction<UpsertActionPayload>) => {
+      const { appletId, activityId, eventId, progressPayload } = action.payload
 
-      if (activityIndex === -1) {
-        state.push(action.payload)
-        return
+      state = {
+        ...state,
+        [appletId]: {
+          ...(state[appletId] ?? {}),
+          [activityId]: {
+            ...(state[appletId]?.[activityId] ?? {}),
+            [eventId]: progressPayload,
+          },
+        },
       }
 
-      state[activityIndex] = action.payload
+      return state
     },
   },
 })
