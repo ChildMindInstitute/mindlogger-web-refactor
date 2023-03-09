@@ -15,18 +15,9 @@ const activitySlice = createSlice({
     upsertActivityById: (state, action: PayloadAction<UpsertActionPayload>) => {
       const { appletId, activityId, eventId, progressPayload } = action.payload
 
-      state = {
-        ...state,
-        [appletId]: {
-          ...(state[appletId] ?? {}),
-          [activityId]: {
-            ...(state[appletId]?.[activityId] ?? {}),
-            [eventId]: progressPayload,
-          },
-        },
-      }
-
-      return state
+      state[appletId] = state[appletId] ?? {}
+      state[appletId][activityId] = state[appletId][activityId] ?? {}
+      state[appletId][activityId][eventId] = progressPayload
     },
   },
 })
