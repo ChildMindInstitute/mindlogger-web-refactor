@@ -7,7 +7,13 @@ import CustomModal from "../../Modal"
 import { useActivityGroups } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
-import { ActivityListItem, activityModel, ActivityStatus } from "~/entities/activity"
+import {
+  ActivityListItem,
+  activityModel,
+  ActivityOrFlowProgress,
+  ActivityPipelineType,
+  ActivityStatus,
+} from "~/entities/activity"
 import { AppletDetailsDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
@@ -35,7 +41,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     selectedActivity: null,
   })
 
-  const { upsertActivityInProgress, activitiesInProgress } = activityModel.hooks.useActivityInProgressState()
+  const { upsertActivityInProgress } = activityModel.hooks.useActivityInProgressState()
 
   const onCardAboutClick = () => {
     setIsAboutOpen(true)
@@ -49,26 +55,45 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     setResumeActivityState({ isOpen: false, selectedActivity: null })
   }
 
-  const { groups } = useActivityGroups(appletDetails, eventsDetails, activitiesInProgress)
+  const { groups } = useActivityGroups(appletDetails, eventsDetails)
 
-  const navigateToActivityDetailsWithEmptyProgress = (activityId: string, eventId: string) => {
+  const navigateToActivityDetailsWithEmptyProgress = (activity: ActivityListItem) => {
+    const isActivityPipelineFlow = !!activity.activityFlowDetails
+    const isInActivityFlow = activity.isInActivityFlow
+
+    let activityPipelineDetails: ActivityOrFlowProgress | undefined
+
+    if (isActivityPipelineFlow && isInActivityFlow) {
+      activityPipelineDetails = {
+        type: ActivityPipelineType.Flow,
+        currentActivityId: activity.activityId,
+      }
+    } else {
+      activityPipelineDetails = {
+        type: ActivityPipelineType.Regular,
+      }
+    }
+
     upsertActivityInProgress({
       appletId: appletDetails.id,
-      activityId: activityId,
-      eventId: eventId,
-      startAt: new Date(),
-      endAt: null,
-      answers: [],
+      activityId: activity.activityId,
+      eventId: activity.eventId,
+      progressPayload: {
+        ...activityPipelineDetails,
+        startAt: new Date(),
+        endAt: null,
+        itemAnswers: [],
+      },
     })
 
-    return navigateToActivityDetailsPage(appletDetails.id, activityId, eventId)
+    return navigateToActivityDetailsPage(appletDetails.id, activity.activityId, activity.eventId)
   }
 
   const onActivityCardClick = (activity: ActivityListItem) => {
     if (activity.status === ActivityStatus.InProgress) {
       setResumeActivityState({ isOpen: true, selectedActivity: activity })
     } else {
-      return navigateToActivityDetailsWithEmptyProgress(activity.activityId, activity.eventId)
+      return navigateToActivityDetailsWithEmptyProgress(activity)
     }
   }
 
@@ -84,7 +109,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     const { selectedActivity } = resumeActivityState
 
     if (selectedActivity?.activityId && selectedActivity?.eventId) {
-      return navigateToActivityDetailsWithEmptyProgress(selectedActivity.activityId, selectedActivity.eventId)
+      return navigateToActivityDetailsWithEmptyProgress(selectedActivity)
     }
   }
 

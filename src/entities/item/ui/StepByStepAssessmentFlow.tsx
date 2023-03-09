@@ -5,10 +5,11 @@ import { ActivityCardItemList } from "./ActivityCardItemList"
 type StepByStepAssessmentFlowProps = {
   activityDetails: ActivityDetails
   eventId: string
+  appletId: string
 }
 
-export const StepByStepAssessmentFlow = ({ activityDetails, eventId }: StepByStepAssessmentFlowProps) => {
-  const { items, activityProgressLength } = useStepByStepProgress(activityDetails, eventId)
+export const StepByStepAssessmentFlow = ({ activityDetails, eventId, appletId }: StepByStepAssessmentFlowProps) => {
+  const { items, activityProgressLength } = useStepByStepProgress(activityDetails, eventId, appletId)
 
   const buttonsConfig: ItemCardButtonsConfig = {
     isOnePageAssessment: false,

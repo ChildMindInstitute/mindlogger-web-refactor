@@ -12,6 +12,10 @@ const setTime = (target: Date, availability: EventAvailability) => {
   }
 }
 
+const isTodayDate = (date: Date): boolean => {
+  return startOfDay(date) === startOfDay(new Date())
+}
+
 const calculateForMonthly = (selectedDate: Date, availability: EventAvailability): Date | null => {
   const today = startOfDay(new Date())
 
@@ -34,10 +38,11 @@ const calculateForMonthly = (selectedDate: Date, availability: EventAvailability
 }
 
 const calculateForSpecificDay = (specificDay: Date, availability: EventAvailability): Date | null => {
-  // Ask Aleksei about it 06.03.2023, Mon
-  // if (specificDay > startOfDay(new Date())) {
-  //   return null
-  // }
+  const isAlwaysAvailable = availability.availabilityType === AvailabilityType.AlwaysAvailable
+
+  if (!isAlwaysAvailable && !isTodayDate(specificDay)) {
+    return null
+  }
 
   const selectedYear = specificDay.getFullYear()
   const selectedMonth = specificDay.getMonth()

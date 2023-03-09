@@ -2,7 +2,6 @@ import { ActivityDetails, activityModel } from "~/entities/activity"
 import { ActivityItem } from "~/entities/item"
 
 type UseActivityInProgressReturn = {
-  activityProgress: activityModel.types.ProgressPayloadState
   items: ActivityItem[]
   activityProgressLength: number
 }
@@ -10,18 +9,17 @@ type UseActivityInProgressReturn = {
 export const useStepByStepProgress = (
   activityDetails: ActivityDetails,
   eventId: string,
+  appletId: string,
 ): UseActivityInProgressReturn => {
-  const { activitiesInProgress } = activityModel.hooks.useActivityInProgressState()
+  const { eventProgressByParams } = activityModel.hooks.useActivityInProgressState()
 
-  const activityProgress = activitiesInProgress.find(progressEl => {
-    return progressEl.activityId === activityDetails.id && progressEl.eventId === eventId
-  })
+  const eventProgressState = eventProgressByParams({ appletId, activityId: activityDetails.id, eventId })
 
-  if (!activityProgress) {
-    throw new Error("Activity in progress not found")
+  let progressLength = 0
+
+  if (eventProgressState) {
+    progressLength = eventProgressState.itemAnswers.length
   }
-
-  const progressLength = activityProgress.answers.length
 
   const calculateActivityProgress = (): ActivityItem[] => {
     return activityDetails.items.reduce((acc, item, index) => {
@@ -36,7 +34,6 @@ export const useStepByStepProgress = (
   const items = calculateActivityProgress()
 
   return {
-    activityProgress,
     items,
     activityProgressLength: progressLength,
   }

@@ -54,7 +54,9 @@ export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
           {appletDetails?.activities && <ActivityProgressPreviewList activities={appletDetails.activities} />}
         </Col>
         <Col xl={9}>
-          {activityDetails && <ActivityItemList activityDetails={activityDetails} eventId={props.eventId} />}
+          {activityDetails && (
+            <ActivityItemList appletId={props.appletId} eventId={props.eventId} activityDetails={activityDetails} />
+          )}
         </Col>
       </Row>
     </Container>
