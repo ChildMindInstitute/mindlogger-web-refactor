@@ -31,7 +31,7 @@ export const useActivityInProgress = (
       items = [...activityDetails.items]
     } else {
       items = activityDetails.items.reduce<ActivityItem[]>((acc, item, index) => {
-        if (index < itemsProgressLength) {
+        if (index <= itemsProgressLength) {
           acc.push(item)
         }
 
