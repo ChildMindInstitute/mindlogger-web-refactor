@@ -17,7 +17,7 @@ export const ActivityItemList = ({ appletId, activityDetails, eventId }: Activit
 
   const buttonsConfig: ItemCardButtonsConfig = {
     isOnePageAssessment,
-    isBackShown: activityDetails.items.length > 1,
+    isBackShown: activityDetails.items.length > 0,
     isSubmitShown: isOnePageAssessment && activityDetails.items.length === itemsProgressLength,
     isSkippable: activityDetails.isSkippable,
     isNextDisable: true, // Default value === TRUE  (Condition if answer value empty or not exist)
