@@ -1,13 +1,13 @@
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
-import { useLocation, useSearchParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 
 import { AuthorizationGuard } from "~/widgets/AuthorizationGuard"
 import { AuthorizationButtons } from "~/widgets/AuthorizationNavigateButtons"
 import { FetchInvitation } from "~/widgets/FetchInvitation"
 
 const InvitationPage = () => {
-  const [searchParams] = useSearchParams()
+  const { inviteId } = useParams()
   const location = useLocation()
 
   const redirectState = {
@@ -15,14 +15,11 @@ const InvitationPage = () => {
     backRedirectPath: `${location.pathname}${location.search}`,
   }
 
-  const keyParams = searchParams.get("key")
-  const emailParams = searchParams.get("email")
-
   return (
     <Container className={classNames("mt-3", "pt-3")}>
-      {keyParams && emailParams && (
+      {inviteId && (
         <AuthorizationGuard fallback={<AuthorizationButtons redirectState={redirectState} />}>
-          <FetchInvitation keyParams={keyParams} />
+          <FetchInvitation keyParams={inviteId} />
         </AuthorizationGuard>
       )}
     </Container>

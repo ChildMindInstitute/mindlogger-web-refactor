@@ -13,7 +13,7 @@ export const ROUTES = {
     path: "/password-recovery",
   },
   invitation: {
-    path: "/invite",
+    path: "/invitation/:inviteId",
   },
   publicJoin: {
     path: "/public/:joinLinkKey",
