@@ -5,6 +5,7 @@ import { createActivityGroupsBuilder } from "../factories/ActivityGroupsBuilder"
 
 import { activityModel } from "~/entities/activity"
 import { EventModel } from "~/entities/event"
+import { progressModel } from "~/entities/progress"
 import { AppletDetailsDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
 
 type UseActivityGroupsReturn = {
@@ -16,7 +17,7 @@ export const useActivityGroups = (
   appletDetails: AppletDetailsDTO,
   eventsDetails: EventsByAppletIdResponseDTO[],
 ): UseActivityGroupsReturn => {
-  const { progressState } = activityModel.hooks.useActivityInProgressState()
+  const { progressState } = progressModel.hooks.useProgressState()
 
   const activitiesForBuilder = useMemo(() => {
     return activityModel.activityBuilder.convertToActivitiesGroupsBuilder(appletDetails.activities)

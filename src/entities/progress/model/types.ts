@@ -1,16 +1,17 @@
-import { ActivityItemType } from "../../item"
-import { ActivityPipelineType } from "../lib"
+import { InputType, PipelineType } from "~/shared/utils"
 
 type ActivityFlowProgress = {
-  type: ActivityPipelineType.Flow
+  type: PipelineType.Flow
   currentActivityId: string
 }
 
 type ActivityProgress = {
-  type: ActivityPipelineType.Regular
+  type: PipelineType.Regular
 }
 
 type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress
+
+type ActivityItemType = InputType
 
 export type ProgressPayloadAnswer = {
   itemId: string

@@ -1,11 +1,6 @@
 import { ActivityType } from "~/entities/activity"
 import { ScheduleEvent } from "~/entities/event"
-
-export const enum ActivityPipelineType {
-  NotDefined = 0,
-  Regular,
-  Flow,
-}
+import { PipelineType } from "~/shared/utils"
 
 export type Entity = {
   id: string
@@ -16,13 +11,13 @@ export type Entity = {
 
 export type Activity = Entity & {
   type: ActivityType
-  pipelineType: ActivityPipelineType.Regular
+  pipelineType: PipelineType.Regular
 }
 
 export type ActivityFlow = Entity & {
   hideBadge: boolean
   items: Array<{ activityId: string }>
-  pipelineType: ActivityPipelineType.Flow
+  pipelineType: PipelineType.Flow
 }
 
 export type ActivityOrFlow = Activity | ActivityFlow
@@ -33,12 +28,12 @@ export type EventActivity = {
 }
 
 export type ActivityFlowProgress = {
-  type: ActivityPipelineType.Flow
+  type: PipelineType.Flow
   currentActivityId: string
 }
 
 export type ActivityProgress = {
-  type: ActivityPipelineType.Regular
+  type: PipelineType.Regular
 }
 
 export type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress

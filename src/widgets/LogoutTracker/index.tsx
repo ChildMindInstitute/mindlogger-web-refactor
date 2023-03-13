@@ -3,6 +3,7 @@ import { PropsWithChildren, useCallback, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { useLogoutMutation, userModel } from "~/entities/user"
 import { eventEmitter, ROUTES, secureTokensStorage } from "~/shared/utils"
 
@@ -13,7 +14,8 @@ export const LogoutTracker = ({ children }: LogoutTrackerProps) => {
   const { mutate: logout } = useLogoutMutation()
   const tokens = userModel.hooks.useTokensState()
   const { clearUser } = userModel.hooks.useUserState()
-  const { clearActivityInProgressState } = activityModel.hooks.useActivityClearState()
+  const { clearSelectedApplet } = appletModel.hooks.useAppletState()
+  const { clearActivity } = activityModel.hooks.useActivityState()
 
   const onLogoutEvent = useCallback(() => {
     if (tokens?.accessToken) {
@@ -22,9 +24,10 @@ export const LogoutTracker = ({ children }: LogoutTrackerProps) => {
 
     secureTokensStorage.clearTokens()
     clearUser()
-    clearActivityInProgressState()
+    clearSelectedApplet()
+    clearActivity()
     navigate(ROUTES.login.path)
-  }, [clearUser, logout, navigate, tokens?.accessToken, clearActivityInProgressState])
+  }, [clearActivity, clearSelectedApplet, clearUser, logout, navigate, tokens?.accessToken])
 
   useEffect(() => {
     eventEmitter.on("onLogout", onLogoutEvent)

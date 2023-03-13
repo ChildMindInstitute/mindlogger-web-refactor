@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom"
 
 import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
+import { progressModel } from "~/entities/progress"
 import { useLogoutMutation, userModel } from "~/entities/user"
 import { ROUTES, secureTokensStorage } from "~/shared/utils"
 
@@ -12,7 +14,16 @@ type UseLogoutReturn = {
 export const useLogout = (): UseLogoutReturn => {
   const navigate = useNavigate()
   const { clearUser } = userModel.hooks.useUserState()
-  const { clearActivityInProgressState } = activityModel.hooks.useActivityClearState()
+  const { clearSelectedApplet } = appletModel.hooks.useAppletState()
+  const { clearActivity } = activityModel.hooks.useActivityState()
+  const { clearActivityInProgressState } = progressModel.hooks.useClearProgress()
+
+  const clearStateBeforeLogout = () => {
+    clearUser()
+    clearSelectedApplet()
+    clearActivity()
+    clearActivityInProgressState()
+  }
 
   const { mutate: logoutMutation, isLoading } = useLogoutMutation()
 
@@ -23,8 +34,7 @@ export const useLogout = (): UseLogoutReturn => {
       logoutMutation({ accessToken: tokens.accessToken })
     }
 
-    clearUser()
-    clearActivityInProgressState()
+    clearStateBeforeLogout()
     secureTokensStorage.clearTokens()
     navigate(ROUTES.login.path)
   }

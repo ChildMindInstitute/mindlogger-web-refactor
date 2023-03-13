@@ -3,20 +3,15 @@ import { useState } from "react"
 import classNames from "classnames"
 import { Col, Container, Row } from "react-bootstrap"
 
+import { progressModel } from "../../../entities/progress"
 import CustomModal from "../../Modal"
 import { useActivityGroups } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
-import {
-  ActivityListItem,
-  activityModel,
-  ActivityOrFlowProgress,
-  ActivityPipelineType,
-  ActivityStatus,
-} from "~/entities/activity"
+import { ActivityListItem, ActivityOrFlowProgress, ActivityStatus } from "~/entities/activity"
 import { AppletDetailsDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
-import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { PipelineType, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 interface ActivityListWidgetProps {
   appletDetails: AppletDetailsDTO
@@ -41,7 +36,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     selectedActivity: null,
   })
 
-  const { upsertActivityInProgress } = activityModel.hooks.useActivityInProgressState()
+  const { upsertActivityInProgress } = progressModel.hooks.useProgressState()
 
   const onCardAboutClick = () => {
     setIsAboutOpen(true)
@@ -65,12 +60,12 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
 
     if (isActivityPipelineFlow && isInActivityFlow) {
       activityPipelineDetails = {
-        type: ActivityPipelineType.Flow,
+        type: PipelineType.Flow,
         currentActivityId: activity.activityId,
       }
     } else {
       activityPipelineDetails = {
-        type: ActivityPipelineType.Regular,
+        type: PipelineType.Regular,
       }
     }
 

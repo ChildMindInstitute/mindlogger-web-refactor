@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 
-import { actions } from "../activity.slice"
-import { activitySelector } from "../selectors"
+import { actions } from "../progress.slice"
+import { progressSelector } from "../selectors"
 import {
   ActivityProgressState,
   AppletProgressState,
@@ -21,7 +21,6 @@ type GetEventProgressParams = {
 type UseActivityInProgressStateReturn = {
   progressState: ProgressState
   upsertActivityInProgress: (payload: UpsertActionPayload) => void
-  clearActivityInProgressState: () => void
   progressStateByAppletId: (appletId: string) => AppletProgressState | null
   progressStateByActivityId: (
     activityId: string,
@@ -30,22 +29,17 @@ type UseActivityInProgressStateReturn = {
   eventProgressByParams: (params: GetEventProgressParams) => EventProgressState | null
 }
 
-export const useActivityInProgressState = (): UseActivityInProgressStateReturn => {
+export const useProgressState = (): UseActivityInProgressStateReturn => {
   const dispatch = useAppDispatch()
 
-  const progressState = useAppSelector(activitySelector)
+  const progressState = useAppSelector(progressSelector)
 
   const upsertActivityInProgress = useCallback(
     (payload: UpsertActionPayload) => {
-      dispatch(actions.upsertActivityById(payload))
+      dispatch(actions.upsertProgressByParams(payload))
     },
     [dispatch],
   )
-
-  const clearActivityInProgressState = useCallback(() => {
-    dispatch(actions.clearActivity())
-  }, [dispatch])
-
   const progressStateByAppletId = (appletId: string): AppletProgressState | null => {
     const appletProgressState = progressState[appletId]
 
@@ -96,7 +90,6 @@ export const useActivityInProgressState = (): UseActivityInProgressStateReturn =
   return {
     progressState,
     upsertActivityInProgress,
-    clearActivityInProgressState,
     progressStateByAppletId,
     progressStateByActivityId,
     eventProgressByParams,

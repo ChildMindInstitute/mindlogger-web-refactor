@@ -1,18 +1,18 @@
 import { useCallback } from "react"
 
-import { actions } from "../activity.slice"
+import { actions } from "../progress.slice"
 
 import { useAppDispatch } from "~/shared/utils"
 
-type UseActivityClearStateReturn = {
+type UseClearProgressReturn = {
   clearActivityInProgressState: () => void
 }
 
-export const useActivityClearState = (): UseActivityClearStateReturn => {
+export const useClearProgress = (): UseClearProgressReturn => {
   const dispatch = useAppDispatch()
 
   const clearActivityInProgressState = useCallback(() => {
-    dispatch(actions.clearActivity())
+    dispatch(actions.clearAllProgress())
   }, [dispatch])
 
   return {

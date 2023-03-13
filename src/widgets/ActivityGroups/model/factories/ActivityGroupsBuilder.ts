@@ -7,7 +7,6 @@ import {
   ActivityFlow,
   ActivityFlowProgress,
   ActivityListItem,
-  ActivityPipelineType,
   ActivityStatus,
   ActivityType,
   EntityProgress,
@@ -23,6 +22,7 @@ import {
   MINUTES_IN_HOUR,
   MIDNIGHT_DATE,
   isTimeInInterval,
+  PipelineType,
 } from "~/shared/utils"
 
 export interface IActivityGroupsBuilder {
@@ -121,7 +121,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   private createListItem(eventActivity: EventActivity) {
     const { activity, event } = eventActivity
     const { pipelineType } = eventActivity.activity
-    const isFlow = pipelineType === ActivityPipelineType.Flow
+    const isFlow = pipelineType === PipelineType.Flow
 
     const item: ActivityListItem = {
       activityId: activity.id,

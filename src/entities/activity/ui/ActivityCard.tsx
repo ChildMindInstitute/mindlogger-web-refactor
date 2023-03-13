@@ -1,6 +1,7 @@
 import { Button } from "react-bootstrap"
 
 import { ActivityListItem, ActivityStatus } from "../lib"
+import { useActivityState } from "../model/hooks"
 import TimeStatusLabel from "./TimeStatusLabel"
 
 import "./style.scss"
@@ -14,8 +15,16 @@ interface ActivityCardProps {
 const ActivityCard = ({ activity, disabled, onActivityCardClick }: ActivityCardProps) => {
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled
 
+  const { saveActivity } = useActivityState()
+
+  const onHandleClick = () => {
+    saveActivity(activity)
+
+    return onActivityCardClick()
+  }
+
   return (
-    <Button className="ds-activity-button w-100" variant="link" onClick={onActivityCardClick} disabled={isDisabled}>
+    <Button className="ds-activity-button w-100" variant="link" onClick={onHandleClick} disabled={isDisabled}>
       {activity.image && <img className="activity-image" src={activity.image} />}
 
       <div className="activity-data">

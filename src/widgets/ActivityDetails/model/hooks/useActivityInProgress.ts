@@ -1,8 +1,9 @@
-import { ActivityDetails, activityModel } from "~/entities/activity"
+import { ActivityDetails } from "~/entities/activity"
 import { ActivityItem } from "~/entities/item"
+import { progressModel } from "~/entities/progress"
 
 type UseActivityInProgressReturn = {
-  eventProgressState: activityModel.types.EventProgressState | null
+  eventProgressState: progressModel.EventProgressState | null
   items: ActivityItem[]
   itemsProgressLength: number
 }
@@ -16,7 +17,7 @@ export const useActivityInProgress = (
   const isOnePageAssessment = activityDetails.showAllAtOnce
   let itemsProgressLength = 0
 
-  const { eventProgressByParams } = activityModel.hooks.useActivityInProgressState()
+  const { eventProgressByParams } = progressModel.hooks.useProgressState()
 
   const eventProgressState = eventProgressByParams({ appletId, activityId: selectedActivityId, eventId: eventId })
 

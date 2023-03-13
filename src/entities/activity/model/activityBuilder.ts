@@ -2,14 +2,13 @@ import {
   Activity,
   ActivityDetails,
   ActivityListItem,
-  ActivityPipelineType,
   ActivityProgressPreview,
   ActivityStatus,
   ActivityType,
 } from "../lib"
 
 import { ActivityDTO, AppletDetailsActivityDTO } from "~/shared/api"
-import { getRandomInt } from "~/shared/utils"
+import { getRandomInt, PipelineType } from "~/shared/utils"
 
 class ActivityBuilder {
   public convertToActivityProgressPreview(activities: ActivityListItem[]): ActivityProgressPreview[] {
@@ -66,7 +65,7 @@ class ActivityBuilder {
   public convertToActivitiesGroupsBuilder(activities: AppletDetailsActivityDTO[]): Activity[] {
     return activities.map(activity => ({
       type: ActivityType.NotDefined,
-      pipelineType: ActivityPipelineType.Regular,
+      pipelineType: PipelineType.Regular,
       id: activity.id,
       name: activity.name,
       description: activity.description,

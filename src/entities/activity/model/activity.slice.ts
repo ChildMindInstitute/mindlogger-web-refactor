@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-import { ProgressState, UpsertActionPayload } from "./types"
+import { ActivityListItem } from "../lib"
 
-const initialState: ProgressState = {}
+export type ActivityState = Partial<ActivityListItem>
+
+const initialState: ActivityState = {}
 
 const activitySlice = createSlice({
   name: "activityProgress",
@@ -12,12 +14,8 @@ const activitySlice = createSlice({
       return initialState
     },
 
-    upsertActivityById: (state, action: PayloadAction<UpsertActionPayload>) => {
-      const { appletId, activityId, eventId, progressPayload } = action.payload
-
-      state[appletId] = state[appletId] ?? {}
-      state[appletId][activityId] = state[appletId][activityId] ?? {}
-      state[appletId][activityId][eventId] = progressPayload
+    saveSelectedActivity: (state, action: PayloadAction<ActivityState>) => {
+      return action.payload
     },
   },
 })

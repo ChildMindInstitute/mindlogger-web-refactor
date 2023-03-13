@@ -1,2 +1,1 @@
-export * from "./useActivityInProgressState"
-export * from "./useActivityClearState"
+export * from "./useActivityState"
