@@ -1,22 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-export type AppletState = {
-  id: string | null
-  displayName: string | null
-  description: string | null
-  about: string | null
+export type AppletState = Partial<{
+  id: string
+  displayName: string
+  description: string
+  about: string
   image: string | null
   watermark: string | null
-}
+}>
 
-const initialState: AppletState = {
-  id: null,
-  displayName: null,
-  description: null,
-  about: null,
-  image: null,
-  watermark: null,
-}
+const initialState: AppletState = {}
 
 const appletSlice = createSlice({
   name: "applet",

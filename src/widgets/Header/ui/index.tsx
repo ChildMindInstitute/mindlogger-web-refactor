@@ -3,6 +3,7 @@ import { useState } from "react"
 import { Navbar, Nav, Col } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
+import { activityModel } from "../../../entities/activity"
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 import AccountDropdown from "./AccountDropdown"
 import LoginButton from "./LoginButton"
@@ -20,6 +21,7 @@ const Header = (): JSX.Element | null => {
 
   const { user } = userModel.hooks.useUserState()
   const { clearSelectedApplet } = appletModel.hooks.useAppletState()
+  const { clearActivity } = activityModel.hooks.useActivityState()
 
   const [expanded, setExpanded] = useState<boolean>(false)
 
@@ -30,6 +32,7 @@ const Header = (): JSX.Element | null => {
   const onLogoClick = () => {
     if (user?.id) {
       clearSelectedApplet()
+      clearActivity()
       navigate(ROUTES.applets.path)
     } else {
       navigate(ROUTES.login.path)

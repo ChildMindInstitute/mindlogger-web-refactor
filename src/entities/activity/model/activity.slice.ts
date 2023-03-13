@@ -7,7 +7,7 @@ export type ActivityState = Partial<ActivityListItem>
 const initialState: ActivityState = {}
 
 const activitySlice = createSlice({
-  name: "activityProgress",
+  name: "activity",
   initialState,
   reducers: {
     clearActivity: () => {

@@ -1,5 +1,6 @@
 import { ArrowLeft } from "react-bootstrap-icons"
 
+import { activityModel } from "~/entities/activity"
 import { BasicButton } from "~/shared/ui"
 import { useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
@@ -7,8 +8,11 @@ export const BackNavigateButton = () => {
   const { t } = useCustomTranslation()
   const navigator = useCustomNavigation()
 
+  const { clearActivity } = activityModel.hooks.useActivityState()
+
   const onBackButtonClick = () => {
-    navigator.goBack()
+    clearActivity()
+    return navigator.goBack()
   }
 
   return (
