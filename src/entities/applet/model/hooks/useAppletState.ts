@@ -9,12 +9,17 @@ import { useAppDispatch, useAppSelector } from "~/shared/utils"
 type UseAppletStateReturn = {
   selectedApplet: AppletState
   saveApplet: (data: AppletListItem) => void
+  clearSelectedApplet: () => void
 }
 
 export const useAppletState = (): UseAppletStateReturn => {
   const selectedApplet = useAppSelector(appletSelector)
 
   const dispatch = useAppDispatch()
+
+  const clearSelectedApplet = useCallback(() => {
+    return dispatch(actions.clearAppletState())
+  }, [dispatch])
 
   const saveApplet = useCallback(
     (data: AppletListItem) => {
@@ -26,5 +31,6 @@ export const useAppletState = (): UseAppletStateReturn => {
   return {
     selectedApplet,
     saveApplet,
+    clearSelectedApplet,
   }
 }

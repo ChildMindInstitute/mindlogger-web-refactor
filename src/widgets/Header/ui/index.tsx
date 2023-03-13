@@ -7,6 +7,7 @@ import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 import AccountDropdown from "./AccountDropdown"
 import LoginButton from "./LoginButton"
 
+import { appletModel } from "~/entities/applet"
 import { userModel } from "~/entities/user"
 import { LanguageDropdown } from "~/features/language"
 import { ROUTES } from "~/shared/utils"
@@ -18,6 +19,7 @@ const Header = (): JSX.Element | null => {
   const navigate = useNavigate()
 
   const { user } = userModel.hooks.useUserState()
+  const { clearSelectedApplet } = appletModel.hooks.useAppletState()
 
   const [expanded, setExpanded] = useState<boolean>(false)
 
@@ -27,6 +29,7 @@ const Header = (): JSX.Element | null => {
 
   const onLogoClick = () => {
     if (user?.id) {
+      clearSelectedApplet()
       navigate(ROUTES.applets.path)
     } else {
       navigate(ROUTES.login.path)
