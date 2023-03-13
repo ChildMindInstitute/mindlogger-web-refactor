@@ -1,5 +1,4 @@
-import { ActivityType } from "~/entities/activity"
-import { ScheduleEvent } from "~/entities/event"
+import { ActivityType, ScheduleEvent } from "~/shared/lib"
 import { PipelineType } from "~/shared/utils"
 
 export type Entity = {

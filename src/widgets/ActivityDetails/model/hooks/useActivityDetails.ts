@@ -2,6 +2,7 @@ import { useMemo } from "react"
 
 import { ActivityDetails, ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
 import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
+import { ActivityItem } from "~/entities/item"
 
 interface UseActivityDetailsProps {
   appletId: string
@@ -15,7 +16,7 @@ export interface ActivityEvents {
 
 interface UseActivityDetailsReturn {
   appletDetails: AppletDetails<ActivityListItem, ActivityFlow> | null
-  activityDetails: ActivityDetails | null
+  activityDetails: ActivityDetails<ActivityItem> | null
   isError: boolean
   isLoading: boolean
 }

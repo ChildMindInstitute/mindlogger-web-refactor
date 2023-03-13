@@ -8,12 +8,11 @@ import {
   ActivityFlowProgress,
   ActivityListItem,
   ActivityStatus,
-  ActivityType,
   EntityProgress,
   EventActivity,
   ProgressPayload,
 } from "~/entities/activity"
-import { AvailabilityType } from "~/entities/event"
+import { ActivityType, AvailabilityType } from "~/shared/lib"
 import {
   HourMinute,
   getMsFromHours,

@@ -1,7 +1,7 @@
 import { Activity, EventActivity } from "../../activity"
-import { AvailabilityType, PeriodicityType } from "../lib"
 
 import { EventsByAppletIdResponseDTO, PeriodicityTypeDTO } from "~/shared/api"
+import { AvailabilityType, PeriodicityType } from "~/shared/lib"
 import { HourMinute } from "~/shared/utils"
 
 class EventsBuilder {

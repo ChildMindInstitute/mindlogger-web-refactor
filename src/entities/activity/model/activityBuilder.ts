@@ -1,13 +1,8 @@
-import {
-  Activity,
-  ActivityDetails,
-  ActivityListItem,
-  ActivityProgressPreview,
-  ActivityStatus,
-  ActivityType,
-} from "../lib"
+import { Activity, ActivityDetails, ActivityListItem, ActivityProgressPreview, ActivityStatus } from "../lib"
 
+import { ActivityItem } from "~/entities/item"
 import { ActivityDTO, AppletDetailsActivityDTO } from "~/shared/api"
+import { ActivityType } from "~/shared/lib"
 import { getRandomInt, PipelineType } from "~/shared/utils"
 
 class ActivityBuilder {
@@ -42,7 +37,7 @@ class ActivityBuilder {
     }))
   }
 
-  public convertToActivityDetails(activity?: ActivityDTO): ActivityDetails | null {
+  public convertToActivityDetails(activity?: ActivityDTO): ActivityDetails<ActivityItem> | null {
     if (!activity) {
       return null
     }

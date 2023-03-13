@@ -1,4 +1,4 @@
-import { HourMinute } from "~/shared/utils"
+import { HourMinute } from "../../utils"
 
 export const enum AvailabilityType {
   NotDefined = 0,
@@ -15,17 +15,6 @@ export const enum PeriodicityType {
   Monthly = 5,
 }
 
-export type EventAvailability = {
-  availabilityType: AvailabilityType
-  oneTimeCompletion: boolean
-  periodicityType: PeriodicityType | null
-  timeFrom: HourMinute | null
-  timeTo: HourMinute | null
-  allowAccessBeforeFromTime: boolean
-  startDate: Date | null
-  endDate: Date | null
-}
-
 export type ScheduleEvent = {
   id: string
   activityId: string
@@ -36,4 +25,15 @@ export type ScheduleEvent = {
     idleTimer: HourMinute | null
   } | null
   selectedDate: Date | null
+}
+
+export type EventAvailability = {
+  availabilityType: AvailabilityType
+  oneTimeCompletion: boolean
+  periodicityType: PeriodicityType | null
+  timeFrom: HourMinute | null
+  timeTo: HourMinute | null
+  allowAccessBeforeFromTime: boolean
+  startDate: Date | null
+  endDate: Date | null
 }

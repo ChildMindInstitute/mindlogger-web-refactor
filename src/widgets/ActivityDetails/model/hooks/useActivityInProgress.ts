@@ -11,7 +11,7 @@ type UseActivityInProgressReturn = {
 export const useActivityInProgress = (
   appletId: string,
   eventId: string,
-  activityDetails: ActivityDetails,
+  activityDetails: ActivityDetails<ActivityItem>,
 ): UseActivityInProgressReturn => {
   const selectedActivityId = activityDetails.id
   const isOnePageAssessment = activityDetails.showAllAtOnce
