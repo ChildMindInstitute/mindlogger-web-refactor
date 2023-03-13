@@ -1,7 +1,7 @@
 import { differenceInMonths, isEqual, startOfDay, subMonths } from "date-fns"
 import { Parse, Day } from "dayspan"
 
-import { AvailabilityType, EventAvailability, PeriodicityType, ScheduleEvent } from "../../lib"
+import { EventAvailability, AvailabilityType, ScheduleEvent, PeriodicityType } from "~/shared/lib"
 
 type EventParseInput = Parameters<typeof Parse.schedule>[0]
 

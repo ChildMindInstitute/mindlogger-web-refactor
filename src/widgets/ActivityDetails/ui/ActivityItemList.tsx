@@ -1,12 +1,12 @@
 import { useActivityInProgress } from "../model/hooks/useActivityInProgress"
 
 import { ActivityDetails } from "~/entities/activity"
-import { ActivityCardItemList, ItemCardButtonsConfig } from "~/entities/item"
+import { ActivityCardItemList, ActivityItem, ItemCardButtonsConfig } from "~/entities/item"
 
 interface ActivityItemListProps {
   appletId: string
   eventId: string
-  activityDetails: ActivityDetails
+  activityDetails: ActivityDetails<ActivityItem>
 }
 
 export const ActivityItemList = ({ appletId, activityDetails, eventId }: ActivityItemListProps) => {

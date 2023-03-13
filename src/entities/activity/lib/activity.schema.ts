@@ -1,4 +1,4 @@
-import { ActivityItem } from "~/entities/item/lib/item.schema"
+import { ActivityType } from "~/shared/lib"
 import { HourMinute } from "~/shared/utils"
 
 export type ActivityListItem = {
@@ -36,12 +36,7 @@ export const enum ActivityStatus {
   Available = 3,
 }
 
-export const enum ActivityType {
-  NotDefined = 0,
-  Flanker = 1,
-}
-
-export type ActivityDetails = {
+export type ActivityDetails<T> = {
   id: string
   name: string
   description: string
@@ -52,7 +47,7 @@ export type ActivityDetails = {
   isReviewable: boolean
   responseIsEditable: boolean
   ordering: number
-  items: Array<ActivityItem>
+  items: Array<T>
 }
 
 export type ActivityProgressPreview = {
