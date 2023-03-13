@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 import { AppletListItem } from "../lib"
+import { useAppletState } from "../model/hooks"
 
 import { CustomCard } from "~/shared/ui"
 import { ROUTES } from "~/shared/utils"
@@ -12,8 +13,11 @@ interface AppletCardProps {
 const AppletCard = ({ applet }: AppletCardProps) => {
   const navigate = useNavigate()
 
+  const { saveApplet } = useAppletState()
+
   const onAppletCardClick = () => {
-    navigate(ROUTES.activityList.navigateTo(applet.id))
+    saveApplet(applet)
+    return navigate(ROUTES.activityList.navigateTo(applet.id))
   }
 
   return (
