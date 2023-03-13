@@ -4,6 +4,7 @@ import persistStore from "redux-persist/es/persistStore"
 import storage from "redux-persist/lib/storage"
 
 import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { userModel } from "~/entities/user"
 
 const persistConfig = {
@@ -13,6 +14,7 @@ const persistConfig = {
 
 export const rootReducer = combineReducers({
   user: userModel.reducer,
+  applet: appletModel.reducer,
   activity: activityModel.reducer,
 })
 

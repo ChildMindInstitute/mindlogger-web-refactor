@@ -15,8 +15,8 @@ export type AppletListItem = {
   displayName: string
   description: string
   about: string
-  image: string | ""
-  watermark: string | ""
+  image: string | null
+  watermark: string | null
 }
 
 export type AppletDetails<TActivity, TActivityFlow> = {

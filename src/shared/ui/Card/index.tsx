@@ -13,7 +13,7 @@ export interface CardProps {
   description?: string
   buttonLabel?: string | null
   buttonOnClick?: () => void
-  imageSrc?: string
+  imageSrc: string | null
   onClick?: () => void
   className?: string
 }
