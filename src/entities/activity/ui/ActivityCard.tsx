@@ -17,14 +17,18 @@ const ActivityCard = ({ activity, disabled, onActivityCardClick }: ActivityCardP
 
   const { saveActivity } = useActivityState()
 
-  const onHandleClick = () => {
+  const onActivityCardHandleClick = () => {
     saveActivity(activity)
 
     return onActivityCardClick()
   }
 
   return (
-    <Button className="ds-activity-button w-100" variant="link" onClick={onHandleClick} disabled={isDisabled}>
+    <Button
+      className="ds-activity-button w-100"
+      variant="link"
+      onClick={onActivityCardHandleClick}
+      disabled={isDisabled}>
       {activity.image && <img className="activity-image" src={activity.image} />}
 
       <div className="activity-data">
