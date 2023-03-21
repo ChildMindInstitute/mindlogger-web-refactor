@@ -28,7 +28,7 @@ class EventsBuilder {
           activityId: event.entityId,
           scheduledAt: !isAlwaysAvailable ? this.convertToDate(event.availability.startDate) : null,
           timers: event.timers,
-          selectedDate: this.convertToDate(event.selectedDate),
+          selectedDate: event.selectedDate ? this.convertToDate(event.selectedDate, true) : null,
           availability: {
             oneTimeCompletion: event.availability.oneTimeCompletion,
             allowAccessBeforeFromTime: event.availability.allowAccessBeforeFromTime,
@@ -72,8 +72,14 @@ class EventsBuilder {
     }
   }
 
-  private convertToDate(date: string): Date {
-    return new Date(date)
+  private convertToDate(date: string, setMidnight?: boolean): Date {
+    const dateFormat = new Date(date)
+
+    if (dateFormat && setMidnight) {
+      dateFormat.setHours(0, 0, 0, 0)
+    }
+
+    return dateFormat
   }
 }
 

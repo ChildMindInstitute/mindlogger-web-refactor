@@ -2,7 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 import { ProgressState, UpsertActionPayload } from "./types"
 
-const initialState: ProgressState = {}
+type InitialActivityState = {
+  groupsInProgress: ProgressState
+}
+
+const initialState: InitialActivityState = {
+  groupsInProgress: {},
+}
 
 const activitySlice = createSlice({
   name: "activityProgress",
@@ -15,9 +21,9 @@ const activitySlice = createSlice({
     upsertActivityById: (state, action: PayloadAction<UpsertActionPayload>) => {
       const { appletId, activityId, eventId, progressPayload } = action.payload
 
-      state[appletId] = state[appletId] ?? {}
-      state[appletId][activityId] = state[appletId][activityId] ?? {}
-      state[appletId][activityId][eventId] = progressPayload
+      state.groupsInProgress[appletId] = state.groupsInProgress[appletId] ?? {}
+      state.groupsInProgress[appletId][activityId] = state.groupsInProgress[appletId][activityId] ?? {}
+      state.groupsInProgress[appletId][activityId][eventId] = progressPayload
     },
   },
 })
