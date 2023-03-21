@@ -6,6 +6,7 @@ import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/
 interface UseActivityDetailsProps {
   appletId: string
   activityId: string
+  eventId: string
 }
 
 export interface ActivityEvents {
@@ -20,7 +21,13 @@ interface UseActivityDetailsReturn {
   isLoading: boolean
 }
 
-export const useActivityDetails = ({ appletId, activityId }: UseActivityDetailsProps): UseActivityDetailsReturn => {
+export const useActivityDetails = ({
+  appletId,
+  activityId,
+  eventId,
+}: UseActivityDetailsProps): UseActivityDetailsReturn => {
+  const { saveActivityEventRecords } = activityModel.hooks.useSaveActivityEventProgress()
+
   const {
     data: appletById,
     isError: isAppletError,
@@ -30,7 +37,18 @@ export const useActivityDetails = ({ appletId, activityId }: UseActivityDetailsP
     data: activityById,
     isError: isActivityError,
     isLoading: isActivityLoading,
-  } = useActivityByIdQuery({ activityId })
+  } = useActivityByIdQuery(
+    { activityId },
+    {
+      onSuccess(data) {
+        const activityDetails = activityModel.activityBuilder.convertToActivityDetails(data?.data?.result)
+
+        if (activityDetails) {
+          return saveActivityEventRecords(activityDetails, eventId)
+        }
+      },
+    },
+  )
 
   const appletDetails = useMemo(() => {
     return appletModel.appletBuilder.convertToAppletDetails(appletById?.data?.result)

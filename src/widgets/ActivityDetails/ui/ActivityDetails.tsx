@@ -19,6 +19,7 @@ export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
   const { appletDetails, activityDetails, isLoading } = activityDetailsModel.hooks.useActivityDetails({
     appletId: props.appletId,
     activityId: props.activityId,
+    eventId: props.eventId,
   })
 
   if (isLoading) {
