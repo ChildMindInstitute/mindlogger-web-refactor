@@ -14,7 +14,7 @@ type UseActivityGroupsReturn = {
 
 export const useActivityGroups = (
   appletDetails: AppletDetailsDTO,
-  eventsDetails: EventsByAppletIdResponseDTO[],
+  eventsDetails: EventsByAppletIdResponseDTO,
 ): UseActivityGroupsReturn => {
   const { progressState } = activityModel.hooks.useActivityInProgressState()
 

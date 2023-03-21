@@ -5,7 +5,11 @@ import { EventsByAppletIdResponseDTO, PeriodicityTypeDTO } from "~/shared/api"
 import { HourMinute } from "~/shared/utils"
 
 class EventsBuilder {
-  public convertToEventsGroupBuilder(events: EventsByAppletIdResponseDTO[], activities: Activity[]): EventActivity[] {
+  public convertToEventsGroupBuilder(
+    eventDetails: EventsByAppletIdResponseDTO,
+    activities: Activity[],
+  ): EventActivity[] {
+    const { events } = eventDetails
     const activitiesMap = new Map()
 
     activities.forEach(activity => {
@@ -15,26 +19,25 @@ class EventsBuilder {
     })
 
     return events.map(event => {
-      const isAlwaysAvailable = event.periodicity.type === "ALWAYS"
-      const isTimerSet = event.timerType !== "NOT_SET"
+      const isAlwaysAvailable = event.availabilityType === "AlwaysAvailable"
 
       return {
-        activity: activitiesMap.get(event.activityId),
+        activity: activitiesMap.get(event.entityId),
         event: {
           id: event.id,
-          activityId: event.activityId,
-          scheduledAt: !isAlwaysAvailable ? this.convertToDate(event.periodicity.startDate) : null,
-          timers: isTimerSet ? { timer: null, idleTimer: null } : null,
-          selectedDate: null,
+          activityId: event.entityId,
+          scheduledAt: !isAlwaysAvailable ? this.convertToDate(event.availability.startDate) : null,
+          timers: event.timers,
+          selectedDate: this.convertToDate(event.selectedDate),
           availability: {
-            oneTimeCompletion: event.oneTimeCompletion,
-            allowAccessBeforeFromTime: event.accessBeforeSchedule,
-            timeFrom: event.allDay ? this.convertToHourMinute(event.startTime) : null,
-            timeTo: event.allDay ? this.convertToHourMinute(event.endTime) : null,
-            startDate: !isAlwaysAvailable ? this.convertToDate(event.periodicity.startDate) : null,
-            endDate: !isAlwaysAvailable ? this.convertToDate(event.periodicity.endDate) : null,
+            oneTimeCompletion: event.availability.oneTimeCompletion,
+            allowAccessBeforeFromTime: event.availability.allowAccessBeforeFromTime,
+            timeFrom: event.availability.timeFrom,
+            timeTo: event.availability.timeTo,
+            startDate: !isAlwaysAvailable ? this.convertToDate(event.availability.startDate) : null,
+            endDate: !isAlwaysAvailable ? this.convertToDate(event.availability.endDate) : null,
             availabilityType: isAlwaysAvailable ? AvailabilityType.AlwaysAvailable : AvailabilityType.ScheduledAccess,
-            periodicityType: this.convertPeriodicitType(event.periodicity.type),
+            periodicityType: this.convertPeriodicitType(event.availability.periodicityType),
           },
         },
       }

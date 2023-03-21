@@ -1,4 +1,5 @@
-import { BaseSuccessListResponse } from "./base"
+import { HourMinute } from "../../utils"
+import { BaseSuccessResponse } from "./base"
 
 export type TimerTypeDTO = "NOT_SET"
 export type PeriodicityTypeDTO = "ONCE" | "DAILY" | "WEEKLY" | "WEEKDAYS" | "MONTHLY" | "ALWAYS"
@@ -7,24 +8,29 @@ export type GetEventsByAppletIdPayload = {
   appletId: string
 }
 
-export type SuccessEventsByAppletIdResponse = BaseSuccessListResponse<EventsByAppletIdResponseDTO>
+export type SuccessEventsByAppletIdResponse = BaseSuccessResponse<EventsByAppletIdResponseDTO>
 
 export type EventsByAppletIdResponseDTO = {
-  startTime: string // Example: "09:00"
-  endTime: string // Example: "21:00"
-  allDay: boolean
-  accessBeforeSchedule: boolean
-  oneTimeCompletion: boolean
-  timer: number
-  timerType: TimerTypeDTO
+  appletId: string
+  events: EventDTO[]
+}
+
+export type EventDTO = {
   id: string
-  periodicity: {
-    type: PeriodicityTypeDTO
-    startDate: string // Example: "2023-03-03"
-    endDate: string // Example: "2023-03-03"
-    interval: number
+  entityId: string
+  availability: {
+    oneTimeCompletion: boolean
+    periodicityType: "ONCE" | "DAILY" | "WEEKLY" | "WEEKDAYS" | "MONTHLY" | "ALWAYS"
+    timeFrom: HourMinute
+    timeTo: HourMinute
+    allowAccessBeforeFromTime: boolean
+    startDate: string
+    endDate: string
   }
-  userId: string | null
-  activityId: string
-  flowId: string | null
+  selectedDate: string
+  timers: {
+    timer: HourMinute
+    idleTimer: HourMinute
+  }
+  availabilityType: "AlwaysAvailable" | "ScheduledAccess"
 }
