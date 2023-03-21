@@ -1,26 +1,56 @@
 import { useState } from "react"
 
-import { ActivityItem, ItemCardButtonsConfig } from "../lib/item.schema"
+import { ActivityEventProgressRecord } from "../../activity/model/types"
+import { ItemCardButtonsConfig } from "../lib/item.schema"
 import { ItemCardButton } from "./ItemCardButtons"
 
 import { TextItem, CardItem } from "~/shared/ui"
 
 type ActivityCardItemProps = {
-  activityItem: ActivityItem
-  itemCardButtonsConfig: ItemCardButtonsConfig
+  activityItem: ActivityEventProgressRecord
+  isOnePageAssessment: boolean
+  isBackShown: boolean
+  isSubmitShown: boolean
+  toNextStep: () => void
+  toPrevStep: () => void
 }
 
-export const ActivityCardItem = ({ activityItem, itemCardButtonsConfig }: ActivityCardItemProps) => {
+export const ActivityCardItem = ({
+  activityItem,
+  isOnePageAssessment,
+  isBackShown,
+  isSubmitShown,
+  toNextStep,
+  toPrevStep,
+}: ActivityCardItemProps) => {
   const [value, setValue] = useState<string | undefined>(undefined)
 
   const buttonConfig: ItemCardButtonsConfig = {
-    ...itemCardButtonsConfig,
     isNextDisable: !value || !value.length,
-    isSkippable: activityItem.isSkippable || itemCardButtonsConfig.isSkippable,
+    isSkippable: activityItem.config.isSkippable,
+    isOnePageAssessment,
+    isBackShown: isBackShown && activityItem.config.isAbleToMoveToPrevious,
+    isSubmitShown: isSubmitShown,
+  }
+
+  const onNextButtonClick = () => {
+    toNextStep()
+  }
+
+  const onBackButtonClick = () => {
+    toPrevStep()
   }
 
   return (
-    <CardItem markdown={activityItem.question} buttons={<ItemCardButton config={buttonConfig} />}>
+    <CardItem
+      markdown={activityItem.question}
+      buttons={
+        <ItemCardButton
+          config={buttonConfig}
+          onNextButtonClick={onNextButtonClick}
+          onBackButtonClick={onBackButtonClick}
+        />
+      }>
       <TextItem value={value} setValue={setValue} />
     </CardItem>
   )

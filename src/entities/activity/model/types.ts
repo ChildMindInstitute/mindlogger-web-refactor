@@ -1,3 +1,4 @@
+import { ActivityItemType } from "../../item"
 import { ActivityPipelineType } from "../lib"
 
 type ActivityFlowProgress = {
@@ -19,7 +20,23 @@ export type EventProgressState = ActivityOrFlowProgress & {
 export type ActivityProgressState = Record<string, EventProgressState>
 export type AppletProgressState = Record<string, ActivityProgressState>
 
-export type ProgressState = Record<string, AppletProgressState>
+export type GroupsProgressState = Record<string, AppletProgressState>
+
+export type ActivityEventProgressRecord = {
+  id: string
+  question: string
+  type: ActivityItemType
+  answer: string[]
+  config: {
+    isSkippable: boolean
+    isRandom: boolean
+    isAbleToMoveToPrevious: boolean
+    hasTextResponse: boolean
+    ordering: number
+  }
+}
+
+export type ActivityEventProgressState = Record<string, ActivityEventProgressRecord[]>
 
 // Payloads
 export type UpsertActionPayload = {
