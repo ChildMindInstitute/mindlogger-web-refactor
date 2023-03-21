@@ -4,7 +4,10 @@ import axiosService from "./axios"
 function eventService() {
   return {
     getEventsByAppletId(payload: GetEventsByAppletIdPayload) {
-      return axiosService.get<SuccessEventsByAppletIdResponse>(`/applets/${payload.appletId}/events`)
+      return axiosService.get<SuccessEventsByAppletIdResponse>(`/users/me/events/${payload.appletId}`)
+    },
+    getUserEvents() {
+      return axiosService.get<SuccessEventsByAppletIdResponse>("/users/me/events")
     },
   }
 }

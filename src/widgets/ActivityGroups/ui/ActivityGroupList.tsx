@@ -20,7 +20,7 @@ import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/util
 
 interface ActivityListWidgetProps {
   appletDetails: AppletDetailsDTO
-  eventsDetails: EventsByAppletIdResponseDTO[]
+  eventsDetails: EventsByAppletIdResponseDTO
 }
 
 type ResumeActivityState = {
