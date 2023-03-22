@@ -7,14 +7,15 @@ import { activityBuilder } from "../activityBuilder"
 import { useAppDispatch } from "~/shared/utils"
 
 type UseActivityEventProgressReturn = {
-  saveActivityEventRecords: (activity: ActivityDetails, eventId: string) => void
+  saveActivityEventRecords: (activity: ActivityDetails, eventId: string, step: number) => void
+  resetActivityEventRecordsByParams: (activityId: string, eventId: string) => void
 }
 
 export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn => {
   const dispatch = useAppDispatch()
 
   const saveActivityEventRecords = useCallback(
-    (activity: ActivityDetails, eventId: string) => {
+    (activity: ActivityDetails, eventId: string, step: number) => {
       const preparedActivityItemProgressRecords = activity.items.map(item => {
         return activityBuilder.convertActivityItemToEmptyProgressRecord(item)
       })
@@ -22,7 +23,28 @@ export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn =
       const activityEventProgressId = getActivityEventProgressId(activity.id, eventId)
 
       return dispatch(
-        actions.saveActivityEventRecords({ [activityEventProgressId]: preparedActivityItemProgressRecords }),
+        actions.saveActivityEventRecords({
+          [activityEventProgressId]: {
+            activityEvents: preparedActivityItemProgressRecords,
+            step,
+          },
+        }),
+      )
+    },
+    [dispatch],
+  )
+
+  const resetActivityEventRecordsByParams = useCallback(
+    (activityId: string, eventId: string) => {
+      const activityEventProgressId = getActivityEventProgressId(activityId, eventId)
+
+      dispatch(
+        actions.saveActivityEventRecords({
+          [activityEventProgressId]: {
+            activityEvents: [],
+            step: 1,
+          },
+        }),
       )
     },
     [dispatch],
@@ -30,5 +52,6 @@ export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn =
 
   return {
     saveActivityEventRecords,
+    resetActivityEventRecordsByParams,
   }
 }

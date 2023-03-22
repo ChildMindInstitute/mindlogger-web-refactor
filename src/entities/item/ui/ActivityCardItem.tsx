@@ -13,8 +13,9 @@ type ActivityCardItemProps = {
   isSubmitShown: boolean
 
   isActive: boolean
-  toNextStep: () => void
+  toNextStep: (itemId: string, answer: string) => void
   toPrevStep: () => void
+  initialValue?: string
 }
 
 export const ActivityCardItem = ({
@@ -25,8 +26,9 @@ export const ActivityCardItem = ({
   toNextStep,
   toPrevStep,
   isActive,
+  initialValue = "",
 }: ActivityCardItemProps) => {
-  const [value, setValue] = useState<string | undefined>(undefined)
+  const [value, setValue] = useState<string>(initialValue)
 
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !value || !value.length,
@@ -37,7 +39,7 @@ export const ActivityCardItem = ({
   }
 
   const onNextButtonClick = () => {
-    toNextStep()
+    toNextStep(activityItem.id, value)
   }
 
   const onBackButtonClick = () => {

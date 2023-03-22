@@ -1,5 +1,6 @@
 import classNames from "classnames"
 import { Container, Row, Col, Spinner } from "react-bootstrap"
+import { useLocation } from "react-router-dom"
 
 import * as activityDetailsModel from "../model"
 import { ActivityItemList } from "./ActivityItemList"
@@ -16,11 +17,17 @@ interface ActivityDetailsWidgetProps {
 }
 
 export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
-  const { appletDetails, activityDetails, isLoading } = activityDetailsModel.hooks.useActivityDetails({
-    appletId: props.appletId,
-    activityId: props.activityId,
-    eventId: props.eventId,
-  })
+  const location = useLocation()
+  const isRestart = location.state.isRestart
+
+  const { appletDetails, activityDetails, isLoading } = activityDetailsModel.hooks.useActivityDetails(
+    {
+      appletId: props.appletId,
+      activityId: props.activityId,
+      eventId: props.eventId,
+    },
+    { isRestart },
+  )
 
   if (isLoading) {
     return (

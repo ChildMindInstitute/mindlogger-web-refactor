@@ -9,7 +9,7 @@ type ActivityCardItemListProps = PropsWithChildren<{
   isBackShown: boolean
   isSubmitShown: boolean
 
-  toNextStep: () => void
+  toNextStep: (itemId: string, answer: string) => void
   toPrevStep: () => void
 }>
 
@@ -26,6 +26,8 @@ export const ActivityCardItemList = ({
       {items.map((item, index) => {
         const firstElement = 0
         const isActive = index === firstElement
+
+        const initialAnswer = item.answer.length > 0 ? item.answer[0] : "" // Temporary solution
         return (
           <ActivityCardItem
             key={item.id}
@@ -36,6 +38,7 @@ export const ActivityCardItemList = ({
             toNextStep={toNextStep}
             toPrevStep={toPrevStep}
             isActive={isActive}
+            initialValue={initialAnswer}
           />
         )
       })}
