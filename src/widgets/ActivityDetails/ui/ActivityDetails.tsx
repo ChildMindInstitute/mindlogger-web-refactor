@@ -6,7 +6,7 @@ import * as activityDetailsModel from "../model"
 import { ActivityItemList } from "./ActivityItemList"
 import { BackNavigateButton } from "./BackNavigateButton"
 
-import { ActivityProgressPreviewList } from "~/entities/activity"
+import { activityModel, ActivityProgressPreviewList } from "~/entities/activity"
 import { BaseProgressBar } from "~/shared/ui"
 import CustomCard from "~/shared/ui/Card"
 
@@ -29,6 +29,11 @@ export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
     { isRestart },
   )
 
+  const { progress } = activityModel.hooks.useActivityEventProgressState({
+    activityId: props.activityId,
+    eventId: props.eventId,
+  })
+
   if (isLoading) {
     return (
       <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
@@ -43,7 +48,7 @@ export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
         <Col lg={3}>
           <BackNavigateButton />
         </Col>
-        <Col lg={9}>{!activityDetails?.showAllAtOnce && <BaseProgressBar percentage={30} />}</Col>
+        <Col lg={9}>{!activityDetails?.showAllAtOnce && <BaseProgressBar percentage={progress} />}</Col>
       </Row>
       <Row className="mt-2 activity">
         <Col xl={3}>
