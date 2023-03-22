@@ -1,8 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-import { ProgressState, UpsertActionPayload } from "./types"
+import { ActivityEventProgressState, GroupsProgressState, UpsertActionPayload } from "./types"
 
-const initialState: ProgressState = {}
+type InitialActivityState = {
+  groupsInProgress: GroupsProgressState
+  activityEventProgress: ActivityEventProgressState
+}
+
+const initialState: InitialActivityState = {
+  groupsInProgress: {},
+  activityEventProgress: {},
+}
 
 const activitySlice = createSlice({
   name: "activityProgress",
@@ -12,12 +20,16 @@ const activitySlice = createSlice({
       return initialState
     },
 
-    upsertActivityById: (state, action: PayloadAction<UpsertActionPayload>) => {
+    upsertGroupProgressByParams: (state, action: PayloadAction<UpsertActionPayload>) => {
       const { appletId, activityId, eventId, progressPayload } = action.payload
 
-      state[appletId] = state[appletId] ?? {}
-      state[appletId][activityId] = state[appletId][activityId] ?? {}
-      state[appletId][activityId][eventId] = progressPayload
+      state.groupsInProgress[appletId] = state.groupsInProgress[appletId] ?? {}
+      state.groupsInProgress[appletId][activityId] = state.groupsInProgress[appletId][activityId] ?? {}
+      state.groupsInProgress[appletId][activityId][eventId] = progressPayload
+    },
+
+    saveActivityEventRecords: (state, action: PayloadAction<ActivityEventProgressState>) => {
+      state.activityEventProgress = { ...state.activityEventProgress, ...action.payload }
     },
   },
 })

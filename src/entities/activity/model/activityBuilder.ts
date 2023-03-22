@@ -1,3 +1,4 @@
+import { ActivityItem } from "../../item"
 import {
   Activity,
   ActivityDetails,
@@ -7,6 +8,7 @@ import {
   ActivityStatus,
   ActivityType,
 } from "../lib"
+import { ActivityEventProgressRecord } from "./types"
 
 import { ActivityDTO, AppletDetailsActivityDTO } from "~/shared/api"
 import { getRandomInt } from "~/shared/utils"
@@ -72,6 +74,22 @@ class ActivityBuilder {
       description: activity.description,
       image: activity.image,
     }))
+  }
+
+  public convertActivityItemToEmptyProgressRecord(item: ActivityItem): ActivityEventProgressRecord {
+    return {
+      id: item.id,
+      question: item.question,
+      type: item.responseType,
+      answer: [],
+      config: {
+        isSkippable: item.isSkippable,
+        isRandom: item.isRandom,
+        isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+        hasTextResponse: item.hasTextResponse,
+        ordering: item.ordering,
+      },
+    }
   }
 }
 

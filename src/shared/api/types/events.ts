@@ -27,7 +27,7 @@ export type EventDTO = {
     startDate: string
     endDate: string
   }
-  selectedDate: string
+  selectedDate: string | null
   timers: {
     timer: HourMinute
     idleTimer: HourMinute

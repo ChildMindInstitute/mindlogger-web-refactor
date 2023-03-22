@@ -16,7 +16,7 @@ export const useActivityGroups = (
   appletDetails: AppletDetailsDTO,
   eventsDetails: EventsByAppletIdResponseDTO,
 ): UseActivityGroupsReturn => {
-  const { progressState } = activityModel.hooks.useActivityInProgressState()
+  const { groupsInProgress } = activityModel.hooks.useGroupsInProgress()
 
   const activitiesForBuilder = useMemo(() => {
     return activityModel.activityBuilder.convertToActivitiesGroupsBuilder(appletDetails.activities)
@@ -26,9 +26,9 @@ export const useActivityGroups = (
     return createActivityGroupsBuilder({
       allAppletActivities: activitiesForBuilder,
       appletId: appletDetails.id,
-      progress: progressState,
+      progress: groupsInProgress,
     })
-  }, [activitiesForBuilder, appletDetails.id, progressState])
+  }, [activitiesForBuilder, appletDetails.id, groupsInProgress])
 
   const calculator = useMemo(() => EventModel.SheduledDateCalculator, [])
 
@@ -45,7 +45,7 @@ export const useActivityGroups = (
   }, [eventActivities, calculator])
 
   const filteredEventActivities = useMemo(() => {
-    return eventActivityCalculatedScheduleAt.filter(x => x.event.scheduledAt)
+    return eventActivityCalculatedScheduleAt.filter(x => x.activity).filter(x => x.event.scheduledAt)
   }, [eventActivityCalculatedScheduleAt])
 
   const groupAvailable = useMemo(() => {
