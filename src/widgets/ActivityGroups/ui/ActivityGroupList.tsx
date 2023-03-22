@@ -31,8 +31,15 @@ type ResumeActivityState = {
 export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigatator = useCustomNavigation()
-  const navigateToActivityDetailsPage = (appletId: string, activityId: string, eventId: string) => {
-    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId, eventId))
+  const navigateToActivityDetailsPage = (
+    { appletId, activityId, eventId }: { appletId: string; activityId: string; eventId: string },
+    options: { isRestart: boolean },
+  ) => {
+    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId, eventId), {
+      state: {
+        isRestart: options.isRestart,
+      },
+    })
   }
 
   const [isAboutOpen, setIsAboutOpen] = useState(false)
@@ -85,7 +92,14 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
       },
     })
 
-    return navigateToActivityDetailsPage(appletDetails.id, activity.activityId, activity.eventId)
+    return navigateToActivityDetailsPage(
+      {
+        appletId: appletDetails.id,
+        activityId: activity.activityId,
+        eventId: activity.eventId,
+      },
+      { isRestart: true },
+    )
   }
 
   const onActivityCardClick = (activity: ActivityListItem) => {
@@ -99,9 +113,12 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
   const onActivityResume = () => {
     if (resumeActivityState.selectedActivity) {
       return navigateToActivityDetailsPage(
-        appletDetails.id,
-        resumeActivityState.selectedActivity.activityId,
-        resumeActivityState.selectedActivity.eventId,
+        {
+          appletId: appletDetails.id,
+          activityId: resumeActivityState.selectedActivity.activityId,
+          eventId: resumeActivityState.selectedActivity.eventId,
+        },
+        { isRestart: false },
       )
     }
   }

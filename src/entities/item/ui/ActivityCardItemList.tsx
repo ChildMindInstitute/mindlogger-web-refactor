@@ -9,7 +9,7 @@ type ActivityCardItemListProps = PropsWithChildren<{
   isBackShown: boolean
   isSubmitShown: boolean
 
-  toNextStep: () => void
+  toNextStep: (itemId: string, answer: string) => void
   toPrevStep: () => void
 }>
 

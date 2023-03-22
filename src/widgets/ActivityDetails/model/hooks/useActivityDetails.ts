@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 
 import { ActivityDetails, ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
 import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
@@ -21,12 +21,22 @@ interface UseActivityDetailsReturn {
   isLoading: boolean
 }
 
-export const useActivityDetails = ({
-  appletId,
-  activityId,
-  eventId,
-}: UseActivityDetailsProps): UseActivityDetailsReturn => {
-  const { saveActivityEventRecords } = activityModel.hooks.useSaveActivityEventProgress()
+type UseActivityDetailsParams = {
+  isRestart: boolean
+}
+
+export const useActivityDetails = (
+  { appletId, activityId, eventId }: UseActivityDetailsProps,
+  params: UseActivityDetailsParams,
+): UseActivityDetailsReturn => {
+  const { saveActivityEventRecords, resetActivityEventRecordsByParams } =
+    activityModel.hooks.useSaveActivityEventProgress()
+
+  useEffect(() => {
+    if (params.isRestart) {
+      resetActivityEventRecordsByParams(activityId, eventId)
+    }
+  }, [activityId, eventId, params.isRestart, resetActivityEventRecordsByParams])
 
   const {
     data: appletById,
@@ -41,10 +51,15 @@ export const useActivityDetails = ({
     { activityId },
     {
       onSuccess(data) {
+        if (!params.isRestart) {
+          return
+        }
+
         const activityDetails = activityModel.activityBuilder.convertToActivityDetails(data?.data?.result)
 
         if (activityDetails) {
-          return saveActivityEventRecords(activityDetails, eventId)
+          const initialStep = 1
+          return saveActivityEventRecords(activityDetails, eventId, initialStep)
         }
       },
     },
