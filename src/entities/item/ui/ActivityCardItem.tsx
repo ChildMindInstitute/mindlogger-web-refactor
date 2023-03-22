@@ -11,6 +11,8 @@ type ActivityCardItemProps = {
   isOnePageAssessment: boolean
   isBackShown: boolean
   isSubmitShown: boolean
+
+  isActive: boolean
   toNextStep: () => void
   toPrevStep: () => void
 }
@@ -22,6 +24,7 @@ export const ActivityCardItem = ({
   isSubmitShown,
   toNextStep,
   toPrevStep,
+  isActive,
 }: ActivityCardItemProps) => {
   const [value, setValue] = useState<string | undefined>(undefined)
 
@@ -45,13 +48,17 @@ export const ActivityCardItem = ({
     <CardItem
       markdown={activityItem.question}
       buttons={
-        <ItemCardButton
-          config={buttonConfig}
-          onNextButtonClick={onNextButtonClick}
-          onBackButtonClick={onBackButtonClick}
-        />
+        isActive ? (
+          <ItemCardButton
+            config={buttonConfig}
+            onNextButtonClick={onNextButtonClick}
+            onBackButtonClick={onBackButtonClick}
+          />
+        ) : (
+          <></>
+        )
       }>
-      <TextItem value={value} setValue={setValue} />
+      <TextItem value={value} setValue={setValue} disabled={!isActive} />
     </CardItem>
   )
 }

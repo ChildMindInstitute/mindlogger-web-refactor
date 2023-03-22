@@ -23,17 +23,22 @@ export const ActivityCardItemList = ({
 }: ActivityCardItemListProps) => {
   return (
     <>
-      {items.map(item => (
-        <ActivityCardItem
-          key={item.id}
-          activityItem={item}
-          isBackShown={isBackShown}
-          isOnePageAssessment={isOnePageAssessment}
-          isSubmitShown={isSubmitShown}
-          toNextStep={toNextStep}
-          toPrevStep={toPrevStep}
-        />
-      ))}
+      {items.map((item, index) => {
+        const firstElement = 0
+        const isActive = index === firstElement
+        return (
+          <ActivityCardItem
+            key={item.id}
+            activityItem={item}
+            isBackShown={isBackShown}
+            isOnePageAssessment={isOnePageAssessment}
+            isSubmitShown={isSubmitShown}
+            toNextStep={toNextStep}
+            toPrevStep={toPrevStep}
+            isActive={isActive}
+          />
+        )
+      })}
     </>
   )
 }

@@ -83,9 +83,9 @@ class ActivityBuilder {
       type: item.responseType,
       answer: [],
       config: {
-        isSkippable: item.isSkippable,
-        isRandom: item.isRandom,
-        isAbleToMoveToPrevious: item.isAbleToMoveToPrevious,
+        isSkippable: item.isSkippable ? item.isSkippable : false,
+        isRandom: item.isRandom ? item.isRandom : false,
+        isAbleToMoveToPrevious: item.isAbleToMoveToPrevious ? item.isAbleToMoveToPrevious : false,
         hasTextResponse: item.hasTextResponse,
         ordering: item.ordering,
       },
