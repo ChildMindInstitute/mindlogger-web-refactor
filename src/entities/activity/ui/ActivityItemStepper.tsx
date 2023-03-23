@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 
 import { ActivityCardItemList } from "../../item"
 import { ActivityDetails } from "../lib"
-import { useActivityEventProgressState } from "../model/hooks"
+import { useActivityEventProgressState, useSaveActivityItemAnswer, useStepperState } from "../model/hooks"
 
 type ActivityItemStepperProps = {
   eventId: string
@@ -10,24 +10,27 @@ type ActivityItemStepperProps = {
 }
 
 export const ActivityItemStepper = ({ eventId, activityDetails }: ActivityItemStepperProps) => {
-  const [step, setStep] = useState<number>(1)
-
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
     activityId: activityDetails.id,
   })
 
-  const toNextStep = () => {
-    setStep(currentStep => currentStep + 1)
-  }
+  const { saveActivityItemAnswer } = useSaveActivityItemAnswer({ eventId, activityId: activityDetails.id })
 
-  const toPrevStep = () => {
-    setStep(currentStep => currentStep - 1)
-  }
+  const { step, setStep } = useStepperState({ activityId: activityDetails.id, eventId })
 
   const itemsProgress = useMemo(() => {
     return currentActivityEventProgress.slice(0, step).reverse()
   }, [currentActivityEventProgress, step])
+
+  const toNextStep = (itemId: string, answer: string) => {
+    saveActivityItemAnswer(itemId, answer)
+    setStep(step + 1)
+  }
+
+  const toPrevStep = () => {
+    setStep(step - 1)
+  }
 
   const isSubmitShown = step === currentActivityEventProgress.length
   const isBackShown = itemsProgress.length > 1
