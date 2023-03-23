@@ -21,7 +21,7 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
   const currentActivityEventProgress = useMemo(() => {
     const activityEventProgress = currentActivityEventStateProgress
 
-    if (!activityEventProgress) {
+    if (!activityEventProgress?.activityEvents) {
       return []
     }
 
@@ -30,7 +30,7 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
 
   const lastActivityEventWithAnswerIndex = useMemo(() => {
     const activityEventProgress = currentActivityEventStateProgress
-    const step = activityEventProgress.step
+    const step = activityEventProgress?.step ?? 1
 
     // -1 === not foind
     // 0 === start index
@@ -44,16 +44,18 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
 
   const progress = useMemo(() => {
     const activityEventRecords = currentActivityEventStateProgress
+    const activityEventLength = activityEventRecords?.activityEvents.length ?? 0
+
     let answerCount = 0
 
-    for (let i = 0; i < activityEventRecords.activityEvents.length; i++) {
+    for (let i = 0; i < activityEventLength; i++) {
       const isAnswerExist = activityEventRecords.activityEvents[i].answer.length
       if (isAnswerExist) {
         answerCount++
       }
     }
 
-    return (answerCount / activityEventRecords.activityEvents.length) * 100
+    return (answerCount / activityEventLength) * 100
   }, [currentActivityEventStateProgress])
 
   return { currentActivityEventProgress, lastActivityEventWithAnswerIndex, progress }
