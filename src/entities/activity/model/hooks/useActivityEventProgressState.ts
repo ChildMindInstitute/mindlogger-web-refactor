@@ -49,13 +49,15 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
     let answerCount = 0
 
     for (let i = 0; i < activityEventLength; i++) {
-      const isAnswerExist = activityEventRecords.activityEvents[i].answer.length
+      const isAnswerExist = activityEventRecords?.activityEvents[i]?.answer?.length
       if (isAnswerExist) {
         answerCount++
       }
     }
 
-    return (answerCount / activityEventLength) * 100
+    const progressIfExist = (answerCount / activityEventLength) * 100
+
+    return progressIfExist ? progressIfExist : 0
   }, [currentActivityEventStateProgress])
 
   return { currentActivityEventProgress, lastActivityEventWithAnswerIndex, progress }

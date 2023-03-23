@@ -10,27 +10,29 @@ import {
 } from "../lib"
 import { ActivityEventProgressRecord } from "./types"
 
-import { ActivityDTO, AppletDetailsActivityDTO } from "~/shared/api"
-import { getRandomInt } from "~/shared/utils"
+import { ActivityDTO, AppletDetailsActivityDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
 
 class ActivityBuilder {
   public convertToActivityProgressPreview(activities: ActivityListItem[]): ActivityProgressPreview[] {
     return activities.map(activity => {
-      const itemsLength = 10 // activity.items.length in the real implementation
-      const currentProgressItem = getRandomInt(10) // TODO: When redux for progress will implemented, add selector to progress activity and get activity order
-
       return {
         id: activity.activityId,
         title: activity.name,
-        progress: (currentProgressItem / itemsLength) * 100,
+        activityId: activity.activityId,
+        eventId: activity.eventId,
       }
     })
   }
 
-  public convertToActivityList(activities?: AppletDetailsActivityDTO[]): ActivityListItem[] {
+  public convertToActivityList(
+    activities?: AppletDetailsActivityDTO[],
+    events?: EventsByAppletIdResponseDTO,
+  ): ActivityListItem[] {
     if (!activities) {
       return []
     }
+
+    console.log(events)
 
     return activities.map((activity: AppletDetailsActivityDTO, index) => ({
       activityId: activity.id,

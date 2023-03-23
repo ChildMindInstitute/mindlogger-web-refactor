@@ -13,8 +13,8 @@ export const ActivityProgressPreviewList = ({ activities }: ActivityProgressPrev
 
   return (
     <>
-      {activitiesPreview.map(({ id, title, progress }) => (
-        <ActivityProgressPreviewCard key={id} title={title} progress={progress} />
+      {activitiesPreview.map(({ id, title, activityId, eventId }) => (
+        <ActivityProgressPreviewCard key={id} title={title} activityId={activityId} eventId={eventId} />
       ))}
     </>
   )
