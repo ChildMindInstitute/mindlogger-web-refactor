@@ -1,9 +1,8 @@
 import { useEffect, useMemo } from "react"
 
-import { useEventsbyAppletIdQuery } from "../../../../entities/event"
-
 import { ActivityDetails, ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
 import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
+import { useEventsbyAppletIdQuery } from "~/entities/event"
 
 interface UseActivityDetailsProps {
   appletId: string
