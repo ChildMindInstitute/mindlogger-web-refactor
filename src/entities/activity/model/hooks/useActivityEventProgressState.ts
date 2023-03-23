@@ -43,21 +43,19 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
   }, [currentActivityEventStateProgress])
 
   const progress = useMemo(() => {
+    const defaultProgressPercentage = 0
+
     const activityEventRecords = currentActivityEventStateProgress
-    const activityEventLength = activityEventRecords?.activityEvents.length ?? 0
 
-    let answerCount = 0
-
-    for (let i = 0; i < activityEventLength; i++) {
-      const isAnswerExist = activityEventRecords?.activityEvents[i]?.answer?.length
-      if (isAnswerExist) {
-        answerCount++
-      }
+    if (!activityEventRecords?.activityEvents) {
+      return defaultProgressPercentage
     }
 
-    const progressIfExist = (answerCount / activityEventLength) * 100
+    const activityEventLength = activityEventRecords.activityEvents.length
+    const lastStep = activityEventRecords?.step
 
-    return progressIfExist ? progressIfExist : 0
+    // Step always start from 1, but we want to paint progress when we pass some item
+    return ((lastStep - 1) / activityEventLength) * 100
   }, [currentActivityEventStateProgress])
 
   return { currentActivityEventProgress, lastActivityEventWithAnswerIndex, progress }
