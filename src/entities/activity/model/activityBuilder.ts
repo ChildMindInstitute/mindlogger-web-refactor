@@ -10,7 +10,7 @@ import {
 } from "../lib"
 import { ActivityEventProgressRecord } from "./types"
 
-import { ActivityDTO, AppletDetailsActivityDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
+import { ActivityDTO, AppletDetailsActivityDTO, EventDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
 
 class ActivityBuilder {
   public convertToActivityProgressPreview(activities: ActivityListItem[]): ActivityProgressPreview[] {
@@ -28,23 +28,30 @@ class ActivityBuilder {
     activities?: AppletDetailsActivityDTO[],
     events?: EventsByAppletIdResponseDTO,
   ): ActivityListItem[] {
-    if (!activities) {
+    if (!activities || !events) {
       return []
     }
 
-    console.log(events)
+    const eventMap = new Map<string, EventDTO>()
+    events.events.forEach(event => {
+      eventMap.set(event.entityId, event)
+    })
 
-    return activities.map((activity: AppletDetailsActivityDTO, index) => ({
-      activityId: activity.id,
-      eventId: `mock_eventid_${index}`, // Mocked
-      name: activity.name,
-      description: activity.description,
-      image: activity.image,
-      status: ActivityStatus.Available, // Mocked
-      type: ActivityType.NotDefined, // Mocked
-      isInActivityFlow: false, // Mocked
-      isTimerSet: false, // Mocked
-    }))
+    return activities.map((activity: AppletDetailsActivityDTO) => {
+      const eventByActivityId = eventMap.get(activity.id)
+
+      return {
+        activityId: activity.id,
+        eventId: eventByActivityId?.id ?? "",
+        name: activity.name,
+        description: activity.description,
+        image: activity.image,
+        status: ActivityStatus.Available, // Mocked
+        type: ActivityType.NotDefined, // Mocked
+        isInActivityFlow: false, // Mocked
+        isTimerSet: false, // Mocked
+      }
+    })
   }
 
   public convertToActivityDetails(activity?: ActivityDTO): ActivityDetails | null {
