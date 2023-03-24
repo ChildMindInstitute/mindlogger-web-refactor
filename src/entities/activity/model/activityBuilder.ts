@@ -10,39 +10,48 @@ import {
 } from "../lib"
 import { ActivityEventProgressRecord } from "./types"
 
-import { ActivityDTO, AppletDetailsActivityDTO } from "~/shared/api"
-import { getRandomInt } from "~/shared/utils"
+import { ActivityDTO, AppletDetailsActivityDTO, EventDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
 
 class ActivityBuilder {
   public convertToActivityProgressPreview(activities: ActivityListItem[]): ActivityProgressPreview[] {
     return activities.map(activity => {
-      const itemsLength = 10 // activity.items.length in the real implementation
-      const currentProgressItem = getRandomInt(10) // TODO: When redux for progress will implemented, add selector to progress activity and get activity order
-
       return {
         id: activity.activityId,
         title: activity.name,
-        progress: (currentProgressItem / itemsLength) * 100,
+        activityId: activity.activityId,
+        eventId: activity.eventId,
       }
     })
   }
 
-  public convertToActivityList(activities?: AppletDetailsActivityDTO[]): ActivityListItem[] {
-    if (!activities) {
+  public convertToActivityList(
+    activities?: AppletDetailsActivityDTO[],
+    events?: EventsByAppletIdResponseDTO,
+  ): ActivityListItem[] {
+    if (!activities || !events) {
       return []
     }
 
-    return activities.map((activity: AppletDetailsActivityDTO, index) => ({
-      activityId: activity.id,
-      eventId: `mock_eventid_${index}`, // Mocked
-      name: activity.name,
-      description: activity.description,
-      image: activity.image,
-      status: ActivityStatus.Available, // Mocked
-      type: ActivityType.NotDefined, // Mocked
-      isInActivityFlow: false, // Mocked
-      isTimerSet: false, // Mocked
-    }))
+    const eventMap = new Map<string, EventDTO>()
+    events.events.forEach(event => {
+      eventMap.set(event.entityId, event)
+    })
+
+    return activities.map((activity: AppletDetailsActivityDTO) => {
+      const eventByActivityId = eventMap.get(activity.id)
+
+      return {
+        activityId: activity.id,
+        eventId: eventByActivityId?.id ?? "",
+        name: activity.name,
+        description: activity.description,
+        image: activity.image,
+        status: ActivityStatus.Available, // Mocked
+        type: ActivityType.NotDefined, // Mocked
+        isInActivityFlow: false, // Mocked
+        isTimerSet: false, // Mocked
+      }
+    })
   }
 
   public convertToActivityDetails(activity?: ActivityDTO): ActivityDetails | null {

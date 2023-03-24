@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react"
 
 import { ActivityDetails, ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
 import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
+import { useEventsbyAppletIdQuery } from "~/entities/event"
 
 interface UseActivityDetailsProps {
   appletId: string
@@ -43,6 +44,11 @@ export const useActivityDetails = (
     isError: isAppletError,
     isLoading: isAppletLoading,
   } = useAppletByIdQuery({ isPublic: false, appletId })
+
+  const appletDetailsRawData = useMemo(() => {
+    return appletById?.data?.result
+  }, [appletById?.data?.result])
+
   const {
     data: activityById,
     isError: isActivityError,
@@ -65,18 +71,32 @@ export const useActivityDetails = (
     },
   )
 
+  const activityDetailsRawData = useMemo(() => {
+    return activityById?.data?.result
+  }, [activityById?.data?.result])
+
+  const {
+    data: eventsByIdData,
+    isError: isEventsError,
+    isLoading: isEventsLoading,
+  } = useEventsbyAppletIdQuery({ appletId })
+
+  const eventsRawData = useMemo(() => {
+    return eventsByIdData?.data?.result
+  }, [eventsByIdData?.data?.result])
+
   const appletDetails = useMemo(() => {
-    return appletModel.appletBuilder.convertToAppletDetails(appletById?.data?.result)
-  }, [appletById?.data?.result])
+    return appletModel.appletBuilder.convertToAppletDetails(appletDetailsRawData, eventsRawData)
+  }, [appletDetailsRawData, eventsRawData])
 
   const activityDetails = useMemo(() => {
-    return activityModel.activityBuilder.convertToActivityDetails(activityById?.data?.result)
-  }, [activityById?.data?.result])
+    return activityModel.activityBuilder.convertToActivityDetails(activityDetailsRawData)
+  }, [activityDetailsRawData])
 
   return {
     appletDetails,
     activityDetails,
-    isError: isAppletError || isActivityError,
-    isLoading: isAppletLoading || isActivityLoading,
+    isError: isAppletError || isActivityError || isEventsError,
+    isLoading: isAppletLoading || isActivityLoading || isEventsLoading,
   }
 }

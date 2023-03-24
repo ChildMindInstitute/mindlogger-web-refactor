@@ -58,5 +58,6 @@ export type ActivityDetails = {
 export type ActivityProgressPreview = {
   id: string
   title: string
-  progress: number
+  activityId: string
+  eventId: string
 }
