@@ -13,29 +13,50 @@ type UseActivityEventProgressStateProps = {
 export const useActivityEventProgressState = (props: UseActivityEventProgressStateProps) => {
   const activityEventProgressState = useSelector(activityEventProgressSelector)
 
-  const currentActivityEventProgress = useMemo(() => {
+  const currentActivityEventStateProgress = useMemo(() => {
     const activityEventId = getActivityEventProgressId(props.activityId, props.eventId)
-    const activityEventProgress = activityEventProgressState[activityEventId]
+    return activityEventProgressState[activityEventId]
+  }, [activityEventProgressState, props.activityId, props.eventId])
 
-    if (!activityEventProgress) {
+  const currentActivityEventProgress = useMemo(() => {
+    const activityEventProgress = currentActivityEventStateProgress
+
+    if (!activityEventProgress?.activityEvents) {
       return []
     }
 
     return activityEventProgress.activityEvents
-  }, [activityEventProgressState, props.activityId, props.eventId])
+  }, [currentActivityEventStateProgress])
 
   const lastActivityEventWithAnswerIndex = useMemo(() => {
-    const index = currentActivityEventProgress.findIndex(item => item.answer.length === 0)
+    const activityEventProgress = currentActivityEventStateProgress
+    const step = activityEventProgress?.step ?? 1
 
     // -1 === not foind
     // 0 === start index
     // If not found return start index
-    if (index === -1) {
-      return 0
+    if (step > 1) {
+      return step - 1
     }
 
-    return index
-  }, [currentActivityEventProgress])
+    return step
+  }, [currentActivityEventStateProgress])
 
-  return { currentActivityEventProgress, lastActivityEventWithAnswerIndex }
+  const progress = useMemo(() => {
+    const defaultProgressPercentage = 0
+
+    const activityEventRecords = currentActivityEventStateProgress
+
+    if (!activityEventRecords?.activityEvents) {
+      return defaultProgressPercentage
+    }
+
+    const activityEventLength = activityEventRecords.activityEvents.length
+    const lastStep = activityEventRecords?.step
+
+    // Step always start from 1, but we want to paint progress when we pass some item
+    return ((lastStep - 1) / activityEventLength) * 100
+  }, [currentActivityEventStateProgress])
+
+  return { currentActivityEventProgress, lastActivityEventWithAnswerIndex, progress }
 }
