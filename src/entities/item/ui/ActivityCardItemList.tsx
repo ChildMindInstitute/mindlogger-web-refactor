@@ -9,8 +9,9 @@ type ActivityCardItemListProps = PropsWithChildren<{
   isBackShown: boolean
   isSubmitShown: boolean
 
-  toNextStep: (itemId: string, answer: string) => void
+  toNextStep: () => void
   toPrevStep: () => void
+  setValue: (itemId: string, answer: string) => void
 }>
 
 export const ActivityCardItemList = ({
@@ -20,6 +21,7 @@ export const ActivityCardItemList = ({
   isSubmitShown,
   toNextStep,
   toPrevStep,
+  setValue,
 }: ActivityCardItemListProps) => {
   return (
     <>
@@ -38,7 +40,8 @@ export const ActivityCardItemList = ({
             toNextStep={toNextStep}
             toPrevStep={toPrevStep}
             isActive={isActive}
-            initialValue={initialAnswer}
+            value={initialAnswer}
+            setValue={setValue}
           />
         )
       })}

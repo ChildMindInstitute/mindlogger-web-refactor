@@ -23,8 +23,7 @@ export const ActivityItemStepper = ({ eventId, activityDetails }: ActivityItemSt
     return currentActivityEventProgress.slice(0, step).reverse()
   }, [currentActivityEventProgress, step])
 
-  const toNextStep = (itemId: string, answer: string) => {
-    saveActivityItemAnswer(itemId, answer)
+  const toNextStep = () => {
     setStep(step + 1)
   }
 
@@ -43,6 +42,7 @@ export const ActivityItemStepper = ({ eventId, activityDetails }: ActivityItemSt
       isSubmitShown={isSubmitShown}
       toNextStep={toNextStep}
       toPrevStep={toPrevStep}
+      setValue={saveActivityItemAnswer}
     />
   )
 }
