@@ -9,8 +9,8 @@ type ActivityCardItemListProps = PropsWithChildren<{
   isBackShown: boolean
   isSubmitShown: boolean
 
-  toNextStep: () => void
-  toPrevStep: () => void
+  toNextStep?: () => void
+  toPrevStep?: () => void
   setValue: (itemId: string, answer: string) => void
 }>
 
@@ -27,7 +27,8 @@ export const ActivityCardItemList = ({
     <>
       {items.map((item, index) => {
         const firstElement = 0
-        const isActive = index === firstElement
+        const isActive = index === firstElement || isOnePageAssessment
+        const iSubmitButtonShown = isOnePageAssessment && isSubmitShown && index === items.length - 1
 
         const initialAnswer = item.answer.length > 0 ? item.answer[0] : "" // Temporary solution
         return (
@@ -36,7 +37,7 @@ export const ActivityCardItemList = ({
             activityItem={item}
             isBackShown={isBackShown}
             isOnePageAssessment={isOnePageAssessment}
-            isSubmitShown={isSubmitShown}
+            isSubmitShown={iSubmitButtonShown}
             toNextStep={toNextStep}
             toPrevStep={toPrevStep}
             isActive={isActive}

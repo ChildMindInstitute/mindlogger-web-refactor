@@ -1,4 +1,4 @@
-import { ActivityDetails, ActivityItemStepper } from "~/entities/activity"
+import { ActivityDetails, ActivityItemStepper, ActivityOnePageAssessment } from "~/entities/activity"
 
 interface ActivityItemListProps {
   appletId: string
@@ -13,9 +13,9 @@ export const ActivityItemList = ({ activityDetails, eventId }: ActivityItemListP
   return (
     <>
       {/* {isSummaryScreen && <ActivitySummary />} */}
-      {/* {!isSummaryScreen && isOnePageAssessment && (
-        <ActivityCardItemList items={items} itemCardButtonsConfig={buttonsConfig} />
-      )} */}
+      {!isSummaryScreen && isOnePageAssessment && (
+        <ActivityOnePageAssessment eventId={eventId} activityDetails={activityDetails} />
+      )}
       {!isSummaryScreen && !isOnePageAssessment && (
         <ActivityItemStepper eventId={eventId} activityDetails={activityDetails} />
       )}

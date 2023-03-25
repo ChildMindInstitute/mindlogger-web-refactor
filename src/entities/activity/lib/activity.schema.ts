@@ -13,6 +13,7 @@ export type ActivityListItem = {
   type: ActivityType
 
   isInActivityFlow: boolean
+  isOnePageAssessment?: boolean
 
   activityFlowDetails?: {
     showActivityFlowBadge: boolean
