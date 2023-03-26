@@ -16,7 +16,7 @@ export const useActivityGroups = (
   appletDetails: AppletDetailsDTO,
   eventsDetails: EventsByAppletIdResponseDTO,
 ): UseActivityGroupsReturn => {
-  const { groupsInProgress } = activityModel.hooks.useGroupsInProgress()
+  const { groupsInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
 
   const activitiesForBuilder = useMemo(() => {
     return activityModel.activityBuilder.convertToActivitiesGroupsBuilder(appletDetails.activities)
