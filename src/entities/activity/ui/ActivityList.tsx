@@ -1,12 +1,12 @@
 import { ActivityListItem } from "../lib"
-import ActivityCard from "./ActivityCard"
+import { ActivityCard } from "./ActivityCard"
 
 interface ActivityListProps {
   activities: ActivityListItem[]
   onActivityCardClick: (activity: ActivityListItem) => void
 }
 
-const ActivityList = ({ activities, onActivityCardClick }: ActivityListProps) => {
+export const ActivityList = ({ activities, onActivityCardClick }: ActivityListProps) => {
   return (
     <>
       {activities.map(activity => (
@@ -19,5 +19,3 @@ const ActivityList = ({ activities, onActivityCardClick }: ActivityListProps) =>
     </>
   )
 }
-
-export default ActivityList

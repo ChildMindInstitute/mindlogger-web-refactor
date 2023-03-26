@@ -11,7 +11,7 @@ interface ActivityCardProps {
   onActivityCardClick: () => void
 }
 
-const ActivityCard = ({ activity, disabled, onActivityCardClick }: ActivityCardProps) => {
+export const ActivityCard = ({ activity, disabled, onActivityCardClick }: ActivityCardProps) => {
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled
 
   return (
@@ -27,5 +27,3 @@ const ActivityCard = ({ activity, disabled, onActivityCardClick }: ActivityCardP
     </Button>
   )
 }
-
-export default ActivityCard

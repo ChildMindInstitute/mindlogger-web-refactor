@@ -1,4 +1,4 @@
-import { ItemCardButtonsConfig } from "../lib/item.schema"
+import { ItemCardButtonsConfig } from "../lib"
 import { ActivityEventProgressRecord } from "../model/types"
 import { ItemCardButton } from "./ItemCardButtons"
 
