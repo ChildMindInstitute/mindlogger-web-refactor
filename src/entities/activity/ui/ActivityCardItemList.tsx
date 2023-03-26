@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react"
 
-import { ActivityEventProgressRecord } from "../../activity/model/types"
+import { ActivityEventProgressRecord } from "../model/types"
 import { ActivityCardItem } from "./ActivityCardItem"
 
 type ActivityCardItemListProps = PropsWithChildren<{

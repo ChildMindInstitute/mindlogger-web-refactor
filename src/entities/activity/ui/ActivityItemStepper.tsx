@@ -1,8 +1,8 @@
 import { useMemo } from "react"
 
-import { ActivityCardItemList } from "../../item"
 import { ActivityDetails } from "../lib"
 import { useActivityEventProgressState, useSaveActivityItemAnswer, useStepperState } from "../model/hooks"
+import { ActivityCardItemList } from "./ActivityCardItemList"
 
 type ActivityItemStepperProps = {
   eventId: string

@@ -1,4 +1,4 @@
-import { ActivityItem } from "~/entities/item/lib/item.schema"
+import { ActivityItem } from "~/entities/activity/lib/item.schema"
 import { HourMinute } from "~/shared/utils"
 
 export type ActivityListItem = {

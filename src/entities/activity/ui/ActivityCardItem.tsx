@@ -1,5 +1,5 @@
-import { ActivityEventProgressRecord } from "../../activity/model/types"
 import { ItemCardButtonsConfig } from "../lib/item.schema"
+import { ActivityEventProgressRecord } from "../model/types"
 import { ItemCardButton } from "./ItemCardButtons"
 
 import { TextItem, CardItem } from "~/shared/ui"

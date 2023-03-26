@@ -1,7 +1,7 @@
-import { ActivityItem } from "../../item"
 import {
   Activity,
   ActivityDetails,
+  ActivityItem,
   ActivityListItem,
   ActivityPipelineType,
   ActivityProgressPreview,

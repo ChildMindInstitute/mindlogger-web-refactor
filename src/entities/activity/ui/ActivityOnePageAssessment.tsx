@@ -1,6 +1,6 @@
-import { ActivityCardItemList } from "../../item"
 import { ActivityDetails } from "../lib"
 import { useActivityEventProgressState, useSaveActivityItemAnswer } from "../model/hooks"
+import { ActivityCardItemList } from "./ActivityCardItemList"
 
 type ActivityOnePageAssessmentProps = {
   eventId: string

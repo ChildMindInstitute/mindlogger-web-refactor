@@ -1,5 +1,4 @@
-import { ActivityItemType } from "../../item"
-import { ActivityPipelineType } from "../lib"
+import { ActivityItemType, ActivityPipelineType } from "../lib"
 
 type ActivityFlowProgress = {
   type: ActivityPipelineType.Flow
