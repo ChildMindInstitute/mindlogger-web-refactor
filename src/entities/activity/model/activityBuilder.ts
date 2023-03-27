@@ -1,7 +1,7 @@
-import { ActivityItem } from "../../item"
 import {
   Activity,
   ActivityDetails,
+  ActivityItem,
   ActivityListItem,
   ActivityPipelineType,
   ActivityProgressPreview,
@@ -46,6 +46,7 @@ class ActivityBuilder {
         name: activity.name,
         description: activity.description,
         image: activity.image,
+        isOnePageAssessment: activity.showAllAtOnce,
         status: ActivityStatus.Available, // Mocked
         type: ActivityType.NotDefined, // Mocked
         isInActivityFlow: false, // Mocked

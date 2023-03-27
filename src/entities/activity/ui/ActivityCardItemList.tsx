@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react"
 
-import { ActivityEventProgressRecord } from "../../activity/model/types"
+import { ActivityEventProgressRecord } from "../model/types"
 import { ActivityCardItem } from "./ActivityCardItem"
 
 type ActivityCardItemListProps = PropsWithChildren<{
@@ -9,8 +9,9 @@ type ActivityCardItemListProps = PropsWithChildren<{
   isBackShown: boolean
   isSubmitShown: boolean
 
-  toNextStep: (itemId: string, answer: string) => void
-  toPrevStep: () => void
+  toNextStep?: () => void
+  toPrevStep?: () => void
+  setValue: (itemId: string, answer: string) => void
 }>
 
 export const ActivityCardItemList = ({
@@ -20,12 +21,14 @@ export const ActivityCardItemList = ({
   isSubmitShown,
   toNextStep,
   toPrevStep,
+  setValue,
 }: ActivityCardItemListProps) => {
   return (
     <>
       {items.map((item, index) => {
         const firstElement = 0
-        const isActive = index === firstElement
+        const isActive = index === firstElement || isOnePageAssessment
+        const iSubmitButtonShown = isOnePageAssessment && isSubmitShown && index === items.length - 1
 
         const initialAnswer = item.answer.length > 0 ? item.answer[0] : "" // Temporary solution
         return (
@@ -34,11 +37,12 @@ export const ActivityCardItemList = ({
             activityItem={item}
             isBackShown={isBackShown}
             isOnePageAssessment={isOnePageAssessment}
-            isSubmitShown={isSubmitShown}
+            isSubmitShown={iSubmitButtonShown}
             toNextStep={toNextStep}
             toPrevStep={toPrevStep}
             isActive={isActive}
-            initialValue={initialAnswer}
+            value={initialAnswer}
+            setValue={setValue}
           />
         )
       })}

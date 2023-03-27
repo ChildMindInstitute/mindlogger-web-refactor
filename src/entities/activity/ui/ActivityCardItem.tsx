@@ -1,7 +1,5 @@
-import { useState } from "react"
-
-import { ActivityEventProgressRecord } from "../../activity/model/types"
-import { ItemCardButtonsConfig } from "../lib/item.schema"
+import { ItemCardButtonsConfig } from "../lib"
+import { ActivityEventProgressRecord } from "../model/types"
 import { ItemCardButton } from "./ItemCardButtons"
 
 import { TextItem, CardItem } from "~/shared/ui"
@@ -13,9 +11,10 @@ type ActivityCardItemProps = {
   isSubmitShown: boolean
 
   isActive: boolean
-  toNextStep: (itemId: string, answer: string) => void
-  toPrevStep: () => void
-  initialValue?: string
+  toNextStep?: () => void
+  toPrevStep?: () => void
+  value?: string
+  setValue: (itemId: string, answer: string) => void
 }
 
 export const ActivityCardItem = ({
@@ -26,10 +25,9 @@ export const ActivityCardItem = ({
   toNextStep,
   toPrevStep,
   isActive,
-  initialValue = "",
+  value = "",
+  setValue,
 }: ActivityCardItemProps) => {
-  const [value, setValue] = useState<string>(initialValue)
-
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !value || !value.length,
     isSkippable: activityItem.config.isSkippable,
@@ -39,11 +37,19 @@ export const ActivityCardItem = ({
   }
 
   const onNextButtonClick = () => {
-    toNextStep(activityItem.id, value)
+    if (toNextStep) {
+      toNextStep()
+    }
   }
 
   const onBackButtonClick = () => {
-    toPrevStep()
+    if (toPrevStep) {
+      toPrevStep()
+    }
+  }
+
+  const onItemValueChange = (value: string) => {
+    setValue(activityItem.id, value)
   }
 
   return (
@@ -60,7 +66,7 @@ export const ActivityCardItem = ({
           <></>
         )
       }>
-      <TextItem value={value} setValue={setValue} disabled={!isActive} />
+      <TextItem value={value} onValueChange={onItemValueChange} disabled={!isActive} />
     </CardItem>
   )
 }
