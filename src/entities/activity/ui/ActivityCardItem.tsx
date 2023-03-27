@@ -66,7 +66,7 @@ export const ActivityCardItem = ({
           <></>
         )
       }>
-      <TextItem value={value} setValue={onItemValueChange} disabled={!isActive} />
+      <TextItem value={value} onValueChange={onItemValueChange} disabled={!isActive} />
     </CardItem>
   )
 }
