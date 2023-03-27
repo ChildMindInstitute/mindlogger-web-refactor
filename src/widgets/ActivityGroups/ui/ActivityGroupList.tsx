@@ -48,7 +48,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     selectedActivity: null,
   })
 
-  const { upsertGroupInProgress } = activityModel.hooks.useGroupsInProgress()
+  const { upsertGroupInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
 
   const onCardAboutClick = () => {
     setIsAboutOpen(true)

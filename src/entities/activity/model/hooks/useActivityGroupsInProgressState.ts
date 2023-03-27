@@ -6,12 +6,12 @@ import { GroupsProgressState, UpsertActionPayload } from "../types"
 
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
-type UseGroupsInProgressReturn = {
+type UseActivityGroupsInProgressStateReturn = {
   groupsInProgress: GroupsProgressState
   upsertGroupInProgress: (payload: UpsertActionPayload) => void
 }
 
-export const useGroupsInProgress = (): UseGroupsInProgressReturn => {
+export const useActivityGroupsInProgressState = (): UseActivityGroupsInProgressStateReturn => {
   const dispatch = useAppDispatch()
   const groupsInProgress = useAppSelector(groupsInProgressSelector)
 

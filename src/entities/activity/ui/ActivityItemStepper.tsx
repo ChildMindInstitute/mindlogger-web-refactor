@@ -1,8 +1,8 @@
 import { useMemo } from "react"
 
-import { ActivityCardItemList } from "../../item"
 import { ActivityDetails } from "../lib"
 import { useActivityEventProgressState, useSaveActivityItemAnswer, useStepperState } from "../model/hooks"
+import { ActivityCardItemList } from "./ActivityCardItemList"
 
 type ActivityItemStepperProps = {
   eventId: string
@@ -23,8 +23,7 @@ export const ActivityItemStepper = ({ eventId, activityDetails }: ActivityItemSt
     return currentActivityEventProgress.slice(0, step).reverse()
   }, [currentActivityEventProgress, step])
 
-  const toNextStep = (itemId: string, answer: string) => {
-    saveActivityItemAnswer(itemId, answer)
+  const toNextStep = () => {
     setStep(step + 1)
   }
 
@@ -43,6 +42,7 @@ export const ActivityItemStepper = ({ eventId, activityDetails }: ActivityItemSt
       isSubmitShown={isSubmitShown}
       toNextStep={toNextStep}
       toPrevStep={toPrevStep}
+      setValue={saveActivityItemAnswer}
     />
   )
 }

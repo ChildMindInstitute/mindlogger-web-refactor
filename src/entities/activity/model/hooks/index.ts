@@ -1,5 +1,5 @@
 export * from "./useActivityClearState"
-export * from "./useGroupsInProgress"
+export * from "./useActivityGroupsInProgressState"
 export * from "./useSaveActivityEventProgress"
 export * from "./useActivityEventProgressState"
 export * from "./useSaveActivityItemAnswer"

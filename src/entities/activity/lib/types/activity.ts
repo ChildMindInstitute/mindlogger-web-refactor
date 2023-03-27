@@ -1,4 +1,4 @@
-import { ActivityItem } from "~/entities/item/lib/item.schema"
+import { ActivityItem } from "~/entities/activity/lib/types/item"
 import { HourMinute } from "~/shared/utils"
 
 export type ActivityListItem = {
@@ -13,6 +13,7 @@ export type ActivityListItem = {
   type: ActivityType
 
   isInActivityFlow: boolean
+  isOnePageAssessment?: boolean
 
   activityFlowDetails?: {
     showActivityFlowBadge: boolean
