@@ -11,8 +11,6 @@ type ItemPickerProps = {
 }
 
 export const ItemPicker = ({ item, value, onValueChange, isDisabled }: ItemPickerProps) => {
-  console.log(item.responseType)
-
   switch (item.responseType) {
     case "text":
       return <TextItem value={value} onValueChange={onValueChange} isDisabled={isDisabled} />
