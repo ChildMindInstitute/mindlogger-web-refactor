@@ -1,9 +1,10 @@
-import { ActivityDetails, ActivityItemStepper, ActivityOnePageAssessment } from "~/entities/activity"
+import { ActivityItemStepper, ActivityOnePageAssessment } from "~/entities/activity"
+import { ActivityDTO } from "~/shared/api"
 
 interface ActivityItemListProps {
   appletId: string
   eventId: string
-  activityDetails: ActivityDetails
+  activityDetails: ActivityDTO
 }
 
 export const ActivityItemList = ({ activityDetails, eventId }: ActivityItemListProps) => {
@@ -14,10 +15,10 @@ export const ActivityItemList = ({ activityDetails, eventId }: ActivityItemListP
     <>
       {/* {isSummaryScreen && <ActivitySummary />} */}
       {!isSummaryScreen && isOnePageAssessment && (
-        <ActivityOnePageAssessment eventId={eventId} activityDetails={activityDetails} />
+        <ActivityOnePageAssessment eventId={eventId} activityId={activityDetails.id} />
       )}
       {!isSummaryScreen && !isOnePageAssessment && (
-        <ActivityItemStepper eventId={eventId} activityDetails={activityDetails} />
+        <ActivityItemStepper eventId={eventId} activityId={activityDetails.id} />
       )}
     </>
   )
