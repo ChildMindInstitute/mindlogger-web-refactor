@@ -1,4 +1,5 @@
 import { BaseSuccessResponse } from "./base"
+import { CheckboxItemDTO, TextItemDTO } from "./item"
 
 export interface GetActivityByIdPayload {
   activityId: string
@@ -18,24 +19,7 @@ export type ActivityDTO = {
   isReviewable: boolean
   responseIsEditable: boolean
   ordering: number
-  items: ItemDetailsDTO[]
+  items: ActivityItemDetailsDTO[]
 }
 
-export interface ItemDetailsDTO {
-  id: string
-  question: string
-  responseType: ItemResponseType
-  answers: Record<string, unknown>
-  colorPalette: string
-  timer: number
-  hasTokenValue: boolean
-  isSkippable: boolean
-  hasAlert: boolean
-  hasScore: boolean
-  isRandom: boolean
-  isAbleToMoveToPrevious: boolean
-  hasTextResponse: boolean
-  ordering: number
-}
-
-type ItemResponseType = "text" | "slider" | "radio" | "checkbox"
+export type ActivityItemDetailsDTO = TextItemDTO | CheckboxItemDTO
