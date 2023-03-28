@@ -4,8 +4,8 @@ import { CustomTooltip } from "../../Tooltip"
 
 import "./style.scss"
 
-type CheckboxItemProps = {
-  key?: string
+type CheckboxItemOptionProps = {
+  key: string
 
   id: string
   name: string
@@ -21,7 +21,7 @@ type CheckboxItemProps = {
   onChange: (value: string) => void
 }
 
-export const CheckboxItem = (props: CheckboxItemProps) => {
+export const CheckboxItemOption = (props: CheckboxItemOptionProps) => {
   const { id, key, name, value, label, image, description, disabled, defaultChecked, onChange, color } = props
 
   return (
