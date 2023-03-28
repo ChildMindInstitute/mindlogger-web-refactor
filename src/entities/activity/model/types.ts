@@ -1,4 +1,4 @@
-import { ActivityItemType, ActivityPipelineType } from "../lib"
+import { ActivityPipelineType, BaseItem, CheckboxConfig, CheckboxValues, TextItemConfig } from "../lib"
 
 type ActivityFlowProgress = {
   type: ActivityPipelineType.Flow
@@ -21,19 +21,10 @@ export type AppletProgressState = Record<string, ActivityProgressState>
 
 export type GroupsProgressState = Record<string, AppletProgressState>
 
-export type ActivityEventProgressRecord = {
-  id: string
-  question: string
-  type: ActivityItemType
-  answer: string[]
-  config: {
-    isSkippable: boolean
-    isRandom: boolean
-    isAbleToMoveToPrevious: boolean
-    hasTextResponse: boolean
-    ordering: number
-  }
-}
+export type TextItem = BaseItem<TextItemConfig, null>
+export type CheckboxItem = BaseItem<CheckboxConfig, CheckboxValues>
+
+export type ActivityEventProgressRecord = TextItem | CheckboxItem
 
 export type ActivityEventProgressState = {
   activityEvents: ActivityEventProgressRecord[]
