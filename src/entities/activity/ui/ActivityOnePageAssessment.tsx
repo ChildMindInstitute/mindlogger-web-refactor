@@ -1,19 +1,18 @@
-import { ActivityDetails } from "../lib"
 import { useActivityEventProgressState, useSaveActivityItemAnswer } from "../model/hooks"
 import { ActivityCardItemList } from "./ActivityCardItemList"
 
 type ActivityOnePageAssessmentProps = {
   eventId: string
-  activityDetails: ActivityDetails
+  activityId: string
 }
 
-export const ActivityOnePageAssessment = ({ eventId, activityDetails }: ActivityOnePageAssessmentProps) => {
+export const ActivityOnePageAssessment = ({ eventId, activityId }: ActivityOnePageAssessmentProps) => {
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
-    activityId: activityDetails.id,
+    activityId,
   })
 
-  const { saveActivityItemAnswer } = useSaveActivityItemAnswer({ eventId, activityId: activityDetails.id })
+  const { saveActivityItemAnswer } = useSaveActivityItemAnswer({ eventId, activityId })
 
   const isSubmitShown = true // Always true when one page assessment
   const isBackShown = false // Always false when one page assessment

@@ -1,8 +1,9 @@
 import { useEffect, useMemo } from "react"
 
-import { ActivityDetails, ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
+import { ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
 import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
+import { ActivityDTO } from "~/shared/api"
 
 interface UseActivityDetailsProps {
   appletId: string
@@ -17,7 +18,7 @@ export interface ActivityEvents {
 
 interface UseActivityDetailsReturn {
   appletDetails: AppletDetails<ActivityListItem, ActivityFlow> | null
-  activityDetails: ActivityDetails | null
+  activityDetails: ActivityDTO | null
   isError: boolean
   isLoading: boolean
 }
@@ -89,13 +90,9 @@ export const useActivityDetails = (
     return appletModel.appletBuilder.convertToAppletDetails(appletDetailsRawData, eventsRawData)
   }, [appletDetailsRawData, eventsRawData])
 
-  const activityDetails = useMemo(() => {
-    return activityModel.activityBuilder.convertToActivityDetails(activityDetailsRawData)
-  }, [activityDetailsRawData])
-
   return {
     appletDetails,
-    activityDetails,
+    activityDetails: activityDetailsRawData ?? null,
     isError: isAppletError || isActivityError || isEventsError,
     isLoading: isAppletLoading || isActivityLoading || isEventsLoading,
   }

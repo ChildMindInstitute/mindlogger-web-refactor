@@ -1,16 +1,20 @@
 import {
   Activity,
-  ActivityDetails,
-  ActivityItem,
   ActivityListItem,
   ActivityPipelineType,
   ActivityProgressPreview,
   ActivityStatus,
   ActivityType,
 } from "../lib"
-import { ActivityEventProgressRecord } from "./types"
+import { ActivityEventProgressRecord, CheckboxItem, TextItem, UnsupportableItem } from "./types"
 
-import { ActivityDTO, AppletDetailsActivityDTO, EventDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
+import {
+  ActivityDTO,
+  ActivityItemDetailsDTO,
+  AppletDetailsActivityDTO,
+  EventDTO,
+  EventsByAppletIdResponseDTO,
+} from "~/shared/api"
 
 class ActivityBuilder {
   public convertToActivityProgressPreview(activities: ActivityListItem[]): ActivityProgressPreview[] {
@@ -55,24 +59,12 @@ class ActivityBuilder {
     })
   }
 
-  public convertToActivityDetails(activity?: ActivityDTO): ActivityDetails | null {
+  public convertToActivityDetails(activity?: ActivityDTO): ActivityDTO | null {
     if (!activity) {
       return null
     }
 
-    return {
-      id: activity.id,
-      name: activity.name,
-      description: activity.description,
-      image: activity.image,
-      splashScreen: activity.splashScreen,
-      showAllAtOnce: activity.showAllAtOnce,
-      isSkippable: activity.isSkippable,
-      isReviewable: activity.isReviewable,
-      responseIsEditable: activity.responseIsEditable,
-      ordering: activity.ordering,
-      items: activity.items,
-    }
+    return activity
   }
 
   public convertToActivitiesGroupsBuilder(activities: AppletDetailsActivityDTO[]): Activity[] {
@@ -86,19 +78,21 @@ class ActivityBuilder {
     }))
   }
 
-  public convertActivityItemToEmptyProgressRecord(item: ActivityItem): ActivityEventProgressRecord {
-    return {
-      id: item.id,
-      question: item.question,
-      type: item.responseType,
+  public convertActivityItemToEmptyProgressRecord(item: ActivityItemDetailsDTO): ActivityEventProgressRecord | null {
+    const itemWithEmptyAnswer = {
+      ...item,
       answer: [],
-      config: {
-        isSkippable: item.isSkippable ? item.isSkippable : false,
-        isRandom: item.isRandom ? item.isRandom : false,
-        isAbleToMoveToPrevious: item.isAbleToMoveToPrevious ? item.isAbleToMoveToPrevious : false,
-        hasTextResponse: item.hasTextResponse,
-        ordering: item.ordering,
-      },
+    }
+
+    switch (item.responseType) {
+      case "text":
+        return itemWithEmptyAnswer as TextItem
+
+      case "multiSelect":
+        return itemWithEmptyAnswer as CheckboxItem
+
+      default:
+        return null
     }
   }
 }

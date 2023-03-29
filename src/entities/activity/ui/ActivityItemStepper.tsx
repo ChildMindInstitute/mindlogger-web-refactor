@@ -1,23 +1,22 @@
 import { useMemo } from "react"
 
-import { ActivityDetails } from "../lib"
 import { useActivityEventProgressState, useSaveActivityItemAnswer, useStepperState } from "../model/hooks"
 import { ActivityCardItemList } from "./ActivityCardItemList"
 
 type ActivityItemStepperProps = {
   eventId: string
-  activityDetails: ActivityDetails
+  activityId: string
 }
 
-export const ActivityItemStepper = ({ eventId, activityDetails }: ActivityItemStepperProps) => {
+export const ActivityItemStepper = ({ eventId, activityId }: ActivityItemStepperProps) => {
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
-    activityId: activityDetails.id,
+    activityId,
   })
 
-  const { saveActivityItemAnswer } = useSaveActivityItemAnswer({ eventId, activityId: activityDetails.id })
+  const { saveActivityItemAnswer } = useSaveActivityItemAnswer({ eventId, activityId })
 
-  const { step, setStep } = useStepperState({ activityId: activityDetails.id, eventId })
+  const { step, setStep } = useStepperState({ activityId, eventId })
 
   const itemsProgress = useMemo(() => {
     return currentActivityEventProgress.slice(0, step).reverse()

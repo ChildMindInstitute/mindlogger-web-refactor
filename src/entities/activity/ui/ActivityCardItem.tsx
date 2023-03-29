@@ -1,8 +1,9 @@
 import { ItemCardButtonsConfig } from "../lib"
 import { ActivityEventProgressRecord } from "../model/types"
 import { ItemCardButton } from "./ItemCardButtons"
+import { ItemPicker } from "./items/ItemPicker"
 
-import { TextItem, CardItem } from "~/shared/ui"
+import { CardItem } from "~/shared/ui"
 
 type ActivityCardItemProps = {
   activityItem: ActivityEventProgressRecord
@@ -30,9 +31,9 @@ export const ActivityCardItem = ({
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !value || !value.length,
-    isSkippable: activityItem.config.isSkippable,
+    isSkippable: activityItem.config.skippableItem,
     isOnePageAssessment,
-    isBackShown: isBackShown && activityItem.config.isAbleToMoveToPrevious,
+    isBackShown: isBackShown && !activityItem.config.removeBackButton,
     isSubmitShown: isSubmitShown,
   }
 
@@ -66,7 +67,7 @@ export const ActivityCardItem = ({
           <></>
         )
       }>
-      <TextItem value={value} onValueChange={onItemValueChange} disabled={!isActive} />
+      <ItemPicker item={activityItem} value={value} onValueChange={onItemValueChange} isDisabled={!isActive} />
     </CardItem>
   )
 }

@@ -1,13 +1,15 @@
 import { useCallback } from "react"
 
-import { ActivityDetails, getActivityEventProgressId } from "../../lib"
+import { getActivityEventProgressId } from "../../lib"
 import { actions } from "../activity.slice"
 import { activityBuilder } from "../activityBuilder"
+import { ActivityEventProgressRecord } from "../types"
 
+import { ActivityDTO } from "~/shared/api"
 import { useAppDispatch } from "~/shared/utils"
 
 type UseActivityEventProgressReturn = {
-  saveActivityEventRecords: (activity: ActivityDetails, eventId: string, step: number) => void
+  saveActivityEventRecords: (activity: ActivityDTO, eventId: string, step: number) => void
   resetActivityEventRecordsByParams: (activityId: string, eventId: string) => void
 }
 
@@ -15,10 +17,12 @@ export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn =
   const dispatch = useAppDispatch()
 
   const saveActivityEventRecords = useCallback(
-    (activity: ActivityDetails, eventId: string, step: number) => {
-      const preparedActivityItemProgressRecords = activity.items.map(item => {
-        return activityBuilder.convertActivityItemToEmptyProgressRecord(item)
-      })
+    (activity: ActivityDTO, eventId: string, step: number) => {
+      const preparedActivityItemProgressRecords = activity.items
+        .map(item => {
+          return activityBuilder.convertActivityItemToEmptyProgressRecord(item)
+        })
+        .filter(x => x !== null) as ActivityEventProgressRecord[]
 
       const activityEventProgressId = getActivityEventProgressId(activity.id, eventId)
 
