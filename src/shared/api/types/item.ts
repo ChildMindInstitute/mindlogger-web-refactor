@@ -97,3 +97,32 @@ export type RadioItemResponseValuesDTO = {
     isHidden: boolean
   }>
 }
+
+export type RadioItemDTO = ItemDetailsBaseDTO<"singleSelect", RadioItemConfigDTO, RadioItemResponseValuesDTO>
+
+export type RadioItemConfigDTO = {
+  randomizeOptions: boolean
+  addScores: boolean
+  setAlerts: boolean
+  addTooltip: boolean
+  setPalette: boolean
+  removeBackButton: boolean
+  skippableItem: boolean
+  timer: number | null
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+
+export type RadioItemResponseValuesDTO = {
+  options: Array<{
+    id: string
+    text: string
+    image: string | null
+    score: number | null
+    tooltip: string | null
+    color: string | null
+    isHidden: boolean
+  }>
+}
