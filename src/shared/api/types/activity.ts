@@ -1,5 +1,5 @@
 import { BaseSuccessResponse } from "./base"
-import { CheckboxItemDTO, TextItemDTO } from "./item"
+import { CheckboxItemDTO, RadioItemDTO, TextItemDTO } from "./item"
 
 export interface GetActivityByIdPayload {
   activityId: string
@@ -22,4 +22,4 @@ export type ActivityDTO = {
   items: ActivityItemDetailsDTO[]
 }
 
-export type ActivityItemDetailsDTO = TextItemDTO | CheckboxItemDTO
+export type ActivityItemDetailsDTO = TextItemDTO | CheckboxItemDTO | RadioItemDTO

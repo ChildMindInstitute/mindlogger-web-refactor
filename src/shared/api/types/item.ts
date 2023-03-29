@@ -17,17 +17,17 @@ export type ItemResponseTypeDTO =
   | "audio"
   | "audioPlayer"
 
-export interface ItemDetailsBaseDTO<Config, ResponseValues> {
+export interface ItemDetailsBaseDTO<ResponseType extends ItemResponseTypeDTO, Config, ResponseValues> {
   id: string
   name: string
   question: string
-  responseType: ItemResponseTypeDTO
+  responseType: ResponseType
   responseValues: ResponseValues | null
   config: Config
   order: number
 }
 
-export type TextItemDTO = ItemDetailsBaseDTO<TextItemConfigDTO, null>
+export type TextItemDTO = ItemDetailsBaseDTO<"text", TextItemConfigDTO, null>
 
 export type TextItemConfigDTO = {
   maxResponseLength: number // default 300
@@ -40,7 +40,7 @@ export type TextItemConfigDTO = {
   skippableItem: boolean
 }
 
-export type CheckboxItemDTO = ItemDetailsBaseDTO<CheckboxItemConfigDTO, CheckboxItemResponseValuesDTO>
+export type CheckboxItemDTO = ItemDetailsBaseDTO<"multiSelect", CheckboxItemConfigDTO, CheckboxItemResponseValuesDTO>
 
 export type CheckboxItemConfigDTO = {
   removeBackButton: boolean
@@ -58,5 +58,42 @@ export type CheckboxItemConfigDTO = {
 }
 
 export type CheckboxItemResponseValuesDTO = {
-  options: [{ text: string; image: string; score: number; tooltip: string; isHidden: boolean }]
+  options: Array<{
+    id: string
+    text: string
+    image: string | null
+    score: number | null
+    tooltip: string | null
+    color: string | null
+    isHidden: boolean
+  }>
+}
+
+export type RadioItemDTO = ItemDetailsBaseDTO<"singleSelect", RadioItemConfigDTO, RadioItemResponseValuesDTO>
+
+export type RadioItemConfigDTO = {
+  removeBackButton: boolean
+  skippableItem: boolean
+  randomizeOptions: boolean
+  timer: number | null
+  addScores: boolean
+  setAlerts: boolean
+  addTooltip: boolean
+  setPalette: boolean
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+
+export type RadioItemResponseValuesDTO = {
+  options: Array<{
+    id: string
+    text: string
+    image: string | null
+    score: number | null
+    tooltip: string | null
+    color: string | null
+    isHidden: boolean
+  }>
 }

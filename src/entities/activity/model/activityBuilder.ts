@@ -6,7 +6,7 @@ import {
   ActivityStatus,
   ActivityType,
 } from "../lib"
-import { ActivityEventProgressRecord } from "./types"
+import { ActivityEventProgressRecord, CheckboxItem, RadioItem } from "./types"
 
 import {
   ActivityDTO,
@@ -78,10 +78,33 @@ class ActivityBuilder {
     }))
   }
 
-  public convertActivityItemToEmptyProgressRecord(item: ActivityItemDetailsDTO): ActivityEventProgressRecord {
-    return {
-      ...item,
-      answer: [],
+  public convertActivityItemToEmptyProgressRecord(item: ActivityItemDetailsDTO): ActivityEventProgressRecord | null {
+    // return {
+    //   ...item,
+    //   answer: [],
+    // }
+
+    switch (item.responseType) {
+      case "text":
+        return {
+          ...item,
+          answer: [],
+        }
+
+      case "multiSelect":
+        return {
+          ...item,
+          answer: [],
+        } as CheckboxItem
+
+      case "singleSelect":
+        return {
+          ...item,
+          answer: [],
+        } as RadioItem
+
+      default:
+        return null
     }
   }
 }

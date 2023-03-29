@@ -12,8 +12,8 @@ type RadioItemOptionProps = {
   value: string
   label: string
 
-  description?: string
-  image?: string
+  description: string | null
+  image: string | null
   disabled?: boolean
   defaultChecked?: boolean
   color?: string

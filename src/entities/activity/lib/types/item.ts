@@ -40,11 +40,11 @@ export type ItemCardButtonsConfig = {
   isNextDisable?: boolean
 }
 
-export type BaseItem<Config, ResponseValues> = {
+export type BaseItem<ResponseType extends ActivityItemType, Config, ResponseValues> = {
   id: string
   name: string
   question: string
-  responseType: ActivityItemType
+  responseType: ResponseType
   responseValues: ResponseValues | null
   order: number
   config: Config
@@ -80,10 +80,39 @@ export type CheckboxConfig = {
 export type CheckboxValues = {
   options: [
     {
+      id: string
       text: string
-      image: string
-      score: number
-      tooltip: string
+      image: string | null
+      score: number | null
+      tooltip: string | null
+      isHidden: boolean
+    },
+  ]
+}
+
+export type RadioConfig = {
+  removeBackButton: boolean
+  skippableItem: boolean
+  randomizeOptions: boolean
+  timer: number | null
+  addScores: boolean
+  setAlerts: boolean
+  addTooltip: boolean
+  setPalette: boolean
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+
+export type RadioValues = {
+  options: [
+    {
+      id: string
+      text: string
+      image: string | null
+      score: number | null
+      tooltip: string | null
       isHidden: boolean
     },
   ]

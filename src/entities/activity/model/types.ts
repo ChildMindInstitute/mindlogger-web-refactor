@@ -1,4 +1,12 @@
-import { ActivityPipelineType, BaseItem, CheckboxConfig, CheckboxValues, TextItemConfig } from "../lib"
+import {
+  ActivityPipelineType,
+  BaseItem,
+  CheckboxConfig,
+  CheckboxValues,
+  RadioConfig,
+  RadioValues,
+  TextItemConfig,
+} from "../lib"
 
 type ActivityFlowProgress = {
   type: ActivityPipelineType.Flow
@@ -21,10 +29,11 @@ export type AppletProgressState = Record<string, ActivityProgressState>
 
 export type GroupsProgressState = Record<string, AppletProgressState>
 
-export type TextItem = BaseItem<TextItemConfig, null>
-export type CheckboxItem = BaseItem<CheckboxConfig, CheckboxValues>
+export type TextItem = BaseItem<"text", TextItemConfig, null>
+export type CheckboxItem = BaseItem<"multiSelect", CheckboxConfig, CheckboxValues>
+export type RadioItem = BaseItem<"singleSelect", RadioConfig, RadioValues>
 
-export type ActivityEventProgressRecord = TextItem | CheckboxItem
+export type ActivityEventProgressRecord = TextItem | CheckboxItem | RadioItem
 
 export type ActivityEventProgressState = {
   activityEvents: ActivityEventProgressRecord[]
