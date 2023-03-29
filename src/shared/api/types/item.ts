@@ -22,7 +22,7 @@ export interface ItemDetailsBaseDTO<Config, ResponseValues> {
   name: string
   question: string
   responseType: ItemResponseTypeDTO
-  responseValues: ResponseValues | null
+  responseValues: ResponseValues
   config: Config
   order: number
 }
@@ -58,5 +58,12 @@ export type CheckboxItemConfigDTO = {
 }
 
 export type CheckboxItemResponseValuesDTO = {
-  options: [{ text: string; image: string; score: number; tooltip: string; isHidden: boolean }]
+  options: Array<{
+    id: string
+    text: string
+    image: string | null
+    score: number | null
+    tooltip: string | null
+    isHidden: boolean
+  }>
 }

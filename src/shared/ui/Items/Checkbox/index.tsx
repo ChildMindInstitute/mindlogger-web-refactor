@@ -13,8 +13,8 @@ type CheckboxItemOptionProps = {
   label: string
 
   disabled?: boolean
-  image?: string
-  description?: string
+  image: string | null
+  description: string | null
   color?: string
   defaultChecked?: boolean
 

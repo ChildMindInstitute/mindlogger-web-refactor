@@ -1,18 +1,18 @@
 import { Col } from "react-bootstrap"
 
-import { ActivityEventProgressRecord } from "../../model/types"
+import { CheckboxItem as CheckboxItemType } from "../../model/types"
 
 import { CheckboxItemOption } from "~/shared/ui"
 
 type CheckboxItemProps = {
-  item: ActivityEventProgressRecord
+  item: CheckboxItemType
 
   onValueChange: (value: string) => void
   isDisabled: boolean
 }
 
 export const CheckboxItem = ({ item, onValueChange, isDisabled }: CheckboxItemProps) => {
-  const options = item.responseValues!.options.filter(x => !x.isHidden)
+  const options = item.responseValues.options.filter(x => !x.isHidden)
 
   const leftColumnOptions = options.filter((option, index) => index < Math.ceil(options.length / 2))
   const rightColumnOptions = options.filter((option, index) => index >= Math.ceil(options.length / 2))
