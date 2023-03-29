@@ -1,10 +1,11 @@
 import {
+  ActivityItem,
   ActivityPipelineType,
-  BaseItem,
-  CheckboxConfig,
+  CheckboxItemConfig,
   CheckboxValues,
-  RadioConfig,
+  RadioItemConfig,
   RadioValues,
+  SupportableActivityItemType,
   TextItemConfig,
 } from "../lib"
 
@@ -29,9 +30,10 @@ export type AppletProgressState = Record<string, ActivityProgressState>
 
 export type GroupsProgressState = Record<string, AppletProgressState>
 
-export type TextItem = BaseItem<"text", TextItemConfig, null>
-export type CheckboxItem = BaseItem<"multiSelect", CheckboxConfig, CheckboxValues>
-export type RadioItem = BaseItem<"singleSelect", RadioConfig, RadioValues>
+export type TextItem = ActivityItem<SupportableActivityItemType.Text, TextItemConfig, null>
+export type CheckboxItem = ActivityItem<SupportableActivityItemType.Checkbox, CheckboxItemConfig, CheckboxValues>
+export type RadioItem = ActivityItem<SupportableActivityItemType.Radio, RadioItemConfig, RadioValues>
+export type UnsupportableItem = ActivityItem<SupportableActivityItemType.Unsupportable>
 
 export type ActivityEventProgressRecord = TextItem | CheckboxItem | RadioItem
 

@@ -22,7 +22,7 @@ export interface ItemDetailsBaseDTO<ResponseType extends ItemResponseTypeDTO, Co
   name: string
   question: string
   responseType: ResponseType
-  responseValues: ResponseValues | null
+  responseValues: ResponseValues
   config: Config
   order: number
 }

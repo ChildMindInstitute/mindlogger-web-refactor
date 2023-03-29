@@ -16,20 +16,13 @@ export type ActivityItemType =
   | "multiSelectRows"
   | "audio"
   | "audioPlayer"
+  | "unsupportable"
 
-export type ActivityItem = {
-  id: string
-  question: string
-
-  responseType: ActivityItemType
-
-  timer: number
-
-  isSkippable: boolean
-  isRandom: boolean
-  isAbleToMoveToPrevious: boolean
-  hasTextResponse: boolean
-  ordering: number
+export enum SupportableActivityItemType {
+  Text = "text",
+  Checkbox = "multiSelect",
+  Radio = "singleSelect",
+  Unsupportable = "unsupportable",
 }
 
 export type ItemCardButtonsConfig = {
@@ -40,80 +33,80 @@ export type ItemCardButtonsConfig = {
   isNextDisable?: boolean
 }
 
-export type BaseItem<ResponseType extends ActivityItemType, Config, ResponseValues> = {
+export type ButtonsConfig = {
+  removeBackButton: boolean
+  skippableItem: boolean
+}
+
+export type TimerConfig = {
+  timer: number | null
+}
+
+export type AdditionalResponseConfig = {
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+
+export type ActivityItem<Type = unknown, Config = unknown, ResponseValues = unknown> = {
   id: string
   name: string
   question: string
-  responseType: ResponseType
-  responseValues: ResponseValues | null
+  responseType: Type
+  responseValues: ResponseValues
   order: number
   config: Config
   answer: string[]
 }
 
-export type TextItemConfig = {
+export type TextItemConfig = ButtonsConfig & {
   maxResponseLength: number // default 300
   correctAnswerRequired: boolean // default false
   correctAnswer: string // default ""
   numericalResponseRequired: boolean // default false
   responseDataIdentifier: string // default ""
   responseRequired: boolean // default false
-  removeBackButton: boolean
-  skippableItem: boolean
 }
 
-export type CheckboxConfig = {
-  removeBackButton: boolean
-  skippableItem: boolean
-  randomizeOptions: boolean
-  timer: number | null
-  addScores: boolean
-  setAlerts: boolean
-  addTooltip: boolean
-  setPalette: boolean
-  additionalResponseOption: {
-    textInputOption: boolean
-    textInputRequired: boolean
+export type CheckboxItemConfig = ButtonsConfig &
+  TimerConfig &
+  AdditionalResponseConfig & {
+    randomizeOptions: boolean
+    addScores: boolean
+    setAlerts: boolean
+    addTooltip: boolean
+    setPalette: boolean
   }
-}
 
 export type CheckboxValues = {
-  options: [
-    {
-      id: string
-      text: string
-      image: string | null
-      score: number | null
-      tooltip: string | null
-      isHidden: boolean
-    },
-  ]
+  options: Array<{
+    id: string
+    text: string
+    image: string | null
+    score: number | null
+    tooltip: string | null
+    isHidden: boolean
+  }>
 }
 
-export type RadioConfig = {
-  removeBackButton: boolean
-  skippableItem: boolean
-  randomizeOptions: boolean
-  timer: number | null
-  addScores: boolean
-  setAlerts: boolean
-  addTooltip: boolean
-  setPalette: boolean
-  additionalResponseOption: {
-    textInputOption: boolean
-    textInputRequired: boolean
+export type RadioItemConfig = ButtonsConfig &
+  TimerConfig &
+  AdditionalResponseConfig & {
+    randomizeOptions: boolean
+    addScores: boolean
+    setAlerts: boolean
+    addTooltip: boolean
+    setPalette: boolean
   }
-}
 
 export type RadioValues = {
-  options: [
-    {
-      id: string
-      text: string
-      image: string | null
-      score: number | null
-      tooltip: string | null
-      isHidden: boolean
-    },
-  ]
+  options: Array<{
+    id: string
+    text: string
+    image: string | null
+    score: number | null
+    tooltip: string | null
+    isHidden: boolean
+  }>
 }
