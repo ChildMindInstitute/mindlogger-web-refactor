@@ -1,6 +1,6 @@
 import { Col } from "react-bootstrap"
 
-import { CheckboxItem as CheckboxItemType } from "../../model/types"
+import { CheckboxItem as CheckboxItemType } from "../../lib/types/item"
 
 import { CheckboxItemOption } from "~/shared/ui"
 

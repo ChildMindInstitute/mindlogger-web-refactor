@@ -49,15 +49,24 @@ export type AdditionalResponseConfig = {
   }
 }
 
-export type ActivityItem<Type = unknown, Config = unknown, ResponseValues = unknown> = {
+export interface ActivityItemBase {
   id: string
   name: string
   question: string
-  responseType: Type
-  responseValues: ResponseValues
   order: number
-  config: Config
   answer: string[]
+  responseType: ActivityItemType
+  config: Config
+  responseValues: ResponseValues
+}
+
+export type Config = TextItemConfig | CheckboxItemConfig | RadioItemConfig
+export type ResponseValues = TextItemResponseValues | CheckboxValues | RadioValues
+
+export interface TextItem extends ActivityItemBase {
+  responseType: "text"
+  config: TextItemConfig
+  responseValues: TextItemResponseValues
 }
 
 export type TextItemConfig = ButtonsConfig & {
@@ -67,6 +76,14 @@ export type TextItemConfig = ButtonsConfig & {
   numericalResponseRequired: boolean // default false
   responseDataIdentifier: string // default ""
   responseRequired: boolean // default false
+}
+
+export type TextItemResponseValues = null
+
+export interface CheckboxItem extends ActivityItemBase {
+  responseType: "multiSelect"
+  config: CheckboxItemConfig
+  responseValues: CheckboxValues
 }
 
 export type CheckboxItemConfig = ButtonsConfig &
@@ -88,6 +105,12 @@ export type CheckboxValues = {
     tooltip: string | null
     isHidden: boolean
   }>
+}
+
+export interface RadioItem extends ActivityItemBase {
+  responseType: "singleSelect"
+  config: RadioItemConfig
+  responseValues: RadioValues
 }
 
 export type RadioItemConfig = ButtonsConfig &

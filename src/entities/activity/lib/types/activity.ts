@@ -1,4 +1,5 @@
-import { ActivityItem } from "~/entities/activity/lib/types/item"
+import { ActivityItemBase } from "./item"
+
 import { HourMinute } from "~/shared/utils"
 
 export type ActivityListItem = {
@@ -53,7 +54,7 @@ export type ActivityDetails = {
   isReviewable: boolean
   responseIsEditable: boolean
   ordering: number
-  items: Array<ActivityItem>
+  items: Array<ActivityItemBase>
 }
 
 export type ActivityProgressPreview = {
