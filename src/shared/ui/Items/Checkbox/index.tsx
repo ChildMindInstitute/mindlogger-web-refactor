@@ -42,7 +42,9 @@ export const CheckboxItemOption = (props: CheckboxItemOptionProps) => {
         label={label}
         disabled={disabled}
         defaultChecked={defaultChecked}
-        onChange={e => onChange(e.target.value)}
+        onChange={e => {
+          onChange(e.target.id)
+        }}
       />
     </div>
   )

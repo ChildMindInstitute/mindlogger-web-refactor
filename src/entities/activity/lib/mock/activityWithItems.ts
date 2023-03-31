@@ -126,7 +126,7 @@ export const radioItemMock: RadioItemDTO = {
 }
 
 export const activityDetailsWithItemsMock: ActivityDTO = {
-  id: "activity-mock-1-id",
+  id: "55ea4993-a7ba-4751-9e6c-fea04e9d53e5",
   guid: "activity-mock-guid",
   name: "Mock activity with all item types",
   description: "Mock activity description",

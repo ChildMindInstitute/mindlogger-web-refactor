@@ -6,18 +6,18 @@ import { TextItem } from "./Text"
 type ItemPickerProps = {
   item: ActivityEventProgressRecord
 
-  value: string
+  values: string[]
   onValueChange: (value: string) => void
   isDisabled: boolean
 }
 
-export const ItemPicker = ({ item, value, onValueChange, isDisabled }: ItemPickerProps) => {
+export const ItemPicker = ({ item, values, onValueChange, isDisabled }: ItemPickerProps) => {
   switch (item.responseType) {
     case "text":
-      return <TextItem value={value} onValueChange={onValueChange} isDisabled={isDisabled} />
+      return <TextItem value={values[0]} onValueChange={onValueChange} isDisabled={isDisabled} />
 
     case "multiSelect":
-      return <CheckboxItem item={item} onValueChange={onValueChange} isDisabled={isDisabled} />
+      return <CheckboxItem item={item} values={values} onValueChange={onValueChange} isDisabled={isDisabled} />
 
     case "singleSelect":
       return <RadioItem item={item} onValueChange={onValueChange} isDisabled={isDisabled} />

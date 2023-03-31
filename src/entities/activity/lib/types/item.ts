@@ -54,10 +54,10 @@ export interface ActivityItemBase {
   name: string
   question: string
   order: number
-  answer: string[]
   responseType: ActivityItemType
   config: Config
   responseValues: ResponseValues
+  answer: string[]
 }
 
 export type Config = TextItemConfig | CheckboxItemConfig | RadioItemConfig

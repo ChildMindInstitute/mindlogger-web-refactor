@@ -30,7 +30,7 @@ export const ActivityCardItemList = ({
         const isActive = index === firstElement || isOnePageAssessment
         const iSubmitButtonShown = isOnePageAssessment && isSubmitShown && index === items.length - 1
 
-        const initialAnswer = item.answer.length > 0 ? item.answer[0] : "" // Temporary solution
+        const initialAnswer = item.answer
         return (
           <ActivityCardItem
             key={item.id}
@@ -41,7 +41,7 @@ export const ActivityCardItemList = ({
             toNextStep={toNextStep}
             toPrevStep={toPrevStep}
             isActive={isActive}
-            value={initialAnswer}
+            values={initialAnswer}
             setValue={setValue}
           />
         )

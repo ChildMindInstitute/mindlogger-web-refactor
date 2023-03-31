@@ -14,7 +14,7 @@ type ActivityCardItemProps = {
   isActive: boolean
   toNextStep?: () => void
   toPrevStep?: () => void
-  value?: string
+  values: string[]
   setValue: (itemId: string, answer: string) => void
 }
 
@@ -26,11 +26,11 @@ export const ActivityCardItem = ({
   toNextStep,
   toPrevStep,
   isActive,
-  value = "",
+  values,
   setValue,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
-    isNextDisable: !value || !value.length,
+    isNextDisable: !values || !values.length,
     isSkippable: activityItem.config.skippableItem,
     isOnePageAssessment,
     isBackShown: isBackShown && !activityItem.config.removeBackButton,
@@ -67,7 +67,7 @@ export const ActivityCardItem = ({
           <></>
         )
       }>
-      <ItemPicker item={activityItem} value={value} onValueChange={onItemValueChange} isDisabled={!isActive} />
+      <ItemPicker item={activityItem} values={values} onValueChange={onItemValueChange} isDisabled={!isActive} />
     </CardItem>
   )
 }
