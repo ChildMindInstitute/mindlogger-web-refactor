@@ -5,8 +5,6 @@ import { CustomTooltip } from "../../Tooltip"
 import "./style.scss"
 
 type RadioItemOptionProps = {
-  key: string
-
   id: string
   name: string
   value: string
@@ -22,10 +20,10 @@ type RadioItemOptionProps = {
 }
 
 export const RadioItemOption = (props: RadioItemOptionProps) => {
-  const { key, id, name, value, label, description, image, disabled, defaultChecked, color, onChange } = props
+  const { id, name, value, label, description, image, disabled, defaultChecked, color, onChange } = props
 
   return (
-    <div key={key} className="response-option" style={{ background: color ? color : "none" }}>
+    <div className="response-option" style={{ background: color ? color : "none" }}>
       <div className="option-tooltip">{description && <CustomTooltip markdown={description} />}</div>
 
       {image && (
@@ -42,7 +40,7 @@ export const RadioItemOption = (props: RadioItemOptionProps) => {
         label={label}
         disabled={disabled}
         defaultChecked={defaultChecked}
-        onChange={e => onChange(e.target.value)}
+        onChange={e => onChange(e.target.id)}
       />
     </div>
   )

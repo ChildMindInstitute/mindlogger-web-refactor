@@ -20,7 +20,7 @@ export const ItemPicker = ({ item, values, onValueChange, isDisabled }: ItemPick
       return <CheckboxItem item={item} values={values} onValueChange={onValueChange} isDisabled={isDisabled} />
 
     case "singleSelect":
-      return <RadioItem item={item} onValueChange={onValueChange} isDisabled={isDisabled} />
+      return <RadioItem item={item} value={values[0]} onValueChange={onValueChange} isDisabled={isDisabled} />
 
     default:
       return <></>

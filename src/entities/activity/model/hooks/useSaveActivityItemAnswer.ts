@@ -22,10 +22,20 @@ export const useSaveActivityItemAnswer = (props: UseSaveActivityItemAnswerProps)
       const currentItemById = currentActivityEventProgress?.find(x => x.id === itemId)
 
       if (currentItemById && currentItemById.responseType === "multiSelect") {
+        const isAnswerAlreadyExist = currentItemById.answer.includes(answer)
+        const preparedAnswer: string[] = [...currentItemById.answer]
+
+        if (isAnswerAlreadyExist) {
+          const answerIndexToRemove = preparedAnswer.findIndex(x => x === answer)
+          preparedAnswer.splice(answerIndexToRemove, 1)
+        } else {
+          preparedAnswer.push(answer)
+        }
+
         return {
           activityEventId,
           itemId,
-          answer: [...currentItemById.answer, answer],
+          answer: preparedAnswer,
         }
       }
 

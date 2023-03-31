@@ -5,8 +5,6 @@ import { CustomTooltip } from "../../Tooltip"
 import "./style.scss"
 
 type CheckboxItemOptionProps = {
-  key: string
-
   id: string
   name: string
   value: string
@@ -22,10 +20,10 @@ type CheckboxItemOptionProps = {
 }
 
 export const CheckboxItemOption = (props: CheckboxItemOptionProps) => {
-  const { id, key, name, value, label, image, description, disabled, defaultChecked, onChange, color } = props
+  const { id, name, value, label, image, description, disabled, defaultChecked, onChange, color } = props
 
   return (
-    <div key={key} className="response-option" style={{ background: color ? color : "none" }}>
+    <div className="response-option" style={{ background: color ? color : "none" }}>
       <div className="option-tooltip">{description && <CustomTooltip markdown={description} />}</div>
 
       {image && (

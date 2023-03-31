@@ -6,12 +6,13 @@ import { RadioItemOption } from "~/shared/ui"
 
 type RadioItemProps = {
   item: ActivityEventProgressRecord
+  value: string
 
   onValueChange: (value: string) => void
   isDisabled: boolean
 }
 
-export const RadioItem = ({ item, onValueChange, isDisabled }: RadioItemProps) => {
+export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemProps) => {
   const options = item.responseValues!.options.filter(x => !x.isHidden)
 
   const leftColumnOptions = options.filter((option, index) => index < Math.ceil(options.length / 2))
@@ -20,36 +21,38 @@ export const RadioItem = ({ item, onValueChange, isDisabled }: RadioItemProps) =
   return (
     <>
       <Col md={6}>
-        {leftColumnOptions.map((option, index) => {
+        {leftColumnOptions.map(option => {
           return (
             <RadioItemOption
-              key={`${index}${option.text}`}
-              id={option.text}
-              name={option.text}
+              key={option.id}
+              id={option.id}
+              name={item.name}
               value={option.text}
               label={option.text}
               onChange={onValueChange}
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}
+              defaultChecked={option.id === value}
             />
           )
         })}
       </Col>
 
       <Col md={6}>
-        {rightColumnOptions.map((option, index) => {
+        {rightColumnOptions.map(option => {
           return (
             <RadioItemOption
-              key={`${index}${option.text}`}
-              id={option.text}
-              name={option.text}
+              key={option.id}
+              id={option.id}
+              name={item.name}
               value={option.text}
               label={option.text}
               onChange={onValueChange}
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}
+              defaultChecked={option.id === value}
             />
           )
         })}
