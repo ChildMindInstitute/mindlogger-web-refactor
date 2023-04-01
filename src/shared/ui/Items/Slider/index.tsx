@@ -23,7 +23,7 @@ type SliderItemProps = {
   onChange: (value: string) => void
 }
 
-export const SliderItem = (props: SliderItemProps) => {
+export const SliderItemBase = (props: SliderItemProps) => {
   const {
     minLabel,
     minImage,
@@ -44,7 +44,7 @@ export const SliderItem = (props: SliderItemProps) => {
   const stickList = useMemo(() => {
     const stickLabels = []
 
-    for (let i = 0; i < maxValue; i++) {
+    for (let i = 0; i <= maxValue; i++) {
       stickLabels.push(i)
     }
 
@@ -67,7 +67,7 @@ export const SliderItem = (props: SliderItemProps) => {
           {stickList.map(label => {
             return (
               <span key={label} className="tick" style={{ background: showStickMarks ? "black" : "white" }}>
-                {(showStickLabel && label) || ""}
+                {showStickLabel ? label : ""}
               </span>
             )
           })}
