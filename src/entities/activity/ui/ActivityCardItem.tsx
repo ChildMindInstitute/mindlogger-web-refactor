@@ -15,7 +15,7 @@ type ActivityCardItemProps = {
   toNextStep?: () => void
   toPrevStep?: () => void
   values: string[]
-  setValue: (itemId: string, answer: string) => void
+  setValue: (itemId: string, answer: string[]) => void
 }
 
 export const ActivityCardItem = ({
@@ -49,7 +49,7 @@ export const ActivityCardItem = ({
     }
   }
 
-  const onItemValueChange = (value: string) => {
+  const onItemValueChange = (value: string[]) => {
     setValue(activityItem.id, value)
   }
 

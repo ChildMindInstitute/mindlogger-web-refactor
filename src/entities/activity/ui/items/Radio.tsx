@@ -8,7 +8,7 @@ type RadioItemProps = {
   item: ActivityEventProgressRecord
   value: string
 
-  onValueChange: (value: string) => void
+  onValueChange: (value: string[]) => void
   isDisabled: boolean
 }
 
@@ -17,6 +17,10 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemP
 
   const leftColumnOptions = options.filter((option, index) => index < Math.ceil(options.length / 2))
   const rightColumnOptions = options.filter((option, index) => index >= Math.ceil(options.length / 2))
+
+  const onHandleValueChange = (value: string) => {
+    onValueChange([value])
+  }
 
   return (
     <>
@@ -29,7 +33,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemP
               name={item.name}
               value={option.text}
               label={option.text}
-              onChange={onValueChange}
+              onChange={onHandleValueChange}
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}
@@ -48,7 +52,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemP
               name={item.name}
               value={option.text}
               label={option.text}
-              onChange={onValueChange}
+              onChange={onHandleValueChange}
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}
