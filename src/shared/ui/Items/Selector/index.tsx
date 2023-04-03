@@ -1,21 +1,25 @@
 import { Form } from "react-bootstrap"
 
+import { ValueLabel } from "../../../utils"
+
 type SelectorItemProps = {
   value?: string
-  valueLabelList: Array<{ value: string | number; label: string | number }>
+  valueLabelList: Array<ValueLabel>
 
-  onChangeValue: (value: string) => void
+  onValueChange: (value: string) => void
+  disabled: boolean
 }
 
-export const SelectorItem = ({ value, onChangeValue, valueLabelList }: SelectorItemProps) => {
+export const SelectorItem = ({ value, onValueChange, valueLabelList, disabled }: SelectorItemProps) => {
   const defaultValue = "select"
 
   return (
     <Form.Control
       type="select"
       value={value}
-      onChange={e => onChangeValue(e.target.value)}
+      onChange={e => onValueChange(e.target.value)}
       required
+      disabled={disabled}
       defaultValue={defaultValue}>
       {valueLabelList.map(item => {
         return (

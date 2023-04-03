@@ -60,8 +60,8 @@ export interface ActivityItemBase {
   answer: string[]
 }
 
-export type Config = TextItemConfig | CheckboxItemConfig | RadioItemConfig | SliderItemConfig
-export type ResponseValues = TextValues | CheckboxValues | RadioValues | SliderValues
+export type Config = TextItemConfig | CheckboxItemConfig | RadioItemConfig | SliderItemConfig | SelectorItemConfig
+export type ResponseValues = TextValues | CheckboxValues | RadioValues | SliderValues | SelectorValues
 
 export interface TextItem extends ActivityItemBase {
   responseType: "text"
@@ -157,4 +157,16 @@ export type SliderValues = {
   maxValue: number
   minImage: string | null
   maxImage: string | null
+}
+
+export interface SelectorItem extends ActivityItemBase {
+  responseType: "numberSelect"
+  config: SelectorItemConfig
+  responseValues: SelectorValues
+}
+
+export type SelectorItemConfig = ButtonsConfig & AdditionalResponseConfig
+export type SelectorValues = {
+  minValue: number
+  maxValue: number
 }
