@@ -3,7 +3,7 @@ import { Form } from "react-bootstrap"
 import { ValueLabel } from "../../../utils"
 
 type SelectorItemProps = {
-  value?: string
+  value: string
   valueLabelList: Array<ValueLabel>
 
   onValueChange: (value: string) => void
@@ -16,6 +16,7 @@ export const SelectorItem = ({ value, onValueChange, valueLabelList, disabled }:
   return (
     <Form.Control
       type="select"
+      as="select"
       value={value}
       onChange={e => onValueChange(e.target.value)}
       required

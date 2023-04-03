@@ -1,4 +1,4 @@
-import { ActivityDTO, CheckboxItemDTO, RadioItemDTO, TextItemDTO, SliderItemDTO } from "~/shared/api"
+import { ActivityDTO, CheckboxItemDTO, RadioItemDTO, TextItemDTO, SliderItemDTO, SelectorItemDTO } from "~/shared/api"
 
 export const textItemMock: TextItemDTO = {
   id: "text-item-id",
@@ -155,6 +155,26 @@ export const sliderItemMock: SliderItemDTO = {
   },
 }
 
+export const selectorItemMock: SelectorItemDTO = {
+  id: "selector-item-id",
+  name: "selector item name",
+  question: "Selector item mock question 5?",
+  responseType: "numberSelect",
+  order: 5,
+  responseValues: {
+    minValue: 0,
+    maxValue: 35,
+  },
+  config: {
+    removeBackButton: false,
+    skippableItem: false,
+    additionalResponseOption: {
+      textInputOption: false,
+      textInputRequired: false,
+    },
+  },
+}
+
 export const activityDetailsWithItemsMock: ActivityDTO = {
   id: "55ea4993-a7ba-4751-9e6c-fea04e9d53e5",
   guid: "activity-mock-guid",
@@ -167,5 +187,5 @@ export const activityDetailsWithItemsMock: ActivityDTO = {
   isReviewable: false,
   responseIsEditable: false,
   ordering: 0,
-  items: [textItemMock, sliderItemMock, checkboxItemMock, radioItemMock],
+  items: [textItemMock, sliderItemMock, selectorItemMock, checkboxItemMock, radioItemMock],
 }
