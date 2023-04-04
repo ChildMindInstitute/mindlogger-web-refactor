@@ -68,7 +68,7 @@ export const useActivityDetails = (
         }
 
         // data?.data?.result - Changed it to get real data
-        const activityDetails = activityModel.activityBuilder.convertToActivityDetails(activityDetailsWithItemsMock)
+        const activityDetails = activityModel.activityBuilder.convertToActivityDetails(data?.data?.result)
 
         if (activityDetails) {
           const initialStep = 1

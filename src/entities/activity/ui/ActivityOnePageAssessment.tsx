@@ -4,9 +4,10 @@ import { ActivityCardItemList } from "./ActivityCardItemList"
 type ActivityOnePageAssessmentProps = {
   eventId: string
   activityId: string
+  splashScreen: string | null
 }
 
-export const ActivityOnePageAssessment = ({ eventId, activityId }: ActivityOnePageAssessmentProps) => {
+export const ActivityOnePageAssessment = ({ eventId, activityId, splashScreen }: ActivityOnePageAssessmentProps) => {
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
     activityId,
@@ -24,6 +25,7 @@ export const ActivityOnePageAssessment = ({ eventId, activityId }: ActivityOnePa
       isBackShown={isBackShown}
       isSubmitShown={isSubmitShown}
       setValue={saveActivityItemAnswer}
+      splashScreen={splashScreen}
     />
   )
 }

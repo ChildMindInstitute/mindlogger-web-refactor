@@ -6,9 +6,10 @@ import { ActivityCardItemList } from "./ActivityCardItemList"
 type ActivityItemStepperProps = {
   eventId: string
   activityId: string
+  splashScreen: string | null
 }
 
-export const ActivityItemStepper = ({ eventId, activityId }: ActivityItemStepperProps) => {
+export const ActivityItemStepper = ({ eventId, activityId, splashScreen }: ActivityItemStepperProps) => {
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
     activityId,
@@ -42,6 +43,7 @@ export const ActivityItemStepper = ({ eventId, activityId }: ActivityItemStepper
       toNextStep={toNextStep}
       toPrevStep={toPrevStep}
       setValue={saveActivityItemAnswer}
+      splashScreen={splashScreen}
     />
   )
 }
