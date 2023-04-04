@@ -27,12 +27,18 @@ export interface ItemDetailsBaseDTO {
   responseValues: ResponseValuesDTO
 }
 
-export type ConfigDTO = TextItemConfigDTO | CheckboxItemConfigDTO | RadioItemConfigDTO | SliderItemConfigDTO
+export type ConfigDTO =
+  | TextItemConfigDTO
+  | CheckboxItemConfigDTO
+  | RadioItemConfigDTO
+  | SliderItemConfigDTO
+  | SelectorItemConfigDTO
 export type ResponseValuesDTO =
   | TextItemResponseValuesDTO
   | CheckboxItemResponseValuesDTO
   | RadioItemResponseValuesDTO
   | SliderItemResponseValuesDTO
+  | SelectorItemResponseValues
 
 export interface TextItemDTO extends ItemDetailsBaseDTO {
   responseType: "text"
@@ -147,4 +153,24 @@ export type SliderItemResponseValuesDTO = {
   maxValue: number
   minImage: string | null
   maxImage: string | null
+}
+
+export interface SelectorItemDTO extends ItemDetailsBaseDTO {
+  responseType: "numberSelect"
+  config: SelectorItemConfigDTO
+  responseValues: SelectorItemResponseValues
+}
+
+export type SelectorItemConfigDTO = {
+  removeBackButton: boolean
+  skippableItem: boolean
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+
+export type SelectorItemResponseValues = {
+  minValue: number
+  maxValue: number
 }
