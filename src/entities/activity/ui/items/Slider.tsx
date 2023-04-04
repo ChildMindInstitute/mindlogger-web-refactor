@@ -5,12 +5,16 @@ import { SliderItemBase } from "~/shared/ui"
 type SliderItemProps = {
   item: SliderItemType
   value: string
-  onValueChange: (value: string) => void
+  onValueChange: (value: string[]) => void
   isDisabled: boolean
 }
 
 export const SliderItem = ({ value, item, onValueChange, isDisabled }: SliderItemProps) => {
   const { responseValues, config } = item
+
+  const onHandleValueChange = (value: string) => {
+    onValueChange([value])
+  }
 
   return (
     <SliderItemBase
@@ -21,7 +25,7 @@ export const SliderItem = ({ value, item, onValueChange, isDisabled }: SliderIte
       maxValue={responseValues.maxValue}
       maxLabel={responseValues.maxLabel}
       maxImage={responseValues.maxImage}
-      onChange={onValueChange}
+      onChange={onHandleValueChange}
       disabled={isDisabled}
       continiusSlider={config.continuousSlider}
       showStickLabel={config.showTickLabels}

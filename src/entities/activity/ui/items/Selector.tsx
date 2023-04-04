@@ -9,7 +9,7 @@ type SelectorItemProps = {
   item: SelectorItemType
   value: string
 
-  onValueChange: (value: string) => void
+  onValueChange: (value: string[]) => void
   isDisabled: boolean
 }
 
@@ -29,11 +29,15 @@ export const SelectorItem = ({ item, value, onValueChange, isDisabled }: Selecto
     return list
   }, [maxValue, minValue])
 
+  const onHandleValueChange = (value: string) => {
+    onValueChange([value])
+  }
+
   return (
     <SelectorItemBase
       value={value}
       valueLabelList={valueLabelList}
-      onValueChange={onValueChange}
+      onValueChange={onHandleValueChange}
       disabled={isDisabled}
     />
   )

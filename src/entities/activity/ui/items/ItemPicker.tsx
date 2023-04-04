@@ -9,7 +9,7 @@ type ItemPickerProps = {
   item: ActivityEventProgressRecord
 
   values: string[]
-  onValueChange: (value: string) => void
+  onValueChange: (value: string[]) => void
   isDisabled: boolean
 }
 

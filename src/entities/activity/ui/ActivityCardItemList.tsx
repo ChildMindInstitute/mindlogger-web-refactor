@@ -11,7 +11,7 @@ type ActivityCardItemListProps = PropsWithChildren<{
 
   toNextStep?: () => void
   toPrevStep?: () => void
-  setValue: (itemId: string, answer: string) => void
+  setValue: (itemId: string, answer: string[]) => void
 }>
 
 export const ActivityCardItemList = ({
