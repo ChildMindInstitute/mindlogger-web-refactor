@@ -2,6 +2,7 @@ import { PropsWithChildren } from "react"
 
 import { ActivityEventProgressRecord } from "../model/types"
 import { ActivityCardItem } from "./ActivityCardItem"
+import { SplashScreen } from "./SplashScreen"
 
 type ActivityCardItemListProps = PropsWithChildren<{
   items: ActivityEventProgressRecord[]
