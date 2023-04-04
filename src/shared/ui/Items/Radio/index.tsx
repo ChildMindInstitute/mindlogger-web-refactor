@@ -26,11 +26,7 @@ export const RadioItemOption = (props: RadioItemOptionProps) => {
     <div className="response-option" style={{ background: color ? color : "none" }}>
       <div className="option-tooltip">{description && <CustomTooltip markdown={description} />}</div>
 
-      {image && (
-        <div className="option-image">
-          <Image src={image} roundedCircle />
-        </div>
-      )}
+      <div className="option-image">{image && <Image src={image} className="option-image" roundedCircle />}</div>
       <Form.Check
         id={id}
         type="radio"
