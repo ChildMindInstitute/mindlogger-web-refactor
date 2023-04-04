@@ -1,4 +1,4 @@
-import { ActivityDTO, CheckboxItemDTO, RadioItemDTO, TextItemDTO } from "~/shared/api"
+import { ActivityDTO, CheckboxItemDTO, RadioItemDTO, TextItemDTO, SliderItemDTO } from "~/shared/api"
 
 export const textItemMock: TextItemDTO = {
   id: "text-item-id",
@@ -55,7 +55,7 @@ export const checkboxItemMock: CheckboxItemDTO = {
       },
     ],
   },
-  order: 1,
+  order: 2,
   config: {
     removeBackButton: false,
     skippableItem: false,
@@ -108,7 +108,7 @@ export const radioItemMock: RadioItemDTO = {
       },
     ],
   },
-  order: 1,
+  order: 3,
   config: {
     removeBackButton: false,
     skippableItem: false,
@@ -118,6 +118,36 @@ export const radioItemMock: RadioItemDTO = {
     setAlerts: false,
     addTooltip: false,
     setPalette: false,
+    additionalResponseOption: {
+      textInputOption: false,
+      textInputRequired: false,
+    },
+  },
+}
+
+export const sliderItemMock: SliderItemDTO = {
+  id: "slider-item-id",
+  name: "slider item name",
+  question: "Slider item mock question 3?",
+  responseType: "slider",
+  order: 4,
+  responseValues: {
+    minValue: 0,
+    minLabel: "0",
+    minImage: "https://dummyimage.com/600x400/000/fff.png",
+    maxValue: 5,
+    maxLabel: "5",
+    maxImage: "https://dummyimage.com/600x400/000/fff.png",
+  },
+  config: {
+    addScores: false,
+    setAlerts: false,
+    showTickMarks: true,
+    showTickLabels: true,
+    continuousSlider: false,
+    removeBackButton: false,
+    skippableItem: false,
+    timer: null,
     additionalResponseOption: {
       textInputOption: false,
       textInputRequired: false,
@@ -137,5 +167,5 @@ export const activityDetailsWithItemsMock: ActivityDTO = {
   isReviewable: false,
   responseIsEditable: false,
   ordering: 0,
-  items: [textItemMock, checkboxItemMock, radioItemMock],
+  items: [textItemMock, sliderItemMock, checkboxItemMock, radioItemMock],
 }

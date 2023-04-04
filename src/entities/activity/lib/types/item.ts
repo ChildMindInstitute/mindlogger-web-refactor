@@ -60,13 +60,13 @@ export interface ActivityItemBase {
   answer: string[]
 }
 
-export type Config = TextItemConfig | CheckboxItemConfig | RadioItemConfig
-export type ResponseValues = TextItemResponseValues | CheckboxValues | RadioValues
+export type Config = TextItemConfig | CheckboxItemConfig | RadioItemConfig | SliderItemConfig
+export type ResponseValues = TextValues | CheckboxValues | RadioValues | SliderValues
 
 export interface TextItem extends ActivityItemBase {
   responseType: "text"
   config: TextItemConfig
-  responseValues: TextItemResponseValues
+  responseValues: TextValues
 }
 
 export type TextItemConfig = ButtonsConfig & {
@@ -78,7 +78,7 @@ export type TextItemConfig = ButtonsConfig & {
   responseRequired: boolean // default false
 }
 
-export type TextItemResponseValues = null
+export type TextValues = null
 
 export interface CheckboxItem extends ActivityItemBase {
   responseType: "multiSelect"
@@ -132,4 +132,29 @@ export type RadioValues = {
     tooltip: string | null
     isHidden: boolean
   }>
+}
+
+export interface SliderItem extends ActivityItemBase {
+  responseType: "slider"
+  config: SliderItemConfig
+  responseValues: SliderValues
+}
+
+export type SliderItemConfig = ButtonsConfig &
+  TimerConfig &
+  AdditionalResponseConfig & {
+    addScores: boolean
+    setAlerts: boolean
+    showTickMarks: boolean
+    showTickLabels: boolean
+    continuousSlider: boolean
+  }
+
+export type SliderValues = {
+  minLabel: string | null
+  maxLabel: string | null
+  minValue: number
+  maxValue: number
+  minImage: string | null
+  maxImage: string | null
 }

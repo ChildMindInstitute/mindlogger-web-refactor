@@ -1,11 +1,11 @@
 import { Col } from "react-bootstrap"
 
-import { ActivityEventProgressRecord } from "../../model/types"
+import { RadioItem as RadioItemType } from "../../lib"
 
 import { RadioItemOption } from "~/shared/ui"
 
 type RadioItemProps = {
-  item: ActivityEventProgressRecord
+  item: RadioItemType
   value: string
 
   onValueChange: (value: string[]) => void
@@ -13,7 +13,7 @@ type RadioItemProps = {
 }
 
 export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemProps) => {
-  const options = item.responseValues!.options.filter(x => !x.isHidden)
+  const options = item.responseValues.options.filter(x => !x.isHidden)
 
   const leftColumnOptions = options.filter((option, index) => index < Math.ceil(options.length / 2))
   const rightColumnOptions = options.filter((option, index) => index >= Math.ceil(options.length / 2))

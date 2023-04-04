@@ -27,8 +27,12 @@ export interface ItemDetailsBaseDTO {
   responseValues: ResponseValuesDTO
 }
 
-export type ConfigDTO = TextItemConfigDTO | CheckboxItemConfigDTO | RadioItemConfigDTO
-export type ResponseValuesDTO = TextItemResponseValuesDTO | CheckboxItemResponseValuesDTO | RadioItemResponseValuesDTO
+export type ConfigDTO = TextItemConfigDTO | CheckboxItemConfigDTO | RadioItemConfigDTO | SliderItemConfigDTO
+export type ResponseValuesDTO =
+  | TextItemResponseValuesDTO
+  | CheckboxItemResponseValuesDTO
+  | RadioItemResponseValuesDTO
+  | SliderItemResponseValuesDTO
 
 export interface TextItemDTO extends ItemDetailsBaseDTO {
   responseType: "text"
@@ -113,4 +117,34 @@ export type RadioItemResponseValuesDTO = {
     color: string | null
     isHidden: boolean
   }>
+}
+
+export interface SliderItemDTO extends ItemDetailsBaseDTO {
+  responseType: "slider"
+  config: SliderItemConfigDTO
+  responseValues: SliderItemResponseValuesDTO
+}
+
+export type SliderItemConfigDTO = {
+  addScores: boolean
+  setAlerts: boolean
+  showTickMarks: boolean
+  showTickLabels: boolean
+  continuousSlider: boolean
+  removeBackButton: boolean
+  skippableItem: boolean
+  timer: number | null
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+
+export type SliderItemResponseValuesDTO = {
+  minLabel: string | null
+  maxLabel: string | null
+  minValue: number
+  maxValue: number
+  minImage: string | null
+  maxImage: string | null
 }

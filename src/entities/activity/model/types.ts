@@ -1,4 +1,4 @@
-import { ActivityPipelineType, CheckboxItem, RadioItem, TextItem } from "../lib"
+import { ActivityPipelineType, CheckboxItem, RadioItem, SliderItem, TextItem } from "../lib"
 
 type ActivityFlowProgress = {
   type: ActivityPipelineType.Flow
@@ -21,7 +21,7 @@ export type AppletProgressState = Record<string, ActivityProgressState>
 
 export type GroupsProgressState = Record<string, AppletProgressState>
 
-export type ActivityEventProgressRecord = TextItem | CheckboxItem | RadioItem
+export type ActivityEventProgressRecord = TextItem | CheckboxItem | RadioItem | SliderItem
 
 export type ActivityEventProgressState = {
   activityEvents: ActivityEventProgressRecord[]
