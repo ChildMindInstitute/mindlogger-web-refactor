@@ -8,7 +8,7 @@ type CheckboxItemProps = {
   item: CheckboxItemType
   values: string[]
 
-  onValueChange: (value: string) => void
+  onValueChange: (value: string[]) => void
   isDisabled: boolean
 }
 
@@ -17,6 +17,20 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: Checkb
 
   const leftColumnOptions = options.filter((option, index) => index < Math.ceil(options.length / 2))
   const rightColumnOptions = options.filter((option, index) => index >= Math.ceil(options.length / 2))
+
+  const onHandleValueChange = (value: string) => {
+    const preparedValues = [...values]
+
+    const isCheckedValueIndexExist = preparedValues.findIndex(x => x === value)
+
+    if (isCheckedValueIndexExist !== -1) {
+      preparedValues.splice(isCheckedValueIndexExist, 1)
+    } else {
+      preparedValues.push(value)
+    }
+
+    onValueChange(preparedValues)
+  }
 
   return (
     <>
@@ -29,7 +43,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: Checkb
               name={item.name}
               value={option.text}
               label={option.text}
-              onChange={onValueChange}
+              onChange={onHandleValueChange}
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}
@@ -48,7 +62,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: Checkb
               name={item.name}
               value={option.text}
               label={option.text}
-              onChange={onValueChange}
+              onChange={onHandleValueChange}
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}
