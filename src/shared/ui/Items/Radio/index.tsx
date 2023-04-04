@@ -4,23 +4,23 @@ import { CustomTooltip } from "../../Tooltip"
 
 import "./style.scss"
 
-type CheckboxItemOptionProps = {
+type RadioItemOptionProps = {
   id: string
   name: string
   value: string
   label: string
 
-  disabled?: boolean
-  image: string | null
   description: string | null
-  color?: string
+  image: string | null
+  disabled?: boolean
   defaultChecked?: boolean
+  color?: string
 
   onChange: (value: string) => void
 }
 
-export const CheckboxItemOption = (props: CheckboxItemOptionProps) => {
-  const { id, name, value, label, image, description, disabled, defaultChecked, onChange, color } = props
+export const RadioItemOption = (props: RadioItemOptionProps) => {
+  const { id, name, value, label, description, image, disabled, defaultChecked, color, onChange } = props
 
   return (
     <div className="response-option" style={{ background: color ? color : "none" }}>
@@ -33,16 +33,14 @@ export const CheckboxItemOption = (props: CheckboxItemOptionProps) => {
       )}
       <Form.Check
         id={id}
-        type="checkbox"
+        type="radio"
         name={name}
         className="form-check-width"
         value={value}
         label={label}
         disabled={disabled}
         defaultChecked={defaultChecked}
-        onChange={e => {
-          onChange(e.target.id)
-        }}
+        onChange={e => onChange(e.target.id)}
       />
     </div>
   )

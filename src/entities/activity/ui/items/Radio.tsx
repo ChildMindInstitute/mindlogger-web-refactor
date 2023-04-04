@@ -1,35 +1,25 @@
 import { Col } from "react-bootstrap"
 
-import { CheckboxItem as CheckboxItemType } from "../../lib/types/item"
+import { ActivityEventProgressRecord } from "../../model/types"
 
-import { CheckboxItemOption } from "~/shared/ui"
+import { RadioItemOption } from "~/shared/ui"
 
-type CheckboxItemProps = {
-  item: CheckboxItemType
-  values: string[]
+type RadioItemProps = {
+  item: ActivityEventProgressRecord
+  value: string
 
   onValueChange: (value: string[]) => void
   isDisabled: boolean
 }
 
-export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: CheckboxItemProps) => {
-  const options = item.responseValues.options.filter(x => !x.isHidden)
+export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemProps) => {
+  const options = item.responseValues!.options.filter(x => !x.isHidden)
 
   const leftColumnOptions = options.filter((option, index) => index < Math.ceil(options.length / 2))
   const rightColumnOptions = options.filter((option, index) => index >= Math.ceil(options.length / 2))
 
   const onHandleValueChange = (value: string) => {
-    const preparedValues = [...values]
-
-    const isCheckedValueIndexExist = preparedValues.findIndex(x => x === value)
-
-    if (isCheckedValueIndexExist !== -1) {
-      preparedValues.splice(isCheckedValueIndexExist, 1)
-    } else {
-      preparedValues.push(value)
-    }
-
-    onValueChange(preparedValues)
+    onValueChange([value])
   }
 
   return (
@@ -37,7 +27,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: Checkb
       <Col md={6}>
         {leftColumnOptions.map(option => {
           return (
-            <CheckboxItemOption
+            <RadioItemOption
               key={option.id}
               id={option.id}
               name={item.name}
@@ -47,7 +37,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: Checkb
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}
-              defaultChecked={values.includes(option.id)}
+              defaultChecked={option.id === value}
             />
           )
         })}
@@ -56,7 +46,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: Checkb
       <Col md={6}>
         {rightColumnOptions.map(option => {
           return (
-            <CheckboxItemOption
+            <RadioItemOption
               key={option.id}
               id={option.id}
               name={item.name}
@@ -66,7 +56,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: Checkb
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}
-              defaultChecked={values.includes(option.id)}
+              defaultChecked={option.id === value}
             />
           )
         })}

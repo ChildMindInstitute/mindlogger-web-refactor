@@ -6,7 +6,7 @@ import {
   ActivityStatus,
   ActivityType,
 } from "../lib"
-import { ActivityEventProgressRecord, CheckboxItem, TextItem, UnsupportableItem } from "./types"
+import { ActivityEventProgressRecord } from "./types"
 
 import {
   ActivityDTO,
@@ -78,21 +78,10 @@ class ActivityBuilder {
     }))
   }
 
-  public convertActivityItemToEmptyProgressRecord(item: ActivityItemDetailsDTO): ActivityEventProgressRecord | null {
-    const itemWithEmptyAnswer = {
+  public convertActivityItemToEmptyProgressRecord(item: ActivityItemDetailsDTO): ActivityEventProgressRecord {
+    return {
       ...item,
       answer: [],
-    }
-
-    switch (item.responseType) {
-      case "text":
-        return itemWithEmptyAnswer as TextItem
-
-      case "multiSelect":
-        return itemWithEmptyAnswer as CheckboxItem
-
-      default:
-        return null
     }
   }
 }

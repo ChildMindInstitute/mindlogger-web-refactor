@@ -14,16 +14,16 @@ export const useSaveActivityItemAnswer = (props: UseSaveActivityItemAnswerProps)
   const dispatch = useAppDispatch()
 
   const saveActivityItemAnswer = useCallback(
-    (itemId: string, answer: string) => {
+    (itemId: string, answer: string[]) => {
       const activityEventId = getActivityEventProgressId(props.activityId, props.eventId)
 
-      const params = {
-        activityEventId,
-        itemId,
-        answer: [answer],
-      }
-
-      dispatch(actions.saveActivityEventAnswerById(params))
+      dispatch(
+        actions.saveActivityEventAnswerById({
+          activityEventId,
+          itemId,
+          answer,
+        }),
+      )
     },
     [dispatch, props.activityId, props.eventId],
   )

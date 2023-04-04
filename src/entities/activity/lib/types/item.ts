@@ -21,6 +21,7 @@ export type ActivityItemType =
 export enum SupportableActivityItemType {
   Text = "text",
   Checkbox = "multiSelect",
+  Radio = "singleSelect",
   Unsupportable = "unsupportable",
 }
 
@@ -48,15 +49,24 @@ export type AdditionalResponseConfig = {
   }
 }
 
-export type ActivityItem<Type = unknown, Config = unknown, ResponseValues = unknown> = {
+export interface ActivityItemBase {
   id: string
   name: string
   question: string
-  responseType: Type
-  responseValues: ResponseValues
   order: number
+  responseType: ActivityItemType
   config: Config
+  responseValues: ResponseValues
   answer: string[]
+}
+
+export type Config = TextItemConfig | CheckboxItemConfig | RadioItemConfig
+export type ResponseValues = TextItemResponseValues | CheckboxValues | RadioValues
+
+export interface TextItem extends ActivityItemBase {
+  responseType: "text"
+  config: TextItemConfig
+  responseValues: TextItemResponseValues
 }
 
 export type TextItemConfig = ButtonsConfig & {
@@ -66,6 +76,14 @@ export type TextItemConfig = ButtonsConfig & {
   numericalResponseRequired: boolean // default false
   responseDataIdentifier: string // default ""
   responseRequired: boolean // default false
+}
+
+export type TextItemResponseValues = null
+
+export interface CheckboxItem extends ActivityItemBase {
+  responseType: "multiSelect"
+  config: CheckboxItemConfig
+  responseValues: CheckboxValues
 }
 
 export type CheckboxItemConfig = ButtonsConfig &
@@ -79,6 +97,33 @@ export type CheckboxItemConfig = ButtonsConfig &
   }
 
 export type CheckboxValues = {
+  options: Array<{
+    id: string
+    text: string
+    image: string | null
+    score: number | null
+    tooltip: string | null
+    isHidden: boolean
+  }>
+}
+
+export interface RadioItem extends ActivityItemBase {
+  responseType: "singleSelect"
+  config: RadioItemConfig
+  responseValues: RadioValues
+}
+
+export type RadioItemConfig = ButtonsConfig &
+  TimerConfig &
+  AdditionalResponseConfig & {
+    randomizeOptions: boolean
+    addScores: boolean
+    setAlerts: boolean
+    addTooltip: boolean
+    setPalette: boolean
+  }
+
+export type RadioValues = {
   options: Array<{
     id: string
     text: string

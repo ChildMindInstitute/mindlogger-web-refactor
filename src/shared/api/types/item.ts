@@ -17,17 +17,24 @@ export type ItemResponseTypeDTO =
   | "audio"
   | "audioPlayer"
 
-export interface ItemDetailsBaseDTO<Config, ResponseValues> {
+export interface ItemDetailsBaseDTO {
   id: string
   name: string
   question: string
-  responseType: ItemResponseTypeDTO
-  responseValues: ResponseValues
-  config: Config
   order: number
+  responseType: ItemResponseTypeDTO
+  config: ConfigDTO
+  responseValues: ResponseValuesDTO
 }
 
-export type TextItemDTO = ItemDetailsBaseDTO<TextItemConfigDTO, null>
+export type ConfigDTO = TextItemConfigDTO | CheckboxItemConfigDTO | RadioItemConfigDTO
+export type ResponseValuesDTO = TextItemResponseValuesDTO | CheckboxItemResponseValuesDTO | RadioItemResponseValuesDTO
+
+export interface TextItemDTO extends ItemDetailsBaseDTO {
+  responseType: "text"
+  config: TextItemConfigDTO
+  responseValues: TextItemResponseValuesDTO
+}
 
 export type TextItemConfigDTO = {
   maxResponseLength: number // default 300
@@ -40,7 +47,13 @@ export type TextItemConfigDTO = {
   skippableItem: boolean
 }
 
-export type CheckboxItemDTO = ItemDetailsBaseDTO<CheckboxItemConfigDTO, CheckboxItemResponseValuesDTO>
+export type TextItemResponseValuesDTO = null
+
+export interface CheckboxItemDTO extends ItemDetailsBaseDTO {
+  responseType: "multiSelect"
+  config: CheckboxItemConfigDTO
+  responseValues: CheckboxItemResponseValuesDTO
+}
 
 export type CheckboxItemConfigDTO = {
   removeBackButton: boolean
@@ -64,6 +77,40 @@ export type CheckboxItemResponseValuesDTO = {
     image: string | null
     score: number | null
     tooltip: string | null
+    color: string | null
+    isHidden: boolean
+  }>
+}
+
+export interface RadioItemDTO extends ItemDetailsBaseDTO {
+  responseType: "singleSelect"
+  config: RadioItemConfigDTO
+  responseValues: RadioItemResponseValuesDTO
+}
+
+export type RadioItemConfigDTO = {
+  removeBackButton: boolean
+  skippableItem: boolean
+  randomizeOptions: boolean
+  timer: number | null
+  addScores: boolean
+  setAlerts: boolean
+  addTooltip: boolean
+  setPalette: boolean
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+
+export type RadioItemResponseValuesDTO = {
+  options: Array<{
+    id: string
+    text: string
+    image: string | null
+    score: number | null
+    tooltip: string | null
+    color: string | null
     isHidden: boolean
   }>
 }
