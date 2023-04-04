@@ -1,6 +1,7 @@
 import { ActivityEventProgressRecord } from "../../model/types"
 import { CheckboxItem } from "./Checkbox"
 import { RadioItem } from "./Radio"
+import { SelectorItem } from "./Selector"
 import { SliderItem } from "./Slider"
 import { TextItem } from "./Text"
 
@@ -25,6 +26,9 @@ export const ItemPicker = ({ item, values, onValueChange, isDisabled }: ItemPick
 
     case "slider":
       return <SliderItem item={item} value={values[0]} onValueChange={onValueChange} isDisabled={isDisabled} />
+
+    case "numberSelect":
+      return <SelectorItem item={item} value={values[0]} onValueChange={onValueChange} isDisabled={isDisabled} />
 
     default:
       return <></>
