@@ -27,11 +27,9 @@ export enum SupportableActivityItemType {
 }
 
 export type ItemCardButtonsConfig = {
-  isOnePageAssessment?: boolean
-  isBackShown?: boolean
-  isSubmitShown?: boolean
-  isSkippable?: boolean
-  isNextDisable?: boolean
+  isBackShown: boolean
+  isSkippable: boolean
+  isNextDisable: boolean
 }
 
 export type ButtonsConfig = {

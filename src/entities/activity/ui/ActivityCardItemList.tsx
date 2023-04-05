@@ -31,7 +31,8 @@ export const ActivityCardItemList = ({
         const firstElement = 0
         const isActive = index === firstElement || isOnePageAssessment
 
-        const iSubmitButtonShown = isOnePageAssessment || (isSubmitShown && index === items.length - 1)
+        const isStepByStepSubmitButtonShownCondition = isSubmitShown && index === 0
+        const isOnePageSubmitButtonShownCondition = isSubmitShown && index === items.length - 1
 
         const initialAnswer = item.answer
         return (
@@ -40,7 +41,9 @@ export const ActivityCardItemList = ({
             activityItem={item}
             isBackShown={isBackShown}
             isOnePageAssessment={isOnePageAssessment}
-            isSubmitShown={iSubmitButtonShown}
+            isSubmitShown={
+              isOnePageAssessment ? isOnePageSubmitButtonShownCondition : isStepByStepSubmitButtonShownCondition
+            }
             toNextStep={toNextStep}
             toPrevStep={toPrevStep}
             isActive={isActive}
