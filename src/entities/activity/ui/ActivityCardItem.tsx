@@ -12,6 +12,7 @@ type ActivityCardItemProps = {
   isSubmitShown: boolean
 
   isActive: boolean
+  onSubmitButtonClick: () => void
   toNextStep?: () => void
   toPrevStep?: () => void
   values: string[]
@@ -28,13 +29,14 @@ export const ActivityCardItem = ({
   isActive,
   values,
   setValue,
+  onSubmitButtonClick,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !values || !values.length,
     isSkippable: activityItem.config.skippableItem,
     isOnePageAssessment,
     isBackShown: isBackShown && !activityItem.config.removeBackButton,
-    isSubmitShown: isSubmitShown,
+    isSubmitShown,
   }
 
   const onNextButtonClick = () => {
@@ -62,6 +64,7 @@ export const ActivityCardItem = ({
             config={buttonConfig}
             onNextButtonClick={onNextButtonClick}
             onBackButtonClick={onBackButtonClick}
+            onSubmitButtonClick={onSubmitButtonClick}
           />
         ) : (
           <></>
