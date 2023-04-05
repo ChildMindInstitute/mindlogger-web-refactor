@@ -84,6 +84,23 @@ class ActivityBuilder {
       answer: [],
     }
   }
+
+  public convertSplashScreenToItem(splashScreen: string): ActivityEventProgressRecord {
+    return {
+      id: splashScreen,
+      name: "",
+      question: "",
+      order: 0,
+      responseType: "splashScreen",
+      config: {
+        removeBackButton: true,
+        skippableItem: true,
+        imageSrc: splashScreen,
+      },
+      responseValues: null,
+      answer: [],
+    }
+  }
 }
 
 export const activityBuilder = new ActivityBuilder()

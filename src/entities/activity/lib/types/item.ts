@@ -17,6 +17,7 @@ export type ActivityItemType =
   | "audio"
   | "audioPlayer"
   | "unsupportable"
+  | "splashScreen"
 
 export enum SupportableActivityItemType {
   Text = "text",
@@ -60,8 +61,20 @@ export interface ActivityItemBase {
   answer: string[]
 }
 
-export type Config = TextItemConfig | CheckboxItemConfig | RadioItemConfig | SliderItemConfig | SelectorItemConfig
-export type ResponseValues = TextValues | CheckboxValues | RadioValues | SliderValues | SelectorValues
+export type Config =
+  | TextItemConfig
+  | CheckboxItemConfig
+  | RadioItemConfig
+  | SliderItemConfig
+  | SelectorItemConfig
+  | SplashScreenItemConfig
+export type ResponseValues =
+  | TextValues
+  | CheckboxValues
+  | RadioValues
+  | SliderValues
+  | SelectorValues
+  | SplashScreenItemValues
 
 export interface TextItem extends ActivityItemBase {
   responseType: "text"
@@ -170,3 +183,14 @@ export type SelectorValues = {
   minValue: number
   maxValue: number
 }
+
+export interface SplashScreenItem extends ActivityItemBase {
+  responseType: "splashScreen"
+  config: SplashScreenItemConfig
+  responseValues: SplashScreenItemValues
+}
+
+export type SplashScreenItemConfig = ButtonsConfig & {
+  imageSrc: string
+}
+export type SplashScreenItemValues = null

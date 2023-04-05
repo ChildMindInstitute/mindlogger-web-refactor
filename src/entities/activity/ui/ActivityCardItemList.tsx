@@ -24,7 +24,7 @@ export const ActivityCardItemList = ({
   setValue,
 }: ActivityCardItemListProps) => {
   return (
-    <>
+    <div>
       {items.map((item, index) => {
         const firstElement = 0
         const isActive = index === firstElement || isOnePageAssessment
@@ -46,6 +46,6 @@ export const ActivityCardItemList = ({
           />
         )
       })}
-    </>
+    </div>
   )
 }

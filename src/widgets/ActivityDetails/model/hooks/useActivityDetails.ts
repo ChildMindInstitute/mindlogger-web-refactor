@@ -1,11 +1,6 @@
 import { useEffect, useMemo } from "react"
 
-import {
-  activityDetailsWithItemsMock,
-  ActivityListItem,
-  activityModel,
-  useActivityByIdQuery,
-} from "~/entities/activity"
+import { ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
 import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
 import { ActivityDTO } from "~/shared/api"
@@ -67,8 +62,7 @@ export const useActivityDetails = (
           return
         }
 
-        // data?.data?.result - Changed it to get real data
-        const activityDetails = activityModel.activityBuilder.convertToActivityDetails(activityDetailsWithItemsMock)
+        const activityDetails = activityModel.activityBuilder.convertToActivityDetails(data?.data?.result)
 
         if (activityDetails) {
           const initialStep = 1

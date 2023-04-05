@@ -3,6 +3,7 @@ import { CheckboxItem } from "./Checkbox"
 import { RadioItem } from "./Radio"
 import { SelectorItem } from "./Selector"
 import { SliderItem } from "./Slider"
+import { SplashScreen } from "./SplashScreen"
 import { TextItem } from "./Text"
 
 type ItemPickerProps = {
@@ -15,6 +16,9 @@ type ItemPickerProps = {
 
 export const ItemPicker = ({ item, values, onValueChange, isDisabled }: ItemPickerProps) => {
   switch (item.responseType) {
+    case "splashScreen":
+      return <SplashScreen imageSrc={item.config.imageSrc} />
+
     case "text":
       return <TextItem value={values[0]} onValueChange={onValueChange} isDisabled={isDisabled} />
 
