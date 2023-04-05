@@ -88,13 +88,13 @@ class ActivityBuilder {
   public convertSplashScreenToItem(splashScreen: string): ActivityEventProgressRecord {
     return {
       id: splashScreen,
-      name: splashScreen,
-      question: splashScreen,
+      name: "",
+      question: "",
       order: 0,
       responseType: "splashScreen",
       config: {
         removeBackButton: true,
-        skippableItem: false,
+        skippableItem: true,
         imageSrc: splashScreen,
       },
       responseValues: null,

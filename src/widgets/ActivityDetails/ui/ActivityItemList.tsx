@@ -15,18 +15,10 @@ export const ActivityItemList = ({ activityDetails, eventId }: ActivityItemListP
     <>
       {/* {isSummaryScreen && <ActivitySummary />} */}
       {!isSummaryScreen && isOnePageAssessment && (
-        <ActivityOnePageAssessment
-          eventId={eventId}
-          activityId={activityDetails.id}
-          splashScreen={activityDetails.splashScreen}
-        />
+        <ActivityOnePageAssessment eventId={eventId} activityId={activityDetails.id} />
       )}
       {!isSummaryScreen && !isOnePageAssessment && (
-        <ActivityItemStepper
-          eventId={eventId}
-          activityId={activityDetails.id}
-          splashScreen={activityDetails.splashScreen}
-        />
+        <ActivityItemStepper eventId={eventId} activityId={activityDetails.id} />
       )}
     </>
   )
