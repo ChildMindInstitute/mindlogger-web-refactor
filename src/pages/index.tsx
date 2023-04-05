@@ -14,6 +14,7 @@ import { PublicJoinPage } from "./PublicJoin"
 import RecoveryPassword from "./RecoveryPassword"
 import Settings from "./Settings"
 import SignupPage from "./Signup"
+import { ThanksPage } from "./Thanks"
 
 import { userModel } from "~/entities/user"
 import { ROUTES } from "~/shared/utils"
@@ -43,6 +44,7 @@ const ApplicationRouter = (): JSX.Element | null => {
             <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
             <Route path={ROUTES.invitationAccept.path} element={<InvitationAcceptPage />} />
             <Route path={ROUTES.invitationDecline.path} element={<InvitationDeclinePage />} />
+            <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
 
             <Route path="*" element={<Navigate to={ROUTES.applets.path} />} />
           </Route>

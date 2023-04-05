@@ -4,7 +4,7 @@ import Modal from "../../Modal"
 
 import { ActivityItemStepper, ActivityOnePageAssessment } from "~/entities/activity"
 import { ActivityDTO } from "~/shared/api"
-import { useCustomTranslation } from "~/shared/utils"
+import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 interface ActivityItemListProps {
   appletId: string
@@ -12,8 +12,9 @@ interface ActivityItemListProps {
   activityDetails: ActivityDTO
 }
 
-export const ActivityItemList = ({ activityDetails, eventId }: ActivityItemListProps) => {
+export const ActivityItemList = ({ activityDetails, eventId, appletId }: ActivityItemListProps) => {
   const { t } = useCustomTranslation()
+  const navigator = useCustomNavigation()
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState<boolean>(false)
 
   const isOnePageAssessment = activityDetails.showAllAtOnce
@@ -29,7 +30,8 @@ export const ActivityItemList = ({ activityDetails, eventId }: ActivityItemListP
     // Step 2 - Send answers to backend
     // Step 3 - Clear progress state related to activity (Need to clarify)
     // Step 4 - Redirect to "Thanks screen"
-  }, [])
+    return navigator.navigate(ROUTES.thanks.navigateTo(appletId))
+  }, [appletId, navigator])
 
   const onSubmitButtonClick = useCallback(() => {
     setIsSubmitModalOpen(true)
