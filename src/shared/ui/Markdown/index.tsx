@@ -9,7 +9,7 @@ interface MarkdownProps {
 export const Markdown = ({ markdown }: MarkdownProps) => {
   return (
     <div>
-      <MDEditor.Markdown source={markdown} />
+      <MDEditor.Markdown source={markdown} className="markdown" />
     </div>
   )
 }
