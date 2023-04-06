@@ -9,6 +9,8 @@ import "./style.scss"
 
 type ItemCardButtonsProps = {
   config: ItemCardButtonsConfig
+  isSubmitShown: boolean
+  isOnePageAssessment: boolean
   onBackButtonClick?: () => void
   onNextButtonClick?: () => void
   onSubmitButtonClick?: () => void
@@ -16,6 +18,8 @@ type ItemCardButtonsProps = {
 
 export const ItemCardButton = ({
   config,
+  isSubmitShown,
+  isOnePageAssessment,
   onBackButtonClick,
   onNextButtonClick,
   onSubmitButtonClick,
@@ -25,10 +29,10 @@ export const ItemCardButton = ({
   const nextLabel = config.isNextDisable && config.isSkippable ? t("Consent.skip") : t("Consent.next")
   const submitLabel = t("submit")
 
-  if (config.isOnePageAssessment) {
+  if (isOnePageAssessment) {
     return (
       <div className={classNames("no-gutters", "d-flex", "flex-row", "justify-content-around")}>
-        {(config.isSubmitShown && (
+        {(isSubmitShown && (
           <BasicButton
             variant="outline-dark"
             size="lg"
@@ -68,8 +72,8 @@ export const ItemCardButton = ({
         size="lg"
         disabled={!config.isSkippable && config.isNextDisable}
         className={classNames("mb-2", "navigator-button")}
-        onClick={config.isSubmitShown ? onSubmitButtonClick : onNextButtonClick}>
-        {config.isSubmitShown ? submitLabel : nextLabel}
+        onClick={isSubmitShown ? onSubmitButtonClick : onNextButtonClick}>
+        {isSubmitShown ? submitLabel : nextLabel}
       </BasicButton>
     </div>
   )

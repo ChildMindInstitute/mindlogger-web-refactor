@@ -47,4 +47,8 @@ export const ROUTES = {
   invitationDecline: {
     path: "/protected/invite/declined",
   },
+  thanks: {
+    path: "/protected/thanks/:appletId",
+    navigateTo: (appletId: string) => `/protected/thanks/${appletId}`,
+  },
 }
