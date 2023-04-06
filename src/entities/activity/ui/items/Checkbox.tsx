@@ -40,7 +40,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: Checkb
             <CheckboxItemOption
               key={option.id}
               id={option.id}
-              name={item.name}
+              name={item.id}
               value={option.text}
               label={option.text}
               onChange={onHandleValueChange}
@@ -59,7 +59,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: Checkb
             <CheckboxItemOption
               key={option.id}
               id={option.id}
-              name={item.name}
+              name={item.id}
               value={option.text}
               label={option.text}
               onChange={onHandleValueChange}
