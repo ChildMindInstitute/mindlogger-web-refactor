@@ -13,7 +13,7 @@ export const CustomTooltip = ({ markdown }: TooltipProps) => {
   return (
     <OverlayTrigger
       placement="bottom"
-      delay={{ show: 250, hide: 20000 }}
+      delay={{ show: 250, hide: 200 }}
       overlay={
         <Tooltip id="button-tooltip">
           <Markdown markdown={markdown} />
