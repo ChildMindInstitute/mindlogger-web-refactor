@@ -2,7 +2,7 @@ import { useCallback, useState } from "react"
 
 import Modal from "../../Modal"
 
-import { ActivityItemStepper, ActivityOnePageAssessment } from "~/entities/activity"
+import { ActivityItemStepper, ActivityOnePageAssessment, activityModel } from "~/entities/activity"
 import { ActivityDTO } from "~/shared/api"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
@@ -17,6 +17,9 @@ export const ActivityItemList = ({ activityDetails, eventId, appletId }: Activit
   const navigator = useCustomNavigation()
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState<boolean>(false)
 
+  const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
+  const { updateGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+
   const isOnePageAssessment = activityDetails.showAllAtOnce
   const isSummaryScreen = false // Mock
 
@@ -28,10 +31,20 @@ export const ActivityItemList = ({ activityDetails, eventId, appletId }: Activit
     // Will be implemented in the next tasks
     // Step 1 - Collect answers from store
     // Step 2 - Send answers to backend
-    // Step 3 - Clear progress state related to activity (Need to clarify)
+    // Step 3 - Clear progress state related to activity
+    clearActivityItemsProgressById(activityDetails.id, eventId)
+    updateGroupInProgressByIds({
+      appletId,
+      eventId,
+      activityId: activityDetails.id,
+      progressPayload: {
+        endAt: new Date(),
+      },
+    })
+
     // Step 4 - Redirect to "Thanks screen"
     return navigator.navigate(ROUTES.thanks.navigateTo(appletId))
-  }, [appletId, navigator])
+  }, [activityDetails.id, appletId, clearActivityItemsProgressById, eventId, navigator, updateGroupInProgressByIds])
 
   const onSubmitButtonClick = useCallback(() => {
     setIsSubmitModalOpen(true)
