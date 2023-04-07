@@ -2,9 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 import {
   ActivityEventState,
+  ClearActivityItemsProgresByIdPayload,
   GroupsProgressState,
   SaveActivityItemAnswerPayload,
   SetActivityEventProgressStep,
+  UpdateActionPayload,
   UpsertActionPayload,
 } from "./types"
 
@@ -26,12 +28,29 @@ const activitySlice = createSlice({
       return initialState
     },
 
-    upsertGroupProgressByParams: (state, action: PayloadAction<UpsertActionPayload>) => {
+    clearActivityItemsProgressById: (state, action: PayloadAction<ClearActivityItemsProgresByIdPayload>) => {
+      delete state.activityEventProgress[action.payload.activityEventId]
+    },
+
+    insertGroupProgressByParams: (state, action: PayloadAction<UpsertActionPayload>) => {
       const { appletId, activityId, eventId, progressPayload } = action.payload
 
       state.groupsInProgress[appletId] = state.groupsInProgress[appletId] ?? {}
       state.groupsInProgress[appletId][activityId] = state.groupsInProgress[appletId][activityId] ?? {}
       state.groupsInProgress[appletId][activityId][eventId] = progressPayload
+    },
+    updateGroupProgressByParams: (state, action: PayloadAction<UpdateActionPayload>) => {
+      const { appletId, activityId, eventId, progressPayload } = action.payload
+
+      state.groupsInProgress[appletId] = state.groupsInProgress[appletId] ?? {}
+      state.groupsInProgress[appletId][activityId] = state.groupsInProgress[appletId][activityId] ?? {}
+      const group = state.groupsInProgress[appletId][activityId][eventId]
+      const updatedProgress = {
+        ...group,
+        ...progressPayload,
+      }
+
+      state.groupsInProgress[appletId][activityId][eventId] = updatedProgress
     },
 
     saveActivityEventRecords: (state, action: PayloadAction<ActivityEventState>) => {

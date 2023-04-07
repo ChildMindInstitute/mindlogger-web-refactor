@@ -30,7 +30,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemP
             <RadioItemOption
               key={option.id}
               id={option.id}
-              name={item.name}
+              name={item.id}
               value={option.text}
               label={option.text}
               onChange={onHandleValueChange}
@@ -49,7 +49,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemP
             <RadioItemOption
               key={option.id}
               id={option.id}
-              name={item.name}
+              name={item.id}
               value={option.text}
               label={option.text}
               onChange={onHandleValueChange}

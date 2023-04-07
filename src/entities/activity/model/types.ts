@@ -19,10 +19,12 @@ type ActivityProgress = {
 
 type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress
 
-export type EventProgressState = ActivityOrFlowProgress & {
+type EventProgressTimestampState = {
   startAt: Date | null
   endAt: Date | null
 }
+
+export type EventProgressState = ActivityOrFlowProgress & EventProgressTimestampState
 
 export type ActivityProgressState = Record<string, EventProgressState>
 export type AppletProgressState = Record<string, ActivityProgressState>
@@ -45,11 +47,23 @@ export type ActivityEventProgressState = {
 export type ActivityEventState = Record<string, ActivityEventProgressState>
 
 // Payloads
+
+export type ClearActivityItemsProgresByIdPayload = {
+  activityEventId: string
+}
+
 export type UpsertActionPayload = {
   appletId: string
   activityId: string
   eventId: string
   progressPayload: EventProgressState
+}
+
+export type UpdateActionPayload = {
+  appletId: string
+  activityId: string
+  eventId: string
+  progressPayload: Partial<EventProgressTimestampState>
 }
 
 export type SaveActivityItemAnswerPayload = {
