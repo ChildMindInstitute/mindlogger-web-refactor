@@ -1,5 +1,6 @@
 import { Form, Image } from "react-bootstrap"
 
+import { invertColor } from "../../../utils"
 import { CustomTooltip } from "../../Tooltip"
 
 import "./style.scss"
@@ -13,7 +14,7 @@ type CheckboxItemOptionProps = {
   disabled?: boolean
   image: string | null
   description: string | null
-  color?: string
+  color: string | null
   defaultChecked?: boolean
 
   onChange: (value: string) => void
@@ -21,6 +22,8 @@ type CheckboxItemOptionProps = {
 
 export const CheckboxItemOption = (props: CheckboxItemOptionProps) => {
   const { id, name, value, label, image, description, disabled, defaultChecked, onChange, color } = props
+
+  const defaultOptionColor = "#333333"
 
   return (
     <div className="response-option" style={{ background: color ? color : "none" }}>
@@ -32,6 +35,7 @@ export const CheckboxItemOption = (props: CheckboxItemOptionProps) => {
         type="checkbox"
         name={name}
         className="form-check-width"
+        style={{ color: color ? invertColor(color) : defaultOptionColor }}
         value={value}
         label={label}
         disabled={disabled}
