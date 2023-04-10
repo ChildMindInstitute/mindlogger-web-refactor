@@ -18,7 +18,7 @@ export const SliderItem = ({ value, item, onValueChange, isDisabled }: SliderIte
 
   return (
     <SliderItemBase
-      value={value}
+      value={value ? value : responseValues.minValue.toString()}
       minValue={responseValues.minValue}
       minLabel={responseValues.minLabel}
       minImage={responseValues.minImage}
