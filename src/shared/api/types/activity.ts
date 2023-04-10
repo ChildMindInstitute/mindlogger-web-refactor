@@ -23,3 +23,50 @@ export type ActivityDTO = {
 }
 
 export type ActivityItemDetailsDTO = TextItemDTO | CheckboxItemDTO | RadioItemDTO | SliderItemDTO | SelectorItemDTO
+
+export type AnswerPayload = {
+  appletId: string
+  version: string
+  flowId: string | null
+  activityId: string
+  answers: Array<AnswerTypesPayload>
+  createdAt: string
+}
+
+export type AnswerTypesPayload =
+  | TextAnswerPayload
+  | MultiSelectAnswerPayload
+  | SingleSelectAnswerPayload
+  | SliderAnswerPayload
+
+export type TextAnswerPayload = {
+  activityItemId: string
+  answer: {
+    value: string
+    shouldIdentifyResponse: boolean
+  }
+}
+
+export type MultiSelectAnswerPayload = {
+  activityItemId: string
+  answer: {
+    value: Array<string> // Array of IDs
+    additionalText: string | null
+  }
+}
+
+export type SingleSelectAnswerPayload = {
+  activityItemId: string
+  answer: {
+    value: Array<string> // Array of IDs
+    additionalText: string | null
+  }
+}
+
+export type SliderAnswerPayload = {
+  activityItemId: string
+  answer: {
+    value: number
+    additionalText: string | null
+  }
+}
