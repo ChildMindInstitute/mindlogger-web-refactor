@@ -16,6 +16,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletId }: Activit
   const { t } = useCustomTranslation()
   const navigator = useCustomNavigation()
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState<boolean>(false)
+  const [isRequiredModalOpen, setIsRequiredModalOpen] = useState<boolean>(false)
 
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { updateGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
@@ -25,6 +26,16 @@ export const ActivityItemList = ({ activityDetails, eventId, appletId }: Activit
 
   const closeSubmitModal = useCallback(() => {
     setIsSubmitModalOpen(false)
+  }, [])
+  const onSubmitButtonClick = useCallback(() => {
+    setIsSubmitModalOpen(true)
+  }, [])
+
+  const closeRequiredModal = useCallback(() => {
+    setIsRequiredModalOpen(false)
+  }, [])
+  const openRequiredModal = useCallback(() => {
+    setIsRequiredModalOpen(true)
   }, [])
 
   const onPrimaryButtonClick = useCallback(() => {
@@ -46,10 +57,6 @@ export const ActivityItemList = ({ activityDetails, eventId, appletId }: Activit
     return navigator.navigate(ROUTES.thanks.navigateTo(appletId))
   }, [activityDetails.id, appletId, clearActivityItemsProgressById, eventId, navigator, updateGroupInProgressByIds])
 
-  const onSubmitButtonClick = useCallback(() => {
-    setIsSubmitModalOpen(true)
-  }, [])
-
   return (
     <>
       {/* {isSummaryScreen && <ActivitySummary />} */}
@@ -58,6 +65,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletId }: Activit
           eventId={eventId}
           activityId={activityDetails.id}
           onSubmitButtonClick={onSubmitButtonClick}
+          openRequiredModal={openRequiredModal}
         />
       )}
       {!isSummaryScreen && !isOnePageAssessment && (
@@ -65,6 +73,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletId }: Activit
           eventId={eventId}
           activityId={activityDetails.id}
           onSubmitButtonClick={onSubmitButtonClick}
+          openRequiredModal={openRequiredModal}
         />
       )}
 
@@ -78,6 +87,8 @@ export const ActivityItemList = ({ activityDetails, eventId, appletId }: Activit
         footerSecondaryButton={t("additional.no")}
         onSecondaryButtonClick={closeSubmitModal}
       />
+
+      <Modal show={isRequiredModalOpen} onHide={closeRequiredModal} title={t("failed")} label={t("incorrect_answer")} />
     </>
   )
 }

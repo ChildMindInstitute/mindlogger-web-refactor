@@ -20,7 +20,7 @@ export const ItemPicker = ({ item, values, onValueChange, isDisabled }: ItemPick
       return <SplashScreen imageSrc={item.config.imageSrc} />
 
     case "text":
-      return <TextItem value={values[0]} onValueChange={onValueChange} isDisabled={isDisabled} />
+      return <TextItem item={item} value={values[0]} onValueChange={onValueChange} isDisabled={isDisabled} />
 
     case "multiSelect":
       return <CheckboxItem item={item} values={values} onValueChange={onValueChange} isDisabled={isDisabled} />

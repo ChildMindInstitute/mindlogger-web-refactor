@@ -5,12 +5,14 @@ type ActivityOnePageAssessmentProps = {
   eventId: string
   activityId: string
   onSubmitButtonClick: () => void
+  openRequiredModal: () => void
 }
 
 export const ActivityOnePageAssessment = ({
   eventId,
   activityId,
   onSubmitButtonClick,
+  openRequiredModal,
 }: ActivityOnePageAssessmentProps) => {
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
@@ -30,6 +32,7 @@ export const ActivityOnePageAssessment = ({
       isSubmitShown={isSubmitShown}
       setValue={saveActivityItemAnswer}
       onSubmitButtonClick={onSubmitButtonClick}
+      openRequiredModal={openRequiredModal}
     />
   )
 }
