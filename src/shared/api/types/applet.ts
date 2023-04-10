@@ -43,7 +43,6 @@ export type AppletDetailsDTO = {
 
 export type AppletDetailsActivityDTO = {
   id: string
-  guid: string
   name: string
   description: string
   splashScreen: string | ""
@@ -52,18 +51,17 @@ export type AppletDetailsActivityDTO = {
   isSkippable: boolean
   isReviewable: boolean
   responseIsEditable: boolean
-  ordering: number
+  order: number
 }
 
 export type ActivityFlowDTO = {
   id: string
-  guid: string
   name: string
   description: string
   image: string | ""
   isSingleReport: boolean
   hideBadge: boolean
-  ordering: number
+  order: number
   activityIds: Array<string>
 }
 
