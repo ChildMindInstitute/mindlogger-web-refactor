@@ -30,7 +30,6 @@ export type AnswerPayload = {
   flowId: string | null
   activityId: string
   answers: Array<AnswerTypesPayload>
-  createdAt: string
 }
 
 export type AnswerTypesPayload =
@@ -58,7 +57,7 @@ export type MultiSelectAnswerPayload = {
 export type SingleSelectAnswerPayload = {
   activityItemId: string
   answer: {
-    value: Array<string> // Array of IDs
+    value: string // ID
     additionalText: string | null
   }
 }

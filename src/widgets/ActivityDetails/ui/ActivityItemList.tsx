@@ -2,24 +2,53 @@ import { useCallback, useState } from "react"
 
 import Modal from "../../Modal"
 
-import { ActivityItemStepper, ActivityOnePageAssessment, activityModel } from "~/entities/activity"
-import { ActivityDTO } from "~/shared/api"
+import {
+  ActivityItemStepper,
+  ActivityListItem,
+  ActivityOnePageAssessment,
+  activityModel,
+  useSaveAnswerMutation,
+} from "~/entities/activity"
+import { ActivityFlow, AppletDetails } from "~/entities/applet"
+import { ActivityDTO, AnswerPayload } from "~/shared/api"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 interface ActivityItemListProps {
-  appletId: string
-  eventId: string
+  appletDetails: AppletDetails<ActivityListItem, ActivityFlow>
   activityDetails: ActivityDTO
+  eventId: string
 }
 
-export const ActivityItemList = ({ activityDetails, eventId, appletId }: ActivityItemListProps) => {
+export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: ActivityItemListProps) => {
   const { t } = useCustomTranslation()
   const navigator = useCustomNavigation()
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState<boolean>(false)
   const [isRequiredModalOpen, setIsRequiredModalOpen] = useState<boolean>(false)
 
+  const { mutate: saveAnswer } = useSaveAnswerMutation({
+    onSuccess() {
+      // Step 3 - Clear progress state related to activity
+      clearActivityItemsProgressById(activityDetails.id, eventId)
+      updateGroupInProgressByIds({
+        appletId: appletDetails.id,
+        eventId,
+        activityId: activityDetails.id,
+        progressPayload: {
+          endAt: new Date(),
+        },
+      })
+
+      // Step 4 - Redirect to "Thanks screen"
+      return navigator.navigate(ROUTES.thanks.navigateTo(appletDetails.id))
+    },
+  })
+
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { updateGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { currentActivityEventProgress } = activityModel.hooks.useActivityEventProgressState({
+    activityId: activityDetails.id,
+    eventId,
+  })
 
   const isOnePageAssessment = activityDetails.showAllAtOnce
   const isSummaryScreen = false // Mock
@@ -39,23 +68,19 @@ export const ActivityItemList = ({ activityDetails, eventId, appletId }: Activit
   }, [])
 
   const onPrimaryButtonClick = useCallback(() => {
-    // Will be implemented in the next tasks
-    // Step 1 - Collect answers from store
-    // Step 2 - Send answers to backend
-    // Step 3 - Clear progress state related to activity
-    clearActivityItemsProgressById(activityDetails.id, eventId)
-    updateGroupInProgressByIds({
-      appletId,
-      eventId,
-      activityId: activityDetails.id,
-      progressPayload: {
-        endAt: new Date(),
-      },
-    })
+    // Step 1 - Collect answers from store and transform to answer payload
+    const itemAnswers = activityModel.activityBuilder.convertToAnswers(currentActivityEventProgress)
 
-    // Step 4 - Redirect to "Thanks screen"
-    return navigator.navigate(ROUTES.thanks.navigateTo(appletId))
-  }, [activityDetails.id, appletId, clearActivityItemsProgressById, eventId, navigator, updateGroupInProgressByIds])
+    // Step 2 - Send answers to backend
+    const answer: AnswerPayload = {
+      appletId: appletDetails?.id,
+      version: appletDetails?.version,
+      flowId: null,
+      activityId: activityDetails.id,
+      answers: itemAnswers,
+    }
+    return saveAnswer(answer) // Next steps in onSuccess handler
+  }, [activityDetails.id, appletDetails?.id, appletDetails?.version, currentActivityEventProgress, saveAnswer])
 
   return (
     <>

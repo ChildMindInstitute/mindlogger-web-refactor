@@ -34,6 +34,7 @@ export class AppletBuilder {
       about: applet.about,
       watermark: applet.watermark,
       image: applet.image,
+      version: applet.version,
       activities: activityModel.activityBuilder.convertToActivityList(applet.activities, events),
       activityFlows: applet.activityFlows,
     }

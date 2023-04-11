@@ -77,8 +77,8 @@ export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
           {activityProgressPreviewList && <ActivityProgressPreviewList activities={activityProgressPreviewList} />}
         </Col>
         <Col xl={9}>
-          {activityDetails ? (
-            <ActivityItemList appletId={props.appletId} eventId={props.eventId} activityDetails={activityDetails} />
+          {activityDetails && appletDetails ? (
+            <ActivityItemList appletDetails={appletDetails} eventId={props.eventId} activityDetails={activityDetails} />
           ) : (
             <>Data fetching error</>
           )}

@@ -5,15 +5,24 @@ import {
   ActivityProgressPreview,
   ActivityStatus,
   ActivityType,
+  CheckboxItem,
+  RadioItem,
+  SliderItem,
+  TextItem,
 } from "../lib"
 import { ActivityEventProgressRecord } from "./types"
 
 import {
   ActivityDTO,
   ActivityItemDetailsDTO,
+  AnswerTypesPayload,
   AppletDetailsActivityDTO,
   EventDTO,
   EventsByAppletIdResponseDTO,
+  MultiSelectAnswerPayload,
+  SingleSelectAnswerPayload,
+  SliderAnswerPayload,
+  TextAnswerPayload,
 } from "~/shared/api"
 
 class ActivityBuilder {
@@ -99,6 +108,72 @@ class ActivityBuilder {
       },
       responseValues: null,
       answer: [],
+    }
+  }
+
+  public convertToAnswers(items: Array<ActivityEventProgressRecord>): Array<AnswerTypesPayload> {
+    const answers = items.map(item => {
+      switch (item.responseType) {
+        case "text":
+          return this.convertToTextAnswer(item)
+
+        case "singleSelect":
+          return this.convertToSingleSelectAnswer(item)
+
+        case "multiSelect":
+          return this.convertToMultiSelectAnswer(item)
+
+        case "slider":
+          return this.convertToSliderAnswer(item)
+
+        case "numberSelect":
+          return null
+
+        default:
+          return null
+      }
+    })
+
+    return answers.filter(x => x) as Array<AnswerTypesPayload>
+  }
+
+  private convertToTextAnswer(item: TextItem): TextAnswerPayload {
+    return {
+      activityItemId: item.id,
+      answer: {
+        value: item.answer[0],
+        shouldIdentifyResponse: !!item.config.responseDataIdentifier,
+      },
+    }
+  }
+
+  private convertToSingleSelectAnswer(item: RadioItem): SingleSelectAnswerPayload {
+    return {
+      activityItemId: item.id,
+      answer: {
+        value: item.answer[0],
+        additionalText: null,
+      },
+    }
+  }
+
+  private convertToMultiSelectAnswer(item: CheckboxItem): MultiSelectAnswerPayload {
+    return {
+      activityItemId: item.id,
+      answer: {
+        value: item.answer,
+        additionalText: null,
+      },
+    }
+  }
+
+  private convertToSliderAnswer(item: SliderItem): SliderAnswerPayload {
+    return {
+      activityItemId: item.id,
+      answer: {
+        value: Number(item.answer[0]),
+        additionalText: null,
+      },
     }
   }
 }
