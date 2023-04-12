@@ -5,7 +5,7 @@ import { Col } from "react-bootstrap"
 import { RadioItem as RadioItemType } from "../../lib"
 
 import { RadioItemOption } from "~/shared/ui"
-import { randomizeArray } from "~/shared/utils"
+import { randomizeArray, splitList } from "~/shared/utils"
 
 type RadioItemProps = {
   item: RadioItemType
@@ -24,20 +24,8 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemP
     return item.responseValues.options.filter(x => !x.isHidden)
   }, [item?.config?.randomizeOptions, item?.responseValues?.options])
 
-  const leftColumnOptions = useMemo(() => {
-    if (!options) {
-      return []
-    }
-
-    return options.filter((option, index) => index < Math.ceil(options.length / 2))
-  }, [options])
-
-  const rightColumnOptions = useMemo(() => {
-    if (!options) {
-      return []
-    }
-
-    return options.filter((option, index) => index >= Math.ceil(options.length / 2))
+  const [evenColumn, oddColumn] = useMemo(() => {
+    return splitList(options)
   }, [options])
 
   const onHandleValueChange = (value: string) => {
@@ -47,7 +35,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemP
   return (
     <>
       <Col md={6}>
-        {leftColumnOptions?.map(option => {
+        {evenColumn.map(option => {
           return (
             <RadioItemOption
               key={option.id}
@@ -67,7 +55,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemP
       </Col>
 
       <Col md={6}>
-        {rightColumnOptions?.map(option => {
+        {oddColumn.map(option => {
           return (
             <RadioItemOption
               key={option.id}
