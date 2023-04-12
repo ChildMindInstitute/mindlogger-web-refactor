@@ -39,20 +39,26 @@ export const ActivityCardItem = ({
     isBackShown: isBackShown && !activityItem.config.removeBackButton,
   }
 
+  const validateCorrectAnswer = () => {
+    if (activityItem.responseType === "text" && activityItem.config.correctAnswerRequired) {
+      const isAnswerCorrect = activityItem.answer[0] === activityItem.config.correctAnswer
+
+      return isAnswerCorrect
+    }
+  }
+
   const onNextButtonClick = () => {
     if (!toNextStep) {
       return
     }
 
-    if (activityItem.responseType === "text" && activityItem.config.correctAnswerRequired) {
-      const isAnswerCorrect = activityItem.answer[0] === activityItem.config.correctAnswer
+    const isAnswerCorrect = validateCorrectAnswer()
 
-      if (!isAnswerCorrect) {
-        return openRequiredModal()
-      }
+    if (isAnswerCorrect) {
+      return toNextStep()
+    } else {
+      return openRequiredModal()
     }
-
-    return toNextStep()
   }
 
   const onBackButtonClick = () => {
