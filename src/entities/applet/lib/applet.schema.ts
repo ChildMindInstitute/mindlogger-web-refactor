@@ -25,6 +25,7 @@ export type AppletDetails<TActivity, TActivityFlow> = {
   about: string
   image: string | ""
   watermark: string | ""
+  version: string
   activities: TActivity[]
   activityFlows: TActivityFlow[]
 }
