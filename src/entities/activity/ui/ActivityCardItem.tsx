@@ -13,6 +13,7 @@ type ActivityCardItemProps = {
 
   isActive: boolean
   onSubmitButtonClick: () => void
+  openRequiredModal: () => void
   toNextStep?: () => void
   toPrevStep?: () => void
   values: string[]
@@ -30,6 +31,7 @@ export const ActivityCardItem = ({
   values,
   setValue,
   onSubmitButtonClick,
+  openRequiredModal,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !values || !values.length,
@@ -37,16 +39,34 @@ export const ActivityCardItem = ({
     isBackShown: isBackShown && !activityItem.config.removeBackButton,
   }
 
+  const validateCorrectAnswer = () => {
+    if (activityItem.responseType === "text" && activityItem.config.correctAnswerRequired) {
+      const isAnswerCorrect = activityItem.answer[0] === activityItem.config.correctAnswer
+
+      return isAnswerCorrect
+    }
+  }
+
   const onNextButtonClick = () => {
-    if (toNextStep) {
-      toNextStep()
+    if (!toNextStep) {
+      return
+    }
+
+    const isAnswerCorrect = validateCorrectAnswer()
+
+    if (isAnswerCorrect) {
+      return toNextStep()
+    } else {
+      return openRequiredModal()
     }
   }
 
   const onBackButtonClick = () => {
-    if (toPrevStep) {
-      toPrevStep()
+    if (!toPrevStep) {
+      return
     }
+
+    return toPrevStep()
   }
 
   const onItemValueChange = (value: string[]) => {

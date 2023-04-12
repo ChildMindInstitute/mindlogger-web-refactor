@@ -14,8 +14,7 @@ export const SelectorItem = ({ value, onValueChange, valueLabelList, disabled }:
   const defaultValue = "select"
 
   return (
-    <Form.Control
-      type="select"
+    <Form.Select
       as="select"
       value={value}
       onChange={e => onValueChange(e.target.value)}
@@ -29,6 +28,6 @@ export const SelectorItem = ({ value, onValueChange, valueLabelList, disabled }:
           </option>
         )
       })}
-    </Form.Control>
+    </Form.Select>
   )
 }

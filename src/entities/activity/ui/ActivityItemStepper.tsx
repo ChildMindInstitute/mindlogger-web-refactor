@@ -7,9 +7,15 @@ type ActivityItemStepperProps = {
   eventId: string
   activityId: string
   onSubmitButtonClick: () => void
+  openRequiredModal: () => void
 }
 
-export const ActivityItemStepper = ({ eventId, activityId, onSubmitButtonClick }: ActivityItemStepperProps) => {
+export const ActivityItemStepper = ({
+  eventId,
+  activityId,
+  onSubmitButtonClick,
+  openRequiredModal,
+}: ActivityItemStepperProps) => {
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
     activityId,
@@ -44,6 +50,7 @@ export const ActivityItemStepper = ({ eventId, activityId, onSubmitButtonClick }
       toPrevStep={toPrevStep}
       setValue={saveActivityItemAnswer}
       onSubmitButtonClick={onSubmitButtonClick}
+      openRequiredModal={openRequiredModal}
     />
   )
 }

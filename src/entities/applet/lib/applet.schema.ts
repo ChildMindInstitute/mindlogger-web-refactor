@@ -1,12 +1,11 @@
 export type ActivityFlow = {
   id: string
-  guid: string
   name: string
   description: string
   image: string | ""
   isSingleReport: boolean
   hideBadge: boolean
-  ordering: number
+  order: number
   activityIds: string[]
 }
 

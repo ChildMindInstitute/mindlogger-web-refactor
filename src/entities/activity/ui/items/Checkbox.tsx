@@ -1,8 +1,11 @@
+import { useMemo } from "react"
+
 import { Col } from "react-bootstrap"
 
 import { CheckboxItem as CheckboxItemType } from "../../lib/types/item"
 
 import { CheckboxItemOption } from "~/shared/ui"
+import { randomizeArray, splitList } from "~/shared/utils"
 
 type CheckboxItemProps = {
   item: CheckboxItemType
@@ -13,10 +16,17 @@ type CheckboxItemProps = {
 }
 
 export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: CheckboxItemProps) => {
-  const options = item.responseValues.options.filter(x => !x.isHidden)
+  const options = useMemo(() => {
+    if (item.config.randomizeOptions) {
+      return randomizeArray(item.responseValues.options).filter(x => !x.isHidden)
+    }
 
-  const leftColumnOptions = options.filter((option, index) => index < Math.ceil(options.length / 2))
-  const rightColumnOptions = options.filter((option, index) => index >= Math.ceil(options.length / 2))
+    return item.responseValues.options.filter(x => !x.isHidden)
+  }, [item?.config?.randomizeOptions, item?.responseValues?.options])
+
+  const [evenColumn, oddColumn] = useMemo(() => {
+    return splitList(options)
+  }, [options])
 
   const onHandleValueChange = (value: string) => {
     const preparedValues = [...values]
@@ -35,7 +45,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: Checkb
   return (
     <>
       <Col md={6}>
-        {leftColumnOptions.map(option => {
+        {evenColumn.map(option => {
           return (
             <CheckboxItemOption
               key={option.id}
@@ -48,13 +58,14 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: Checkb
               image={option.image}
               disabled={isDisabled}
               defaultChecked={values.includes(option.id)}
+              color={option.color}
             />
           )
         })}
       </Col>
 
       <Col md={6}>
-        {rightColumnOptions.map(option => {
+        {oddColumn.map(option => {
           return (
             <CheckboxItemOption
               key={option.id}
@@ -67,6 +78,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled }: Checkb
               image={option.image}
               disabled={isDisabled}
               defaultChecked={values.includes(option.id)}
+              color={option.color}
             />
           )
         })}

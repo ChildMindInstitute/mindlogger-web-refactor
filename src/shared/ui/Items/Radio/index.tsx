@@ -1,5 +1,6 @@
 import { Form, Image } from "react-bootstrap"
 
+import { invertColor } from "../../../utils"
 import { CustomTooltip } from "../../Tooltip"
 
 import "./style.scss"
@@ -14,13 +15,15 @@ type RadioItemOptionProps = {
   image: string | null
   disabled?: boolean
   defaultChecked?: boolean
-  color?: string
+  color: string | null
 
   onChange: (value: string) => void
 }
 
 export const RadioItemOption = (props: RadioItemOptionProps) => {
   const { id, name, value, label, description, image, disabled, defaultChecked, color, onChange } = props
+
+  const defaultOptionColor = "#333333"
 
   return (
     <div className="response-option" style={{ background: color ? color : "none" }}>
@@ -32,6 +35,7 @@ export const RadioItemOption = (props: RadioItemOptionProps) => {
         type="radio"
         name={name}
         className="form-check-width"
+        style={{ color: color ? invertColor(color) : defaultOptionColor }}
         value={value}
         label={label}
         disabled={disabled}
