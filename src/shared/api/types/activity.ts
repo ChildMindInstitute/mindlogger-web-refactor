@@ -1,15 +1,16 @@
 import { BaseSuccessResponse } from "./base"
 import { CheckboxItemDTO, RadioItemDTO, SelectorItemDTO, SliderItemDTO, TextItemDTO } from "./item"
 
+export type ID = string
+
 export interface GetActivityByIdPayload {
-  activityId: string
+  activityId: ID
 }
 
 export type SuccessResponseActivityById = BaseSuccessResponse<ActivityDTO>
 
 export type ActivityDTO = {
-  id: string
-  guid: string
+  id: ID
   name: string
   description: string
   splashScreen: string | ""
@@ -25,11 +26,12 @@ export type ActivityDTO = {
 export type ActivityItemDetailsDTO = TextItemDTO | CheckboxItemDTO | RadioItemDTO | SliderItemDTO | SelectorItemDTO
 
 export type AnswerPayload = {
-  appletId: string
+  appletId: ID
   version: string
-  flowId: string | null
-  activityId: string
+  flowId: ID | null
+  activityId: ID
   answers: Array<AnswerTypesPayload>
+  createdAt: number | null
 }
 
 export type AnswerTypesPayload =
@@ -49,7 +51,7 @@ export type TextAnswerPayload = {
 export type MultiSelectAnswerPayload = {
   activityItemId: string
   answer: {
-    value: Array<string> // Array of IDs
+    value: Array<ID>
     additionalText: string | null
   }
 }
@@ -57,7 +59,7 @@ export type MultiSelectAnswerPayload = {
 export type SingleSelectAnswerPayload = {
   activityItemId: string
   answer: {
-    value: string // ID
+    value: ID
     additionalText: string | null
   }
 }

@@ -177,7 +177,6 @@ export const selectorItemMock: SelectorItemDTO = {
 
 export const activityDetailsWithItemsMock: ActivityDTO = {
   id: "55ea4993-a7ba-4751-9e6c-fea04e9d53e5",
-  guid: "activity-mock-guid",
   name: "Mock activity with all item types",
   description: "Mock activity description",
   splashScreen: "",

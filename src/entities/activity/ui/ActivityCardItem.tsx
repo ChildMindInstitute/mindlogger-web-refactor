@@ -54,10 +54,10 @@ export const ActivityCardItem = ({
 
     const isAnswerCorrect = validateCorrectAnswer()
 
-    if (isAnswerCorrect) {
-      return toNextStep()
-    } else {
+    if (isAnswerCorrect === false) {
       return openRequiredModal()
+    } else {
+      return toNextStep()
     }
   }
 

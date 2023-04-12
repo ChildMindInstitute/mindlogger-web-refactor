@@ -78,6 +78,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
       flowId: null,
       activityId: activityDetails.id,
       answers: itemAnswers,
+      createdAt: new Date().getTime(),
     }
     return saveAnswer(answer) // Next steps in onSuccess handler
   }, [activityDetails.id, appletDetails?.id, appletDetails?.version, currentActivityEventProgress, saveAnswer])
