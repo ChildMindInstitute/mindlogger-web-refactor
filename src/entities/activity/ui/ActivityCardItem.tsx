@@ -45,6 +45,8 @@ export const ActivityCardItem = ({
 
       return isAnswerCorrect
     }
+
+    return true
   }
 
   const onNextButtonClick = () => {
@@ -54,11 +56,11 @@ export const ActivityCardItem = ({
 
     const isAnswerCorrect = validateCorrectAnswer()
 
-    if (isAnswerCorrect === false) {
+    if (!isAnswerCorrect) {
       return openRequiredModal()
-    } else {
-      return toNextStep()
     }
+
+    return toNextStep()
   }
 
   const onBackButtonClick = () => {
