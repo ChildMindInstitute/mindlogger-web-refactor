@@ -10,7 +10,7 @@ export const ChangePasswordSchema = z
   })
   .refine(data => data.new === data.confirm, {
     message: Dictionary.validation.password.notMatch,
-    path: ["confirmNewPassword"],
+    path: ["confirm"],
   })
 
 export type TChangePassword = z.infer<typeof ChangePasswordSchema>
