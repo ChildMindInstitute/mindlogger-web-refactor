@@ -40,7 +40,7 @@ export const ActivityCardItemList = ({
 
         const initialAnswer = item.answer
 
-        const isInvalidItem = invalidItemIds.includes(item.id)
+        const isInvalidItem = invalidItemIds.includes(item.id) && !initialAnswer.length
         return (
           <ActivityCardItem
             key={item.id}
