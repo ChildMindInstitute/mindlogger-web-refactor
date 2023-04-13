@@ -9,8 +9,8 @@ export const SignupFormSchema = BaseUserSchema.pick({ email: true, lastName: tru
   .extend({
     firstName: z.string().min(1, Dictionary.validation.firstName.required),
     lastName: z.string().min(1, Dictionary.validation.lastName.required),
-    password: z.string().min(1, Dictionary.validation.password.required),
-    confirmPassword: z.string().min(1, Dictionary.validation.password.required),
+    password: z.string().trim().min(6, Dictionary.validation.password.minLength),
+    confirmPassword: z.string().trim().min(6, Dictionary.validation.password.minLength),
   })
   .refine(data => data.confirmPassword === data.password, {
     message: Dictionary.validation.password.notMatch,
