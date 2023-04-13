@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react"
 
 import Modal from "../../Modal"
+import { validateAnswerBeforeSubmit } from "../model/validateItemsBeforeSubmit"
 
 import {
   ActivityItemStepper,
@@ -24,6 +25,9 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
   const navigator = useCustomNavigation()
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState<boolean>(false)
   const [isRequiredModalOpen, setIsRequiredModalOpen] = useState<boolean>(false)
+  const [isInvalidAnswerModalOpen, setIsInvalidAnswerModalOpen] = useState<boolean>(false)
+
+  const [invalidItemIds, setInvalidItemIds] = useState<Array<string>>([])
 
   const { mutate: saveAnswer } = useSaveAnswerMutation({
     onSuccess() {
@@ -54,18 +58,36 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
   const isSummaryScreen = false // Mock
 
   const closeSubmitModal = useCallback(() => {
-    setIsSubmitModalOpen(false)
-  }, [])
-  const onSubmitButtonClick = useCallback(() => {
-    setIsSubmitModalOpen(true)
+    return setIsSubmitModalOpen(false)
   }, [])
 
   const closeRequiredModal = useCallback(() => {
-    setIsRequiredModalOpen(false)
+    return setIsRequiredModalOpen(false)
   }, [])
   const openRequiredModal = useCallback(() => {
-    setIsRequiredModalOpen(true)
+    return setIsRequiredModalOpen(true)
   }, [])
+
+  const openInvalidAnswerModal = useCallback(() => {
+    return setIsInvalidAnswerModalOpen(true)
+  }, [])
+
+  const closeInvalidAnswerModal = useCallback(() => {
+    return setIsInvalidAnswerModalOpen(false)
+  }, [])
+
+  const onSubmitButtonClick = useCallback(() => {
+    const invalidItemIds = validateAnswerBeforeSubmit(currentActivityEventProgress)
+
+    const hasInvalidItems = invalidItemIds.length > 0
+
+    if (hasInvalidItems) {
+      setInvalidItemIds(invalidItemIds)
+      return openRequiredModal()
+    }
+
+    return setIsSubmitModalOpen(true)
+  }, [currentActivityEventProgress, openRequiredModal])
 
   const onPrimaryButtonClick = useCallback(() => {
     // Step 1 - Collect answers from store and transform to answer payload
@@ -78,7 +100,6 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
       flowId: null,
       activityId: activityDetails.id,
       answers: itemAnswers,
-      createdAt: new Date().getTime(),
     }
     return saveAnswer(answer) // Next steps in onSuccess handler
   }, [activityDetails.id, appletDetails?.id, appletDetails?.version, currentActivityEventProgress, saveAnswer])
@@ -90,16 +111,18 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
         <ActivityOnePageAssessment
           eventId={eventId}
           activityId={activityDetails.id}
+          invalidItemIds={invalidItemIds}
           onSubmitButtonClick={onSubmitButtonClick}
-          openRequiredModal={openRequiredModal}
+          openInvalidAnswerModal={openInvalidAnswerModal}
         />
       )}
       {!isSummaryScreen && !isOnePageAssessment && (
         <ActivityItemStepper
           eventId={eventId}
           activityId={activityDetails.id}
+          invalidItemIds={invalidItemIds}
           onSubmitButtonClick={onSubmitButtonClick}
-          openRequiredModal={openRequiredModal}
+          openInvalidAnswerModal={openInvalidAnswerModal}
         />
       )}
 
@@ -114,7 +137,20 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
         onSecondaryButtonClick={closeSubmitModal}
       />
 
-      <Modal show={isRequiredModalOpen} onHide={closeRequiredModal} title={t("failed")} label={t("incorrect_answer")} />
+      <Modal
+        show={isInvalidAnswerModalOpen}
+        onHide={closeInvalidAnswerModal}
+        title={t("failed")}
+        label={t("incorrect_answer")}
+      />
+      <Modal
+        show={isRequiredModalOpen}
+        onHide={closeRequiredModal}
+        title={t("additional.response_submit")}
+        label={t("additional.fill_out_fields")}
+        footerSecondaryButton={t("additional.okay")}
+        onSecondaryButtonClick={closeRequiredModal}
+      />
     </>
   )
 }

@@ -6,15 +6,17 @@ import { ActivityCardItemList } from "./ActivityCardItemList"
 type ActivityItemStepperProps = {
   eventId: string
   activityId: string
+  invalidItemIds: Array<string>
   onSubmitButtonClick: () => void
-  openRequiredModal: () => void
+  openInvalidAnswerModal: () => void
 }
 
 export const ActivityItemStepper = ({
   eventId,
   activityId,
+  invalidItemIds,
   onSubmitButtonClick,
-  openRequiredModal,
+  openInvalidAnswerModal,
 }: ActivityItemStepperProps) => {
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
@@ -50,7 +52,8 @@ export const ActivityItemStepper = ({
       toPrevStep={toPrevStep}
       setValue={saveActivityItemAnswer}
       onSubmitButtonClick={onSubmitButtonClick}
-      openRequiredModal={openRequiredModal}
+      openInvalidAnswerModal={openInvalidAnswerModal}
+      invalidItemIds={invalidItemIds}
     />
   )
 }

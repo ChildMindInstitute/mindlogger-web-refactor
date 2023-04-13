@@ -31,7 +31,6 @@ export type AnswerPayload = {
   flowId: ID | null
   activityId: ID
   answers: Array<AnswerTypesPayload>
-  createdAt: number | null
 }
 
 export type AnswerTypesPayload =

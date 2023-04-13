@@ -11,9 +11,10 @@ type ActivityCardItemProps = {
   isBackShown: boolean
   isSubmitShown: boolean
 
+  isInvalid: boolean
   isActive: boolean
   onSubmitButtonClick: () => void
-  openRequiredModal: () => void
+  openInvalidAnswerModal: () => void
   toNextStep?: () => void
   toPrevStep?: () => void
   values: string[]
@@ -28,10 +29,11 @@ export const ActivityCardItem = ({
   toNextStep,
   toPrevStep,
   isActive,
+  isInvalid,
   values,
   setValue,
   onSubmitButtonClick,
-  openRequiredModal,
+  openInvalidAnswerModal,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !values || !values.length,
@@ -57,7 +59,7 @@ export const ActivityCardItem = ({
     const isAnswerCorrect = validateCorrectAnswer()
 
     if (!isAnswerCorrect) {
-      return openRequiredModal()
+      return openInvalidAnswerModal()
     }
 
     return toNextStep()
@@ -78,6 +80,7 @@ export const ActivityCardItem = ({
   return (
     <CardItem
       markdown={activityItem.question}
+      isInvalid={isInvalid}
       buttons={
         isActive ? (
           <ItemCardButton
