@@ -26,7 +26,7 @@ export const Invitation = ({ invite, actionComponent }: InvitationProps) => {
     <div className={classNames("invitationBody")}>
       {invite && (
         <>
-          <InvitationHeader appletName={invite.appletName} />
+          <InvitationHeader appletName={invite.appletName} role={invite.role} />
           <div className={classNames("mb-3")}>{actionComponent}</div>
           <InvitationContent appletName={invite.appletName} />
 
