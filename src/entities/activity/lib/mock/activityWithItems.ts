@@ -6,6 +6,7 @@ export const textItemMock: TextItemDTO = {
   question: "Text item mock question 1?",
   responseType: "text",
   responseValues: null,
+  isHidden: false,
   order: 1,
   config: {
     maxResponseLength: 300, // default 300
@@ -24,6 +25,7 @@ export const checkboxItemMock: CheckboxItemDTO = {
   name: "checkox item name",
   question: "Checkbox item mock question 2?",
   responseType: "multiSelect",
+  isHidden: false,
   responseValues: {
     options: [
       {
@@ -77,6 +79,7 @@ export const radioItemMock: RadioItemDTO = {
   name: "radio item name",
   question: "Radio item mock question 3?",
   responseType: "singleSelect",
+  isHidden: false,
   responseValues: {
     options: [
       {
@@ -131,6 +134,7 @@ export const sliderItemMock: SliderItemDTO = {
   question: "Slider item mock question 3?",
   responseType: "slider",
   order: 4,
+  isHidden: false,
   responseValues: {
     minValue: 0,
     minLabel: "0",
@@ -161,6 +165,7 @@ export const selectorItemMock: SelectorItemDTO = {
   question: "Selector item mock question 5?",
   responseType: "numberSelect",
   order: 5,
+  isHidden: false,
   responseValues: {
     minValue: 0,
     maxValue: 35,
