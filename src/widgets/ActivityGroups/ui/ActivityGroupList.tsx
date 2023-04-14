@@ -28,11 +28,13 @@ type ResumeActivityState = {
   selectedActivity: ActivityListItem | null
 }
 
+type NavigateToActivityDetailsPageProps = { appletId: string; activityId: string; eventId: string }
+
 export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigatator = useCustomNavigation()
   const navigateToActivityDetailsPage = (
-    { appletId, activityId, eventId }: { appletId: string; activityId: string; eventId: string },
+    { appletId, activityId, eventId }: NavigateToActivityDetailsPageProps,
     options: { isRestart: boolean },
   ) => {
     return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId, eventId), {
