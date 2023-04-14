@@ -137,7 +137,11 @@ class ActivityBuilder {
     return answers.filter(x => x) as Array<AnswerTypesPayload>
   }
 
-  private convertToTextAnswer(item: TextItem): TextAnswerPayload {
+  private convertToTextAnswer(item: TextItem): TextAnswerPayload | null {
+    if (!item.answer[0]) {
+      return null
+    }
+
     return {
       activityItemId: item.id,
       answer: {
@@ -147,7 +151,11 @@ class ActivityBuilder {
     }
   }
 
-  private convertToSingleSelectAnswer(item: RadioItem): SingleSelectAnswerPayload {
+  private convertToSingleSelectAnswer(item: RadioItem): SingleSelectAnswerPayload | null {
+    if (!item.answer[0]) {
+      return null
+    }
+
     return {
       activityItemId: item.id,
       answer: {
@@ -157,7 +165,11 @@ class ActivityBuilder {
     }
   }
 
-  private convertToMultiSelectAnswer(item: CheckboxItem): MultiSelectAnswerPayload {
+  private convertToMultiSelectAnswer(item: CheckboxItem): MultiSelectAnswerPayload | null {
+    if (!item.answer[0]) {
+      return null
+    }
+
     return {
       activityItemId: item.id,
       answer: {
@@ -167,7 +179,11 @@ class ActivityBuilder {
     }
   }
 
-  private convertToSliderAnswer(item: SliderItem): SliderAnswerPayload {
+  private convertToSliderAnswer(item: SliderItem): SliderAnswerPayload | null {
+    if (!item.answer[0]) {
+      return null
+    }
+
     return {
       activityItemId: item.id,
       answer: {

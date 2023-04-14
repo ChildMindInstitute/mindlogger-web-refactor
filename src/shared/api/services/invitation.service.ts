@@ -15,7 +15,7 @@ function invitationService() {
       return axiosService.post(`/invitations/${payload.invitationId}/accept`)
     },
     declineInvitation(payload: DeclineInvitationByIdPayload) {
-      return axiosService.post(`/invitations/${payload.invitationId}/decline`)
+      return axiosService.delete(`/invitations/${payload.invitationId}/decline`)
     },
 
     getPrivateInvitationById(payload: GetInvitationByIdPayload) {

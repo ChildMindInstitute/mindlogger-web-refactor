@@ -9,8 +9,9 @@ type ActivityCardItemListProps = PropsWithChildren<{
   isBackShown: boolean
   isSubmitShown: boolean
 
+  invalidItemIds: Array<string>
   onSubmitButtonClick: () => void
-  openRequiredModal: () => void
+  openInvalidAnswerModal: () => void
   toNextStep?: () => void
   toPrevStep?: () => void
   setValue: (itemId: string, answer: string[]) => void
@@ -25,7 +26,8 @@ export const ActivityCardItemList = ({
   toPrevStep,
   setValue,
   onSubmitButtonClick,
-  openRequiredModal,
+  openInvalidAnswerModal,
+  invalidItemIds,
 }: ActivityCardItemListProps) => {
   return (
     <div>
@@ -37,6 +39,8 @@ export const ActivityCardItemList = ({
         const isOnePageSubmitButtonShownCondition = isSubmitShown && index === items.length - 1
 
         const initialAnswer = item.answer
+
+        const isInvalidItem = invalidItemIds.includes(item.id) && !initialAnswer.length
         return (
           <ActivityCardItem
             key={item.id}
@@ -49,10 +53,11 @@ export const ActivityCardItemList = ({
             toNextStep={toNextStep}
             toPrevStep={toPrevStep}
             isActive={isActive}
+            isInvalid={isInvalidItem}
             values={initialAnswer}
             setValue={setValue}
             onSubmitButtonClick={onSubmitButtonClick}
-            openRequiredModal={openRequiredModal}
+            openInvalidAnswerModal={openInvalidAnswerModal}
           />
         )
       })}
