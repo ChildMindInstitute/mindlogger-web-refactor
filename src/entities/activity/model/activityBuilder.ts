@@ -77,14 +77,16 @@ class ActivityBuilder {
   }
 
   public convertToActivitiesGroupsBuilder(activities: AppletDetailsActivityDTO[]): Activity[] {
-    return activities.map(activity => ({
-      type: ActivityType.NotDefined,
-      pipelineType: ActivityPipelineType.Regular,
-      id: activity.id,
-      name: activity.name,
-      description: activity.description,
-      image: activity.image,
-    }))
+    return activities
+      .filter(x => !x.isHidden)
+      .map(activity => ({
+        type: ActivityType.NotDefined,
+        pipelineType: ActivityPipelineType.Regular,
+        id: activity.id,
+        name: activity.name,
+        description: activity.description,
+        image: activity.image,
+      }))
   }
 
   public convertActivityItemToEmptyProgressRecord(item: ActivityItemDetailsDTO): ActivityEventProgressRecord {

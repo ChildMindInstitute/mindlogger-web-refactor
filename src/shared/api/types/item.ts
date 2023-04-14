@@ -22,6 +22,7 @@ export interface ItemDetailsBaseDTO {
   name: string
   question: string
   order: number
+  isHidden: boolean
   responseType: ItemResponseTypeDTO
   config: ConfigDTO
   responseValues: ResponseValuesDTO
