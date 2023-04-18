@@ -12,10 +12,10 @@ type ItemPickerProps = {
   values: string[]
   onValueChange: (value: string[]) => void
   isDisabled: boolean
-  replaceTextVariables: (value: string) => string
+  replaceText: (value: string) => string
 }
 
-export const ItemPicker = ({ item, values, onValueChange, isDisabled, replaceTextVariables }: ItemPickerProps) => {
+export const ItemPicker = ({ item, values, onValueChange, isDisabled, replaceText }: ItemPickerProps) => {
   switch (item.responseType) {
     case "splashScreen":
       return <SplashScreen imageSrc={item.config.imageSrc} />
@@ -30,7 +30,7 @@ export const ItemPicker = ({ item, values, onValueChange, isDisabled, replaceTex
           values={values}
           onValueChange={onValueChange}
           isDisabled={isDisabled}
-          replaceTextVariables={replaceTextVariables}
+          replaceText={replaceText}
         />
       )
 
@@ -41,7 +41,7 @@ export const ItemPicker = ({ item, values, onValueChange, isDisabled, replaceTex
           value={values[0]}
           onValueChange={onValueChange}
           isDisabled={isDisabled}
-          replaceTextVariables={replaceTextVariables}
+          replaceText={replaceText}
         />
       )
 

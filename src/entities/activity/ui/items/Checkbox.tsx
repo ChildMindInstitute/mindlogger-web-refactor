@@ -12,11 +12,11 @@ type CheckboxItemProps = {
   values: string[]
 
   onValueChange: (value: string[]) => void
-  replaceTextVariables: (value: string) => string
+  replaceText: (value: string) => string
   isDisabled: boolean
 }
 
-export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceTextVariables }: CheckboxItemProps) => {
+export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceText }: CheckboxItemProps) => {
   const options = useMemo(() => {
     if (item.config.randomizeOptions) {
       return randomizeArray(item.responseValues.options).filter(x => !x.isHidden)
@@ -60,7 +60,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
               disabled={isDisabled}
               defaultChecked={values.includes(option.id)}
               color={option.color}
-              replaceTextVariables={replaceTextVariables}
+              replaceText={replaceText}
             />
           )
         })}
@@ -81,7 +81,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
               disabled={isDisabled}
               defaultChecked={values.includes(option.id)}
               color={option.color}
-              replaceTextVariables={replaceTextVariables}
+              replaceText={replaceText}
             />
           )
         })}

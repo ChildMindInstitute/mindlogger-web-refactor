@@ -62,7 +62,7 @@ export const ActivityItemStepper = ({
       onSubmitButtonClick={onSubmitButtonClick}
       openInvalidAnswerModal={openInvalidAnswerModal}
       invalidItemIds={invalidItemIds}
-      replaceTextVariables={replaceTextVariables}
+      replaceText={replaceTextVariables}
     />
   )
 }

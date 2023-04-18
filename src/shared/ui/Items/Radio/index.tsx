@@ -20,37 +20,25 @@ type RadioItemOptionProps = {
   color: string | null
 
   onChange: (value: string) => void
-  replaceTextVariables: (value: string) => string
+  replaceText: (value: string) => string
 }
 
 export const RadioItemOption = (props: RadioItemOptionProps) => {
-  const {
-    id,
-    name,
-    value,
-    label,
-    description,
-    image,
-    disabled,
-    defaultChecked,
-    color,
-    onChange,
-    replaceTextVariables,
-  } = props
+  const { id, name, value, label, description, image, disabled, defaultChecked, color, onChange, replaceText } = props
 
   const defaultOptionColor = "#333333"
 
   const tooltipText = useMemo(() => {
     if (description) {
-      return replaceTextVariables(description)
+      return replaceText(description)
     }
 
     return null
-  }, [description, replaceTextVariables])
+  }, [description, replaceText])
 
   const labelText = useMemo(() => {
-    return replaceTextVariables(label)
-  }, [replaceTextVariables, label])
+    return replaceText(label)
+  }, [replaceText, label])
 
   return (
     <div className="response-option" style={{ background: color ? color : "none" }}>

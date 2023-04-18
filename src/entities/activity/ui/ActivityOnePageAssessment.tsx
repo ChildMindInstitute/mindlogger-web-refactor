@@ -44,7 +44,7 @@ export const ActivityOnePageAssessment = ({
       setValue={saveActivityItemAnswer}
       onSubmitButtonClick={onSubmitButtonClick}
       openInvalidAnswerModal={openInvalidAnswerModal}
-      replaceTextVariables={replaceTextVariables}
+      replaceText={replaceTextVariables}
     />
   )
 }

@@ -20,37 +20,25 @@ type CheckboxItemOptionProps = {
   defaultChecked?: boolean
 
   onChange: (value: string) => void
-  replaceTextVariables: (value: string) => string
+  replaceText: (value: string) => string
 }
 
 export const CheckboxItemOption = (props: CheckboxItemOptionProps) => {
-  const {
-    id,
-    name,
-    value,
-    label,
-    image,
-    description,
-    disabled,
-    defaultChecked,
-    onChange,
-    color,
-    replaceTextVariables,
-  } = props
+  const { id, name, value, label, image, description, disabled, defaultChecked, onChange, color, replaceText } = props
 
   const defaultOptionColor = "#333333"
 
   const tooltipText = useMemo(() => {
     if (description) {
-      return replaceTextVariables(description)
+      return replaceText(description)
     }
 
     return null
-  }, [description, replaceTextVariables])
+  }, [description, replaceText])
 
   const labelText = useMemo(() => {
-    return replaceTextVariables(label)
-  }, [replaceTextVariables, label])
+    return replaceText(label)
+  }, [replaceText, label])
 
   return (
     <div className="response-option" style={{ background: color ? color : "none" }}>

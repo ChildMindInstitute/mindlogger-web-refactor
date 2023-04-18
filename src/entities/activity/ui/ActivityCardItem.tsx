@@ -21,7 +21,7 @@ type ActivityCardItemProps = {
   toPrevStep?: () => void
   values: string[]
   setValue: (itemId: string, answer: string[]) => void
-  replaceTextVariables: (value: string) => string
+  replaceText: (value: string) => string
 }
 
 export const ActivityCardItem = ({
@@ -37,7 +37,7 @@ export const ActivityCardItem = ({
   setValue,
   onSubmitButtonClick,
   openInvalidAnswerModal,
-  replaceTextVariables,
+  replaceText,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !values || !values.length,
@@ -82,8 +82,8 @@ export const ActivityCardItem = ({
   }
 
   const questionText = useMemo(() => {
-    return replaceTextVariables(activityItem.question)
-  }, [activityItem.question, replaceTextVariables])
+    return replaceText(activityItem.question)
+  }, [activityItem.question, replaceText])
 
   return (
     <CardItem
@@ -108,7 +108,7 @@ export const ActivityCardItem = ({
         values={values}
         onValueChange={onItemValueChange}
         isDisabled={!isActive}
-        replaceTextVariables={replaceTextVariables}
+        replaceText={replaceText}
       />
     </CardItem>
   )
