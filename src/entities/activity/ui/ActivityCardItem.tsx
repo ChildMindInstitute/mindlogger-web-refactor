@@ -1,3 +1,5 @@
+import { useMemo } from "react"
+
 import { ItemCardButtonsConfig } from "../lib"
 import { ActivityEventProgressRecord } from "../model/types"
 import { ItemCardButton } from "./ItemCardButtons"
@@ -19,6 +21,7 @@ type ActivityCardItemProps = {
   toPrevStep?: () => void
   values: string[]
   setValue: (itemId: string, answer: string[]) => void
+  replaceText: (value: string) => string
 }
 
 export const ActivityCardItem = ({
@@ -34,6 +37,7 @@ export const ActivityCardItem = ({
   setValue,
   onSubmitButtonClick,
   openInvalidAnswerModal,
+  replaceText,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !values || !values.length,
@@ -77,9 +81,13 @@ export const ActivityCardItem = ({
     setValue(activityItem.id, value)
   }
 
+  const questionText = useMemo(() => {
+    return replaceText(activityItem.question)
+  }, [activityItem.question, replaceText])
+
   return (
     <CardItem
-      markdown={activityItem.question}
+      markdown={questionText}
       isInvalid={isInvalid}
       buttons={
         isActive ? (
@@ -95,7 +103,13 @@ export const ActivityCardItem = ({
           <></>
         )
       }>
-      <ItemPicker item={activityItem} values={values} onValueChange={onItemValueChange} isDisabled={!isActive} />
+      <ItemPicker
+        item={activityItem}
+        values={values}
+        onValueChange={onItemValueChange}
+        isDisabled={!isActive}
+        replaceText={replaceText}
+      />
     </CardItem>
   )
 }

@@ -48,6 +48,9 @@ export type AdditionalResponseConfig = {
   }
 }
 
+export type Answer = Array<string>
+export type Answers = Array<Answer>
+
 export interface ActivityItemBase {
   id: string
   name: string
@@ -56,7 +59,7 @@ export interface ActivityItemBase {
   responseType: ActivityItemType
   config: Config
   responseValues: ResponseValues
-  answer: string[]
+  answer: Answer
 }
 
 export type Config =

@@ -12,10 +12,11 @@ type RadioItemProps = {
   value: string
 
   onValueChange: (value: string[]) => void
+  replaceText: (value: string) => string
   isDisabled: boolean
 }
 
-export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemProps) => {
+export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText }: RadioItemProps) => {
   const options = useMemo(() => {
     if (item.config.randomizeOptions) {
       return randomizeArray(item.responseValues.options).filter(x => !x.isHidden)
@@ -49,6 +50,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemP
               disabled={isDisabled}
               defaultChecked={option.id === value}
               color={option.color}
+              replaceText={replaceText}
             />
           )
         })}
@@ -69,6 +71,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled }: RadioItemP
               disabled={isDisabled}
               defaultChecked={option.id === value}
               color={option.color}
+              replaceText={replaceText}
             />
           )
         })}

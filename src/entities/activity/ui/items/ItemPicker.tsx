@@ -12,9 +12,10 @@ type ItemPickerProps = {
   values: string[]
   onValueChange: (value: string[]) => void
   isDisabled: boolean
+  replaceText: (value: string) => string
 }
 
-export const ItemPicker = ({ item, values, onValueChange, isDisabled }: ItemPickerProps) => {
+export const ItemPicker = ({ item, values, onValueChange, isDisabled, replaceText }: ItemPickerProps) => {
   switch (item.responseType) {
     case "splashScreen":
       return <SplashScreen imageSrc={item.config.imageSrc} />
@@ -23,10 +24,26 @@ export const ItemPicker = ({ item, values, onValueChange, isDisabled }: ItemPick
       return <TextItem item={item} value={values[0]} onValueChange={onValueChange} isDisabled={isDisabled} />
 
     case "multiSelect":
-      return <CheckboxItem item={item} values={values} onValueChange={onValueChange} isDisabled={isDisabled} />
+      return (
+        <CheckboxItem
+          item={item}
+          values={values}
+          onValueChange={onValueChange}
+          isDisabled={isDisabled}
+          replaceText={replaceText}
+        />
+      )
 
     case "singleSelect":
-      return <RadioItem item={item} value={values[0]} onValueChange={onValueChange} isDisabled={isDisabled} />
+      return (
+        <RadioItem
+          item={item}
+          value={values[0]}
+          onValueChange={onValueChange}
+          isDisabled={isDisabled}
+          replaceText={replaceText}
+        />
+      )
 
     case "slider":
       return <SliderItem item={item} value={values[0]} onValueChange={onValueChange} isDisabled={isDisabled} />

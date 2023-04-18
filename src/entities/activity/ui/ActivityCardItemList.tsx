@@ -10,6 +10,7 @@ type ActivityCardItemListProps = PropsWithChildren<{
   isSubmitShown: boolean
 
   invalidItemIds: Array<string>
+  replaceText: (value: string) => string
   onSubmitButtonClick: () => void
   openInvalidAnswerModal: () => void
   toNextStep?: () => void
@@ -28,6 +29,7 @@ export const ActivityCardItemList = ({
   onSubmitButtonClick,
   openInvalidAnswerModal,
   invalidItemIds,
+  replaceText,
 }: ActivityCardItemListProps) => {
   return (
     <div>
@@ -58,6 +60,7 @@ export const ActivityCardItemList = ({
             setValue={setValue}
             onSubmitButtonClick={onSubmitButtonClick}
             openInvalidAnswerModal={openInvalidAnswerModal}
+            replaceText={replaceText}
           />
         )
       })}

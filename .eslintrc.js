@@ -42,6 +42,7 @@ module.exports = {
         'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
         'no-console': "warn",
+        'no-case-declarations': 'off',
         '@typescript-eslint/unbound-method': 'off',
         '@typescript-eslint/no-unsafe-member-access': 'off',
         '@typescript-eslint/no-unsafe-argument': 'off',
