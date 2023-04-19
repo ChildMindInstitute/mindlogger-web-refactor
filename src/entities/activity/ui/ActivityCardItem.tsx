@@ -57,6 +57,16 @@ export const ActivityCardItem = ({
     return true
   }
 
+  const onSubmitButtonHandleClick = () => {
+    const isAnswerCorrect = validateCorrectAnswer()
+
+    if (!isAnswerCorrect && !isAllItemsSkippable && !activityItem.config.skippableItem) {
+      return openInvalidAnswerModal()
+    }
+
+    return onSubmitButtonClick()
+  }
+
   const onNextButtonClick = () => {
     if (!toNextStep) {
       return
@@ -99,7 +109,7 @@ export const ActivityCardItem = ({
             isSubmitShown={isSubmitShown}
             onNextButtonClick={onNextButtonClick}
             onBackButtonClick={onBackButtonClick}
-            onSubmitButtonClick={onSubmitButtonClick}
+            onSubmitButtonClick={onSubmitButtonHandleClick}
           />
         ) : (
           <></>
