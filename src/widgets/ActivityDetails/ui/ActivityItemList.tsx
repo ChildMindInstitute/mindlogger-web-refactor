@@ -29,6 +29,8 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
 
   const [invalidItemIds, setInvalidItemIds] = useState<Array<string>>([])
 
+  const isAllItemsSkippable = activityDetails.isSkippable
+
   const { mutate: saveAnswer } = useSaveAnswerMutation({
     onSuccess() {
       // Step 3 - Clear progress state related to activity
@@ -77,7 +79,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
   }, [])
 
   const onSubmitButtonClick = useCallback(() => {
-    const invalidItemIds = validateAnswerBeforeSubmit(currentActivityEventProgress)
+    const invalidItemIds = validateAnswerBeforeSubmit(currentActivityEventProgress, { isAllItemsSkippable })
 
     const hasInvalidItems = invalidItemIds.length > 0
 
@@ -87,7 +89,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
     }
 
     return setIsSubmitModalOpen(true)
-  }, [currentActivityEventProgress, openRequiredModal])
+  }, [currentActivityEventProgress, isAllItemsSkippable, openRequiredModal])
 
   const onPrimaryButtonClick = useCallback(() => {
     // Step 1 - Collect answers from store and transform to answer payload
@@ -114,6 +116,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
           invalidItemIds={invalidItemIds}
           onSubmitButtonClick={onSubmitButtonClick}
           openInvalidAnswerModal={openInvalidAnswerModal}
+          isAllItemsSkippable={isAllItemsSkippable}
         />
       )}
       {!isSummaryScreen && !isOnePageAssessment && (
@@ -123,6 +126,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
           invalidItemIds={invalidItemIds}
           onSubmitButtonClick={onSubmitButtonClick}
           openInvalidAnswerModal={openInvalidAnswerModal}
+          isAllItemsSkippable={isAllItemsSkippable}
         />
       )}
 
