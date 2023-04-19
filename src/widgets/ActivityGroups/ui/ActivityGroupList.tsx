@@ -156,12 +156,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
             ))}
         </Col>
       </Row>
-      <CustomModal
-        show={isAboutOpen}
-        onHide={onAboutModalClose}
-        title={t("about")}
-        label={appletDetails?.description}
-      />
+      <CustomModal show={isAboutOpen} onHide={onAboutModalClose} title={t("about")} label={appletDetails?.about} />
       <CustomModal
         show={resumeActivityState.isOpen}
         onHide={onResumeActivityModalClose}
