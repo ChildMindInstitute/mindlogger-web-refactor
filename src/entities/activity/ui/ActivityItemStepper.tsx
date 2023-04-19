@@ -10,6 +10,7 @@ type ActivityItemStepperProps = {
   invalidItemIds: Array<string>
   onSubmitButtonClick: () => void
   openInvalidAnswerModal: () => void
+  isAllItemsSkippable: boolean
 }
 
 export const ActivityItemStepper = ({
@@ -18,6 +19,7 @@ export const ActivityItemStepper = ({
   invalidItemIds,
   onSubmitButtonClick,
   openInvalidAnswerModal,
+  isAllItemsSkippable,
 }: ActivityItemStepperProps) => {
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
@@ -63,6 +65,7 @@ export const ActivityItemStepper = ({
       openInvalidAnswerModal={openInvalidAnswerModal}
       invalidItemIds={invalidItemIds}
       replaceText={replaceTextVariables}
+      isAllItemsSkippable={isAllItemsSkippable}
     />
   )
 }

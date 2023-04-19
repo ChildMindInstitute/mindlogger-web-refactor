@@ -12,6 +12,7 @@ type ActivityCardItemProps = {
   isOnePageAssessment: boolean
   isBackShown: boolean
   isSubmitShown: boolean
+  isAllItemsSkippable: boolean
 
   isInvalid: boolean
   isActive: boolean
@@ -38,10 +39,11 @@ export const ActivityCardItem = ({
   onSubmitButtonClick,
   openInvalidAnswerModal,
   replaceText,
+  isAllItemsSkippable,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !values || !values.length,
-    isSkippable: activityItem.config.skippableItem && !isSubmitShown,
+    isSkippable: (activityItem.config.skippableItem && !isSubmitShown) || isAllItemsSkippable,
     isBackShown: isBackShown && !activityItem.config.removeBackButton,
   }
 
@@ -62,7 +64,7 @@ export const ActivityCardItem = ({
 
     const isAnswerCorrect = validateCorrectAnswer()
 
-    if (!isAnswerCorrect) {
+    if (!isAnswerCorrect && !isAllItemsSkippable && !activityItem.config.skippableItem) {
       return openInvalidAnswerModal()
     }
 
