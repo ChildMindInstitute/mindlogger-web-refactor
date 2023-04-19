@@ -43,7 +43,7 @@ export const ActivityCardItem = ({
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !values || !values.length,
-    isSkippable: (activityItem.config.skippableItem && !isSubmitShown) || isAllItemsSkippable,
+    isSkippable: activityItem.config.skippableItem || isAllItemsSkippable,
     isBackShown: isBackShown && !activityItem.config.removeBackButton,
   }
 
