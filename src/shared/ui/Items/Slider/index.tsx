@@ -44,12 +44,12 @@ export const SliderItemBase = (props: SliderItemProps) => {
   const stickList = useMemo(() => {
     const stickLabels = []
 
-    for (let i = 0; i <= maxValue; i++) {
+    for (let i = minValue; i <= maxValue; i++) {
       stickLabels.push(i)
     }
 
     return stickLabels
-  }, [maxValue])
+  }, [maxValue, minValue])
 
   return (
     <div className={`slider-widget ${value ? "no-value" : ""}`}>
