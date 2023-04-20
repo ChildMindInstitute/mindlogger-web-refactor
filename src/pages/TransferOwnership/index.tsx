@@ -2,11 +2,12 @@ import classNames from "classnames"
 import { Container } from "react-bootstrap"
 import { useLocation, useParams, useSearchParams } from "react-router-dom"
 
+import { TransferOwnershipAccept } from "~/features/TransferOwnershipAccept"
+import { TransferOwnershipDecline } from "~/features/TransferOwnershipDecline"
 import { PageMessage } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 import { AuthorizationGuard } from "~/widgets/AuthorizationGuard"
 import { AuthorizationButtons } from "~/widgets/AuthorizationNavigateButtons"
-import { TransferOwnershipAccept, TransferOwnershipDecline } from "~/widgets/TransferOwnership"
 
 const TransferOwnershipPage = () => {
   const { appletId } = useParams()
