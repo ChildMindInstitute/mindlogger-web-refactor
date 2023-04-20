@@ -15,6 +15,7 @@ import RecoveryPassword from "./RecoveryPassword"
 import Settings from "./Settings"
 import SignupPage from "./Signup"
 import { ThanksPage } from "./Thanks"
+import TransferOwnershipPage from "./TransferOwnership"
 
 import { userModel } from "~/entities/user"
 import { ROUTES } from "~/shared/utils"
@@ -45,6 +46,7 @@ const ApplicationRouter = (): JSX.Element | null => {
             <Route path={ROUTES.invitationAccept.path} element={<InvitationAcceptPage />} />
             <Route path={ROUTES.invitationDecline.path} element={<InvitationDeclinePage />} />
             <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
+            <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
 
             <Route path="*" element={<Navigate to={ROUTES.applets.path} />} />
           </Route>
@@ -62,6 +64,7 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
       <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
       <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
+      <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
 
       <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
     </Routes>

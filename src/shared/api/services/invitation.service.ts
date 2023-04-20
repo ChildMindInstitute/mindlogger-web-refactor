@@ -3,6 +3,7 @@ import {
   DeclineInvitationByIdPayload,
   GetInvitationByIdPayload,
   GetInvitationSuccessResponse,
+  TransferOwnershipPayload,
 } from "../types/invitation"
 import axiosService from "./axios"
 
@@ -23,6 +24,13 @@ function invitationService() {
     },
     acceptPrivateInvitation(payload: AcceptInvitationByIdPayload) {
       return axiosService.post(`/invitations/private/${payload.invitationId}/accept`)
+    },
+
+    acceptTransferOwnership(payload: TransferOwnershipPayload) {
+      return axiosService.post(`/applets/${payload.appletId}/transferOwnership/${payload.key}`)
+    },
+    declineTransferOwnerShip(payload: TransferOwnershipPayload) {
+      return axiosService.delete(`/applets/${payload.appletId}/transferOwnership/${payload.key}`)
     },
   }
 }

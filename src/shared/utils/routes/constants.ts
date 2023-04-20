@@ -21,6 +21,9 @@ export const ROUTES = {
   privateJoin: {
     path: "/join/:joinLinkKey",
   },
+  transferOwnership: {
+    path: "/transferOwnership/:appletId",
+  },
 
   // Protected routes
   profile: {
