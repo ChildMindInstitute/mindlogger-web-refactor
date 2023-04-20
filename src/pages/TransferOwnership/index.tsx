@@ -1,14 +1,26 @@
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
-import { useLocation, useParams } from "react-router-dom"
+import { useLocation, useParams, useSearchParams } from "react-router-dom"
 
+import { PageMessage } from "~/shared/ui"
+import { useCustomTranslation } from "~/shared/utils"
 import { AuthorizationGuard } from "~/widgets/AuthorizationGuard"
 import { AuthorizationButtons } from "~/widgets/AuthorizationNavigateButtons"
-import { FetchInvitation } from "~/widgets/FetchInvitation"
+import { TransferOwnershipAccept, TransferOwnershipDecline } from "~/widgets/TransferOwnership"
 
 const TransferOwnershipPage = () => {
-  const { inviteId } = useParams()
+  const { appletId } = useParams()
+  const [searchParams] = useSearchParams()
   const location = useLocation()
+
+  const { t } = useCustomTranslation()
+
+  const key = searchParams.get("key")
+  const action = searchParams.get("action")
+
+  if (!appletId || !key || !action) {
+    return <PageMessage message={t("wrondLinkParametrError")} />
+  }
 
   const redirectState = {
     isInvitationFlow: true,
@@ -17,11 +29,10 @@ const TransferOwnershipPage = () => {
 
   return (
     <Container className={classNames("mt-3", "pt-3")}>
-      {inviteId && (
-        <AuthorizationGuard fallback={<AuthorizationButtons redirectState={redirectState} />}>
-          <FetchInvitation keyParams={inviteId} />
-        </AuthorizationGuard>
-      )}
+      <AuthorizationGuard fallback={<AuthorizationButtons redirectState={redirectState} />}>
+        {action === "accept" && <TransferOwnershipAccept appletId={appletId} keyParam={key} />}
+        {action === "decline" && <TransferOwnershipDecline appletId={appletId} keyParam={key} />}
+      </AuthorizationGuard>
     </Container>
   )
 }

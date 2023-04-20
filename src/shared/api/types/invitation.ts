@@ -14,6 +14,11 @@ export interface DeclineInvitationByIdPayload {
   invitationId: string
 }
 
+export interface TransferOwnershipPayload {
+  appletId: string
+  key: string
+}
+
 export type GetInvitationSuccessResponse = BaseSuccessResponse<{
   key: string
   email: string
