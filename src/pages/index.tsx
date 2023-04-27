@@ -43,6 +43,7 @@ const ApplicationRouter = (): JSX.Element | null => {
             <Route path={ROUTES.settings.path} element={<Settings />} />
             <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
             <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
+            <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
             <Route path={ROUTES.invitationAccept.path} element={<InvitationAcceptPage />} />
             <Route path={ROUTES.invitationDecline.path} element={<InvitationDeclinePage />} />
             <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
