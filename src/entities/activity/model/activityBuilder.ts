@@ -7,6 +7,7 @@ import {
   ActivityType,
   CheckboxItem,
   RadioItem,
+  SelectorItem,
   SliderItem,
   TextItem,
 } from "../lib"
@@ -20,6 +21,7 @@ import {
   EventDTO,
   EventsByAppletIdResponseDTO,
   MultiSelectAnswerPayload,
+  NumberSelectAnswerPayload,
   SingleSelectAnswerPayload,
   SliderAnswerPayload,
   TextAnswerPayload,
@@ -129,7 +131,7 @@ class ActivityBuilder {
           return this.convertToSliderAnswer(item)
 
         case "numberSelect":
-          return null
+          return this.convertToNumberSelectAnswer(item)
 
         default:
           return null
@@ -182,6 +184,20 @@ class ActivityBuilder {
   }
 
   private convertToSliderAnswer(item: SliderItem): SliderAnswerPayload | null {
+    if (!item.answer[0]) {
+      return null
+    }
+
+    return {
+      activityItemId: item.id,
+      answer: {
+        value: Number(item.answer[0]),
+        additionalText: null,
+      },
+    }
+  }
+
+  private convertToNumberSelectAnswer(item: SelectorItem): NumberSelectAnswerPayload | null {
     if (!item.answer[0]) {
       return null
     }

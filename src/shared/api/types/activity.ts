@@ -70,3 +70,11 @@ export type SliderAnswerPayload = {
     additionalText: string | null
   }
 }
+
+export type NumberSelectAnswerPayload = {
+  activityItemId: string
+  answer: {
+    value: number
+    additionalText: string | null
+  }
+}
