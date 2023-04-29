@@ -1,3 +1,3 @@
 export * from "./useTextVariablesReplacer"
-export * from "./useUnsupportedActivities"
+export * from "./useSupportableActivities"
 export * from "./useActivitiesByIds"

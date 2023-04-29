@@ -9,8 +9,9 @@ import {
   RadioItem,
   SliderItem,
   TextItem,
+  supportableItemTypes,
 } from "../lib"
-import { ActivityEventProgressRecord } from "./types"
+import { ActivityEventProgressRecord, SupportableActivities } from "./types"
 
 import {
   ActivityDTO,
@@ -94,6 +95,23 @@ class ActivityBuilder {
       ...item,
       answer: [],
     }
+  }
+
+  public checkIsSupportableActivity(activities: ActivityDTO[]): SupportableActivities | null {
+    return activities.reduce<SupportableActivities>((acc, activity) => {
+      const activityId = activity.id
+      const itemTypes = activity.items.map(x => x.responseType)
+
+      const isSupportable = itemTypes.reduce((acc, itemType) => {
+        const isItemSupported = supportableItemTypes.includes(itemType)
+
+        return acc && isItemSupported
+      }, true)
+
+      acc[activityId] = isSupportable
+
+      return acc
+    }, {})
   }
 
   public convertSplashScreenToItem(splashScreen: string): ActivityEventProgressRecord {

@@ -9,18 +9,18 @@ type Props = {
   appletDetails: AppletDetailsDTO
 }
 
-export const useUnsupportableActivities = ({ appletDetails }: Props) => {
+export const useSupportableActivities = ({ appletDetails }: Props) => {
   const { data } = useActivitiesByIds({ appletDetails })
 
   const activities = useMemo(() => {
     return data.filter(x => x) as Array<ActivityDTO>
   }, [data])
 
-  const hasActivitiesUnsupportableItems = useMemo(() => {
+  const supportableActivities = useMemo(() => {
     return activityBuilder.checkIsSupportableActivity(activities)
   }, [activities])
 
   return {
-    hasActivitiesUnsupportableItems,
+    supportableActivities,
   }
 }

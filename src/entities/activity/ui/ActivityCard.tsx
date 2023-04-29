@@ -8,15 +8,18 @@ import { DisableOverlay } from "~/shared/ui"
 
 interface ActivityCardProps {
   activity: ActivityListItem
-  disabled?: boolean
+  isSupported: boolean
   onActivityCardClick: () => void
+
+  disabled?: boolean
 }
 
-export const ActivityCard = ({ activity, disabled, onActivityCardClick }: ActivityCardProps) => {
-  const isDisabled = disabled || activity.status === ActivityStatus.Scheduled
+export const ActivityCard = ({ activity, disabled, onActivityCardClick, isSupported }: ActivityCardProps) => {
+  const isDisabled = disabled || activity.status === ActivityStatus.Scheduled || !isSupported
 
   return (
     <Button className="ds-activity-button w-100" variant="link" onClick={onActivityCardClick} disabled={isDisabled}>
+      {/* ToDo: Change message to i18n */}
       <DisableOverlay message="Mobile only" isDisabled={isDisabled}>
         {activity.image && <img className="activity-image" src={activity.image} />}
         <div className="activity-data">
