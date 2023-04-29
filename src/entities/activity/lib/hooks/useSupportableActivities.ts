@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const useSupportableActivities = ({ appletDetails }: Props) => {
-  const { data } = useActivitiesByIds({ appletDetails })
+  const { data, isError, isLoading } = useActivitiesByIds({ appletDetails })
 
   const activities = useMemo(() => {
     return data.filter(x => x) as Array<ActivityDTO>
@@ -22,5 +22,7 @@ export const useSupportableActivities = ({ appletDetails }: Props) => {
 
   return {
     supportableActivities,
+    isError,
+    isLoading,
   }
 }

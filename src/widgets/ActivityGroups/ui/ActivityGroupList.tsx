@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import classNames from "classnames"
-import { Col, Container, Row } from "react-bootstrap"
+import { Col, Container, Row, Spinner } from "react-bootstrap"
 
 import CustomModal from "../../Modal"
 import { useActivityGroups } from "../model/hooks"
@@ -16,7 +16,7 @@ import {
   useSupportableActivities,
 } from "~/entities/activity"
 import { AppletDetailsDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
-import { CustomCard } from "~/shared/ui"
+import { CustomCard, Loader } from "~/shared/ui"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 interface ActivityListWidgetProps {
@@ -53,7 +53,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
 
   const { upsertGroupInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  const { supportableActivities } = useSupportableActivities({ appletDetails })
+  const { supportableActivities, isLoading } = useSupportableActivities({ appletDetails })
 
   const onCardAboutClick = () => {
     setIsAboutOpen(true)
@@ -152,7 +152,10 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
           )}
         </Col>
         <Col lg={7}>
-          {supportableActivities &&
+          {isLoading && <Loader defaultSize />}
+
+          {!isLoading &&
+            supportableActivities &&
             groups
               ?.filter(g => g.activities.length)
               .map(g => (
