@@ -1,25 +1,27 @@
 import { PropsWithChildren } from "react"
 
 import classNames from "classnames"
-import { Container } from "react-bootstrap"
 
 import "./style.scss"
 
 type DisableOverlayProps = PropsWithChildren & {
   message: string
   isDisabled: boolean
+  className?: string
 }
 
-export const DisableOverlay = ({ message, isDisabled, children }: DisableOverlayProps) => {
+export const DisableOverlay = ({ message, isDisabled, children, className }: DisableOverlayProps) => {
   return (
-    <Container className={classNames({ "disable-overlay-wrapper": isDisabled })}>
+    <div className={classNames({ "disable-overlay-wrapper": isDisabled }, className)}>
       {isDisabled && (
         <div className={classNames({ "disable-overlay-message-wrapper": isDisabled })}>
           <div className={classNames({ "disable-overlay-message": isDisabled })}>{message}</div>
         </div>
       )}
 
-      <Container className={classNames({ "overlay-blur": isDisabled })}>{children}</Container>
-    </Container>
+      {isDisabled && <div className={classNames({ "overlay-blur": isDisabled })}></div>}
+
+      {children}
+    </div>
   )
 }
