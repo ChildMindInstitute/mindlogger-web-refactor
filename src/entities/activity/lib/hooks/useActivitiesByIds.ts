@@ -16,13 +16,8 @@ export const useActivitiesByIds = ({ appletDetails }: Props) => {
   const queryResults = useActivitiesByIdsQuery({ activitiesIds })
 
   const { isError, isLoading, data } = useMemo(() => {
-    const isLoading = queryResults.reduce((acc, item) => {
-      return item.isLoading || acc
-    }, false)
-
-    const isError = queryResults.reduce((acc, item) => {
-      return item.isError || acc
-    }, false)
+    const isLoading = queryResults.some(item => item.isLoading)
+    const isError = queryResults.some(item => item.isError)
 
     const data = queryResults.map(item => item.data?.data?.result)
 

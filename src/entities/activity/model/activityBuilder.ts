@@ -97,7 +97,7 @@ class ActivityBuilder {
     }
   }
 
-  public checkIsSupportableActivity(activities: ActivityDTO[]): SupportableActivities | null {
+  public getSupportableActivitiesMap(activities: ActivityDTO[]): SupportableActivities | null {
     return activities.reduce<SupportableActivities>((acc, activity) => {
       const activityId = activity.id
       const itemTypes = activity.items.map(x => x.responseType)

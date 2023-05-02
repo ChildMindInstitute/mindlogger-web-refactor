@@ -17,7 +17,7 @@ export const useSupportableActivities = ({ appletDetails }: Props) => {
   }, [data])
 
   const supportableActivities = useMemo(() => {
-    return activityBuilder.checkIsSupportableActivity(activities)
+    return activityBuilder.getSupportableActivitiesMap(activities)
   }, [activities])
 
   return {
