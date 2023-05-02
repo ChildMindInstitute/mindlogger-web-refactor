@@ -30,7 +30,7 @@ export const ActivityGroups = (props: FetchActivitiesProps) => {
     isLoading: isEventsLoading,
     error: eventsError,
     data: eventsData,
-  } = useEventsbyAppletIdQuery({ appletId: props.isPublic ? props.publicAppletKey : props.appletId })
+  } = useEventsbyAppletIdQuery(props)
 
   if (isAppletLoading || isEventsLoading) {
     return (

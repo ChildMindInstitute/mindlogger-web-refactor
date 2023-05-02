@@ -1,4 +1,4 @@
-import { GetEventsByAppletIdPayload, SuccessEventsByAppletIdResponse } from "../types"
+import { GetEventsByAppletIdPayload, GetEventsByPublicAppletKey, SuccessEventsByAppletIdResponse } from "../types"
 import axiosService from "./axios"
 
 function eventService() {
@@ -8,6 +8,9 @@ function eventService() {
     },
     getUserEvents() {
       return axiosService.get<SuccessEventsByAppletIdResponse>("/users/me/events")
+    },
+    getEventsByPublicAppletKey(payload: GetEventsByPublicAppletKey) {
+      return axiosService.get<SuccessEventsByAppletIdResponse>(`/public/applets/${payload.publicAppletKey}/events`)
     },
   }
 }

@@ -1,4 +1,4 @@
-import { AnswerPayload, GetActivityByIdPayload, SuccessResponseActivityById } from "../types"
+import { AnswerPayload, GetActivityByIdPayload, GetPublicActivityById, SuccessResponseActivityById } from "../types"
 import axiosService from "./axios"
 
 function activityService() {
@@ -8,6 +8,9 @@ function activityService() {
     },
     saveAnswers(payload: AnswerPayload) {
       return axiosService.post(`/answers`, payload)
+    },
+    getPublicById(payload: GetPublicActivityById) {
+      return axiosService.get<SuccessResponseActivityById>(`/public/activities/${payload.activityId}`)
     },
   }
 }
