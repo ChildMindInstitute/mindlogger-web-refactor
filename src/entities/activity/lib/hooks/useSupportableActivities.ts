@@ -1,27 +1,25 @@
 import { useMemo } from "react"
 
+import { useActivityByIdQuery } from "../../api"
 import { activityBuilder } from "../../model"
-import { useActivitiesByIds } from "./useActivitiesByIds"
-
-import { ActivityDTO, AppletDetailsDTO } from "~/shared/api"
 
 type Props = {
-  appletDetails: AppletDetailsDTO
+  activityId: string
 }
 
-export const useSupportableActivities = ({ appletDetails }: Props) => {
-  const { data, isError, isLoading } = useActivitiesByIds({ appletDetails })
+export const useSupportableActivity = ({ activityId }: Props) => {
+  const { data, isError, isLoading } = useActivityByIdQuery({ activityId })
 
-  const activities = useMemo(() => {
-    return data.filter(x => x) as Array<ActivityDTO>
+  const activity = useMemo(() => {
+    return data?.data?.result
   }, [data])
 
-  const supportableActivities = useMemo(() => {
-    return activityBuilder.getSupportableActivitiesMap(activities)
-  }, [activities])
+  const isSupportedActivity = useMemo(() => {
+    return activityBuilder.isSupportedActivity(activity)
+  }, [activity])
 
   return {
-    supportableActivities,
+    isSupportedActivity,
     isError,
     isLoading,
   }

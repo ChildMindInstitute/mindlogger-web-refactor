@@ -1,24 +1,34 @@
 import { Button } from "react-bootstrap"
 
-import { ActivityListItem, ActivityStatus } from "../lib"
+import { ActivityListItem, ActivityStatus, useSupportableActivity } from "../lib"
 import TimeStatusLabel from "./TimeStatusLabel"
 
 import "./style.scss"
-import { DisableOverlay } from "~/shared/ui"
+import { DisableOverlay, Loader } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 
 interface ActivityCardProps {
   activity: ActivityListItem
-  isSupported: boolean
   onActivityCardClick: () => void
 
   disabled?: boolean
 }
 
-export const ActivityCard = ({ activity, disabled, onActivityCardClick, isSupported }: ActivityCardProps) => {
+export const ActivityCard = ({ activity, disabled, onActivityCardClick }: ActivityCardProps) => {
   const { t } = useCustomTranslation()
+  const { isSupportedActivity, isError, isLoading } = useSupportableActivity({ activityId: activity.activityId })
 
-  const isDisabled = disabled || activity.status === ActivityStatus.Scheduled || !isSupported
+  const isDisabled = disabled || activity.status === ActivityStatus.Scheduled || !isSupportedActivity
+
+  if (isLoading) {
+    return (
+      <Button className="ds-activity-button w-100" variant="link" disabled={isLoading}>
+        <div className="activity-data">
+          <Loader />
+        </div>
+      </Button>
+    )
+  }
 
   return (
     <DisableOverlay message={t("mobileOnly")} isDisabled={isDisabled}>

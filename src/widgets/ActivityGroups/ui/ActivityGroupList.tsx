@@ -13,10 +13,9 @@ import {
   ActivityOrFlowProgress,
   ActivityPipelineType,
   ActivityStatus,
-  useSupportableActivities,
 } from "~/entities/activity"
 import { AppletDetailsDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
-import { CustomCard, Loader } from "~/shared/ui"
+import { CustomCard } from "~/shared/ui"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 interface ActivityListWidgetProps {
@@ -53,7 +52,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
 
   const { upsertGroupInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  const { supportableActivities, isLoading } = useSupportableActivities({ appletDetails })
+  // const { supportableActivities, isLoading } = useSupportableActivities({ appletDetails })
 
   const onCardAboutClick = () => {
     setIsAboutOpen(true)
@@ -152,20 +151,11 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
           )}
         </Col>
         <Col lg={7}>
-          {isLoading && <Loader defaultSize />}
-
-          {!isLoading &&
-            supportableActivities &&
-            groups
-              ?.filter(g => g.activities.length)
-              .map(g => (
-                <ActivityGroup
-                  group={g}
-                  key={g.name}
-                  onActivityCardClick={onActivityCardClick}
-                  supportableActivities={supportableActivities}
-                />
-              ))}
+          {groups
+            ?.filter(g => g.activities.length)
+            .map(g => (
+              <ActivityGroup group={g} key={g.name} onActivityCardClick={onActivityCardClick} />
+            ))}
         </Col>
       </Row>
       <CustomModal show={isAboutOpen} onHide={onAboutModalClose} title={t("about")} label={appletDetails?.about} />

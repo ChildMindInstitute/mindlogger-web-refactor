@@ -114,6 +114,14 @@ class ActivityBuilder {
     }, {})
   }
 
+  public isSupportedActivity(activity: ActivityDTO | undefined) {
+    if (!activity) {
+      return false
+    }
+
+    return activity.items.every(item => supportableItemTypes.includes(item.responseType))
+  }
+
   public convertSplashScreenToItem(splashScreen: string): ActivityEventProgressRecord {
     return {
       id: splashScreen,
