@@ -16,7 +16,7 @@ interface ActivityCardProps {
 
 export const ActivityCard = ({ activity, disabled, onActivityCardClick }: ActivityCardProps) => {
   const { t } = useCustomTranslation()
-  const { isSupportedActivity, isError, isLoading } = useSupportableActivity({ activityId: activity.activityId })
+  const { isSupportedActivity, isLoading } = useSupportableActivity({ activityId: activity.activityId })
 
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled || !isSupportedActivity
 
