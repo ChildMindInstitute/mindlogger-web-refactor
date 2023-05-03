@@ -1,8 +1,6 @@
 import { z } from "zod"
 
-import { Dictionary } from "~/shared/utils"
-
-const isIncludesSpaces = (value: string) => value.includes(" ")
+import { Dictionary, isIncludesSpaces } from "~/shared/utils"
 
 export const ChangePasswordSchema = z
   .object({
