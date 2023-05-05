@@ -1,3 +1,4 @@
+import classNames from "classnames"
 import { Button } from "react-bootstrap"
 
 import { ActivityListItem, ActivityStatus, useSupportableActivity } from "../lib"
@@ -34,7 +35,14 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick }: Activi
     <Button className="ds-activity-button w-100" variant="link" onClick={onActivityCardClick} disabled={isDisabled}>
       {activity.image && <img className="activity-image" src={activity.image} />}
       <div className="activity-data">
-        <div className="activity-name-date">{activity.name}</div>
+        <div
+          className={classNames(
+            "activity-name-date",
+            { "activity-title-active": !isDisabled },
+            { "activity-title-disabled": isDisabled },
+          )}>
+          {activity.name}
+        </div>
 
         {activity.description && <div className="activity-description">{activity.description}</div>}
 
