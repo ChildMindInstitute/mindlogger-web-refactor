@@ -23,9 +23,9 @@ const useBaseQuery = <TQueryFnData, TError = BaseError, TData = TQueryFnData>(
 
         const currentLanguage = i18n.language as Language
 
-        const message = firstRecord.message[currentLanguage] ?? firstRecord.message[DEFAULT_LANGUAGE]
+        // const message = firstRecord.message[currentLanguage] ?? firstRecord.message[DEFAULT_LANGUAGE]
 
-        error.evaluatedMessage = message
+        error.evaluatedMessage = firstRecord.message
       } else {
         error.evaluatedMessage = error.message
       }
