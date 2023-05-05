@@ -15,7 +15,7 @@ const useBaseMutation = <TRequest, TResponse>(
     ...options,
     onError: (error: BaseError, variables: TRequest, context: unknown) => {
       if (error?.response?.data?.result.length) {
-        error.evaluatedMessage = error.response?.data?.result[0].message.en
+        error.evaluatedMessage = error.response?.data?.result[0].message
       } else {
         error.evaluatedMessage = error.message
       }
