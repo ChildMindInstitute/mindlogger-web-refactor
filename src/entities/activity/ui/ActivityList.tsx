@@ -9,13 +9,15 @@ interface ActivityListProps {
 export const ActivityList = ({ activities, onActivityCardClick }: ActivityListProps) => {
   return (
     <>
-      {activities.map(activity => (
-        <ActivityCard
-          key={activity.eventId}
-          activity={activity}
-          onActivityCardClick={() => onActivityCardClick(activity)}
-        />
-      ))}
+      {activities.map(activity => {
+        return (
+          <ActivityCard
+            key={activity.eventId}
+            activity={activity}
+            onActivityCardClick={() => onActivityCardClick(activity)}
+          />
+        )
+      })}
     </>
   )
 }

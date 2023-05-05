@@ -76,3 +76,5 @@ export type SetActivityEventProgressStep = {
   activityEventId: string
   step: number
 }
+
+export type SupportableActivities = Record<string, boolean>

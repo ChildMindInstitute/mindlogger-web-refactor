@@ -4,7 +4,7 @@ interface Messages {
 }
 
 interface Result {
-  message: Messages
+  message: string
   path: string[]
   type: string
 }
