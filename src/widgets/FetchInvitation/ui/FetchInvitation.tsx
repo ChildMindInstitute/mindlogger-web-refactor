@@ -1,10 +1,11 @@
 import classNames from "classnames"
 import { Spinner } from "react-bootstrap"
 
+import { FetchInvitationErrorMapper } from "./FetchInvitationErrorMapper"
+
 import { Invitation, useInvitationQuery, useInvitationTranslation } from "~/entities/invitation"
 import { InvitationAcceptButton } from "~/features/InvitationAccept"
 import { InvitationDeclineButton } from "~/features/InvitationDecline"
-import { PageMessage } from "~/shared/ui"
 
 interface FetchInvitationProps {
   keyParams: string
@@ -13,10 +14,10 @@ interface FetchInvitationProps {
 export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
   const { t } = useInvitationTranslation()
 
-  const { isError, data, isLoading } = useInvitationQuery(keyParams)
+  const { isError, data, isLoading, error } = useInvitationQuery(keyParams)
 
   if (isError) {
-    return <PageMessage message={t("invitationAlreadyRemoved")} />
+    return <FetchInvitationErrorMapper error={error} />
   }
 
   if (isLoading) {
