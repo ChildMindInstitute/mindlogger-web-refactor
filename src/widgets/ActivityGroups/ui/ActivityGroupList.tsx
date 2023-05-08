@@ -21,6 +21,7 @@ import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/util
 interface ActivityListWidgetProps {
   appletDetails: AppletDetailsDTO
   eventsDetails: EventsByAppletIdResponseDTO
+  isPublic: boolean
 }
 
 type ResumeActivityState = {
@@ -30,7 +31,7 @@ type ResumeActivityState = {
 
 type NavigateToActivityDetailsPageProps = { appletId: string; activityId: string; eventId: string }
 
-export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityListWidgetProps) => {
+export const ActivityGroupList = ({ appletDetails, eventsDetails, isPublic }: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigatator = useCustomNavigation()
   const navigateToActivityDetailsPage = (
@@ -152,7 +153,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
           {groups
             ?.filter(g => g.activities.length)
             .map(g => (
-              <ActivityGroup group={g} key={g.name} onActivityCardClick={onActivityCardClick} />
+              <ActivityGroup group={g} key={g.name} onActivityCardClick={onActivityCardClick} isPublic={isPublic} />
             ))}
         </Col>
       </Row>

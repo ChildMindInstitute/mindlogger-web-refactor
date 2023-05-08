@@ -8,10 +8,11 @@ import { useCustomTranslation } from "~/shared/utils"
 
 interface ActivityGroupProps {
   group: ActivityListGroup
+  isPublic: boolean
   onActivityCardClick: (activity: ActivityListItem) => void
 }
 
-export const ActivityGroup = ({ group, onActivityCardClick }: ActivityGroupProps) => {
+export const ActivityGroup = ({ group, onActivityCardClick, isPublic }: ActivityGroupProps) => {
   const { t } = useCustomTranslation()
 
   return (
@@ -19,7 +20,7 @@ export const ActivityGroup = ({ group, onActivityCardClick }: ActivityGroupProps
       <p className={classNames("mt-2", "text-capitalize")}>{t(group.name)}</p>
 
       <div>
-        <ActivityList activities={group.activities} onActivityCardClick={onActivityCardClick} />
+        <ActivityList activities={group.activities} onActivityCardClick={onActivityCardClick} isPublic={isPublic} />
       </div>
     </Container>
   )

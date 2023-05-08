@@ -3,19 +3,23 @@ import { ActivityCard } from "./ActivityCard"
 
 interface ActivityListProps {
   activities: ActivityListItem[]
+  isPublic: boolean
   onActivityCardClick: (activity: ActivityListItem) => void
 }
 
-export const ActivityList = ({ activities, onActivityCardClick }: ActivityListProps) => {
+export const ActivityList = ({ activities, onActivityCardClick, isPublic }: ActivityListProps) => {
   return (
     <>
-      {activities.map(activity => (
-        <ActivityCard
-          key={activity.eventId}
-          activity={activity}
-          onActivityCardClick={() => onActivityCardClick(activity)}
-        />
-      ))}
+      {activities.map(activity => {
+        return (
+          <ActivityCard
+            key={activity.eventId}
+            activity={activity}
+            onActivityCardClick={() => onActivityCardClick(activity)}
+            isPublic={isPublic}
+          />
+        )
+      })}
     </>
   )
 }

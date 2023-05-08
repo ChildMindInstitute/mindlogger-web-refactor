@@ -4,6 +4,11 @@
   box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
 }
 
+.ds-activity-button:disabled {
+  opacity: 1 !important;
+  background-color: rgba(230, 230, 230, 0.9) !important;
+}
+
 .ds-activity-button {
   background: white !important;
   border: none;
@@ -39,7 +44,13 @@
 .ds-activity-button .activity-name-date {
   font-weight: 500;
   font-size: 22px;
+}
+
+.activity-title-active {
   color: variables.$dark-blue;
+}
+.activity-title-disabled {
+  color: variables.$secondary;
 }
 
 .ds-activity-button .activity-description {
