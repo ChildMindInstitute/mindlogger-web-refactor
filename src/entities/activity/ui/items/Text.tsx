@@ -17,6 +17,10 @@ export const TextItem = ({ item, value, onValueChange, isDisabled }: TextItemPro
       return
     }
 
+    if (value.length === 0) {
+      return onValueChange([])
+    }
+
     onValueChange([value])
   }
 
