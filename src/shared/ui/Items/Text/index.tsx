@@ -6,7 +6,7 @@ type TextItemProps = {
   disabled: boolean
 }
 
-export const TextItem = ({ value, onValueChange, disabled }: TextItemProps) => {
+export const TextItem = ({ value = "", onValueChange, disabled }: TextItemProps) => {
   return (
     <Form.Control type="text" value={value} onChange={event => onValueChange(event.target.value)} disabled={disabled} />
   )

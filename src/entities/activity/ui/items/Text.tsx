@@ -1,6 +1,7 @@
 import { TextItem as TextItemType } from "../../lib"
 
 import { TextItem as BaseTextItem } from "~/shared/ui"
+import { containsOnlyNumbers } from "~/shared/utils"
 
 type TextItemProps = {
   item: TextItemType
@@ -10,7 +11,7 @@ type TextItemProps = {
 }
 
 export const TextItem = ({ item, value, onValueChange, isDisabled }: TextItemProps) => {
-  const { maxResponseLength } = item.config
+  const { maxResponseLength, numericalResponseRequired } = item.config
 
   const onHandleValueChange = (value: string) => {
     if (value.length > maxResponseLength) {
@@ -21,7 +22,11 @@ export const TextItem = ({ item, value, onValueChange, isDisabled }: TextItemPro
       return onValueChange([])
     }
 
-    onValueChange([value])
+    if (numericalResponseRequired && !containsOnlyNumbers(value)) {
+      return
+    }
+
+    return onValueChange([value])
   }
 
   return <BaseTextItem value={value} onValueChange={onHandleValueChange} disabled={isDisabled} />
