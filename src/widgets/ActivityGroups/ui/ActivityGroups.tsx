@@ -53,7 +53,12 @@ export const ActivityGroups = (props: FetchActivitiesProps) => {
 
   return (
     appletDetails && (
-      <ActivityGroupList appletDetails={appletDetails} eventsDetails={eventsDetails} isPublic={props.isPublic} />
+      <ActivityGroupList
+        appletDetails={appletDetails}
+        eventsDetails={eventsDetails}
+        isPublic={props.isPublic}
+        publicAppletKey={props.isPublic ? props.publicAppletKey : null}
+      />
     )
   )
 }

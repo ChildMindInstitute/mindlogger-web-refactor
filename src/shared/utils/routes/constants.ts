@@ -24,6 +24,11 @@ export const ROUTES = {
   transferOwnership: {
     path: "/transferOwnership/:appletId",
   },
+  publicActivityDetails: {
+    path: "/public/applets/:appletId/activity/:activityId/event/:eventId/publicAppletKey/:publicAppletKey",
+    navigateTo: (appletId: string, activityId: string, eventId: string, publicAppletKey: string) =>
+      `/public/applets/${appletId}/activity/${activityId}/event/${eventId}/publicAppletKey/${publicAppletKey}`,
+  },
 
   // Protected routes
   profile: {
