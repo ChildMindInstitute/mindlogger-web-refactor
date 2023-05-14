@@ -3,8 +3,8 @@ import { useCallback } from "react"
 import { encryption } from "../encryption"
 
 type GenerateAesKeyProps = {
-  userId: string
-  appletPrivateKey: number[]
+  accountId: string
+  privateKey: number[]
   prime: number[]
   base: number[]
 }
@@ -20,8 +20,8 @@ type DecryptDataByKeyProps = {
 }
 
 export const useEncryption = () => {
-  const generateAesKey = useCallback(({ userId, appletPrivateKey, prime, base }: GenerateAesKeyProps) => {
-    return encryption.getAESKey(appletPrivateKey, userId, prime, base)
+  const generateAesKey = useCallback(({ accountId, privateKey, prime, base }: GenerateAesKeyProps) => {
+    return encryption.getAESKey(privateKey, accountId, prime, base)
   }, [])
 
   const encryptDataByKey = useCallback((props: EncryptDataByKeyProps) => {

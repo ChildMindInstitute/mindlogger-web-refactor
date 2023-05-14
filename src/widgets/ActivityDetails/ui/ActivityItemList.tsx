@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react"
 
 import Modal from "../../Modal"
+import { encryptionParamsMock } from "../mock/encryptionParams.mock"
 import { validateAnswerBeforeSubmit } from "../model/validateItemsBeforeSubmit"
 
 import {
@@ -8,9 +9,11 @@ import {
   ActivityListItem,
   ActivityOnePageAssessment,
   activityModel,
+  useEncrypteAnswers,
   useSaveAnswerMutation,
 } from "~/entities/activity"
 import { ActivityFlow, AppletDetails } from "~/entities/applet"
+import { userModel } from "~/entities/user"
 import { ActivityDTO, AnswerPayload } from "~/shared/api"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
@@ -28,6 +31,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
   const [isInvalidAnswerModalOpen, setIsInvalidAnswerModalOpen] = useState<boolean>(false)
 
   const [invalidItemIds, setInvalidItemIds] = useState<Array<string>>([])
+  const { user } = userModel.hooks.useUserState()
 
   const isAllItemsSkippable = activityDetails.isSkippable
 
@@ -48,6 +52,8 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
       return navigator.navigate(ROUTES.thanks.navigateTo(appletDetails.id))
     },
   })
+
+  const { encrypteAnswers } = useEncrypteAnswers()
 
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { updateGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
@@ -95,16 +101,25 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
     // Step 1 - Collect answers from store and transform to answer payload
     const itemAnswers = activityModel.activityBuilder.convertToAnswers(currentActivityEventProgress)
 
+    const encryptedAnswer = encrypteAnswers(user.id!, encryptionParamsMock, { answers: itemAnswers })
+
     // Step 2 - Send answers to backend
     const answer: AnswerPayload = {
       appletId: appletDetails?.id,
       version: appletDetails?.version,
       flowId: null,
       activityId: activityDetails.id,
-      answers: itemAnswers,
+      answers: encryptedAnswer,
     }
     return saveAnswer(answer) // Next steps in onSuccess handler
-  }, [activityDetails.id, appletDetails?.id, appletDetails?.version, currentActivityEventProgress, saveAnswer])
+  }, [
+    activityDetails.id,
+    appletDetails?.id,
+    appletDetails?.version,
+    currentActivityEventProgress,
+    encrypteAnswers,
+    saveAnswer,
+  ])
 
   return (
     <>
