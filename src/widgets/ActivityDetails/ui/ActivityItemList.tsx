@@ -119,6 +119,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
     currentActivityEventProgress,
     encrypteAnswers,
     saveAnswer,
+    user.id,
   ])
 
   return (
