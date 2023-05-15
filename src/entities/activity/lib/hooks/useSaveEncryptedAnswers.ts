@@ -1,32 +1,59 @@
 import { useCallback } from "react"
 
 import { AnswerTypesPayload } from "~/shared/api"
-import { useEncryption } from "~/shared/utils"
+import { secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
 
 type EncryptionParams = {
-  privateKey: number[]
   publicKey: number[]
   prime: number[]
   base: number[]
-  accountId: string
 }
 
 type AnswerPayload = {
   answers: Array<AnswerTypesPayload>
 }
 
+type EncryptAnswerReturn = {
+  activityItemId: string
+  answer: string
+}
+
 export const useEncrypteAnswers = () => {
-  const { generateAesKey, encryptDataByKey } = useEncryption()
+  const { generateAesKey, encryptDataByKey, generateUserPublicKey } = useEncryption()
 
   const encrypteAnswers = useCallback(
-    (userId: string, encryptionParamsJSON: string, answerPayload: AnswerPayload): string => {
-      const encryptionParams: EncryptionParams = JSON.parse(encryptionParamsJSON)
-      const key = generateAesKey(encryptionParams)
+    (encryptionParams: EncryptionParams, answerPayload: AnswerPayload): EncryptAnswerReturn[] => {
+      const userPrivateKey = secureUserPrivateKeyStorage.getUserPrivateKey()
 
-      const answersJSON = JSON.stringify(answerPayload.answers)
-      return encryptDataByKey({ text: answersJSON, key })
+      if (!userPrivateKey) {
+        throw new Error("User private key is undefined")
+      }
+
+      // Need this public key for the future, when BE will be ready
+      const userPublicKey = generateUserPublicKey({
+        privateKey: userPrivateKey,
+        appletPrime: encryptionParams.prime,
+        appletBase: encryptionParams.base,
+      })
+
+      const key = generateAesKey({
+        userPrivateKey,
+        appletPublicKey: encryptionParams.publicKey,
+        appletPrime: encryptionParams.prime,
+        appletBase: encryptionParams.base,
+      })
+
+      return answerPayload.answers.map(answerItem => {
+        const answerJSON = JSON.stringify(answerItem.answer)
+        const encryptedAnswer = encryptDataByKey({ text: answerJSON, key })
+
+        return {
+          ...answerItem,
+          answer: encryptedAnswer,
+        }
+      })
     },
-    [encryptDataByKey, generateAesKey],
+    [encryptDataByKey, generateAesKey, generateUserPublicKey],
   )
 
   return {

@@ -13,7 +13,6 @@ import {
   useSaveAnswerMutation,
 } from "~/entities/activity"
 import { ActivityFlow, AppletDetails } from "~/entities/applet"
-import { userModel } from "~/entities/user"
 import { ActivityDTO, AnswerPayload } from "~/shared/api"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
@@ -31,7 +30,6 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
   const [isInvalidAnswerModalOpen, setIsInvalidAnswerModalOpen] = useState<boolean>(false)
 
   const [invalidItemIds, setInvalidItemIds] = useState<Array<string>>([])
-  const { user } = userModel.hooks.useUserState()
 
   const isAllItemsSkippable = activityDetails.isSkippable
 
@@ -101,7 +99,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
     // Step 1 - Collect answers from store and transform to answer payload
     const itemAnswers = activityModel.activityBuilder.convertToAnswers(currentActivityEventProgress)
 
-    const encryptedAnswer = encrypteAnswers(user.id!, encryptionParamsMock, { answers: itemAnswers })
+    const encryptedAnswers = encrypteAnswers(encryptionParamsMock, { answers: itemAnswers })
 
     // Step 2 - Send answers to backend
     const answer: AnswerPayload = {
@@ -109,7 +107,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
       version: appletDetails?.version,
       flowId: null,
       activityId: activityDetails.id,
-      answers: encryptedAnswer,
+      answers: encryptedAnswers,
     }
     return saveAnswer(answer) // Next steps in onSuccess handler
   }, [
@@ -119,7 +117,6 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
     currentActivityEventProgress,
     encrypteAnswers,
     saveAnswer,
-    user.id,
   ])
 
   return (

@@ -2,11 +2,23 @@ import { useCallback } from "react"
 
 import { encryption } from "../encryption"
 
-type GenerateAesKeyProps = {
-  accountId: string
+type GenerateUserPrivateKeyParams = {
+  userId: string
+  email: string
+  password: string
+}
+
+type GenerateUserPublicKeyParams = {
   privateKey: number[]
-  prime: number[]
-  base: number[]
+  appletPrime: number[]
+  appletBase: number[]
+}
+
+type GenerateAesKeyProps = {
+  userPrivateKey: number[]
+  appletPublicKey: number[]
+  appletPrime: number[]
+  appletBase: number[]
 }
 
 type EncryptDataByKeyProps = {
@@ -20,8 +32,16 @@ type DecryptDataByKeyProps = {
 }
 
 export const useEncryption = () => {
-  const generateAesKey = useCallback(({ accountId, privateKey, prime, base }: GenerateAesKeyProps) => {
-    return encryption.getAESKey(privateKey, accountId, prime, base)
+  const generateUserPrivateKey = useCallback((params: GenerateUserPrivateKeyParams) => {
+    return encryption.getPrivateKey(params)
+  }, [])
+
+  const generateUserPublicKey = useCallback((params: GenerateUserPublicKeyParams) => {
+    return encryption.getPublicKey(params)
+  }, [])
+
+  const generateAesKey = useCallback((params: GenerateAesKeyProps) => {
+    return encryption.getAESKey(params)
   }, [])
 
   const encryptDataByKey = useCallback((props: EncryptDataByKeyProps) => {
@@ -36,5 +56,7 @@ export const useEncryption = () => {
     generateAesKey,
     encryptDataByKey,
     decryptDataByKey,
+    generateUserPrivateKey,
+    generateUserPublicKey,
   }
 }

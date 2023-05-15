@@ -1,15 +1,51 @@
 import { Buffer } from "buffer"
 import * as crypto from "crypto-browserify"
 
+type GetPrivateKeyProps = { userId: string; email: string; password: string }
+type GetPublicKeyProps = { privateKey: number[]; appletPrime: number[]; appletBase: number[] }
+
+type GetAESKeyProps = {
+  userPrivateKey: number[]
+  appletPublicKey: number[]
+  appletPrime: number[]
+  appletBase: number[]
+}
+
+type EncryptDataProps = { text: string; key: number[] }
+type DecryptDataProps = { text: string; key: string }
+
 class Encryption {
-  public getAESKey = (appletPrivateKey: number[], userId: string, appletPrime: number[], base: number[]): number[] => {
-    const key = crypto.createDiffieHellman(Buffer.from(appletPrime), Buffer.from(base))
-    key.setPrivateKey(Buffer.from(appletPrivateKey))
-    const secretKey = key.computeSecret(Buffer.from(userId))
-    return crypto.createHash("sha256").update(secretKey).digest()
+  public getPrivateKey = ({ userId, email, password }: GetPrivateKeyProps): number[] => {
+    const key1 = crypto
+      .createHash("sha512")
+      .update(password + email)
+      .digest()
+    const key2 = crypto
+      .createHash("sha512")
+      .update(userId + email)
+      .digest()
+
+    return Array.from(Buffer.concat([Buffer.from(key1), Buffer.from(key2)]))
   }
 
-  public encryptData = ({ text, key }: { text: string; key: number[] }): string => {
+  public getPublicKey = ({ appletPrime, appletBase, privateKey }: GetPublicKeyProps): number[] => {
+    const key = crypto.createDiffieHellman(Buffer.from(appletPrime), Buffer.from(appletBase))
+    key.setPrivateKey(Buffer.from(privateKey))
+    key.generateKeys()
+
+    return Array.from(key.getPublicKey())
+  }
+
+  public getAESKey = ({ userPrivateKey, appletPublicKey, appletPrime, appletBase }: GetAESKeyProps): number[] => {
+    const key = crypto.createDiffieHellman(Buffer.from(appletPrime), Buffer.from(appletBase))
+    key.setPrivateKey(Buffer.from(userPrivateKey))
+
+    const secretKey = key.computeSecret(Buffer.from(appletPublicKey))
+
+    return Array.from(crypto.createHash("sha256").update(secretKey).digest())
+  }
+
+  public encryptData = ({ text, key }: EncryptDataProps): string => {
     const iv: Buffer = crypto.randomBytes(Number(import.meta.env.VITE_IV_LENGTH))
     const cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(key), iv)
     let encrypted: Buffer = cipher.update(text)
@@ -17,7 +53,7 @@ class Encryption {
     return `${iv.toString("hex")}:${encrypted.toString("hex")}`
   }
 
-  public decryptData = ({ text, key }: { text: string; key: string }): string => {
+  public decryptData = ({ text, key }: DecryptDataProps): string => {
     const textParts = text.split(":")
     const iv = Buffer.from(textParts.shift()!, "hex")
     const encryptedText = Buffer.from(textParts.join(":"), "hex")

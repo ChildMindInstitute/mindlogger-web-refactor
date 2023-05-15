@@ -30,7 +30,10 @@ export type AnswerPayload = {
   version: string
   flowId: ID | null
   activityId: ID
-  answers: string // Prev version: Array<AnswerTypesPayload>
+  answers: Array<{
+    activityItemId: string
+    answer: string
+  }> // Prev version: Array<AnswerTypesPayload>
 }
 
 export type AnswerTypesPayload =
