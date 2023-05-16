@@ -117,6 +117,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
           onSubmitButtonClick={onSubmitButtonClick}
           openInvalidAnswerModal={openInvalidAnswerModal}
           isAllItemsSkippable={isAllItemsSkippable}
+          watermark={appletDetails.watermark}
         />
       )}
       {!isSummaryScreen && !isOnePageAssessment && (
@@ -127,6 +128,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
           onSubmitButtonClick={onSubmitButtonClick}
           openInvalidAnswerModal={openInvalidAnswerModal}
           isAllItemsSkippable={isAllItemsSkippable}
+          watermark={appletDetails.watermark}
         />
       )}
 

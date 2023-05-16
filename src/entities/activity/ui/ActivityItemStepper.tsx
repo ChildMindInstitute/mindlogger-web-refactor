@@ -11,6 +11,7 @@ type ActivityItemStepperProps = {
   onSubmitButtonClick: () => void
   openInvalidAnswerModal: () => void
   isAllItemsSkippable: boolean
+  watermark?: string
 }
 
 export const ActivityItemStepper = ({
@@ -20,6 +21,7 @@ export const ActivityItemStepper = ({
   onSubmitButtonClick,
   openInvalidAnswerModal,
   isAllItemsSkippable,
+  watermark,
 }: ActivityItemStepperProps) => {
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
@@ -66,6 +68,7 @@ export const ActivityItemStepper = ({
       invalidItemIds={invalidItemIds}
       replaceText={replaceTextVariables}
       isAllItemsSkippable={isAllItemsSkippable}
+      watermark={watermark}
     />
   )
 }
