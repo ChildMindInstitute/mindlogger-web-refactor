@@ -1,3 +1,5 @@
+import { ConditionalLogic } from "./conditionalLogin"
+
 export type ItemResponseTypeDTO =
   | "text"
   | "singleSelect"
@@ -26,6 +28,7 @@ export interface ItemDetailsBaseDTO {
   responseType: ItemResponseTypeDTO
   config: ConfigDTO
   responseValues: ResponseValuesDTO
+  conditionalLogic: Array<ConditionalLogic>
 }
 
 export type ConfigDTO =
