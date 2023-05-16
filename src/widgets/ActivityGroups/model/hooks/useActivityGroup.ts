@@ -45,7 +45,7 @@ export const useActivityGroups = (
   }, [eventActivities, calculator])
 
   const filteredEventActivities = useMemo(() => {
-    return eventActivityCalculatedScheduleAt.filter(x => x.activity).filter(x => x.event.scheduledAt)
+    return eventActivityCalculatedScheduleAt.filter(x => x.activity)
   }, [eventActivityCalculatedScheduleAt])
 
   const groupAvailable = useMemo(() => {
