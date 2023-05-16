@@ -1,13 +1,7 @@
 import { useCallback } from "react"
 
-import { AnswerTypesPayload } from "~/shared/api"
+import { AnswerTypesPayload, AppletEncryptionDTO } from "~/shared/api"
 import { secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
-
-type EncryptionParams = {
-  publicKey: number[]
-  prime: number[]
-  base: number[]
-}
 
 type AnswerPayload = {
   answers: Array<AnswerTypesPayload>
@@ -22,7 +16,11 @@ export const useEncrypteAnswers = () => {
   const { generateAesKey, encryptDataByKey, generateUserPublicKey } = useEncryption()
 
   const encrypteAnswers = useCallback(
-    (encryptionParams: EncryptionParams, answerPayload: AnswerPayload): EncryptAnswerReturn[] => {
+    (encryptionParams: AppletEncryptionDTO | null, answerPayload: AnswerPayload): EncryptAnswerReturn[] => {
+      if (!encryptionParams) {
+        throw new Error("Encryption params is undefined")
+      }
+
       const userPrivateKey = secureUserPrivateKeyStorage.getUserPrivateKey()
 
       if (!userPrivateKey) {
@@ -32,15 +30,15 @@ export const useEncrypteAnswers = () => {
       // Need this public key for the future, when BE will be ready
       const userPublicKey = generateUserPublicKey({
         privateKey: userPrivateKey,
-        appletPrime: encryptionParams.prime,
-        appletBase: encryptionParams.base,
+        appletPrime: JSON.parse(encryptionParams.prime),
+        appletBase: JSON.parse(encryptionParams.base),
       })
 
       const key = generateAesKey({
         userPrivateKey,
-        appletPublicKey: encryptionParams.publicKey,
-        appletPrime: encryptionParams.prime,
-        appletBase: encryptionParams.base,
+        appletPublicKey: JSON.parse(encryptionParams.publicKey),
+        appletPrime: JSON.parse(encryptionParams.prime),
+        appletBase: JSON.parse(encryptionParams.base),
       })
 
       return answerPayload.answers.map(answerItem => {

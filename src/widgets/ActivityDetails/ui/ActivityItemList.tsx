@@ -99,7 +99,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
     // Step 1 - Collect answers from store and transform to answer payload
     const itemAnswers = activityModel.activityBuilder.convertToAnswers(currentActivityEventProgress)
 
-    const encryptedAnswers = encrypteAnswers(encryptionParamsMock, { answers: itemAnswers })
+    const encryptedAnswers = encrypteAnswers(appletDetails.encryption, { answers: itemAnswers })
 
     // Step 2 - Send answers to backend
     const answer: AnswerPayload = {
@@ -110,14 +110,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
       answers: encryptedAnswers,
     }
     return saveAnswer(answer) // Next steps in onSuccess handler
-  }, [
-    activityDetails.id,
-    appletDetails?.id,
-    appletDetails?.version,
-    currentActivityEventProgress,
-    encrypteAnswers,
-    saveAnswer,
-  ])
+  }, [activityDetails.id, appletDetails, currentActivityEventProgress, encrypteAnswers, saveAnswer])
 
   return (
     <>

@@ -39,6 +39,7 @@ export type AppletDetailsDTO = {
   watermark: string | ""
   activities: AppletDetailsActivityDTO[]
   activityFlows: ActivityFlowDTO[]
+  encryption: AppletEncryptionDTO | null
 }
 
 export type AppletDetailsActivityDTO = {
@@ -81,4 +82,11 @@ export type EventAvailabilityDTO = {
 export type ScheduleEventDto = {
   entityId: string
   availability: EventAvailabilityDTO
+}
+
+export type AppletEncryptionDTO = {
+  accountId: string
+  base: string // Contains number[]
+  prime: string // Contains number[]
+  publicKey: string // Contains number[]
 }

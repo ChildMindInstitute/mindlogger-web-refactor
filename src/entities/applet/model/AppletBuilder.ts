@@ -37,6 +37,7 @@ export class AppletBuilder {
       version: applet.version,
       activities: activityModel.activityBuilder.convertToActivityList(applet.activities, events),
       activityFlows: applet.activityFlows,
+      encryption: applet.encryption,
     }
   }
 }
