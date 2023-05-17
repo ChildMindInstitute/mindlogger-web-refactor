@@ -1,4 +1,4 @@
-import { ConditionalLogic } from "./conditionalLogin"
+import { ConditionalLogic } from "./conditionalLogiс"
 
 export type ItemResponseTypeDTO =
   | "text"
@@ -28,7 +28,7 @@ export interface ItemDetailsBaseDTO {
   responseType: ItemResponseTypeDTO
   config: ConfigDTO
   responseValues: ResponseValuesDTO
-  conditionalLogic: Array<ConditionalLogic>
+  conditionalLogic: ConditionalLogic | null
 }
 
 export type ConfigDTO =

@@ -18,7 +18,7 @@ export const textItemMock: TextItemDTO = {
     removeBackButton: false,
     skippableItem: false,
   },
-  conditionalLogic: [],
+  conditionalLogic: null,
 }
 
 export const checkboxItemMock: CheckboxItemDTO = {
@@ -27,7 +27,7 @@ export const checkboxItemMock: CheckboxItemDTO = {
   question: "Checkbox item mock question 2?",
   responseType: "multiSelect",
   isHidden: false,
-  conditionalLogic: [],
+  conditionalLogic: null,
   responseValues: {
     options: [
       {
@@ -82,7 +82,7 @@ export const radioItemMock: RadioItemDTO = {
   question: "Radio item mock question 3?",
   responseType: "singleSelect",
   isHidden: false,
-  conditionalLogic: [],
+  conditionalLogic: null,
   responseValues: {
     options: [
       {
@@ -138,7 +138,7 @@ export const sliderItemMock: SliderItemDTO = {
   responseType: "slider",
   order: 4,
   isHidden: false,
-  conditionalLogic: [],
+  conditionalLogic: null,
   responseValues: {
     minValue: 0,
     minLabel: "0",
@@ -169,7 +169,7 @@ export const selectorItemMock: SelectorItemDTO = {
   question: "Selector item mock question 5?",
   responseType: "numberSelect",
   order: 5,
-  conditionalLogic: [],
+  conditionalLogic: null,
   isHidden: false,
   responseValues: {
     minValue: 0,
