@@ -1,3 +1,5 @@
+import { ConditionalLogic } from "~/shared/api"
+
 export type ActivityItemType =
   | "text"
   | "singleSelect"
@@ -60,6 +62,7 @@ export interface ActivityItemBase {
   config: Config
   responseValues: ResponseValues
   answer: Answer
+  conditionalLogic: ConditionalLogic | null
 }
 
 export type Config =

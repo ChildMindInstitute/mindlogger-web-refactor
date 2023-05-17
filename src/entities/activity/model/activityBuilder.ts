@@ -136,6 +136,7 @@ class ActivityBuilder {
       },
       responseValues: null,
       answer: [],
+      conditionalLogic: null,
     }
   }
 

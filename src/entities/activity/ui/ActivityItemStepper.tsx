@@ -1,5 +1,6 @@
 import { useMemo } from "react"
 
+import { conditionalLogicBuilder } from "../lib"
 import { useTextVariablesReplacer } from "../lib/hooks"
 import { useActivityEventProgressState, useSaveActivityItemAnswer, useStepperState } from "../model/hooks"
 import { ActivityCardItemList } from "./ActivityCardItemList"
@@ -39,9 +40,13 @@ export const ActivityItemStepper = ({
 
   const { step, setStep } = useStepperState({ activityId, eventId })
 
+  const activityItemBasedOnConditionalLogic = useMemo(() => {
+    return conditionalLogicBuilder.process(currentActivityEventProgress)
+  }, [currentActivityEventProgress])
+
   const itemsProgress = useMemo(() => {
-    return currentActivityEventProgress.slice(0, step).reverse()
-  }, [currentActivityEventProgress, step])
+    return activityItemBasedOnConditionalLogic.slice(0, step).reverse()
+  }, [activityItemBasedOnConditionalLogic, step])
 
   const toNextStep = () => {
     setStep(step + 1)
@@ -51,7 +56,7 @@ export const ActivityItemStepper = ({
     setStep(step - 1)
   }
 
-  const isSubmitShown = step === currentActivityEventProgress.length
+  const isSubmitShown = step === activityItemBasedOnConditionalLogic.length
   const isBackShown = itemsProgress.length > 1
 
   return (
