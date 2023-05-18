@@ -87,7 +87,13 @@ export const ActivityDetailsWidget = (props: WidgetProps) => {
         </Col>
         <Col xl={9}>
           {activityDetails && appletDetails ? (
-            <ActivityItemList appletDetails={appletDetails} eventId={props.eventId} activityDetails={activityDetails} />
+            <ActivityItemList
+              appletDetails={appletDetails}
+              eventId={props.eventId}
+              activityDetails={activityDetails}
+              isPublic={props.isPublic}
+              publicAppletKey={props.isPublic ? props.publicAppletKey : undefined}
+            />
           ) : (
             <>Data fetching error</>
           )}

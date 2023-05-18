@@ -69,6 +69,7 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
       <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
       <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
+      <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
 
       <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
     </Routes>

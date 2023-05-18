@@ -12,6 +12,9 @@ function activityService() {
     getPublicById(payload: GetPublicActivityById) {
       return axiosService.get<SuccessResponseActivityById>(`/public/activities/${payload.activityId}`)
     },
+    publicSaveAnswers(payload: AnswerPayload) {
+      return axiosService.post(`/public/answers`, payload)
+    },
   }
 }
 

@@ -17,6 +17,7 @@ export const ROUTES = {
   },
   publicJoin: {
     path: "/public/:joinLinkKey",
+    navigateTo: (joinLinkKey: string) => `/public/${joinLinkKey}`,
   },
   privateJoin: {
     path: "/join/:joinLinkKey",
@@ -56,7 +57,7 @@ export const ROUTES = {
     path: "/protected/invite/declined",
   },
   thanks: {
-    path: "/protected/thanks/:appletId",
-    navigateTo: (appletId: string) => `/protected/thanks/${appletId}`,
+    path: "/protected/thanks/:appletId/isPublic/:isPublic",
+    navigateTo: (appletId: string, isPublic: boolean) => `/protected/thanks/${appletId}/isPublic/${isPublic}`,
   },
 }
