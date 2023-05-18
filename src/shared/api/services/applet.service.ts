@@ -16,8 +16,8 @@ function appletService() {
     getById(payload: GetAppletByIdPayload) {
       return axiosService.get<AppletSuccessResponse>(`/applets/${payload.appletId}`)
     },
-    getPublicById(payload: GetPublicAppletByIdPayload) {
-      return axiosService.get<AppletSuccessResponse>(`/public/applet/${payload.publicAppletKey}`)
+    getPublicByKey(payload: GetPublicAppletByIdPayload) {
+      return axiosService.get<AppletSuccessResponse>(`/public/applets/${payload.publicAppletKey}`)
     },
     getPublicAppletActivityById(payload: GetPublicAppletActivityByIdPayload) {
       return axiosService.get(`/public/applet/${payload.publicAppletKey}/activity/${payload.activityId}`)

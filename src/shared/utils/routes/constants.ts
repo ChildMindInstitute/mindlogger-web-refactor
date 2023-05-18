@@ -17,12 +17,18 @@ export const ROUTES = {
   },
   publicJoin: {
     path: "/public/:joinLinkKey",
+    navigateTo: (joinLinkKey: string) => `/public/${joinLinkKey}`,
   },
   privateJoin: {
     path: "/join/:joinLinkKey",
   },
   transferOwnership: {
     path: "/transferOwnership/:appletId",
+  },
+  publicActivityDetails: {
+    path: "/public/applets/:appletId/activity/:activityId/event/:eventId/publicAppletKey/:publicAppletKey",
+    navigateTo: (appletId: string, activityId: string, eventId: string, publicAppletKey: string) =>
+      `/public/applets/${appletId}/activity/${activityId}/event/${eventId}/publicAppletKey/${publicAppletKey}`,
   },
 
   // Protected routes
@@ -51,7 +57,7 @@ export const ROUTES = {
     path: "/protected/invite/declined",
   },
   thanks: {
-    path: "/protected/thanks/:appletId",
-    navigateTo: (appletId: string) => `/protected/thanks/${appletId}`,
+    path: "/protected/thanks/:appletId/isPublic/:isPublic",
+    navigateTo: (appletId: string, isPublic: boolean) => `/protected/thanks/${appletId}/isPublic/${isPublic}`,
   },
 }

@@ -7,14 +7,18 @@ import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/util
 import "./style.scss"
 
 export const ThanksPage = () => {
-  const { appletId } = useParams()
+  const { appletId, isPublic } = useParams()
   const navigator = useCustomNavigation()
   const { t } = useCustomTranslation()
 
   const onClick = () => {
-    if (appletId) {
-      navigator.navigate(ROUTES.activityList.navigateTo(appletId))
+    if (!appletId) {
+      return
     }
+
+    return navigator.navigate(
+      isPublic ? ROUTES.publicJoin.navigateTo(appletId) : ROUTES.activityList.navigateTo(appletId),
+    )
   }
 
   return (

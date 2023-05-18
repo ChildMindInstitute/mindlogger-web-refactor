@@ -10,14 +10,15 @@ import { useCustomTranslation } from "~/shared/utils"
 
 interface ActivityCardProps {
   activity: ActivityListItem
+  isPublic: boolean
   onActivityCardClick: () => void
 
   disabled?: boolean
 }
 
-export const ActivityCard = ({ activity, disabled, onActivityCardClick }: ActivityCardProps) => {
+export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic }: ActivityCardProps) => {
   const { t } = useCustomTranslation()
-  const { isSupportedActivity, isLoading } = useSupportableActivity({ activityId: activity.activityId })
+  const { isSupportedActivity, isLoading } = useSupportableActivity({ activityId: activity.activityId, isPublic })
 
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled || !isSupportedActivity
 
@@ -34,6 +35,7 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick }: Activi
   return (
     <Button className="ds-activity-button w-100" variant="link" onClick={onActivityCardClick} disabled={isDisabled}>
       {activity.image && <img className="activity-image" src={activity.image} />}
+
       <div className="activity-data">
         <div
           className={classNames(
