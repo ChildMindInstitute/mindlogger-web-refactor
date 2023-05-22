@@ -51,8 +51,6 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     { appletId, activityId, eventId }: NavigateToActivityDetailsPageProps,
     options: { isRestart: boolean },
   ) => {
-    console.log(props)
-
     if (props.isPublic && props.publicAppletKey) {
       return navigatator.navigate(
         ROUTES.publicActivityDetails.navigateTo(appletId, activityId, eventId, props.publicAppletKey),
