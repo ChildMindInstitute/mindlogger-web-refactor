@@ -2,11 +2,11 @@ import classNames from "classnames"
 import { Button } from "react-bootstrap"
 
 import { ActivityListItem, ActivityStatus, useSupportableActivity } from "../lib"
+import { MobileOnlyLabel } from "./MobileOnlyLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
+import { Loader } from "~/shared/ui"
 import "./style.scss"
-import { BoxLabel, Loader } from "~/shared/ui"
-import { useCustomTranslation } from "~/shared/utils"
 
 interface ActivityCardProps {
   activity: ActivityListItem
@@ -17,7 +17,6 @@ interface ActivityCardProps {
 }
 
 export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic }: ActivityCardProps) => {
-  const { t } = useCustomTranslation()
   const { isSupportedActivity, isLoading } = useSupportableActivity({ activityId: activity.activityId, isPublic })
 
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled || !isSupportedActivity
@@ -33,7 +32,11 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
   }
 
   return (
-    <Button className="ds-activity-button w-100" variant="link" onClick={onActivityCardClick} disabled={isDisabled}>
+    <Button
+      className={classNames("ds-activity-button", "w-100")}
+      variant="link"
+      disabled={isDisabled}
+      onClick={onActivityCardClick}>
       {activity.image && <img className="activity-image" src={activity.image} />}
 
       <div className="activity-data">
@@ -50,7 +53,7 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
 
         {isSupportedActivity && <TimeStatusLabel activity={activity} />}
 
-        {!isSupportedActivity && <BoxLabel message={t("mobileOnly")} />}
+        {!isSupportedActivity && <MobileOnlyLabel />}
       </div>
     </Button>
   )
