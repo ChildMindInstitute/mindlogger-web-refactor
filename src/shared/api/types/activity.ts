@@ -7,6 +7,10 @@ export interface GetActivityByIdPayload {
   activityId: ID
 }
 
+export type GetPublicActivityById = {
+  activityId: ID
+}
+
 export type SuccessResponseActivityById = BaseSuccessResponse<ActivityDTO>
 
 export type ActivityDTO = {

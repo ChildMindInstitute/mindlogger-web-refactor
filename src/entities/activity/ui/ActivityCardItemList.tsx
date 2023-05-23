@@ -9,6 +9,7 @@ type ActivityCardItemListProps = PropsWithChildren<{
   isBackShown: boolean
   isSubmitShown: boolean
   isAllItemsSkippable: boolean
+  watermark?: string
 
   invalidItemIds: Array<string>
   replaceText: (value: string) => string
@@ -32,6 +33,7 @@ export const ActivityCardItemList = ({
   invalidItemIds,
   replaceText,
   isAllItemsSkippable,
+  watermark,
 }: ActivityCardItemListProps) => {
   return (
     <div>
@@ -64,6 +66,7 @@ export const ActivityCardItemList = ({
             openInvalidAnswerModal={openInvalidAnswerModal}
             replaceText={replaceText}
             isAllItemsSkippable={isAllItemsSkippable}
+            watermark={watermark}
           />
         )
       })}

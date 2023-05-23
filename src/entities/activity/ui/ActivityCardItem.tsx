@@ -13,6 +13,7 @@ type ActivityCardItemProps = {
   isBackShown: boolean
   isSubmitShown: boolean
   isAllItemsSkippable: boolean
+  watermark?: string
 
   isInvalid: boolean
   isActive: boolean
@@ -40,6 +41,7 @@ export const ActivityCardItem = ({
   openInvalidAnswerModal,
   replaceText,
   isAllItemsSkippable,
+  watermark,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !values || !values.length,
@@ -101,6 +103,7 @@ export const ActivityCardItem = ({
     <CardItem
       markdown={questionText}
       isInvalid={isInvalid}
+      watermark={watermark}
       buttons={
         isActive ? (
           <ItemCardButton

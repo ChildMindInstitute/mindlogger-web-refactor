@@ -10,6 +10,7 @@ import { InvitationDeclinePage } from "./InvitationDecline"
 import LoginPage from "./Login"
 import { PrivateJoinPage } from "./PrivateJoin"
 import Profile from "./Profile"
+import { PublicActivityDetailsPage } from "./PublicActivityDetails"
 import { PublicJoinPage } from "./PublicJoin"
 import RecoveryPassword from "./RecoveryPassword"
 import Settings from "./Settings"
@@ -43,10 +44,12 @@ const ApplicationRouter = (): JSX.Element | null => {
             <Route path={ROUTES.settings.path} element={<Settings />} />
             <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
             <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
+            <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
             <Route path={ROUTES.invitationAccept.path} element={<InvitationAcceptPage />} />
             <Route path={ROUTES.invitationDecline.path} element={<InvitationDeclinePage />} />
             <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
             <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
+            <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
 
             <Route path="*" element={<Navigate to={ROUTES.applets.path} />} />
           </Route>
@@ -65,6 +68,8 @@ const ApplicationRouter = (): JSX.Element | null => {
       <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
       <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
       <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
+      <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
+      <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
 
       <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
     </Routes>

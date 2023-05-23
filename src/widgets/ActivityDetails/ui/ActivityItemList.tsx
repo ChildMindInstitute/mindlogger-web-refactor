@@ -9,19 +9,24 @@ import {
   ActivityOnePageAssessment,
   activityModel,
   useEncrypteAnswers,
+  usePublicSaveAnswerMutation,
   useSaveAnswerMutation,
 } from "~/entities/activity"
 import { ActivityFlow, AppletDetails } from "~/entities/applet"
 import { ActivityDTO, AnswerPayload } from "~/shared/api"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
-interface ActivityItemListProps {
+type ActivityItemListProps = {
+  isPublic: boolean
+  publicAppletKey?: string
   appletDetails: AppletDetails<ActivityListItem, ActivityFlow>
   activityDetails: ActivityDTO
   eventId: string
 }
 
-export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: ActivityItemListProps) => {
+export const ActivityItemList = (props: ActivityItemListProps) => {
+  const { activityDetails, eventId, appletDetails, isPublic } = props
+
   const { t } = useCustomTranslation()
   const navigator = useCustomNavigation()
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState<boolean>(false)
@@ -32,21 +37,31 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
 
   const isAllItemsSkippable = activityDetails.isSkippable
 
+  const onSaveAnswerSuccess = () => {
+    // Step 3 - Clear progress state related to activity
+    clearActivityItemsProgressById(activityDetails.id, eventId)
+    updateGroupInProgressByIds({
+      appletId: appletDetails.id,
+      eventId,
+      activityId: activityDetails.id,
+      progressPayload: {
+        endAt: new Date(),
+      },
+    })
+
+    // Step 4 - Redirect to "Thanks screen"
+
+    return navigator.navigate(ROUTES.thanks.navigateTo(isPublic ? props.publicAppletKey! : appletDetails.id, isPublic))
+  }
+
   const { mutate: saveAnswer } = useSaveAnswerMutation({
     onSuccess() {
-      // Step 3 - Clear progress state related to activity
-      clearActivityItemsProgressById(activityDetails.id, eventId)
-      updateGroupInProgressByIds({
-        appletId: appletDetails.id,
-        eventId,
-        activityId: activityDetails.id,
-        progressPayload: {
-          endAt: new Date(),
-        },
-      })
-
-      // Step 4 - Redirect to "Thanks screen"
-      return navigator.navigate(ROUTES.thanks.navigateTo(appletDetails.id))
+      return onSaveAnswerSuccess()
+    },
+  })
+  const { mutate: publicSaveAnswer } = usePublicSaveAnswerMutation({
+    onSuccess() {
+      return onSaveAnswerSuccess()
     },
   })
 
@@ -108,8 +123,19 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
       activityId: activityDetails.id,
       answers: encryptedAnswers,
     }
-    return saveAnswer(answer) // Next steps in onSuccess handler
-  }, [activityDetails.id, appletDetails, currentActivityEventProgress, encrypteAnswers, saveAnswer])
+
+    return isPublic ? publicSaveAnswer(answer) : saveAnswer(answer) // Next steps in onSuccess handler
+  }, [
+    activityDetails.id,
+    appletDetails.encryption,
+    appletDetails?.id,
+    appletDetails?.version,
+    currentActivityEventProgress,
+    encrypteAnswers,
+    isPublic,
+    publicSaveAnswer,
+    saveAnswer,
+  ])
 
   return (
     <>
@@ -122,6 +148,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
           onSubmitButtonClick={onSubmitButtonClick}
           openInvalidAnswerModal={openInvalidAnswerModal}
           isAllItemsSkippable={isAllItemsSkippable}
+          watermark={appletDetails.watermark}
         />
       )}
       {!isSummaryScreen && !isOnePageAssessment && (
@@ -132,6 +159,7 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
           onSubmitButtonClick={onSubmitButtonClick}
           openInvalidAnswerModal={openInvalidAnswerModal}
           isAllItemsSkippable={isAllItemsSkippable}
+          watermark={appletDetails.watermark}
         />
       )}
 

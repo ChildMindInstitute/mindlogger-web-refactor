@@ -8,6 +8,10 @@ export type GetEventsByAppletIdPayload = {
   appletId: string
 }
 
+export type GetEventsByPublicAppletKey = {
+  publicAppletKey: string
+}
+
 export type SuccessEventsByAppletIdResponse = BaseSuccessResponse<EventsByAppletIdResponseDTO>
 
 export type EventsByAppletIdResponseDTO = {

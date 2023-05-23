@@ -9,6 +9,7 @@ type ActivityOnePageAssessmentProps = {
   onSubmitButtonClick: () => void
   openInvalidAnswerModal: () => void
   isAllItemsSkippable: boolean
+  watermark?: string
 }
 
 export const ActivityOnePageAssessment = ({
@@ -18,6 +19,7 @@ export const ActivityOnePageAssessment = ({
   onSubmitButtonClick,
   openInvalidAnswerModal,
   isAllItemsSkippable,
+  watermark,
 }: ActivityOnePageAssessmentProps) => {
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
@@ -48,6 +50,7 @@ export const ActivityOnePageAssessment = ({
       openInvalidAnswerModal={openInvalidAnswerModal}
       replaceText={replaceTextVariables}
       isAllItemsSkippable={isAllItemsSkippable}
+      watermark={watermark}
     />
   )
 }

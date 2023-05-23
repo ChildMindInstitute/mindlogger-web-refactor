@@ -12,24 +12,33 @@ import { activityModel, ActivityProgressPreviewList } from "~/entities/activity"
 import { BaseProgressBar } from "~/shared/ui"
 import CustomCard from "~/shared/ui/Card"
 
-interface ActivityDetailsWidgetProps {
+type PrivateActivityDetailsWidgetProps = {
+  isPublic: false
+
   appletId: string
   activityId: string
   eventId: string
 }
 
-export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
+type PublicActivityDetailsWidgetProps = {
+  isPublic: true
+
+  appletId: string
+  activityId: string
+  eventId: string
+
+  publicAppletKey: string
+}
+
+type WidgetProps = PrivateActivityDetailsWidgetProps | PublicActivityDetailsWidgetProps
+
+export const ActivityDetailsWidget = (props: WidgetProps) => {
   const location = useLocation()
   const isRestart = location.state.isRestart
 
-  const { appletDetails, activityDetails, isLoading } = activityDetailsModel.hooks.useActivityDetails(
-    {
-      appletId: props.appletId,
-      activityId: props.activityId,
-      eventId: props.eventId,
-    },
-    { isRestart },
-  )
+  const { appletDetails, activityDetails, isLoading } = activityDetailsModel.hooks.useActivityDetails(props, {
+    isRestart,
+  })
 
   const { progress } = activityModel.hooks.useActivityEventProgressState({
     activityId: props.activityId,
@@ -78,7 +87,13 @@ export const ActivityDetailsWidget = (props: ActivityDetailsWidgetProps) => {
         </Col>
         <Col xl={9}>
           {activityDetails && appletDetails ? (
-            <ActivityItemList appletDetails={appletDetails} eventId={props.eventId} activityDetails={activityDetails} />
+            <ActivityItemList
+              appletDetails={appletDetails}
+              eventId={props.eventId}
+              activityDetails={activityDetails}
+              isPublic={props.isPublic}
+              publicAppletKey={props.isPublic ? props.publicAppletKey : undefined}
+            />
           ) : (
             <>Data fetching error</>
           )}
