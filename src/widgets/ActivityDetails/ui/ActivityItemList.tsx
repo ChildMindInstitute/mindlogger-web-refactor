@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react"
 
 import Modal from "../../Modal"
-import { encryptionParamsMock } from "../mock/encryptionParams.mock"
 import { validateAnswerBeforeSubmit } from "../model/validateItemsBeforeSubmit"
 
 import {

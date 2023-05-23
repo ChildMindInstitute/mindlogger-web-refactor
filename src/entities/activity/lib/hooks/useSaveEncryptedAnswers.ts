@@ -13,7 +13,7 @@ type EncryptAnswerReturn = {
 }
 
 export const useEncrypteAnswers = () => {
-  const { generateAesKey, encryptDataByKey, generateUserPublicKey } = useEncryption()
+  const { createEncryptionService } = useEncryption()
 
   const encrypteAnswers = useCallback(
     (encryptionParams: AppletEncryptionDTO | null, answerPayload: AnswerPayload): EncryptAnswerReturn[] => {
@@ -27,23 +27,13 @@ export const useEncrypteAnswers = () => {
         throw new Error("User private key is undefined")
       }
 
-      // Need this public key for the future, when BE will be ready
-      const userPublicKey = generateUserPublicKey({
+      const encryptionService = createEncryptionService({
+        ...encryptionParams,
         privateKey: userPrivateKey,
-        appletPrime: JSON.parse(encryptionParams.prime),
-        appletBase: JSON.parse(encryptionParams.base),
-      })
-
-      const key = generateAesKey({
-        userPrivateKey,
-        appletPublicKey: JSON.parse(encryptionParams.publicKey),
-        appletPrime: JSON.parse(encryptionParams.prime),
-        appletBase: JSON.parse(encryptionParams.base),
       })
 
       return answerPayload.answers.map(answerItem => {
-        const answerJSON = JSON.stringify(answerItem.answer)
-        const encryptedAnswer = encryptDataByKey({ text: answerJSON, key })
+        const encryptedAnswer = encryptionService.encrypt(JSON.stringify(answerItem.answer))
 
         return {
           ...answerItem,
@@ -51,7 +41,7 @@ export const useEncrypteAnswers = () => {
         }
       })
     },
-    [encryptDataByKey, generateAesKey, generateUserPublicKey],
+    [createEncryptionService],
   )
 
   return {
