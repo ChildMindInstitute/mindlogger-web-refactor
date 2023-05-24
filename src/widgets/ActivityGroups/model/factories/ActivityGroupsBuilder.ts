@@ -47,7 +47,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   private getNow = () => new Date()
 
   private getProgressRecord(eventActivity: EventActivity): ProgressPayload | null {
-    const record = this.progress[this.appletId]?.[eventActivity.activity.id]?.[eventActivity.event.id]
+    const record = this.progress[this.appletId]?.[eventActivity.entity.id]?.[eventActivity.event.id]
     return record ?? null
   }
 
@@ -65,13 +65,13 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   private populateActivityFlowFields(item: ActivityListItem, activityEvent: EventActivity) {
-    const activityFlow = activityEvent.activity as ActivityFlow
+    const activityFlow = activityEvent.entity as ActivityFlow
 
     item.isInActivityFlow = true
     item.activityFlowDetails = {
       showActivityFlowBadge: !activityFlow.hideBadge,
       activityFlowName: activityFlow.name,
-      numberOfActivitiesInFlow: activityFlow.items.length,
+      numberOfActivitiesInFlow: activityFlow.activityIds.length,
       activityPositionInFlow: 0,
     }
 
@@ -83,9 +83,9 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       const progressRecord = this.getProgressRecord(activityEvent) as ActivityFlowProgress
 
       activity = this.activities.find(x => x.id === progressRecord.currentActivityId)!
-      position = activityFlow.items.findIndex(x => x.activityId === activity.id) + 1
+      position = progressRecord.pipelineActivityOrder + 1
     } else {
-      activity = this.activities.find(x => x.id === activityFlow.items[0].activityId)!
+      activity = this.activities.find(x => x.id === activityFlow.activityIds[0])!
       position = 1
     }
 
@@ -99,7 +99,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
   private getTimeToComplete(eventActivity: EventActivity): HourMinute {
     const { event } = eventActivity
-    const timer = event.timers!.timer!
+    const timer = event.timers.timer!
 
     const startedTime = this.getStartedDateTime(eventActivity)
 
@@ -120,17 +120,17 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   private createListItem(eventActivity: EventActivity) {
-    const { activity, event } = eventActivity
-    const { pipelineType } = eventActivity.activity
+    const { entity, event } = eventActivity
+    const { pipelineType } = entity
     const isFlow = pipelineType === ActivityPipelineType.Flow
 
     const item: ActivityListItem = {
-      activityId: activity.id,
+      activityId: entity.id,
       eventId: event.id,
-      name: isFlow ? "" : activity.name,
-      description: isFlow ? "" : activity.description,
-      type: isFlow ? ActivityType.NotDefined : (activity as Activity).type,
-      image: isFlow ? null : activity.image,
+      name: isFlow ? "" : entity.name,
+      description: isFlow ? "" : entity.description,
+      type: isFlow ? ActivityType.NotDefined : entity.type,
+      image: isFlow ? null : entity.image,
       status: ActivityStatus.NotDefined,
       isTimerSet: false,
       timeLeftToComplete: null,

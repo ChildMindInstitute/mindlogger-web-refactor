@@ -14,21 +14,21 @@ import {
   ActivityPipelineType,
   ActivityStatus,
 } from "~/entities/activity"
-import { AppletDetailsDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
+import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false
   appletDetails: AppletDetailsDTO
-  eventsDetails: EventsByAppletIdResponseDTO
+  eventsDetails: AppletEventsResponse
 }
 
 type PublicActivityListWidgetProps = {
   isPublic: true
   publicAppletKey: string | null
   appletDetails: AppletDetailsDTO
-  eventsDetails: EventsByAppletIdResponseDTO
+  eventsDetails: AppletEventsResponse
 }
 
 type ActivityListWidgetProps = PublicActivityListWidgetProps | PrivateActivityListWidgetProps
@@ -101,6 +101,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
       activityPipelineDetails = {
         type: ActivityPipelineType.Flow,
         currentActivityId: activity.activityId,
+        pipelineActivityOrder: 0, // Hardcoded because WEB APP not supported activity flow
       }
     } else {
       activityPipelineDetails = {

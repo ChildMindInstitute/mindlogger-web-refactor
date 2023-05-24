@@ -8,7 +8,7 @@ export type ActivityListItem = {
 
   name: string
   description: string
-  image: string | null
+  image?: string | null
 
   status: ActivityStatus
   type: ActivityType

@@ -18,7 +18,7 @@ export const enum PeriodicityType {
 export type EventAvailability = {
   availabilityType: AvailabilityType
   oneTimeCompletion: boolean
-  periodicityType: PeriodicityType | null
+  periodicityType: PeriodicityType
   timeFrom: HourMinute | null
   timeTo: HourMinute | null
   allowAccessBeforeFromTime: boolean
@@ -28,12 +28,12 @@ export type EventAvailability = {
 
 export type ScheduleEvent = {
   id: string
-  activityId: string
+  entityId: string
   availability: EventAvailability
-  scheduledAt: Date | null
   timers: {
     timer: HourMinute | null
     idleTimer: HourMinute | null
-  } | null
+  }
   selectedDate: Date | null
+  scheduledAt: Date | null
 }

@@ -18,9 +18,9 @@ import {
   ActivityItemDetailsDTO,
   AnswerTypesPayload,
   AppletDetailsActivityDTO,
-  EventDTO,
-  EventsByAppletIdResponseDTO,
+  AppletEventsResponse,
   MultiSelectAnswerPayload,
+  ScheduleEventDto,
   SingleSelectAnswerPayload,
   SliderAnswerPayload,
   TextAnswerPayload,
@@ -40,13 +40,13 @@ class ActivityBuilder {
 
   public convertToActivityList(
     activities?: AppletDetailsActivityDTO[],
-    events?: EventsByAppletIdResponseDTO,
+    events?: AppletEventsResponse,
   ): ActivityListItem[] {
     if (!activities || !events) {
       return []
     }
 
-    const eventMap = new Map<string, EventDTO>()
+    const eventMap = new Map<string, ScheduleEventDto>()
     events.events.forEach(event => {
       eventMap.set(event.entityId, event)
     })
@@ -87,6 +87,8 @@ class ActivityBuilder {
         name: activity.name,
         description: activity.description,
         image: activity.image,
+        isHidden: activity.isHidden,
+        order: activity.order,
       }))
   }
 

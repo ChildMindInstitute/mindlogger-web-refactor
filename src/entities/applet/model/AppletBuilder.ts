@@ -1,7 +1,7 @@
 import { ActivityListItem, activityModel } from "../../activity"
 import { AppletListItem, AppletDetails, ActivityFlow } from "../lib"
 
-import { AppletListDTO, AppletDetailsDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
+import { AppletListDTO, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 
 export class AppletBuilder {
   public convertToAppletList(applets?: AppletListDTO[]): AppletListItem[] {
@@ -21,7 +21,7 @@ export class AppletBuilder {
 
   public convertToAppletDetails(
     applet?: AppletDetailsDTO,
-    events?: EventsByAppletIdResponseDTO,
+    events?: AppletEventsResponse,
   ): AppletDetails<ActivityListItem, ActivityFlow> | null {
     if (!applet) {
       return null

@@ -7,34 +7,37 @@ export const enum ActivityPipelineType {
   Flow,
 }
 
-export type Entity = {
+export type EntityBase = {
   id: string
   name: string
   description: string
-  image: string | null
+  image?: string | null
+  isHidden: boolean
+  order: number
 }
 
-export type Activity = Entity & {
+export type Activity = EntityBase & {
   type: ActivityType
   pipelineType: ActivityPipelineType.Regular
 }
 
-export type ActivityFlow = Entity & {
+export type ActivityFlow = EntityBase & {
   hideBadge: boolean
-  items: Array<{ activityId: string }>
+  activityIds: Array<string>
   pipelineType: ActivityPipelineType.Flow
 }
 
-export type ActivityOrFlow = Activity | ActivityFlow
+export type Entity = Activity | ActivityFlow
 
 export type EventActivity = {
-  activity: ActivityOrFlow
+  entity: Entity
   event: ScheduleEvent
 }
 
 export type ActivityFlowProgress = {
   type: ActivityPipelineType.Flow
   currentActivityId: string
+  pipelineActivityOrder: number
 }
 
 export type ActivityProgress = {
