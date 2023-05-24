@@ -89,6 +89,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       position = 1
     }
 
+    item.activityId = activity.id
     item.activityFlowDetails.activityPositionInFlow = position
     item.name = activity.name
     item.description = activity.description
@@ -158,7 +159,11 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
       const { event } = eventActivity
       item.isTimerSet = !!event.timers?.timer
-      item.timeLeftToComplete = item.isTimerSet ? this.getTimeToComplete(eventActivity) : null
+
+      if (item.isTimerSet) {
+        const timeLeft = this.getTimeToComplete(eventActivity)
+        item.timeLeftToComplete = timeLeft
+      }
 
       activityItems.push(item)
     }
@@ -200,6 +205,8 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
       const scheduledToday = isToday(event.scheduledAt!)
 
+      const accessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime
+
       const isCurrentTimeInTimeWindow = isScheduled
         ? isTimeInInterval(
             { hours: now.getHours(), minutes: now.getMinutes() },
@@ -211,10 +218,17 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       const conditionForAlwaysAvailable =
         isAlwaysAvailable && ((oneTimeCompletion && neverCompleted) || !oneTimeCompletion)
 
-      const conditionForScheduled =
+      const conditionForScheduledAndInTimeWindow =
         isScheduled && scheduledToday && now > event.scheduledAt! && isCurrentTimeInTimeWindow && !completedToday
 
-      if (conditionForAlwaysAvailable || conditionForScheduled) {
+      const conditionForScheduledAndValidBeforeStartTime =
+        isScheduled && scheduledToday && now < event.scheduledAt! && accessBeforeTimeFrom && !completedToday
+
+      if (
+        conditionForAlwaysAvailable ||
+        conditionForScheduledAndInTimeWindow ||
+        conditionForScheduledAndValidBeforeStartTime
+      ) {
         filtered.push(eventActivity)
       }
     }
