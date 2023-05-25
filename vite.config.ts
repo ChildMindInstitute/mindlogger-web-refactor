@@ -28,6 +28,7 @@ export default defineConfig(async ({ command, mode }) => {
   } else if(command === 'build') {
     return {
       define: {
+        global: 'globalThis',
         'process.env': {
           REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY: env.REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY,
         }
@@ -36,6 +37,7 @@ export default defineConfig(async ({ command, mode }) => {
       resolve: {
         alias: {
           '~': resolve(__dirname, 'src'),
+          Buffer: 'buffer'
         },
       },
     }
