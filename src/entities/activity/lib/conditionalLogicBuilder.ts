@@ -15,9 +15,9 @@ class ConditionalLogicBuilder {
     index: number,
     array: ActivityEventProgressRecord[],
   ): boolean {
-    const condition = item.conditionalLogic
+    const { conditionalLogic } = item
 
-    if (!condition) {
+    if (!conditionalLogic) {
       return true
     }
 
@@ -26,8 +26,8 @@ class ConditionalLogicBuilder {
       return acc
     }, {})
 
-    const conditionPattern = condition.match
-    const conditionRules = condition.conditions
+    const conditionPattern = conditionalLogic.match
+    const conditionRules = conditionalLogic.conditions
 
     switch (conditionPattern) {
       case "all":
