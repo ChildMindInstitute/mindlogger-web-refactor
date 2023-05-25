@@ -33,7 +33,7 @@ export default defineConfig(async ({ command, mode }) => {
           REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY: env.REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY,
         }
       },
-      plugins: [react()],
+      plugins: [react(), nodePolyfills()],
       resolve: {
         alias: {
           '~': resolve(__dirname, 'src'),
