@@ -47,7 +47,9 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
         password: variables.password,
       }
 
+      console.log("log before generating user private key")
       const userPrivateKey = generateUserPrivateKey(userParams)
+      console.log("user private key generated", userPrivateKey)
       secureUserPrivateKeyStorage.setUserPrivateKey(userPrivateKey)
 
       setUser(data.data.result.user)
