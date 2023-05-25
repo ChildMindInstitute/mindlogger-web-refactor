@@ -18,25 +18,50 @@ import { AppletDetailsDTO, EventsByAppletIdResponseDTO } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
-interface ActivityListWidgetProps {
+type PrivateActivityListWidgetProps = {
+  isPublic: false
   appletDetails: AppletDetailsDTO
   eventsDetails: EventsByAppletIdResponseDTO
 }
+
+type PublicActivityListWidgetProps = {
+  isPublic: true
+  publicAppletKey: string | null
+  appletDetails: AppletDetailsDTO
+  eventsDetails: EventsByAppletIdResponseDTO
+}
+
+type ActivityListWidgetProps = PublicActivityListWidgetProps | PrivateActivityListWidgetProps
 
 type ResumeActivityState = {
   isOpen: boolean
   selectedActivity: ActivityListItem | null
 }
 
-type NavigateToActivityDetailsPageProps = { appletId: string; activityId: string; eventId: string }
+type NavigateToActivityDetailsPageProps = {
+  appletId: string
+  activityId: string
+  eventId: string
+}
 
-export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityListWidgetProps) => {
+export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigatator = useCustomNavigation()
   const navigateToActivityDetailsPage = (
     { appletId, activityId, eventId }: NavigateToActivityDetailsPageProps,
     options: { isRestart: boolean },
   ) => {
+    if (props.isPublic && props.publicAppletKey) {
+      return navigatator.navigate(
+        ROUTES.publicActivityDetails.navigateTo(appletId, activityId, eventId, props.publicAppletKey),
+        {
+          state: {
+            isRestart: options.isRestart,
+          },
+        },
+      )
+    }
+
     return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId, eventId), {
       state: {
         isRestart: options.isRestart,
@@ -64,7 +89,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     setResumeActivityState({ isOpen: false, selectedActivity: null })
   }
 
-  const { groups } = useActivityGroups(appletDetails, eventsDetails)
+  const { groups } = useActivityGroups(props.appletDetails, props.eventsDetails)
 
   const navigateToActivityDetailsWithEmptyProgress = (activity: ActivityListItem) => {
     const isActivityPipelineFlow = !!activity.activityFlowDetails
@@ -84,7 +109,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     }
 
     upsertGroupInProgress({
-      appletId: appletDetails.id,
+      appletId: props.appletDetails.id,
       activityId: activity.activityId,
       eventId: activity.eventId,
       progressPayload: {
@@ -96,7 +121,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
 
     return navigateToActivityDetailsPage(
       {
-        appletId: appletDetails.id,
+        appletId: props.appletDetails.id,
         activityId: activity.activityId,
         eventId: activity.eventId,
       },
@@ -116,7 +141,7 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     if (resumeActivityState.selectedActivity) {
       return navigateToActivityDetailsPage(
         {
-          appletId: appletDetails.id,
+          appletId: props.appletDetails.id,
           activityId: resumeActivityState.selectedActivity.activityId,
           eventId: resumeActivityState.selectedActivity.eventId,
         },
@@ -137,12 +162,12 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
     <Container fluid>
       <Row className={classNames("mt-5", "mb-3")}>
         <Col lg={3} className={classNames("d-flex", "justify-content-center")}>
-          {appletDetails && (
+          {props.appletDetails && (
             <CustomCard
               type="card"
-              id={appletDetails.id}
-              title={appletDetails.displayName}
-              imageSrc={appletDetails.image}
+              id={props.appletDetails.id}
+              title={props.appletDetails.displayName}
+              imageSrc={props.appletDetails.image}
               buttonLabel={t("about")}
               buttonOnClick={onCardAboutClick}
             />
@@ -152,11 +177,21 @@ export const ActivityGroupList = ({ appletDetails, eventsDetails }: ActivityList
           {groups
             ?.filter(g => g.activities.length)
             .map(g => (
-              <ActivityGroup group={g} key={g.name} onActivityCardClick={onActivityCardClick} />
+              <ActivityGroup
+                group={g}
+                key={g.name}
+                onActivityCardClick={onActivityCardClick}
+                isPublic={props.isPublic}
+              />
             ))}
         </Col>
       </Row>
-      <CustomModal show={isAboutOpen} onHide={onAboutModalClose} title={t("about")} label={appletDetails?.about} />
+      <CustomModal
+        show={isAboutOpen}
+        onHide={onAboutModalClose}
+        title={t("about")}
+        label={props.appletDetails?.about}
+      />
       <CustomModal
         show={resumeActivityState.isOpen}
         onHide={onResumeActivityModalClose}

@@ -30,7 +30,7 @@ export const ActivityGroups = (props: FetchActivitiesProps) => {
     isLoading: isEventsLoading,
     error: eventsError,
     data: eventsData,
-  } = useEventsbyAppletIdQuery({ appletId: props.isPublic ? props.publicAppletKey : props.appletId })
+  } = useEventsbyAppletIdQuery(props)
 
   if (isAppletLoading || isEventsLoading) {
     return (
@@ -51,5 +51,14 @@ export const ActivityGroups = (props: FetchActivitiesProps) => {
   const appletDetails = appletData?.data?.result
   const eventsDetails = eventsData?.data?.result
 
-  return appletDetails && <ActivityGroupList appletDetails={appletDetails} eventsDetails={eventsDetails} />
+  return (
+    appletDetails && (
+      <ActivityGroupList
+        appletDetails={appletDetails}
+        eventsDetails={eventsDetails}
+        isPublic={props.isPublic}
+        publicAppletKey={props.isPublic ? props.publicAppletKey : null}
+      />
+    )
+  )
 }

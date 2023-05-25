@@ -14,7 +14,7 @@ export const ActivityDetailsPage = () => {
 
   return (
     <Container>
-      <ActivityDetailsWidget appletId={appletId!} activityId={activityId!} eventId={eventId!} />
+      <ActivityDetailsWidget isPublic={false} appletId={appletId!} activityId={activityId!} eventId={eventId!} />
     </Container>
   )
 }

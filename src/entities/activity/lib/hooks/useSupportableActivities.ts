@@ -4,11 +4,12 @@ import { useActivityByIdQuery } from "../../api"
 import { activityBuilder } from "../../model"
 
 type Props = {
+  isPublic: boolean
   activityId: string
 }
 
-export const useSupportableActivity = ({ activityId }: Props) => {
-  const { data, isError, isLoading } = useActivityByIdQuery({ activityId })
+export const useSupportableActivity = (props: Props) => {
+  const { data, isError, isLoading } = useActivityByIdQuery(props)
 
   const activity = useMemo(() => {
     return data?.data?.result

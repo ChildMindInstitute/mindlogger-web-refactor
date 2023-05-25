@@ -27,6 +27,11 @@ export interface RecoveryPasswordPayload {
   email: string
 }
 
+export type RecoveryPasswordLinkHealthcheckPayload = {
+  email: string
+  key: string
+}
+
 export type PasswordRecoverySuccessResponse = BaseSuccessResponse<UserDTO>
 
 export interface RecoveryPasswordApprovalPayload {

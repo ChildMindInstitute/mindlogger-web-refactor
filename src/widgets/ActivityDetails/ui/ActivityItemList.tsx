@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react"
 
 import Modal from "../../Modal"
+import { generateUserPublicKey, mapToAnswers } from "../model"
+import { prepareItemAnswers } from "../model/prepareItemAnswers"
 import { validateAnswerBeforeSubmit } from "../model/validateItemsBeforeSubmit"
 
 import {
@@ -8,19 +10,25 @@ import {
   ActivityListItem,
   ActivityOnePageAssessment,
   activityModel,
+  useEncrypteAnswers,
+  usePublicSaveAnswerMutation,
   useSaveAnswerMutation,
 } from "~/entities/activity"
 import { ActivityFlow, AppletDetails } from "~/entities/applet"
 import { ActivityDTO, AnswerPayload } from "~/shared/api"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
-interface ActivityItemListProps {
+type ActivityItemListProps = {
+  isPublic: boolean
+  publicAppletKey?: string
   appletDetails: AppletDetails<ActivityListItem, ActivityFlow>
   activityDetails: ActivityDTO
   eventId: string
 }
 
-export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: ActivityItemListProps) => {
+export const ActivityItemList = (props: ActivityItemListProps) => {
+  const { activityDetails, eventId, appletDetails, isPublic } = props
+
   const { t } = useCustomTranslation()
   const navigator = useCustomNavigation()
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState<boolean>(false)
@@ -31,23 +39,35 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
 
   const isAllItemsSkippable = activityDetails.isSkippable
 
+  const onSaveAnswerSuccess = () => {
+    // Step 3 - Clear progress state related to activity
+    clearActivityItemsProgressById(activityDetails.id, eventId)
+    updateGroupInProgressByIds({
+      appletId: appletDetails.id,
+      eventId,
+      activityId: activityDetails.id,
+      progressPayload: {
+        endAt: new Date(),
+      },
+    })
+
+    // Step 4 - Redirect to "Thanks screen"
+
+    return navigator.navigate(ROUTES.thanks.navigateTo(isPublic ? props.publicAppletKey! : appletDetails.id, isPublic))
+  }
+
   const { mutate: saveAnswer } = useSaveAnswerMutation({
     onSuccess() {
-      // Step 3 - Clear progress state related to activity
-      clearActivityItemsProgressById(activityDetails.id, eventId)
-      updateGroupInProgressByIds({
-        appletId: appletDetails.id,
-        eventId,
-        activityId: activityDetails.id,
-        progressPayload: {
-          endAt: new Date(),
-        },
-      })
-
-      // Step 4 - Redirect to "Thanks screen"
-      return navigator.navigate(ROUTES.thanks.navigateTo(appletDetails.id))
+      return onSaveAnswerSuccess()
     },
   })
+  const { mutate: publicSaveAnswer } = usePublicSaveAnswerMutation({
+    onSuccess() {
+      return onSaveAnswerSuccess()
+    },
+  })
+
+  const { encrypteAnswers } = useEncrypteAnswers()
 
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { updateGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
@@ -93,18 +113,41 @@ export const ActivityItemList = ({ activityDetails, eventId, appletDetails }: Ac
 
   const onPrimaryButtonClick = useCallback(() => {
     // Step 1 - Collect answers from store and transform to answer payload
-    const itemAnswers = activityModel.activityBuilder.convertToAnswers(currentActivityEventProgress)
+    const itemAnswers = mapToAnswers(currentActivityEventProgress)
+
+    const userPublicKey = generateUserPublicKey(appletDetails?.encryption)
+
+    const preparedItemAnswers = prepareItemAnswers(itemAnswers)
+
+    const encryptedAnswers = encrypteAnswers(appletDetails.encryption, { answers: preparedItemAnswers.answer })
 
     // Step 2 - Send answers to backend
     const answer: AnswerPayload = {
-      appletId: appletDetails?.id,
-      version: appletDetails?.version,
-      flowId: null,
-      activityId: activityDetails.id,
-      answers: itemAnswers,
+      appletId: appletDetails.id,
+      version: appletDetails.version,
+      userPublicKey,
+      answers: [
+        {
+          flowId: null,
+          activityId: activityDetails.id,
+          answer: encryptedAnswers,
+          itemIds: preparedItemAnswers.itemIds,
+        },
+      ],
     }
-    return saveAnswer(answer) // Next steps in onSuccess handler
-  }, [activityDetails.id, appletDetails?.id, appletDetails?.version, currentActivityEventProgress, saveAnswer])
+
+    return isPublic ? publicSaveAnswer(answer) : saveAnswer(answer) // Next steps in onSuccess handler
+  }, [
+    activityDetails.id,
+    appletDetails.encryption,
+    appletDetails?.id,
+    appletDetails?.version,
+    currentActivityEventProgress,
+    encrypteAnswers,
+    isPublic,
+    publicSaveAnswer,
+    saveAnswer,
+  ])
 
   return (
     <>

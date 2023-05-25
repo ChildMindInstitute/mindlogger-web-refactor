@@ -5,11 +5,25 @@ import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/
 import { useEventsbyAppletIdQuery } from "~/entities/event"
 import { ActivityDTO } from "~/shared/api"
 
-interface UseActivityDetailsProps {
+type PrivateProps = {
+  isPublic: false
+
   appletId: string
   activityId: string
   eventId: string
 }
+
+type PublicProps = {
+  isPublic: true
+
+  appletId: string
+  activityId: string
+  eventId: string
+
+  publicAppletKey: string
+}
+
+type Props = PrivateProps | PublicProps
 
 export interface ActivityEvents {
   eventId: string
@@ -27,24 +41,25 @@ type UseActivityDetailsParams = {
   isRestart: boolean
 }
 
-export const useActivityDetails = (
-  { appletId, activityId, eventId }: UseActivityDetailsProps,
-  params: UseActivityDetailsParams,
-): UseActivityDetailsReturn => {
+export const useActivityDetails = (props: Props, params: UseActivityDetailsParams): UseActivityDetailsReturn => {
   const { saveActivityEventRecords, resetActivityEventRecordsByParams } =
     activityModel.hooks.useSaveActivityEventProgress()
 
   useEffect(() => {
     if (params.isRestart) {
-      resetActivityEventRecordsByParams(activityId, eventId)
+      resetActivityEventRecordsByParams(props.activityId, props.eventId)
     }
-  }, [activityId, eventId, params.isRestart, resetActivityEventRecordsByParams])
+  }, [props.activityId, props.eventId, params.isRestart, resetActivityEventRecordsByParams])
 
   const {
     data: appletById,
     isError: isAppletError,
     isLoading: isAppletLoading,
-  } = useAppletByIdQuery({ isPublic: false, appletId })
+  } = useAppletByIdQuery(
+    props.isPublic
+      ? { isPublic: props.isPublic, publicAppletKey: props.publicAppletKey }
+      : { isPublic: props.isPublic, appletId: props.appletId },
+  )
 
   const appletDetailsRawData = useMemo(() => {
     return appletById?.data?.result
@@ -55,7 +70,7 @@ export const useActivityDetails = (
     isError: isActivityError,
     isLoading: isActivityLoading,
   } = useActivityByIdQuery(
-    { activityId },
+    { isPublic: props.isPublic, activityId: props.activityId },
     {
       onSuccess(data) {
         if (!params.isRestart) {
@@ -66,7 +81,7 @@ export const useActivityDetails = (
 
         if (activityDetails) {
           const initialStep = 1
-          return saveActivityEventRecords(activityDetails, eventId, initialStep)
+          return saveActivityEventRecords(activityDetails, props.eventId, initialStep)
         }
       },
     },
@@ -80,7 +95,11 @@ export const useActivityDetails = (
     data: eventsByIdData,
     isError: isEventsError,
     isLoading: isEventsLoading,
-  } = useEventsbyAppletIdQuery({ appletId })
+  } = useEventsbyAppletIdQuery(
+    props.isPublic
+      ? { isPublic: props.isPublic, publicAppletKey: props.publicAppletKey }
+      : { isPublic: props.isPublic, appletId: props.appletId },
+  )
 
   const eventsRawData = useMemo(() => {
     return eventsByIdData?.data?.result

@@ -7,7 +7,14 @@ import { LoginSchema, TLoginForm } from "../model/login.schema"
 
 import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
 import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
-import { ROUTES, secureTokensStorage, useCustomForm, usePasswordType } from "~/shared/utils"
+import {
+  ROUTES,
+  secureTokensStorage,
+  secureUserPrivateKeyStorage,
+  useCustomForm,
+  useEncryption,
+  usePasswordType,
+} from "~/shared/utils"
 
 interface LoginFormProps {
   locationState?: Record<string, unknown>
@@ -20,6 +27,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
   const [passwordType, onPasswordIconClick] = usePasswordType()
 
   const { setUser } = userModel.hooks.useUserState()
+  const { generateUserPrivateKey } = useEncryption()
 
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {
@@ -32,7 +40,16 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
     isLoading,
     error,
   } = useLoginMutation({
-    onSuccess(data) {
+    onSuccess(data, variables) {
+      const userParams = {
+        userId: data.data.result.user.id,
+        email: data.data.result.user.email,
+        password: variables.password,
+      }
+
+      const userPrivateKey = generateUserPrivateKey(userParams)
+      secureUserPrivateKeyStorage.setUserPrivateKey(userPrivateKey)
+
       setUser(data.data.result.user)
       secureTokensStorage.setTokens(data.data.result.token)
 

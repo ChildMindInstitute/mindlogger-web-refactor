@@ -20,7 +20,7 @@ export const useAppletByIdQuery = <TData = ReturnAwaited<FetchFn>>(params: Param
     ["appletById", { ...params }],
     () =>
       params.isPublic
-        ? appletService.getPublicById({ publicAppletKey: params.publicAppletKey })
+        ? appletService.getPublicByKey({ publicAppletKey: params.publicAppletKey })
         : appletService.getById({ appletId: params.appletId }),
     options,
   )
