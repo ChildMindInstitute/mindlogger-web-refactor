@@ -136,7 +136,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
       ],
     }
 
-    return isPublic ? publicSaveAnswer(answer) : saveAnswer(answer) // Next steps in onSuccess handler
+    return isPublic ? publicSaveAnswer(answer) : saveAnswer(answer) // Next steps in onSuccess mutation handler
   }, [
     activityDetails.id,
     appletDetails.encryption,
