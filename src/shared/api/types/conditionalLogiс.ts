@@ -1,4 +1,4 @@
-export type Match = "Any" | "ALL"
+export type Match = "any" | "all"
 
 export type ConditionalLogic = {
   match: Match
@@ -37,7 +37,7 @@ export type EqualToOptionCondition = {
   itemName: string
   type: "EQUAL_TO_OPTION"
   payload: {
-    optiondId: string
+    optionId: string
   }
 }
 

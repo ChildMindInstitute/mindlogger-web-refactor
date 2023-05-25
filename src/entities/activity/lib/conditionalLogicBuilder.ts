@@ -1,12 +1,13 @@
-import { Condition } from "../../../shared/api"
 import { ActivityEventProgressRecord } from "../model/types"
 import { Answer } from "./types"
+
+import { Condition } from "~/shared/api"
 
 export type ItemMapByName = Record<string, ActivityEventProgressRecord>
 
 class ConditionalLogicBuilder {
   public process(items: ActivityEventProgressRecord[]): ActivityEventProgressRecord[] {
-    return items.filter(this.conditionalLogicFilter)
+    return items.filter((item, index, array) => this.conditionalLogicFilter(item, index, array))
   }
 
   private conditionalLogicFilter(
@@ -20,20 +21,19 @@ class ConditionalLogicBuilder {
       return true
     }
 
-    const itemMapByName: ItemMapByName = {}
-
-    array.forEach(item => {
-      itemMapByName[item.name] = item
-    })
+    const itemMapByName: ItemMapByName = array.reduce<ItemMapByName>((acc, item) => {
+      acc[item.name] = item
+      return acc
+    }, {})
 
     const conditionPattern = condition.match
     const conditionRules = condition.conditions
 
     switch (conditionPattern) {
-      case "ALL":
+      case "all":
         return this.checkAllRules(conditionRules, itemMapByName)
 
-      case "Any":
+      case "any":
         return this.checkAnyRules(conditionRules, itemMapByName)
 
       default:
@@ -72,7 +72,7 @@ class ConditionalLogicBuilder {
   private checkRuleByPattern(rule: Condition, answer: Answer): boolean {
     switch (rule.type) {
       case "EQUAL_TO_OPTION":
-        return rule.payload.optiondId === answer[0]
+        return rule.payload.optionId === answer[0]
 
       case "NOT_EQUAL_TO_OPTION":
         return rule.payload.optionId !== answer[0]
