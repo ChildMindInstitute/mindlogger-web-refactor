@@ -7,16 +7,13 @@ type AnswerPayload = {
   answers: Array<AnswerTypesPayload>
 }
 
-type EncryptAnswerReturn = {
-  activityItemId: string
-  answer: string
-}
+type EncryptAnswerReturn = string
 
 export const useEncrypteAnswers = () => {
   const { createEncryptionService } = useEncryption()
 
   const encrypteAnswers = useCallback(
-    (encryptionParams: AppletEncryptionDTO | null, answerPayload: AnswerPayload): EncryptAnswerReturn[] => {
+    (encryptionParams: AppletEncryptionDTO | null, answerPayload: AnswerPayload): EncryptAnswerReturn => {
       if (!encryptionParams) {
         throw new Error("Encryption params is undefined")
       }
@@ -32,14 +29,7 @@ export const useEncrypteAnswers = () => {
         privateKey: userPrivateKey,
       })
 
-      return answerPayload.answers.map(answerItem => {
-        const encryptedAnswer = encryptionService.encrypt(JSON.stringify(answerItem.answer))
-
-        return {
-          ...answerItem,
-          answer: encryptedAnswer,
-        }
-      })
+      return encryptionService.encrypt(JSON.stringify(answerPayload.answers))
     },
     [createEncryptionService],
   )

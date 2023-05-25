@@ -32,12 +32,13 @@ export type ActivityItemDetailsDTO = TextItemDTO | CheckboxItemDTO | RadioItemDT
 export type AnswerPayload = {
   appletId: ID
   version: string
-  flowId: ID | null
-  activityId: ID
+  userPublicKey: string
   answers: Array<{
-    activityItemId: string
-    answer: string
-  }> // Prev version: Array<AnswerTypesPayload>
+    flowId: ID | null
+    activityId: ID
+    answer: string // Encrypted answer DTO: Array<string | { value: string | string[] | number, text: string | null }>
+    itemIds: Array<ID>
+  }>
 }
 
 export type AnswerTypesPayload =
@@ -46,34 +47,19 @@ export type AnswerTypesPayload =
   | SingleSelectAnswerPayload
   | SliderAnswerPayload
 
-export type TextAnswerPayload = {
-  activityItemId: string
-  answer: {
-    value: string
-    shouldIdentifyResponse: boolean
-  }
-}
+export type TextAnswerPayload = string
 
 export type MultiSelectAnswerPayload = {
-  activityItemId: string
-  answer: {
-    value: Array<ID>
-    additionalText: string | null
-  }
+  value: Array<ID>
+  text: string | null
 }
 
 export type SingleSelectAnswerPayload = {
-  activityItemId: string
-  answer: {
-    value: ID
-    additionalText: string | null
-  }
+  value: ID
+  text: string | null
 }
 
 export type SliderAnswerPayload = {
-  activityItemId: string
-  answer: {
-    value: number
-    additionalText: string | null
-  }
+  value: number
+  text: string | null
 }
