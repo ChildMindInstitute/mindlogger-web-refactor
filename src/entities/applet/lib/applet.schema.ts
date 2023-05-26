@@ -1,3 +1,5 @@
+import { AppletEncryptionDTO } from "../../../shared/api"
+
 export type ActivityFlow = {
   id: string
   name: string
@@ -28,4 +30,5 @@ export type AppletDetails<TActivity, TActivityFlow> = {
   version: string
   activities: TActivity[]
   activityFlows: TActivityFlow[]
+  encryption: AppletEncryptionDTO | null
 }

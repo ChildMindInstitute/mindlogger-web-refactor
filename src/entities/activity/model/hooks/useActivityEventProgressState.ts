@@ -2,7 +2,7 @@ import { useMemo } from "react"
 
 import { useSelector } from "react-redux"
 
-import { getActivityEventProgressId } from "../../lib"
+import { conditionalLogicBuilder, getActivityEventProgressId } from "../../lib"
 import { activityEventProgressSelector } from "../selectors"
 
 type UseActivityEventProgressStateProps = {
@@ -25,7 +25,7 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
       return []
     }
 
-    return activityEventProgress.activityEvents
+    return conditionalLogicBuilder.process(activityEventProgress.activityEvents)
   }, [currentActivityEventStateProgress])
 
   const lastActivityEventWithAnswerIndex = useMemo(() => {
@@ -51,12 +51,12 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
       return defaultProgressPercentage
     }
 
-    const activityEventLength = activityEventRecords.activityEvents.length
+    const activityEventLength = currentActivityEventProgress.length
     const lastStep = activityEventRecords?.step
 
     // Step always start from 1, but we want to paint progress when we pass some item
     return ((lastStep - 1) / activityEventLength) * 100
-  }, [currentActivityEventStateProgress])
+  }, [currentActivityEventProgress.length, currentActivityEventStateProgress])
 
   return { currentActivityEventProgress, lastActivityEventWithAnswerIndex, progress }
 }

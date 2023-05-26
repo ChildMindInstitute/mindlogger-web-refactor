@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react"
 
 import Modal from "../../Modal"
+import { generateUserPublicKey, mapToAnswers } from "../model"
+import { prepareItemAnswers } from "../model/prepareItemAnswers"
 import { validateAnswerBeforeSubmit } from "../model/validateItemsBeforeSubmit"
 
 import {
@@ -8,6 +10,7 @@ import {
   ActivityListItem,
   ActivityOnePageAssessment,
   activityModel,
+  useEncrypteAnswers,
   usePublicSaveAnswerMutation,
   useSaveAnswerMutation,
 } from "~/entities/activity"
@@ -64,6 +67,8 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     },
   })
 
+  const { encrypteAnswers } = useEncrypteAnswers()
+
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { updateGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
   const { currentActivityEventProgress } = activityModel.hooks.useActivityEventProgressState({
@@ -108,23 +113,37 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
 
   const onPrimaryButtonClick = useCallback(() => {
     // Step 1 - Collect answers from store and transform to answer payload
-    const itemAnswers = activityModel.activityBuilder.convertToAnswers(currentActivityEventProgress)
+    const itemAnswers = mapToAnswers(currentActivityEventProgress)
+
+    const userPublicKey = generateUserPublicKey(appletDetails?.encryption)
+
+    const preparedItemAnswers = prepareItemAnswers(itemAnswers)
+
+    const encryptedAnswers = encrypteAnswers(appletDetails.encryption, { answers: preparedItemAnswers.answer })
 
     // Step 2 - Send answers to backend
     const answer: AnswerPayload = {
-      appletId: appletDetails?.id,
-      version: appletDetails?.version,
-      flowId: null,
-      activityId: activityDetails.id,
-      answers: itemAnswers,
+      appletId: appletDetails.id,
+      version: appletDetails.version,
+      userPublicKey,
+      answers: [
+        {
+          flowId: null,
+          activityId: activityDetails.id,
+          answer: encryptedAnswers,
+          itemIds: preparedItemAnswers.itemIds,
+        },
+      ],
     }
 
-    return isPublic ? publicSaveAnswer(answer) : saveAnswer(answer) // Next steps in onSuccess handler
+    return isPublic ? publicSaveAnswer(answer) : saveAnswer(answer) // Next steps in onSuccess mutation handler
   }, [
     activityDetails.id,
+    appletDetails.encryption,
     appletDetails?.id,
     appletDetails?.version,
     currentActivityEventProgress,
+    encrypteAnswers,
     isPublic,
     publicSaveAnswer,
     saveAnswer,
