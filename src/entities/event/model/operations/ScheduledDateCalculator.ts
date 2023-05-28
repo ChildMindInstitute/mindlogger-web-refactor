@@ -1,7 +1,7 @@
 import { differenceInMonths, isEqual, startOfDay, subMonths, addDays, subMinutes } from "date-fns"
 import { Parse, Day } from "dayspan"
 
-import { AvailabilityType, EventAvailability, PeriodicityType, ScheduleEvent } from "../../lib"
+import { AvailabilityLabelType, EventAvailability, PeriodicityType, ScheduleEvent } from "../../lib"
 
 type EventParseInput = Parameters<typeof Parse.schedule>[0]
 
@@ -62,9 +62,9 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
     throw new Error("[SheduledDateCalculator]: selectedDate contains time set")
   }
 
-  const alwaysAvailable = availability.availabilityType === AvailabilityType.AlwaysAvailable
+  const alwaysAvailable = availability.availabilityType === AvailabilityLabelType.AlwaysAvailable
 
-  const scheduled = availability.availabilityType === AvailabilityType.ScheduledAccess
+  const scheduled = availability.availabilityType === AvailabilityLabelType.ScheduledAccess
 
   if (alwaysAvailable) {
     return calculateForSpecificDay(startOfDay(now), availability)

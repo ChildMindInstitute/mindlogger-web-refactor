@@ -14,7 +14,7 @@ import {
   EventActivity,
   ProgressPayload,
 } from "~/entities/activity"
-import { AvailabilityType } from "~/entities/event"
+import { AvailabilityLabelType } from "~/entities/event"
 import {
   HourMinute,
   getMsFromHours,
@@ -189,9 +189,9 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     for (const eventActivity of notInProgress) {
       const { event } = eventActivity
 
-      const isAlwaysAvailable = event.availability.availabilityType === AvailabilityType.AlwaysAvailable
+      const isAlwaysAvailable = event.availability.availabilityType === AvailabilityLabelType.AlwaysAvailable
 
-      const isScheduled = event.availability.availabilityType === AvailabilityType.ScheduledAccess
+      const isScheduled = event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess
 
       const oneTimeCompletion = event.availability.oneTimeCompletion
 
@@ -240,7 +240,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
       const { event } = eventActivity
 
-      if (event.availability.availabilityType === AvailabilityType.ScheduledAccess) {
+      if (event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess) {
         const to = this.getNow()
         to.setHours(event.availability.timeTo!.hours)
         to.setMinutes(event.availability.timeTo!.minutes)
@@ -273,7 +273,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     for (const eventActivity of notInProgress) {
       const { event } = eventActivity
 
-      const typeIsScheduled = event.availability.availabilityType === AvailabilityType.ScheduledAccess
+      const typeIsScheduled = event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess
 
       const accessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime
 

@@ -1,4 +1,4 @@
-import { ScheduleEvent, AvailabilityType, PeriodicityType } from "../lib"
+import { ScheduleEvent, PeriodicityType, AvailabilityLabelType } from "../lib"
 
 import { PeriodicityTypeDTO, ScheduleEventDto } from "~/shared/api"
 import { buildDateFromDto } from "~/shared/utils"
@@ -18,7 +18,7 @@ export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
     scheduledAt: null,
     availability: {
       allowAccessBeforeFromTime: dto.availability.allowAccessBeforeFromTime,
-      availabilityType: dto.availabilityType as unknown as AvailabilityType, // TODO: change to mapper
+      availabilityType: dto.availabilityType as unknown as AvailabilityLabelType, // TODO: change to mapper
       periodicityType: convertPeriodicitType(dto.availability.periodicityType),
       startDate: buildDateFromDto(dto.availability.startDate),
       endDate: buildDateFromDto(dto.availability.endDate),

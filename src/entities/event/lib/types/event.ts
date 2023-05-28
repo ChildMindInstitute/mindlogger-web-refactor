@@ -6,6 +6,12 @@ export const enum AvailabilityType {
   ScheduledAccess = 2,
 }
 
+export const enum AvailabilityLabelType {
+  NotDefined = "NotDefined",
+  AlwaysAvailable = "AlwaysAvailable",
+  ScheduledAccess = "ScheduledAccess",
+}
+
 export const enum PeriodicityType {
   NotDefined = 0,
   Once = 1,
@@ -16,7 +22,7 @@ export const enum PeriodicityType {
 }
 
 export type EventAvailability = {
-  availabilityType: AvailabilityType
+  availabilityType: AvailabilityLabelType
   oneTimeCompletion: boolean
   periodicityType: PeriodicityType
   timeFrom: HourMinute | null
