@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { Dictionary, isIncludesSpaces } from "~/shared/utils"
+import { Dictionary, stringContainsSpaces } from "~/shared/utils"
 
 export const RecoveryPasswordSchema = z
   .object({
@@ -8,14 +8,14 @@ export const RecoveryPasswordSchema = z
       .string()
       .trim()
       .min(6, { message: Dictionary.validation.password.minLength })
-      .refine(value => !isIncludesSpaces(value), {
+      .refine(value => !stringContainsSpaces(value), {
         message: Dictionary.validation.password.shouldNotContainSpaces,
       }),
     confirm: z
       .string()
       .trim()
       .min(6, { message: Dictionary.validation.password.minLength })
-      .refine(value => !isIncludesSpaces(value), {
+      .refine(value => !stringContainsSpaces(value), {
         message: Dictionary.validation.password.shouldNotContainSpaces,
       }),
   })
