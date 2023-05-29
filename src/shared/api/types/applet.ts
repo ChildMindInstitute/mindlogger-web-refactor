@@ -1,5 +1,6 @@
 import { HourMinute } from "../../utils"
 import { BaseSuccessListResponse, BaseSuccessResponse } from "./base"
+import { PeriodicityTypeDTO } from "./events"
 
 // API payloads
 export type GetAppletByIdPayload = {
@@ -64,24 +65,34 @@ export type ActivityFlowDTO = {
   isSingleReport: boolean
   hideBadge: boolean
   order: number
+  isHidden: boolean
   activityIds: Array<string>
 }
 
-export type EventAvailabilityDTO = {
-  availabilityType: number
+export type EventAvailabilityDto = {
   oneTimeCompletion: boolean
-  periodicityType: number
+  periodicityType: PeriodicityTypeDTO
   timeFrom: HourMinute | null
   timeTo: HourMinute | null
   allowAccessBeforeFromTime: boolean
   startDate?: string | null
   endDate?: string | null
-  selectedDate?: string | null
 }
 
 export type ScheduleEventDto = {
+  id: string
   entityId: string
-  availability: EventAvailabilityDTO
+  availabilityType: string
+  availability: EventAvailabilityDto
+  selectedDate?: string | null
+  timers: {
+    timer: HourMinute | null
+    idleTimer: HourMinute | null
+  }
+}
+
+export type AppletEventsResponse = {
+  events: ScheduleEventDto[]
 }
 
 export type AppletEncryptionDTO = {

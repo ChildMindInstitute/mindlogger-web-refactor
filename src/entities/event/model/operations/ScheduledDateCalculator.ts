@@ -1,7 +1,7 @@
-import { differenceInMonths, isEqual, startOfDay, subMonths } from "date-fns"
+import { differenceInMonths, isEqual, startOfDay, subMonths, addDays, subMinutes } from "date-fns"
 import { Parse, Day } from "dayspan"
 
-import { AvailabilityType, EventAvailability, PeriodicityType, ScheduleEvent } from "../../lib"
+import { AvailabilityLabelType, EventAvailability, PeriodicityType, ScheduleEvent } from "../../lib"
 
 type EventParseInput = Parameters<typeof Parse.schedule>[0]
 
@@ -10,10 +10,6 @@ const setTime = (target: Date, availability: EventAvailability) => {
     target.setHours(availability.timeFrom.hours)
     target.setMinutes(availability.timeFrom.minutes)
   }
-}
-
-const isTodayDate = (date: Date): boolean => {
-  return startOfDay(date) === startOfDay(new Date())
 }
 
 const calculateForMonthly = (selectedDate: Date, availability: EventAvailability): Date | null => {
@@ -29,7 +25,11 @@ const calculateForMonthly = (selectedDate: Date, availability: EventAvailability
   } else {
     date = check
   }
-  if (date < availability.startDate! || date > availability.endDate!) {
+
+  const isBeyondOfDateBorders =
+    (availability.startDate && date < availability.startDate) || (availability.endDate && date > availability.endDate)
+
+  if (isBeyondOfDateBorders) {
     return null
   }
   setTime(date, availability)
@@ -38,9 +38,9 @@ const calculateForMonthly = (selectedDate: Date, availability: EventAvailability
 }
 
 const calculateForSpecificDay = (specificDay: Date, availability: EventAvailability): Date | null => {
-  const isAlwaysAvailable = availability.availabilityType === AvailabilityType.AlwaysAvailable
+  const today = startOfDay(new Date())
 
-  if (!isAlwaysAvailable && !isTodayDate(specificDay)) {
+  if (specificDay < today) {
     return null
   }
 
@@ -62,12 +62,16 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
     throw new Error("[SheduledDateCalculator]: selectedDate contains time set")
   }
 
-  const alwaysAvailable = availability.availabilityType === AvailabilityType.AlwaysAvailable
+  const alwaysAvailable = availability.availabilityType === AvailabilityLabelType.AlwaysAvailable
 
-  const scheduled = availability.availabilityType === AvailabilityType.ScheduledAccess
+  const scheduled = availability.availabilityType === AvailabilityLabelType.ScheduledAccess
 
-  if (alwaysAvailable || (scheduled && availability.periodicityType === PeriodicityType.Once)) {
-    return calculateForSpecificDay(alwaysAvailable ? now : selectedDate!, availability)
+  if (alwaysAvailable) {
+    return calculateForSpecificDay(startOfDay(now), availability)
+  }
+
+  if (scheduled && availability.periodicityType === PeriodicityType.Once) {
+    return calculateForSpecificDay(selectedDate!, availability)
   }
 
   if (availability.periodicityType === PeriodicityType.Monthly) {
@@ -87,7 +91,9 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
     parseInput.start = availability.startDate.getTime()
   }
   if (availability.endDate) {
-    parseInput.end = availability.endDate.getTime()
+    let endOfDay = addDays(availability.endDate, 1)
+    endOfDay = subMinutes(endOfDay, 1)
+    parseInput.end = endOfDay.getTime()
   }
 
   if (availability.timeFrom) {
@@ -104,18 +110,22 @@ const calculateScheduledAt = (event: ScheduleEvent): Date | null => {
 
   const futureSchedule = parsedSchedule.forecast(fromDate, true, 1, 0, true)
 
-  const result = futureSchedule.first()
+  const calculated = futureSchedule.first()
 
-  if (!result) {
+  if (!calculated) {
     return null
   }
 
-  return result[0].start.date
+  const result = calculated[0].start.date
+
+  setTime(result, availability)
+
+  return result
 }
 
 const cache = new Map()
 
-export const SheduledDateCalculator = {
+export const ScheduledDateCalculator = {
   calculate: (event: ScheduleEvent): Date | null => {
     const today = new Date().toDateString()
 

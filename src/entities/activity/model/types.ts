@@ -11,6 +11,7 @@ import {
 type ActivityFlowProgress = {
   type: ActivityPipelineType.Flow
   currentActivityId: string
+  pipelineActivityOrder: number
 }
 
 type ActivityProgress = {

@@ -14,7 +14,7 @@ import {
   EventActivity,
   ProgressPayload,
 } from "~/entities/activity"
-import { AvailabilityType } from "~/entities/event"
+import { AvailabilityLabelType } from "~/entities/event"
 import {
   HourMinute,
   getMsFromHours,
@@ -47,7 +47,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   private getNow = () => new Date()
 
   private getProgressRecord(eventActivity: EventActivity): ProgressPayload | null {
-    const record = this.progress[this.appletId]?.[eventActivity.activity.id]?.[eventActivity.event.id]
+    const record = this.progress[this.appletId]?.[eventActivity.entity.id]?.[eventActivity.event.id]
     return record ?? null
   }
 
@@ -65,13 +65,13 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   private populateActivityFlowFields(item: ActivityListItem, activityEvent: EventActivity) {
-    const activityFlow = activityEvent.activity as ActivityFlow
+    const activityFlow = activityEvent.entity as ActivityFlow
 
     item.isInActivityFlow = true
     item.activityFlowDetails = {
       showActivityFlowBadge: !activityFlow.hideBadge,
       activityFlowName: activityFlow.name,
-      numberOfActivitiesInFlow: activityFlow.items.length,
+      numberOfActivitiesInFlow: activityFlow.activityIds.length,
       activityPositionInFlow: 0,
     }
 
@@ -83,12 +83,13 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       const progressRecord = this.getProgressRecord(activityEvent) as ActivityFlowProgress
 
       activity = this.activities.find(x => x.id === progressRecord.currentActivityId)!
-      position = activityFlow.items.findIndex(x => x.activityId === activity.id) + 1
+      position = progressRecord.pipelineActivityOrder + 1
     } else {
-      activity = this.activities.find(x => x.id === activityFlow.items[0].activityId)!
+      activity = this.activities.find(x => x.id === activityFlow.activityIds[0])!
       position = 1
     }
 
+    item.activityId = activity.id
     item.activityFlowDetails.activityPositionInFlow = position
     item.name = activity.name
     item.description = activity.description
@@ -98,7 +99,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
   private getTimeToComplete(eventActivity: EventActivity): HourMinute {
     const { event } = eventActivity
-    const timer = event.timers!.timer!
+    const timer = event.timers.timer!
 
     const startedTime = this.getStartedDateTime(eventActivity)
 
@@ -119,17 +120,17 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   private createListItem(eventActivity: EventActivity) {
-    const { activity, event } = eventActivity
-    const { pipelineType } = eventActivity.activity
+    const { entity, event } = eventActivity
+    const { pipelineType } = entity
     const isFlow = pipelineType === ActivityPipelineType.Flow
 
     const item: ActivityListItem = {
-      activityId: activity.id,
+      activityId: entity.id,
       eventId: event.id,
-      name: isFlow ? "" : activity.name,
-      description: isFlow ? "" : activity.description,
-      type: isFlow ? ActivityType.NotDefined : (activity as Activity).type,
-      image: isFlow ? null : activity.image,
+      name: isFlow ? "" : entity.name,
+      description: isFlow ? "" : entity.description,
+      type: isFlow ? ActivityType.NotDefined : entity.type,
+      image: isFlow ? null : entity.image,
       status: ActivityStatus.NotDefined,
       isTimerSet: false,
       timeLeftToComplete: null,
@@ -158,7 +159,11 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
       const { event } = eventActivity
       item.isTimerSet = !!event.timers?.timer
-      item.timeLeftToComplete = item.isTimerSet ? this.getTimeToComplete(eventActivity) : null
+
+      if (item.isTimerSet) {
+        const timeLeft = this.getTimeToComplete(eventActivity)
+        item.timeLeftToComplete = timeLeft
+      }
 
       activityItems.push(item)
     }
@@ -184,9 +189,9 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     for (const eventActivity of notInProgress) {
       const { event } = eventActivity
 
-      const isAlwaysAvailable = event.availability.availabilityType === AvailabilityType.AlwaysAvailable
+      const isAlwaysAvailable = event.availability.availabilityType === AvailabilityLabelType.AlwaysAvailable
 
-      const isScheduled = event.availability.availabilityType === AvailabilityType.ScheduledAccess
+      const isScheduled = event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess
 
       const oneTimeCompletion = event.availability.oneTimeCompletion
 
@@ -200,6 +205,8 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
       const scheduledToday = isToday(event.scheduledAt!)
 
+      const accessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime
+
       const isCurrentTimeInTimeWindow = isScheduled
         ? isTimeInInterval(
             { hours: now.getHours(), minutes: now.getMinutes() },
@@ -211,10 +218,17 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       const conditionForAlwaysAvailable =
         isAlwaysAvailable && ((oneTimeCompletion && neverCompleted) || !oneTimeCompletion)
 
-      const conditionForScheduled =
+      const conditionForScheduledAndInTimeWindow =
         isScheduled && scheduledToday && now > event.scheduledAt! && isCurrentTimeInTimeWindow && !completedToday
 
-      if (conditionForAlwaysAvailable || conditionForScheduled) {
+      const conditionForScheduledAndValidBeforeStartTime =
+        isScheduled && scheduledToday && now < event.scheduledAt! && accessBeforeTimeFrom && !completedToday
+
+      if (
+        conditionForAlwaysAvailable ||
+        conditionForScheduledAndInTimeWindow ||
+        conditionForScheduledAndValidBeforeStartTime
+      ) {
         filtered.push(eventActivity)
       }
     }
@@ -226,7 +240,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
       const { event } = eventActivity
 
-      if (event.availability.availabilityType === AvailabilityType.ScheduledAccess) {
+      if (event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess) {
         const to = this.getNow()
         to.setHours(event.availability.timeTo!.hours)
         to.setMinutes(event.availability.timeTo!.minutes)
@@ -259,7 +273,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     for (const eventActivity of notInProgress) {
       const { event } = eventActivity
 
-      const typeIsScheduled = event.availability.availabilityType === AvailabilityType.ScheduledAccess
+      const typeIsScheduled = event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess
 
       const accessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime
 

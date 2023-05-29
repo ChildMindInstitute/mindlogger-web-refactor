@@ -1,4 +1,5 @@
 import { HourMinute } from "../../utils"
+import { AppletEventsResponse } from "./applet"
 import { BaseSuccessResponse } from "./base"
 
 export type TimerTypeDTO = "NOT_SET"
@@ -12,7 +13,7 @@ export type GetEventsByPublicAppletKey = {
   publicAppletKey: string
 }
 
-export type SuccessEventsByAppletIdResponse = BaseSuccessResponse<EventsByAppletIdResponseDTO>
+export type SuccessEventsByAppletIdResponse = BaseSuccessResponse<AppletEventsResponse>
 
 export type EventsByAppletIdResponseDTO = {
   appletId: string
