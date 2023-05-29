@@ -9,7 +9,6 @@ export * from "./storage"
 export * from "./constants"
 export * from "./string"
 export * from "./convert"
-export * from "./dateTime"
 
 // Common
 export { enumToArray } from "./enumToArray"

@@ -84,7 +84,7 @@ export type ScheduleEventDto = {
   entityId: string
   availabilityType: string
   availability: EventAvailabilityDto
-  selectedDate?: string | null
+  selectedDate: string | null
   timers: {
     timer: HourMinute | null
     idleTimer: HourMinute | null

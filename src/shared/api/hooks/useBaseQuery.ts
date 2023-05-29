@@ -1,7 +1,5 @@
 import { QueryFunction, UseQueryOptions, useQuery } from "@tanstack/react-query"
-import { useTranslation } from "react-i18next"
 
-import { DEFAULT_LANGUAGE, Language } from "../../utils"
 import { BaseError } from "../types"
 
 type QueryKey = [string, Record<string, unknown>?]
@@ -11,8 +9,6 @@ const useBaseQuery = <TQueryFnData, TError = BaseError, TData = TQueryFnData>(
   queryFn: QueryFunction<TQueryFnData, QueryKey>,
   options?: Omit<UseQueryOptions<TQueryFnData, TError, TData, QueryKey>, "queryKey" | "queryFn">,
 ) => {
-  const { i18n } = useTranslation()
-
   return useQuery(key, queryFn, {
     ...options,
     onError: (error: BaseError) => {
@@ -20,10 +16,6 @@ const useBaseQuery = <TQueryFnData, TError = BaseError, TData = TQueryFnData>(
 
       if (errorRecords?.length) {
         const firstRecord = errorRecords[0]
-
-        const currentLanguage = i18n.language as Language
-
-        // const message = firstRecord.message[currentLanguage] ?? firstRecord.message[DEFAULT_LANGUAGE]
 
         error.evaluatedMessage = firstRecord.message
       } else {

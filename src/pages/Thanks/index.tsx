@@ -2,7 +2,7 @@ import { Container } from "react-bootstrap"
 import { useParams } from "react-router-dom"
 
 import { BasicButton } from "~/shared/ui"
-import { ROUTES, convertBooleanStringToBoolean, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { ROUTES, booleanStringToBoolean, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 import "./style.scss"
 
@@ -21,7 +21,7 @@ export const ThanksPage = () => {
     }
 
     return navigator.navigate(
-      convertBooleanStringToBoolean(isPublic)
+      booleanStringToBoolean(isPublic)
         ? ROUTES.publicJoin.navigateTo(appletId)
         : ROUTES.activityList.navigateTo(appletId),
     )
