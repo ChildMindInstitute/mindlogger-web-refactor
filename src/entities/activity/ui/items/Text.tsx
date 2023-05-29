@@ -1,7 +1,7 @@
 import { TextItem as TextItemType } from "../../lib"
 
 import { TextItem as BaseTextItem } from "~/shared/ui"
-import { containsOnlyNumbers } from "~/shared/utils"
+import { stringContainsOnlyNumbers } from "~/shared/utils"
 
 type TextItemProps = {
   item: TextItemType
@@ -22,7 +22,7 @@ export const TextItem = ({ item, value, onValueChange, isDisabled }: TextItemPro
       return onValueChange([])
     }
 
-    if (numericalResponseRequired && !containsOnlyNumbers(value)) {
+    if (numericalResponseRequired && !stringContainsOnlyNumbers(value)) {
       return
     }
 

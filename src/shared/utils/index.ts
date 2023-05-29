@@ -1,6 +1,5 @@
 export * from "./hooks"
 export * from "./encryption"
-export * from "./object"
 export * from "./types"
 export * from "./routes"
 export * from "./store"
@@ -9,6 +8,7 @@ export * from "./storage"
 export * from "./constants"
 export * from "./string"
 export * from "./convert"
+export * from "./validate"
 
 // Common
 export { enumToArray } from "./enumToArray"
