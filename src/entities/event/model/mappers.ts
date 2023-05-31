@@ -2,7 +2,6 @@ import { ScheduleEvent, PeriodicityType, AvailabilityLabelType } from "../lib"
 
 import { buildDateFromDto } from "~/abstract/lib"
 import { PeriodicityTypeDTO, ScheduleEventDto } from "~/shared/api"
-import { stringToDate } from "~/shared/utils"
 
 export function mapEventsFromDto(eventsDto: ScheduleEventDto[]): ScheduleEvent[] {
   return eventsDto.map<ScheduleEvent>(x => mapEventFromDto(x))
@@ -11,7 +10,7 @@ export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
   return {
     id: dto.id,
     entityId: dto.entityId,
-    selectedDate: dto.selectedDate ? stringToDate(dto.selectedDate) : null,
+    selectedDate: buildDateFromDto(dto.selectedDate),
     timers: {
       idleTimer: dto.timers.idleTimer,
       timer: dto.timers.timer,
