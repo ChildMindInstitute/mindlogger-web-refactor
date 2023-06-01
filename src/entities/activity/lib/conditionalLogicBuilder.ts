@@ -90,10 +90,10 @@ class ConditionalLogicBuilder {
         return rule.payload.value !== Number(answer[0])
 
       case "GREATER_THAN":
-        return rule.payload.value > Number(answer[0])
+        return rule.payload.value < Number(answer[0])
 
       case "LESS_THAN":
-        return rule.payload.value < Number(answer[0])
+        return rule.payload.value > Number(answer[0])
 
       case "BETWEEN":
         return Number(answer[0]) > rule.payload.minValue && Number(answer[0]) < rule.payload.maxValue
