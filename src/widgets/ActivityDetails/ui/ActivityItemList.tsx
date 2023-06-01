@@ -132,6 +132,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
           activityId: activityDetails.id,
           answer: encryptedAnswers,
           itemIds: preparedItemAnswers.itemIds,
+          userActions: "some string for now",
         },
       ],
     }

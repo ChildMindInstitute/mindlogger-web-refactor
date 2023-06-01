@@ -25,6 +25,19 @@ type EventProgressTimestampState = {
   endAt: Date | null
 }
 
+type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"
+
+type UserEventResponse = {
+  value: number[]
+}
+
+type UserEvents = {
+  type: UserEventTypes
+  time: number
+  screen: string
+  response?: UserEventResponse
+}
+
 export type EventProgressState = ActivityOrFlowProgress & EventProgressTimestampState
 
 export type ActivityProgressState = Record<string, EventProgressState>
@@ -43,6 +56,7 @@ export type ActivityEventProgressRecord =
 export type ActivityEventProgressState = {
   activityEvents: ActivityEventProgressRecord[]
   step: number
+  userEvents: Array<UserEvents>
 }
 
 export type ActivityEventState = Record<string, ActivityEventProgressState>

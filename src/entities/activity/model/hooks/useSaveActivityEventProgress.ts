@@ -42,6 +42,7 @@ export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn =
           [activityEventProgressId]: {
             activityEvents,
             step,
+            userEvents: [],
           },
         }),
       )
@@ -58,6 +59,7 @@ export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn =
           [activityEventProgressId]: {
             activityEvents: [],
             step: 1,
+            userEvents: [],
           },
         }),
       )
