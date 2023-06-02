@@ -96,7 +96,7 @@ class ConditionalLogicBuilder {
         return rule.payload.value > Number(answer[0])
 
       case "BETWEEN":
-        return Number(answer[0]) > rule.payload.minValue || Number(answer[0]) < rule.payload.maxValue
+        return Number(answer[0]) > rule.payload.minValue && Number(answer[0]) < rule.payload.maxValue
 
       case "OUTSIDE_OF":
         return Number(answer[0]) < rule.payload.minValue || Number(answer[0]) > rule.payload.maxValue
