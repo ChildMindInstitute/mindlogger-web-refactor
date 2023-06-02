@@ -25,13 +25,15 @@ type EventProgressTimestampState = {
   endAt: Date | null
 }
 
-type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"
+export type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"
 
-type UserEventResponse = {
-  value: number[]
-}
+export type UserEventResponse =
+  | string
+  | {
+      value: number[]
+    }
 
-type UserEvents = {
+export type UserEvents = {
   type: UserEventTypes
   time: number
   screen: string
@@ -90,6 +92,19 @@ export type SaveActivityItemAnswerPayload = {
 export type SetActivityEventProgressStep = {
   activityEventId: string
   step: number
+}
+
+export type SetUserEventByItemIdPayload = {
+  activityEventId: string
+  itemId: string
+  userEvent: UserEvents
+}
+
+export type UpdateUserEventByIndexPayload = {
+  activityEventId: string
+  itemId: string
+  userEventIndex: number
+  userEvent: UserEvents
 }
 
 export type SupportableActivities = Record<string, boolean>

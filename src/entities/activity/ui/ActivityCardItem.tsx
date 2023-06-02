@@ -23,6 +23,7 @@ type ActivityCardItemProps = {
   toPrevStep?: () => void
   values: string[]
   setValue: (itemId: string, answer: string[]) => void
+  saveSetAnswerUserEvent: (item: ActivityEventProgressRecord) => void
   replaceText: (value: string) => string
 }
 
@@ -42,6 +43,7 @@ export const ActivityCardItem = ({
   replaceText,
   isAllItemsSkippable,
   watermark,
+  saveSetAnswerUserEvent,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !values || !values.length,
@@ -93,6 +95,10 @@ export const ActivityCardItem = ({
 
   const onItemValueChange = (value: string[]) => {
     setValue(activityItem.id, value)
+    saveSetAnswerUserEvent({
+      ...activityItem,
+      answer: value,
+    })
   }
 
   const questionText = useMemo(() => {

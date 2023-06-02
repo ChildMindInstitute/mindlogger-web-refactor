@@ -18,6 +18,7 @@ type ActivityCardItemListProps = PropsWithChildren<{
   toNextStep?: () => void
   toPrevStep?: () => void
   setValue: (itemId: string, answer: string[]) => void
+  saveSetAnswerUserEvent: (item: ActivityEventProgressRecord) => void
 }>
 
 export const ActivityCardItemList = ({
@@ -34,6 +35,7 @@ export const ActivityCardItemList = ({
   replaceText,
   isAllItemsSkippable,
   watermark,
+  saveSetAnswerUserEvent,
 }: ActivityCardItemListProps) => {
   return (
     <div>
@@ -62,6 +64,7 @@ export const ActivityCardItemList = ({
             isInvalid={isInvalidItem}
             values={initialAnswer}
             setValue={setValue}
+            saveSetAnswerUserEvent={saveSetAnswerUserEvent}
             onSubmitButtonClick={onSubmitButtonClick}
             openInvalidAnswerModal={openInvalidAnswerModal}
             replaceText={replaceText}

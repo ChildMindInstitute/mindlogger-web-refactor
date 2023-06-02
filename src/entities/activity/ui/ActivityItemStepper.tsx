@@ -2,6 +2,7 @@ import { useMemo } from "react"
 
 import { useTextVariablesReplacer } from "../lib/hooks"
 import { useActivityEventProgressState, useSaveActivityItemAnswer, useStepperState } from "../model/hooks"
+import { useSetAnswerUserEvent } from "../model/hooks/useSaveUserEvent"
 import { ActivityCardItemList } from "./ActivityCardItemList"
 
 type ActivityItemStepperProps = {
@@ -35,6 +36,7 @@ export const ActivityItemStepper = ({
     answers: answers,
   })
 
+  const { saveSetAnswerUserEvent } = useSetAnswerUserEvent({ activityId, eventId })
   const { saveActivityItemAnswer } = useSaveActivityItemAnswer({ eventId, activityId })
 
   const { step, setStep } = useStepperState({ activityId, eventId })
@@ -63,6 +65,7 @@ export const ActivityItemStepper = ({
       toNextStep={toNextStep}
       toPrevStep={toPrevStep}
       setValue={saveActivityItemAnswer}
+      saveSetAnswerUserEvent={saveSetAnswerUserEvent}
       onSubmitButtonClick={onSubmitButtonClick}
       openInvalidAnswerModal={openInvalidAnswerModal}
       invalidItemIds={invalidItemIds}
