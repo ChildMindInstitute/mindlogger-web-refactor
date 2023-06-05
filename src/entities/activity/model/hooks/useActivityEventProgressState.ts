@@ -58,5 +58,10 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
     return ((lastStep - 1) / activityEventLength) * 100
   }, [currentActivityEventProgress.length, currentActivityEventStateProgress])
 
-  return { currentActivityEventProgress, lastActivityEventWithAnswerIndex, progress }
+  return {
+    currentActivityEventProgress,
+    lastActivityEventWithAnswerIndex,
+    progress,
+    userEvents: currentActivityEventStateProgress?.userEvents ?? [],
+  }
 }

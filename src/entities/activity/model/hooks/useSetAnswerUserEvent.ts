@@ -8,12 +8,12 @@ import { ActivityEventProgressRecord } from "../types"
 
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
-type UseSaveActivityItemAnswerProps = {
+type UseSetAnswerUserEventProps = {
   activityId: string
   eventId: string
 }
 
-export const useSetAnswerUserEvent = (props: UseSaveActivityItemAnswerProps) => {
+export const useSetAnswerUserEvent = (props: UseSetAnswerUserEventProps) => {
   const dispatch = useAppDispatch()
   const activityEventProgress = useAppSelector(activityEventProgressSelector)
 

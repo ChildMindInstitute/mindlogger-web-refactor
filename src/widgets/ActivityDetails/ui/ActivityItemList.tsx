@@ -10,7 +10,7 @@ import {
   ActivityListItem,
   ActivityOnePageAssessment,
   activityModel,
-  useEncrypteAnswers,
+  useEncryptPayload,
   usePublicSaveAnswerMutation,
   useSaveAnswerMutation,
 } from "~/entities/activity"
@@ -67,11 +67,11 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     },
   })
 
-  const { encrypteAnswers } = useEncrypteAnswers()
+  const { encryptePayload } = useEncryptPayload()
 
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { updateGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
-  const { currentActivityEventProgress } = activityModel.hooks.useActivityEventProgressState({
+  const { currentActivityEventProgress, userEvents } = activityModel.hooks.useActivityEventProgressState({
     activityId: activityDetails.id,
     eventId,
   })
@@ -119,7 +119,8 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
 
     const preparedItemAnswers = prepareItemAnswers(itemAnswers)
 
-    const encryptedAnswers = encrypteAnswers(appletDetails.encryption, { answers: preparedItemAnswers.answer })
+    const encryptedAnswers = encryptePayload(appletDetails.encryption, preparedItemAnswers.answer)
+    const encryptedUserEvents = encryptePayload(appletDetails.encryption, userEvents)
 
     // Step 2 - Send answers to backend
     const answer: AnswerPayload = {
@@ -132,7 +133,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
           activityId: activityDetails.id,
           answer: encryptedAnswers,
           itemIds: preparedItemAnswers.itemIds,
-          userActions: "some string for now",
+          userActions: encryptedUserEvents,
         },
       ],
     }
@@ -141,13 +142,14 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
   }, [
     activityDetails.id,
     appletDetails.encryption,
-    appletDetails?.id,
-    appletDetails?.version,
+    appletDetails.id,
+    appletDetails.version,
     currentActivityEventProgress,
-    encrypteAnswers,
+    encryptePayload,
     isPublic,
     publicSaveAnswer,
     saveAnswer,
+    userEvents,
   ])
 
   return (

@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 
 import { ItemCardButtonsConfig } from "../lib"
-import { ActivityEventProgressRecord } from "../model/types"
+import { ActivityEventProgressRecord, UserEventTypes } from "../model/types"
 import { ItemCardButton } from "./ItemCardButtons"
 import { ItemPicker } from "./items/ItemPicker"
 
@@ -24,6 +24,7 @@ type ActivityCardItemProps = {
   values: string[]
   setValue: (itemId: string, answer: string[]) => void
   saveSetAnswerUserEvent: (item: ActivityEventProgressRecord) => void
+  saveUserEventByType: (type: UserEventTypes, item: ActivityEventProgressRecord) => void
   replaceText: (value: string) => string
 }
 
@@ -44,6 +45,7 @@ export const ActivityCardItem = ({
   isAllItemsSkippable,
   watermark,
   saveSetAnswerUserEvent,
+  saveUserEventByType,
 }: ActivityCardItemProps) => {
   const buttonConfig: ItemCardButtonsConfig = {
     isNextDisable: !values || !values.length,
@@ -68,6 +70,7 @@ export const ActivityCardItem = ({
       return openInvalidAnswerModal()
     }
 
+    saveUserEventByType("DONE", activityItem)
     return onSubmitButtonClick()
   }
 
@@ -82,6 +85,7 @@ export const ActivityCardItem = ({
       return openInvalidAnswerModal()
     }
 
+    saveUserEventByType("NEXT", activityItem)
     return toNextStep()
   }
 
@@ -90,6 +94,7 @@ export const ActivityCardItem = ({
       return
     }
 
+    saveUserEventByType("PREV", activityItem)
     return toPrevStep()
   }
 
