@@ -85,7 +85,12 @@ export const ActivityCardItem = ({
       return openInvalidAnswerModal()
     }
 
-    saveUserEventByType("NEXT", activityItem)
+    if (!activityItem.answer.length && (isAllItemsSkippable || activityItem.config.skippableItem)) {
+      saveUserEventByType("SKIP", activityItem)
+    } else {
+      saveUserEventByType("NEXT", activityItem)
+    }
+
     return toNextStep()
   }
 
