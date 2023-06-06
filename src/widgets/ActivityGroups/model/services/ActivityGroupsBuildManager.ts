@@ -1,6 +1,6 @@
 import { ActivityListGroup, EventEntity } from "../../lib"
 import { createActivityGroupsBuilder } from "../factories/ActivityGroupsBuilder"
-import { mapActivitiesFromDto, mapActivityFlowsFromDto } from "../mappers"
+import { mapActivitiesFromDto } from "../mappers"
 
 import { Activity, ActivityFlow, ActivityPipelineType, Entity, activityModel } from "~/entities/activity"
 import { EventModel, ScheduleEvent } from "~/entities/event"
@@ -39,7 +39,7 @@ const createActivityGroupsBuildManager = () => {
 
     const activities: Activity[] = mapActivitiesFromDto(appletResponse.activities)
 
-    const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(appletResponse.activityFlows)
+    const activityFlows: ActivityFlow[] = [] // Hardcoded empty array because Web app not support activity flows
 
     const eventsResponse = params.eventsDetails
 
