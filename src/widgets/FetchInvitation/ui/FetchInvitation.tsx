@@ -1,6 +1,7 @@
 import classNames from "classnames"
 import { Spinner } from "react-bootstrap"
 
+import { useAuthorizationGuard } from "../../AuthorizationGuard"
 import { FetchInvitationErrorMapper } from "./FetchInvitationErrorMapper"
 
 import { Invitation, useInvitationQuery, useInvitationTranslation } from "~/entities/invitation"
@@ -13,6 +14,7 @@ interface FetchInvitationProps {
 
 export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
   const { t } = useInvitationTranslation()
+  const { isAuthenticated } = useAuthorizationGuard()
 
   const { isError, data, isLoading, error } = useInvitationQuery(keyParams)
 
@@ -32,6 +34,7 @@ export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
   return (
     <Invitation
       invite={data?.data?.result}
+      isUserAuthenticated={isAuthenticated}
       actionComponent={
         <div className={classNames("d-flex", "justify-content-center", "align-items-center", "flex-row")}>
           <InvitationAcceptButton invitationKey={keyParams} />

@@ -4,7 +4,7 @@ export const useAuthorizationGuard = () => {
   const { user } = userModel.hooks.useUserState()
   const tokens = userModel.hooks.useTokensState()
 
-  const isAuthenticated = user.id && tokens?.accessToken
+  const isAuthenticated = Boolean(user.id) && Boolean(tokens?.accessToken)
 
   return {
     isAuthenticated,

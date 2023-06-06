@@ -9,9 +9,10 @@ import { Logo, PageMessage } from "~/shared/ui"
 interface InvitationProps {
   actionComponent: JSX.Element
   invite?: InvitationDetails
+  isUserAuthenticated: boolean
 }
 
-export const Invitation = ({ invite, actionComponent }: InvitationProps) => {
+export const Invitation = ({ invite, actionComponent, isUserAuthenticated }: InvitationProps) => {
   const { t } = useInvitationTranslation()
 
   if (invite?.status === "approved") {
@@ -28,7 +29,7 @@ export const Invitation = ({ invite, actionComponent }: InvitationProps) => {
         <>
           <InvitationHeader appletName={invite.appletName} role={invite.role} />
           <div className={classNames("mb-3")}>{actionComponent}</div>
-          <InvitationContent appletName={invite.appletName} />
+          <InvitationContent appletName={invite.appletName} isUserAuthenticated={isUserAuthenticated} />
 
           <div>
             <div>
