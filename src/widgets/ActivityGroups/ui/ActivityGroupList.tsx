@@ -191,7 +191,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
         show={isAboutOpen}
         onHide={onAboutModalClose}
         title={t("about")}
-        label={props.appletDetails?.about}
+        label={props.appletDetails?.about ? props.appletDetails.about : t("no_markdown")}
       />
       <CustomModal
         show={resumeActivityState.isOpen}
