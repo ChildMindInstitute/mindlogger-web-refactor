@@ -21,7 +21,7 @@ export const FetchPrivateInvitation = ({ keyParams, redirectState }: FetchPrivat
   const { isError, data, isLoading } = usePrivateInvitationQuery(keyParams)
 
   if (isError) {
-    return <PageMessage message={t("invitationAlreadyRemoved")} />
+    return <PageMessage message={t("notFound")} />
   }
 
   if (isLoading) {
