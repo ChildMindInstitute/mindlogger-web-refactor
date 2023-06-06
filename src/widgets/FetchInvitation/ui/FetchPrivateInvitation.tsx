@@ -36,6 +36,7 @@ export const FetchPrivateInvitation = ({ keyParams, redirectState }: FetchPrivat
   return (
     <Invitation
       invite={data?.data?.result}
+      isUserAuthenticated={isAuthenticated}
       actionComponent={
         <div className={classNames("d-flex", "justify-content-center", "align-items-center", "flex-row")}>
           {isAuthenticated ? (
