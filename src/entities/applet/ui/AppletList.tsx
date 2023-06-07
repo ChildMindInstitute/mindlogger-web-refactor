@@ -5,8 +5,11 @@ import { useAppletListQuery } from "../api"
 import { appletBuilder } from "../model"
 import AppletCard from "./AppletCard"
 
+import { userModel } from "~/entities/user"
+
 const AppletList = () => {
-  const { data, isLoading, isError, error } = useAppletListQuery()
+  const { user } = userModel.hooks.useUserState()
+  const { data, isLoading, isError, error } = useAppletListQuery({ userId: user.id! })
 
   const applets = appletBuilder.convertToAppletList(data?.data?.result)
   const isAppletsEmpty = !applets.length

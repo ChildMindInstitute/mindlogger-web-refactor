@@ -28,7 +28,7 @@ function authorizationService() {
       }
 
       const body = {
-        deviceId: "someid",
+        deviceId: null,
       }
 
       return axiosService.post("/auth/logout", body, { headers })
