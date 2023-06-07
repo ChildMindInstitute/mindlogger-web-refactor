@@ -34,7 +34,7 @@ type WidgetProps = PrivateActivityDetailsWidgetProps | PublicActivityDetailsWidg
 
 export const ActivityDetailsWidget = (props: WidgetProps) => {
   const location = useLocation()
-  const isRestart = location.state.isRestart
+  const isRestart = location.state.isRestart ?? false
 
   const { appletDetails, activityDetails, isLoading } = activityDetailsModel.hooks.useActivityDetails(props, {
     isRestart,
