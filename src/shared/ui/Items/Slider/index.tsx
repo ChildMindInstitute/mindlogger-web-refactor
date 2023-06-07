@@ -13,7 +13,7 @@ type SliderItemProps = {
   maxLabel: string | null
   maxValue: number
 
-  value: string
+  value?: string
 
   disabled?: boolean
   continiusSlider?: boolean
