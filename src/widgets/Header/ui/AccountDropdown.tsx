@@ -32,12 +32,14 @@ const AccountDropdown = ({ title, onSelectExtended }: IAccountDropdownProps) => 
   }, [t, accountDropdownOptions])
 
   return (
-    <Dropdown
-      title={title}
-      options={preparedAccountDropdownOptions}
-      onSelect={onSelect}
-      beforeIndexDivider={preparedAccountDropdownOptions.length - 1}
-    />
+    <div data-testid="header-user-account-dropdown">
+      <Dropdown
+        title={title}
+        options={preparedAccountDropdownOptions}
+        onSelect={onSelect}
+        beforeIndexDivider={preparedAccountDropdownOptions.length - 1}
+      />
+    </div>
   )
 }
 
