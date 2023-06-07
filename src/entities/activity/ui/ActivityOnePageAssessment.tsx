@@ -1,5 +1,6 @@
 import { useTextVariablesReplacer } from "../lib/hooks"
-import { useActivityEventProgressState, useSaveActivityItemAnswer } from "../model/hooks"
+import { useActivityEventProgressState, useSaveActivityItemAnswer, useUserEvent } from "../model/hooks"
+import { useSetAnswerUserEvent } from "../model/hooks/useSetAnswerUserEvent"
 import { ActivityCardItemList } from "./ActivityCardItemList"
 
 type ActivityOnePageAssessmentProps = {
@@ -33,6 +34,8 @@ export const ActivityOnePageAssessment = ({
     answers: answers,
   })
 
+  const { saveUserEventByType } = useUserEvent({ activityId, eventId })
+  const { saveSetAnswerUserEvent } = useSetAnswerUserEvent({ activityId, eventId })
   const { saveActivityItemAnswer } = useSaveActivityItemAnswer({ eventId, activityId })
 
   const isSubmitShown = true // Always true when one page assessment
@@ -46,6 +49,8 @@ export const ActivityOnePageAssessment = ({
       isSubmitShown={isSubmitShown}
       invalidItemIds={invalidItemIds}
       setValue={saveActivityItemAnswer}
+      saveSetAnswerUserEvent={saveSetAnswerUserEvent}
+      saveUserEventByType={saveUserEventByType}
       onSubmitButtonClick={onSubmitButtonClick}
       openInvalidAnswerModal={openInvalidAnswerModal}
       replaceText={replaceTextVariables}

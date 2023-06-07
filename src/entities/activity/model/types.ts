@@ -25,6 +25,21 @@ type EventProgressTimestampState = {
   endAt: Date | null
 }
 
+export type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"
+
+export type UserEventResponse =
+  | string
+  | {
+      value: number[]
+    }
+
+export type UserEvents = {
+  type: UserEventTypes
+  time: number
+  screen: string
+  response?: UserEventResponse
+}
+
 export type EventProgressState = ActivityOrFlowProgress & EventProgressTimestampState
 
 export type ActivityProgressState = Record<string, EventProgressState>
@@ -43,6 +58,7 @@ export type ActivityEventProgressRecord =
 export type ActivityEventProgressState = {
   activityEvents: ActivityEventProgressRecord[]
   step: number
+  userEvents: Array<UserEvents>
 }
 
 export type ActivityEventState = Record<string, ActivityEventProgressState>
@@ -76,6 +92,19 @@ export type SaveActivityItemAnswerPayload = {
 export type SetActivityEventProgressStep = {
   activityEventId: string
   step: number
+}
+
+export type SetUserEventByItemIdPayload = {
+  activityEventId: string
+  itemId: string
+  userEvent: UserEvents
+}
+
+export type UpdateUserEventByIndexPayload = {
+  activityEventId: string
+  itemId: string
+  userEventIndex: number
+  userEvent: UserEvents
 }
 
 export type SupportableActivities = Record<string, boolean>

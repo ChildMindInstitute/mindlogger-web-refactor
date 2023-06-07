@@ -1,19 +1,15 @@
 import { useCallback } from "react"
 
-import { AnswerTypesPayload, AppletEncryptionDTO } from "~/shared/api"
+import { AppletEncryptionDTO } from "~/shared/api"
 import { secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
-
-type AnswerPayload = {
-  answers: Array<AnswerTypesPayload>
-}
 
 type EncryptAnswerReturn = string
 
-export const useEncrypteAnswers = () => {
+export const useEncryptPayload = () => {
   const { createEncryptionService } = useEncryption()
 
-  const encrypteAnswers = useCallback(
-    (encryptionParams: AppletEncryptionDTO | null, answerPayload: AnswerPayload): EncryptAnswerReturn => {
+  const encryptePayload = useCallback(
+    (encryptionParams: AppletEncryptionDTO | null, payload: unknown): EncryptAnswerReturn => {
       if (!encryptionParams) {
         throw new Error("Encryption params is undefined")
       }
@@ -29,12 +25,12 @@ export const useEncrypteAnswers = () => {
         privateKey: userPrivateKey,
       })
 
-      return encryptionService.encrypt(JSON.stringify(answerPayload.answers))
+      return encryptionService.encrypt(JSON.stringify(payload))
     },
     [createEncryptionService],
   )
 
   return {
-    encrypteAnswers,
+    encryptePayload,
   }
 }

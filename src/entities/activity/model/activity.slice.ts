@@ -6,7 +6,9 @@ import {
   GroupsProgressState,
   SaveActivityItemAnswerPayload,
   SetActivityEventProgressStep,
+  SetUserEventByItemIdPayload,
   UpdateActionPayload,
+  UpdateUserEventByIndexPayload,
   UpsertActionPayload,
 } from "./types"
 
@@ -67,6 +69,28 @@ const activitySlice = createSlice({
       const itemIndex = activityEventProgressRecord.activityEvents.findIndex(item => item.id === action.payload.itemId)
 
       activityEventProgressRecord.activityEvents[itemIndex].answer = action.payload.answer
+    },
+    insertUserEventById: (state, action: PayloadAction<SetUserEventByItemIdPayload>) => {
+      const activityEventProgressRecord = state.activityEventProgress[action.payload.activityEventId]
+
+      if (!activityEventProgressRecord) {
+        return state
+      }
+
+      activityEventProgressRecord.userEvents.push(action.payload.userEvent)
+    },
+    updateUserEventByIndex: (state, action: PayloadAction<UpdateUserEventByIndexPayload>) => {
+      const activityEventProgressRecord = state.activityEventProgress[action.payload.activityEventId]
+
+      if (!activityEventProgressRecord) {
+        return state
+      }
+
+      if (!activityEventProgressRecord.userEvents[action.payload.userEventIndex]) {
+        return state
+      }
+
+      activityEventProgressRecord.userEvents[action.payload.userEventIndex] = action.payload.userEvent
     },
 
     setActivityEventProgressStepByParams: (state, action: PayloadAction<SetActivityEventProgressStep>) => {

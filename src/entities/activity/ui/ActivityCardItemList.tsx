@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react"
 
-import { ActivityEventProgressRecord } from "../model/types"
+import { ActivityEventProgressRecord, UserEventTypes } from "../model/types"
 import { ActivityCardItem } from "./ActivityCardItem"
 
 type ActivityCardItemListProps = PropsWithChildren<{
@@ -18,6 +18,8 @@ type ActivityCardItemListProps = PropsWithChildren<{
   toNextStep?: () => void
   toPrevStep?: () => void
   setValue: (itemId: string, answer: string[]) => void
+  saveSetAnswerUserEvent: (item: ActivityEventProgressRecord) => void
+  saveUserEventByType: (type: UserEventTypes, item: ActivityEventProgressRecord) => void
 }>
 
 export const ActivityCardItemList = ({
@@ -34,6 +36,8 @@ export const ActivityCardItemList = ({
   replaceText,
   isAllItemsSkippable,
   watermark,
+  saveSetAnswerUserEvent,
+  saveUserEventByType,
 }: ActivityCardItemListProps) => {
   return (
     <div>
@@ -62,6 +66,8 @@ export const ActivityCardItemList = ({
             isInvalid={isInvalidItem}
             values={initialAnswer}
             setValue={setValue}
+            saveSetAnswerUserEvent={saveSetAnswerUserEvent}
+            saveUserEventByType={saveUserEventByType}
             onSubmitButtonClick={onSubmitButtonClick}
             openInvalidAnswerModal={openInvalidAnswerModal}
             replaceText={replaceText}

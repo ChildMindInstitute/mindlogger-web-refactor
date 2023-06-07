@@ -37,6 +37,7 @@ export type AnswerPayload = {
     flowId: ID | null
     activityId: ID
     answer: string // Encrypted answer DTO: Array<string | { value: string | string[] | number, text: string | null }>
+    userActions: string // Encrypted user actions DTO
     itemIds: Array<ID>
   }>
 }
