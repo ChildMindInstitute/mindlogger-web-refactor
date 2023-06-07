@@ -25,7 +25,7 @@ export const TransferOwnershipDecline = ({ appletId, keyParam }: TransferOwnersh
   }
 
   if (isError) {
-    return <PageMessage message={t("invitationAlreadyRemoved")} />
+    return <PageMessage message={t("notFound")} />
   }
 
   return <PageMessage message={t("invitationDeclined")} />
