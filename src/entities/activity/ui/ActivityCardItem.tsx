@@ -116,31 +116,33 @@ export const ActivityCardItem = ({
   }, [activityItem.question, replaceText])
 
   return (
-    <CardItem
-      markdown={questionText}
-      isInvalid={isInvalid}
-      watermark={watermark}
-      buttons={
-        isActive ? (
-          <ItemCardButton
-            config={buttonConfig}
-            isOnePageAssessment={isOnePageAssessment}
-            isSubmitShown={isSubmitShown}
-            onNextButtonClick={onNextButtonClick}
-            onBackButtonClick={onBackButtonClick}
-            onSubmitButtonClick={onSubmitButtonHandleClick}
-          />
-        ) : (
-          <></>
-        )
-      }>
-      <ItemPicker
-        item={activityItem}
-        values={values}
-        onValueChange={onItemValueChange}
-        isDisabled={!isActive}
-        replaceText={replaceText}
-      />
-    </CardItem>
+    <div data-testid={isActive ? "active-item" : undefined}>
+      <CardItem
+        markdown={questionText}
+        isInvalid={isInvalid}
+        watermark={watermark}
+        buttons={
+          isActive ? (
+            <ItemCardButton
+              config={buttonConfig}
+              isOnePageAssessment={isOnePageAssessment}
+              isSubmitShown={isSubmitShown}
+              onNextButtonClick={onNextButtonClick}
+              onBackButtonClick={onBackButtonClick}
+              onSubmitButtonClick={onSubmitButtonHandleClick}
+            />
+          ) : (
+            <></>
+          )
+        }>
+        <ItemPicker
+          item={activityItem}
+          values={values}
+          onValueChange={onItemValueChange}
+          isDisabled={!isActive}
+          replaceText={replaceText}
+        />
+      </CardItem>
+    </div>
   )
 }
