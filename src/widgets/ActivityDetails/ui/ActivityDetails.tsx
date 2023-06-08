@@ -36,9 +36,12 @@ export const ActivityDetailsWidget = (props: WidgetProps) => {
   const location = useLocation()
   const isRestart = location.state?.isRestart ?? false
 
-  const { appletDetails, activityDetails, isLoading } = activityDetailsModel.hooks.useActivityDetails(props, {
-    isRestart,
-  })
+  const { appletDetails, activityDetails, eventsRawData, isLoading } = activityDetailsModel.hooks.useActivityDetails(
+    props,
+    {
+      isRestart,
+    },
+  )
 
   const { progress } = activityModel.hooks.useActivityEventProgressState({
     activityId: props.activityId,
@@ -90,6 +93,7 @@ export const ActivityDetailsWidget = (props: WidgetProps) => {
             <ActivityItemList
               appletDetails={appletDetails}
               eventId={props.eventId}
+              eventsRawData={eventsRawData}
               activityDetails={activityDetails}
               isPublic={props.isPublic}
               publicAppletKey={props.isPublic ? props.publicAppletKey : undefined}

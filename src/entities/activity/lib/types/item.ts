@@ -91,7 +91,7 @@ export type TextItemConfig = ButtonsConfig & {
   correctAnswerRequired: boolean // default false
   correctAnswer: string // default ""
   numericalResponseRequired: boolean // default false
-  responseDataIdentifier: string // default ""
+  responseDataIdentifier: boolean // default false
   responseRequired: boolean // default false
 }
 
