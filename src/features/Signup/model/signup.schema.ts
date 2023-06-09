@@ -7,8 +7,8 @@ export type TSignupForm = z.infer<typeof SignupFormSchema>
 
 export const SignupFormSchema = BaseUserSchema.pick({ email: true, lastName: true, firstName: true })
   .extend({
-    firstName: z.string().min(1, Dictionary.validation.firstName.required),
-    lastName: z.string().min(1, Dictionary.validation.lastName.required),
+    firstName: z.string().trim().min(1, Dictionary.validation.firstName.required),
+    lastName: z.string().trim().min(1, Dictionary.validation.lastName.required),
     password: z.string().trim().min(6, Dictionary.validation.password.minLength),
     confirmPassword: z.string().trim().min(6, Dictionary.validation.password.minLength),
   })
