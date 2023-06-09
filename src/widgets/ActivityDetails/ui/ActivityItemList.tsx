@@ -156,9 +156,13 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
         userPublicKey,
         startTime: getUnixTime(groupInProgress.startAt!),
         endTime: getUnixTime(new Date()),
-        scheduledTime: getScheduledTimeFromEvents(eventsRawData, activityDetails.id),
         identifier: encryptedIdentifier,
       },
+    }
+
+    const scheduledTime = getScheduledTimeFromEvents(eventsRawData, activityDetails.id)
+    if (scheduledTime) {
+      answer.answer.scheduledTime = scheduledTime
     }
 
     return isPublic ? publicSaveAnswer(answer) : saveAnswer(answer) // Next steps in onSuccess mutation handler

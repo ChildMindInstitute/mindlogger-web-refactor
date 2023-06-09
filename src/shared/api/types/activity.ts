@@ -40,7 +40,7 @@ export type AnswerPayload = {
     events: string // Encrypted user actions DTO
     itemIds: Array<ID>
     identifier: string | null
-    scheduledTime: number | null
+    scheduledTime?: number
     startTime: number
     endTime: number
     userPublicKey: string
