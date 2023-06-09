@@ -1,6 +1,6 @@
 import { ItemAnswer } from "./itemAnswer"
 
-import { CheckboxItem, RadioItem, SliderItem, TextItem, activityModel } from "~/entities/activity"
+import { CheckboxItem, RadioItem, SelectorItem, SliderItem, TextItem, activityModel } from "~/entities/activity"
 import {
   MultiSelectAnswerPayload,
   SingleSelectAnswerPayload,
@@ -24,7 +24,7 @@ export function mapToAnswers(items: Array<activityModel.types.ActivityEventProgr
         return convertToSliderAnswer(item)
 
       case "numberSelect":
-        return null
+        return convertToNumberSelectAnswer(item)
 
       default:
         return null
@@ -93,6 +93,23 @@ function convertToSliderAnswer(item: SliderItem): { answer: SliderAnswerPayload 
   return {
     answer: {
       value: Number(item.answer[0]),
+      text: null,
+    },
+    itemId: item.id,
+  }
+}
+
+function convertToNumberSelectAnswer(item: SelectorItem) {
+  if (!item.answer[0]) {
+    return {
+      answer: null,
+      itemId: item.id,
+    }
+  }
+
+  return {
+    answer: {
+      value: item.answer[0],
       text: null,
     },
     itemId: item.id,
