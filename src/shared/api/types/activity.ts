@@ -52,6 +52,7 @@ export type AnswerTypesPayload =
   | MultiSelectAnswerPayload
   | SingleSelectAnswerPayload
   | SliderAnswerPayload
+  | NumberSelectAnswerPayload
 
 export type TextAnswerPayload = string
 
@@ -66,6 +67,11 @@ export type SingleSelectAnswerPayload = {
 }
 
 export type SliderAnswerPayload = {
+  value: number
+  text: string | null
+}
+
+export type NumberSelectAnswerPayload = {
   value: number
   text: string | null
 }
