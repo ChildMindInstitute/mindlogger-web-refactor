@@ -13,7 +13,7 @@ export const textItemMock: TextItemDTO = {
     correctAnswerRequired: false, // default false
     correctAnswer: "", // default ""
     numericalResponseRequired: false, // default ""
-    responseDataIdentifier: "", // default ""
+    responseDataIdentifier: false, // default ""
     responseRequired: false, // default false
     removeBackButton: false,
     skippableItem: false,

@@ -3,7 +3,7 @@ import { useEffect, useMemo } from "react"
 import { ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
 import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
-import { ActivityDTO } from "~/shared/api"
+import { ActivityDTO, AppletEventsResponse } from "~/shared/api"
 
 type PrivateProps = {
   isPublic: false
@@ -33,6 +33,7 @@ export interface ActivityEvents {
 interface UseActivityDetailsReturn {
   appletDetails: AppletDetails<ActivityListItem, ActivityFlow> | null
   activityDetails: ActivityDTO | null
+  eventsRawData: AppletEventsResponse | undefined
   isError: boolean
   isLoading: boolean
 }
@@ -112,6 +113,7 @@ export const useActivityDetails = (props: Props, params: UseActivityDetailsParam
   return {
     appletDetails,
     activityDetails: activityDetailsRawData ?? null,
+    eventsRawData,
     isError: isAppletError || isActivityError || isEventsError,
     isLoading: isAppletLoading || isActivityLoading || isEventsLoading,
   }

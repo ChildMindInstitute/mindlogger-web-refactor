@@ -32,14 +32,19 @@ export type ActivityItemDetailsDTO = TextItemDTO | CheckboxItemDTO | RadioItemDT
 export type AnswerPayload = {
   appletId: ID
   version: string
-  userPublicKey: string
-  answers: Array<{
-    flowId: ID | null
-    activityId: ID
+  submitId: ID
+  flowId: ID | null
+  activityId: ID
+  answer: {
     answer: string // Encrypted answer DTO: Array<string | { value: string | string[] | number, text: string | null }>
-    userActions: string // Encrypted user actions DTO
+    events: string // Encrypted user actions DTO
     itemIds: Array<ID>
-  }>
+    identifier: string | null
+    scheduledTime?: number
+    startTime: number
+    endTime: number
+    userPublicKey: string
+  }
 }
 
 export type AnswerTypesPayload =

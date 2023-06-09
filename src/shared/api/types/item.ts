@@ -55,7 +55,7 @@ export type TextItemConfigDTO = {
   correctAnswerRequired: boolean // default false
   correctAnswer: string // default ""
   numericalResponseRequired: boolean // default ""
-  responseDataIdentifier: string // default ""
+  responseDataIdentifier: boolean // default ""
   responseRequired: boolean // default false
   removeBackButton: boolean
   skippableItem: boolean
