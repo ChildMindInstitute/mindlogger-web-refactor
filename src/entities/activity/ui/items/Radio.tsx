@@ -42,13 +42,13 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText 
               key={option.id}
               id={option.id}
               name={item.id}
-              value={option.text}
+              value={option.value}
               label={option.text}
               onChange={onHandleValueChange}
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}
-              defaultChecked={option.id === value}
+              defaultChecked={String(option.value) === value}
               color={option.color}
               replaceText={replaceText}
             />
@@ -63,13 +63,13 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText 
               key={option.id}
               id={option.id}
               name={item.id}
-              value={option.text}
+              value={option.value}
               label={option.text}
               onChange={onHandleValueChange}
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}
-              defaultChecked={option.id === value}
+              defaultChecked={String(option.value) === value}
               color={option.color}
               replaceText={replaceText}
             />

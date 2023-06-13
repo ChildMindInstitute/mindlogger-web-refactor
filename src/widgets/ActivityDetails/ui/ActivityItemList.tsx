@@ -184,7 +184,6 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
 
   return (
     <>
-      {/* {isSummaryScreen && <ActivitySummary />} */}
       {!isSummaryScreen && isOnePageAssessment && (
         <ActivityOnePageAssessment
           eventId={eventId}

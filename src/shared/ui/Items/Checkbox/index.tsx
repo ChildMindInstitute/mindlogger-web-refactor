@@ -10,7 +10,7 @@ import "./style.scss"
 type CheckboxItemOptionProps = {
   id: string
   name: string
-  value: string
+  value: string | number
   label: string
 
   disabled?: boolean
@@ -56,7 +56,7 @@ export const CheckboxItemOption = (props: CheckboxItemOptionProps) => {
         disabled={disabled}
         defaultChecked={defaultChecked}
         onChange={e => {
-          onChange(e.target.id)
+          onChange(e.target.value)
         }}
       />
     </div>

@@ -31,7 +31,7 @@ export function mapToAnswers(items: Array<activityModel.types.ActivityEventProgr
     }
   })
 
-  return answers.filter(x => x?.answer) as Array<ItemAnswer>
+  return answers as Array<ItemAnswer>
 }
 
 function convertToTextAnswer(item: TextItem): { answer: TextAnswerPayload | null; itemId: string } {
