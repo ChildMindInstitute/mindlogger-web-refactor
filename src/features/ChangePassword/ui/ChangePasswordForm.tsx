@@ -77,8 +77,7 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
           className={classNames("success-button", "my-3")}
           variant="primary"
           loading={isLoading}
-          disabled={isLoading}
-          defaultSize>
+          disabled={isLoading}>
           {t("submit")}
         </BasicButton>
       </BasicFormProvider>
