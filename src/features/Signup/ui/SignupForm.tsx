@@ -100,7 +100,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
         disabled={!terms || isLoading}
         defaultSize
         loading={isLoading}>
-        {t("title")}
+        {t("create")}
       </BasicButton>
     </BasicFormProvider>
   )
