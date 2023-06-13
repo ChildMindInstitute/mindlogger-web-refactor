@@ -48,11 +48,14 @@ export type AnswerPayload = {
 }
 
 export type AnswerTypesPayload =
+  | SkippedAnswerPayload
   | TextAnswerPayload
   | MultiSelectAnswerPayload
   | SingleSelectAnswerPayload
   | SliderAnswerPayload
   | NumberSelectAnswerPayload
+
+export type SkippedAnswerPayload = null
 
 export type TextAnswerPayload = string
 

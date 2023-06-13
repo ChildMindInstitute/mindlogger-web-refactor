@@ -1,6 +1,6 @@
 import { AnswerTypesPayload } from "~/shared/api"
 
 export type ItemAnswer = {
-  answer: AnswerTypesPayload
+  answer: AnswerTypesPayload | null
   itemId: string
 }

@@ -122,6 +122,7 @@ export type CheckboxValues = {
     tooltip: string | null
     color: string | null
     isHidden: boolean
+    value: number
   }>
 }
 
@@ -150,6 +151,7 @@ export type RadioValues = {
     tooltip: string | null
     color: string | null
     isHidden: boolean
+    value: number
   }>
 }
 

@@ -93,6 +93,7 @@ export type CheckboxItemResponseValuesDTO = {
     tooltip: string | null
     color: string | null
     isHidden: boolean
+    value: number
   }>
 }
 
@@ -126,6 +127,7 @@ export type RadioItemResponseValuesDTO = {
     tooltip: string | null
     color: string | null
     isHidden: boolean
+    value: number
   }>
 }
 

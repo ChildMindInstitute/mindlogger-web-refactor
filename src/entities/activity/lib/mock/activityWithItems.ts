@@ -38,6 +38,7 @@ export const checkboxItemMock: CheckboxItemDTO = {
         score: null,
         tooltip: null,
         color: null,
+        value: 1,
       },
       {
         id: "mock-option-2",
@@ -47,6 +48,7 @@ export const checkboxItemMock: CheckboxItemDTO = {
         score: null,
         tooltip: null,
         color: null,
+        value: 2,
       },
       {
         id: "mock-option-3",
@@ -56,6 +58,7 @@ export const checkboxItemMock: CheckboxItemDTO = {
         score: null,
         tooltip: null,
         color: null,
+        value: 3,
       },
     ],
   },
@@ -93,6 +96,7 @@ export const radioItemMock: RadioItemDTO = {
         score: null,
         tooltip: null,
         color: null,
+        value: 1,
       },
       {
         id: "mock-option-2",
@@ -102,6 +106,7 @@ export const radioItemMock: RadioItemDTO = {
         score: null,
         tooltip: null,
         color: null,
+        value: 2,
       },
       {
         id: "mock-option-3",
@@ -111,6 +116,7 @@ export const radioItemMock: RadioItemDTO = {
         score: null,
         tooltip: null,
         color: null,
+        value: 3,
       },
     ],
   },

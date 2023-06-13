@@ -10,7 +10,7 @@ import "./style.scss"
 type RadioItemOptionProps = {
   id: string
   name: string
-  value: string
+  value: string | number
   label: string
 
   description: string | null
@@ -55,7 +55,7 @@ export const RadioItemOption = (props: RadioItemOptionProps) => {
         label={labelText}
         disabled={disabled}
         defaultChecked={defaultChecked}
-        onChange={e => onChange(e.target.id)}
+        onChange={e => onChange(e.target.value)}
       />
     </div>
   )

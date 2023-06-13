@@ -5,22 +5,14 @@ export const mapItemAnswerToUserEventResponse = (item: ActivityEventProgressReco
   const itemAnswer = item.answer
 
   if (responseType === "singleSelect") {
-    const itemResponseValues = item.responseValues
-    const answerOptionIndex = itemResponseValues.options.findIndex(option => option.id === itemAnswer[0])
     return {
-      value: [answerOptionIndex],
+      value: [Number(itemAnswer[0])],
     }
   }
 
   if (responseType === "multiSelect") {
-    const itemResponseValues = item.responseValues
-    const optionIndex = itemAnswer.map(answer => {
-      const answerOptionIndex = itemResponseValues.options.findIndex(option => option.id === answer)
-      return answerOptionIndex
-    })
-
     return {
-      value: optionIndex,
+      value: itemAnswer.map(answer => Number(answer)),
     }
   }
 
