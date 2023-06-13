@@ -2,6 +2,8 @@ import { Modal } from "react-bootstrap"
 
 import { BasicButton } from "~/shared/ui"
 
+import "./style.scss"
+
 export interface CustomModalProps {
   show: boolean
   onHide: () => void
@@ -26,7 +28,7 @@ const CustomModal = (props: CustomModalProps) => {
   } = props
 
   return (
-    <Modal show={show} onHide={onHide} animation={true}>
+    <Modal show={show} onHide={onHide} animation={true} className="modal-align-center">
       {title && (
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
