@@ -12,7 +12,7 @@ const SignupPage = () => {
 
   return (
     <div className="signupPageContainer align-self-start pt-5 mb-3 w-100">
-      <div className="signup text-center my-2">
+      <div className="signup text-center my-2 px-3">
         <h1>{t("title")}</h1>
 
         <Container className="signupForm">
