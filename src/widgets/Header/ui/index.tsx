@@ -46,12 +46,12 @@ const Header = (): JSX.Element | null => {
       </Navbar.Brand>
 
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
+      <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
         <Nav className="ms-auto">
-          <Col xs={12} md={6} className="container justify-content-center">
+          <Col xs={12} md={4} className="container justify-content-end">
             <LanguageDropdown onSelectExtended={closeExpandedNavbar} />
           </Col>
-          <Col xs={12} md={6} className="container justify-content-center">
+          <Col xs={12} md={8} className="container justify-content-end">
             {user?.id ? (
               <AccountDropdown title={`${user?.firstName} ${user?.lastName}`} onSelectExtended={closeExpandedNavbar} />
             ) : (
