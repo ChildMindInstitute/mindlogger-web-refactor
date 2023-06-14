@@ -1,6 +1,7 @@
 import classNames from "classnames"
 import { Container, Spinner } from "react-bootstrap"
 
+import { useCustomTranslation } from "../../../shared/utils"
 import { ActivityGroupList } from "./ActivityGroupList"
 
 import { useAppletByIdQuery } from "~/entities/applet"
@@ -19,18 +20,10 @@ type FetchPrivateActivitiesProps = {
 type FetchActivitiesProps = FetchPublicActivitiesProps | FetchPrivateActivitiesProps
 
 export const ActivityGroups = (props: FetchActivitiesProps) => {
-  const {
-    isError: isAppletError,
-    isLoading: isAppletLoading,
-    data: appletData,
-    error: appletError,
-  } = useAppletByIdQuery(props)
-  const {
-    isError: isEventsError,
-    isLoading: isEventsLoading,
-    error: eventsError,
-    data: eventsData,
-  } = useEventsbyAppletIdQuery(props)
+  const { t } = useCustomTranslation()
+
+  const { isError: isAppletError, isLoading: isAppletLoading, data: appletData } = useAppletByIdQuery(props)
+  const { isError: isEventsError, isLoading: isEventsLoading, data: eventsData } = useEventsbyAppletIdQuery(props)
 
   if (isAppletLoading || isEventsLoading) {
     return (
@@ -43,7 +36,7 @@ export const ActivityGroups = (props: FetchActivitiesProps) => {
   if (isEventsError || isAppletError) {
     return (
       <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
-        <span>{appletError?.evaluatedMessage || eventsError?.evaluatedMessage}</span>
+        <span>{t("additional.invalid_public_url")}</span>
       </Container>
     )
   }
