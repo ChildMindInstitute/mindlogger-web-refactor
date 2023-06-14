@@ -11,6 +11,7 @@ import { BackNavigateButton } from "./BackNavigateButton"
 import { activityModel, ActivityProgressPreviewList } from "~/entities/activity"
 import { BaseProgressBar } from "~/shared/ui"
 import CustomCard from "~/shared/ui/Card"
+import { useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityDetailsWidgetProps = {
   isPublic: false
@@ -36,12 +37,12 @@ export const ActivityDetailsWidget = (props: WidgetProps) => {
   const location = useLocation()
   const isRestart = location.state?.isRestart ?? false
 
-  const { appletDetails, activityDetails, eventsRawData, isLoading } = activityDetailsModel.hooks.useActivityDetails(
-    props,
-    {
+  const { t } = useCustomTranslation()
+
+  const { appletDetails, activityDetails, eventsRawData, isLoading, isError, error } =
+    activityDetailsModel.hooks.useActivityDetails(props, {
       isRestart,
-    },
-  )
+    })
 
   const { progress } = activityModel.hooks.useActivityEventProgressState({
     activityId: props.activityId,
@@ -60,6 +61,14 @@ export const ActivityDetailsWidget = (props: WidgetProps) => {
     return (
       <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
         <Spinner as="div" animation="border" role="status" aria-hidden="true" />
+      </Container>
+    )
+  }
+
+  if (isError) {
+    return (
+      <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
+        <span>{props.isPublic ? t("additional.invalid_public_url") : error?.evaluatedMessage}</span>
       </Container>
     )
   }

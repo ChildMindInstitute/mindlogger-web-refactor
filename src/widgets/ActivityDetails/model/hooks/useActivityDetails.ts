@@ -3,7 +3,7 @@ import { useEffect, useMemo } from "react"
 import { ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
 import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
-import { ActivityDTO, AppletEventsResponse } from "~/shared/api"
+import { ActivityDTO, AppletEventsResponse, BaseError } from "~/shared/api"
 
 type PrivateProps = {
   isPublic: false
@@ -36,6 +36,7 @@ interface UseActivityDetailsReturn {
   eventsRawData: AppletEventsResponse | undefined
   isError: boolean
   isLoading: boolean
+  error: BaseError | null
 }
 
 type UseActivityDetailsParams = {
@@ -56,6 +57,7 @@ export const useActivityDetails = (props: Props, params: UseActivityDetailsParam
     data: appletById,
     isError: isAppletError,
     isLoading: isAppletLoading,
+    error: appletError,
   } = useAppletByIdQuery(
     props.isPublic
       ? { isPublic: props.isPublic, publicAppletKey: props.publicAppletKey }
@@ -70,6 +72,7 @@ export const useActivityDetails = (props: Props, params: UseActivityDetailsParam
     data: activityById,
     isError: isActivityError,
     isLoading: isActivityLoading,
+    error: activityError,
   } = useActivityByIdQuery(
     { isPublic: props.isPublic, activityId: props.activityId },
     {
@@ -96,6 +99,7 @@ export const useActivityDetails = (props: Props, params: UseActivityDetailsParam
     data: eventsByIdData,
     isError: isEventsError,
     isLoading: isEventsLoading,
+    error: eventsError,
   } = useEventsbyAppletIdQuery(
     props.isPublic
       ? { isPublic: props.isPublic, publicAppletKey: props.publicAppletKey }
@@ -116,5 +120,6 @@ export const useActivityDetails = (props: Props, params: UseActivityDetailsParam
     eventsRawData,
     isError: isAppletError || isActivityError || isEventsError,
     isLoading: isAppletLoading || isActivityLoading || isEventsLoading,
+    error: appletError ?? activityError ?? eventsError,
   }
 }
