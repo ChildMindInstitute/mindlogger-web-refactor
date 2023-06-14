@@ -31,7 +31,7 @@ export const ForgotPasswordForm = () => {
         <p>{t("formTitle")}</p>
       </Container>
 
-      <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
+      <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="email" />
 
       <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
