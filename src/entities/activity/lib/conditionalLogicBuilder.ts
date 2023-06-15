@@ -43,9 +43,9 @@ class ConditionalLogicBuilder {
 
   private checkAllRules(rules: Condition[], itemsMap: ItemMapByName): boolean {
     const checkResult = rules.every(rule => {
-      const answer = itemsMap[rule.itemName]?.answer
+      const answer = this.getOptionIdByValue(itemsMap[rule.itemName])
 
-      if (!answer) {
+      if (!answer.length) {
         return false
       }
 
@@ -57,9 +57,9 @@ class ConditionalLogicBuilder {
 
   private checkAnyRules(rules: Condition[], itemsMap: ItemMapByName): boolean {
     const checkResult = rules.some(rule => {
-      const answer = itemsMap[rule.itemName]?.answer
+      const answer = this.getOptionIdByValue(itemsMap[rule.itemName])
 
-      if (!answer) {
+      if (!answer.length) {
         return false
       }
 
@@ -104,6 +104,22 @@ class ConditionalLogicBuilder {
       default:
         return true
     }
+  }
+
+  private getOptionIdByValue(item: ActivityEventProgressRecord): string[] {
+    if (item.responseType === "multiSelect" || item.responseType === "singleSelect") {
+      const { answer, responseValues } = item
+      const optionIds = answer
+        .map((value: string) => {
+          const option = responseValues.options.find(option => option.value === Number(value))
+          return option?.id
+        })
+        .filter(element => element !== undefined) as Array<string>
+
+      return optionIds
+    }
+
+    return item.answer
   }
 }
 
