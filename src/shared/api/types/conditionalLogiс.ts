@@ -21,7 +21,7 @@ export type IncludesOptionCondition = {
   itemName: string
   type: "INCLUDES_OPTION"
   payload: {
-    optionId: string
+    optionValue: string
   }
 }
 
@@ -29,7 +29,7 @@ export type NotIncludesOptionCondition = {
   itemName: string
   type: "NOT_INCLUDES_OPTION"
   payload: {
-    optionId: string
+    optionValue: string
   }
 }
 
@@ -37,7 +37,7 @@ export type EqualToOptionCondition = {
   itemName: string
   type: "EQUAL_TO_OPTION"
   payload: {
-    optionId: string
+    optionValue: string
   }
 }
 
@@ -45,7 +45,7 @@ export type NotEqualToOptionCondition = {
   itemName: string
   type: "NOT_EQUAL_TO_OPTION"
   payload: {
-    optionId: string
+    optionValue: string
   }
 }
 
