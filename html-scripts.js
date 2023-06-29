@@ -1,12 +1,3 @@
-import { defineConfig, loadEnv } from 'vite'
-import react from '@vitejs/plugin-react'
-import eslint from 'vite-plugin-eslint'
-import { resolve } from 'path'
-import nodePolyfills from 'vite-plugin-node-stdlib-browser'
-import { createHtmlPlugin } from 'vite-plugin-html'
-
-import { getScriptsByEnv } from './html-scripts'
-
 const FreshPaintScript = `
   <script type="text/javascript">
     (function(c,a){if(!a.__SV){var b=window;try{var d,m,j,k=b.location,f=k.hash;d=function(a,b){return(m=a.match(RegExp(b+"=([^&]*)")))?m[1]:null};f&&d(f,"fpState")&&(j=JSON.parse(decodeURIComponent(d(f,"fpState"))),"fpeditor"===j.action&&(b.sessionStorage.setItem("_fpcehash",f),history.replaceState(j.desiredHash||"",c.title,k.pathname+k.search)))}catch(n){}var l,h;window.freshpaint=a;a._i=[];a.init=function(b,d,g){function c(b,i){var a=i.split(".");2==a.length&&(b=b[a[0]],i=a[1]);b[i]=function(){b.push([i].concat(Array.prototype.slice.call(arguments,
@@ -18,49 +9,4 @@ const FreshPaintScript = `
   </script>
 `
 
-const shouldInjectScript = (env: string) => ['STAGE', 'PRODUCTION'].includes(env)
-
-// https://vitejs.dev/config/
-export default defineConfig(async ({ command, mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
-
-  const htmlPlugin = createHtmlPlugin({
-    inject: {
-      data: { injectScripts: getScriptsByEnv(env.VITE_ENV) }
-    }
-  })
-
-  if(command === 'serve') {
-    return {
-      define: {
-        global: 'globalThis',
-        'process.env': {
-          REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY: env.REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY,
-        },
-      },
-      plugins: [react(), eslint(), nodePolyfills(), htmlPlugin],
-      resolve: {
-        alias: {
-          '~': resolve(__dirname, 'src'),
-          Buffer: 'buffer'
-        },
-      },
-    }
-  } else if(command === 'build') {
-    return {
-      define: {
-        global: 'globalThis',
-        'process.env': {
-          REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY: env.REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY,
-        }
-      },
-      plugins: [react(), nodePolyfills(), htmlPlugin],
-      resolve: {
-        alias: {
-          '~': resolve(__dirname, 'src'),
-          Buffer: 'buffer'
-        },
-      },
-    }
-  }
-})
+export const getScriptsByEnv = (env) => ['STAGE', 'PRODUCTION'].includes(env) ? FreshPaintScript : ''
