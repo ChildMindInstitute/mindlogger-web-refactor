@@ -63,5 +63,6 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
     lastActivityEventWithAnswerIndex,
     progress,
     userEvents: currentActivityEventStateProgress?.userEvents ?? [],
+    activityEvents: currentActivityEventStateProgress?.activityEvents ?? [],
   }
 }
