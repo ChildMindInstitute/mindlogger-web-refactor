@@ -80,10 +80,11 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
 
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { updateGroupInProgressByIds, getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
-  const { currentActivityEventProgress, userEvents } = activityModel.hooks.useActivityEventProgressState({
-    activityId: activityDetails.id,
-    eventId,
-  })
+  const { currentActivityEventProgress, userEvents, activityEvents } =
+    activityModel.hooks.useActivityEventProgressState({
+      activityId: activityDetails.id,
+      eventId,
+    })
 
   const isOnePageAssessment = activityDetails.showAllAtOnce
   const isSummaryScreen = false // Mock
@@ -122,7 +123,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
 
   const onPrimaryButtonClick = useCallback(() => {
     // Step 1 - Collect answers from store and transform to answer payload
-    const itemAnswers = mapToAnswers(currentActivityEventProgress)
+    const itemAnswers = mapToAnswers(activityEvents)
 
     const userPublicKey = generateUserPublicKey(appletDetails?.encryption)
 
@@ -137,7 +138,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
       eventId,
     })
 
-    const firstTextItemAnserWithIdentifier = getFirstResponseDataIdentifierTextItem(currentActivityEventProgress)
+    const firstTextItemAnserWithIdentifier = getFirstResponseDataIdentifierTextItem(activityEvents)
     const encryptedIdentifier = firstTextItemAnserWithIdentifier
       ? encryptePayload(appletDetails.encryption, firstTextItemAnserWithIdentifier)
       : null
@@ -168,10 +169,10 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     return isPublic ? publicSaveAnswer(answer) : saveAnswer(answer) // Next steps in onSuccess mutation handler
   }, [
     activityDetails.id,
+    activityEvents,
     appletDetails.encryption,
     appletDetails.id,
     appletDetails.version,
-    currentActivityEventProgress,
     encryptePayload,
     eventId,
     eventsRawData,
