@@ -25,7 +25,9 @@ export const useEncryptPayload = () => {
         privateKey: userPrivateKey,
       })
 
-      return encryptionService.encrypt(JSON.stringify(payload))
+      const payloadString = typeof payload === "string" ? payload : JSON.stringify(payload)
+
+      return encryptionService.encrypt(payloadString)
     },
     [createEncryptionService],
   )
