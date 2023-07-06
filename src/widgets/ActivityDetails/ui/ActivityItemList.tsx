@@ -155,7 +155,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
         itemIds: preparedItemAnswers.itemIds,
         events: encryptedUserEvents,
         userPublicKey,
-        startTime: getUnixTime(groupInProgress.startAt!),
+        startTime: getUnixTime(new Date(groupInProgress.startAt!)),
         endTime: getUnixTime(new Date()),
         identifier: encryptedIdentifier,
       },
