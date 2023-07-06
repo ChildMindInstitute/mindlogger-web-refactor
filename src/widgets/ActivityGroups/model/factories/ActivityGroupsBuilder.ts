@@ -197,7 +197,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
       const progressRecord = this.getProgressRecord(eventActivity)
 
-      const endAt = progressRecord?.endAt
+      const endAt = progressRecord?.endAt ? new Date(progressRecord.endAt) : progressRecord?.endAt
 
       const completedToday = !!endAt && isToday(endAt)
 
