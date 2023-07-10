@@ -10,7 +10,7 @@ import axiosService from "./axios"
 function appletService() {
   return {
     getAll() {
-      return axiosService.get<AppletListSuccessResponse>("/applets")
+      return axiosService.get<AppletListSuccessResponse>("/applets?roles=respondent")
     },
 
     getById(payload: GetAppletByIdPayload) {
