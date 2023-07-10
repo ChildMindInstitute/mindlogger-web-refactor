@@ -60,12 +60,12 @@ export type SkippedAnswerPayload = null
 export type TextAnswerPayload = string
 
 export type MultiSelectAnswerPayload = {
-  value: Array<ID>
+  value: Array<number>
   text: string | null
 }
 
 export type SingleSelectAnswerPayload = {
-  value: ID
+  value: number
   text: string | null
 }
 
