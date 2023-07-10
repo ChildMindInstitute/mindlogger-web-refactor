@@ -58,7 +58,7 @@ function convertToSingleSelectAnswer(item: RadioItem): { answer: SingleSelectAns
 
   return {
     answer: {
-      value: item.answer[0],
+      value: Number(item.answer[0]),
       text: null,
     },
     itemId: item.id,
@@ -75,7 +75,7 @@ function convertToMultiSelectAnswer(item: CheckboxItem): { answer: MultiSelectAn
 
   return {
     answer: {
-      value: item.answer,
+      value: item.answer.map(strValue => Number(strValue)),
       text: null,
     },
     itemId: item.id,
