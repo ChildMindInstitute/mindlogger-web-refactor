@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 
 import { AppletEncryptionDTO } from "~/shared/api"
-import { secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
+import { useEncryption } from "~/shared/utils"
 
 type EncryptAnswerReturn = string
 
@@ -9,15 +9,17 @@ export const useEncryptPayload = () => {
   const { createEncryptionService } = useEncryption()
 
   const encryptePayload = useCallback(
-    (encryptionParams: AppletEncryptionDTO | null, payload: unknown): EncryptAnswerReturn => {
+    (
+      encryptionParams: AppletEncryptionDTO | null,
+      payload: unknown,
+      userPrivateKey: number[] | null,
+    ): EncryptAnswerReturn => {
       if (!encryptionParams) {
         throw new Error("Encryption params is undefined")
       }
 
-      const userPrivateKey = secureUserPrivateKeyStorage.getUserPrivateKey()
-
       if (!userPrivateKey) {
-        throw new Error("User private key is undefined")
+        throw new Error("Private key is undefined")
       }
 
       const encryptionService = createEncryptionService({

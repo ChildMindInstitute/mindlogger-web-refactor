@@ -24,7 +24,14 @@ import {
 } from "~/entities/activity"
 import { ActivityFlow, AppletDetails } from "~/entities/applet"
 import { ActivityDTO, AnswerPayload, AppletEventsResponse } from "~/shared/api"
-import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import {
+  ROUTES,
+  secureUserPrivateKeyStorage,
+  useCustomNavigation,
+  useCustomTranslation,
+  useEncryption,
+  useModal,
+} from "~/shared/utils"
 
 type ActivityItemListProps = {
   isPublic: boolean
@@ -40,16 +47,19 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
 
   const { t } = useCustomTranslation()
   const navigator = useCustomNavigation()
-  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState<boolean>(false)
-  const [isRequiredModalOpen, setIsRequiredModalOpen] = useState<boolean>(false)
-  const [isInvalidAnswerModalOpen, setIsInvalidAnswerModalOpen] = useState<boolean>(false)
+
+  const [isSubmitModalOpen, openSubmitModal, closeSubmitModal] = useModal()
+  const [isRequiredModalOpen, openRequiredModal, closeRequiredModal] = useModal()
+  const [isInvalidAnswerModalOpen, openInvalidAnswerModal, closeInvalidAnswerModal] = useModal()
 
   const [invalidItemIds, setInvalidItemIds] = useState<Array<string>>([])
+
+  const { generateUserPrivateKey } = useEncryption()
 
   const isAllItemsSkippable = activityDetails.isSkippable
 
   const onSaveAnswerSuccess = () => {
-    // Step 3 - Clear progress state related to activity
+    // Step 4 - Clear progress state related to activity
     clearActivityItemsProgressById(activityDetails.id, eventId)
     updateGroupInProgressByIds({
       appletId: appletDetails.id,
@@ -60,7 +70,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
       },
     })
 
-    // Step 4 - Redirect to "Thanks screen"
+    // Step 5 - Redirect to "Thanks screen"
 
     return navigator.navigate(ROUTES.thanks.navigateTo(isPublic ? props.publicAppletKey! : appletDetails.id, isPublic))
   }
@@ -89,25 +99,6 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
   const isOnePageAssessment = activityDetails.showAllAtOnce
   const isSummaryScreen = false // Mock
 
-  const closeSubmitModal = useCallback(() => {
-    return setIsSubmitModalOpen(false)
-  }, [])
-
-  const closeRequiredModal = useCallback(() => {
-    return setIsRequiredModalOpen(false)
-  }, [])
-  const openRequiredModal = useCallback(() => {
-    return setIsRequiredModalOpen(true)
-  }, [])
-
-  const openInvalidAnswerModal = useCallback(() => {
-    return setIsInvalidAnswerModalOpen(true)
-  }, [])
-
-  const closeInvalidAnswerModal = useCallback(() => {
-    return setIsInvalidAnswerModalOpen(false)
-  }, [])
-
   const onSubmitButtonClick = useCallback(() => {
     const invalidItemIds = validateAnswerBeforeSubmit(currentActivityEventProgress, { isAllItemsSkippable })
 
@@ -118,19 +109,27 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
       return openRequiredModal()
     }
 
-    return setIsSubmitModalOpen(true)
-  }, [currentActivityEventProgress, isAllItemsSkippable, openRequiredModal])
+    return openSubmitModal()
+  }, [currentActivityEventProgress, isAllItemsSkippable, openRequiredModal, openSubmitModal])
 
   const onPrimaryButtonClick = useCallback(() => {
     // Step 1 - Collect answers from store and transform to answer payload
     const itemAnswers = mapToAnswers(activityEvents)
-
-    const userPublicKey = generateUserPublicKey(appletDetails?.encryption)
-
     const preparedItemAnswers = prepareItemAnswers(itemAnswers)
 
-    const encryptedAnswers = encryptePayload(appletDetails.encryption, preparedItemAnswers.answer)
-    const encryptedUserEvents = encryptePayload(appletDetails.encryption, userEvents)
+    // Step 2 - Encrypt answers
+    let privateKey: number[] | null = null
+
+    if (isPublic) {
+      privateKey = generateUserPrivateKey({ userId: uuidV4(), email: uuidV4(), password: uuidV4() })
+    } else {
+      privateKey = secureUserPrivateKeyStorage.getUserPrivateKey()
+    }
+
+    const userPublicKey = generateUserPublicKey(appletDetails?.encryption, privateKey)
+
+    const encryptedAnswers = encryptePayload(appletDetails.encryption, preparedItemAnswers.answer, privateKey)
+    const encryptedUserEvents = encryptePayload(appletDetails.encryption, userEvents, privateKey)
 
     const groupInProgress = getGroupInProgressByIds({
       appletId: appletDetails.id,
@@ -140,10 +139,10 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
 
     const firstTextItemAnserWithIdentifier = getFirstResponseDataIdentifierTextItem(activityEvents)
     const encryptedIdentifier = firstTextItemAnserWithIdentifier
-      ? encryptePayload(appletDetails.encryption, firstTextItemAnserWithIdentifier)
+      ? encryptePayload(appletDetails.encryption, firstTextItemAnserWithIdentifier, privateKey)
       : null
 
-    // Step 2 - Send answers to backend
+    // Step 3 - Send answers to backend
     const answer: AnswerPayload = {
       appletId: appletDetails.id,
       version: appletDetails.version,
@@ -176,6 +175,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     encryptePayload,
     eventId,
     eventsRawData,
+    generateUserPrivateKey,
     getGroupInProgressByIds,
     isPublic,
     publicSaveAnswer,
