@@ -121,7 +121,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     let privateKey: number[] | null = null
 
     if (isPublic) {
-      privateKey = generateUserPrivateKey({ userId: "public", email: "public", password: "public" })
+      privateKey = generateUserPrivateKey({ userId: uuidV4(), email: uuidV4(), password: uuidV4() })
     } else {
       privateKey = secureUserPrivateKeyStorage.getUserPrivateKey()
     }
