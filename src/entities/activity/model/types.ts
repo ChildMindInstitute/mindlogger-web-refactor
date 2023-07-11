@@ -1,6 +1,7 @@
 import {
   ActivityPipelineType,
   CheckboxItem,
+  MessageItem,
   RadioItem,
   SelectorItem,
   SliderItem,
@@ -54,6 +55,7 @@ export type ActivityEventProgressRecord =
   | SliderItem
   | SelectorItem
   | SplashScreenItem
+  | MessageItem
 
 export type ActivityEventProgressState = {
   activityEvents: ActivityEventProgressRecord[]
