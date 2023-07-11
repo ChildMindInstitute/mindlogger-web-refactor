@@ -115,7 +115,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
       eventId: activity.eventId,
       progressPayload: {
         ...activityPipelineDetails,
-        startAt: new Date(),
+        startAt: new Date().toString(),
         endAt: null,
       },
     })
