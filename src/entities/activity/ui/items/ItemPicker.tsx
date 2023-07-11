@@ -51,6 +51,9 @@ export const ItemPicker = ({ item, values, onValueChange, isDisabled, replaceTex
     case "numberSelect":
       return <SelectorItem item={item} value={values[0]} onValueChange={onValueChange} isDisabled={isDisabled} />
 
+    case "message":
+      return <></>
+
     default:
       return <></>
   }

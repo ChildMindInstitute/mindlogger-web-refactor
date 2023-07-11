@@ -37,12 +37,15 @@ export type ConfigDTO =
   | RadioItemConfigDTO
   | SliderItemConfigDTO
   | SelectorItemConfigDTO
+  | MessageItemConfigDTO
+
 export type ResponseValuesDTO =
   | TextItemResponseValuesDTO
   | CheckboxItemResponseValuesDTO
   | RadioItemResponseValuesDTO
   | SliderItemResponseValuesDTO
   | SelectorItemResponseValues
+  | MessageItemResponseValuesDTO
 
 export interface TextItemDTO extends ItemDetailsBaseDTO {
   responseType: "text"
@@ -180,3 +183,15 @@ export type SelectorItemResponseValues = {
   minValue: number
   maxValue: number
 }
+
+export interface MessageItemDTO extends ItemDetailsBaseDTO {
+  responseType: "message"
+  config: MessageItemConfigDTO
+  responseValues: MessageItemResponseValuesDTO
+}
+
+export type MessageItemConfigDTO = {
+  removeBackButton: boolean
+  timer: number | null
+}
+export type MessageItemResponseValuesDTO = null

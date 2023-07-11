@@ -1,6 +1,14 @@
 import { ItemAnswer } from "./itemAnswer"
 
-import { CheckboxItem, RadioItem, SelectorItem, SliderItem, TextItem, activityModel } from "~/entities/activity"
+import {
+  CheckboxItem,
+  MessageItem,
+  RadioItem,
+  SelectorItem,
+  SliderItem,
+  TextItem,
+  activityModel,
+} from "~/entities/activity"
 import {
   MultiSelectAnswerPayload,
   SingleSelectAnswerPayload,
@@ -25,6 +33,9 @@ export function mapToAnswers(items: Array<activityModel.types.ActivityEventProgr
 
       case "numberSelect":
         return convertToNumberSelectAnswer(item)
+
+      case "message":
+        return convertToMessageAnswer(item)
 
       default:
         return null
@@ -112,6 +123,13 @@ function convertToNumberSelectAnswer(item: SelectorItem) {
       value: item.answer[0],
       text: null,
     },
+    itemId: item.id,
+  }
+}
+
+function convertToMessageAnswer(item: MessageItem) {
+  return {
+    answer: null,
     itemId: item.id,
   }
 }
