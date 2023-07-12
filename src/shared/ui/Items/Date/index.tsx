@@ -1,11 +1,12 @@
-import { FormControl } from "react-bootstrap"
+import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 
 type Props = {
+  label?: string
   value?: string
 
-  onChange: (value: string) => void
+  onChange: (value: string | null) => void
 }
 
 export const DateItemBase = (props: Props) => {
-  return <FormControl type="date" value={props.value} onChange={e => props.onChange(e.target.value)} />
+  return <DatePicker label={props.label} value={props.value} onChange={props.onChange} />
 }

@@ -7,7 +7,11 @@ type Props = {
 }
 
 export const DateItem = ({ value, onValueChange }: Props) => {
-  const onHandleChange = (value: string) => {
+  const onHandleChange = (value: string | null) => {
+    if (value === null) {
+      return
+    }
+
     return onValueChange([value])
   }
 
