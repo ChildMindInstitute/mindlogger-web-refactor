@@ -50,7 +50,7 @@ export const ActivityCardItem = ({
   const isMessageItem = activityItem.responseType === "message"
 
   const buttonConfig: ItemCardButtonsConfig = {
-    isNextDisable: isMessageItem ? false : !values || !values.length,
+    isNextDisabled: isMessageItem ? false : !values || !values.length,
     isSkippable: activityItem.config.skippableItem || isAllItemsSkippable,
     isBackShown: isBackShown && !activityItem.config.removeBackButton,
   }
