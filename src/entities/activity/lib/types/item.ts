@@ -21,13 +21,6 @@ export type ActivityItemType =
   | "unsupportable"
   | "splashScreen"
 
-export enum SupportableActivityItemType {
-  Text = "text",
-  Checkbox = "multiSelect",
-  Radio = "singleSelect",
-  Unsupportable = "unsupportable",
-}
-
 export type ItemCardButtonsConfig = {
   isBackShown: boolean
   isSkippable: boolean
@@ -73,6 +66,7 @@ export type Config =
   | SelectorItemConfig
   | SplashScreenItemConfig
   | MessageItemConfig
+  | DateItemConfig
 
 export type ResponseValues =
   | TextValues
@@ -82,6 +76,7 @@ export type ResponseValues =
   | SelectorValues
   | SplashScreenItemValues
   | MessageItemValues
+  | DateItemValues
 
 export interface TextItem extends ActivityItemBase {
   responseType: "text"
@@ -214,3 +209,12 @@ export interface MessageItem extends ActivityItemBase {
 
 export type MessageItemConfig = ButtonsConfig
 export type MessageItemValues = null
+
+export interface DateItem extends ActivityItemBase {
+  responseType: "date"
+  config: DateItemConfig
+  responseValues: DateItemValues
+}
+
+export type DateItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig
+export type DateItemValues = null

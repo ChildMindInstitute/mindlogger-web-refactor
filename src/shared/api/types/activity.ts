@@ -1,5 +1,13 @@
 import { BaseSuccessResponse } from "./base"
-import { CheckboxItemDTO, MessageItemDTO, RadioItemDTO, SelectorItemDTO, SliderItemDTO, TextItemDTO } from "./item"
+import {
+  CheckboxItemDTO,
+  DateItemDTO,
+  MessageItemDTO,
+  RadioItemDTO,
+  SelectorItemDTO,
+  SliderItemDTO,
+  TextItemDTO,
+} from "./item"
 
 export type ID = string
 
@@ -34,6 +42,7 @@ export type ActivityItemDetailsDTO =
   | SliderItemDTO
   | SelectorItemDTO
   | MessageItemDTO
+  | DateItemDTO
 
 export type AnswerPayload = {
   appletId: ID

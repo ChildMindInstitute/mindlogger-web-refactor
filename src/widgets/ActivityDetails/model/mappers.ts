@@ -2,6 +2,7 @@ import { ItemAnswer } from "./itemAnswer"
 
 import {
   CheckboxItem,
+  DateItem,
   MessageItem,
   RadioItem,
   SelectorItem,
@@ -36,6 +37,9 @@ export function mapToAnswers(items: Array<activityModel.types.ActivityEventProgr
 
       case "message":
         return convertToMessageAnswer(item)
+
+      case "date":
+        return convertToDateAnswer(item)
 
       default:
         return null
@@ -130,6 +134,23 @@ function convertToNumberSelectAnswer(item: SelectorItem) {
 function convertToMessageAnswer(item: MessageItem) {
   return {
     answer: null,
+    itemId: item.id,
+  }
+}
+
+function convertToDateAnswer(item: DateItem) {
+  if (!item.answer[0]) {
+    return {
+      answer: null,
+      itemId: item.id,
+    }
+  }
+
+  return {
+    answer: {
+      value: item.answer[0],
+      text: null,
+    },
     itemId: item.id,
   }
 }
