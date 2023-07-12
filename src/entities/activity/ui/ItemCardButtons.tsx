@@ -26,7 +26,7 @@ export const ItemCardButton = ({
 }: ItemCardButtonsProps) => {
   const { t } = useCustomTranslation()
 
-  const nextLabel = config.isNextDisable && config.isSkippable ? t("Consent.skip") : t("Consent.next")
+  const nextLabel = config.isNextDisabled && config.isSkippable ? t("Consent.skip") : t("Consent.next")
   const submitLabel = t("submit")
 
   if (isOnePageAssessment) {
@@ -44,7 +44,7 @@ export const ItemCardButton = ({
 
         {config.isSkippable && (
           <BasicButton
-            disabled={!config.isNextDisable}
+            disabled={!config.isNextDisabled}
             variant="outline-dark"
             size="lg"
             className={classNames("mb-2", "navigator-button")}>
@@ -70,7 +70,7 @@ export const ItemCardButton = ({
       <BasicButton
         variant="outline-dark"
         size="lg"
-        disabled={!config.isSkippable && config.isNextDisable}
+        disabled={!config.isSkippable && config.isNextDisabled}
         className={classNames("mb-2", "navigator-button")}
         onClick={isSubmitShown ? onSubmitButtonClick : onNextButtonClick}>
         {isSubmitShown ? submitLabel : nextLabel}

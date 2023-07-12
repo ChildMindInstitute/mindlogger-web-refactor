@@ -66,7 +66,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
       eventId,
       activityId: activityDetails.id,
       progressPayload: {
-        endAt: new Date(),
+        endAt: Date.now(),
       },
     })
 
