@@ -22,8 +22,8 @@ type ActivityProgress = {
 type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress
 
 type EventProgressTimestampState = {
-  startAt: string | null
-  endAt: string | null
+  startAt: number | null
+  endAt: number | null
 }
 
 export type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"

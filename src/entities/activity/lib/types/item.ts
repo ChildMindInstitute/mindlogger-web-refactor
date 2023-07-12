@@ -31,7 +31,7 @@ export enum SupportableActivityItemType {
 export type ItemCardButtonsConfig = {
   isBackShown: boolean
   isSkippable: boolean
-  isNextDisable: boolean
+  isNextDisabled: boolean
 }
 
 export type ButtonsConfig = {
