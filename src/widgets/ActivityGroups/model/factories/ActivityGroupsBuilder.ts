@@ -61,7 +61,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
   private getStartedDateTime(eventActivity: EventActivity): Date {
     const record = this.getProgressRecord(eventActivity)!
-    return new Date(record.startAt!)
+    return record.startAt!
   }
 
   private populateActivityFlowFields(item: ActivityListItem, activityEvent: EventActivity) {
@@ -197,7 +197,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
       const progressRecord = this.getProgressRecord(eventActivity)
 
-      const endAt: Date | null = progressRecord?.endAt ? new Date(progressRecord.endAt) : null
+      const endAt = progressRecord?.endAt ? new Date(progressRecord.endAt) : progressRecord?.endAt
 
       const completedToday = !!endAt && isToday(endAt)
 
@@ -279,7 +279,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
       const endAt = this.getProgressRecord(eventActivity)?.endAt
 
-      const completedToday = !!endAt && isToday(new Date(endAt))
+      const completedToday = !!endAt && isToday(endAt)
 
       const scheduledToday = isToday(event.scheduledAt!)
 

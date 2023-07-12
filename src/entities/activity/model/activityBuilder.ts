@@ -84,17 +84,6 @@ class ActivityBuilder {
   }
 
   public convertActivityItemToEmptyProgressRecord(item: ActivityItemDetailsDTO): ActivityEventProgressRecord {
-    if (item.responseType === "message") {
-      return {
-        ...item,
-        config: {
-          ...item.config,
-          skippableItem: false,
-        },
-        answer: [],
-      }
-    }
-
     return {
       ...item,
       answer: [],

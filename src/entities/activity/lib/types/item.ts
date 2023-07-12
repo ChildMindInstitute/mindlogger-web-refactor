@@ -72,8 +72,6 @@ export type Config =
   | SliderItemConfig
   | SelectorItemConfig
   | SplashScreenItemConfig
-  | MessageItemConfig
-
 export type ResponseValues =
   | TextValues
   | CheckboxValues
@@ -81,7 +79,6 @@ export type ResponseValues =
   | SliderValues
   | SelectorValues
   | SplashScreenItemValues
-  | MessageItemValues
 
 export interface TextItem extends ActivityItemBase {
   responseType: "text"
@@ -205,12 +202,3 @@ export type SplashScreenItemConfig = ButtonsConfig & {
   imageSrc: string
 }
 export type SplashScreenItemValues = null
-
-export interface MessageItem extends ActivityItemBase {
-  responseType: "message"
-  config: MessageItemConfig
-  responseValues: MessageItemValues
-}
-
-export type MessageItemConfig = ButtonsConfig
-export type MessageItemValues = null

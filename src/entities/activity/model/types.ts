@@ -1,7 +1,6 @@
 import {
   ActivityPipelineType,
   CheckboxItem,
-  MessageItem,
   RadioItem,
   SelectorItem,
   SliderItem,
@@ -22,8 +21,8 @@ type ActivityProgress = {
 type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress
 
 type EventProgressTimestampState = {
-  startAt: string | null
-  endAt: string | null
+  startAt: Date | null
+  endAt: Date | null
 }
 
 export type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"
@@ -55,7 +54,6 @@ export type ActivityEventProgressRecord =
   | SliderItem
   | SelectorItem
   | SplashScreenItem
-  | MessageItem
 
 export type ActivityEventProgressState = {
   activityEvents: ActivityEventProgressRecord[]
