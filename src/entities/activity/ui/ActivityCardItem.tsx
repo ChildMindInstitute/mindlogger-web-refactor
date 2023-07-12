@@ -47,10 +47,8 @@ export const ActivityCardItem = ({
   saveSetAnswerUserEvent,
   saveUserEventByType,
 }: ActivityCardItemProps) => {
-  const isMessageItem = activityItem.responseType === "message"
-
   const buttonConfig: ItemCardButtonsConfig = {
-    isNextDisable: isMessageItem ? false : !values || !values.length,
+    isNextDisable: !values || !values.length,
     isSkippable: activityItem.config.skippableItem || isAllItemsSkippable,
     isBackShown: isBackShown && !activityItem.config.removeBackButton,
   }

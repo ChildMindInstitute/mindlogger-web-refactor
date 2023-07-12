@@ -47,8 +47,8 @@ export type ActivityProgress = {
 export type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress
 
 export type ProgressPayload = ActivityOrFlowProgress & {
-  startAt: string | null
-  endAt: string | null
+  startAt: Date | null
+  endAt: Date | null
 }
 
 export type EntityProgress = {

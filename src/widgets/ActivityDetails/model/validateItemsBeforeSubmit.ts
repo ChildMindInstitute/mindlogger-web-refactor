@@ -14,9 +14,7 @@ export const validateAnswerBeforeSubmit = (
     const isRequired = !item.config.skippableItem
     const isAnswerExist = item.answer[0]
 
-    const isMessageItem = item.responseType === "message"
-
-    if (!isMessageItem && !params?.isAllItemsSkippable && isRequired && !isAnswerExist) {
+    if (!params?.isAllItemsSkippable && isRequired && !isAnswerExist) {
       invalidItemIds.push(item.id)
     }
   })

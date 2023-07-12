@@ -19,7 +19,7 @@ export const CardItem = ({ watermark, isInvalid, children, buttons, markdown }: 
     <Card className={classNames("mb-3", "px-3", { invalid: isInvalid })}>
       <Row className={classNames("no-gutters")}>
         <Col md={12}>
-          <Card.Title className={classNames("question", "px-0")}>
+          <Card.Title className={classNames("question")}>
             {watermark && <Image src={watermark} alt="watermark" rounded className={classNames("watermark")} />}
             <div className={classNames("markdown")}>
               <Markdown markdown={markdown} />
