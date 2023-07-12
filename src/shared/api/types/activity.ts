@@ -69,6 +69,8 @@ export type AnswerTypesPayload =
   | SingleSelectAnswerPayload
   | SliderAnswerPayload
   | NumberSelectAnswerPayload
+  | MessageAnswerPayload
+  | DateAnswerPayload
 
 export type SkippedAnswerPayload = null
 
@@ -91,5 +93,16 @@ export type SliderAnswerPayload = {
 
 export type NumberSelectAnswerPayload = {
   value: number
+  text: string | null
+}
+
+export type MessageAnswerPayload = null
+
+export type DateAnswerPayload = {
+  value: {
+    day: number
+    month: number
+    year: number
+  }
   text: string | null
 }

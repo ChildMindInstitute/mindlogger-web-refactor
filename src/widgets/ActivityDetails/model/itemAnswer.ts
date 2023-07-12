@@ -1,6 +1,6 @@
 import { AnswerTypesPayload } from "~/shared/api"
 
-export type ItemAnswer = {
-  answer: AnswerTypesPayload | null
+export interface ItemAnswer<T extends AnswerTypesPayload> {
+  answer: T | null
   itemId: string
 }

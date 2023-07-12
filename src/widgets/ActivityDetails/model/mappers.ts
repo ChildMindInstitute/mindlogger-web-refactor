@@ -11,13 +11,20 @@ import {
   activityModel,
 } from "~/entities/activity"
 import {
+  AnswerTypesPayload,
+  DateAnswerPayload,
+  MessageAnswerPayload,
   MultiSelectAnswerPayload,
+  NumberSelectAnswerPayload,
   SingleSelectAnswerPayload,
   SliderAnswerPayload,
   TextAnswerPayload,
 } from "~/shared/api"
+import { dateToDayMonthYearDTO } from "~/shared/utils"
 
-export function mapToAnswers(items: Array<activityModel.types.ActivityEventProgressRecord>): Array<ItemAnswer> {
+export function mapToAnswers(
+  items: Array<activityModel.types.ActivityEventProgressRecord>,
+): Array<ItemAnswer<AnswerTypesPayload>> {
   const answers = items.map(item => {
     switch (item.responseType) {
       case "text":
@@ -46,10 +53,10 @@ export function mapToAnswers(items: Array<activityModel.types.ActivityEventProgr
     }
   })
 
-  return answers as Array<ItemAnswer>
+  return answers as Array<ItemAnswer<AnswerTypesPayload>>
 }
 
-function convertToTextAnswer(item: TextItem): { answer: TextAnswerPayload | null; itemId: string } {
+function convertToTextAnswer(item: TextItem): ItemAnswer<TextAnswerPayload> {
   if (!item.answer[0]) {
     return {
       answer: null,
@@ -63,7 +70,7 @@ function convertToTextAnswer(item: TextItem): { answer: TextAnswerPayload | null
   }
 }
 
-function convertToSingleSelectAnswer(item: RadioItem): { answer: SingleSelectAnswerPayload | null; itemId: string } {
+function convertToSingleSelectAnswer(item: RadioItem): ItemAnswer<SingleSelectAnswerPayload> {
   if (!item.answer[0]) {
     return {
       answer: null,
@@ -80,7 +87,7 @@ function convertToSingleSelectAnswer(item: RadioItem): { answer: SingleSelectAns
   }
 }
 
-function convertToMultiSelectAnswer(item: CheckboxItem): { answer: MultiSelectAnswerPayload | null; itemId: string } {
+function convertToMultiSelectAnswer(item: CheckboxItem): ItemAnswer<MultiSelectAnswerPayload> {
   if (!item.answer[0]) {
     return {
       answer: null,
@@ -97,7 +104,7 @@ function convertToMultiSelectAnswer(item: CheckboxItem): { answer: MultiSelectAn
   }
 }
 
-function convertToSliderAnswer(item: SliderItem): { answer: SliderAnswerPayload | null; itemId: string } {
+function convertToSliderAnswer(item: SliderItem): ItemAnswer<SliderAnswerPayload> {
   if (!item.answer[0]) {
     return {
       answer: null,
@@ -114,7 +121,7 @@ function convertToSliderAnswer(item: SliderItem): { answer: SliderAnswerPayload 
   }
 }
 
-function convertToNumberSelectAnswer(item: SelectorItem) {
+function convertToNumberSelectAnswer(item: SelectorItem): ItemAnswer<NumberSelectAnswerPayload> {
   if (!item.answer[0]) {
     return {
       answer: null,
@@ -124,21 +131,21 @@ function convertToNumberSelectAnswer(item: SelectorItem) {
 
   return {
     answer: {
-      value: item.answer[0],
+      value: Number(item.answer[0]),
       text: null,
     },
     itemId: item.id,
   }
 }
 
-function convertToMessageAnswer(item: MessageItem) {
+function convertToMessageAnswer(item: MessageItem): ItemAnswer<MessageAnswerPayload> {
   return {
     answer: null,
     itemId: item.id,
   }
 }
 
-function convertToDateAnswer(item: DateItem) {
+function convertToDateAnswer(item: DateItem): ItemAnswer<DateAnswerPayload> {
   if (!item.answer[0]) {
     return {
       answer: null,
@@ -148,7 +155,7 @@ function convertToDateAnswer(item: DateItem) {
 
   return {
     answer: {
-      value: item.answer[0],
+      value: dateToDayMonthYearDTO(new Date(item.answer[0])),
       text: null,
     },
     itemId: item.id,
