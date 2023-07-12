@@ -1,5 +1,13 @@
 import { BaseSuccessResponse } from "./base"
-import { CheckboxItemDTO, MessageItemDTO, RadioItemDTO, SelectorItemDTO, SliderItemDTO, TextItemDTO } from "./item"
+import {
+  CheckboxItemDTO,
+  DateItemDTO,
+  MessageItemDTO,
+  RadioItemDTO,
+  SelectorItemDTO,
+  SliderItemDTO,
+  TextItemDTO,
+} from "./item"
 
 export type ID = string
 
@@ -34,6 +42,7 @@ export type ActivityItemDetailsDTO =
   | SliderItemDTO
   | SelectorItemDTO
   | MessageItemDTO
+  | DateItemDTO
 
 export type AnswerPayload = {
   appletId: ID
@@ -60,6 +69,8 @@ export type AnswerTypesPayload =
   | SingleSelectAnswerPayload
   | SliderAnswerPayload
   | NumberSelectAnswerPayload
+  | MessageAnswerPayload
+  | DateAnswerPayload
 
 export type SkippedAnswerPayload = null
 
@@ -82,5 +93,16 @@ export type SliderAnswerPayload = {
 
 export type NumberSelectAnswerPayload = {
   value: number
+  text: string | null
+}
+
+export type MessageAnswerPayload = null
+
+export type DateAnswerPayload = {
+  value: {
+    day: number
+    month: number
+    year: number
+  }
   text: string | null
 }

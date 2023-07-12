@@ -195,3 +195,20 @@ export type MessageItemConfigDTO = {
   timer: number | null
 }
 export type MessageItemResponseValuesDTO = null
+
+export interface DateItemDTO extends ItemDetailsBaseDTO {
+  responseType: "date"
+  config: DateItemConfigDTO
+  responseValues: DateItemResponseValuesDTO
+}
+
+export type DateItemConfigDTO = {
+  removeBackButton: boolean
+  skippableItem: boolean
+  timer: number | null
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+export type DateItemResponseValuesDTO = null

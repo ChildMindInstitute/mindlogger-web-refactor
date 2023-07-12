@@ -3,7 +3,7 @@ import { Suspense } from "react"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 import Layout from "./Layout"
-import { ReactQuery, Redux, RouteProvider } from "./providers"
+import { DateLocalizationProvider, ReactQuery, ReduxProvider, RouteProvider } from "./providers"
 import i18nManager from "./system/locale/i18n"
 
 import ApplicationRouter from "~/pages"
@@ -16,14 +16,16 @@ function App() {
   return (
     <Suspense>
       <RouteProvider>
-        <Redux>
+        <ReduxProvider>
           <ReactQuery>
-            <Layout>
-              <ApplicationRouter />
-            </Layout>
+            <DateLocalizationProvider>
+              <Layout>
+                <ApplicationRouter />
+              </Layout>
+            </DateLocalizationProvider>
             <ReactQueryDevtools initialIsOpen={false} />
           </ReactQuery>
-        </Redux>
+        </ReduxProvider>
       </RouteProvider>
     </Suspense>
   )
