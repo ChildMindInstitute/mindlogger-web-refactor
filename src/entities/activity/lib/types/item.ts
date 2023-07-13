@@ -13,6 +13,7 @@ export type ActivityItemType =
   | "photo"
   | "video"
   | "date"
+  | "time"
   | "sliderRows"
   | "singleSelectRows"
   | "multiSelectRows"
@@ -67,6 +68,7 @@ export type Config =
   | SplashScreenItemConfig
   | MessageItemConfig
   | DateItemConfig
+  | TimeItemItemConfig
 
 export type ResponseValues =
   | TextValues
@@ -77,6 +79,7 @@ export type ResponseValues =
   | SplashScreenItemValues
   | MessageItemValues
   | DateItemValues
+  | TimeItemValues
 
 export interface TextItem extends ActivityItemBase {
   responseType: "text"
@@ -218,3 +221,21 @@ export interface DateItem extends ActivityItemBase {
 
 export type DateItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig
 export type DateItemValues = null
+
+export interface TimeItem extends ActivityItemBase {
+  responseType: "time"
+  config: TimeItemItemConfig
+  responseValues: TimeItemValues
+}
+
+export type TimeItemItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig
+export type TimeItemValues = null
+
+export interface TimeRangeItem extends ActivityItemBase {
+  responseType: "timeRange"
+  config: TimeRangeItemConfig
+  responseValues: TimeRangeItemValues
+}
+
+export type TimeRangeItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig
+export type TimeRangeItemValues = null

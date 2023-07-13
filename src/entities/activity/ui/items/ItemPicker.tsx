@@ -6,6 +6,8 @@ import { SelectorItem } from "./Selector"
 import { SliderItem } from "./Slider"
 import { SplashScreen } from "./SplashScreen"
 import { TextItem } from "./Text"
+import { TimeItem } from "./Time"
+import { TimeRangeItem } from "./TimeRange"
 
 type ItemPickerProps = {
   item: ActivityEventProgressRecord
@@ -57,6 +59,12 @@ export const ItemPicker = ({ item, values, onValueChange, isDisabled, replaceTex
 
     case "date":
       return <DateItem value={values[0]} onValueChange={onValueChange} />
+
+    case "time":
+      return <TimeItem value={values[0]} onValueChange={onValueChange} width="160px" />
+
+    case "timeRange":
+      return <TimeRangeItem values={values} onValueChange={onValueChange} />
 
     default:
       return <></>
