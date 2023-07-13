@@ -1,4 +1,4 @@
-import { TimePicker } from "@mui/x-date-pickers/TimePicker"
+import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker"
 
 type Props = {
   label?: string
@@ -9,5 +9,5 @@ type Props = {
 export const TimeItemBase = ({ label, value, onChange }: Props) => {
   const formatedValue = value ? new Date(value) : null
 
-  return <TimePicker<Date> label={label} value={formatedValue} onChange={onChange} />
+  return <DesktopTimePicker<Date> label={label} value={formatedValue} onChange={onChange} />
 }

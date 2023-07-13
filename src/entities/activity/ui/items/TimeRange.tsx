@@ -1,4 +1,6 @@
 import Box from "@mui/material/Box"
+import { useTheme } from "@mui/material/styles"
+import useMediaQuery from "@mui/material/useMediaQuery"
 
 import { TimeItemBase } from "~/shared/ui"
 
@@ -9,6 +11,9 @@ type Props = {
 }
 
 export const TimeRangeItem = ({ values, onValueChange }: Props) => {
+  const theme = useTheme()
+  const smMatch = useMediaQuery(theme.breakpoints.down("sm"))
+
   const onFromTimeHandleChange = (value: Date | null) => {
     if (!value) {
       return
@@ -33,7 +38,7 @@ export const TimeRangeItem = ({ values, onValueChange }: Props) => {
 
   return (
     <Box display="flex" justifyContent="center">
-      <Box display="flex" alignItems="center" gap={2}>
+      <Box display="flex" alignItems="center" gap={smMatch ? 0.5 : 2}>
         <TimeItemBase label="from" value={values[0]} onChange={onFromTimeHandleChange} />
         <span>-</span>
         <TimeItemBase label="to" value={values[1]} onChange={onToTimeHandleChange} />

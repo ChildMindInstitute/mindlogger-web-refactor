@@ -69,6 +69,7 @@ export type Config =
   | MessageItemConfig
   | DateItemConfig
   | TimeItemItemConfig
+  | TimeRangeItemConfig
 
 export type ResponseValues =
   | TextValues
@@ -80,6 +81,7 @@ export type ResponseValues =
   | MessageItemValues
   | DateItemValues
   | TimeItemValues
+  | TimeRangeItemValues
 
 export interface TextItem extends ActivityItemBase {
   responseType: "text"
