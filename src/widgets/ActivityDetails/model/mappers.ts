@@ -8,6 +8,8 @@ import {
   SelectorItem,
   SliderItem,
   TextItem,
+  TimeItem,
+  TimeRangeItem,
   activityModel,
 } from "~/entities/activity"
 import {
@@ -19,8 +21,10 @@ import {
   SingleSelectAnswerPayload,
   SliderAnswerPayload,
   TextAnswerPayload,
+  TimeAnswerPayload,
+  TimeRangeAnswerPayload,
 } from "~/shared/api"
-import { dateToDayMonthYearDTO } from "~/shared/utils"
+import { dateToDayMonthYearDTO, dateToHourMinuteDTO } from "~/shared/utils"
 
 export function mapToAnswers(
   items: Array<activityModel.types.ActivityEventProgressRecord>,
@@ -47,6 +51,12 @@ export function mapToAnswers(
 
       case "date":
         return convertToDateAnswer(item)
+
+      case "time":
+        return convertToTimeAnswer(item)
+
+      case "timeRange":
+        return convertToTimeRangeAnswer(item)
 
       default:
         return null
@@ -156,6 +166,43 @@ function convertToDateAnswer(item: DateItem): ItemAnswer<DateAnswerPayload> {
   return {
     answer: {
       value: dateToDayMonthYearDTO(new Date(item.answer[0])),
+      text: null,
+    },
+    itemId: item.id,
+  }
+}
+
+function convertToTimeAnswer(item: TimeItem): ItemAnswer<TimeAnswerPayload> {
+  if (!item.answer[0]) {
+    return {
+      answer: null,
+      itemId: item.id,
+    }
+  }
+
+  return {
+    answer: {
+      value: dateToHourMinuteDTO(new Date(item.answer[0])),
+      text: null,
+    },
+    itemId: item.id,
+  }
+}
+
+function convertToTimeRangeAnswer(item: TimeRangeItem): ItemAnswer<TimeRangeAnswerPayload> {
+  if (!item.answer[0]) {
+    return {
+      answer: null,
+      itemId: item.id,
+    }
+  }
+
+  return {
+    answer: {
+      value: {
+        startTime: dateToHourMinuteDTO(new Date(item.answer[0])),
+        endTime: dateToHourMinuteDTO(new Date(item.answer[1])),
+      },
       text: null,
     },
     itemId: item.id,

@@ -7,6 +7,8 @@ import {
   SelectorItemDTO,
   SliderItemDTO,
   TextItemDTO,
+  TimeItemDTO,
+  TimeRangeItemDTO,
 } from "./item"
 
 export type ID = string
@@ -43,6 +45,8 @@ export type ActivityItemDetailsDTO =
   | SelectorItemDTO
   | MessageItemDTO
   | DateItemDTO
+  | TimeItemDTO
+  | TimeRangeItemDTO
 
 export type AnswerPayload = {
   appletId: ID
@@ -71,6 +75,8 @@ export type AnswerTypesPayload =
   | NumberSelectAnswerPayload
   | MessageAnswerPayload
   | DateAnswerPayload
+  | TimeAnswerPayload
+  | TimeRangeAnswerPayload
 
 export type SkippedAnswerPayload = null
 
@@ -103,6 +109,28 @@ export type DateAnswerPayload = {
     day: number
     month: number
     year: number
+  }
+  text: string | null
+}
+
+export type TimeAnswerPayload = {
+  value: {
+    hour: number
+    minute: number
+  }
+  text: string | null
+}
+
+export type TimeRangeAnswerPayload = {
+  value: {
+    startTime: {
+      hour: number
+      minute: number
+    }
+    endTime: {
+      hour: number
+      minute: number
+    }
   }
   text: string | null
 }

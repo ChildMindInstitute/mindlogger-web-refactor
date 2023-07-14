@@ -8,6 +8,8 @@ import {
   SliderItem,
   SplashScreenItem,
   TextItem,
+  TimeItem,
+  TimeRangeItem,
 } from "../lib"
 
 type ActivityFlowProgress = {
@@ -58,6 +60,8 @@ export type ActivityEventProgressRecord =
   | SplashScreenItem
   | MessageItem
   | DateItem
+  | TimeItem
+  | TimeRangeItem
 
 export type ActivityEventProgressState = {
   activityEvents: ActivityEventProgressRecord[]

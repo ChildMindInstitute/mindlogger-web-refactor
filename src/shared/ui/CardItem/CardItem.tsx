@@ -26,7 +26,7 @@ export const CardItem = ({ watermark, isInvalid, children, buttons, markdown }: 
             </div>
           </Card.Title>
           <Card.Body>
-            <Row className="no-gutters px-4 py-4">{children}</Row>
+            <Row className="no-gutters py-2 px-md-4 py-md-4">{children}</Row>
           </Card.Body>
         </Col>
       </Row>

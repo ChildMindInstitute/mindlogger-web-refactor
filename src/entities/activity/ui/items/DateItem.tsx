@@ -1,3 +1,5 @@
+import Box from "@mui/material/Box"
+
 import { DateItemBase } from "~/shared/ui"
 
 type Props = {
@@ -15,5 +17,11 @@ export const DateItem = ({ value, onValueChange }: Props) => {
     return onValueChange([value])
   }
 
-  return <DateItemBase value={value} onChange={onHandleChange} />
+  return (
+    <Box display="flex" justifyContent="center">
+      <Box>
+        <DateItemBase value={value} onChange={onHandleChange} />
+      </Box>
+    </Box>
+  )
 }

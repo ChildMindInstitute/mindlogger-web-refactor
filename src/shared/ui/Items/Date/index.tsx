@@ -7,6 +7,6 @@ type Props = {
   onChange: (value: string | null) => void
 }
 
-export const DateItemBase = (props: Props) => {
-  return <DatePicker label={props.label} value={props.value} onChange={props.onChange} />
+export const DateItemBase = ({ label, value, onChange }: Props) => {
+  return <DatePicker label={label} value={value ?? null} onChange={onChange} />
 }
