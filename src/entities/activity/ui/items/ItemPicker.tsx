@@ -1,13 +1,15 @@
+import Box from "@mui/material/Box"
+
 import { ActivityEventProgressRecord } from "../../model/types"
-import { CheckboxItem } from "./Checkbox"
-import { DateItem } from "./Date"
-import { RadioItem } from "./Radio"
-import { SelectorItem } from "./Selector"
-import { SliderItem } from "./Slider"
+import { CheckboxItem } from "./CheckboxItem"
+import { DateItem } from "./DateItem"
+import { RadioItem } from "./RadioItem"
+import { SelectorItem } from "./SelectorItem"
+import { SliderItem } from "./SliderItem"
 import { SplashScreen } from "./SplashScreen"
-import { TextItem } from "./Text"
-import { TimeItem } from "./Time"
-import { TimeRangeItem } from "./TimeRange"
+import { TextItem } from "./TextItem"
+import { TimeItem } from "./TimeItem"
+import { TimeRangeItem } from "./TimeRangeItem"
 
 type ItemPickerProps = {
   item: ActivityEventProgressRecord
@@ -61,7 +63,11 @@ export const ItemPicker = ({ item, values, onValueChange, isDisabled, replaceTex
       return <DateItem value={values[0]} onValueChange={onValueChange} />
 
     case "time":
-      return <TimeItem value={values[0]} onValueChange={onValueChange} width="160px" />
+      return (
+        <Box sx={{ width: "160px" }}>
+          <TimeItem value={values[0]} onValueChange={onValueChange} />
+        </Box>
+      )
 
     case "timeRange":
       return <TimeRangeItem values={values} onValueChange={onValueChange} />

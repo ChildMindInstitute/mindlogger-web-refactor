@@ -7,11 +7,9 @@ type Props = {
   label?: string
 
   onValueChange: (value: string[]) => void
-
-  width?: string
 }
 
-export const TimeItem = ({ value, label, onValueChange, width }: Props) => {
+export const TimeItem = ({ value, label, onValueChange }: Props) => {
   const onHandleChange = (value: Date | null) => {
     if (value === null) {
       return
@@ -22,7 +20,7 @@ export const TimeItem = ({ value, label, onValueChange, width }: Props) => {
 
   return (
     <Box display="flex" justifyContent="center">
-      <Box sx={{ width }}>
+      <Box>
         <TimeItemBase value={value} label={label} onChange={onHandleChange} />
       </Box>
     </Box>
