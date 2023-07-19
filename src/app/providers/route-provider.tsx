@@ -6,8 +6,6 @@ interface RouteProviderProps {
   children: ReactNode
 }
 
-const RouteProvider = ({ children }: RouteProviderProps) => {
+export const RouteProvider = ({ children }: RouteProviderProps) => {
   return <BrowserRouter>{children}</BrowserRouter>
 }
-
-export default RouteProvider

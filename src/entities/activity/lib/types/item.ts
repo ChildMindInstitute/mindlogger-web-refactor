@@ -13,6 +13,7 @@ export type ActivityItemType =
   | "photo"
   | "video"
   | "date"
+  | "time"
   | "sliderRows"
   | "singleSelectRows"
   | "multiSelectRows"
@@ -21,17 +22,10 @@ export type ActivityItemType =
   | "unsupportable"
   | "splashScreen"
 
-export enum SupportableActivityItemType {
-  Text = "text",
-  Checkbox = "multiSelect",
-  Radio = "singleSelect",
-  Unsupportable = "unsupportable",
-}
-
 export type ItemCardButtonsConfig = {
   isBackShown: boolean
   isSkippable: boolean
-  isNextDisable: boolean
+  isNextDisabled: boolean
 }
 
 export type ButtonsConfig = {
@@ -72,6 +66,11 @@ export type Config =
   | SliderItemConfig
   | SelectorItemConfig
   | SplashScreenItemConfig
+  | MessageItemConfig
+  | DateItemConfig
+  | TimeItemItemConfig
+  | TimeRangeItemConfig
+
 export type ResponseValues =
   | TextValues
   | CheckboxValues
@@ -79,6 +78,10 @@ export type ResponseValues =
   | SliderValues
   | SelectorValues
   | SplashScreenItemValues
+  | MessageItemValues
+  | DateItemValues
+  | TimeItemValues
+  | TimeRangeItemValues
 
 export interface TextItem extends ActivityItemBase {
   responseType: "text"
@@ -202,3 +205,39 @@ export type SplashScreenItemConfig = ButtonsConfig & {
   imageSrc: string
 }
 export type SplashScreenItemValues = null
+
+export interface MessageItem extends ActivityItemBase {
+  responseType: "message"
+  config: MessageItemConfig
+  responseValues: MessageItemValues
+}
+
+export type MessageItemConfig = ButtonsConfig
+export type MessageItemValues = null
+
+export interface DateItem extends ActivityItemBase {
+  responseType: "date"
+  config: DateItemConfig
+  responseValues: DateItemValues
+}
+
+export type DateItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig
+export type DateItemValues = null
+
+export interface TimeItem extends ActivityItemBase {
+  responseType: "time"
+  config: TimeItemItemConfig
+  responseValues: TimeItemValues
+}
+
+export type TimeItemItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig
+export type TimeItemValues = null
+
+export interface TimeRangeItem extends ActivityItemBase {
+  responseType: "timeRange"
+  config: TimeRangeItemConfig
+  responseValues: TimeRangeItemValues
+}
+
+export type TimeRangeItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig
+export type TimeRangeItemValues = null

@@ -7,7 +7,7 @@ interface ReduxProps {
   children: React.ReactNode
 }
 
-const Redux = (props: ReduxProps) => {
+export const ReduxProvider = (props: ReduxProps) => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -16,5 +16,3 @@ const Redux = (props: ReduxProps) => {
     </Provider>
   )
 }
-
-export default Redux

@@ -1,5 +1,15 @@
 import { BaseSuccessResponse } from "./base"
-import { CheckboxItemDTO, RadioItemDTO, SelectorItemDTO, SliderItemDTO, TextItemDTO } from "./item"
+import {
+  CheckboxItemDTO,
+  DateItemDTO,
+  MessageItemDTO,
+  RadioItemDTO,
+  SelectorItemDTO,
+  SliderItemDTO,
+  TextItemDTO,
+  TimeItemDTO,
+  TimeRangeItemDTO,
+} from "./item"
 
 export type ID = string
 
@@ -27,7 +37,16 @@ export type ActivityDTO = {
   items: ActivityItemDetailsDTO[]
 }
 
-export type ActivityItemDetailsDTO = TextItemDTO | CheckboxItemDTO | RadioItemDTO | SliderItemDTO | SelectorItemDTO
+export type ActivityItemDetailsDTO =
+  | TextItemDTO
+  | CheckboxItemDTO
+  | RadioItemDTO
+  | SliderItemDTO
+  | SelectorItemDTO
+  | MessageItemDTO
+  | DateItemDTO
+  | TimeItemDTO
+  | TimeRangeItemDTO
 
 export type AnswerPayload = {
   appletId: ID
@@ -54,6 +73,10 @@ export type AnswerTypesPayload =
   | SingleSelectAnswerPayload
   | SliderAnswerPayload
   | NumberSelectAnswerPayload
+  | MessageAnswerPayload
+  | DateAnswerPayload
+  | TimeAnswerPayload
+  | TimeRangeAnswerPayload
 
 export type SkippedAnswerPayload = null
 
@@ -76,5 +99,38 @@ export type SliderAnswerPayload = {
 
 export type NumberSelectAnswerPayload = {
   value: number
+  text: string | null
+}
+
+export type MessageAnswerPayload = null
+
+export type DateAnswerPayload = {
+  value: {
+    day: number
+    month: number
+    year: number
+  }
+  text: string | null
+}
+
+export type TimeAnswerPayload = {
+  value: {
+    hour: number
+    minute: number
+  }
+  text: string | null
+}
+
+export type TimeRangeAnswerPayload = {
+  value: {
+    startTime: {
+      hour: number
+      minute: number
+    }
+    endTime: {
+      hour: number
+      minute: number
+    }
+  }
   text: string | null
 }

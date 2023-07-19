@@ -7,7 +7,7 @@ type PreparedItemAnswers = {
   itemIds: string[]
 }
 
-export const prepareItemAnswers = (itemAnswers: Array<ItemAnswer>): PreparedItemAnswers => {
+export const prepareItemAnswers = (itemAnswers: Array<ItemAnswer<AnswerTypesPayload>>): PreparedItemAnswers => {
   return itemAnswers.reduce(
     (acc, itemAnswer) => {
       acc.answer.push(itemAnswer.answer)

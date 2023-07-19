@@ -18,6 +18,7 @@ export type ItemResponseTypeDTO =
   | "multiSelectRows"
   | "audio"
   | "audioPlayer"
+  | "time"
 
 export interface ItemDetailsBaseDTO {
   id: string
@@ -37,12 +38,21 @@ export type ConfigDTO =
   | RadioItemConfigDTO
   | SliderItemConfigDTO
   | SelectorItemConfigDTO
+  | MessageItemConfigDTO
+  | DateItemConfigDTO
+  | TimeItemConfigDTO
+  | TimeRangeItemConfigDTO
+
 export type ResponseValuesDTO =
   | TextItemResponseValuesDTO
   | CheckboxItemResponseValuesDTO
   | RadioItemResponseValuesDTO
   | SliderItemResponseValuesDTO
   | SelectorItemResponseValues
+  | MessageItemResponseValuesDTO
+  | DateItemResponseValuesDTO
+  | TimeItemResponseValuesDTO
+  | TimeRangeItemResponseValuesDTO
 
 export interface TextItemDTO extends ItemDetailsBaseDTO {
   responseType: "text"
@@ -180,3 +190,68 @@ export type SelectorItemResponseValues = {
   minValue: number
   maxValue: number
 }
+
+export interface MessageItemDTO extends ItemDetailsBaseDTO {
+  responseType: "message"
+  config: MessageItemConfigDTO
+  responseValues: MessageItemResponseValuesDTO
+}
+
+export type MessageItemConfigDTO = {
+  removeBackButton: boolean
+  timer: number | null
+}
+export type MessageItemResponseValuesDTO = null
+
+export interface DateItemDTO extends ItemDetailsBaseDTO {
+  responseType: "date"
+  config: DateItemConfigDTO
+  responseValues: DateItemResponseValuesDTO
+}
+
+export type DateItemConfigDTO = {
+  removeBackButton: boolean
+  skippableItem: boolean
+  timer: number | null
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+export type DateItemResponseValuesDTO = null
+
+export interface TimeItemDTO extends ItemDetailsBaseDTO {
+  responseType: "time"
+  config: TimeItemConfigDTO
+  responseValues: TimeItemResponseValuesDTO
+}
+
+export type TimeItemConfigDTO = {
+  removeBackButton: boolean
+  skippableItem: boolean
+  timer: number | null
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+
+export type TimeItemResponseValuesDTO = null
+
+export interface TimeRangeItemDTO extends ItemDetailsBaseDTO {
+  responseType: "timeRange"
+  config: TimeRangeItemConfigDTO
+  responseValues: TimeRangeItemResponseValuesDTO
+}
+
+export type TimeRangeItemConfigDTO = {
+  removeBackButton: boolean
+  skippableItem: boolean
+  timer: number | null
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+
+export type TimeRangeItemResponseValuesDTO = null
