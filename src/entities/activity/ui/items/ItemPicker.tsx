@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box"
 
 import { ActivityEventProgressRecord } from "../../model/types"
+import { AudioPlayerItem } from "./AudioPlayerItem"
 import { CheckboxItem } from "./CheckboxItem"
 import { DateItem } from "./DateItem"
 import { RadioItem } from "./RadioItem"
@@ -71,6 +72,9 @@ export const ItemPicker = ({ item, values, onValueChange, isDisabled, replaceTex
 
     case "timeRange":
       return <TimeRangeItem values={values} onValueChange={onValueChange} />
+
+    case "audioPlayer":
+      return <AudioPlayerItem item={item} />
 
     default:
       return <></>

@@ -42,6 +42,7 @@ export type ConfigDTO =
   | DateItemConfigDTO
   | TimeItemConfigDTO
   | TimeRangeItemConfigDTO
+  | AudioPlayerItemConfigDTO
 
 export type ResponseValuesDTO =
   | TextItemResponseValuesDTO
@@ -53,6 +54,7 @@ export type ResponseValuesDTO =
   | DateItemResponseValuesDTO
   | TimeItemResponseValuesDTO
   | TimeRangeItemResponseValuesDTO
+  | AudioPlayerItemResponseValuesDTO
 
 export interface TextItemDTO extends ItemDetailsBaseDTO {
   responseType: "text"
@@ -255,3 +257,23 @@ export type TimeRangeItemConfigDTO = {
 }
 
 export type TimeRangeItemResponseValuesDTO = null
+
+export interface AudioPlayerItemDTO extends ItemDetailsBaseDTO {
+  responseType: "audioPlayer"
+  config: AudioPlayerItemConfigDTO
+  responseValues: AudioPlayerItemResponseValuesDTO
+}
+
+export type AudioPlayerItemConfigDTO = {
+  playOnce: boolean
+  removeBackButton: boolean
+  skippableItem: boolean
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+
+export type AudioPlayerItemResponseValuesDTO = {
+  file: string
+}
