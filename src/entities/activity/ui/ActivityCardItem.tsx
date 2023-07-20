@@ -48,9 +48,12 @@ export const ActivityCardItem = ({
   saveUserEventByType,
 }: ActivityCardItemProps) => {
   const isMessageItem = activityItem.responseType === "message"
+  const isAudioPlayerItem = activityItem.responseType === "audioPlayer"
+
+  const isItemWithoutAnswer = isMessageItem || isAudioPlayerItem
 
   const buttonConfig: ItemCardButtonsConfig = {
-    isNextDisabled: isMessageItem ? false : !values || !values.length,
+    isNextDisabled: isItemWithoutAnswer ? false : !values || !values.length,
     isSkippable: activityItem.config.skippableItem || isAllItemsSkippable,
     isBackShown: isBackShown && !activityItem.config.removeBackButton,
   }

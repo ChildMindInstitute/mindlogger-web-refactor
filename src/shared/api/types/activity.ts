@@ -79,6 +79,7 @@ export type AnswerTypesPayload =
   | DateAnswerPayload
   | TimeAnswerPayload
   | TimeRangeAnswerPayload
+  | AudioPlayerAnswerPayload
 
 export type SkippedAnswerPayload = null
 
@@ -136,3 +137,5 @@ export type TimeRangeAnswerPayload = {
   }
   text: string | null
 }
+
+export type AudioPlayerAnswerPayload = null
