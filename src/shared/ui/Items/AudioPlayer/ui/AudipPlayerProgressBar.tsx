@@ -1,3 +1,4 @@
+import { SxProps, Theme } from "@mui/material"
 import Box from "@mui/material/Box"
 import LinearProgress from "@mui/material/LinearProgress"
 
@@ -10,15 +11,13 @@ type Props = {
   isDisabled?: boolean
 
   onProgressBarClick: (progress: number) => void
+
+  mediaQuery?: {
+    sm?: boolean
+  }
 }
 
-export const AudioPlayerProgressBar = ({
-  progress,
-  buffer,
-  width = "150px",
-  onProgressBarClick,
-  isDisabled,
-}: Props) => {
+export const AudioPlayerProgressBar = ({ progress, buffer, onProgressBarClick, isDisabled, mediaQuery }: Props) => {
   const onClick = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     const rect = event.currentTarget.getBoundingClientRect()
 
@@ -30,8 +29,12 @@ export const AudioPlayerProgressBar = ({
     return onProgressBarClick(porgressPicked)
   }
 
+  const defaultWidth = "150px"
+
+  const width = mediaQuery?.sm ? "60px" : defaultWidth
+
   return (
-    <Box width={width}>
+    <Box sx={{ width }}>
       <LinearProgress
         variant="determinate"
         value={progress}

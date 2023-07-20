@@ -9,13 +9,19 @@ type Props = {
   onPauseClick: () => void
 
   isDisabled?: boolean
+
+  mediaQuery?: {
+    sm?: boolean
+  }
 }
 
-export const AudioPlayerControls = ({ isPlaying, onPlayClick, onPauseClick, isDisabled }: Props) => {
+export const AudioPlayerControls = ({ isPlaying, onPlayClick, onPauseClick, isDisabled, mediaQuery }: Props) => {
+  const iconSize = mediaQuery?.sm ? "small" : "medium"
+
   return (
     <Box>
       <IconButton onClick={isPlaying ? onPauseClick : onPlayClick} disabled={isDisabled}>
-        {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+        {isPlaying ? <PauseIcon fontSize={iconSize} /> : <PlayArrowIcon fontSize={iconSize} />}
       </IconButton>
     </Box>
   )

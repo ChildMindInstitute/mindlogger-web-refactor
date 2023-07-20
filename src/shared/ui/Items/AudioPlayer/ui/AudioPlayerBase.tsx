@@ -1,5 +1,6 @@
 import { useRef } from "react"
 
+import { useMediaQuery, useTheme } from "@mui/material"
 import Box from "@mui/material/Box"
 
 import { useAudioControls, useAudioDuration, useAudioVolume } from "../lib"
@@ -19,6 +20,9 @@ type Props = {
 
 export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
   const audioRef = useRef<HTMLAudioElement>(null)
+
+  const theme = useTheme()
+  const smMatch = useMediaQuery(theme.breakpoints.down("sm"))
 
   const { isPlaying, play, pause } = useAudioControls({ audioRef })
 
@@ -51,19 +55,25 @@ export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
       <Box
         display="flex"
         alignItems="center"
-        gap={1}
-        sx={{ padding: "12px", borderRadius: "50px", backgroundColor: "#F0F3F4" }}>
+        gap={smMatch ? 0.5 : 1}
+        sx={{ padding: smMatch ? "6px 12px" : "12px", borderRadius: "50px", backgroundColor: "#F0F3F4" }}>
         <AudioPlayerControls
           isPlaying={isPlaying}
           onPlayClick={play}
           onPauseClick={onHandlePause}
           isDisabled={playOnce && isPlaying}
+          mediaQuery={{ sm: smMatch }}
         />
-        <AudioPlayerDuration currentDuration={currentDuration} totalDuration={totalDuration} />
+        <AudioPlayerDuration
+          currentDuration={currentDuration}
+          totalDuration={totalDuration}
+          mediaQuery={{ sm: smMatch }}
+        />
         <AudioPlayerProgressBar
           progress={progress}
           onProgressBarClick={onHandleDurationChange}
           isDisabled={playOnce && isPlaying}
+          mediaQuery={{ sm: smMatch }}
         />
         <AudioPlayerVolume
           isMuted={isMuted}

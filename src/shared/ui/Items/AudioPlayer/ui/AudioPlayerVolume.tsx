@@ -13,25 +13,32 @@ type Props = {
   onHandleUnmute: () => void
 
   onChange: (volume: number) => void
+
+  mediaQuery?: {
+    sm?: boolean
+  }
 }
 
-export const AudioPlayerVolume = ({ isMuted, onHandleMute, onHandleUnmute, value = 50, onChange }: Props) => {
+export const AudioPlayerVolume = ({
+  isMuted,
+  onHandleMute,
+  onHandleUnmute,
+  value = 50,
+  onChange,
+  mediaQuery,
+}: Props) => {
   const onHandleChange = (event: Event, newValue: number | number[]) => {
     onChange(newValue as number)
   }
 
+  const iconSize = mediaQuery?.sm ? "small" : "medium"
+
   return (
-    <Box display="flex" alignItems="center" gap={1}>
+    <Box display="flex" alignItems="center" gap={mediaQuery?.sm ? 0.5 : 1}>
       <Box>
-        {isMuted ? (
-          <IconButton onClick={onHandleUnmute}>
-            <VolumeOffIcon />
-          </IconButton>
-        ) : (
-          <IconButton onClick={onHandleMute}>
-            <VolumeUpIcon />
-          </IconButton>
-        )}
+        <IconButton onClick={isMuted ? onHandleUnmute : onHandleMute}>
+          {isMuted ? <VolumeOffIcon fontSize={iconSize} /> : <VolumeUpIcon fontSize={iconSize} />}
+        </IconButton>
       </Box>
 
       <Box display="flex">
