@@ -1,4 +1,4 @@
-import { SyntheticEvent, useRef } from "react"
+import { useRef } from "react"
 
 import Box from "@mui/material/Box"
 
@@ -11,15 +11,24 @@ type Props = {
   src: string
   playOnce?: boolean
 
-  onHandlePlay?: (event: SyntheticEvent<HTMLAudioElement>) => void
-  onHandlePause?: (event: SyntheticEvent<HTMLAudioElement>) => void
-  onHandleEnded?: (event: SyntheticEvent<HTMLAudioElement>) => void
+  onHandlePlay?: () => void
+  onHandlePause?: () => void
+  onHandleEnded?: () => void
 }
 
-export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
+export const AudioPlayerItemBase = ({ src }: Props) => {
   const audioRef = useRef<HTMLAudioElement>(null)
 
-  const { isPlaying, currentDuration, totalDuration, play, pause, updateCurrentDuration } = useAudioPlayer({ audioRef })
+  const {
+    isPlaying,
+    currentDuration,
+    totalDuration,
+    play,
+    pause,
+    updateCurrentDuration,
+    setCurrentDuration,
+    progress,
+  } = useAudioPlayer({ audioRef })
 
   return (
     <Box sx={{}}>
@@ -32,7 +41,7 @@ export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
         sx={{ padding: "12px", borderRadius: "50px", backgroundColor: "#F0F3F4" }}>
         <AudioPlayerControls isPlaying={isPlaying} onPlayClick={play} onPauseClick={pause} />
         <AudioPlayerDuration currentDuration={currentDuration} totalDuration={totalDuration} />
-        <AudioPlayerProgressBar progress={50} />
+        <AudioPlayerProgressBar progress={progress} onProgressBarClick={setCurrentDuration} />
       </Box>
     </Box>
   )

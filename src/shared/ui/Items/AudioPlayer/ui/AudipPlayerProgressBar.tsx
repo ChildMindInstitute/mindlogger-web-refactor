@@ -6,12 +6,25 @@ type Props = {
 
   progress: number
   buffer?: number
+
+  onProgressBarClick: (progress: number) => void
 }
 
-export const AudioPlayerProgressBar = ({ progress, buffer, width = "150px" }: Props) => {
+export const AudioPlayerProgressBar = ({ progress, buffer, width = "150px", onProgressBarClick }: Props) => {
+  const onClick = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+
+    const x = event.clientX - rect.left
+    const barWidth = event.currentTarget.clientWidth
+
+    const porgressPicked = (x / barWidth) * 100
+
+    return onProgressBarClick(porgressPicked)
+  }
+
   return (
     <Box width={width}>
-      <LinearProgress variant="determinate" value={progress} valueBuffer={buffer} />
+      <LinearProgress variant="determinate" value={progress} valueBuffer={buffer} onClick={onClick} />
     </Box>
   )
 }
