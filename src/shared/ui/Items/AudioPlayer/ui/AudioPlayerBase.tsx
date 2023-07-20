@@ -2,9 +2,10 @@ import { useRef } from "react"
 
 import Box from "@mui/material/Box"
 
-import { useAudioPlayer } from "../lib"
+import { useAudioControls, useAudioDuration, useAudioVolume } from "../lib"
 import { AudioPlayerControls } from "./AudioPlayerControls"
 import { AudioPlayerDuration } from "./AudioPlayerDuration"
+import { AudioPlayerVolume } from "./AudioPlayerVolume"
 import { AudioPlayerProgressBar } from "./AudipPlayerProgressBar"
 
 type Props = {
@@ -19,19 +20,16 @@ type Props = {
 export const AudioPlayerItemBase = ({ src }: Props) => {
   const audioRef = useRef<HTMLAudioElement>(null)
 
-  const {
-    isPlaying,
-    currentDuration,
-    totalDuration,
-    play,
-    pause,
-    updateCurrentDuration,
-    setCurrentDuration,
-    progress,
-  } = useAudioPlayer({ audioRef })
+  const { isPlaying, play, pause } = useAudioControls({ audioRef })
+
+  const { totalDuration, currentDuration, updateCurrentDuration, setCurrentDuration, progress } = useAudioDuration({
+    audioRef,
+  })
+
+  const { isMuted, mute, unmute, volume, onVolumeChange } = useAudioVolume({ audioRef })
 
   return (
-    <Box sx={{}}>
+    <Box>
       <audio ref={audioRef} src={src} loop={false} onTimeUpdate={updateCurrentDuration} />
 
       <Box
@@ -42,6 +40,13 @@ export const AudioPlayerItemBase = ({ src }: Props) => {
         <AudioPlayerControls isPlaying={isPlaying} onPlayClick={play} onPauseClick={pause} />
         <AudioPlayerDuration currentDuration={currentDuration} totalDuration={totalDuration} />
         <AudioPlayerProgressBar progress={progress} onProgressBarClick={setCurrentDuration} />
+        <AudioPlayerVolume
+          isMuted={isMuted}
+          onHandleMute={mute}
+          onHandleUnmute={unmute}
+          value={volume}
+          onChange={onVolumeChange}
+        />
       </Box>
     </Box>
   )
