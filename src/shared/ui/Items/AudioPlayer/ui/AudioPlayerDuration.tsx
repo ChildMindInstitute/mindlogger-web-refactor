@@ -9,7 +9,7 @@ type Props = {
 export const AudioPlayerDuration = ({ currentDuration, totalDuration }: Props) => {
   return (
     <Box>
-      <Typography variant="body1">{`${currentDuration} / ${totalDuration}`}</Typography>
+      <Typography variant="body1" sx={{ cursor: "default" }}>{`${currentDuration} / ${totalDuration}`}</Typography>
     </Box>
   )
 }

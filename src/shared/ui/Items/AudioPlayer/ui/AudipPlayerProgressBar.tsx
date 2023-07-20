@@ -7,10 +7,18 @@ type Props = {
   progress: number
   buffer?: number
 
+  isDisabled?: boolean
+
   onProgressBarClick: (progress: number) => void
 }
 
-export const AudioPlayerProgressBar = ({ progress, buffer, width = "150px", onProgressBarClick }: Props) => {
+export const AudioPlayerProgressBar = ({
+  progress,
+  buffer,
+  width = "150px",
+  onProgressBarClick,
+  isDisabled,
+}: Props) => {
   const onClick = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     const rect = event.currentTarget.getBoundingClientRect()
 
@@ -24,7 +32,13 @@ export const AudioPlayerProgressBar = ({ progress, buffer, width = "150px", onPr
 
   return (
     <Box width={width}>
-      <LinearProgress variant="determinate" value={progress} valueBuffer={buffer} onClick={onClick} />
+      <LinearProgress
+        variant="determinate"
+        value={progress}
+        valueBuffer={buffer}
+        onClick={onClick}
+        sx={{ cursor: isDisabled ? "default" : "pointer" }}
+      />
     </Box>
   )
 }

@@ -14,13 +14,11 @@ export const useAudioControls = ({ audioRef }: Props): Return => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
 
   const play = () => {
-    console.log("play")
     audioRef.current?.play()
     return setIsPlaying(true)
   }
 
   const pause = () => {
-    console.log("pause")
     setIsPlaying(false)
     return audioRef.current?.pause()
   }

@@ -7,20 +7,16 @@ type Props = {
   isPlaying: boolean
   onPlayClick: () => void
   onPauseClick: () => void
+
+  isDisabled?: boolean
 }
 
-export const AudioPlayerControls = ({ isPlaying, onPlayClick, onPauseClick }: Props) => {
+export const AudioPlayerControls = ({ isPlaying, onPlayClick, onPauseClick, isDisabled }: Props) => {
   return (
     <Box>
-      {isPlaying ? (
-        <IconButton onClick={onPauseClick}>
-          <PauseIcon />
-        </IconButton>
-      ) : (
-        <IconButton onClick={onPlayClick}>
-          <PlayArrowIcon />
-        </IconButton>
-      )}
+      <IconButton onClick={isPlaying ? onPauseClick : onPlayClick} disabled={isDisabled}>
+        {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+      </IconButton>
     </Box>
   )
 }
