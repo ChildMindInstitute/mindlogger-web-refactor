@@ -62,12 +62,11 @@ export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
           onClick={isPlaying ? onHandlePause : play}
           isDisabled={playOnce && isPlaying}
         />
-        <AudioPlayerDuration currentDuration={currentDuration} totalDuration={totalDuration} mediaQuery={mediaQuery} />
+        <AudioPlayerDuration currentDuration={currentDuration} totalDuration={totalDuration} />
         <AudioPlayerProgressBar
           progress={progress}
           onProgressBarClick={onHandleDurationChange}
           isDisabled={playOnce && isPlaying}
-          mediaQuery={mediaQuery}
         />
         <AudioPlayerVolume
           isMuted={isMuted}
