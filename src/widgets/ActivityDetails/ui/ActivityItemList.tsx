@@ -75,7 +75,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     return navigator.navigate(ROUTES.thanks.navigateTo(isPublic ? props.publicAppletKey! : appletDetails.id, isPublic))
   }
 
-  const { mutate: saveAnswer } = useSaveAnswerMutation({
+  const { mutate: saveAnswer, isLoading: submitLoading } = useSaveAnswerMutation({
     onSuccess() {
       return onSaveAnswerSuccess()
     },
@@ -214,8 +214,10 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
         title={t("additional.response_submit")}
         label={t("additional.response_submit_text")}
         footerPrimaryButton={t("additional.yes")}
+        primaryButtonDisabled={submitLoading}
         onPrimaryButtonClick={onPrimaryButtonClick}
         footerSecondaryButton={t("additional.no")}
+        secondaryButtonDisabled={submitLoading}
         onSecondaryButtonClick={closeSubmitModal}
       />
 
