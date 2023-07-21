@@ -16,7 +16,7 @@ export type GetPublicAppletActivityByIdPayload = {
   activityId: string
 }
 
-// API Responses
+// API Responses - Success
 export type AppletListSuccessResponse = BaseSuccessListResponse<AppletListDTO>
 export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDTO>
 
