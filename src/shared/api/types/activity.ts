@@ -1,5 +1,6 @@
 import { BaseSuccessResponse } from "./base"
 import {
+  AudioPlayerItemDTO,
   CheckboxItemDTO,
   DateItemDTO,
   MessageItemDTO,
@@ -47,6 +48,7 @@ export type ActivityItemDetailsDTO =
   | DateItemDTO
   | TimeItemDTO
   | TimeRangeItemDTO
+  | AudioPlayerItemDTO
 
 export type AnswerPayload = {
   appletId: ID
@@ -77,6 +79,7 @@ export type AnswerTypesPayload =
   | DateAnswerPayload
   | TimeAnswerPayload
   | TimeRangeAnswerPayload
+  | AudioPlayerAnswerPayload
 
 export type SkippedAnswerPayload = null
 
@@ -134,3 +137,5 @@ export type TimeRangeAnswerPayload = {
   }
   text: string | null
 }
+
+export type AudioPlayerAnswerPayload = null

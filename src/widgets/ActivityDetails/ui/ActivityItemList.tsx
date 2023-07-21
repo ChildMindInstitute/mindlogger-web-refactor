@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react"
 
-import { getUnixTime } from "date-fns"
 import { v4 as uuidV4 } from "uuid"
 
 import Modal from "../../Modal"
@@ -75,7 +74,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     return navigator.navigate(ROUTES.thanks.navigateTo(isPublic ? props.publicAppletKey! : appletDetails.id, isPublic))
   }
 
-  const { mutate: saveAnswer } = useSaveAnswerMutation({
+  const { mutate: saveAnswer, isLoading: submitLoading } = useSaveAnswerMutation({
     onSuccess() {
       return onSaveAnswerSuccess()
     },
@@ -154,8 +153,8 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
         itemIds: preparedItemAnswers.itemIds,
         events: encryptedUserEvents,
         userPublicKey,
-        startTime: getUnixTime(new Date(groupInProgress.startAt!)),
-        endTime: getUnixTime(new Date()),
+        startTime: new Date(groupInProgress.startAt!).getTime(),
+        endTime: new Date().getTime(),
         identifier: encryptedIdentifier,
       },
     }
@@ -214,8 +213,10 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
         title={t("additional.response_submit")}
         label={t("additional.response_submit_text")}
         footerPrimaryButton={t("additional.yes")}
+        primaryButtonDisabled={submitLoading}
         onPrimaryButtonClick={onPrimaryButtonClick}
         footerSecondaryButton={t("additional.no")}
+        secondaryButtonDisabled={submitLoading}
         onSecondaryButtonClick={closeSubmitModal}
       />
 

@@ -10,8 +10,10 @@ export interface CustomModalProps {
   title?: string | null
   label?: string | null
   footerPrimaryButton?: string | null
+  primaryButtonDisabled?: boolean
   onPrimaryButtonClick?: () => void
   footerSecondaryButton?: string | null
+  secondaryButtonDisabled?: boolean
   onSecondaryButtonClick?: () => void
 }
 
@@ -22,6 +24,8 @@ const CustomModal = (props: CustomModalProps) => {
     footerPrimaryButton,
     footerSecondaryButton,
     show,
+    primaryButtonDisabled,
+    secondaryButtonDisabled,
     onHide,
     onPrimaryButtonClick,
     onSecondaryButtonClick,
@@ -38,12 +42,12 @@ const CustomModal = (props: CustomModalProps) => {
       {(footerPrimaryButton || footerSecondaryButton) && (
         <Modal.Footer>
           {footerSecondaryButton && (
-            <BasicButton variant="secondary" onClick={onSecondaryButtonClick}>
+            <BasicButton variant="secondary" onClick={onSecondaryButtonClick} disabled={secondaryButtonDisabled}>
               {footerSecondaryButton}
             </BasicButton>
           )}
           {footerPrimaryButton && (
-            <BasicButton variant="primary" onClick={onPrimaryButtonClick}>
+            <BasicButton variant="primary" onClick={onPrimaryButtonClick} disabled={primaryButtonDisabled}>
               {footerPrimaryButton}
             </BasicButton>
           )}

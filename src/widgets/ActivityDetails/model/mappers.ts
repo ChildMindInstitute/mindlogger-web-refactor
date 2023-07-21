@@ -1,6 +1,7 @@
 import { ItemAnswer } from "./itemAnswer"
 
 import {
+  AudioPlayerItem,
   CheckboxItem,
   DateItem,
   MessageItem,
@@ -14,6 +15,7 @@ import {
 } from "~/entities/activity"
 import {
   AnswerTypesPayload,
+  AudioPlayerAnswerPayload,
   DateAnswerPayload,
   MessageAnswerPayload,
   MultiSelectAnswerPayload,
@@ -57,6 +59,9 @@ export function mapToAnswers(
 
       case "timeRange":
         return convertToTimeRangeAnswer(item)
+
+      case "audioPlayer":
+        return convertToAudioPlayerAnswer(item)
 
       default:
         return null
@@ -205,6 +210,13 @@ function convertToTimeRangeAnswer(item: TimeRangeItem): ItemAnswer<TimeRangeAnsw
       },
       text: null,
     },
+    itemId: item.id,
+  }
+}
+
+function convertToAudioPlayerAnswer(item: AudioPlayerItem): ItemAnswer<AudioPlayerAnswerPayload> {
+  return {
+    answer: null,
     itemId: item.id,
   }
 }

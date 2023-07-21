@@ -8,4 +8,5 @@ export const supportableItemTypes = [
   "date",
   "time",
   "timeRange",
+  "audioPlayer",
 ]
