@@ -10,8 +10,10 @@ type PreparedItemAnswers = {
 export const prepareItemAnswers = (itemAnswers: Array<ItemAnswer>): PreparedItemAnswers => {
   return itemAnswers.reduce(
     (acc, itemAnswer) => {
-      acc.answer.push(itemAnswer.answer)
-      acc.itemIds.push(itemAnswer.itemId)
+      if (itemAnswer) {
+        acc.answer.push(itemAnswer.answer)
+        acc.itemIds.push(itemAnswer.itemId)
+      }
 
       return acc
     },
