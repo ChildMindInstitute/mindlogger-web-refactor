@@ -1,19 +1,19 @@
 import { Typography } from "@mui/material"
 import Box from "@mui/material/Box"
 
+import { MediaQueryReturn } from "~/shared/utils"
+
 type Props = {
   currentDuration: string
   totalDuration: string
 
-  mediaQuery?: {
-    sm?: boolean
-  }
+  mediaQuery?: MediaQueryReturn
 }
 
 export const AudioPlayerDuration = ({ currentDuration, totalDuration, mediaQuery }: Props) => {
-  const fontSize = mediaQuery?.sm ? "12px" : "14px"
+  const fontSize = mediaQuery?.lessThanSM ? "12px" : "14px"
 
-  const width = mediaQuery?.sm ? "75px" : "100px"
+  const width = mediaQuery?.lessThanSM ? "75px" : "100px"
 
   return (
     <Box width={width}>

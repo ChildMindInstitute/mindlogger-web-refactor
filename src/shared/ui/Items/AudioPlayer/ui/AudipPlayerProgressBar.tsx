@@ -1,6 +1,8 @@
 import Box from "@mui/material/Box"
 import LinearProgress from "@mui/material/LinearProgress"
 
+import { MediaQueryReturn } from "~/shared/utils"
+
 type Props = {
   width?: string
 
@@ -11,9 +13,7 @@ type Props = {
 
   onProgressBarClick: (progress: number) => void
 
-  mediaQuery?: {
-    sm?: boolean
-  }
+  mediaQuery?: MediaQueryReturn
 }
 
 export const AudioPlayerProgressBar = ({ progress, buffer, onProgressBarClick, isDisabled, mediaQuery }: Props) => {
@@ -30,7 +30,7 @@ export const AudioPlayerProgressBar = ({ progress, buffer, onProgressBarClick, i
 
   const defaultWidth = "150px"
 
-  const width = mediaQuery?.sm ? "60px" : defaultWidth
+  const width = mediaQuery?.lessThanSM ? "60px" : defaultWidth
 
   return (
     <Box sx={{ width }}>

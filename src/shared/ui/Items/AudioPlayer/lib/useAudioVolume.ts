@@ -11,7 +11,7 @@ type Return = {
   mute: () => void
   unmute: () => void
 
-  onVolumeChange: (volume: number) => void
+  volumeChange: (volume: number) => void
 }
 
 export const useAudioVolume = ({ audioRef }: Props): Return => {
@@ -46,7 +46,7 @@ export const useAudioVolume = ({ audioRef }: Props): Return => {
     audioRef.current.volume = volume
   }
 
-  const onVolumeChange = (volume: number) => {
+  const volumeChange = (volume: number) => {
     if (audioRef.current?.volume === undefined) {
       return
     }
@@ -67,6 +67,6 @@ export const useAudioVolume = ({ audioRef }: Props): Return => {
     volume: isMuted ? 0 : Math.round(volume * 100),
     mute,
     unmute,
-    onVolumeChange,
+    volumeChange,
   }
 }
