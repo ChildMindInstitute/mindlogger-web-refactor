@@ -1,1 +1,1 @@
-build( job: env.MindloggerWebRefactorBuilder )
+build( job: env.MindloggerWebRefactorNewBuilder )
