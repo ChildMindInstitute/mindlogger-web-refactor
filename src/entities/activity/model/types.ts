@@ -1,5 +1,6 @@
 import {
   ActivityPipelineType,
+  AudioPlayerItem,
   CheckboxItem,
   DateItem,
   MessageItem,
@@ -62,6 +63,7 @@ export type ActivityEventProgressRecord =
   | DateItem
   | TimeItem
   | TimeRangeItem
+  | AudioPlayerItem
 
 export type ActivityEventProgressState = {
   activityEvents: ActivityEventProgressRecord[]

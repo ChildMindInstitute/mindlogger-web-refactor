@@ -70,6 +70,7 @@ export type Config =
   | DateItemConfig
   | TimeItemItemConfig
   | TimeRangeItemConfig
+  | AudioPlayerItemConfig
 
 export type ResponseValues =
   | TextValues
@@ -82,6 +83,7 @@ export type ResponseValues =
   | DateItemValues
   | TimeItemValues
   | TimeRangeItemValues
+  | AudioPlayerItemValues
 
 export interface TextItem extends ActivityItemBase {
   responseType: "text"
@@ -241,3 +243,18 @@ export interface TimeRangeItem extends ActivityItemBase {
 
 export type TimeRangeItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig
 export type TimeRangeItemValues = null
+
+export interface AudioPlayerItem extends ActivityItemBase {
+  responseType: "audioPlayer"
+  config: AudioPlayerItemConfig
+  responseValues: AudioPlayerItemValues
+}
+
+export type AudioPlayerItemConfig = ButtonsConfig &
+  AdditionalResponseConfig & {
+    playOnce: boolean
+  }
+
+export type AudioPlayerItemValues = {
+  file: string
+}
