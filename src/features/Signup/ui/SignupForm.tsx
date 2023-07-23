@@ -9,7 +9,13 @@ import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
 import { useLoginMutation, userModel, useSignupMutation } from "~/entities/user"
 import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
-import { secureTokensStorage, useCustomForm, usePasswordType } from "~/shared/utils"
+import {
+  secureTokensStorage,
+  secureUserPrivateKeyStorage,
+  useCustomForm,
+  useEncryption,
+  usePasswordType,
+} from "~/shared/utils"
 
 interface SignupFormProps {
   locationState?: Record<string, unknown>
@@ -30,10 +36,20 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
     SignupFormSchema,
   )
   const { handleSubmit, reset } = form
+  const { generateUserPrivateKey } = useEncryption()
 
   const { mutate: login } = useLoginMutation({
-    onSuccess(data) {
+    onSuccess(data, variables) {
       const { user, token } = data.data.result
+
+      const userParams = {
+        userId: data.data.result.user.id,
+        email: data.data.result.user.email,
+        password: variables.password,
+      }
+
+      const userPrivateKey = generateUserPrivateKey(userParams)
+      secureUserPrivateKeyStorage.setUserPrivateKey(userPrivateKey)
 
       setUser(user)
       secureTokensStorage.setTokens(token)

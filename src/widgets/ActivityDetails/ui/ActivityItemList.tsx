@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react"
 
+import { getUnixTime } from "date-fns"
 import { v4 as uuidV4 } from "uuid"
 
 import Modal from "../../Modal"
@@ -153,8 +154,8 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
         itemIds: preparedItemAnswers.itemIds,
         events: encryptedUserEvents,
         userPublicKey,
-        startTime: new Date(groupInProgress.startAt!).getTime(),
-        endTime: new Date().getTime(),
+        startTime: getUnixTime(groupInProgress.startAt!),
+        endTime: getUnixTime(new Date()),
         identifier: encryptedIdentifier,
       },
     }
