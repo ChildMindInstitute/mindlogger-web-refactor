@@ -1,6 +1,6 @@
 import { Modal } from "react-bootstrap"
 
-import { BasicButton } from "~/shared/ui"
+import { BasicButton, Markdown } from "~/shared/ui"
 
 import "./style.scss"
 
@@ -39,7 +39,11 @@ const CustomModal = (props: CustomModalProps) => {
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
       )}
-      {label && <Modal.Body>{label}</Modal.Body>}
+      {label && (
+        <Modal.Body>
+          <Markdown markdown={label} />
+        </Modal.Body>
+      )}
       {(footerPrimaryButton || footerSecondaryButton) && (
         <Modal.Footer>
           {footerSecondaryButton && (
