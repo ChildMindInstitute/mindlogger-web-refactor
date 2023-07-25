@@ -2,6 +2,7 @@ import { ItemAnswer } from "./itemAnswer"
 
 import { CheckboxItem, RadioItem, SelectorItem, SliderItem, TextItem, activityModel } from "~/entities/activity"
 import {
+  AlertDTO,
   MultiSelectAnswerPayload,
   SingleSelectAnswerPayload,
   SliderAnswerPayload,
@@ -48,11 +49,29 @@ function convertToTextAnswer(item: TextItem): { answer: TextAnswerPayload | null
   }
 }
 
-function convertToSingleSelectAnswer(item: RadioItem): { answer: SingleSelectAnswerPayload | null; itemId: string } {
+function convertToSingleSelectAnswer(item: RadioItem): {
+  answer: SingleSelectAnswerPayload | null
+  itemId: string
+  alert: Array<AlertDTO>
+} {
   if (!item.answer[0]) {
     return {
       answer: null,
       itemId: item.id,
+      alert: [],
+    }
+  }
+
+  const alert: Array<AlertDTO> = []
+
+  if (item.config.setAlerts) {
+    const option = item.responseValues.options.find(option => option.value === Number(item.answer[0]))
+
+    if (option && option.alert) {
+      alert.push({
+        activityItemId: item.id,
+        message: option.alert,
+      })
     }
   }
 
@@ -62,15 +81,36 @@ function convertToSingleSelectAnswer(item: RadioItem): { answer: SingleSelectAns
       text: null,
     },
     itemId: item.id,
+    alert,
   }
 }
 
-function convertToMultiSelectAnswer(item: CheckboxItem): { answer: MultiSelectAnswerPayload | null; itemId: string } {
+function convertToMultiSelectAnswer(item: CheckboxItem): {
+  answer: MultiSelectAnswerPayload | null
+  itemId: string
+  alert: Array<AlertDTO>
+} {
   if (!item.answer[0]) {
     return {
       answer: null,
       itemId: item.id,
+      alert: [],
     }
+  }
+
+  const alert: Array<AlertDTO> = []
+
+  if (item.config.setAlerts) {
+    item.responseValues.options.forEach(option => {
+      const answeredOption = item.answer.includes(String(option.value))
+
+      if (answeredOption && option.alert) {
+        alert.push({
+          activityItemId: item.id,
+          message: option.alert,
+        })
+      }
+    })
   }
 
   return {
@@ -79,15 +119,34 @@ function convertToMultiSelectAnswer(item: CheckboxItem): { answer: MultiSelectAn
       text: null,
     },
     itemId: item.id,
+    alert,
   }
 }
 
-function convertToSliderAnswer(item: SliderItem): { answer: SliderAnswerPayload | null; itemId: string } {
+function convertToSliderAnswer(item: SliderItem): {
+  answer: SliderAnswerPayload | null
+  itemId: string
+  alert: Array<AlertDTO>
+} {
   if (!item.answer[0]) {
     return {
       answer: null,
       itemId: item.id,
+      alert: [],
     }
+  }
+
+  const alert: Array<AlertDTO> = []
+
+  if (item.config.setAlerts) {
+    item.responseValues.alerts?.forEach(alertItem => {
+      if (alertItem.value === Number(item.answer[0])) {
+        alert.push({
+          activityItemId: item.id,
+          message: alertItem.alert,
+        })
+      }
+    })
   }
 
   return {
@@ -96,6 +155,7 @@ function convertToSliderAnswer(item: SliderItem): { answer: SliderAnswerPayload 
       text: null,
     },
     itemId: item.id,
+    alert,
   }
 }
 

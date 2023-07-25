@@ -22,7 +22,7 @@ import {
   useSaveAnswerMutation,
 } from "~/entities/activity"
 import { ActivityFlow, AppletDetails } from "~/entities/applet"
-import { ActivityDTO, AnswerPayload, AppletEventsResponse } from "~/shared/api"
+import { ActivityDTO, AlertDTO, AnswerPayload, AppletEventsResponse } from "~/shared/api"
 import {
   ROUTES,
   secureUserPrivateKeyStorage,
@@ -116,6 +116,14 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     const itemAnswers = mapToAnswers(activityEvents)
     const preparedItemAnswers = prepareItemAnswers(itemAnswers)
 
+    const alerts = itemAnswers.reduce<Array<AlertDTO>>((acc, itemAnswer) => {
+      if (!itemAnswer?.alert) {
+        return acc
+      }
+
+      return [...acc, ...itemAnswer.alert]
+    }, [])
+
     // Step 2 - Encrypt answers
     let privateKey: number[] | null = null
 
@@ -157,6 +165,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
         endTime: new Date().getTime(),
         identifier: encryptedIdentifier,
       },
+      alerts,
     }
 
     const scheduledTime = getScheduledTimeFromEvents(eventsRawData, activityDetails.id)
