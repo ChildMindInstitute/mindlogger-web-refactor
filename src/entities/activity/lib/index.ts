@@ -1,7 +1,6 @@
 export * from "./getActivityEventProgressId"
 export * from "./getActivityItemScreenId"
 export * from "./types"
-export * from "./mock"
 export * from "./constants"
 export * from "./hooks"
 export * from "./conditionalLogicBuilder"

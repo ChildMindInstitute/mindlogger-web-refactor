@@ -81,11 +81,9 @@ export const useActivityDetails = (props: Props, params: UseActivityDetailsParam
           return
         }
 
-        const activityDetails = activityModel.activityBuilder.convertToActivityDetails(data?.data?.result)
-
-        if (activityDetails) {
+        if (data?.data?.result) {
           const initialStep = 1
-          return saveActivityEventRecords(activityDetails, props.eventId, initialStep)
+          return saveActivityEventRecords(data.data.result, props.eventId, initialStep)
         }
       },
     },
