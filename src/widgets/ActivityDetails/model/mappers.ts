@@ -52,26 +52,11 @@ function convertToTextAnswer(item: TextItem): { answer: TextAnswerPayload | null
 function convertToSingleSelectAnswer(item: RadioItem): {
   answer: SingleSelectAnswerPayload | null
   itemId: string
-  alert: Array<AlertDTO>
 } {
   if (!item.answer[0]) {
     return {
       answer: null,
       itemId: item.id,
-      alert: [],
-    }
-  }
-
-  const alert: Array<AlertDTO> = []
-
-  if (item.config.setAlerts) {
-    const option = item.responseValues.options.find(option => option.value === Number(item.answer[0]))
-
-    if (option && option.alert) {
-      alert.push({
-        activityItemId: item.id,
-        message: option.alert,
-      })
     }
   }
 
@@ -81,36 +66,18 @@ function convertToSingleSelectAnswer(item: RadioItem): {
       text: null,
     },
     itemId: item.id,
-    alert,
   }
 }
 
 function convertToMultiSelectAnswer(item: CheckboxItem): {
   answer: MultiSelectAnswerPayload | null
   itemId: string
-  alert: Array<AlertDTO>
 } {
   if (!item.answer[0]) {
     return {
       answer: null,
       itemId: item.id,
-      alert: [],
     }
-  }
-
-  const alert: Array<AlertDTO> = []
-
-  if (item.config.setAlerts) {
-    item.responseValues.options.forEach(option => {
-      const answeredOption = item.answer.includes(String(option.value))
-
-      if (answeredOption && option.alert) {
-        alert.push({
-          activityItemId: item.id,
-          message: option.alert,
-        })
-      }
-    })
   }
 
   return {
@@ -119,34 +86,18 @@ function convertToMultiSelectAnswer(item: CheckboxItem): {
       text: null,
     },
     itemId: item.id,
-    alert,
   }
 }
 
 function convertToSliderAnswer(item: SliderItem): {
   answer: SliderAnswerPayload | null
   itemId: string
-  alert: Array<AlertDTO>
 } {
   if (!item.answer[0]) {
     return {
       answer: null,
       itemId: item.id,
-      alert: [],
     }
-  }
-
-  const alert: Array<AlertDTO> = []
-
-  if (item.config.setAlerts) {
-    item.responseValues.alerts?.forEach(alertItem => {
-      if (alertItem.value === Number(item.answer[0])) {
-        alert.push({
-          activityItemId: item.id,
-          message: alertItem.alert,
-        })
-      }
-    })
   }
 
   return {
@@ -155,7 +106,6 @@ function convertToSliderAnswer(item: SliderItem): {
       text: null,
     },
     itemId: item.id,
-    alert,
   }
 }
 
@@ -174,4 +124,86 @@ function convertToNumberSelectAnswer(item: SelectorItem) {
     },
     itemId: item.id,
   }
+}
+
+export function mapAlerts(items: Array<activityModel.types.ActivityEventProgressRecord>): Array<AlertDTO> {
+  const alerts = items.map(item => {
+    switch (item.responseType) {
+      case "singleSelect":
+        return convertSingleSelectToAlert(item)
+
+      case "multiSelect":
+        return convertMultiSelectToAlert(item)
+
+      case "slider":
+        return convertSliderToAlert(item)
+
+      default:
+        return null
+    }
+  })
+
+  return alerts.filter(alert => alert !== null).flat() as Array<AlertDTO>
+}
+
+function convertSingleSelectToAlert(item: RadioItem): Array<AlertDTO> {
+  const alert: Array<AlertDTO> = []
+
+  if (item.config.setAlerts && item.answer.length > 0) {
+    const option = item.responseValues.options.find(option => option.value === Number(item.answer[0]))
+
+    if (option && option.alert) {
+      alert.push({
+        activityItemId: item.id,
+        message: option.alert,
+      })
+    }
+  }
+
+  return alert
+}
+
+function convertMultiSelectToAlert(item: CheckboxItem): Array<AlertDTO> {
+  const alert: Array<AlertDTO> = []
+
+  if (item.config.setAlerts && item.answer.length > 0) {
+    item.responseValues.options.forEach(option => {
+      const answeredOption = item.answer.includes(String(option.value))
+
+      if (answeredOption && option.alert) {
+        alert.push({
+          activityItemId: item.id,
+          message: option.alert,
+        })
+      }
+    })
+  }
+
+  return alert
+}
+
+function convertSliderToAlert(item: SliderItem): Array<AlertDTO> {
+  const alert: Array<AlertDTO> = []
+
+  if (item.config.setAlerts && item.answer.length > 0) {
+    item.responseValues.alerts?.forEach(alertItem => {
+      const answer = Number(item.answer[0])
+
+      if (alertItem.minValue < answer && alertItem.maxValue > answer) {
+        alert.push({
+          activityItemId: item.id,
+          message: alertItem.alert,
+        })
+      }
+
+      if (!alertItem.minValue && !alertItem.maxValue && alertItem.value === answer) {
+        alert.push({
+          activityItemId: item.id,
+          message: alertItem.alert,
+        })
+      }
+    })
+  }
+
+  return alert
 }
