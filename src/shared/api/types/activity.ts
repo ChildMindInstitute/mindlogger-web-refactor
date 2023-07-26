@@ -67,6 +67,12 @@ export type AnswerPayload = {
     userPublicKey: string
   }
   alerts: Array<AlertDTO>
+  client: {
+    appId: "mindlogger-web"
+    appVersion: string
+    width: number
+    height: number
+  }
 }
 
 export type AlertDTO = {
