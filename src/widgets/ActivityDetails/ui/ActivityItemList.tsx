@@ -7,6 +7,7 @@ import {
   generateUserPublicKey,
   getFirstResponseDataIdentifierTextItem,
   getScheduledTimeFromEvents,
+  mapAlerts,
   mapToAnswers,
 } from "../model"
 import { prepareItemAnswers } from "../model/prepareItemAnswers"
@@ -116,6 +117,8 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     const itemAnswers = mapToAnswers(activityEvents)
     const preparedItemAnswers = prepareItemAnswers(itemAnswers)
 
+    const preparedAlerts = mapAlerts(activityEvents)
+
     // Step 2 - Encrypt answers
     let privateKey: number[] | null = null
 
@@ -156,6 +159,13 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
         startTime: new Date(groupInProgress.startAt!).getTime(),
         endTime: new Date().getTime(),
         identifier: encryptedIdentifier,
+      },
+      alerts: preparedAlerts,
+      client: {
+        appId: "mindlogger-web",
+        appVersion: import.meta.env.VITE_BUILD_VERSION,
+        width: window.innerWidth,
+        height: window.innerHeight,
       },
     }
 

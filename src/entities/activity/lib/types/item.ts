@@ -127,6 +127,7 @@ export type CheckboxValues = {
     tooltip: string | null
     color: string | null
     isHidden: boolean
+    alert: string | null
     value: number
   }>
 }
@@ -156,6 +157,7 @@ export type RadioValues = {
     tooltip: string | null
     color: string | null
     isHidden: boolean
+    alert: string | null
     value: number
   }>
 }
@@ -183,6 +185,13 @@ export type SliderValues = {
   maxValue: number
   minImage: string | null
   maxImage: string | null
+  scores: Array<number> | null
+  alerts: Array<{
+    value: number
+    minValue: number
+    maxValue: number
+    alert: string
+  }> | null
 }
 
 export interface SelectorItem extends ActivityItemBase {
