@@ -161,6 +161,12 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
         identifier: encryptedIdentifier,
       },
       alerts: preparedAlerts,
+      client: {
+        appId: "mindlogger-web",
+        appVersion: import.meta.env.VITE_BUILD_VERSION,
+        width: window.innerWidth,
+        height: window.innerHeight,
+      },
     }
 
     const scheduledTime = getScheduledTimeFromEvents(eventsRawData, activityDetails.id)
