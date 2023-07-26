@@ -66,6 +66,12 @@ export type AnswerPayload = {
     endTime: number
     userPublicKey: string
   }
+  alerts: Array<AlertDTO>
+}
+
+export type AlertDTO = {
+  activityItemId: string
+  message: string
 }
 
 export type AnswerTypesPayload =

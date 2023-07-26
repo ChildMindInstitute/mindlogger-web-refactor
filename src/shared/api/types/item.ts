@@ -105,6 +105,7 @@ export type CheckboxItemResponseValuesDTO = {
     tooltip: string | null
     color: string | null
     isHidden: boolean
+    alert: string | null
     value: number
   }>
 }
@@ -139,6 +140,7 @@ export type RadioItemResponseValuesDTO = {
     tooltip: string | null
     color: string | null
     isHidden: boolean
+    alert: string | null
     value: number
   }>
 }
@@ -171,6 +173,13 @@ export type SliderItemResponseValuesDTO = {
   maxValue: number
   minImage: string | null
   maxImage: string | null
+  scores: Array<number> | null
+  alerts: Array<{
+    value: number
+    minValue: number
+    maxValue: number
+    alert: string
+  }> | null
 }
 
 export interface SelectorItemDTO extends ItemDetailsBaseDTO {
