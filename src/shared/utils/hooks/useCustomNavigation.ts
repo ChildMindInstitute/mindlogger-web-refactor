@@ -15,9 +15,9 @@ export const useCustomNavigation = (): UseCustomNavigationReturn => {
   const goBack = () => {
     console.log(location)
     console.log(location.key, canGoBack)
-    if (canGoBack) {
-      return navigate(-1)
-    }
+    // if (canGoBack) {
+    return navigate(-1)
+    // }
   }
 
   return {
