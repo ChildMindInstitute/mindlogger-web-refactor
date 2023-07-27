@@ -13,6 +13,7 @@ export const useCustomNavigation = (): UseCustomNavigationReturn => {
   const canGoBack = location.key !== "default"
 
   const goBack = () => {
+    console.log(location)
     console.log(location.key, canGoBack)
     if (canGoBack) {
       return navigate(-1)
