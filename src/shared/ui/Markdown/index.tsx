@@ -1,15 +1,19 @@
-import MDEditor from "@uiw/react-md-editor"
+import ReactMarkdown from "react-markdown"
+import rehypeRaw from "rehype-raw"
 
 import "./style.scss"
+import { markdownBuilder } from "./lib/markdown-builder"
 
 interface MarkdownProps {
   markdown: string
 }
 
 export const Markdown = ({ markdown }: MarkdownProps) => {
+  const processedMarkdown = markdownBuilder.extend(markdown)
+
   return (
     <div>
-      <MDEditor.Markdown source={markdown} className="markdown" />
+      <ReactMarkdown rehypePlugins={[rehypeRaw]}>{processedMarkdown}</ReactMarkdown>
     </div>
   )
 }
