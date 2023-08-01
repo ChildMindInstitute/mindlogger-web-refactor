@@ -2,10 +2,12 @@ import classNames from "classnames"
 import { Button } from "react-bootstrap"
 
 import { ActivityListItem, ActivityStatus, useSupportableActivity } from "../lib"
+import { ActivityFlowStep } from "./ActivityFlowStep"
 import { MobileOnlyLabel } from "./MobileOnlyLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
 import { Loader } from "~/shared/ui"
+
 import "./style.scss"
 
 interface ActivityCardProps {
@@ -40,6 +42,10 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
       {activity.image && <img className="activity-image" src={activity.image} />}
 
       <div className="activity-data">
+        {activity.isInActivityFlow && activity.activityFlowDetails!.showActivityFlowBadge && (
+          <ActivityFlowStep activity={activity} />
+        )}
+
         <div
           className={classNames(
             "activity-name-date",
