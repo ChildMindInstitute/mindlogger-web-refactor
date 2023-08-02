@@ -17,7 +17,9 @@ const Layout = (props: LayoutProps): null | JSX.Element => {
       height="100vh"
       display="flex"
       flexDirection="column"
-      sx={{ backgroundColor: Theme.colors.light.surface }}>
+      sx={{
+        backgroundColor: Theme.colors.light.surface1,
+      }}>
       <Header />
       <div className="content-container">
         <div className="content">{props.children}</div>

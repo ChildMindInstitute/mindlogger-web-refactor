@@ -1,5 +1,5 @@
+import Button from "@mui/material/ButtonBase"
 import classNames from "classnames"
-import { Button } from "react-bootstrap"
 
 import { ActivityListItem, ActivityStatus, useSupportableActivity } from "../lib"
 import { ActivityFlowStep } from "./ActivityFlowStep"
@@ -7,6 +7,7 @@ import { MobileOnlyLabel } from "./MobileOnlyLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
 import { Loader } from "~/shared/ui"
+import { Theme } from "~/shared/utils"
 
 import "./style.scss"
 
@@ -25,7 +26,10 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
 
   if (isLoading) {
     return (
-      <Button className="ds-activity-button w-100" variant="link" disabled={isLoading}>
+      <Button
+        className="ds-activity-button w-100"
+        disabled={isLoading}
+        sx={{ backgroundColor: Theme.colors.light.surface, border: `1px solid ${Theme.colors.light.surfaceVariant}` }}>
         <div className="activity-data">
           <Loader />
         </div>
@@ -36,9 +40,9 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
   return (
     <Button
       className={classNames("ds-activity-button", "w-100")}
-      variant="link"
       disabled={isDisabled}
-      onClick={onActivityCardClick}>
+      onClick={onActivityCardClick}
+      sx={{ backgroundColor: Theme.colors.light.surface }}>
       {activity.image && <img className="activity-image" src={activity.image} />}
 
       <div className="activity-data">
