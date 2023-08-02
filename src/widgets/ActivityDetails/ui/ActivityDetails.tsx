@@ -1,6 +1,5 @@
 import classNames from "classnames"
 import { Container, Row, Col, Spinner } from "react-bootstrap"
-import { useLocation } from "react-router-dom"
 
 import * as activityDetailsModel from "../model"
 import { ActivityItemList } from "./ActivityItemList"
@@ -32,15 +31,10 @@ type PublicActivityDetailsWidgetProps = {
 type WidgetProps = PrivateActivityDetailsWidgetProps | PublicActivityDetailsWidgetProps
 
 export const ActivityDetailsWidget = (props: WidgetProps) => {
-  const location = useLocation()
-  const isRestart = location.state?.isRestart ?? false
-
   const { t } = useCustomTranslation()
 
   const { appletDetails, activityDetails, eventsRawData, isLoading, isError, error } =
-    activityDetailsModel.hooks.useActivityDetails(props, {
-      isRestart,
-    })
+    activityDetailsModel.hooks.useActivityDetails(props)
 
   const { progress } = activityModel.hooks.useActivityEventProgressState({
     activityId: props.activityId,
