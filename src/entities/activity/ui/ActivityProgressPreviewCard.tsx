@@ -8,6 +8,9 @@ interface ActivityProgressPreviewCardProps {
   eventId: string
 }
 
+// TODO: Remove this component in the future
+// Deprecated component; Keep it for now
+
 export const ActivityProgressPreviewCard = ({ title, activityId, eventId }: ActivityProgressPreviewCardProps) => {
   const { progress } = useActivityEventProgressState({ activityId, eventId })
 

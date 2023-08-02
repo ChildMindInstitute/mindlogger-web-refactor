@@ -8,6 +8,9 @@ interface ActivityProgressPreviewListProps {
   activities: ActivityListItem[]
 }
 
+// TODO: Remove this component in the future
+// Deprecated component; Keep it for now
+
 export const ActivityProgressPreviewList = ({ activities }: ActivityProgressPreviewListProps) => {
   const activitiesPreview = useMemo(() => activityBuilder.convertToActivityProgressPreview(activities), [activities])
 
