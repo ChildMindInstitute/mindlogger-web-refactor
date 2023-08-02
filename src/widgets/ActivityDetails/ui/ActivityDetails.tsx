@@ -1,5 +1,3 @@
-import { useMemo } from "react"
-
 import classNames from "classnames"
 import { Container, Row, Col, Spinner } from "react-bootstrap"
 import { useLocation } from "react-router-dom"
@@ -8,7 +6,7 @@ import * as activityDetailsModel from "../model"
 import { ActivityItemList } from "./ActivityItemList"
 import { BackNavigateButton } from "./BackNavigateButton"
 
-import { activityModel, ActivityProgressPreviewList } from "~/entities/activity"
+import { activityModel } from "~/entities/activity"
 import { BaseProgressBar } from "~/shared/ui"
 import CustomCard from "~/shared/ui/Card"
 import { useCustomTranslation } from "~/shared/utils"
@@ -49,14 +47,6 @@ export const ActivityDetailsWidget = (props: WidgetProps) => {
     eventId: props.eventId,
   })
 
-  const activityProgressPreviewList = useMemo(() => {
-    if (!appletDetails?.activities) {
-      return []
-    }
-
-    return appletDetails.activities.filter(x => !x.isOnePageAssessment && x.activityId !== props.activityId)
-  }, [appletDetails?.activities, props.activityId])
-
   if (isLoading) {
     return (
       <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
@@ -94,8 +84,6 @@ export const ActivityDetailsWidget = (props: WidgetProps) => {
               />
             )}
           </div>
-
-          {activityProgressPreviewList && <ActivityProgressPreviewList activities={activityProgressPreviewList} />}
         </Col>
         <Col xl={9}>
           {activityDetails && appletDetails ? (
