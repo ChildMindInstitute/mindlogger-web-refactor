@@ -1,24 +1,11 @@
-import classNames from "classnames"
-import { Container, Spinner } from "react-bootstrap"
-
+import Box from "@mui/material/Box"
 import "./styles.scss"
+import CircularProgress from "@mui/material/CircularProgress"
 
-type LoaderProps = {
-  defaultSize?: boolean
-}
-
-export const Loader = ({ defaultSize }: LoaderProps) => {
+export const Loader = () => {
   return (
-    <Container
-      className={classNames(
-        "d-flex",
-        "w-100",
-        "justify-content-center",
-        "align-items-center",
-        { "default-loader-height": defaultSize },
-        { "h-100": !defaultSize },
-      )}>
-      <Spinner as="div" animation="border" role="status" aria-hidden="true" />
-    </Container>
+    <Box height="100%" width="100%" display="flex" justifyContent="center" alignItems="center">
+      <CircularProgress />
+    </Box>
   )
 }

@@ -1,10 +1,10 @@
 import Box from "@mui/material/Box"
-import CircularProgress from "@mui/material/CircularProgress"
 import Container from "@mui/material/Container"
 
 import * as activityDetailsModel from "../model"
 import { Header } from "./Header"
 
+import { Loader } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityDetailsWidgetProps = {
@@ -33,11 +33,7 @@ export const ActivityWelcomeScreen = (props: WidgetProps) => {
     activityDetailsModel.hooks.useActivityDetails(props)
 
   if (isLoading) {
-    return (
-      <Box height="100vh" width="100%" display="flex" justifyContent="center" alignItems="center">
-        <CircularProgress />
-      </Box>
-    )
+    return <Loader />
   }
 
   if (isError) {
