@@ -36,19 +36,11 @@ type NavigateToActivityDetailsPageProps = {
 export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigatator = useCustomNavigation()
-  const navigateToActivityDetailsPage = ({ appletId, activityId, eventId }: NavigateToActivityDetailsPageProps) => {
-    if (props.isPublic && props.publicAppletKey) {
-      return navigatator.navigate(
-        ROUTES.publicActivityDetails.navigateTo(appletId, activityId, eventId, props.publicAppletKey),
-      )
-    }
-
-    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId, eventId))
-  }
 
   const [isAboutOpen, setIsAboutOpen] = useState(false)
 
   const { upsertGroupInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { groups } = useActivityGroups(props.appletDetails, props.eventsDetails)
 
   const onCardAboutClick = () => {
     setIsAboutOpen(true)
@@ -58,7 +50,15 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     setIsAboutOpen(false)
   }
 
-  const { groups } = useActivityGroups(props.appletDetails, props.eventsDetails)
+  const navigateToActivityDetailsPage = ({ appletId, activityId, eventId }: NavigateToActivityDetailsPageProps) => {
+    if (props.isPublic && props.publicAppletKey) {
+      return navigatator.navigate(
+        ROUTES.publicActivityDetails.navigateTo(appletId, activityId, eventId, props.publicAppletKey),
+      )
+    }
+
+    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId, eventId))
+  }
 
   const onActivityCardClick = (activity: ActivityListItem) => {
     const isActivityPipelineFlow = !!activity.activityFlowDetails

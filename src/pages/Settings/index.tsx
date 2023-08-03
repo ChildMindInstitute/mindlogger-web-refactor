@@ -5,7 +5,7 @@ import { userModel } from "~/entities/user"
 import { ChangePasswordForm, useChangePasswordTranslation } from "~/features/ChangePassword"
 import { Avatar } from "~/shared/ui"
 
-const Settings = () => {
+export const SettingsPage = () => {
   const { t } = useChangePasswordTranslation()
   const { user } = userModel.hooks.useUserState()
 
@@ -28,5 +28,3 @@ const Settings = () => {
     </div>
   )
 }
-
-export default Settings

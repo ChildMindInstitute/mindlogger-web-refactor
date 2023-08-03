@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import { useCustomTranslation } from "~/shared/utils"
 import { ActivityGroups } from "~/widgets/ActivityGroups"
 
-const ActivityListPage = () => {
+export const ActivityListPage = () => {
   const { appletId } = useParams()
   const { t } = useCustomTranslation()
 
@@ -13,5 +13,3 @@ const ActivityListPage = () => {
 
   return <ActivityGroups isPublic={false} appletId={appletId} />
 }
-
-export default ActivityListPage

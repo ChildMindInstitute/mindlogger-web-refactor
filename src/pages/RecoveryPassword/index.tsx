@@ -6,7 +6,7 @@ import { useRecoveryPasswordLinkHealthcheckQuery } from "~/entities/user"
 import { RecoveryPasswordForm, useRecoveryPasswordTranslation } from "~/features/RecoveryPassword"
 import { Loader, PageMessage } from "~/shared/ui"
 
-const RecoveryPassword = () => {
+export const RecoveryPasswordPage = () => {
   const [searchParams] = useSearchParams()
   const { t } = useRecoveryPasswordTranslation()
 
@@ -35,5 +35,3 @@ const RecoveryPassword = () => {
     </div>
   )
 }
-
-export default RecoveryPassword

@@ -1,22 +1,23 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 
 import { ActivityDetailsPage } from "./ActivityDetails"
-import ActivityListPage from "./ActivityList"
-import Dashboard from "./Dashboard"
-import ForgotPassword from "./ForgotPassword"
+import { ActivityListPage } from "./ActivityList"
+import { AssessmentWelcomePage } from "./AssessmentWelcome"
+import { DashboardPage } from "./Dashboard"
+import { ForgotPasswordPage } from "./ForgotPassword"
 import { InvitationPage } from "./Invitation"
 import { InvitationAcceptPage } from "./InvitationAccept"
 import { InvitationDeclinePage } from "./InvitationDecline"
-import LoginPage from "./Login"
+import { LoginPage } from "./Login"
 import { PrivateJoinPage } from "./PrivateJoin"
-import Profile from "./Profile"
+import { ProfilePage } from "./Profile"
 import { PublicActivityDetailsPage } from "./PublicActivityDetails"
 import { PublicJoinPage } from "./PublicJoin"
-import RecoveryPassword from "./RecoveryPassword"
-import Settings from "./Settings"
-import SignupPage from "./Signup"
+import { RecoveryPasswordPage } from "./RecoveryPassword"
+import { SettingsPage } from "./Settings"
+import { SignupPage } from "./Signup"
 import { ThanksPage } from "./Thanks"
-import TransferOwnershipPage from "./TransferOwnership"
+import { TransferOwnershipPage } from "./TransferOwnership"
 
 import { userModel } from "~/entities/user"
 import { ROUTES } from "~/shared/utils"
@@ -32,7 +33,7 @@ const ApplicationRouter = (): JSX.Element | null => {
         <Routes>
           <Route element={<ProtectedRoute token={tokens?.accessToken} />}>
             <Route path={ROUTES.applets.path}>
-              <Route index element={<Dashboard />} />
+              <Route index element={<DashboardPage />} />
               <Route path={ROUTES.activityList.path}>
                 <Route index element={<ActivityListPage />} />
                 <Route path={ROUTES.activityDetails.path}>
@@ -40,8 +41,8 @@ const ApplicationRouter = (): JSX.Element | null => {
                 </Route>
               </Route>
             </Route>
-            <Route path={ROUTES.profile.path} element={<Profile />} />
-            <Route path={ROUTES.settings.path} element={<Settings />} />
+            <Route path={ROUTES.profile.path} element={<ProfilePage />} />
+            <Route path={ROUTES.settings.path} element={<SettingsPage />} />
             <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
             <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
             <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
@@ -50,6 +51,8 @@ const ApplicationRouter = (): JSX.Element | null => {
             <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
             <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
             <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
+
+            <Route path={""} element={<AssessmentWelcomePage />} />
 
             <Route path="*" element={<Navigate to={ROUTES.applets.path} />} />
           </Route>
@@ -62,8 +65,8 @@ const ApplicationRouter = (): JSX.Element | null => {
     <Routes>
       <Route index path={ROUTES.login.path} element={<LoginPage />} />
       <Route path={ROUTES.signup.path} element={<SignupPage />} />
-      <Route path={ROUTES.forgotPassword.path} element={<ForgotPassword />} />
-      <Route path={ROUTES.changePassword.path} element={<RecoveryPassword />} />
+      <Route path={ROUTES.forgotPassword.path} element={<ForgotPasswordPage />} />
+      <Route path={ROUTES.changePassword.path} element={<RecoveryPasswordPage />} />
       <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
       <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
       <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />

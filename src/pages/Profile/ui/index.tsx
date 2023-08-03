@@ -6,7 +6,7 @@ import { userModel } from "~/entities/user"
 import { Avatar } from "~/shared/ui"
 import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
 
-const ProfilePage = () => {
+export const ProfilePage = () => {
   const { t } = useProfileTranslation()
   const { user } = userModel.hooks.useUserState()
 
@@ -25,5 +25,3 @@ const ProfilePage = () => {
     </div>
   )
 }
-
-export default ProfilePage

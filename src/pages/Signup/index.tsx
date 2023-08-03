@@ -6,7 +6,7 @@ import { ROUTES } from "~/shared/utils"
 
 import "./styles.scss"
 
-const SignupPage = () => {
+export const SignupPage = () => {
   const { t } = useSignupTranslation()
   const location = useLocation()
 
@@ -26,5 +26,3 @@ const SignupPage = () => {
     </div>
   )
 }
-
-export default SignupPage
