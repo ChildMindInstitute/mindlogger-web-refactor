@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from "react-router-dom"
 
 import { ActivityDetailsPage } from "./ActivityDetails"
 import { ActivityListPage } from "./ActivityList"
-import { AssessmentWelcomePage } from "./AssessmentWelcome"
 import { DashboardPage } from "./Dashboard"
 import { ForgotPasswordPage } from "./ForgotPassword"
 import { InvitationPage } from "./Invitation"
@@ -51,8 +50,6 @@ const ApplicationRouter = (): JSX.Element | null => {
             <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
             <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
             <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
-
-            <Route path={""} element={<AssessmentWelcomePage />} />
 
             <Route path="*" element={<Navigate to={ROUTES.applets.path} />} />
           </Route>

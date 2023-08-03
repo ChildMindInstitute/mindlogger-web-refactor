@@ -1,8 +1,9 @@
 import { ReactNode } from "react"
 
 import Box from "@mui/material/Box"
+import { matchPath, useLocation } from "react-router-dom"
 
-import { Theme } from "~/shared/utils"
+import { ROUTES, Theme } from "~/shared/utils"
 import Footer from "~/widgets/Footer"
 import Header from "~/widgets/Header"
 
@@ -11,6 +12,11 @@ interface LayoutProps {
 }
 
 const Layout = (props: LayoutProps): null | JSX.Element => {
+  const location = useLocation()
+  const routeList = Object.values(ROUTES)
+
+  const currentRoute = routeList.find(route => matchPath(route.path, location.pathname))
+
   return (
     <Box
       id="app-main-layout"
@@ -18,13 +24,13 @@ const Layout = (props: LayoutProps): null | JSX.Element => {
       display="flex"
       flexDirection="column"
       sx={{
-        backgroundColor: Theme.colors.light.surface1,
+        backgroundColor: currentRoute?.pageStyles?.backgroundColor ?? Theme.colors.light.surface1,
       }}>
-      <Header />
+      {currentRoute?.hasHeader && <Header />}
       <div className="content-container">
         <div className="content">{props.children}</div>
       </div>
-      <Footer />
+      {currentRoute?.hasFooter && <Footer />}
     </Box>
   )
 }
