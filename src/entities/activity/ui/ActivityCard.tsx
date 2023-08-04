@@ -42,7 +42,7 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
       className={classNames("ds-activity-button", "w-100")}
       disabled={isDisabled}
       onClick={onActivityCardClick}
-      sx={{ backgroundColor: Theme.colors.light.surface }}>
+      sx={{ backgroundColor: Theme.colors.light.surface, padding: "24px" }}>
       {activity.image && <img className="activity-image" src={activity.image} />}
 
       <div className="activity-data">
