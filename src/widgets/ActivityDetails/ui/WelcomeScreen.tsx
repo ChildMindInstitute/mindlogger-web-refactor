@@ -7,8 +7,9 @@ import * as activityDetailsModel from "../model"
 import { Footer } from "./Footer"
 import { Header } from "./Header"
 
+import { Theme } from "~/shared/constants"
 import { Loader } from "~/shared/ui"
-import { Theme, useCustomTranslation } from "~/shared/utils"
+import { useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityDetailsWidgetProps = {
   isPublic: false

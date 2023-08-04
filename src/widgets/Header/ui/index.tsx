@@ -9,7 +9,8 @@ import LoginButton from "./LoginButton"
 
 import { userModel } from "~/entities/user"
 import { LanguageDropdown } from "~/features/language"
-import { ROUTES, Theme } from "~/shared/utils"
+import { Theme } from "~/shared/constants"
+import { ROUTES } from "~/shared/utils"
 
 import "./header.scss"
 

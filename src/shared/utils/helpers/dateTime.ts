@@ -2,7 +2,7 @@ import { format as formatBase } from "date-fns"
 import { enGB, fr } from "date-fns/locale"
 import i18n from "i18next"
 
-import { MINUTES_IN_HOUR, MS_IN_MINUTE } from "../constants"
+import { MINUTES_IN_HOUR, MS_IN_MINUTE } from "../../constants"
 import { HourMinute, type Language } from "../types"
 
 const dateFnsLocales = { fr, en: enGB }

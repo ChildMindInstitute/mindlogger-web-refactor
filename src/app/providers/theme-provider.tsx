@@ -2,7 +2,7 @@ import { PropsWithChildren } from "react"
 
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 
-import { Theme } from "~/shared/utils"
+import { Theme } from "~/shared/constants"
 
 type Props = PropsWithChildren<unknown>
 

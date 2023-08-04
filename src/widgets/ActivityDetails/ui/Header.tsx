@@ -4,8 +4,9 @@ import Typography from "@mui/material/Typography"
 import { SaveAndExitButton } from "./SaveAndExitButton"
 
 import { activityModel } from "~/entities/activity"
+import { Theme } from "~/shared/constants"
 import { BaseProgressBar } from "~/shared/ui"
-import { Theme, useCustomNavigation } from "~/shared/utils"
+import { useCustomNavigation } from "~/shared/utils"
 
 type Props = {
   activityId: string

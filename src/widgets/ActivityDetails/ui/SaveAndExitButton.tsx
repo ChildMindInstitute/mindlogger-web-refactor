@@ -2,7 +2,7 @@ import { Typography } from "@mui/material"
 import Box from "@mui/material/Box"
 import ButtonBase from "@mui/material/ButtonBase"
 
-import { Theme } from "~/shared/utils"
+import { Theme } from "~/shared/constants"
 
 type Props = {
   onClick: () => void

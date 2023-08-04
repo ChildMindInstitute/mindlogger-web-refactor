@@ -3,7 +3,8 @@ import { ReactNode } from "react"
 import Box from "@mui/material/Box"
 import { matchPath, useLocation } from "react-router-dom"
 
-import { ROUTES, Theme } from "~/shared/utils"
+import { Theme } from "~/shared/constants"
+import { ROUTES } from "~/shared/utils"
 import Footer from "~/widgets/Footer"
 import Header from "~/widgets/Header"
 

@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box"
 import LinearProgress, { linearProgressClasses } from "@mui/material/LinearProgress"
 
-import { Theme } from "../../utils"
+import { Theme } from "../../constants"
 
 interface BaseProgressBarProps {
   percentage: number

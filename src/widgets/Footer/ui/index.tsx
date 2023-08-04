@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box"
 
+import { Theme } from "~/shared/constants"
 import { Logo } from "~/shared/ui"
-import { Theme } from "~/shared/utils"
 
 import "./style.scss"
 

@@ -1,4 +1,4 @@
-import { Theme } from "../constants"
+import { Theme } from "../../constants"
 
 export const ROUTES = {
   // Public routes

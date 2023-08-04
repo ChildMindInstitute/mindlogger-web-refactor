@@ -2,7 +2,7 @@ import { PropsWithChildren } from "react"
 
 import Box from "@mui/material/Box"
 
-import { Theme } from "~/shared/utils"
+import { Theme } from "~/shared/constants"
 
 type Props = PropsWithChildren<unknown>
 
