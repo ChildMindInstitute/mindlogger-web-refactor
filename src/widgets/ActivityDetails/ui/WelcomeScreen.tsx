@@ -1,11 +1,14 @@
 import Box from "@mui/material/Box"
+import ButtonBase from "@mui/material/ButtonBase"
 import Container from "@mui/material/Container"
+import Typography from "@mui/material/Typography"
 
 import * as activityDetailsModel from "../model"
+import { Footer } from "./Footer"
 import { Header } from "./Header"
 
 import { Loader } from "~/shared/ui"
-import { useCustomTranslation } from "~/shared/utils"
+import { Theme, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityDetailsWidgetProps = {
   isPublic: false
@@ -45,12 +48,24 @@ export const ActivityWelcomeScreen = (props: WidgetProps) => {
   }
 
   return (
-    <>
+    <Box height="100%" sx={{ display: "grid", gridTemplateRows: "80px 1fr 72px", alignItems: "stretch" }}>
       {activityDetails?.name && (
         <Header activityId={props.activityId} eventId={props.eventId} title={activityDetails.name} />
       )}
       <Container>content</Container>
-      <Box>footer</Box>
-    </>
+      <Footer>
+        <ButtonBase
+          sx={{
+            padding: "10px 24px",
+            backgroundColor: Theme.colors.light.primary,
+            width: "375px",
+            borderRadius: "100px",
+          }}>
+          <Typography variant="body1" color={Theme.colors.light.onPrimary} fontSize="14px" fontWeight="700">
+            Start
+          </Typography>
+        </ButtonBase>
+      </Footer>
+    </Box>
   )
 }

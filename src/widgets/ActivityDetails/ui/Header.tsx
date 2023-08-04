@@ -31,7 +31,7 @@ export const Header = ({ activityId, eventId, title }: Props) => {
       justifyContent="center"
       alignItems="center"
       width="100%"
-      height="80px"
+      height="100%"
       position="relative"
       sx={{
         backgroundColor: Theme.colors.light.surface,
