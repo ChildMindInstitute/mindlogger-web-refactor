@@ -2,7 +2,7 @@ import { ReactNode } from "react"
 
 import Box from "@mui/material/Box"
 
-import { Theme } from "~/shared/utils"
+import { Theme } from "~/shared/constants"
 import Footer from "~/widgets/Footer"
 import Header from "~/widgets/Header"
 

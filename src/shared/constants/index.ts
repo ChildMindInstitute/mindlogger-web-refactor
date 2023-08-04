@@ -1,4 +1,4 @@
-import { Language } from "../types"
+import { Language } from "../utils/types"
 
 export const DEFAULT_LANGUAGE: Language = "en"
 

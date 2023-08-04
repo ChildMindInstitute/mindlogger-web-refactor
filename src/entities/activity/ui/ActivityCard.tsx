@@ -6,8 +6,8 @@ import { ActivityFlowStep } from "./ActivityFlowStep"
 import { MobileOnlyLabel } from "./MobileOnlyLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
+import { Theme } from "~/shared/constants"
 import { Loader } from "~/shared/ui"
-import { Theme } from "~/shared/utils"
 
 import "./style.scss"
 
@@ -47,7 +47,11 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
 
       <div className="activity-data">
         {activity.isInActivityFlow && activity.activityFlowDetails!.showActivityFlowBadge && (
-          <ActivityFlowStep activity={activity} />
+          <ActivityFlowStep
+            position={activity.activityFlowDetails!.activityPositionInFlow}
+            activityCount={activity.activityFlowDetails!.numberOfActivitiesInFlow}
+            activityFlowName={activity.activityFlowDetails!.activityFlowName}
+          />
         )}
 
         <div

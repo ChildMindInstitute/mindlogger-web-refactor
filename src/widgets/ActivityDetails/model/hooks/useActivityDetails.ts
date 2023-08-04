@@ -46,6 +46,8 @@ export const useActivityDetails = (props: Props): UseActivityDetailsReturn => {
 
   const { saveActivityEventRecords } = activityModel.hooks.useSaveActivityEventProgress()
 
+  const isActivityEventInProgress = currentActivityEventProgress.length > 0
+
   const {
     data: appletById,
     isError: isAppletError,
@@ -66,7 +68,7 @@ export const useActivityDetails = (props: Props): UseActivityDetailsReturn => {
     { isPublic: props.isPublic, activityId: props.activityId },
     {
       onSuccess(data) {
-        if (currentActivityEventProgress.length > 0) {
+        if (isActivityEventInProgress) {
           return
         }
 

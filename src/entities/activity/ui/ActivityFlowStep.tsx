@@ -1,15 +1,13 @@
-import { ActivityListItem } from "../lib"
-
 type Props = {
-  activity: ActivityListItem
+  position: number
+  activityCount: number
+  activityFlowName: string
 }
 
-export const ActivityFlowStep = ({ activity }: Props) => {
-  const { activityPositionInFlow, numberOfActivitiesInFlow, activityFlowName } = activity.activityFlowDetails!
-
+export const ActivityFlowStep = ({ position, activityCount, activityFlowName }: Props) => {
   return (
     <div className="activity-flow-badge">
-      <p>{`(${activityPositionInFlow} of ${numberOfActivitiesInFlow}) ${activityFlowName}`}</p>
+      <p className="activity-flow-label">{`(${position} of ${activityCount}) ${activityFlowName}`}</p>
     </div>
   )
 }
