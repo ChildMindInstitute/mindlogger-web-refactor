@@ -1,5 +1,6 @@
 import { Suspense } from "react"
 
+import CssBaseline from "@mui/material/CssBaseline"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 import Layout from "./Layout"
@@ -15,6 +16,7 @@ i18nManager.initialize()
 function App() {
   return (
     <Suspense>
+      <CssBaseline />
       <MUIThemeProvider>
         <RouteProvider>
           <ReduxProvider>

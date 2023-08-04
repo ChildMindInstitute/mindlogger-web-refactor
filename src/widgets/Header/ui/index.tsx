@@ -9,6 +9,7 @@ import LoginButton from "./LoginButton"
 
 import { userModel } from "~/entities/user"
 import { LanguageDropdown } from "~/features/language"
+import { Theme } from "~/shared/constants"
 import { ROUTES } from "~/shared/utils"
 
 import "./header.scss"
@@ -40,7 +41,13 @@ const Header = (): JSX.Element | null => {
   }
 
   return (
-    <Navbar expand="md" variant="dark" className="header" expanded={expanded} onToggle={onNavbarToggle}>
+    <Navbar
+      expand="md"
+      variant="dark"
+      className="header"
+      expanded={expanded}
+      onToggle={onNavbarToggle}
+      style={{ backgroundColor: Theme.colors.light.primary }}>
       <Navbar.Brand role="button" onClick={onLogoClick}>
         {t("mindLogger")}
       </Navbar.Brand>

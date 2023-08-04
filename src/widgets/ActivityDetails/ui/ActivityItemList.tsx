@@ -15,15 +15,13 @@ import { validateAnswerBeforeSubmit } from "../model/validateItemsBeforeSubmit"
 
 import {
   ActivityItemStepper,
-  ActivityListItem,
   ActivityOnePageAssessment,
   activityModel,
   useEncryptPayload,
   usePublicSaveAnswerMutation,
   useSaveAnswerMutation,
 } from "~/entities/activity"
-import { ActivityFlow, AppletDetails } from "~/entities/applet"
-import { ActivityDTO, AnswerPayload, AppletEventsResponse } from "~/shared/api"
+import { ActivityDTO, AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import {
   ROUTES,
   secureUserPrivateKeyStorage,
@@ -36,9 +34,9 @@ import {
 type ActivityItemListProps = {
   isPublic: boolean
   publicAppletKey?: string
-  appletDetails: AppletDetails<ActivityListItem, ActivityFlow>
+  appletDetails: AppletDetailsDTO
   activityDetails: ActivityDTO
-  eventsRawData: AppletEventsResponse | undefined
+  eventsRawData: AppletEventsResponse | null
   eventId: string
 }
 

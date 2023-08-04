@@ -1,14 +1,11 @@
-import { useMemo } from "react"
-
 import classNames from "classnames"
 import { Container, Row, Col, Spinner } from "react-bootstrap"
-import { useLocation } from "react-router-dom"
 
 import * as activityDetailsModel from "../model"
 import { ActivityItemList } from "./ActivityItemList"
 import { BackNavigateButton } from "./BackNavigateButton"
 
-import { activityModel, ActivityProgressPreviewList } from "~/entities/activity"
+import { activityModel } from "~/entities/activity"
 import { BaseProgressBar } from "~/shared/ui"
 import CustomCard from "~/shared/ui/Card"
 import { useCustomTranslation } from "~/shared/utils"
@@ -34,28 +31,15 @@ type PublicActivityDetailsWidgetProps = {
 type WidgetProps = PrivateActivityDetailsWidgetProps | PublicActivityDetailsWidgetProps
 
 export const ActivityDetailsWidget = (props: WidgetProps) => {
-  const location = useLocation()
-  const isRestart = location.state?.isRestart ?? false
-
   const { t } = useCustomTranslation()
 
   const { appletDetails, activityDetails, eventsRawData, isLoading, isError, error } =
-    activityDetailsModel.hooks.useActivityDetails(props, {
-      isRestart,
-    })
+    activityDetailsModel.hooks.useActivityDetails(props)
 
   const { progress } = activityModel.hooks.useActivityEventProgressState({
     activityId: props.activityId,
     eventId: props.eventId,
   })
-
-  const activityProgressPreviewList = useMemo(() => {
-    if (!appletDetails?.activities) {
-      return []
-    }
-
-    return appletDetails.activities.filter(x => !x.isOnePageAssessment && x.activityId !== props.activityId)
-  }, [appletDetails?.activities, props.activityId])
 
   if (isLoading) {
     return (
@@ -94,8 +78,6 @@ export const ActivityDetailsWidget = (props: WidgetProps) => {
               />
             )}
           </div>
-
-          {activityProgressPreviewList && <ActivityProgressPreviewList activities={activityProgressPreviewList} />}
         </Col>
         <Col xl={9}>
           {activityDetails && appletDetails ? (

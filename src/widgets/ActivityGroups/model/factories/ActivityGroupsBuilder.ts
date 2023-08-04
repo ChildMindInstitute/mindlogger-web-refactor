@@ -15,15 +15,8 @@ import {
   ProgressPayload,
 } from "~/entities/activity"
 import { AvailabilityLabelType } from "~/entities/event"
-import {
-  HourMinute,
-  getMsFromHours,
-  getMsFromMinutes,
-  MS_IN_MINUTE,
-  MINUTES_IN_HOUR,
-  MIDNIGHT_DATE,
-  isTimeInInterval,
-} from "~/shared/utils"
+import { MS_IN_MINUTE, MINUTES_IN_HOUR, MIDNIGHT_DATE } from "~/shared/constants"
+import { HourMinute, getMsFromHours, getMsFromMinutes, isTimeInInterval } from "~/shared/utils"
 
 export interface IActivityGroupsBuilder {
   buildInProgress: (eventsActivities: Array<EventActivity>) => ActivityListGroup

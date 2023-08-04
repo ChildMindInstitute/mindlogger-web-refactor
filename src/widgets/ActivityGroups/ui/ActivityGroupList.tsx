@@ -7,13 +7,7 @@ import CustomModal from "../../Modal"
 import { useActivityGroups } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
-import {
-  ActivityListItem,
-  activityModel,
-  ActivityOrFlowProgress,
-  ActivityPipelineType,
-  ActivityStatus,
-} from "~/entities/activity"
+import { ActivityListItem, activityModel, ActivityOrFlowProgress, ActivityPipelineType } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
 import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
@@ -33,11 +27,6 @@ type PublicActivityListWidgetProps = {
 
 type ActivityListWidgetProps = PublicActivityListWidgetProps | PrivateActivityListWidgetProps
 
-type ResumeActivityState = {
-  isOpen: boolean
-  selectedActivity: ActivityListItem | null
-}
-
 type NavigateToActivityDetailsPageProps = {
   appletId: string
   activityId: string
@@ -47,33 +36,17 @@ type NavigateToActivityDetailsPageProps = {
 export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigatator = useCustomNavigation()
-  const navigateToActivityDetailsPage = (
-    { appletId, activityId, eventId }: NavigateToActivityDetailsPageProps,
-    options: { isRestart: boolean },
-  ) => {
+  const navigateToActivityDetailsPage = ({ appletId, activityId, eventId }: NavigateToActivityDetailsPageProps) => {
     if (props.isPublic && props.publicAppletKey) {
       return navigatator.navigate(
         ROUTES.publicActivityDetails.navigateTo(appletId, activityId, eventId, props.publicAppletKey),
-        {
-          state: {
-            isRestart: options.isRestart,
-          },
-        },
       )
     }
 
-    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId, eventId), {
-      state: {
-        isRestart: options.isRestart,
-      },
-    })
+    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId, eventId))
   }
 
   const [isAboutOpen, setIsAboutOpen] = useState(false)
-  const [resumeActivityState, setResumeActivityState] = useState<ResumeActivityState>({
-    isOpen: false,
-    selectedActivity: null,
-  })
 
   const { upsertGroupInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
 
@@ -85,13 +58,9 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     setIsAboutOpen(false)
   }
 
-  const onResumeActivityModalClose = () => {
-    setResumeActivityState({ isOpen: false, selectedActivity: null })
-  }
-
   const { groups } = useActivityGroups(props.appletDetails, props.eventsDetails)
 
-  const navigateToActivityDetailsWithEmptyProgress = (activity: ActivityListItem) => {
+  const onActivityCardClick = (activity: ActivityListItem) => {
     const isActivityPipelineFlow = !!activity.activityFlowDetails
     const isInActivityFlow = activity.isInActivityFlow
 
@@ -120,43 +89,11 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
       },
     })
 
-    return navigateToActivityDetailsPage(
-      {
-        appletId: props.appletDetails.id,
-        activityId: activity.activityId,
-        eventId: activity.eventId,
-      },
-      { isRestart: true },
-    )
-  }
-
-  const onActivityCardClick = (activity: ActivityListItem) => {
-    if (activity.status === ActivityStatus.InProgress) {
-      setResumeActivityState({ isOpen: true, selectedActivity: activity })
-    } else {
-      return navigateToActivityDetailsWithEmptyProgress(activity)
-    }
-  }
-
-  const onActivityResume = () => {
-    if (resumeActivityState.selectedActivity) {
-      return navigateToActivityDetailsPage(
-        {
-          appletId: props.appletDetails.id,
-          activityId: resumeActivityState.selectedActivity.activityId,
-          eventId: resumeActivityState.selectedActivity.eventId,
-        },
-        { isRestart: false },
-      )
-    }
-  }
-
-  const onActivityRestart = () => {
-    const { selectedActivity } = resumeActivityState
-
-    if (selectedActivity?.activityId && selectedActivity?.eventId) {
-      return navigateToActivityDetailsWithEmptyProgress(selectedActivity)
-    }
+    return navigateToActivityDetailsPage({
+      appletId: props.appletDetails.id,
+      activityId: activity.activityId,
+      eventId: activity.eventId,
+    })
   }
 
   return (
@@ -192,16 +129,6 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
         onHide={onAboutModalClose}
         title={t("about")}
         label={props.appletDetails?.about ? props.appletDetails.about : t("no_markdown")}
-      />
-      <CustomModal
-        show={resumeActivityState.isOpen}
-        onHide={onResumeActivityModalClose}
-        title={t("additional.resume_activity")}
-        label={t("additional.activity_resume_restart")}
-        footerPrimaryButton={t("additional.restart")}
-        onPrimaryButtonClick={onActivityRestart}
-        footerSecondaryButton={t("additional.resume")}
-        onSecondaryButtonClick={onActivityResume}
       />
     </Container>
   )
