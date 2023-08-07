@@ -1,61 +1,39 @@
 import { Typography } from "@mui/material"
 import Box from "@mui/material/Box"
 
-import * as activityDetailsModel from "../model"
 import { ActivityAssessmentLayout } from "./ActivityAssessmentLayout"
 
+import { activityModel } from "~/entities/activity"
 import { StartAssessmentButton } from "~/features/StartAssessment"
+import { ActivityDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
-import { AvatarBase, Loader } from "~/shared/ui"
+import { AvatarBase } from "~/shared/ui"
 import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
 
-type PrivateActivityDetailsWidgetProps = {
-  isPublic: false
-
-  appletId: string
-  activityId: string
+type Props = {
+  activityDetails: ActivityDTO
   eventId: string
 }
 
-type PublicActivityDetailsWidgetProps = {
-  isPublic: true
-
-  appletId: string
-  activityId: string
-  eventId: string
-
-  publicAppletKey: string
-}
-
-type WidgetProps = PrivateActivityDetailsWidgetProps | PublicActivityDetailsWidgetProps
-
-export const ActivityWelcomeScreen = (props: WidgetProps) => {
+export const ActivityWelcomeScreen = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery()
-
   const { t } = useCustomTranslation()
-  const { appletDetails, activityDetails, eventsRawData, isLoading, isError, error } =
-    activityDetailsModel.hooks.useActivityDetails(props)
 
-  if (isLoading) {
-    return <Loader />
-  }
+  const { saveActivityEventRecords } = activityModel.hooks.useSaveActivityEventProgress()
 
-  if (isError) {
-    return (
-      <Box height="100vh" width="100%" display="flex" justifyContent="center" alignItems="center">
-        <span>{props.isPublic ? t("additional.invalid_public_url") : error?.evaluatedMessage}</span>
-      </Box>
-    )
+  const startAssessment = () => {
+    const initialStep = 1
+    return saveActivityEventRecords(props.activityDetails, props.eventId, initialStep)
   }
 
   return (
     <ActivityAssessmentLayout
-      title={activityDetails?.name ?? ""}
-      activityId={props.activityId}
+      title={props.activityDetails.name}
+      activityId={props.activityDetails.id}
       eventId={props.eventId}
       buttons={
         <Box width="100%" display="flex" justifyContent="center">
-          <StartAssessmentButton width={greaterThanSM ? "375px" : "335px"} />
+          <StartAssessmentButton width={greaterThanSM ? "375px" : "335px"} onClick={startAssessment} />
         </Box>
       }>
       <Box height="100%" width="100%" display="flex" justifyContent="center" paddingTop="80px">
@@ -65,7 +43,12 @@ export const ActivityWelcomeScreen = (props: WidgetProps) => {
           flexDirection="column"
           alignItems="center"
           maxWidth="570px">
-          <AvatarBase src={activityDetails?.image} name={activityDetails?.name ?? ""} width="124px" height="124px" />
+          <AvatarBase
+            src={props.activityDetails.image}
+            name={props.activityDetails?.name}
+            width="124px"
+            height="124px"
+          />
           <Typography
             variant="body1"
             fontSize="18px"
@@ -74,7 +57,7 @@ export const ActivityWelcomeScreen = (props: WidgetProps) => {
               color: Theme.colors.light.secondary,
               marginTop: "24px",
             }}>
-            {t("question_count", { length: activityDetails?.items.length ?? "" })}
+            {t("question_count", { length: props.activityDetails.items.length })}
           </Typography>
           <Typography
             variant="body1"
@@ -84,7 +67,7 @@ export const ActivityWelcomeScreen = (props: WidgetProps) => {
               color: Theme.colors.light.onSurface,
               margin: "16px 0px",
             }}>
-            {activityDetails?.name ?? ""}
+            {props.activityDetails.name}
           </Typography>
 
           <Typography
@@ -95,7 +78,7 @@ export const ActivityWelcomeScreen = (props: WidgetProps) => {
             sx={{
               color: Theme.colors.light.onSurface,
             }}>
-            {activityDetails?.description ?? ""}
+            {props.activityDetails.description}
           </Typography>
         </Box>
       </Box>

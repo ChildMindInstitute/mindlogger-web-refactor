@@ -21,7 +21,7 @@ import {
   usePublicSaveAnswerMutation,
   useSaveAnswerMutation,
 } from "~/entities/activity"
-import { ActivityDTO, AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
+import { ActivityDTO, AnswerPayload, AppletEncryptionDTO, AppletEventsResponse } from "~/shared/api"
 import {
   ROUTES,
   secureUserPrivateKeyStorage,
@@ -34,14 +34,19 @@ import {
 type ActivityItemListProps = {
   isPublic: boolean
   publicAppletKey?: string
-  appletDetails: AppletDetailsDTO
+
+  appletId: string
+  appletEncryption: AppletEncryptionDTO | null
+  appletVersion: string
+  appletWatermark: string
+
   activityDetails: ActivityDTO
   eventsRawData: AppletEventsResponse | null
   eventId: string
 }
 
 export const ActivityItemList = (props: ActivityItemListProps) => {
-  const { activityDetails, eventId, appletDetails, isPublic, eventsRawData } = props
+  const { activityDetails, eventId, isPublic, eventsRawData } = props
 
   const { t } = useCustomTranslation()
   const navigator = useCustomNavigation()
@@ -60,7 +65,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     // Step 4 - Clear progress state related to activity
     clearActivityItemsProgressById(activityDetails.id, eventId)
     updateGroupInProgressByIds({
-      appletId: appletDetails.id,
+      appletId: props.appletId,
       eventId,
       activityId: activityDetails.id,
       progressPayload: {
@@ -70,7 +75,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
 
     // Step 5 - Redirect to "Thanks screen"
 
-    return navigator.navigate(ROUTES.thanks.navigateTo(isPublic ? props.publicAppletKey! : appletDetails.id, isPublic))
+    return navigator.navigate(ROUTES.thanks.navigateTo(isPublic ? props.publicAppletKey! : props.appletId, isPublic))
   }
 
   const { mutate: saveAnswer, isLoading: submitLoading } = useSaveAnswerMutation({
@@ -126,26 +131,30 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
       privateKey = secureUserPrivateKeyStorage.getUserPrivateKey()
     }
 
-    const userPublicKey = generateUserPublicKey(appletDetails?.encryption, privateKey)
+    const userPublicKey = generateUserPublicKey(props.appletEncryption, privateKey)
 
-    const encryptedAnswers = encryptePayload(appletDetails.encryption, preparedItemAnswers.answer, privateKey)
-    const encryptedUserEvents = encryptePayload(appletDetails.encryption, userEvents, privateKey)
+    const encryptedAnswers = encryptePayload(props.appletEncryption, preparedItemAnswers.answer, privateKey)
+    const encryptedUserEvents = encryptePayload(props.appletEncryption, userEvents, privateKey)
 
     const groupInProgress = getGroupInProgressByIds({
-      appletId: appletDetails.id,
+      appletId: props.appletId,
       activityId: activityDetails.id,
       eventId,
     })
 
+    if (!groupInProgress) {
+      throw new Error("[Activity item list] Group in progress not found")
+    }
+
     const firstTextItemAnserWithIdentifier = getFirstResponseDataIdentifierTextItem(activityEvents)
     const encryptedIdentifier = firstTextItemAnserWithIdentifier
-      ? encryptePayload(appletDetails.encryption, firstTextItemAnserWithIdentifier, privateKey)
+      ? encryptePayload(props.appletEncryption, firstTextItemAnserWithIdentifier, privateKey)
       : null
 
     // Step 3 - Send answers to backend
     const answer: AnswerPayload = {
-      appletId: appletDetails.id,
-      version: appletDetails.version,
+      appletId: props.appletId,
+      version: props.appletVersion,
       flowId: null,
       activityId: activityDetails.id,
       submitId: uuidV4(),
@@ -176,15 +185,15 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
   }, [
     activityDetails.id,
     activityEvents,
-    appletDetails.encryption,
-    appletDetails.id,
-    appletDetails.version,
     encryptePayload,
     eventId,
     eventsRawData,
     generateUserPrivateKey,
     getGroupInProgressByIds,
     isPublic,
+    props.appletEncryption,
+    props.appletId,
+    props.appletVersion,
     publicSaveAnswer,
     saveAnswer,
     userEvents,
@@ -200,7 +209,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
           onSubmitButtonClick={onSubmitButtonClick}
           openInvalidAnswerModal={openInvalidAnswerModal}
           isAllItemsSkippable={isAllItemsSkippable}
-          watermark={appletDetails.watermark}
+          watermark={props.appletWatermark}
         />
       )}
       {!isSummaryScreen && !isOnePageAssessment && (
@@ -211,7 +220,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
           onSubmitButtonClick={onSubmitButtonClick}
           openInvalidAnswerModal={openInvalidAnswerModal}
           isAllItemsSkippable={isAllItemsSkippable}
-          watermark={appletDetails.watermark}
+          watermark={props.appletWatermark}
         />
       )}
 

@@ -40,7 +40,11 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const [isAboutOpen, setIsAboutOpen] = useState(false)
 
   const { upsertGroupInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
-  const { groups } = useActivityGroups(props.appletDetails, props.eventsDetails)
+  const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { groups } = useActivityGroups({
+    appletDetails: props.appletDetails,
+    eventsDetails: props.eventsDetails,
+  })
 
   const onCardAboutClick = () => {
     setIsAboutOpen(true)
@@ -78,13 +82,19 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
       }
     }
 
+    const groupInProgressById = getGroupInProgressByIds({
+      appletId: props.appletDetails.id,
+      eventId: activity.eventId,
+      activityId: activity.activityId,
+    })
+
     upsertGroupInProgress({
       appletId: props.appletDetails.id,
       activityId: activity.activityId,
       eventId: activity.eventId,
       progressPayload: {
         ...activityPipelineDetails,
-        startAt: Date.now(),
+        startAt: groupInProgressById ? groupInProgressById.startAt : Date.now(),
         endAt: null,
       },
     })

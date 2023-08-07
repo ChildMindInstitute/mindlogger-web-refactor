@@ -4,9 +4,8 @@ import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
 
-import { SaveAndExitButton } from "./SaveAndExitButton"
-
 import { activityModel } from "~/entities/activity"
+import { SaveAndExitButton } from "~/features/SaveAssessmentAndExit"
 import { Theme } from "~/shared/constants"
 import { BaseProgressBar } from "~/shared/ui"
 import { useCustomMediaQuery, useCustomNavigation } from "~/shared/utils"

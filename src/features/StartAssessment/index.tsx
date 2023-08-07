@@ -6,13 +6,15 @@ import { useCustomTranslation } from "~/shared/utils"
 
 type Props = {
   width: string
+  onClick: () => void
 }
 
-export const StartAssessmentButton = ({ width }: Props) => {
+export const StartAssessmentButton = ({ width, onClick }: Props) => {
   const { t } = useCustomTranslation()
 
   return (
     <ButtonBase
+      onClick={onClick}
       sx={{
         padding: "10px 24px",
         backgroundColor: Theme.colors.light.primary,

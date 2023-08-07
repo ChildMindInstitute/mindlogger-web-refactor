@@ -17,7 +17,7 @@ type UseActivityGroupsInProgressStateReturn = {
   groupsInProgress: GroupsProgressState
   upsertGroupInProgress: (payload: UpsertActionPayload) => void
   updateGroupInProgressByIds: (payload: UpdateActionPayload) => void
-  getGroupInProgressByIds: (params: GetGroupInProgressByParams) => EventProgressState
+  getGroupInProgressByIds: (params: GetGroupInProgressByParams) => EventProgressState | null
 }
 
 export const useActivityGroupsInProgressState = (): UseActivityGroupsInProgressStateReturn => {
@@ -42,17 +42,17 @@ export const useActivityGroupsInProgressState = (): UseActivityGroupsInProgressS
     (params: GetGroupInProgressByParams) => {
       const groupByAppletId = groupsInProgress[params.appletId]
       if (!groupByAppletId) {
-        throw new Error(`Group by appletId ${params.appletId} not found`)
+        return null
       }
 
       const groupByActivityId = groupByAppletId[params.activityId]
       if (!groupByActivityId) {
-        throw new Error(`Group by activityId ${params.activityId} not found`)
+        return null
       }
 
       const groupByEventId = groupByActivityId[params.eventId]
       if (!groupByEventId) {
-        throw new Error(`Group by eventId ${params.eventId} not found`)
+        return null
       }
 
       return groupByEventId
