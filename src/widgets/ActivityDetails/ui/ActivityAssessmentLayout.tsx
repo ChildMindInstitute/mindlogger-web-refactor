@@ -9,7 +9,7 @@ import { SaveAndExitButton } from "./SaveAndExitButton"
 import { activityModel } from "~/entities/activity"
 import { Theme } from "~/shared/constants"
 import { BaseProgressBar } from "~/shared/ui"
-import { useCustomNavigation } from "~/shared/utils"
+import { useCustomMediaQuery, useCustomNavigation } from "~/shared/utils"
 
 type Props = PropsWithChildren<{
   title: string
@@ -19,6 +19,8 @@ type Props = PropsWithChildren<{
 }>
 
 export const ActivityAssessmentLayout = ({ children, buttons, activityId, eventId, title }: Props) => {
+  const { greaterThanSM } = useCustomMediaQuery()
+
   const navigator = useCustomNavigation()
   const { progress } = activityModel.hooks.useActivityEventProgressState({
     activityId: activityId,
@@ -30,31 +32,49 @@ export const ActivityAssessmentLayout = ({ children, buttons, activityId, eventI
   }
 
   return (
-    <Box height="100%" sx={{ display: "grid", gridTemplateRows: "80px 1fr 72px", alignItems: "stretch" }}>
+    <Box height="100%" sx={{ display: "grid", gridTemplateRows: "88px 1fr 88px", alignItems: "stretch" }}>
       <Box
         id="activity-details-header"
-        display="flex"
-        justifyContent="center"
+        display="grid"
         alignItems="center"
+        justifyContent="center"
+        gridTemplateColumns="1fr minmax(400px, 900px) 1fr"
         width="100%"
         height="100%"
         position="relative"
+        padding={greaterThanSM ? "0px 24px" : "0px 16px"}
+        gap={1.5}
         sx={{
           backgroundColor: Theme.colors.light.surface,
           borderBottom: `1px solid ${Theme.colors.light.surfaceVariant}`,
         }}>
-        <Box width="570px">
-          <Typography
-            variant="body1"
-            textAlign="center"
-            color={Theme.colors.light.onSurface}
-            sx={{ marginBottom: "8px" }}>
-            {title}
-          </Typography>
+        <Box width="100%" sx={{ gridColumn: "2 / 3" }}>
+          <Box
+            display="flex"
+            justifyContent={greaterThanSM ? "center" : "space-between"}
+            marginBottom={greaterThanSM ? "8px" : "16px"}>
+            <Typography
+              variant="body1"
+              textAlign={greaterThanSM ? "center" : "left"}
+              color={Theme.colors.light.onSurface}>
+              {title}
+            </Typography>
+            {!greaterThanSM && <SaveAndExitButton onClick={onSaveAndExitClick} asLink={true} />}
+          </Box>
           <BaseProgressBar percentage={progress} />
         </Box>
 
-        <SaveAndExitButton onClick={onSaveAndExitClick} />
+        {greaterThanSM && (
+          <Box
+            width="125px"
+            height="100%"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            justifySelf="flex-end">
+            <SaveAndExitButton onClick={onSaveAndExitClick} />
+          </Box>
+        )}
       </Box>
 
       <Container>{children}</Container>
