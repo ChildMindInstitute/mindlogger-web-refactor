@@ -4,7 +4,11 @@ import Typography from "@mui/material/Typography"
 import { Theme } from "~/shared/constants"
 import { useCustomTranslation } from "~/shared/utils"
 
-export const StartAssessmentButton = () => {
+type Props = {
+  width: string
+}
+
+export const StartAssessmentButton = ({ width }: Props) => {
   const { t } = useCustomTranslation()
 
   return (
@@ -12,7 +16,7 @@ export const StartAssessmentButton = () => {
       sx={{
         padding: "10px 24px",
         backgroundColor: Theme.colors.light.primary,
-        width: "375px",
+        width,
         borderRadius: "100px",
       }}>
       <Typography variant="body1" color={Theme.colors.light.onPrimary} fontSize="14px" fontWeight="700">

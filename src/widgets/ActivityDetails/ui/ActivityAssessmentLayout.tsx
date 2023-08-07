@@ -41,7 +41,6 @@ export const ActivityAssessmentLayout = ({ children, buttons, activityId, eventI
         gridTemplateColumns="1fr minmax(400px, 900px) 1fr"
         width="100%"
         height="100%"
-        position="relative"
         padding={greaterThanSM ? "0px 24px" : "0px 16px"}
         gap={1.5}
         sx={{
@@ -77,16 +76,21 @@ export const ActivityAssessmentLayout = ({ children, buttons, activityId, eventI
         )}
       </Box>
 
-      <Container>{children}</Container>
+      <Container sx={{ display: "flex", justifyContent: "center" }}>
+        <Box maxWidth="900px">{children}</Box>
+      </Container>
 
       <Box
-        display="flex"
+        display="grid"
         justifyContent="center"
         alignItems="center"
+        gridTemplateColumns="1fr minmax(400px, 900px) 1fr"
         height="100%"
         width="100%"
         sx={{ borderTop: `1px solid ${Theme.colors.light.surfaceVariant}` }}>
-        {buttons}
+        <Box width="100%" sx={{ gridColumn: "2 / 3" }} padding="0px 16px">
+          {buttons}
+        </Box>
       </Box>
     </Box>
   )

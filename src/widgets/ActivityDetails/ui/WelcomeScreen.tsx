@@ -7,7 +7,7 @@ import { ActivityAssessmentLayout } from "./ActivityAssessmentLayout"
 import { StartAssessmentButton } from "~/features/StartAssessment"
 import { Theme } from "~/shared/constants"
 import { AvatarBase, Loader } from "~/shared/ui"
-import { useCustomTranslation } from "~/shared/utils"
+import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityDetailsWidgetProps = {
   isPublic: false
@@ -30,6 +30,8 @@ type PublicActivityDetailsWidgetProps = {
 type WidgetProps = PrivateActivityDetailsWidgetProps | PublicActivityDetailsWidgetProps
 
 export const ActivityWelcomeScreen = (props: WidgetProps) => {
+  const { greaterThanSM } = useCustomMediaQuery()
+
   const { t } = useCustomTranslation()
   const { appletDetails, activityDetails, eventsRawData, isLoading, isError, error } =
     activityDetailsModel.hooks.useActivityDetails(props)
@@ -51,7 +53,11 @@ export const ActivityWelcomeScreen = (props: WidgetProps) => {
       title={activityDetails?.name ?? ""}
       activityId={props.activityId}
       eventId={props.eventId}
-      buttons={<StartAssessmentButton />}>
+      buttons={
+        <Box width="100%" display="flex" justifyContent="center">
+          <StartAssessmentButton width={greaterThanSM ? "375px" : "335px"} />
+        </Box>
+      }>
       <Box height="100%" width="100%" display="flex" justifyContent="center" paddingTop="80px">
         <Box
           id="welcome-screen-activity-details"
