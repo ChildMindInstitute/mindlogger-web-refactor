@@ -13,7 +13,7 @@ export const ActivityDetailsPage = () => {
   }
 
   return (
-    <Box width="100%" display="flex" flex={1}>
+    <Box height="100vh" display="flex" flex={1}>
       <ActivityDetailsWidget isPublic={false} appletId={appletId} activityId={activityId} eventId={eventId} />
     </Box>
   )
