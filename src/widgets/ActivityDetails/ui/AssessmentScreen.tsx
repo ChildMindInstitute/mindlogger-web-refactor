@@ -53,7 +53,6 @@ export const AssessmentScreen = (props: Props) => {
   const { generateUserPrivateKey } = useEncryption()
   const { encryptePayload } = useEncryptPayload()
 
-  const [isRequiredModalOpen, openRequiredModal, closeRequiredModal] = useModal()
   const [isInvalidAnswerModalOpen, openInvalidAnswerModal, closeInvalidAnswerModal] = useModal()
 
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
@@ -159,12 +158,6 @@ export const AssessmentScreen = (props: Props) => {
   }
 
   const submitAnswers = useCallback(() => {
-    // const isAnswerCorrect = validateCorrectAnswer()
-
-    // if (!isAnswerCorrect && !isAllItemsSkippable && !currentItem?.config.skippableItem) {
-    //   return openInvalidAnswerModal()
-    // }
-
     saveUserEventByType("DONE", currentItem!)
 
     // Step 1 - Collect answers from store and transform to answer payload
@@ -268,6 +261,7 @@ export const AssessmentScreen = (props: Props) => {
             <ItemCardButton
               config={buttonConfig}
               isSubmitShown={!hasNextStep}
+              isLoading={submitLoading}
               onNextButtonClick={onNextButtonClick}
               onBackButtonClick={onBackButtonClick}
               onSubmitButtonClick={submitAnswers}
@@ -292,14 +286,6 @@ export const AssessmentScreen = (props: Props) => {
         onHide={closeInvalidAnswerModal}
         title={t("failed")}
         label={t("incorrect_answer")}
-      />
-      <Modal
-        show={isRequiredModalOpen}
-        onHide={closeRequiredModal}
-        title={t("additional.response_submit")}
-        label={t("additional.fill_out_fields")}
-        footerSecondaryButton={t("additional.okay")}
-        onSecondaryButtonClick={closeRequiredModal}
       />
     </>
   )
