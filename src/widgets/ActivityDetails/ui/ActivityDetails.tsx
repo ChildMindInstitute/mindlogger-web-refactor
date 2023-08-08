@@ -58,13 +58,15 @@ export const ActivityDetailsWidget = (props: Props) => {
   }
 
   return (
-    <AssessmentScreen
-      appletDetails={appletDetails}
-      activityDetails={activityDetails}
-      eventsRawData={eventsRawData}
-      eventId={props.eventId}
-      isPublic={props.isPublic}
-      publicAppletKey={props.isPublic ? props.publicAppletKey : undefined}
-    />
+    <>
+      <AssessmentScreen
+        appletDetails={appletDetails}
+        activityDetails={activityDetails}
+        eventsRawData={eventsRawData}
+        eventId={props.eventId}
+        isPublic={props.isPublic}
+        publicAppletKey={props.isPublic ? props.publicAppletKey : undefined}
+      />
+    </>
   )
 }

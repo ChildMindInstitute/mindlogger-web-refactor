@@ -1,8 +1,8 @@
-import classNames from "classnames"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
 
 import { ItemCardButtonsConfig } from "../lib"
 
-import { BasicButton } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 
 import "./style.scss"
@@ -10,7 +10,6 @@ import "./style.scss"
 type ItemCardButtonsProps = {
   config: ItemCardButtonsConfig
   isSubmitShown: boolean
-  isOnePageAssessment: boolean
   onBackButtonClick?: () => void
   onNextButtonClick?: () => void
   onSubmitButtonClick?: () => void
@@ -19,7 +18,6 @@ type ItemCardButtonsProps = {
 export const ItemCardButton = ({
   config,
   isSubmitShown,
-  isOnePageAssessment,
   onBackButtonClick,
   onNextButtonClick,
   onSubmitButtonClick,
@@ -29,52 +27,24 @@ export const ItemCardButton = ({
   const nextLabel = config.isNextDisabled && config.isSkippable ? t("Consent.skip") : t("Consent.next")
   const submitLabel = t("submit")
 
-  if (isOnePageAssessment) {
-    return (
-      <div className={classNames("no-gutters", "d-flex", "flex-row", "justify-content-around")}>
-        {(isSubmitShown && (
-          <BasicButton
-            variant="outline-dark"
-            size="lg"
-            onClick={onSubmitButtonClick}
-            className={classNames("mb-2", "navigator-button")}>
-            {submitLabel}
-          </BasicButton>
-        )) || <div />}
-
-        {config.isSkippable && (
-          <BasicButton
-            disabled={!config.isNextDisabled}
-            variant="outline-dark"
-            size="lg"
-            className={classNames("mb-2", "navigator-button")}>
-            {t("Consent.skip")}
-          </BasicButton>
-        )}
-      </div>
-    )
-  }
-
   return (
-    <div className={classNames("no-gutters", "d-flex", "flex-row", "justify-content-around")}>
+    <Box display="grid" justifyContent="center" alignItems="center" gridTemplateColumns="200px 1fr 200px">
       {(config.isBackShown && (
-        <BasicButton
-          variant="outline-dark"
-          size="lg"
+        <Button
+          variant="outlined"
           onClick={onBackButtonClick}
-          className={classNames("mb-2", "navigator-button")}>
+          sx={{ gridColumn: "1/2", borderRadius: "100px", padding: "10px 24px" }}>
           {t("Consent.back")}
-        </BasicButton>
-      )) || <div />}
+        </Button>
+      )) || <></>}
 
-      <BasicButton
-        variant="outline-dark"
-        size="lg"
+      <Button
+        variant="contained"
+        sx={{ gridColumn: "3/4", borderRadius: "100px", padding: "10px 24px" }}
         disabled={!config.isSkippable && config.isNextDisabled}
-        className={classNames("mb-2", "navigator-button")}
         onClick={isSubmitShown ? onSubmitButtonClick : onNextButtonClick}>
         {isSubmitShown ? submitLabel : nextLabel}
-      </BasicButton>
-    </div>
+      </Button>
+    </Box>
   )
 }
