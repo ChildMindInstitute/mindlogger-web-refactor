@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box"
 
 import * as activityDetailsModel from "../model"
-import { AssessmentScreen } from "./AssessmentScreen"
-import { ActivityWelcomeScreen } from "./WelcomeScreen"
+import { AssessmentPassingScreen } from "./AssessmentPassingScreen"
+import { AssessmentWelcomeScreen } from "./AssessmentWelcomeScreen"
 
 import { Loader } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
@@ -46,7 +46,7 @@ export const ActivityDetailsWidget = (props: Props) => {
   }
 
   if (!isActivityEventInProgress && activityDetails) {
-    return <ActivityWelcomeScreen activityDetails={activityDetails} eventId={props.eventId} />
+    return <AssessmentWelcomeScreen activityDetails={activityDetails} eventId={props.eventId} />
   }
 
   if (!appletDetails || !activityDetails || !eventsRawData) {
@@ -59,7 +59,7 @@ export const ActivityDetailsWidget = (props: Props) => {
 
   return (
     <>
-      <AssessmentScreen
+      <AssessmentPassingScreen
         appletDetails={appletDetails}
         activityDetails={activityDetails}
         eventsRawData={eventsRawData}

@@ -3,30 +3,46 @@ import Button from "@mui/material/Button"
 import CircularProgress from "@mui/material/CircularProgress"
 
 import { ItemCardButtonsConfig } from "../lib"
+import { ActivityEventProgressRecord } from "../model/types"
 
 import { Theme } from "~/shared/constants"
 import { useCustomTranslation } from "~/shared/utils"
 
-import "./style.scss"
-
 type ItemCardButtonsProps = {
-  config: ItemCardButtonsConfig
+  currentItem: ActivityEventProgressRecord | null
+
   isLoading: boolean
+  isAllItemsSkippable: boolean
   isSubmitShown: boolean
+  hasPrevStep: boolean
+
   onBackButtonClick?: () => void
   onNextButtonClick?: () => void
   onSubmitButtonClick?: () => void
 }
 
 export const ItemCardButton = ({
-  config,
   isSubmitShown,
   onBackButtonClick,
   onNextButtonClick,
   onSubmitButtonClick,
   isLoading,
+  currentItem,
+  isAllItemsSkippable,
+  hasPrevStep,
 }: ItemCardButtonsProps) => {
   const { t } = useCustomTranslation()
+
+  const isMessageItem = currentItem?.responseType === "message"
+  const isAudioPlayerItem = currentItem?.responseType === "audioPlayer"
+
+  const isItemWithoutAnswer = isMessageItem || isAudioPlayerItem
+
+  const config: ItemCardButtonsConfig = {
+    isNextDisabled: isItemWithoutAnswer ? false : !currentItem?.answer || !currentItem.answer.length,
+    isSkippable: currentItem?.config.skippableItem || isAllItemsSkippable,
+    isBackShown: hasPrevStep && !currentItem?.config.removeBackButton,
+  }
 
   const nextLabel = config.isNextDisabled && config.isSkippable ? t("Consent.skip") : t("Consent.next")
   const submitLabel = t("submit")

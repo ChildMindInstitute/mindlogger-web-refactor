@@ -15,7 +15,7 @@ type Props = {
   eventId: string
 }
 
-export const ActivityWelcomeScreen = (props: Props) => {
+export const AssessmentWelcomeScreen = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery()
   const { t } = useCustomTranslation()
 

@@ -1,30 +1,40 @@
 import { useMemo } from "react"
 
+import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "../model/hooks"
 import { ActivityEventProgressRecord } from "../model/types"
 import { ItemPicker } from "./items/ItemPicker"
 
 import { CardItem } from "~/shared/ui"
 
 type ActivityCardItemProps = {
+  activityId: string
+  eventId: string
   activityItem: ActivityEventProgressRecord
   watermark?: string
 
   values: string[]
-  setValue: (itemId: string, answer: string[]) => void
-  saveSetAnswerUserEvent: (item: ActivityEventProgressRecord) => void
   replaceText: (value: string) => string
 }
 
 export const ActivityCardItem = ({
   activityItem,
   values,
-  setValue,
   replaceText,
   watermark,
-  saveSetAnswerUserEvent,
+  activityId,
+  eventId,
 }: ActivityCardItemProps) => {
+  const { saveSetAnswerUserEvent } = useSetAnswerUserEvent({
+    activityId,
+    eventId,
+  })
+  const { saveActivityItemAnswer } = useSaveActivityItemAnswer({
+    activityId,
+    eventId,
+  })
+
   const onItemValueChange = (value: string[]) => {
-    setValue(activityItem.id, value)
+    saveActivityItemAnswer(activityItem.id, value)
     saveSetAnswerUserEvent({
       ...activityItem,
       answer: value,
