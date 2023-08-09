@@ -1,5 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 
+import { Theme } from "../shared/constants"
+import Layout from "../widgets/AppLayout"
 import { ActivityDetailsPage } from "./ActivityDetails"
 import { ActivityListPage } from "./ActivityList"
 import { DashboardPage } from "./Dashboard"
@@ -31,27 +33,27 @@ const ApplicationRouter = (): JSX.Element | null => {
       <LogoutTracker>
         <Routes>
           <Route element={<ProtectedRoute token={tokens?.accessToken} />}>
-            <Route path={ROUTES.applets.path}>
-              <Route index element={<DashboardPage />} />
-              <Route path={ROUTES.activityList.path}>
-                <Route index element={<ActivityListPage />} />
-                <Route path={ROUTES.activityDetails.path}>
-                  <Route index element={<ActivityDetailsPage />} />
-                </Route>
-              </Route>
+            <Route element={<Layout bgColor={Theme.colors.light.surface} hasFooter={false} hasHeader={false} />}>
+              <Route path={ROUTES.activityDetails.path} element={<ActivityDetailsPage />} />
             </Route>
-            <Route path={ROUTES.profile.path} element={<ProfilePage />} />
-            <Route path={ROUTES.settings.path} element={<SettingsPage />} />
-            <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
-            <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
-            <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
-            <Route path={ROUTES.invitationAccept.path} element={<InvitationAcceptPage />} />
-            <Route path={ROUTES.invitationDecline.path} element={<InvitationDeclinePage />} />
-            <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
-            <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
-            <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
 
-            <Route path="*" element={<Navigate to={ROUTES.applets.path} />} />
+            <Route element={<Layout />}>
+              <Route path={ROUTES.applets.path} element={<DashboardPage />} />
+              <Route path={ROUTES.activityList.path} element={<ActivityListPage />} />
+
+              <Route path={ROUTES.profile.path} element={<ProfilePage />} />
+              <Route path={ROUTES.settings.path} element={<SettingsPage />} />
+              <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
+              <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
+              <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
+              <Route path={ROUTES.invitationAccept.path} element={<InvitationAcceptPage />} />
+              <Route path={ROUTES.invitationDecline.path} element={<InvitationDeclinePage />} />
+              <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
+              <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
+              <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
+
+              <Route path="*" element={<Navigate to={ROUTES.applets.path} />} />
+            </Route>
           </Route>
         </Routes>
       </LogoutTracker>
@@ -60,18 +62,20 @@ const ApplicationRouter = (): JSX.Element | null => {
 
   return (
     <Routes>
-      <Route index path={ROUTES.login.path} element={<LoginPage />} />
-      <Route path={ROUTES.signup.path} element={<SignupPage />} />
-      <Route path={ROUTES.forgotPassword.path} element={<ForgotPasswordPage />} />
-      <Route path={ROUTES.changePassword.path} element={<RecoveryPasswordPage />} />
-      <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
-      <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
-      <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
-      <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
-      <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
-      <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
+      <Route element={<Layout />}>
+        <Route index path={ROUTES.login.path} element={<LoginPage />} />
+        <Route path={ROUTES.signup.path} element={<SignupPage />} />
+        <Route path={ROUTES.forgotPassword.path} element={<ForgotPasswordPage />} />
+        <Route path={ROUTES.changePassword.path} element={<RecoveryPasswordPage />} />
+        <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
+        <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
+        <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
+        <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
+        <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
+        <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
 
-      <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
+        <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
+      </Route>
     </Routes>
   )
 }
