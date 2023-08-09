@@ -9,8 +9,9 @@ import { ActivityGroup } from "./ActivityGroup"
 
 import { ActivityListItem, activityModel, ActivityOrFlowProgress, ActivityPipelineType } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
+import { ROUTES } from "~/shared/constants"
 import { CustomCard } from "~/shared/ui"
-import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false

@@ -6,9 +6,9 @@ import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { LoginSchema, TLoginForm } from "../model/login.schema"
 
 import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
+import { ROUTES } from "~/shared/constants"
 import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
 import {
-  ROUTES,
   secureTokensStorage,
   secureUserPrivateKeyStorage,
   useCustomForm,

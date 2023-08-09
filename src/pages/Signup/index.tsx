@@ -2,7 +2,7 @@ import { Container } from "react-bootstrap"
 import { Link, useLocation } from "react-router-dom"
 
 import { SignupForm, useSignupTranslation } from "~/features/Signup"
-import { ROUTES } from "~/shared/utils"
+import { ROUTES } from "~/shared/constants"
 
 import "./styles.scss"
 

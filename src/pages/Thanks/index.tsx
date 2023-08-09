@@ -1,8 +1,9 @@
 import { Container } from "react-bootstrap"
 import { useParams } from "react-router-dom"
 
+import { ROUTES } from "~/shared/constants"
 import { BasicButton } from "~/shared/ui"
-import { ROUTES, booleanStringToBoolean, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { booleanStringToBoolean, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 import "./style.scss"
 
