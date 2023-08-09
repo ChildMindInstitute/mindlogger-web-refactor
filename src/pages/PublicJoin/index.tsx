@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 
-import { ActivityGroups } from "../../widgets/ActivityGroups"
+import { ActivityGroups } from "~/widgets/ActivityGroups"
 
 export const PublicJoinPage = () => {
   const { joinLinkKey } = useParams()
