@@ -3,7 +3,6 @@ import { Suspense } from "react"
 import CssBaseline from "@mui/material/CssBaseline"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
-import Layout from "./Layout"
 import { DateLocalizationProvider, MUIThemeProvider, ReactQuery, ReduxProvider, RouteProvider } from "./providers"
 import i18nManager from "./system/locale/i18n"
 
@@ -22,9 +21,7 @@ function App() {
           <ReduxProvider>
             <ReactQuery>
               <DateLocalizationProvider>
-                <Layout>
-                  <ApplicationRouter />
-                </Layout>
+                <ApplicationRouter />
               </DateLocalizationProvider>
               <ReactQueryDevtools initialIsOpen={false} />
             </ReactQuery>
