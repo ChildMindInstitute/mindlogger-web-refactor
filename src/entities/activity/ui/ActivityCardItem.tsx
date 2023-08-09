@@ -46,16 +46,14 @@ export const ActivityCardItem = ({
   }, [activityItem.question, replaceText])
 
   return (
-    <div data-testid={"active-item"}>
-      <CardItem markdown={questionText} isInvalid={false} watermark={watermark} buttons={<></>}>
-        <ItemPicker
-          item={activityItem}
-          values={values}
-          onValueChange={onItemValueChange}
-          isDisabled={false}
-          replaceText={replaceText}
-        />
-      </CardItem>
-    </div>
+    <CardItem markdown={questionText} watermark={watermark}>
+      <ItemPicker
+        item={activityItem}
+        values={values}
+        onValueChange={onItemValueChange}
+        isDisabled={false}
+        replaceText={replaceText}
+      />
+    </CardItem>
   )
 }
