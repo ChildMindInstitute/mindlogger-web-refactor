@@ -13,7 +13,7 @@ export const ActivityDetailsPage = () => {
   }
 
   return (
-    <Box width="100%" height="100vh">
+    <Box height="100vh" display="flex" flex={1}>
       <ActivityWelcomeScreen isPublic={false} appletId={appletId} activityId={activityId} eventId={eventId} />
     </Box>
   )
