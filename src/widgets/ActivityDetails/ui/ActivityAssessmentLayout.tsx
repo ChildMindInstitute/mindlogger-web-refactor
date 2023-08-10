@@ -38,7 +38,6 @@ export const ActivityAssessmentLayout = ({ children, buttons, activityId, eventI
         alignItems="center"
         justifyContent="center"
         gridTemplateColumns="1fr minmax(400px, 900px) 1fr"
-        width="100%"
         padding={greaterThanSM ? "20px 24px" : "0px 16px"}
         gap={1.5}
         sx={{
