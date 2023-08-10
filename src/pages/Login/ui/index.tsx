@@ -8,7 +8,7 @@ import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
 
 import "./login.scss"
 
-const LoginPage = () => {
+export const LoginPage = () => {
   const { t } = useLoginTranslation()
   const location = useLocation()
 
@@ -35,5 +35,3 @@ const LoginPage = () => {
     </div>
   )
 }
-
-export default LoginPage

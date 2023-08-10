@@ -1,16 +1,21 @@
-import { ReactNode } from "react"
-
 import Box from "@mui/material/Box"
+import { Outlet } from "react-router-dom"
 
 import { Theme } from "~/shared/constants"
 import Footer from "~/widgets/Footer"
 import Header from "~/widgets/Header"
 
 interface LayoutProps {
-  children: ReactNode
+  bgColor?: string
+  hasHeader?: boolean
+  hasFooter?: boolean
 }
 
-const Layout = (props: LayoutProps): null | JSX.Element => {
+const Layout = ({
+  bgColor = Theme.colors.light.surface1,
+  hasFooter = true,
+  hasHeader = true,
+}: LayoutProps): null | JSX.Element => {
   return (
     <Box
       id="app-main-layout"
@@ -18,13 +23,15 @@ const Layout = (props: LayoutProps): null | JSX.Element => {
       display="flex"
       flexDirection="column"
       sx={{
-        backgroundColor: Theme.colors.light.surface1,
+        backgroundColor: bgColor,
       }}>
-      <Header />
+      {hasHeader && <Header />}
       <div className="content-container">
-        <div className="content">{props.children}</div>
+        <div className="content">
+          <Outlet />
+        </div>
       </div>
-      <Footer />
+      {hasFooter && <Footer />}
     </Box>
   )
 }

@@ -4,7 +4,7 @@ import { ForgotPasswordForm, useForgotPasswordTranslation } from "~/features/For
 
 import "./style.scss"
 
-const ForgotPassword = () => {
+export const ForgotPasswordPage = () => {
   const { t } = useForgotPasswordTranslation()
 
   return (
@@ -19,5 +19,3 @@ const ForgotPassword = () => {
     </div>
   )
 }
-
-export default ForgotPassword

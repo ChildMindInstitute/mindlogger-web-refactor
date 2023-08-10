@@ -1,11 +1,12 @@
+import Box from "@mui/material/Box"
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
 
 import { userModel } from "~/entities/user"
 import { ChangePasswordForm, useChangePasswordTranslation } from "~/features/ChangePassword"
-import { Avatar } from "~/shared/ui"
+import { AvatarBase } from "~/shared/ui"
 
-const Settings = () => {
+export const SettingsPage = () => {
   const { t } = useChangePasswordTranslation()
   const { user } = userModel.hooks.useUserState()
 
@@ -13,7 +14,9 @@ const Settings = () => {
     <div className="d-flex mp-3 align-self-start justify-content-center w-100 pt-3">
       <div className="text-center my-2 px-3">
         <div className="d-flex justify-content-start align-items-center">
-          <Avatar />
+          <Box sx={{ padding: "0px 15px" }}>
+            <AvatarBase name={`${user?.firstName} ${user?.lastName}`} width="40px" height="40px" />
+          </Box>
           <h5>{t("settings", { name: `${user?.firstName} ${user?.lastName}` })}</h5>
         </div>
         <hr></hr>
@@ -28,5 +31,3 @@ const Settings = () => {
     </div>
   )
 }
-
-export default Settings

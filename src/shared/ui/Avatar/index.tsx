@@ -1,11 +1,27 @@
-import "./style.scss"
+import Avatar from "@mui/material/Avatar"
 
-const Avatar = () => {
-  return (
-    <div>
-      <div className="avatar"></div>
-    </div>
-  )
+import { getInitials } from "../../utils"
+
+type Props = {
+  src?: string
+  name: string
+
+  width?: string
+  height?: string
 }
 
-export default Avatar
+export const AvatarBase = ({ src, name, width = "32px", height = "32px" }: Props) => {
+  const avatarOptions = (name: string, src?: string) => {
+    if (src) {
+      return {
+        src,
+      }
+    }
+
+    return {
+      children: getInitials(name),
+    }
+  }
+
+  return <Avatar {...avatarOptions(name, src)} alt={`${name} image`} sx={{ width, height }} />
+}
