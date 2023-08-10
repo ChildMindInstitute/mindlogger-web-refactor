@@ -31,11 +31,7 @@ export const AssessmentWelcomeScreen = (props: Props) => {
       title={props.activityDetails.name}
       activityId={props.activityDetails.id}
       eventId={props.eventId}
-      buttons={
-        <Box width="100%" display="flex" justifyContent="center">
-          <StartAssessmentButton width={greaterThanSM ? "375px" : "335px"} onClick={startAssessment} />
-        </Box>
-      }>
+      buttons={<StartAssessmentButton width={greaterThanSM ? "375px" : "335px"} onClick={startAssessment} />}>
       <Box height="100%" width="100%" display="flex" justifyContent="center" paddingTop="80px">
         <Box
           id="welcome-screen-activity-details"
