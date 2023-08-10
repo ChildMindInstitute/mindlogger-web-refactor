@@ -1,10 +1,9 @@
 import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
 
 import { activityModel } from "~/entities/activity"
 import { SaveAndExitButton } from "~/features/SaveAssessmentAndExit"
 import { Theme } from "~/shared/constants"
-import { BaseProgressBar } from "~/shared/ui"
+import { BaseProgressBar, Text } from "~/shared/ui"
 import { useCustomMediaQuery, useCustomNavigation } from "~/shared/utils"
 
 type Props = {
@@ -48,12 +47,9 @@ export const AssessmentLayoutHeader = (props: Props) => {
           display="flex"
           justifyContent={greaterThanSM ? "center" : "space-between"}
           marginBottom={greaterThanSM ? "8px" : "16px"}>
-          <Typography
-            variant="body1"
-            textAlign={greaterThanSM ? "center" : "left"}
-            color={Theme.colors.light.onSurface}>
+          <Text color={Theme.colors.light.onSurface} sx={{ textAlign: greaterThanSM ? "center" : "left" }}>
             {greaterThanSM ? props.title : cutStringToLength(props.title, 30)}
-          </Typography>
+          </Text>
           {!greaterThanSM && <SaveAndExitButton onClick={onSaveAndExitClick} asLink={true} />}
         </Box>
         <BaseProgressBar percentage={progress} />

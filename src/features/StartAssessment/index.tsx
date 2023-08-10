@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box"
 import ButtonBase from "@mui/material/ButtonBase"
-import Typography from "@mui/material/Typography"
 
 import { Theme } from "~/shared/constants"
+import { Text } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 
 type Props = {
@@ -23,9 +23,9 @@ export const StartAssessmentButton = ({ width, onClick }: Props) => {
           width,
           borderRadius: "100px",
         }}>
-        <Typography variant="body1" color={Theme.colors.light.onPrimary} fontSize="14px" fontWeight="700">
+        <Text color={Theme.colors.light.onPrimary} fontSize="14px" fontWeight="700">
           {t("start")}
-        </Typography>
+        </Text>
       </ButtonBase>
     </Box>
   )

@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material"
 import Box from "@mui/material/Box"
 
 import { ActivityAssessmentLayout } from "./ActivityAssessmentLayout"
@@ -7,7 +6,7 @@ import { activityModel } from "~/entities/activity"
 import { StartAssessmentButton } from "~/features/StartAssessment"
 import { ActivityDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
-import { AvatarBase } from "~/shared/ui"
+import { AvatarBase, Text } from "~/shared/ui"
 import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
 
 type Props = {
@@ -45,37 +44,17 @@ export const AssessmentWelcomeScreen = (props: Props) => {
             width="124px"
             height="124px"
           />
-          <Typography
-            variant="body1"
-            fontSize="18px"
-            fontWeight="400"
-            sx={{
-              color: Theme.colors.light.secondary,
-              marginTop: "24px",
-            }}>
-            {t("question_count", { length: props.activityDetails.items.length })}
-          </Typography>
-          <Typography
-            variant="body1"
-            fontSize="18px"
-            fontWeight="700"
-            sx={{
-              color: Theme.colors.light.onSurface,
-              margin: "16px 0px",
-            }}>
-            {props.activityDetails.name}
-          </Typography>
 
-          <Typography
-            variant="body1"
-            fontSize="18px"
-            fontWeight="400"
-            textAlign="center"
-            sx={{
-              color: Theme.colors.light.onSurface,
-            }}>
+          <Text fontSize="18px" fontWeight="400" color={Theme.colors.light.secondary} sx={{ marginTop: "24px" }}>
+            {t("question_count", { length: props.activityDetails.items.length })}
+          </Text>
+          <Text fontSize="18px" fontWeight="700" color={Theme.colors.light.onSurface} margin="16px 0px">
+            {props.activityDetails.name}
+          </Text>
+
+          <Text fontSize="18px" fontWeight="400" color={Theme.colors.light.onSurface} sx={{ textAlign: "center" }}>
             {props.activityDetails.description}
-          </Typography>
+          </Text>
         </Box>
       </Box>
     </ActivityAssessmentLayout>
