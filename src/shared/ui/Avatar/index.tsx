@@ -1,5 +1,7 @@
 import Avatar from "@mui/material/Avatar"
 
+import { getInitials } from "../../utils"
+
 type Props = {
   src?: string
   name: string
@@ -17,7 +19,7 @@ export const AvatarBase = ({ src, name, width = "32px", height = "32px" }: Props
     }
 
     return {
-      children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+      children: getInitials(name),
     }
   }
 
