@@ -31,7 +31,7 @@ export const ActivityAssessmentLayout = ({ children, buttons, activityId, eventI
   }
 
   return (
-    <Box height="100%" sx={{ display: "grid", gridTemplateRows: "88px 1fr 88px", alignItems: "stretch" }}>
+    <Box display="flex" flexDirection="column" height="100%">
       <Box
         id="activity-details-header"
         display="grid"
@@ -39,8 +39,7 @@ export const ActivityAssessmentLayout = ({ children, buttons, activityId, eventI
         justifyContent="center"
         gridTemplateColumns="1fr minmax(400px, 900px) 1fr"
         width="100%"
-        height="100%"
-        padding={greaterThanSM ? "0px 24px" : "0px 16px"}
+        padding={greaterThanSM ? "20px 24px" : "0px 16px"}
         gap={1.5}
         sx={{
           backgroundColor: Theme.colors.light.surface,
@@ -75,21 +74,12 @@ export const ActivityAssessmentLayout = ({ children, buttons, activityId, eventI
         )}
       </Box>
 
-      <Container sx={{ display: "flex", justifyContent: "center" }}>
+      <Container sx={{ display: "flex", justifyContent: "center", flex: 1 }}>
         <Box maxWidth="900px">{children}</Box>
       </Container>
 
-      <Box
-        display="grid"
-        justifyContent="center"
-        alignItems="center"
-        gridTemplateColumns="1fr minmax(400px, 900px) 1fr"
-        height="100%"
-        width="100%"
-        sx={{ borderTop: `1px solid ${Theme.colors.light.surfaceVariant}` }}>
-        <Box width="100%" sx={{ gridColumn: "2 / 3" }} padding="0px 16px">
-          {buttons}
-        </Box>
+      <Box sx={{ borderTop: `1px solid ${Theme.colors.light.surfaceVariant}` }} padding="20px 0px">
+        {buttons}
       </Box>
     </Box>
   )

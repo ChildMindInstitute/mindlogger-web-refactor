@@ -144,18 +144,16 @@ export const AssessmentPassingScreen = (props: Props) => {
         activityId={props.activityDetails.id}
         eventId={props.eventId}
         buttons={
-          <Box width="100%">
-            <ItemCardButton
-              currentItem={currentItem}
-              isSubmitShown={!hasNextStep}
-              isLoading={submitLoading}
-              hasPrevStep={hasPrevStep}
-              isAllItemsSkippable={isAllItemsSkippable}
-              onNextButtonClick={onNextButtonClick}
-              onBackButtonClick={onBackButtonClick}
-              onSubmitButtonClick={submitAnswers}
-            />
-          </Box>
+          <ItemCardButton
+            currentItem={currentItem}
+            isSubmitShown={!hasNextStep}
+            isLoading={submitLoading}
+            hasPrevStep={hasPrevStep}
+            isAllItemsSkippable={isAllItemsSkippable}
+            onNextButtonClick={onNextButtonClick}
+            onBackButtonClick={onBackButtonClick}
+            onSubmitButtonClick={submitAnswers}
+          />
         }>
         <Box height="100%" width="100%" display="flex" justifyContent="center" paddingTop="80px">
           <ActivityCardItem
