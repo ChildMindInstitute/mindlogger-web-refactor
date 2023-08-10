@@ -6,7 +6,7 @@ import { ItemCardButtonsConfig } from "../lib"
 import { ActivityEventProgressRecord } from "../model/types"
 
 import { Theme } from "~/shared/constants"
-import { useCustomTranslation } from "~/shared/utils"
+import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
 
 type ItemCardButtonsProps = {
   currentItem: ActivityEventProgressRecord | null
@@ -32,6 +32,7 @@ export const ItemCardButton = ({
   hasPrevStep,
 }: ItemCardButtonsProps) => {
   const { t } = useCustomTranslation()
+  const { greaterThanSM } = useCustomMediaQuery()
 
   const isMessageItem = currentItem?.responseType === "message"
   const isAudioPlayerItem = currentItem?.responseType === "audioPlayer"
@@ -50,20 +51,27 @@ export const ItemCardButton = ({
   const nextOrSubmitButtonLabel = isSubmitShown ? submitLabel : nextLabel
 
   return (
-    <Box display="grid" justifyContent="center" alignItems="center" gridTemplateColumns="200px 1fr 200px">
+    <Box
+      display="flex"
+      flex={1}
+      justifyContent="space-between"
+      alignItems="center"
+      margin="0 auto"
+      padding={greaterThanSM ? "0px 24px" : "0px 16px"}
+      maxWidth="900px">
       {(config.isBackShown && (
         <Button
           variant="outlined"
           onClick={onBackButtonClick}
-          sx={{ gridColumn: "1/2", borderRadius: "100px", padding: "10px 24px" }}>
+          sx={{ borderRadius: "100px", padding: "10px 24px", width: greaterThanSM ? "200px" : "120px" }}>
           {t("Consent.back")}
         </Button>
-      )) || <></>}
+      )) || <div></div>}
 
       {isLoading ? (
         <Button
           variant="contained"
-          sx={{ gridColumn: "3/4", borderRadius: "100px", padding: "10px 24px" }}
+          sx={{ borderRadius: "100px", padding: "10px 24px", width: greaterThanSM ? "200px" : "120px" }}
           disabled={isLoading}
           onClick={isSubmitShown ? onSubmitButtonClick : onNextButtonClick}>
           <CircularProgress size={25} sx={{ color: Theme.colors.light.onPrimary }} />
@@ -71,7 +79,7 @@ export const ItemCardButton = ({
       ) : (
         <Button
           variant="contained"
-          sx={{ gridColumn: "3/4", borderRadius: "100px", padding: "10px 24px" }}
+          sx={{ borderRadius: "100px", padding: "10px 24px", width: greaterThanSM ? "200px" : "120px" }}
           disabled={!config.isSkippable && config.isNextDisabled}
           onClick={isSubmitShown ? onSubmitButtonClick : onNextButtonClick}>
           {nextOrSubmitButtonLabel}

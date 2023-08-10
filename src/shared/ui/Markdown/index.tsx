@@ -13,7 +13,7 @@ export const Markdown = ({ markdown }: MarkdownProps) => {
   const processedMarkdown = markdownBuilder.extend(markdown)
 
   return (
-    <div>
+    <div id="markdown-wrapper">
       <ReactMarkdown rehypePlugins={[rehypeRaw]}>{processedMarkdown}</ReactMarkdown>
     </div>
   )

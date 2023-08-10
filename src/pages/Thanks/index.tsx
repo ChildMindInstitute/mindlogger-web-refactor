@@ -19,10 +19,6 @@ export const ThanksPage = () => {
       return
     }
 
-    if (!isPublic) {
-      return
-    }
-
     return navigator.navigate(
       isPublic ? ROUTES.publicJoin.navigateTo(appletId) : ROUTES.activityList.navigateTo(appletId),
     )

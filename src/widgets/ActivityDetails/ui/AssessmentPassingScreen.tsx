@@ -1,7 +1,5 @@
 import { useCallback } from "react"
 
-import Box from "@mui/material/Box"
-
 import Modal from "../../Modal"
 import { useAnswer } from "../model/hooks/useAnswers"
 import { useStepperStateManager } from "../model/hooks/useStepperStateManager"
@@ -155,17 +153,15 @@ export const AssessmentPassingScreen = (props: Props) => {
             onSubmitButtonClick={submitAnswers}
           />
         }>
-        <Box height="100%" width="100%" display="flex" justifyContent="center" paddingTop="80px">
-          <ActivityCardItem
-            key={currentItem!.id}
-            activityId={props.activityDetails.id}
-            eventId={props.eventId}
-            activityItem={currentItem!}
-            values={currentItem!.answer}
-            replaceText={replaceTextVariables}
-            watermark={props.appletDetails.watermark}
-          />
-        </Box>
+        <ActivityCardItem
+          key={currentItem!.id}
+          activityId={props.activityDetails.id}
+          eventId={props.eventId}
+          activityItem={currentItem!}
+          values={currentItem!.answer}
+          replaceText={replaceTextVariables}
+          watermark={props.appletDetails.watermark}
+        />
       </ActivityAssessmentLayout>
 
       <Modal
