@@ -1,80 +1,84 @@
-import classNames from "classnames"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import CircularProgress from "@mui/material/CircularProgress"
 
 import { ItemCardButtonsConfig } from "../lib"
+import { ActivityEventProgressRecord } from "../model/types"
 
-import { BasicButton } from "~/shared/ui"
-import { useCustomTranslation } from "~/shared/utils"
-
-import "./style.scss"
+import { Theme } from "~/shared/constants"
+import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
 
 type ItemCardButtonsProps = {
-  config: ItemCardButtonsConfig
+  currentItem: ActivityEventProgressRecord | null
+
+  isLoading: boolean
+  isAllItemsSkippable: boolean
   isSubmitShown: boolean
-  isOnePageAssessment: boolean
+  hasPrevStep: boolean
+
   onBackButtonClick?: () => void
   onNextButtonClick?: () => void
   onSubmitButtonClick?: () => void
 }
 
 export const ItemCardButton = ({
-  config,
   isSubmitShown,
-  isOnePageAssessment,
   onBackButtonClick,
   onNextButtonClick,
   onSubmitButtonClick,
+  isLoading,
+  currentItem,
+  isAllItemsSkippable,
+  hasPrevStep,
 }: ItemCardButtonsProps) => {
   const { t } = useCustomTranslation()
+  const { greaterThanSM } = useCustomMediaQuery()
+
+  const isMessageItem = currentItem?.responseType === "message"
+  const isAudioPlayerItem = currentItem?.responseType === "audioPlayer"
+
+  const isItemWithoutAnswer = isMessageItem || isAudioPlayerItem
+
+  const config: ItemCardButtonsConfig = {
+    isNextDisabled: isItemWithoutAnswer ? false : !currentItem?.answer || !currentItem.answer.length,
+    isSkippable: currentItem?.config.skippableItem || isAllItemsSkippable,
+    isBackShown: hasPrevStep && !currentItem?.config.removeBackButton,
+  }
 
   const nextLabel = config.isNextDisabled && config.isSkippable ? t("Consent.skip") : t("Consent.next")
   const submitLabel = t("submit")
 
-  if (isOnePageAssessment) {
-    return (
-      <div className={classNames("no-gutters", "d-flex", "flex-row", "justify-content-around")}>
-        {(isSubmitShown && (
-          <BasicButton
-            variant="outline-dark"
-            size="lg"
-            onClick={onSubmitButtonClick}
-            className={classNames("mb-2", "navigator-button")}>
-            {submitLabel}
-          </BasicButton>
-        )) || <div />}
-
-        {config.isSkippable && (
-          <BasicButton
-            disabled={!config.isNextDisabled}
-            variant="outline-dark"
-            size="lg"
-            className={classNames("mb-2", "navigator-button")}>
-            {t("Consent.skip")}
-          </BasicButton>
-        )}
-      </div>
-    )
-  }
+  const nextOrSubmitButtonLabel = isSubmitShown ? submitLabel : nextLabel
 
   return (
-    <div className={classNames("no-gutters", "d-flex", "flex-row", "justify-content-around")}>
+    <Box
+      display="flex"
+      flex={1}
+      justifyContent="space-between"
+      alignItems="center"
+      margin="0 auto"
+      padding={greaterThanSM ? "0px 24px" : "0px 16px"}
+      maxWidth="900px">
       {(config.isBackShown && (
-        <BasicButton
-          variant="outline-dark"
-          size="lg"
+        <Button
+          variant="outlined"
           onClick={onBackButtonClick}
-          className={classNames("mb-2", "navigator-button")}>
+          sx={{ borderRadius: "100px", padding: "10px 24px", width: greaterThanSM ? "200px" : "120px" }}>
           {t("Consent.back")}
-        </BasicButton>
-      )) || <div />}
+        </Button>
+      )) || <div></div>}
 
-      <BasicButton
-        variant="outline-dark"
-        size="lg"
-        disabled={!config.isSkippable && config.isNextDisabled}
-        className={classNames("mb-2", "navigator-button")}
+      <Button
+        variant="contained"
+        sx={{ borderRadius: "100px", padding: "10px 24px", width: greaterThanSM ? "200px" : "120px" }}
+        disabled={isLoading || (!config.isSkippable && config.isNextDisabled)}
         onClick={isSubmitShown ? onSubmitButtonClick : onNextButtonClick}>
-        {isSubmitShown ? submitLabel : nextLabel}
-      </BasicButton>
-    </div>
+        {isLoading ? (
+          <CircularProgress size={25} sx={{ color: Theme.colors.light.onPrimary }} />
+        ) : (
+          nextOrSubmitButtonLabel
+        )}
+      </Button>
+    </Box>
   )
 }

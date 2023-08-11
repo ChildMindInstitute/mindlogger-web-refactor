@@ -21,7 +21,7 @@ import { ThanksPage } from "./Thanks"
 import { TransferOwnershipPage } from "./TransferOwnership"
 
 import { userModel } from "~/entities/user"
-import { ROUTES } from "~/shared/utils"
+import { ROUTES } from "~/shared/constants"
 import { LogoutTracker } from "~/widgets/LogoutTracker"
 import { ProtectedRoute } from "~/widgets/ProtectedRoute"
 

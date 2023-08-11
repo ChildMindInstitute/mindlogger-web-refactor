@@ -1,11 +1,9 @@
 import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
-
-import { SaveAndExitButton } from "./SaveAndExitButton"
 
 import { activityModel } from "~/entities/activity"
+import { SaveAndExitButton } from "~/features/SaveAssessmentAndExit"
 import { Theme } from "~/shared/constants"
-import { BaseProgressBar } from "~/shared/ui"
+import { BaseProgressBar, Text } from "~/shared/ui"
 import { useCustomMediaQuery, useCustomNavigation } from "~/shared/utils"
 
 type Props = {
@@ -27,30 +25,31 @@ export const AssessmentLayoutHeader = (props: Props) => {
     return navigator.goBack()
   }
 
+  const cutStringToLength = (str: string, length: number) => {
+    return str.length > length ? `${str.substring(0, length)}...` : str
+  }
+
   return (
     <Box
       id="activity-details-header"
       display="grid"
       alignItems="center"
       justifyContent="center"
-      gridTemplateColumns="1fr minmax(400px, 900px) 1fr"
-      padding={greaterThanSM ? "20px 24px" : "0px 16px"}
+      gridTemplateColumns="1fr minmax(300px, 900px) 1fr"
+      padding={greaterThanSM ? "19px 24px" : "15px 16px"}
       gap={1.5}
       sx={{
         backgroundColor: Theme.colors.light.surface,
         borderBottom: `1px solid ${Theme.colors.light.surfaceVariant}`,
       }}>
-      <Box width="100%" sx={{ gridColumn: "2 / 3" }}>
+      <Box sx={{ gridColumn: "2 / 3" }}>
         <Box
           display="flex"
           justifyContent={greaterThanSM ? "center" : "space-between"}
           marginBottom={greaterThanSM ? "8px" : "16px"}>
-          <Typography
-            variant="body1"
-            textAlign={greaterThanSM ? "center" : "left"}
-            color={Theme.colors.light.onSurface}>
-            {props.title}
-          </Typography>
+          <Text color={Theme.colors.light.onSurface} sx={{ textAlign: greaterThanSM ? "center" : "left" }}>
+            {greaterThanSM ? props.title : cutStringToLength(props.title, 30)}
+          </Text>
           {!greaterThanSM && <SaveAndExitButton onClick={onSaveAndExitClick} asLink={true} />}
         </Box>
         <BaseProgressBar percentage={progress} />

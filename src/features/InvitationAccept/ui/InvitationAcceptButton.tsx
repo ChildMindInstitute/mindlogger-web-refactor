@@ -2,8 +2,8 @@ import classNames from "classnames"
 import { useNavigate } from "react-router-dom"
 
 import { useAcceptInviteMutation, useInvitationTranslation } from "~/entities/invitation"
+import { ROUTES } from "~/shared/constants"
 import Button from "~/shared/ui/Button"
-import { ROUTES } from "~/shared/utils"
 
 interface InvitationAcceptButtonProps {
   invitationKey: string

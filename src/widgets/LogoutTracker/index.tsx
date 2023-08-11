@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom"
 
 import { activityModel } from "~/entities/activity"
 import { useLogoutMutation, userModel } from "~/entities/user"
-import { eventEmitter, ROUTES, secureTokensStorage } from "~/shared/utils"
+import { ROUTES } from "~/shared/constants"
+import { eventEmitter, secureTokensStorage } from "~/shared/utils"
 
 type LogoutTrackerProps = PropsWithChildren<unknown>
 

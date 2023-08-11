@@ -6,8 +6,9 @@ import { useRecoveryPasswordTranslation } from "../lib/useRecoveryPasswordTransl
 import { RecoveryPassword, RecoveryPasswordSchema } from "../model/schema"
 
 import { useApproveRecoveryPasswordMutation } from "~/entities/user"
+import { ROUTES } from "~/shared/constants"
 import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
-import { ROUTES, useCustomForm, usePasswordType } from "~/shared/utils"
+import { useCustomForm, usePasswordType } from "~/shared/utils"
 
 interface RecoveryPasswordFormProps {
   title?: string | null

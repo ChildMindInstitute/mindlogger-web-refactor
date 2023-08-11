@@ -1,7 +1,7 @@
-import { Typography } from "@mui/material"
 import ButtonBase from "@mui/material/ButtonBase"
 
 import { Theme } from "~/shared/constants"
+import { Text } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 
 type Props = {
@@ -24,9 +24,9 @@ export const SaveAndExitButton = ({ onClick, asLink }: Props) => {
 
   return (
     <ButtonBase onClick={onClick} sx={{ ...buttonStyles }}>
-      <Typography variant="body1" color={buttonLabelColor} fontSize="14px">
+      <Text color={buttonLabelColor} fontSize="14px">
         {t("save_and_exit")}
-      </Typography>
+      </Text>
     </ButtonBase>
   )
 }

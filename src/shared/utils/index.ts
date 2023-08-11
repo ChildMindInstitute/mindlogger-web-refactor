@@ -1,7 +1,6 @@
 export * from "./hooks"
 export * from "./encryption"
 export * from "./types"
-export * from "./routes"
 export * from "./store"
 export * from "./validation"
 export * from "./storage"

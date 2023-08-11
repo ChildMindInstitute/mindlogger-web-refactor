@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material"
 import Box from "@mui/material/Box"
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
@@ -8,7 +7,7 @@ import { appletBuilder } from "../model"
 import AppletCard from "./AppletCard"
 
 import { userModel } from "~/entities/user"
-import { Loader } from "~/shared/ui"
+import { Loader, Text } from "~/shared/ui"
 
 const AppletList = () => {
   const { user } = userModel.hooks.useUserState()
@@ -32,7 +31,7 @@ const AppletList = () => {
   if (isAppletsEmpty) {
     return (
       <Box display="flex" height="100%" alignItems="center" justifyContent="center">
-        <Typography variant="body1">No applets</Typography>
+        <Text>No applets</Text>
       </Box>
     )
   }

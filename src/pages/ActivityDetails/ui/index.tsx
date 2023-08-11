@@ -2,7 +2,7 @@ import Box from "@mui/material/Box"
 import { useParams } from "react-router-dom"
 
 import { useCustomTranslation } from "~/shared/utils"
-import { ActivityWelcomeScreen } from "~/widgets/ActivityDetails"
+import { ActivityDetailsWidget } from "~/widgets/ActivityDetails"
 
 export const ActivityDetailsPage = () => {
   const { appletId, activityId, eventId } = useParams()
@@ -14,7 +14,7 @@ export const ActivityDetailsPage = () => {
 
   return (
     <Box height="100vh" display="flex" flex={1}>
-      <ActivityWelcomeScreen isPublic={false} appletId={appletId} activityId={activityId} eventId={eventId} />
+      <ActivityDetailsWidget isPublic={false} appletId={appletId} activityId={activityId} eventId={eventId} />
     </Box>
   )
 }

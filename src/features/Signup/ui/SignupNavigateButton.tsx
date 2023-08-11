@@ -1,8 +1,9 @@
 import classNames from "classnames"
 import { useNavigate } from "react-router-dom"
 
+import { ROUTES } from "~/shared/constants"
 import Button from "~/shared/ui/Button"
-import { useCustomTranslation, ROUTES } from "~/shared/utils"
+import { useCustomTranslation } from "~/shared/utils"
 
 interface SignupNavigateButtonProps {
   redirectState?: Record<string, unknown>

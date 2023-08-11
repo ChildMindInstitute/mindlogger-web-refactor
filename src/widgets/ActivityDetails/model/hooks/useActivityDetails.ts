@@ -1,8 +1,6 @@
-import { useMemo } from "react"
-
 import { useItemsInProgress } from "./useItemsInProgress"
 
-import { activityModel, useActivityByIdQuery } from "~/entities/activity"
+import { useActivityByIdQuery } from "~/entities/activity"
 import { useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, BaseError } from "~/shared/api"
@@ -33,6 +31,7 @@ export interface ActivityEvents {
 }
 
 interface UseActivityDetailsReturn {
+  isActivityEventInProgress: boolean
   appletDetails: AppletDetailsDTO | null
   activityDetails: ActivityDTO | null
   eventsRawData: AppletEventsResponse | null
@@ -43,8 +42,6 @@ interface UseActivityDetailsReturn {
 
 export const useActivityDetails = (props: Props): UseActivityDetailsReturn => {
   const { currentActivityEventProgress } = useItemsInProgress(props.eventId, props.activityId)
-
-  const { saveActivityEventRecords } = activityModel.hooks.useSaveActivityEventProgress()
 
   const isActivityEventInProgress = currentActivityEventProgress.length > 0
 
@@ -64,25 +61,7 @@ export const useActivityDetails = (props: Props): UseActivityDetailsReturn => {
     isError: isActivityError,
     isLoading: isActivityLoading,
     error: activityError,
-  } = useActivityByIdQuery(
-    { isPublic: props.isPublic, activityId: props.activityId },
-    {
-      onSuccess(data) {
-        if (isActivityEventInProgress) {
-          return
-        }
-
-        if (data?.data?.result) {
-          const initialStep = 1
-          return saveActivityEventRecords(data?.data?.result, props.eventId, initialStep)
-        }
-      },
-    },
-  )
-
-  const activityDetailsRawData = useMemo(() => {
-    return activityById?.data?.result
-  }, [activityById?.data?.result])
+  } = useActivityByIdQuery({ isPublic: props.isPublic, activityId: props.activityId })
 
   const {
     data: eventsByIdData,
@@ -96,8 +75,9 @@ export const useActivityDetails = (props: Props): UseActivityDetailsReturn => {
   )
 
   return {
+    isActivityEventInProgress,
     appletDetails: appletById?.data?.result ?? null,
-    activityDetails: activityDetailsRawData ?? null,
+    activityDetails: activityById?.data?.result ?? null,
     eventsRawData: eventsByIdData?.data?.result ?? null,
     isError: isAppletError || isActivityError || isEventsError,
     isLoading: isAppletLoading || isActivityLoading || isEventsLoading,

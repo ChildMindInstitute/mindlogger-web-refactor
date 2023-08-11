@@ -1,115 +1,40 @@
 import { useMemo } from "react"
 
-import { ItemCardButtonsConfig } from "../lib"
-import { ActivityEventProgressRecord, UserEventTypes } from "../model/types"
-import { ItemCardButton } from "./ItemCardButtons"
+import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "../model/hooks"
+import { ActivityEventProgressRecord } from "../model/types"
 import { ItemPicker } from "./items/ItemPicker"
 
 import { CardItem } from "~/shared/ui"
 
 type ActivityCardItemProps = {
+  activityId: string
+  eventId: string
   activityItem: ActivityEventProgressRecord
-  isOnePageAssessment: boolean
-  isBackShown: boolean
-  isSubmitShown: boolean
-  isAllItemsSkippable: boolean
   watermark?: string
 
-  isInvalid: boolean
-  isActive: boolean
-  onSubmitButtonClick: () => void
-  openInvalidAnswerModal: () => void
-  toNextStep?: () => void
-  toPrevStep?: () => void
   values: string[]
-  setValue: (itemId: string, answer: string[]) => void
-  saveSetAnswerUserEvent: (item: ActivityEventProgressRecord) => void
-  saveUserEventByType: (type: UserEventTypes, item: ActivityEventProgressRecord) => void
   replaceText: (value: string) => string
 }
 
 export const ActivityCardItem = ({
   activityItem,
-  isOnePageAssessment,
-  isBackShown,
-  isSubmitShown,
-  toNextStep,
-  toPrevStep,
-  isActive,
-  isInvalid,
   values,
-  setValue,
-  onSubmitButtonClick,
-  openInvalidAnswerModal,
   replaceText,
-  isAllItemsSkippable,
   watermark,
-  saveSetAnswerUserEvent,
-  saveUserEventByType,
+  activityId,
+  eventId,
 }: ActivityCardItemProps) => {
-  const isMessageItem = activityItem.responseType === "message"
-  const isAudioPlayerItem = activityItem.responseType === "audioPlayer"
-
-  const isItemWithoutAnswer = isMessageItem || isAudioPlayerItem
-
-  const buttonConfig: ItemCardButtonsConfig = {
-    isNextDisabled: isItemWithoutAnswer ? false : !values || !values.length,
-    isSkippable: activityItem.config.skippableItem || isAllItemsSkippable,
-    isBackShown: isBackShown && !activityItem.config.removeBackButton,
-  }
-
-  const validateCorrectAnswer = () => {
-    if (activityItem.responseType === "text" && activityItem.config.correctAnswerRequired) {
-      const isAnswerCorrect = activityItem.answer[0] === activityItem.config.correctAnswer
-
-      return isAnswerCorrect
-    }
-
-    return true
-  }
-
-  const onSubmitButtonHandleClick = () => {
-    const isAnswerCorrect = validateCorrectAnswer()
-
-    if (!isAnswerCorrect && !isAllItemsSkippable && !activityItem.config.skippableItem) {
-      return openInvalidAnswerModal()
-    }
-
-    saveUserEventByType("DONE", activityItem)
-    return onSubmitButtonClick()
-  }
-
-  const onNextButtonClick = () => {
-    if (!toNextStep) {
-      return
-    }
-
-    const isAnswerCorrect = validateCorrectAnswer()
-
-    if (!isAnswerCorrect && !isAllItemsSkippable && !activityItem.config.skippableItem) {
-      return openInvalidAnswerModal()
-    }
-
-    if (!activityItem.answer.length && (isAllItemsSkippable || activityItem.config.skippableItem)) {
-      saveUserEventByType("SKIP", activityItem)
-    } else {
-      saveUserEventByType("NEXT", activityItem)
-    }
-
-    return toNextStep()
-  }
-
-  const onBackButtonClick = () => {
-    if (!toPrevStep) {
-      return
-    }
-
-    saveUserEventByType("PREV", activityItem)
-    return toPrevStep()
-  }
+  const { saveSetAnswerUserEvent } = useSetAnswerUserEvent({
+    activityId,
+    eventId,
+  })
+  const { saveActivityItemAnswer } = useSaveActivityItemAnswer({
+    activityId,
+    eventId,
+  })
 
   const onItemValueChange = (value: string[]) => {
-    setValue(activityItem.id, value)
+    saveActivityItemAnswer(activityItem.id, value)
     saveSetAnswerUserEvent({
       ...activityItem,
       answer: value,
@@ -121,33 +46,14 @@ export const ActivityCardItem = ({
   }, [activityItem.question, replaceText])
 
   return (
-    <div data-testid={isActive ? "active-item" : undefined}>
-      <CardItem
-        markdown={questionText}
-        isInvalid={isInvalid}
-        watermark={watermark}
-        buttons={
-          isActive ? (
-            <ItemCardButton
-              config={buttonConfig}
-              isOnePageAssessment={isOnePageAssessment}
-              isSubmitShown={isSubmitShown}
-              onNextButtonClick={onNextButtonClick}
-              onBackButtonClick={onBackButtonClick}
-              onSubmitButtonClick={onSubmitButtonHandleClick}
-            />
-          ) : (
-            <></>
-          )
-        }>
-        <ItemPicker
-          item={activityItem}
-          values={values}
-          onValueChange={onItemValueChange}
-          isDisabled={!isActive}
-          replaceText={replaceText}
-        />
-      </CardItem>
-    </div>
+    <CardItem markdown={questionText} watermark={watermark}>
+      <ItemPicker
+        item={activityItem}
+        values={values}
+        onValueChange={onItemValueChange}
+        isDisabled={false}
+        replaceText={replaceText}
+      />
+    </CardItem>
   )
 }
