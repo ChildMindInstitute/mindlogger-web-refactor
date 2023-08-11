@@ -37,7 +37,7 @@ const AppletList = () => {
   }
 
   return (
-    <Box display="flex" flexWrap="wrap" justifyContent="center" minHeight="100%">
+    <Box display="flex" flexWrap="wrap" justifyContent="center">
       {!isAppletsEmpty && applets.map(value => <AppletCard key={value.id} applet={value} />)}
     </Box>
   )

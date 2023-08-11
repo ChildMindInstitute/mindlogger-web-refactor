@@ -60,7 +60,7 @@ export class MarkdownVariableReplacer {
     return format(new Date(year, month, day), "y-MM-dd")
   }
 
-  public process = (markdown: string) => {
+  public process = (markdown: string): string => {
     const variableNames = this.extractVariables(markdown)
     if (!Object.values(this.answers)?.length || !variableNames?.length) {
       return markdown
@@ -75,7 +75,7 @@ export class MarkdownVariableReplacer {
       console.warn(error)
     }
 
-    return markdown
+    return this.process(markdown)
   }
 
   private escapeSpecialChars = (value: Answer) => {
@@ -101,14 +101,14 @@ export class MarkdownVariableReplacer {
         updated = this.escapeSpecialChars(answer)
         break
       case "singleSelect":
-        const filteredItem = activityItem.responseValues.options.find(({ id }) => answer.includes(id))
+        const filteredItem = activityItem.responseValues.options.find(({ value }) => answer.includes(String(value)))
         if (filteredItem) {
           updated = filteredItem.text
         }
         break
       case "multiSelect":
         const filteredItems = activityItem.responseValues.options
-          .filter(({ id }) => answer.includes(id))
+          .filter(({ value }) => answer.includes(String(value)))
           .map(({ text }) => text)
 
         if (filteredItems) {
