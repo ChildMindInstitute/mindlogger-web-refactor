@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react"
+import { useCallback } from "react"
 
 import { activityModel } from "~/entities/activity"
 
@@ -32,13 +32,9 @@ export const useStepperStateManager = (props: UseStepperStateManagerProps): UseS
     eventId: props.eventId,
   })
 
-  const hasNextStep = useMemo(() => {
-    return step < currentActivityEventProgress.length
-  }, [currentActivityEventProgress.length, step])
+  const hasNextStep = step < currentActivityEventProgress.length
 
-  const hasPrevStep = useMemo(() => {
-    return step > 1
-  }, [step])
+  const hasPrevStep = step > 1
 
   const toNextStep = useCallback(() => {
     if (hasNextStep) {

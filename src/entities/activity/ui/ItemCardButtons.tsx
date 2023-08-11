@@ -68,23 +68,17 @@ export const ItemCardButton = ({
         </Button>
       )) || <div></div>}
 
-      {isLoading ? (
-        <Button
-          variant="contained"
-          sx={{ borderRadius: "100px", padding: "10px 24px", width: greaterThanSM ? "200px" : "120px" }}
-          disabled={isLoading}
-          onClick={isSubmitShown ? onSubmitButtonClick : onNextButtonClick}>
+      <Button
+        variant="contained"
+        sx={{ borderRadius: "100px", padding: "10px 24px", width: greaterThanSM ? "200px" : "120px" }}
+        disabled={isLoading || (!config.isSkippable && config.isNextDisabled)}
+        onClick={isSubmitShown ? onSubmitButtonClick : onNextButtonClick}>
+        {isLoading ? (
           <CircularProgress size={25} sx={{ color: Theme.colors.light.onPrimary }} />
-        </Button>
-      ) : (
-        <Button
-          variant="contained"
-          sx={{ borderRadius: "100px", padding: "10px 24px", width: greaterThanSM ? "200px" : "120px" }}
-          disabled={!config.isSkippable && config.isNextDisabled}
-          onClick={isSubmitShown ? onSubmitButtonClick : onNextButtonClick}>
-          {nextOrSubmitButtonLabel}
-        </Button>
-      )}
+        ) : (
+          nextOrSubmitButtonLabel
+        )}
+      </Button>
     </Box>
   )
 }
