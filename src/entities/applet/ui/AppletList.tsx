@@ -1,11 +1,13 @@
+import Box from "@mui/material/Box"
 import classNames from "classnames"
-import { Container, Row, Spinner } from "react-bootstrap"
+import { Container } from "react-bootstrap"
 
 import { useAppletListQuery } from "../api"
 import { appletBuilder } from "../model"
 import AppletCard from "./AppletCard"
 
 import { userModel } from "~/entities/user"
+import { Loader, Text } from "~/shared/ui"
 
 const AppletList = () => {
   const { user } = userModel.hooks.useUserState()
@@ -13,6 +15,10 @@ const AppletList = () => {
 
   const applets = appletBuilder.convertToAppletList(data?.data?.result)
   const isAppletsEmpty = !applets.length
+
+  if (isLoading) {
+    return <Loader />
+  }
 
   if (isError) {
     return (
@@ -22,20 +28,18 @@ const AppletList = () => {
     )
   }
 
+  if (isAppletsEmpty) {
+    return (
+      <Box display="flex" height="100%" alignItems="center" justifyContent="center">
+        <Text>No applets</Text>
+      </Box>
+    )
+  }
+
   return (
-    <Row className={classNames("justify-content-center", { "h-100": isLoading || isAppletsEmpty })}>
-      {isLoading && (
-        <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
-          <Spinner as="div" animation="border" role="status" aria-hidden="true" />
-        </Container>
-      )}
-      {!isLoading && isAppletsEmpty && (
-        <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
-          No applets
-        </Container>
-      )}
-      {!isLoading && !isAppletsEmpty && applets.map(value => <AppletCard key={value.id} applet={value} />)}
-    </Row>
+    <Box display="flex" flexWrap="wrap" justifyContent="center" minHeight="100%">
+      {!isAppletsEmpty && applets.map(value => <AppletCard key={value.id} applet={value} />)}
+    </Box>
   )
 }
 

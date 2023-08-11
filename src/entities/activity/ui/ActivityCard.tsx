@@ -1,11 +1,14 @@
+import Button from "@mui/material/ButtonBase"
 import classNames from "classnames"
-import { Button } from "react-bootstrap"
 
 import { ActivityListItem, ActivityStatus, useSupportableActivity } from "../lib"
+import { ActivityFlowStep } from "./ActivityFlowStep"
 import { MobileOnlyLabel } from "./MobileOnlyLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
+import { Theme } from "~/shared/constants"
 import { Loader } from "~/shared/ui"
+
 import "./style.scss"
 
 interface ActivityCardProps {
@@ -23,7 +26,10 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
 
   if (isLoading) {
     return (
-      <Button className="ds-activity-button w-100" variant="link" disabled={isLoading}>
+      <Button
+        className="ds-activity-button w-100"
+        disabled={isLoading}
+        sx={{ backgroundColor: Theme.colors.light.surface, border: `1px solid ${Theme.colors.light.surfaceVariant}` }}>
         <div className="activity-data">
           <Loader />
         </div>
@@ -34,12 +40,20 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
   return (
     <Button
       className={classNames("ds-activity-button", "w-100")}
-      variant="link"
       disabled={isDisabled}
-      onClick={onActivityCardClick}>
+      onClick={onActivityCardClick}
+      sx={{ backgroundColor: Theme.colors.light.surface, padding: "24px" }}>
       {activity.image && <img className="activity-image" src={activity.image} />}
 
       <div className="activity-data">
+        {activity.isInActivityFlow && activity.activityFlowDetails!.showActivityFlowBadge && (
+          <ActivityFlowStep
+            position={activity.activityFlowDetails!.activityPositionInFlow}
+            activityCount={activity.activityFlowDetails!.numberOfActivitiesInFlow}
+            activityFlowName={activity.activityFlowDetails!.activityFlowName}
+          />
+        )}
+
         <div
           className={classNames(
             "activity-name-date",

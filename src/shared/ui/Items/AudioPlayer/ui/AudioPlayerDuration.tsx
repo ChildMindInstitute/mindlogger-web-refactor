@@ -1,5 +1,6 @@
-import { Typography } from "@mui/material"
 import Box from "@mui/material/Box"
+
+import { Text } from "../../../Typography"
 
 import { useCustomMediaQuery } from "~/shared/utils"
 
@@ -17,9 +18,7 @@ export const AudioPlayerDuration = ({ currentDuration, totalDuration }: Props) =
 
   return (
     <Box width={width}>
-      <Typography
-        variant="body1"
-        sx={{ cursor: "default", fontSize }}>{`${currentDuration} / ${totalDuration}`}</Typography>
+      <Text fontSize={fontSize} sx={{ cursor: "default" }}>{`${currentDuration} / ${totalDuration}`}</Text>
     </Box>
   )
 }

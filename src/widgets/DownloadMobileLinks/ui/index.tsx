@@ -4,7 +4,7 @@ import { useDownloadMobileTranslation } from "../lib/useDownloadMobileTranslatio
 
 import AppStore from "~/assets/AppStore.svg"
 import GooglePlay from "~/assets/GooglePlay.svg"
-import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/shared/utils"
+import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/shared/constants"
 
 const DownloadMobileLinks = () => {
   const { t } = useDownloadMobileTranslation()

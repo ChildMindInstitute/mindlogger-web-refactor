@@ -1,9 +1,9 @@
-import { useEffect, useMemo } from "react"
+import { useItemsInProgress } from "./useItemsInProgress"
 
-import { ActivityListItem, activityModel, useActivityByIdQuery } from "~/entities/activity"
-import { ActivityFlow, AppletDetails, appletModel, useAppletByIdQuery } from "~/entities/applet"
+import { useActivityByIdQuery } from "~/entities/activity"
+import { useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
-import { ActivityDTO, AppletEventsResponse, BaseError } from "~/shared/api"
+import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, BaseError } from "~/shared/api"
 
 type PrivateProps = {
   isPublic: false
@@ -31,27 +31,19 @@ export interface ActivityEvents {
 }
 
 interface UseActivityDetailsReturn {
-  appletDetails: AppletDetails<ActivityListItem, ActivityFlow> | null
+  isActivityEventInProgress: boolean
+  appletDetails: AppletDetailsDTO | null
   activityDetails: ActivityDTO | null
-  eventsRawData: AppletEventsResponse | undefined
+  eventsRawData: AppletEventsResponse | null
   isError: boolean
   isLoading: boolean
   error: BaseError | null
 }
 
-type UseActivityDetailsParams = {
-  isRestart: boolean
-}
+export const useActivityDetails = (props: Props): UseActivityDetailsReturn => {
+  const { currentActivityEventProgress } = useItemsInProgress(props.eventId, props.activityId)
 
-export const useActivityDetails = (props: Props, params: UseActivityDetailsParams): UseActivityDetailsReturn => {
-  const { saveActivityEventRecords, resetActivityEventRecordsByParams } =
-    activityModel.hooks.useSaveActivityEventProgress()
-
-  useEffect(() => {
-    if (params.isRestart) {
-      resetActivityEventRecordsByParams(props.activityId, props.eventId)
-    }
-  }, [props.activityId, props.eventId, params.isRestart, resetActivityEventRecordsByParams])
+  const isActivityEventInProgress = currentActivityEventProgress.length > 0
 
   const {
     data: appletById,
@@ -64,36 +56,12 @@ export const useActivityDetails = (props: Props, params: UseActivityDetailsParam
       : { isPublic: props.isPublic, appletId: props.appletId },
   )
 
-  const appletDetailsRawData = useMemo(() => {
-    return appletById?.data?.result
-  }, [appletById?.data?.result])
-
   const {
     data: activityById,
     isError: isActivityError,
     isLoading: isActivityLoading,
     error: activityError,
-  } = useActivityByIdQuery(
-    { isPublic: props.isPublic, activityId: props.activityId },
-    {
-      onSuccess(data) {
-        if (!params.isRestart) {
-          return
-        }
-
-        const activityDetails = activityModel.activityBuilder.convertToActivityDetails(data?.data?.result)
-
-        if (activityDetails) {
-          const initialStep = 1
-          return saveActivityEventRecords(activityDetails, props.eventId, initialStep)
-        }
-      },
-    },
-  )
-
-  const activityDetailsRawData = useMemo(() => {
-    return activityById?.data?.result
-  }, [activityById?.data?.result])
+  } = useActivityByIdQuery({ isPublic: props.isPublic, activityId: props.activityId })
 
   const {
     data: eventsByIdData,
@@ -106,18 +74,11 @@ export const useActivityDetails = (props: Props, params: UseActivityDetailsParam
       : { isPublic: props.isPublic, appletId: props.appletId },
   )
 
-  const eventsRawData = useMemo(() => {
-    return eventsByIdData?.data?.result
-  }, [eventsByIdData?.data?.result])
-
-  const appletDetails = useMemo(() => {
-    return appletModel.appletBuilder.convertToAppletDetails(appletDetailsRawData, eventsRawData)
-  }, [appletDetailsRawData, eventsRawData])
-
   return {
-    appletDetails,
-    activityDetails: activityDetailsRawData ?? null,
-    eventsRawData,
+    isActivityEventInProgress,
+    appletDetails: appletById?.data?.result ?? null,
+    activityDetails: activityById?.data?.result ?? null,
+    eventsRawData: eventsByIdData?.data?.result ?? null,
     isError: isAppletError || isActivityError || isEventsError,
     isLoading: isAppletLoading || isActivityLoading || isEventsLoading,
     error: appletError ?? activityError ?? eventsError,

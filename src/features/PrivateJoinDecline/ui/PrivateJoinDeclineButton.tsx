@@ -2,8 +2,8 @@ import classNames from "classnames"
 import { useNavigate } from "react-router-dom"
 
 import { useInvitationTranslation } from "~/entities/invitation"
+import { ROUTES } from "~/shared/constants"
 import Button from "~/shared/ui/Button"
-import { ROUTES } from "~/shared/utils"
 
 export const PrivateJoinDeclineButton = () => {
   const { t } = useInvitationTranslation()

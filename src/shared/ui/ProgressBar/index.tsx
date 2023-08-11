@@ -1,13 +1,35 @@
-import { ProgressBar } from "react-bootstrap"
+import Box from "@mui/material/Box"
+import LinearProgress, { linearProgressClasses } from "@mui/material/LinearProgress"
+
+import { Theme } from "../../constants"
 
 interface BaseProgressBarProps {
   percentage: number
+  hasInitialPercentage?: boolean
 }
 
-export const BaseProgressBar = ({ percentage }: BaseProgressBarProps) => {
+export const BaseProgressBar = ({ percentage, hasInitialPercentage = true }: BaseProgressBarProps) => {
+  const initialPercentage = hasInitialPercentage ? 3 : 0
+
+  const progress = percentage > initialPercentage ? percentage : initialPercentage
+
   return (
-    <div className="bg-white p-2">
-      <ProgressBar striped className="mb-2" now={percentage} variant="primary" />
-    </div>
+    <Box>
+      <LinearProgress
+        variant="determinate"
+        value={progress}
+        sx={{
+          height: "16px",
+          borderRadius: "100px",
+          [`&.${linearProgressClasses.colorPrimary}`]: {
+            backgroundColor: Theme.colors.light.surfaceVariant,
+          },
+          [`& .${linearProgressClasses.bar}`]: {
+            borderRadius: 5,
+            backgroundColor: Theme.colors.light.primary,
+          },
+        }}
+      />
+    </Box>
   )
 }

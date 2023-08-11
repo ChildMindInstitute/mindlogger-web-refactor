@@ -1,8 +1,9 @@
 import classNames from "classnames"
 import { isIOS, isMobile } from "react-device-detect"
 
+import { GOOGLEPLAY_LINK, APPSTORE_LINK } from "~/shared/constants"
 import { BoxLabel } from "~/shared/ui"
-import { useCustomTranslation, GOOGLEPLAY_LINK, APPSTORE_LINK } from "~/shared/utils"
+import { useCustomTranslation } from "~/shared/utils"
 
 export const MobileOnlyLabel = () => {
   const { t } = useCustomTranslation()

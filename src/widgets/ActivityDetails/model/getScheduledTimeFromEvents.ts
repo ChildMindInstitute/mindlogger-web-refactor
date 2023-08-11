@@ -3,7 +3,7 @@ import { getUnixTime } from "date-fns"
 import { AppletEventsResponse } from "~/shared/api"
 
 export const getScheduledTimeFromEvents = (
-  eventsRawData: AppletEventsResponse | undefined,
+  eventsRawData: AppletEventsResponse | null,
   entityId: string,
 ): number | null => {
   if (!eventsRawData) {

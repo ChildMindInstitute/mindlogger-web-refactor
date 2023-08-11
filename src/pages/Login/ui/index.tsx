@@ -2,13 +2,13 @@ import { Container } from "react-bootstrap"
 import { Link, useLocation } from "react-router-dom"
 
 import { LoginForm, useLoginTranslation } from "~/features/Login"
+import { ROUTES } from "~/shared/constants"
 import { BasicButton } from "~/shared/ui"
-import { ROUTES } from "~/shared/utils"
 import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
 
 import "./login.scss"
 
-const LoginPage = () => {
+export const LoginPage = () => {
   const { t } = useLoginTranslation()
   const location = useLocation()
 
@@ -35,5 +35,3 @@ const LoginPage = () => {
     </div>
   )
 }
-
-export default LoginPage

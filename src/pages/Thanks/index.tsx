@@ -1,29 +1,26 @@
 import { Container } from "react-bootstrap"
 import { useParams } from "react-router-dom"
 
+import { ROUTES } from "~/shared/constants"
 import { BasicButton } from "~/shared/ui"
-import { ROUTES, booleanStringToBoolean, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { useCustomNavigation, useCustomTranslation, useIsPublic } from "~/shared/utils"
 
 import "./style.scss"
 
 export const ThanksPage = () => {
-  const { appletId, isPublic } = useParams()
+  const { appletId } = useParams()
   const navigator = useCustomNavigation()
   const { t } = useCustomTranslation()
+
+  const isPublic = useIsPublic()
 
   const onClick = () => {
     if (!appletId) {
       return
     }
 
-    if (!isPublic) {
-      return
-    }
-
     return navigator.navigate(
-      booleanStringToBoolean(isPublic)
-        ? ROUTES.publicJoin.navigateTo(appletId)
-        : ROUTES.activityList.navigateTo(appletId),
+      isPublic ? ROUTES.publicJoin.navigateTo(appletId) : ROUTES.activityList.navigateTo(appletId),
     )
   }
 
