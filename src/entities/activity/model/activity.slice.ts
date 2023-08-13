@@ -3,7 +3,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import {
   ActivityEventState,
   ClearActivityItemsProgresByIdPayload,
+  CompletedEntitiesState,
   GroupsProgressState,
+  InProgressEntity,
   SaveActivityItemAnswerPayload,
   SetActivityEventProgressStep,
   SetUserEventByItemIdPayload,
@@ -15,11 +17,14 @@ import {
 type InitialActivityState = {
   groupsInProgress: GroupsProgressState
   activityEventProgress: ActivityEventState
+
+  completedEntities: CompletedEntitiesState
 }
 
 const initialState: InitialActivityState = {
   groupsInProgress: {},
   activityEventProgress: {},
+  completedEntities: {},
 }
 
 const activitySlice = createSlice({
@@ -97,6 +102,16 @@ const activitySlice = createSlice({
       const activityEventProgressRecord = state.activityEventProgress[action.payload.activityEventId]
 
       activityEventProgressRecord.step = action.payload.step
+    },
+
+    entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {
+      const { appletId, entityId, eventId } = action.payload
+
+      state.groupsInProgress[appletId][entityId][eventId].endAt = new Date()
+
+      const completedEntities = state.completedEntities ?? {}
+
+      completedEntities[entityId] = new Date().getTime()
     },
   },
 })

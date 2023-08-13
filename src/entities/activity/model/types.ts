@@ -63,6 +63,8 @@ export type ActivityEventProgressState = {
 
 export type ActivityEventState = Record<string, ActivityEventProgressState>
 
+export type CompletedEntitiesState = Record<string, number>
+
 // Payloads
 
 export type ClearActivityItemsProgresByIdPayload = {
@@ -108,3 +110,9 @@ export type UpdateUserEventByIndexPayload = {
 }
 
 export type SupportableActivities = Record<string, boolean>
+
+export type InProgressEntity = {
+  appletId: string
+  entityId: string
+  eventId: string
+}

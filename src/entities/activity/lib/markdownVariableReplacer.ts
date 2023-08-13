@@ -1,32 +1,26 @@
-import { format } from "date-fns"
+import { format, intervalToDuration, isSameDay, addDays } from "date-fns"
 
 import { ActivityEventProgressRecord } from "../model/types"
 import { Answer, Answers } from "./types"
 
-type TimeRangeAnswer = {
-  from: {
-    hour: number
-    minute: number
-  }
-  to: {
-    hour: number
-    minute: number
-  }
-}
-
-type DateAnswer = {
-  year: number
-  month: number
-  day: number
-}
-
 export class MarkdownVariableReplacer {
   private readonly activityItems: ActivityEventProgressRecord[]
   private readonly answers: Answers
+  private readonly nickName: string
+  private readonly lastResponseTime: Date | number | null
+  private readonly now: number
 
-  constructor(activityItems: ActivityEventProgressRecord[], answers: Answers) {
+  constructor(
+    activityItems: ActivityEventProgressRecord[],
+    answers: Answers,
+    lastResponseTime: Date | number | null,
+    nickName = "",
+  ) {
     this.activityItems = activityItems
     this.answers = answers
+    this.nickName = nickName
+    this.lastResponseTime = lastResponseTime
+    this.now = Date.now()
   }
 
   private extractVariables = (markdown: string): string[] => {
@@ -44,20 +38,69 @@ export class MarkdownVariableReplacer {
     return markdown.replace(reg, replaceValue)
   }
 
-  private formatTime = (timeObject: TimeRangeAnswer["to"] | undefined): string => {
-    if (!timeObject) {
-      return ""
-    }
-    const { hour, minute } = timeObject
-    return format(new Date(0, 0, 0, hour, minute), "HH:mm")
+  private parseBasicSystemVariables = (markdown: string) => {
+    return markdown
+      .replaceAll(/\[Now]/gi, format(this.now, "h:mm aa") + " today (now)")
+      .replaceAll(/\[Nickname]/gi, this.nickName)
+      .replaceAll(/\[sys.date]/gi, format(this.now, "MM/dd/y"))
   }
 
-  private formatDate = (dateObject: undefined | DateAnswer): string => {
-    if (!dateObject) {
-      return ""
+  private cleanUpUnusedResponseVariables = (markdown: string) => {
+    return markdown
+      .replaceAll(/\[Time_Elapsed_Activity_Last_Completed]/gi, "")
+      .replaceAll(/\[Time_Activity_Last_Completed]/gi, "")
+  }
+
+  public parseSystemVariables = (markdown: string) => {
+    if (!this.lastResponseTime) {
+      const cleanedUpMarkdown = this.cleanUpUnusedResponseVariables(markdown)
+      return this.parseBasicSystemVariables(cleanedUpMarkdown)
     }
-    const { year, month, day } = dateObject
-    return format(new Date(year, month, day), "y-MM-dd")
+
+    markdown = markdown.replaceAll(
+      /\[Time_Activity_Last_Completed] to \[Now]/gi,
+      "[blue][Time_Activity_Last_Completed] to [Now]",
+    )
+
+    return this.parseBasicSystemVariables(markdown)
+      .replaceAll(/\[Time_Elapsed_Activity_Last_Completed]/gi, this.getTimeElapsed())
+      .replaceAll(/\[Time_Activity_Last_Completed]/gi, this.getLastResponseTime())
+  }
+
+  private getTimeElapsed = () => {
+    const interval = intervalToDuration({
+      start: this.lastResponseTime!,
+      end: this.now,
+    })
+    let formattedString = ""
+
+    if (interval.minutes) {
+      formattedString = `${interval.minutes} minutes`
+    }
+    if (interval.hours) {
+      formattedString = `${interval.hours} hours and ` + formattedString
+    }
+    if (interval.days) {
+      formattedString = `${interval.days} days and ` + formattedString
+    }
+    if (interval.months) {
+      formattedString = `${interval.months} months and ` + formattedString
+    }
+
+    if (interval.seconds && formattedString === "") {
+      formattedString = "minute"
+    }
+
+    return formattedString
+  }
+
+  private getLastResponseTime = () => {
+    if (isSameDay(this.now, this.lastResponseTime!)) {
+      return `${format(this.lastResponseTime!, "hh:mm aa")} today`
+    } else if (isSameDay(addDays(this.lastResponseTime!, 1), this.now)) {
+      return `${format(this.lastResponseTime!, "hh:mm aa")} yesterday`
+    }
+    return format(this.lastResponseTime!, "hh:mm aa dd/MM/y")
   }
 
   public process = (markdown: string): string => {
@@ -75,7 +118,9 @@ export class MarkdownVariableReplacer {
       console.warn(error)
     }
 
-    return this.process(markdown)
+    // markdown = this.parseSystemVariables(markdown)
+
+    return this.parseSystemVariables(markdown)
   }
 
   private escapeSpecialChars = (value: Answer) => {

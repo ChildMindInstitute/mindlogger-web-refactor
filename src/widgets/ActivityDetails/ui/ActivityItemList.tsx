@@ -61,17 +61,13 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
   const onSaveAnswerSuccess = () => {
     // Step 4 - Clear progress state related to activity
     clearActivityItemsProgressById(activityDetails.id, eventId)
-    updateGroupInProgressByIds({
+    entityCompleted({
       appletId: appletDetails.id,
+      entityId: activityDetails.id,
       eventId,
-      activityId: activityDetails.id,
-      progressPayload: {
-        endAt: new Date(),
-      },
     })
 
     // Step 5 - Redirect to "Thanks screen"
-
     return navigator.navigate(ROUTES.thanks.navigateTo(isPublic ? props.publicAppletKey! : appletDetails.id, isPublic))
   }
 
@@ -89,7 +85,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
   const { encryptePayload } = useEncryptPayload()
 
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
-  const { updateGroupInProgressByIds, getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { getGroupInProgressByIds, entityCompleted } = activityModel.hooks.useActivityGroupsInProgressState()
   const { currentActivityEventProgress, userEvents, activityEvents } =
     activityModel.hooks.useActivityEventProgressState({
       activityId: activityDetails.id,

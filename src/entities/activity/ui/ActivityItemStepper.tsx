@@ -39,6 +39,7 @@ export const ActivityItemStepper = ({
   const { replaceTextVariables } = useTextVariablesReplacer({
     items: currentActivityEventProgress,
     answers: answers,
+    activityId,
   })
 
   const { saveUserEventByType } = useUserEvent({ activityId, eventId })
