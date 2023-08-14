@@ -1,7 +1,6 @@
-import { ActivityListItem, activityModel } from "../../activity"
-import { AppletListItem, AppletDetails, ActivityFlow } from "../lib"
+import { AppletListItem } from "../lib"
 
-import { AppletListDTO, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
+import { AppletListDTO } from "~/shared/api"
 
 export class AppletBuilder {
   public convertToAppletList(applets?: AppletListDTO[]): AppletListItem[] {
@@ -17,28 +16,6 @@ export class AppletBuilder {
       watermark: applet.watermark,
       image: applet.image,
     }))
-  }
-
-  public convertToAppletDetails(
-    applet?: AppletDetailsDTO,
-    events?: AppletEventsResponse,
-  ): AppletDetails<ActivityListItem, ActivityFlow> | null {
-    if (!applet) {
-      return null
-    }
-
-    return {
-      id: applet.id,
-      displayName: applet.displayName,
-      description: applet.description,
-      about: applet.about,
-      watermark: applet.watermark,
-      image: applet.image,
-      version: applet.version,
-      activities: activityModel.activityBuilder.convertToActivityList(applet.activities, events),
-      activityFlows: applet.activityFlows,
-      encryption: applet.encryption,
-    }
   }
 }
 

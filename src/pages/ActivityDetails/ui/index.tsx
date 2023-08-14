@@ -5,16 +5,16 @@ import { useCustomTranslation } from "~/shared/utils"
 import { ActivityDetailsWidget } from "~/widgets/ActivityDetails"
 
 export const ActivityDetailsPage = () => {
-  const { appletId, activityId, eventId } = useParams()
+  const { appletId, entityId, eventId } = useParams()
   const { t } = useCustomTranslation()
 
-  if (!appletId || !activityId || !eventId) {
+  if (!appletId || !entityId || !eventId) {
     return <div>{t("wrondLinkParametrError")}</div>
   }
 
   return (
     <Box height="100vh" display="flex" flex={1}>
-      <ActivityDetailsWidget isPublic={false} appletId={appletId} activityId={activityId} eventId={eventId} />
+      <ActivityDetailsWidget isPublic={false} appletId={appletId} activityId={entityId} eventId={eventId} />
     </Box>
   )
 }

@@ -4,6 +4,7 @@ import { HourMinute } from "~/shared/utils"
 
 export type ActivityListItem = {
   activityId: string
+  flowId: string | null
   eventId: string
 
   name: string
@@ -14,7 +15,6 @@ export type ActivityListItem = {
   type: ActivityType
 
   isInActivityFlow: boolean
-  isOnePageAssessment?: boolean
 
   activityFlowDetails?: {
     showActivityFlowBadge: boolean
@@ -23,11 +23,11 @@ export type ActivityListItem = {
     activityPositionInFlow: number
   } | null
 
-  scheduledAt?: Date | null //todo - discuss with BA
   availableFrom?: Date | null
   availableTo?: Date | null
 
   isTimerSet: boolean
+  isTimerElapsed: boolean
   timeLeftToComplete?: HourMinute | null
 }
 

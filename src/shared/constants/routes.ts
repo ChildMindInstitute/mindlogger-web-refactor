@@ -26,9 +26,15 @@ export const ROUTES = {
     path: "/transferOwnership/:appletId",
   },
   publicActivityDetails: {
-    path: "/public/applets/:appletId/activity/:activityId/event/:eventId/publicAppletKey/:publicAppletKey",
-    navigateTo: (appletId: string, activityId: string, eventId: string, publicAppletKey: string) =>
-      `/public/applets/${appletId}/activity/${activityId}/event/${eventId}/publicAppletKey/${publicAppletKey}`,
+    path: "/public/applets/:appletId/entityId/:entityId/event/:eventId/entityType/:entityType/publicAppletKey/:publicAppletKey",
+    navigateTo: (
+      appletId: string,
+      entityId: string,
+      eventId: string,
+      entityType: "regular" | "flow",
+      publicAppletKey: string,
+    ) =>
+      `/public/applets/${appletId}/entityId/${entityId}/event/${eventId}/entityType/${entityType}/publicAppletKey/${publicAppletKey}`,
   },
 
   // Protected routes
@@ -46,9 +52,9 @@ export const ROUTES = {
     navigateTo: (appletId: string | number) => `/protected/applets/${appletId}`,
   },
   activityDetails: {
-    path: "/protected/applets/:appletId/activity/:activityId/event/:eventId",
-    navigateTo: (appletId: string, activityId: string, eventId: string) =>
-      `/protected/applets/${appletId}/activity/${activityId}/event/${eventId}`,
+    path: "/protected/applets/:appletId/entityId/:entityId/event/:eventId/entityType/:entityType",
+    navigateTo: (appletId: string, entityId: string, eventId: string, entityType: "regular" | "flow") =>
+      `/protected/applets/${appletId}/entityId/${entityId}/event/${eventId}/entityType/${entityType}`,
   },
   invitationAccept: {
     path: "/protected/invite/accepted",

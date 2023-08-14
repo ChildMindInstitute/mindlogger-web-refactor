@@ -3,19 +3,12 @@ import {
   ActivityListItem,
   ActivityPipelineType,
   ActivityProgressPreview,
-  ActivityStatus,
   ActivityType,
   supportableItemTypes,
 } from "../lib"
 import { ActivityEventProgressRecord, SupportableActivities } from "./types"
 
-import {
-  ActivityDTO,
-  ActivityItemDetailsDTO,
-  AppletDetailsActivityDTO,
-  AppletEventsResponse,
-  ScheduleEventDto,
-} from "~/shared/api"
+import { ActivityDTO, ActivityItemDetailsDTO, AppletDetailsActivityDTO } from "~/shared/api"
 
 class ActivityBuilder {
   public convertToActivityProgressPreview(activities: ActivityListItem[]): ActivityProgressPreview[] {
@@ -25,37 +18,6 @@ class ActivityBuilder {
         title: activity.name,
         activityId: activity.activityId,
         eventId: activity.eventId,
-      }
-    })
-  }
-
-  public convertToActivityList(
-    activities?: AppletDetailsActivityDTO[],
-    events?: AppletEventsResponse,
-  ): ActivityListItem[] {
-    if (!activities || !events) {
-      return []
-    }
-
-    const eventMap = new Map<string, ScheduleEventDto>()
-    events.events.forEach(event => {
-      eventMap.set(event.entityId, event)
-    })
-
-    return activities.map((activity: AppletDetailsActivityDTO) => {
-      const eventByActivityId = eventMap.get(activity.id)
-
-      return {
-        activityId: activity.id,
-        eventId: eventByActivityId?.id ?? "",
-        name: activity.name,
-        description: activity.description,
-        image: activity.image,
-        isOnePageAssessment: activity.showAllAtOnce,
-        status: ActivityStatus.Available, // Mocked
-        type: ActivityType.NotDefined, // Mocked
-        isInActivityFlow: false, // Mocked
-        isTimerSet: false, // Mocked
       }
     })
   }

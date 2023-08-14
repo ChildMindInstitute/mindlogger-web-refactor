@@ -118,7 +118,8 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     const isFlow = pipelineType === ActivityPipelineType.Flow
 
     const item: ActivityListItem = {
-      activityId: entity.id,
+      activityId: isFlow ? "" : entity.id,
+      flowId: isFlow ? entity.id : null,
       eventId: event.id,
       name: isFlow ? "" : entity.name,
       description: isFlow ? "" : entity.description,
@@ -126,6 +127,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       image: isFlow ? null : entity.image,
       status: ActivityStatus.NotDefined,
       isTimerSet: false,
+      isTimerElapsed: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
     }

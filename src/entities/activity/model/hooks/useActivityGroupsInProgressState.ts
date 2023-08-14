@@ -3,7 +3,7 @@ import { useCallback } from "react"
 import { actions } from "../activity.slice"
 import { groupsInProgressSelector } from "../selectors"
 import { GroupsProgressState, InProgressEntity, UpdateActionPayload, UpsertActionPayload } from "../types"
-import { EventProgressState } from "../types"
+import { ProgressState } from "../types"
 
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
@@ -17,7 +17,7 @@ type UseActivityGroupsInProgressStateReturn = {
   groupsInProgress: GroupsProgressState
   upsertGroupInProgress: (payload: UpsertActionPayload) => void
   updateGroupInProgressByIds: (payload: UpdateActionPayload) => void
-  getGroupInProgressByIds: (params: GetGroupInProgressByParams) => EventProgressState | null
+  getGroupInProgressByIds: (params: GetGroupInProgressByParams) => ProgressState | null
   entityCompleted: (props: InProgressEntity) => void
 }
 

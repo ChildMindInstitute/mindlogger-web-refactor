@@ -7,7 +7,7 @@ import CustomModal from "../../Modal"
 import { useActivityGroups } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
-import { ActivityListItem, activityModel, ActivityOrFlowProgress, ActivityPipelineType } from "~/entities/activity"
+import { ActivityListItem, activityModel, EntityType } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
 import { CustomCard } from "~/shared/ui"
@@ -30,7 +30,8 @@ type ActivityListWidgetProps = PublicActivityListWidgetProps | PrivateActivityLi
 
 type NavigateToActivityDetailsPageProps = {
   appletId: string
-  activityId: string
+  entityId: string
+  entityType: EntityType
   eventId: string
 }
 
@@ -40,12 +41,12 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
 
   const [isAboutOpen, setIsAboutOpen] = useState(false)
 
-  const { upsertGroupInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
-  const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
   const { groups } = useActivityGroups({
     appletDetails: props.appletDetails,
     eventsDetails: props.eventsDetails,
   })
+
+  const { startActivity, startFlow } = activityModel.hooks.useStartEntity()
 
   const onCardAboutClick = () => {
     setIsAboutOpen(true)
@@ -55,56 +56,36 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     setIsAboutOpen(false)
   }
 
-  const navigateToActivityDetailsPage = ({ appletId, activityId, eventId }: NavigateToActivityDetailsPageProps) => {
+  const navigateToEntity = ({ appletId, entityId, eventId, entityType }: NavigateToActivityDetailsPageProps) => {
     if (props.isPublic && props.publicAppletKey) {
       return navigatator.navigate(
-        ROUTES.publicActivityDetails.navigateTo(appletId, activityId, eventId, props.publicAppletKey),
+        ROUTES.publicActivityDetails.navigateTo(appletId, entityId, eventId, entityType, props.publicAppletKey),
       )
     }
 
-    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId, eventId))
+    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, entityId, eventId, entityType))
   }
 
-  const onActivityCardClick = (activity: ActivityListItem) => {
-    const isActivityPipelineFlow = !!activity.activityFlowDetails
-    const isInActivityFlow = activity.isInActivityFlow
+  const startActivityOrFlow = ({ activityId, flowId, eventId }: ActivityListItem) => {
+    if (flowId) {
+      startFlow(props.appletDetails, flowId, eventId)
 
-    let activityPipelineDetails: ActivityOrFlowProgress | undefined
-
-    if (isActivityPipelineFlow && isInActivityFlow) {
-      activityPipelineDetails = {
-        type: ActivityPipelineType.Flow,
-        currentActivityId: activity.activityId,
-        pipelineActivityOrder: 0, // Hardcoded because WEB APP not supported activity flow
-      }
+      return navigateToEntity({
+        appletId: props.appletDetails.id,
+        entityId: activityId,
+        entityType: "flow",
+        eventId: eventId,
+      })
     } else {
-      activityPipelineDetails = {
-        type: ActivityPipelineType.Regular,
-      }
+      startActivity(props.appletDetails.id, activityId, eventId)
+
+      return navigateToEntity({
+        appletId: props.appletDetails.id,
+        entityId: activityId,
+        entityType: "regular",
+        eventId: eventId,
+      })
     }
-
-    const groupInProgressById = getGroupInProgressByIds({
-      appletId: props.appletDetails.id,
-      eventId: activity.eventId,
-      activityId: activity.activityId,
-    })
-
-    upsertGroupInProgress({
-      appletId: props.appletDetails.id,
-      activityId: activity.activityId,
-      eventId: activity.eventId,
-      progressPayload: {
-        ...activityPipelineDetails,
-        startAt: groupInProgressById ? groupInProgressById.startAt : Date.now(),
-        endAt: null,
-      },
-    })
-
-    return navigateToActivityDetailsPage({
-      appletId: props.appletDetails.id,
-      activityId: activity.activityId,
-      eventId: activity.eventId,
-    })
   }
 
   return (
@@ -129,7 +110,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
               <ActivityGroup
                 group={g}
                 key={g.name}
-                onActivityCardClick={onActivityCardClick}
+                onActivityCardClick={startActivityOrFlow}
                 isPublic={props.isPublic}
               />
             ))}
