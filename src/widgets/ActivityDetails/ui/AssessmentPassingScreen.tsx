@@ -45,7 +45,7 @@ export const AssessmentPassingScreen = (props: Props) => {
   })
 
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
-  const { updateGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { entityCompleted } = activityModel.hooks.useActivityGroupsInProgressState()
   const { toNextStep, toPrevStep, currentItem, items, userEvents, hasNextStep, hasPrevStep } = useStepperStateManager({
     activityId: props.activityDetails.id,
     eventId: props.eventId,
@@ -61,13 +61,10 @@ export const AssessmentPassingScreen = (props: Props) => {
   const onSaveAnswerSuccess = () => {
     // Step 4 - Clear progress state related to activity
     clearActivityItemsProgressById(props.activityDetails.id, props.eventId)
-    updateGroupInProgressByIds({
+    entityCompleted({
       appletId: props.appletDetails.id,
+      entityId: props.activityDetails.id,
       eventId: props.eventId,
-      activityId: props.activityDetails.id,
-      progressPayload: {
-        endAt: Date.now(),
-      },
     })
 
     // Step 5 - Redirect to "Thanks screen"
@@ -89,28 +86,37 @@ export const AssessmentPassingScreen = (props: Props) => {
   })
 
   const onNextButtonClick = () => {
-    const isAnswerCorrect = validateItem({ item: currentItem! })
+    if (!currentItem) {
+      return
+    }
+
+    const isAnswerCorrect = validateItem({ item: currentItem })
 
     if (!isAnswerCorrect && !isAllItemsSkippable && !currentItem?.config.skippableItem) {
       return openInvalidAnswerModal()
     }
 
     if (!currentItem?.answer.length && (isAllItemsSkippable || currentItem?.config.skippableItem)) {
-      saveUserEventByType("SKIP", currentItem!)
+      saveUserEventByType("SKIP", currentItem)
     } else {
-      saveUserEventByType("NEXT", currentItem!)
+      saveUserEventByType("NEXT", currentItem)
     }
 
     return toNextStep()
   }
 
   const onBackButtonClick = () => {
-    saveUserEventByType("PREV", currentItem!)
+    if (currentItem) {
+      saveUserEventByType("PREV", currentItem)
+    }
+
     return toPrevStep()
   }
 
   const submitAnswers = useCallback(() => {
-    saveUserEventByType("DONE", currentItem!)
+    if (currentItem) {
+      saveUserEventByType("DONE", currentItem)
+    }
 
     const answer = processAnswers({
       items,
@@ -133,6 +139,7 @@ export const AssessmentPassingScreen = (props: Props) => {
   const { replaceTextVariables } = useTextVariablesReplacer({
     items,
     answers: items.map(item => item.answer),
+    activityId: props.activityDetails.id,
   })
 
   return (
@@ -153,15 +160,17 @@ export const AssessmentPassingScreen = (props: Props) => {
             onSubmitButtonClick={submitAnswers}
           />
         }>
-        <ActivityCardItem
-          key={currentItem!.id}
-          activityId={props.activityDetails.id}
-          eventId={props.eventId}
-          activityItem={currentItem!}
-          values={currentItem!.answer}
-          replaceText={replaceTextVariables}
-          watermark={props.appletDetails.watermark}
-        />
+        {currentItem && (
+          <ActivityCardItem
+            key={currentItem.id}
+            activityId={props.activityDetails.id}
+            eventId={props.eventId}
+            activityItem={currentItem}
+            values={currentItem.answer}
+            replaceText={replaceTextVariables}
+            watermark={props.appletDetails.watermark}
+          />
+        )}
       </ActivityAssessmentLayout>
 
       <Modal
