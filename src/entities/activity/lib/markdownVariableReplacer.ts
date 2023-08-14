@@ -105,9 +105,6 @@ export class MarkdownVariableReplacer {
 
   public process = (markdown: string): string => {
     const variableNames = this.extractVariables(markdown)
-    if (!Object.values(this.answers)?.length || !variableNames?.length) {
-      return markdown
-    }
 
     try {
       variableNames.forEach(variableName => {
@@ -118,7 +115,10 @@ export class MarkdownVariableReplacer {
       console.warn(error)
     }
 
-    // markdown = this.parseSystemVariables(markdown)
+    const nestingVariableNames = this.extractVariables(markdown)
+    if (nestingVariableNames.length) {
+      return this.process(markdown)
+    }
 
     return this.parseSystemVariables(markdown)
   }
@@ -127,7 +127,7 @@ export class MarkdownVariableReplacer {
     return value.toString().replace(/(?=[$&])/g, "\\")
   }
 
-  private getReplaceValue = (variableName: string) => {
+  private getReplaceValue = (variableName: string): string => {
     const foundIndex = this.activityItems.findIndex(item => item.name === variableName)
     const answerNotFound = foundIndex < 0 || !this.answers[foundIndex]
 
@@ -162,6 +162,7 @@ export class MarkdownVariableReplacer {
         }
         break
     }
+
     return updated
   }
 }
