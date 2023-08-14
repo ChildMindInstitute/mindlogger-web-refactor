@@ -118,3 +118,11 @@ export type UpdateUserEventByIndexPayload = {
 }
 
 export type SupportableActivities = Record<string, boolean>
+
+export type CompletedEntitiesState = Record<string, number>
+
+export type InProgressEntity = {
+  appletId: string
+  entityId: string
+  eventId: string
+}
