@@ -68,7 +68,7 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const onSaveAnswerSuccess = () => {
     if (flowParams.isFlow) {
-      flowCompleted()
+      flowCompleted(flowParams.flowId)
     } else {
       return activityCompleted()
     }

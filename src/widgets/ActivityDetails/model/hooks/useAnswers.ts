@@ -73,8 +73,8 @@ export const useAnswer = (props: UseAnswerProps) => {
         ? encryptePayload(props.appletEncryption, firstTextItemAnserWithIdentifier, privateKey)
         : null
 
-      const isFlow = groupInProgress.type === ActivityPipelineType.Flow
       const now = new Date()
+      const isFlow = groupInProgress.type === ActivityPipelineType.Flow
 
       // Step 3 - Send answers to backend
       const answer: AnswerPayload = {

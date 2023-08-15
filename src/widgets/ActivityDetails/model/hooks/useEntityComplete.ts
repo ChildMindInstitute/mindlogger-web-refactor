@@ -17,12 +17,21 @@ export const useEntityComplete = (props: Props) => {
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { entityCompleted, flowUpdated } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  const flowCompleted = () => {
+  const completeEntity = () => {
     clearActivityItemsProgressById(props.activityId, props.eventId)
+    entityCompleted({
+      appletId: props.appletDetails.id,
+      entityId: props.activityId,
+      eventId: props.eventId,
+    })
+  }
+
+  const flowCompleted = (flowId: string) => {
+    completeEntity()
 
     const { activityFlows } = props.appletDetails
 
-    const currentFlow = activityFlows.find(flow => flow.id === props.flowId)!
+    const currentFlow = activityFlows.find(flow => flow.id === flowId)!
 
     const currentActivityIndexInFlow = currentFlow.activityIds.findIndex(activityId => activityId === props.activityId)!
 
@@ -75,12 +84,7 @@ export const useEntityComplete = (props: Props) => {
   }
 
   const activityCompleted = () => {
-    clearActivityItemsProgressById(props.activityId, props.eventId)
-    entityCompleted({
-      appletId: props.appletDetails.id,
-      entityId: props.flowId ? props.flowId : props.activityId,
-      eventId: props.eventId,
-    })
+    completeEntity()
 
     if (props.publicAppletKey) {
       return navigator.navigate(ROUTES.thanks.navigateTo(props.publicAppletKey, true))
