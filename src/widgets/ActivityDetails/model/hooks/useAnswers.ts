@@ -83,7 +83,7 @@ export const useAnswer = (props: UseAnswerProps) => {
         submitId: isFlow ? groupInProgress.executionGroupKey : uuidV4(),
         version: props.appletVersion,
         createdAt: new Date().getTime(),
-        isFlowCompleted: false,
+        isFlowCompleted: false, // mocked
         answer: {
           answer: encryptedAnswers,
           itemIds: preparedItemAnswers.itemIds,
@@ -93,8 +93,8 @@ export const useAnswer = (props: UseAnswerProps) => {
           endTime: new Date().getTime(),
           identifier: encryptedIdentifier,
           scheduledEventId: props.eventId,
-          localEndDate: "2022-10-01",
-          localEndTime: "12:20",
+          localEndDate: "2022-10-01", // mocked
+          localEndTime: "12:20", // mocked
         },
         alerts: preparedAlerts,
         client: {

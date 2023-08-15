@@ -124,7 +124,7 @@ export const AssessmentPassingScreen = (props: Props) => {
       isPublic: props.isPublic,
     })
 
-    return props.isPublic ? publicSaveAnswer(answer) : saveAnswer(answer) // Next steps in onSuccess mutation handler
+    return props.isPublic ? publicSaveAnswer(answer) : saveAnswer(answer)
   }, [
     currentItem,
     items,
