@@ -45,15 +45,22 @@ export const ActivityDetailsWidget = (props: Props) => {
     )
   }
 
-  if (!isActivityEventInProgress && activityDetails) {
-    return <AssessmentWelcomeScreen activityDetails={activityDetails} eventId={props.eventId} />
-  }
-
   if (!appletDetails || !activityDetails || !eventsRawData) {
     return (
       <Box height="100vh" width="100%" display="flex" justifyContent="center" alignItems="center">
         <span>{t("common_loading_error")}</span>
       </Box>
+    )
+  }
+
+  if (!isActivityEventInProgress && activityDetails) {
+    return (
+      <AssessmentWelcomeScreen
+        activityDetails={activityDetails}
+        eventId={props.eventId}
+        appletId={appletDetails.id}
+        isPublic={props.isPublic}
+      />
     )
   }
 

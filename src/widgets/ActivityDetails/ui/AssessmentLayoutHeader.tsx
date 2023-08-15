@@ -2,14 +2,17 @@ import Box from "@mui/material/Box"
 
 import { activityModel } from "~/entities/activity"
 import { SaveAndExitButton } from "~/features/SaveAssessmentAndExit"
-import { Theme } from "~/shared/constants"
+import { ROUTES, Theme } from "~/shared/constants"
 import { BaseProgressBar, Text } from "~/shared/ui"
 import { useCustomMediaQuery, useCustomNavigation } from "~/shared/utils"
 
 type Props = {
+  title: string
+
+  appletId: string
   activityId: string
   eventId: string
-  title: string
+  isPublic: boolean
 }
 
 export const AssessmentLayoutHeader = (props: Props) => {
@@ -21,12 +24,14 @@ export const AssessmentLayoutHeader = (props: Props) => {
     eventId: props.eventId,
   })
 
-  const onSaveAndExitClick = () => {
-    return navigator.goBack()
-  }
-
   const cutStringToLength = (str: string, length: number) => {
     return str.length > length ? `${str.substring(0, length)}...` : str
+  }
+
+  const onClick = () => {
+    return navigator.navigate(
+      props.isPublic ? ROUTES.publicJoin.navigateTo(props.appletId) : ROUTES.activityList.navigateTo(props.appletId),
+    )
   }
 
   return (
@@ -50,7 +55,7 @@ export const AssessmentLayoutHeader = (props: Props) => {
           <Text color={Theme.colors.light.onSurface} sx={{ textAlign: greaterThanSM ? "center" : "left" }}>
             {greaterThanSM ? props.title : cutStringToLength(props.title, 30)}
           </Text>
-          {!greaterThanSM && <SaveAndExitButton onClick={onSaveAndExitClick} asLink={true} />}
+          {!greaterThanSM && <SaveAndExitButton onClick={onClick} asLink={true} />}
         </Box>
         <BaseProgressBar percentage={progress} />
       </Box>
@@ -63,7 +68,7 @@ export const AssessmentLayoutHeader = (props: Props) => {
           alignItems="center"
           justifyContent="center"
           justifySelf="flex-end">
-          <SaveAndExitButton onClick={onSaveAndExitClick} />
+          <SaveAndExitButton onClick={onClick} />
         </Box>
       )}
     </Box>

@@ -51,6 +51,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     activityId: props.activityDetails.id,
     eventId: props.eventId,
     publicAppletKey: props.publicAppletKey ?? null,
+    flowId: flowParams.isFlow ? flowParams.flowId : null,
   })
 
   const { toNextStep, toPrevStep, currentItem, items, userEvents, hasNextStep, hasPrevStep } = useStepperStateManager({
@@ -67,7 +68,7 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const onSaveAnswerSuccess = () => {
     if (flowParams.isFlow) {
-      flowCompleted(flowParams.flowId)
+      flowCompleted()
     } else {
       return activityCompleted()
     }
@@ -123,8 +124,6 @@ export const AssessmentPassingScreen = (props: Props) => {
       isPublic: props.isPublic,
     })
 
-    console.log(answer)
-
     return props.isPublic ? publicSaveAnswer(answer) : saveAnswer(answer) // Next steps in onSuccess mutation handler
   }, [
     currentItem,
@@ -147,8 +146,10 @@ export const AssessmentPassingScreen = (props: Props) => {
     <>
       <ActivityAssessmentLayout
         title={props.activityDetails.name}
+        appletId={props.appletDetails.id}
         activityId={props.activityDetails.id}
         eventId={props.eventId}
+        isPublic={props.isPublic}
         buttons={
           <ItemCardButton
             currentItem={currentItem}

@@ -7,6 +7,8 @@ type Props = {
   appletDetails: AppletDetailsDTO
   activityId: string
   eventId: string
+
+  flowId: string | null
   publicAppletKey: string | null
 }
 
@@ -15,21 +17,12 @@ export const useEntityComplete = (props: Props) => {
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { entityCompleted, flowUpdated } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  const completeEntity = () => {
+  const flowCompleted = () => {
     clearActivityItemsProgressById(props.activityId, props.eventId)
-    entityCompleted({
-      appletId: props.appletDetails.id,
-      entityId: props.activityId,
-      eventId: props.eventId,
-    })
-  }
-
-  const flowCompleted = (flowId: string) => {
-    completeEntity()
 
     const { activityFlows } = props.appletDetails
 
-    const currentFlow = activityFlows.find(flow => flow.id === flowId)!
+    const currentFlow = activityFlows.find(flow => flow.id === props.flowId)!
 
     const currentActivityIndexInFlow = currentFlow.activityIds.findIndex(activityId => activityId === props.activityId)!
 
@@ -37,11 +30,25 @@ export const useEntityComplete = (props: Props) => {
 
     flowUpdated({
       appletId: props.appletDetails.id,
-      activityId: props.activityId,
+      activityId: nextActivityId ? nextActivityId : currentFlow.activityIds[0],
       flowId: currentFlow.id,
       eventId: props.eventId,
       pipelineActivityOrder: nextActivityId ? currentActivityIndexInFlow + 1 : 0,
     })
+
+    if (!nextActivityId) {
+      entityCompleted({
+        appletId: props.appletDetails.id,
+        entityId: props.flowId ? props.flowId : props.activityId,
+        eventId: props.eventId,
+      })
+
+      if (props.publicAppletKey) {
+        return navigator.navigate(ROUTES.thanks.navigateTo(props.publicAppletKey, true))
+      }
+
+      return navigator.navigate(ROUTES.thanks.navigateTo(props.appletDetails.id, false))
+    }
 
     if (props.publicAppletKey) {
       return navigator.navigate(
@@ -51,7 +58,7 @@ export const useEntityComplete = (props: Props) => {
           eventId: props.eventId,
           entityType: "flow",
           publicAppletKey: props.publicAppletKey,
-          flowId,
+          flowId: props.flowId,
         }),
       )
     }
@@ -62,13 +69,18 @@ export const useEntityComplete = (props: Props) => {
         activityId: nextActivityId,
         eventId: props.eventId,
         entityType: "flow",
-        flowId,
+        flowId: props.flowId,
       }),
     )
   }
 
   const activityCompleted = () => {
-    completeEntity()
+    clearActivityItemsProgressById(props.activityId, props.eventId)
+    entityCompleted({
+      appletId: props.appletDetails.id,
+      entityId: props.flowId ? props.flowId : props.activityId,
+      eventId: props.eventId,
+    })
 
     if (props.publicAppletKey) {
       return navigator.navigate(ROUTES.thanks.navigateTo(props.publicAppletKey, true))
