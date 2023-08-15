@@ -26,15 +26,25 @@ export const ROUTES = {
     path: "/transferOwnership/:appletId",
   },
   publicActivityDetails: {
-    path: "/public/applets/:appletId/entityId/:entityId/event/:eventId/entityType/:entityType/publicAppletKey/:publicAppletKey",
-    navigateTo: (
-      appletId: string,
-      entityId: string,
-      eventId: string,
-      entityType: "regular" | "flow",
-      publicAppletKey: string,
-    ) =>
-      `/public/applets/${appletId}/entityId/${entityId}/event/${eventId}/entityType/${entityType}/publicAppletKey/${publicAppletKey}`,
+    path: "/public/applets/:appletId/activityId/:activityId/event/:eventId/entityType/:entityType/publicAppletKey/:publicAppletKey",
+    navigateTo: ({
+      appletId,
+      activityId,
+      entityType,
+      eventId,
+      flowId,
+      publicAppletKey,
+    }: {
+      appletId: string
+      activityId: string
+      eventId: string
+      entityType: "regular" | "flow"
+      flowId: string | null
+      publicAppletKey: string
+    }) =>
+      `/public/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}/publicAppletKey/${publicAppletKey}?${
+        flowId ? `flowId=${flowId}` : ""
+      }}`,
   },
 
   // Protected routes
@@ -52,9 +62,23 @@ export const ROUTES = {
     navigateTo: (appletId: string | number) => `/protected/applets/${appletId}`,
   },
   activityDetails: {
-    path: "/protected/applets/:appletId/entityId/:entityId/event/:eventId/entityType/:entityType",
-    navigateTo: (appletId: string, entityId: string, eventId: string, entityType: "regular" | "flow") =>
-      `/protected/applets/${appletId}/entityId/${entityId}/event/${eventId}/entityType/${entityType}`,
+    path: "/protected/applets/:appletId/activityId/:activityId/event/:eventId/entityType/:entityType",
+    navigateTo: ({
+      appletId,
+      activityId,
+      entityType,
+      eventId,
+      flowId,
+    }: {
+      appletId: string
+      activityId: string
+      eventId: string
+      entityType: "regular" | "flow"
+      flowId: string | null
+    }) =>
+      `/protected/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}?${
+        flowId ? `flowId=${flowId}` : ""
+      }`,
   },
   invitationAccept: {
     path: "/protected/invite/accepted",

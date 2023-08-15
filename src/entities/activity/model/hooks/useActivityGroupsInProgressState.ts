@@ -2,7 +2,13 @@ import { useCallback } from "react"
 
 import { actions } from "../activity.slice"
 import { groupsInProgressSelector } from "../selectors"
-import { GroupsProgressState, InProgressEntity, UpdateActionPayload, UpsertActionPayload } from "../types"
+import {
+  GroupsProgressState,
+  InProgressEntity,
+  InProgressFlow,
+  UpdateActionPayload,
+  UpsertActionPayload,
+} from "../types"
 import { ProgressState } from "../types"
 
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
@@ -19,6 +25,7 @@ type UseActivityGroupsInProgressStateReturn = {
   updateGroupInProgressByIds: (payload: UpdateActionPayload) => void
   getGroupInProgressByIds: (params: GetGroupInProgressByParams) => ProgressState | null
   entityCompleted: (props: InProgressEntity) => void
+  flowUpdated: (props: InProgressFlow) => void
 }
 
 export const useActivityGroupsInProgressState = (): UseActivityGroupsInProgressStateReturn => {
@@ -35,6 +42,13 @@ export const useActivityGroupsInProgressState = (): UseActivityGroupsInProgressS
   const updateGroupInProgressByIds = useCallback(
     (payload: UpdateActionPayload) => {
       dispatch(actions.updateGroupProgressByParams(payload))
+    },
+    [dispatch],
+  )
+
+  const flowUpdated = useCallback(
+    (props: InProgressFlow) => {
+      dispatch(actions.flowUpdated(props))
     },
     [dispatch],
   )
@@ -74,5 +88,6 @@ export const useActivityGroupsInProgressState = (): UseActivityGroupsInProgressS
     updateGroupInProgressByIds,
     getGroupInProgressByIds,
     entityCompleted,
+    flowUpdated,
   }
 }

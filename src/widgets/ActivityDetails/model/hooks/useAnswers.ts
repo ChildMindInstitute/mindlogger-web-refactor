@@ -8,7 +8,7 @@ import { getScheduledTimeFromEvents } from "../getScheduledTimeFromEvents"
 import { mapAlerts, mapToAnswers } from "../mappers"
 import { prepareItemAnswers } from "../prepareItemAnswers"
 
-import { activityModel, useEncryptPayload } from "~/entities/activity"
+import { ActivityPipelineType, activityModel, useEncryptPayload } from "~/entities/activity"
 import { AnswerPayload, AppletEncryptionDTO, AppletEventsResponse } from "~/shared/api"
 import { secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
 
@@ -17,6 +17,7 @@ type UseAnswerProps = {
   appletVersion: string
   appletEncryption: AppletEncryptionDTO | null
 
+  flowId: string | null
   activityId: string
   eventId: string
 
@@ -59,7 +60,7 @@ export const useAnswer = (props: UseAnswerProps) => {
 
       const groupInProgress = getGroupInProgressByIds({
         appletId: props.appletId,
-        activityId: props.activityId,
+        activityId: props.flowId ? props.flowId : props.activityId,
         eventId: props.eventId,
       })
 
@@ -72,13 +73,17 @@ export const useAnswer = (props: UseAnswerProps) => {
         ? encryptePayload(props.appletEncryption, firstTextItemAnserWithIdentifier, privateKey)
         : null
 
+      const isFlow = groupInProgress.type === ActivityPipelineType.Flow
+
       // Step 3 - Send answers to backend
       const answer: AnswerPayload = {
         appletId: props.appletId,
-        version: props.appletVersion,
-        flowId: null,
         activityId: props.activityId,
-        submitId: uuidV4(),
+        flowId: props.flowId,
+        submitId: isFlow ? groupInProgress.executionGroupKey : uuidV4(),
+        version: props.appletVersion,
+        createdAt: new Date().getTime(),
+        isFlowCompleted: false,
         answer: {
           answer: encryptedAnswers,
           itemIds: preparedItemAnswers.itemIds,
@@ -87,6 +92,9 @@ export const useAnswer = (props: UseAnswerProps) => {
           startTime: new Date(groupInProgress.startAt!).getTime(),
           endTime: new Date().getTime(),
           identifier: encryptedIdentifier,
+          scheduledEventId: props.eventId,
+          localEndDate: "2022-10-01",
+          localEndTime: "12:20",
         },
         alerts: preparedAlerts,
         client: {
@@ -114,6 +122,7 @@ export const useAnswer = (props: UseAnswerProps) => {
       props.appletVersion,
       props.eventId,
       props.eventsRawData,
+      props.flowId,
     ],
   )
 

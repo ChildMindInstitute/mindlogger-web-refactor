@@ -53,9 +53,18 @@ export type ActivityItemDetailsDTO =
 export type AnswerPayload = {
   appletId: ID
   version: string
+  createdAt: number
   submitId: ID
   flowId: ID | null
   activityId: ID
+  alerts: Array<AlertDTO>
+  isFlowCompleted: boolean
+  client: {
+    appId: "mindlogger-web"
+    appVersion: string
+    width: number
+    height: number
+  }
   answer: {
     answer: string // Encrypted answer DTO: Array<string | { value: string | string[] | number, text: string | null }>
     events: string // Encrypted user actions DTO
@@ -65,13 +74,9 @@ export type AnswerPayload = {
     startTime: number
     endTime: number
     userPublicKey: string
-  }
-  alerts: Array<AlertDTO>
-  client: {
-    appId: "mindlogger-web"
-    appVersion: string
-    width: number
-    height: number
+    scheduledEventId: string
+    localEndDate: string
+    localEndTime: string
   }
 }
 

@@ -13,7 +13,7 @@ import {
   TimeRangeItem,
 } from "../lib"
 
-type FlowProgress = {
+export type FlowProgress = {
   type: ActivityPipelineType.Flow
   currentActivityId: string
   pipelineActivityOrder: number
@@ -21,7 +21,7 @@ type FlowProgress = {
   executionGroupKey: string
 }
 
-type ActivityProgress = {
+export type ActivityProgress = {
   type: ActivityPipelineType.Regular
 }
 

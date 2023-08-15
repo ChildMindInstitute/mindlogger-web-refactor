@@ -2,6 +2,7 @@ import { useCallback } from "react"
 
 import Modal from "../../Modal"
 import { useAnswer } from "../model/hooks/useAnswers"
+import { useEntityComplete } from "../model/hooks/useEntityComplete"
 import { useStepperStateManager } from "../model/hooks/useStepperStateManager"
 import { validateItem } from "../model/validateItem"
 import { ActivityAssessmentLayout } from "./ActivityAssessmentLayout"
@@ -15,8 +16,7 @@ import {
   useTextVariablesReplacer,
 } from "~/entities/activity"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
-import { ROUTES } from "~/shared/constants"
-import { useCustomNavigation, useCustomTranslation, useModal } from "~/shared/utils"
+import { useCustomTranslation, useFlowType, useModal } from "~/shared/utils"
 
 type Props = {
   eventId: string
@@ -31,7 +31,8 @@ type Props = {
 
 export const AssessmentPassingScreen = (props: Props) => {
   const { t } = useCustomTranslation()
-  const navigator = useCustomNavigation()
+
+  const flowParams = useFlowType()
 
   const [isInvalidAnswerModalOpen, openInvalidAnswerModal, closeInvalidAnswerModal] = useModal()
 
@@ -42,10 +43,16 @@ export const AssessmentPassingScreen = (props: Props) => {
     activityId: props.activityDetails.id,
     eventId: props.eventId,
     eventsRawData: props.eventsRawData,
+    flowId: flowParams.isFlow ? flowParams.flowId : null,
   })
 
-  const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
-  const { entityCompleted } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { flowCompleted, activityCompleted } = useEntityComplete({
+    appletDetails: props.appletDetails,
+    activityId: props.activityDetails.id,
+    eventId: props.eventId,
+    publicAppletKey: props.publicAppletKey ?? null,
+  })
+
   const { toNextStep, toPrevStep, currentItem, items, userEvents, hasNextStep, hasPrevStep } = useStepperStateManager({
     activityId: props.activityDetails.id,
     eventId: props.eventId,
@@ -59,19 +66,11 @@ export const AssessmentPassingScreen = (props: Props) => {
   })
 
   const onSaveAnswerSuccess = () => {
-    // Step 4 - Clear progress state related to activity
-    clearActivityItemsProgressById(props.activityDetails.id, props.eventId)
-    entityCompleted({
-      appletId: props.appletDetails.id,
-      entityId: props.activityDetails.id,
-      eventId: props.eventId,
-    })
-
-    // Step 5 - Redirect to "Thanks screen"
-
-    return navigator.navigate(
-      ROUTES.thanks.navigateTo(props.isPublic ? props.publicAppletKey! : props.appletDetails.id, props.isPublic),
-    )
+    if (flowParams.isFlow) {
+      flowCompleted(flowParams.flowId)
+    } else {
+      return activityCompleted()
+    }
   }
 
   const { mutate: saveAnswer, isLoading: submitLoading } = useSaveAnswerMutation({
@@ -123,6 +122,8 @@ export const AssessmentPassingScreen = (props: Props) => {
       userEvents,
       isPublic: props.isPublic,
     })
+
+    console.log(answer)
 
     return props.isPublic ? publicSaveAnswer(answer) : saveAnswer(answer) // Next steps in onSuccess mutation handler
   }, [

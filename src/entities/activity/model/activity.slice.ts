@@ -17,6 +17,7 @@ import {
   UpdateActionPayload,
   UpdateUserEventByIndexPayload,
   UpsertActionPayload,
+  FlowProgress,
 } from "./types"
 
 type InitialActivityState = {
@@ -139,6 +140,16 @@ const activitySlice = createSlice({
       state.groupsInProgress[appletId][flowId] = state.groupsInProgress[appletId][flowId] ?? {}
 
       state.groupsInProgress[appletId][flowId][eventId] = flowEvent
+    },
+
+    flowUpdated: (state, action: PayloadAction<InProgressFlow>) => {
+      const { appletId, activityId, flowId, eventId, pipelineActivityOrder } = action.payload
+
+      const event = state.groupsInProgress[appletId][flowId][eventId] as FlowProgress
+
+      event.currentActivityId = activityId
+      event.pipelineActivityOrder = pipelineActivityOrder
+      event.currentActivityStartAt = new Date().getTime()
     },
 
     entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {

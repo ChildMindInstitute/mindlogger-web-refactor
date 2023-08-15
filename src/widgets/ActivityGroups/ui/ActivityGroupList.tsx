@@ -30,14 +30,15 @@ type ActivityListWidgetProps = PublicActivityListWidgetProps | PrivateActivityLi
 
 type NavigateToActivityDetailsPageProps = {
   appletId: string
-  entityId: string
+  flowId: string | null
+  activityId: string
   entityType: EntityType
   eventId: string
 }
 
 export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
-  const navigatator = useCustomNavigation()
+  const navigator = useCustomNavigation()
 
   const [isAboutOpen, setIsAboutOpen] = useState(false)
 
@@ -56,14 +57,35 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     setIsAboutOpen(false)
   }
 
-  const navigateToEntity = ({ appletId, entityId, eventId, entityType }: NavigateToActivityDetailsPageProps) => {
+  const navigateToEntity = ({
+    appletId,
+    activityId,
+    flowId,
+    eventId,
+    entityType,
+  }: NavigateToActivityDetailsPageProps) => {
     if (props.isPublic && props.publicAppletKey) {
-      return navigatator.navigate(
-        ROUTES.publicActivityDetails.navigateTo(appletId, entityId, eventId, entityType, props.publicAppletKey),
+      return navigator.navigate(
+        ROUTES.publicActivityDetails.navigateTo({
+          appletId,
+          activityId,
+          eventId,
+          entityType,
+          publicAppletKey: props.publicAppletKey,
+          flowId,
+        }),
       )
     }
 
-    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, entityId, eventId, entityType))
+    return navigator.navigate(
+      ROUTES.activityDetails.navigateTo({
+        appletId,
+        activityId,
+        eventId,
+        entityType,
+        flowId,
+      }),
+    )
   }
 
   const startActivityOrFlow = ({ activityId, flowId, eventId }: ActivityListItem) => {
@@ -72,18 +94,20 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
 
       return navigateToEntity({
         appletId: props.appletDetails.id,
-        entityId: activityId,
+        activityId,
         entityType: "flow",
         eventId: eventId,
+        flowId,
       })
     } else {
       startActivity(props.appletDetails.id, activityId, eventId)
 
       return navigateToEntity({
         appletId: props.appletDetails.id,
-        entityId: activityId,
+        activityId,
         entityType: "regular",
         eventId: eventId,
+        flowId: null,
       })
     }
   }
