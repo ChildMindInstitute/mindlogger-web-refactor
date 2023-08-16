@@ -26,6 +26,8 @@ import { ActivityFlow, AppletDetails } from "~/entities/applet"
 import { ActivityDTO, AnswerPayload, AppletEventsResponse } from "~/shared/api"
 import {
   ROUTES,
+  getHHMM,
+  getYYYYDDMM,
   secureUserPrivateKeyStorage,
   useCustomNavigation,
   useCustomTranslation,
@@ -109,6 +111,8 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
   }, [currentActivityEventProgress, isAllItemsSkippable, openRequiredModal, openSubmitModal])
 
   const onPrimaryButtonClick = useCallback(() => {
+    const now = new Date()
+
     // Step 1 - Collect answers from store and transform to answer payload
     const itemAnswers = mapToAnswers(activityEvents)
     const preparedItemAnswers = prepareItemAnswers(itemAnswers)
@@ -147,6 +151,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
       flowId: null,
       activityId: activityDetails.id,
       submitId: uuidV4(),
+      isFlowCompleted: null,
       answer: {
         answer: encryptedAnswers,
         itemIds: preparedItemAnswers.itemIds,
@@ -155,6 +160,9 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
         startTime: new Date(groupInProgress.startAt!).getTime(),
         endTime: new Date().getTime(),
         identifier: encryptedIdentifier,
+        scheduledEventId: eventId,
+        localEndDate: getYYYYDDMM(now),
+        localEndTime: getHHMM(now),
       },
       alerts: preparedAlerts,
       client: {

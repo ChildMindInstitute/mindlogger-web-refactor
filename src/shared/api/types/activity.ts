@@ -41,6 +41,7 @@ export type AnswerPayload = {
   submitId: ID
   flowId: ID | null
   activityId: ID
+  isFlowCompleted: boolean | null
   answer: {
     answer: string // Encrypted answer DTO: Array<string | { value: string | string[] | number, text: string | null }>
     events: string // Encrypted user actions DTO
@@ -50,6 +51,9 @@ export type AnswerPayload = {
     startTime: number
     endTime: number
     userPublicKey: string
+    scheduledEventId: string
+    localEndDate: string
+    localEndTime: string
   }
   alerts: Array<AlertDTO>
   client: {
