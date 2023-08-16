@@ -46,6 +46,7 @@ type NavigateToActivityDetailsPageProps = {
 
 export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
+
   const navigatator = useCustomNavigation()
   const navigateToActivityDetailsPage = (
     { appletId, activityId, eventId }: NavigateToActivityDetailsPageProps,
