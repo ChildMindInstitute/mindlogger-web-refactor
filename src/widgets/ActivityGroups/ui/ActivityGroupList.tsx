@@ -4,8 +4,7 @@ import classNames from "classnames"
 import { Col, Container, Row, Spinner } from "react-bootstrap"
 
 import CustomModal from "../../Modal"
-import { filterCompletedEntities } from "../model/filters"
-import { useActivityGroups } from "../model/hooks"
+import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
 import {
@@ -170,7 +169,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     }
   }
 
-  const { groups: filteredGroups } = filterCompletedEntities({ groups, completedEntities })
+  useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
 
   if (isCompletedEntitiesLoading) {
     return (
@@ -196,7 +195,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
           )}
         </Col>
         <Col lg={7}>
-          {filteredGroups
+          {groups
             ?.filter(g => g.activities.length)
             .map(g => (
               <ActivityGroup
