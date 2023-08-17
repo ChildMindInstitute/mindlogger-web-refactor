@@ -1,3 +1,5 @@
+import { useEffect } from "react"
+
 import { ActivityPipelineType, activityModel } from "~/entities/activity"
 import { CompletedEntitiesDTO } from "~/shared/api"
 
@@ -7,51 +9,60 @@ type FilterCompletedEntitiesProps = {
 }
 
 export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
-  if (!props.completedEntities) {
-    return
-  }
-
   const { upsertGroupInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
-
-  const completedEntities = [...props.completedEntities.activities, ...props.completedEntities.activityFlows]
 
   const { groupsInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  completedEntities.forEach(entity => {
-    const hoursMinutes = entity.localEndTime.split(":")
-    const endAtDate = new Date(entity.localEndDate).setHours(Number(hoursMinutes[0]), Number(hoursMinutes[1]))
-
-    const appletInProgress = groupsInProgress[props.appletId] ?? {}
-    const inProgressEntity = appletInProgress[entity.id] ?? {}
-    const inProgressEvent = inProgressEntity[entity.scheduledEventId]
-
-    if (!inProgressEvent) {
-      upsertGroupInProgress({
-        appletId: props.appletId,
-        activityId: entity.id,
-        eventId: entity.scheduledEventId,
-        progressPayload: {
-          type: ActivityPipelineType.Regular,
-          startAt: null,
-          endAt: new Date(endAtDate),
-        },
-      })
+  useEffect(() => {
+    if (!props.completedEntities) {
+      return
     }
 
-    if (inProgressEvent.endAt) {
-      const isServerEndAtBigger = endAtDate > new Date(inProgressEvent.endAt).getTime()
+    const completedEntities = [...props.completedEntities.activities, ...props.completedEntities.activityFlows]
 
-      if (isServerEndAtBigger) {
+    completedEntities.forEach(entity => {
+      const hoursMinutes = entity.localEndTime.split(":")
+      const endAtDate = new Date(entity.localEndDate).setHours(Number(hoursMinutes[0]), Number(hoursMinutes[1]))
+
+      const appletInProgress = groupsInProgress[props.appletId] ?? {}
+      const inProgressEntity = appletInProgress[entity.id] ?? {}
+      const inProgressEvent = inProgressEntity[entity.scheduledEventId]
+
+      if (!inProgressEvent) {
         upsertGroupInProgress({
           appletId: props.appletId,
           activityId: entity.id,
           eventId: entity.scheduledEventId,
           progressPayload: {
-            ...inProgressEvent,
+            type: ActivityPipelineType.Regular,
+            startAt: null,
             endAt: new Date(endAtDate),
           },
         })
+      } else {
+        if (inProgressEvent.endAt) {
+          const isServerEndAtBigger = endAtDate > new Date(inProgressEvent.endAt).getTime()
+
+          if (isServerEndAtBigger) {
+            upsertGroupInProgress({
+              appletId: props.appletId,
+              activityId: entity.id,
+              eventId: entity.scheduledEventId,
+              progressPayload: {
+                ...inProgressEvent,
+                endAt: new Date(endAtDate),
+              },
+            })
+          }
+        }
       }
-    }
-  })
+    })
+  }, [
+    groupsInProgress,
+    props.appletId,
+    props.completedEntities,
+    props.completedEntities?.activities,
+    props.completedEntities?.activityFlows,
+    upsertGroupInProgress,
+  ])
 }
