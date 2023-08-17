@@ -100,3 +100,21 @@ export type NumberSelectAnswerPayload = {
   value: number
   text: string | null
 }
+
+type CompletedEntityDTO = {
+  id: string
+  answerId: string
+  submitId: string
+  scheduledEventId: string
+  localEndDate: string
+  localEndTime: string
+}
+
+export type CompletedEntitiesDTO = {
+  id: string
+  version: string
+  activities: Array<CompletedEntityDTO>
+  activityFlows: Array<CompletedEntityDTO>
+}
+
+export type CompletedEntitiesDTOSuccessResponse = BaseSuccessResponse<CompletedEntitiesDTO>

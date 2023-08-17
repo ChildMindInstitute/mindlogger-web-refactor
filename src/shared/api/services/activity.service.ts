@@ -1,5 +1,6 @@
 import {
   AnswerPayload,
+  CompletedEntitiesDTOSuccessResponse,
   GetActivityByIdPayload,
   GetCompletedEntitiesPayload,
   GetPublicActivityById,
@@ -23,7 +24,7 @@ function activityService() {
     },
 
     getCompletedEntities(payload: GetCompletedEntitiesPayload) {
-      return axiosService.get(
+      return axiosService.get<CompletedEntitiesDTOSuccessResponse>(
         `/answers/applet/${payload.appletId}/completions?version=${payload.version}&date=${payload.date}`,
       )
     },

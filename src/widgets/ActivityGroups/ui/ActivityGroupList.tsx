@@ -1,9 +1,10 @@
 import { useState } from "react"
 
 import classNames from "classnames"
-import { Col, Container, Row } from "react-bootstrap"
+import { Col, Container, Row, Spinner } from "react-bootstrap"
 
 import CustomModal from "../../Modal"
+import { filterCompletedEntities } from "../model/filters"
 import { useActivityGroups } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
@@ -13,10 +14,11 @@ import {
   ActivityOrFlowProgress,
   ActivityPipelineType,
   ActivityStatus,
+  useCompletedEntitiesQuery,
 } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
-import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { getYYYYDDMM, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false
@@ -46,6 +48,14 @@ type NavigateToActivityDetailsPageProps = {
 
 export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
+  const { data: completedEntities, isLoading: isCompletedEntitiesLoading } = useCompletedEntitiesQuery(
+    {
+      appletId: props.appletDetails.id,
+      version: props.appletDetails.version,
+      date: getYYYYDDMM(new Date()),
+    },
+    { select: data => data.data.result },
+  )
 
   const navigatator = useCustomNavigation()
   const navigateToActivityDetailsPage = (
@@ -160,6 +170,16 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     }
   }
 
+  const { groups: filteredGroups } = filterCompletedEntities({ groups, completedEntities })
+
+  if (isCompletedEntitiesLoading) {
+    return (
+      <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
+        <Spinner as="div" animation="border" role="status" aria-hidden="true" />
+      </Container>
+    )
+  }
+
   return (
     <Container fluid>
       <Row className={classNames("mt-5", "mb-3")}>
@@ -176,7 +196,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
           )}
         </Col>
         <Col lg={7}>
-          {groups
+          {filteredGroups
             ?.filter(g => g.activities.length)
             .map(g => (
               <ActivityGroup
