@@ -1,17 +1,18 @@
 import { useState } from "react"
 
 import classNames from "classnames"
+import { subMonths } from "date-fns"
 import { Col, Container, Row } from "react-bootstrap"
 
 import CustomModal from "../../Modal"
-import { useActivityGroups } from "../model/hooks"
+import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
-import { ActivityListItem, activityModel, EntityType } from "~/entities/activity"
+import { ActivityListItem, EntityType, activityModel, useCompletedEntitiesQuery } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
-import { CustomCard } from "~/shared/ui"
-import { useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { CustomCard, Loader } from "~/shared/ui"
+import { getYYYYDDMM, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false
@@ -39,6 +40,15 @@ type NavigateToActivityDetailsPageProps = {
 export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigator = useCustomNavigation()
+
+  const { data: completedEntities, isLoading: isCompletedEntitiesLoading } = useCompletedEntitiesQuery(
+    {
+      appletId: props.appletDetails.id,
+      version: props.appletDetails.version,
+      fromDate: getYYYYDDMM(subMonths(new Date(), 1)),
+    },
+    { select: data => data.data.result },
+  )
 
   const [isAboutOpen, setIsAboutOpen] = useState(false)
 
@@ -110,6 +120,12 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
         flowId: null,
       })
     }
+  }
+
+  useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
+
+  if (isCompletedEntitiesLoading) {
+    return <Loader />
   }
 
   return (

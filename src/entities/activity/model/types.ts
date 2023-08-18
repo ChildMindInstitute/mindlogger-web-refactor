@@ -88,13 +88,6 @@ export type UpsertActionPayload = {
   progressPayload: ProgressState
 }
 
-export type UpdateActionPayload = {
-  appletId: string
-  activityId: string
-  eventId: string
-  progressPayload: Partial<EventProgressTimestampState>
-}
-
 export type SaveActivityItemAnswerPayload = {
   activityEventId: string
   itemId: string

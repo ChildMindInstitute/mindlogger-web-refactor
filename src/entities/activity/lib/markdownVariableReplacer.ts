@@ -132,7 +132,7 @@ export class MarkdownVariableReplacer {
     const answerNotFound = foundIndex < 0 || !this.answers[foundIndex]
 
     if (answerNotFound) {
-      return `[[${variableName}]]`
+      return ""
     }
 
     const activityItem = this.activityItems[foundIndex]
