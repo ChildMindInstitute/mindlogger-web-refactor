@@ -9,7 +9,6 @@ import {
   SaveActivityItemAnswerPayload,
   SetActivityEventProgressStep,
   SetUserEventByItemIdPayload,
-  UpdateActionPayload,
   UpdateUserEventByIndexPayload,
   UpsertActionPayload,
 } from "./types"
@@ -39,14 +38,7 @@ const activitySlice = createSlice({
       delete state.activityEventProgress[action.payload.activityEventId]
     },
 
-    insertGroupProgressByParams: (state, action: PayloadAction<UpsertActionPayload>) => {
-      const { appletId, activityId, eventId, progressPayload } = action.payload
-
-      state.groupsInProgress[appletId] = state.groupsInProgress[appletId] ?? {}
-      state.groupsInProgress[appletId][activityId] = state.groupsInProgress[appletId][activityId] ?? {}
-      state.groupsInProgress[appletId][activityId][eventId] = progressPayload
-    },
-    updateGroupProgressByParams: (state, action: PayloadAction<UpdateActionPayload>) => {
+    upsertGroupProgressByParams: (state, action: PayloadAction<UpsertActionPayload>) => {
       const { appletId, activityId, eventId, progressPayload } = action.payload
 
       state.groupsInProgress[appletId] = state.groupsInProgress[appletId] ?? {}

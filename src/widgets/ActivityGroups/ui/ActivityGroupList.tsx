@@ -1,10 +1,11 @@
 import { useState } from "react"
 
 import classNames from "classnames"
-import { Col, Container, Row } from "react-bootstrap"
+import { subMonths } from "date-fns"
+import { Col, Container, Row, Spinner } from "react-bootstrap"
 
 import CustomModal from "../../Modal"
-import { useActivityGroups } from "../model/hooks"
+import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
 import {
@@ -13,10 +14,11 @@ import {
   ActivityOrFlowProgress,
   ActivityPipelineType,
   ActivityStatus,
+  useCompletedEntitiesQuery,
 } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
-import { ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { getYYYYDDMM, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false
@@ -46,6 +48,15 @@ type NavigateToActivityDetailsPageProps = {
 
 export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
+  const { data: completedEntities, isLoading: isCompletedEntitiesLoading } = useCompletedEntitiesQuery(
+    {
+      appletId: props.appletDetails.id,
+      version: props.appletDetails.version,
+      fromDate: getYYYYDDMM(subMonths(new Date(), 1)),
+    },
+    { select: data => data.data.result },
+  )
+
   const navigatator = useCustomNavigation()
   const navigateToActivityDetailsPage = (
     { appletId, activityId, eventId }: NavigateToActivityDetailsPageProps,
@@ -157,6 +168,16 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     if (selectedActivity?.activityId && selectedActivity?.eventId) {
       return navigateToActivityDetailsWithEmptyProgress(selectedActivity)
     }
+  }
+
+  useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
+
+  if (isCompletedEntitiesLoading) {
+    return (
+      <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
+        <Spinner as="div" animation="border" role="status" aria-hidden="true" />
+      </Container>
+    )
   }
 
   return (

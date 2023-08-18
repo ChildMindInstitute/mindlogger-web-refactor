@@ -1,11 +1,11 @@
 import classNames from "classnames"
 import { Container, Spinner } from "react-bootstrap"
 
-import { useCustomTranslation } from "../../../shared/utils"
 import { ActivityGroupList } from "./ActivityGroupList"
 
 import { useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
+import { useCustomTranslation } from "~/shared/utils"
 
 type FetchPublicActivitiesProps = {
   isPublic: true
