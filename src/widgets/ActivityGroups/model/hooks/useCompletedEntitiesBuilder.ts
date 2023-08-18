@@ -1,7 +1,7 @@
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 
 import { ActivityPipelineType, activityModel } from "~/entities/activity"
-import { CompletedEntitiesDTO } from "~/shared/api"
+import { CompletedEntitiesDTO, CompletedEntityDTO } from "~/shared/api"
 
 type FilterCompletedEntitiesProps = {
   appletId: string
@@ -13,14 +13,8 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
 
   const { groupsInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  useEffect(() => {
-    if (!props.completedEntities) {
-      return
-    }
-
-    const completedEntities = [...props.completedEntities.activities, ...props.completedEntities.activityFlows]
-
-    completedEntities.forEach(entity => {
+  const syncEntity = useCallback(
+    (entity: CompletedEntityDTO) => {
       const hoursMinutes = entity.localEndTime.split(":")
       const endAtDate = new Date(entity.localEndDate).setHours(Number(hoursMinutes[0]), Number(hoursMinutes[1]))
 
@@ -29,7 +23,7 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
       const inProgressEvent = inProgressEntity[entity.scheduledEventId]
 
       if (!inProgressEvent) {
-        upsertGroupInProgress({
+        return upsertGroupInProgress({
           appletId: props.appletId,
           activityId: entity.id,
           eventId: entity.scheduledEventId,
@@ -39,30 +33,36 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
             endAt: new Date(endAtDate),
           },
         })
-      } else {
-        if (inProgressEvent.endAt) {
-          const isServerEndAtBigger = endAtDate > new Date(inProgressEvent.endAt).getTime()
-
-          if (isServerEndAtBigger) {
-            upsertGroupInProgress({
-              appletId: props.appletId,
-              activityId: entity.id,
-              eventId: entity.scheduledEventId,
-              progressPayload: {
-                ...inProgressEvent,
-                endAt: new Date(endAtDate),
-              },
-            })
-          }
-        }
       }
-    })
-  }, [
-    groupsInProgress,
-    props.appletId,
-    props.completedEntities,
-    props.completedEntities?.activities,
-    props.completedEntities?.activityFlows,
-    upsertGroupInProgress,
-  ])
+
+      if (inProgressEvent.endAt) {
+        const isServerEndAtBigger = endAtDate > new Date(inProgressEvent.endAt).getTime()
+
+        if (!isServerEndAtBigger) {
+          return
+        }
+
+        return upsertGroupInProgress({
+          appletId: props.appletId,
+          activityId: entity.id,
+          eventId: entity.scheduledEventId,
+          progressPayload: {
+            ...inProgressEvent,
+            endAt: new Date(endAtDate),
+          },
+        })
+      }
+    },
+    [groupsInProgress, props.appletId, upsertGroupInProgress],
+  )
+
+  useEffect(() => {
+    if (!props.completedEntities) {
+      return
+    }
+
+    const completedEntities = [...props.completedEntities.activities, ...props.completedEntities.activityFlows]
+
+    completedEntities.forEach(syncEntity)
+  }, [props.completedEntities, syncEntity])
 }

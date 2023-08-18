@@ -1,6 +1,7 @@
 import { useState } from "react"
 
 import classNames from "classnames"
+import { subMonths } from "date-fns"
 import { Col, Container, Row, Spinner } from "react-bootstrap"
 
 import CustomModal from "../../Modal"
@@ -51,7 +52,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     {
       appletId: props.appletDetails.id,
       version: props.appletDetails.version,
-      date: getYYYYDDMM(new Date()),
+      fromDate: getYYYYDDMM(subMonths(new Date(), 1)),
     },
     { select: data => data.data.result },
   )

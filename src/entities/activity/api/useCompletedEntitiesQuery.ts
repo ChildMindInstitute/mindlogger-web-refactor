@@ -7,7 +7,7 @@ type Options<TData> = QueryOptions<FetchFn, TData>
 type Params = {
   appletId: string
   version: string
-  date: string
+  fromDate: string
 }
 
 export const useCompletedEntitiesQuery = <TData = ReturnAwaited<FetchFn>>(params: Params, options?: Options<TData>) => {

@@ -24,9 +24,9 @@ function activityService() {
     },
 
     getCompletedEntities(payload: GetCompletedEntitiesPayload) {
-      return axiosService.get<CompletedEntitiesDTOSuccessResponse>(
-        `/answers/applet/${payload.appletId}/completions?version=${payload.version}&date=${payload.date}`,
-      )
+      return axiosService.get<CompletedEntitiesDTOSuccessResponse>(`/answers/applet/${payload.appletId}/completions`, {
+        params: { version: payload.version, fromDate: payload.fromDate },
+      })
     },
   }
 }

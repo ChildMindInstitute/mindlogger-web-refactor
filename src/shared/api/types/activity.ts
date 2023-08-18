@@ -10,7 +10,7 @@ export interface GetActivityByIdPayload {
 export interface GetCompletedEntitiesPayload {
   appletId: ID
   version: string
-  date: string // example: 2022-01-01
+  fromDate: string // example: 2022-01-01
 }
 
 export type GetPublicActivityById = {
@@ -101,7 +101,7 @@ export type NumberSelectAnswerPayload = {
   text: string | null
 }
 
-type CompletedEntityDTO = {
+export type CompletedEntityDTO = {
   id: string
   answerId: string
   submitId: string
