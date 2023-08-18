@@ -1,4 +1,11 @@
-import { AnswerPayload, GetActivityByIdPayload, GetPublicActivityById, SuccessResponseActivityById } from "../types"
+import {
+  AnswerPayload,
+  CompletedEntitiesDTOSuccessResponse,
+  GetActivityByIdPayload,
+  GetCompletedEntitiesPayload,
+  GetPublicActivityById,
+  SuccessResponseActivityById,
+} from "../types"
 import axiosService from "./axios"
 
 function activityService() {
@@ -14,6 +21,12 @@ function activityService() {
     },
     publicSaveAnswers(payload: AnswerPayload) {
       return axiosService.post(`/public/answers`, payload)
+    },
+
+    getCompletedEntities(payload: GetCompletedEntitiesPayload) {
+      return axiosService.get<CompletedEntitiesDTOSuccessResponse>(`/answers/applet/${payload.appletId}/completions`, {
+        params: { version: payload.version, fromDate: payload.fromDate },
+      })
     },
   }
 }

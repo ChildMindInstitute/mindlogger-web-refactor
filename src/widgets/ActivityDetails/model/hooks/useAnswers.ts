@@ -10,7 +10,7 @@ import { prepareItemAnswers } from "../prepareItemAnswers"
 
 import { activityModel, useEncryptPayload } from "~/entities/activity"
 import { AnswerPayload, AppletEncryptionDTO, AppletEventsResponse } from "~/shared/api"
-import { secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
+import { getHHMM, getYYYYDDMM, secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
 
 type UseAnswerProps = {
   appletId: string
@@ -72,6 +72,8 @@ export const useAnswer = (props: UseAnswerProps) => {
         ? encryptePayload(props.appletEncryption, firstTextItemAnserWithIdentifier, privateKey)
         : null
 
+      const now = new Date()
+
       // Step 3 - Send answers to backend
       const answer: AnswerPayload = {
         appletId: props.appletId,
@@ -79,6 +81,7 @@ export const useAnswer = (props: UseAnswerProps) => {
         flowId: null,
         activityId: props.activityId,
         submitId: uuidV4(),
+        isFlowCompleted: false,
         answer: {
           answer: encryptedAnswers,
           itemIds: preparedItemAnswers.itemIds,
@@ -87,6 +90,9 @@ export const useAnswer = (props: UseAnswerProps) => {
           startTime: new Date(groupInProgress.startAt!).getTime(),
           endTime: new Date().getTime(),
           identifier: encryptedIdentifier,
+          scheduledEventId: props.eventId,
+          localEndDate: getYYYYDDMM(now),
+          localEndTime: getHHMM(now),
         },
         alerts: preparedAlerts,
         client: {

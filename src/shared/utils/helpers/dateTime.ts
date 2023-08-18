@@ -54,3 +54,11 @@ export const isSourceTimeBigger = (timeSource: HourMinute, timeTarget: HourMinut
 export const isTimeInInterval = (timeToCheck: HourMinute, intervalFrom: HourMinute, intervalTo: HourMinute) => {
   return isSourceTimeBigger(timeToCheck, intervalFrom) && !isSourceTimeBigger(timeToCheck, intervalTo)
 }
+
+export const getYYYYDDMM = (date: Date) => {
+  return format(date, "yyyy-MM-dd")
+}
+
+export const getHHMM = (date: Date) => {
+  return format(date, "HH:mm")
+}
