@@ -16,7 +16,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
 
   // this resets the timer if it exists.
   const resetTimer = useCallback(() => {
-    if (timerRef) clearTimeout(timerRef.current)
+    if (timerRef) window.clearTimeout(timerRef.current)
   }, [timerRef])
 
   const logoutAction = useCallback(() => {
@@ -24,7 +24,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   }, [logout])
 
   const logoutTimer = useCallback(() => {
-    timerRef.current = setTimeout(() => {
+    timerRef.current = window.setTimeout(() => {
       // clears any pending timer.
       resetTimer()
 

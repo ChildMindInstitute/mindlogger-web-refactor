@@ -1,9 +1,11 @@
+import { useEffect } from "react"
+
 import { Container } from "react-bootstrap"
 import { Link, useLocation } from "react-router-dom"
 
 import { LoginForm, useLoginTranslation } from "~/features/Login"
 import { BasicButton } from "~/shared/ui"
-import { ROUTES } from "~/shared/utils"
+import { Mixpanel, ROUTES } from "~/shared/utils"
 import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
 
 import "./login.scss"
@@ -11,6 +13,10 @@ import "./login.scss"
 const LoginPage = () => {
   const { t } = useLoginTranslation()
   const location = useLocation()
+
+  useEffect(() => {
+    Mixpanel.trackPageView("Login")
+  }, [])
 
   return (
     <div className="loginPageContainer mp-3 align-self-start w-100">

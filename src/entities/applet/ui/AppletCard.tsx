@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { AppletListItem } from "../lib"
 
 import { CustomCard } from "~/shared/ui"
-import { ROUTES } from "~/shared/utils"
+import { Mixpanel, ROUTES } from "~/shared/utils"
 
 interface AppletCardProps {
   applet: AppletListItem
@@ -14,6 +14,8 @@ const AppletCard = ({ applet }: AppletCardProps) => {
 
   const onAppletCardClick = () => {
     navigate(ROUTES.activityList.navigateTo(applet.id))
+
+    Mixpanel.track("Applet click")
   }
 
   return (

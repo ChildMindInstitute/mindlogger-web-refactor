@@ -112,6 +112,7 @@ export class MarkdownVariableReplacer {
         markdown = this.updateMarkdown(variableName, updated, markdown)
       })
     } catch (error) {
+      /* eslint-disable no-console */
       console.warn(error)
     }
 
