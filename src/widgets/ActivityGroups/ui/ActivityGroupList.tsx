@@ -8,7 +8,17 @@ import CustomModal from "../../Modal"
 import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
+<<<<<<< HEAD
 import { ActivityListItem, EntityType, activityModel, useCompletedEntitiesQuery } from "~/entities/activity"
+=======
+import {
+  ActivityListItem,
+  activityModel,
+  ActivityOrFlowProgress,
+  ActivityPipelineType,
+  useCompletedEntitiesQuery,
+} from "~/entities/activity"
+>>>>>>> 0cf8856 (feature: event sync between applications)
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
 import { CustomCard, Loader } from "~/shared/ui"
@@ -40,6 +50,15 @@ type NavigateToActivityDetailsPageProps = {
 export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigator = useCustomNavigation()
+
+  const { data: completedEntities, isLoading: isCompletedEntitiesLoading } = useCompletedEntitiesQuery(
+    {
+      appletId: props.appletDetails.id,
+      version: props.appletDetails.version,
+      fromDate: getYYYYDDMM(subMonths(new Date(), 1)),
+    },
+    { select: data => data.data.result },
+  )
 
   const { data: completedEntities, isLoading: isCompletedEntitiesLoading } = useCompletedEntitiesQuery(
     {
@@ -120,6 +139,12 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
         flowId: null,
       })
     }
+  }
+
+  useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
+
+  if (isCompletedEntitiesLoading) {
+    return <Loader />
   }
 
   useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
