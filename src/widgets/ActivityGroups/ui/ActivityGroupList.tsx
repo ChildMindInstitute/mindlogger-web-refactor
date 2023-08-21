@@ -9,6 +9,7 @@ import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
 import { ActivityListItem, EntityType, activityModel, useCompletedEntitiesQuery } from "~/entities/activity"
+
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
 import { CustomCard, Loader } from "~/shared/ui"
