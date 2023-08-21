@@ -43,6 +43,8 @@ export const useEntityComplete = (props: Props) => {
       pipelineActivityOrder: nextActivityId ? currentActivityIndexInFlow + 1 : 0,
     })
 
+    clearActivityItemsProgressById(props.activityId, props.eventId)
+
     if (!nextActivityId) {
       entityCompleted({
         appletId: props.appletDetails.id,
