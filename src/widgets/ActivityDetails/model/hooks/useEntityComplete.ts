@@ -21,14 +21,12 @@ export const useEntityComplete = (props: Props) => {
     clearActivityItemsProgressById(props.activityId, props.eventId)
     entityCompleted({
       appletId: props.appletDetails.id,
-      entityId: props.activityId,
+      entityId: props.flowId ? props.flowId : props.activityId,
       eventId: props.eventId,
     })
   }
 
   const flowCompleted = (flowId: string) => {
-    completeEntity()
-
     const { activityFlows } = props.appletDetails
 
     const currentFlow = activityFlows.find(flow => flow.id === flowId)!
