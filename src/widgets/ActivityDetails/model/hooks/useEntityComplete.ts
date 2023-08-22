@@ -26,6 +26,18 @@ export const useEntityComplete = (props: Props) => {
     })
   }
 
+  const navigateToAppletDetails = () => {
+    const entityCompletedState = {
+      isAnswersSubmitted: true,
+    }
+
+    if (props.publicAppletKey) {
+      return navigator.navigate(ROUTES.publicJoin.navigateTo(props.appletDetails.id), { state: entityCompletedState })
+    }
+
+    return navigator.navigate(ROUTES.activityList.navigateTo(props.appletDetails.id), { state: entityCompletedState })
+  }
+
   const flowCompleted = (flowId: string) => {
     const { activityFlows } = props.appletDetails
 
@@ -52,11 +64,11 @@ export const useEntityComplete = (props: Props) => {
         eventId: props.eventId,
       })
 
-      if (props.publicAppletKey) {
-        return navigator.navigate(ROUTES.thanks.navigateTo(props.publicAppletKey, true))
-      }
+      return navigateToAppletDetails()
+    }
 
-      return navigator.navigate(ROUTES.thanks.navigateTo(props.appletDetails.id, false))
+    const locationState = {
+      isAnswersSubmitted: true,
     }
 
     if (props.publicAppletKey) {
@@ -69,6 +81,7 @@ export const useEntityComplete = (props: Props) => {
           publicAppletKey: props.publicAppletKey,
           flowId: props.flowId,
         }),
+        { state: locationState },
       )
     }
 
@@ -80,17 +93,14 @@ export const useEntityComplete = (props: Props) => {
         entityType: "flow",
         flowId: props.flowId,
       }),
+      { state: locationState },
     )
   }
 
   const activityCompleted = () => {
     completeEntity()
 
-    if (props.publicAppletKey) {
-      return navigator.navigate(ROUTES.thanks.navigateTo(props.publicAppletKey, true))
-    }
-
-    return navigator.navigate(ROUTES.thanks.navigateTo(props.appletDetails.id, false))
+    return navigateToAppletDetails()
   }
 
   return {

@@ -21,6 +21,8 @@ export const AssessmentWelcomeScreen = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery()
   const { t } = useCustomTranslation()
 
+  activityModel.hooks.useAnswerSubmittedToast({ text: t("toast.next_activity") })
+
   const { saveActivityEventRecords } = activityModel.hooks.useSaveActivityEventProgress()
 
   const startAssessment = () => {
