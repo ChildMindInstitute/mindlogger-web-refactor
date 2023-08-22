@@ -9,13 +9,11 @@ import { mapAlerts, mapToAnswers } from "../mappers"
 import { prepareItemAnswers } from "../prepareItemAnswers"
 
 import { ActivityPipelineType, activityModel, useEncryptPayload } from "~/entities/activity"
-import { AnswerPayload, AppletEncryptionDTO, AppletEventsResponse } from "~/shared/api"
+import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { getHHMM, getYYYYDDMM, secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
 
 type UseAnswerProps = {
-  appletId: string
-  appletVersion: string
-  appletEncryption: AppletEncryptionDTO | null
+  appletDetails: AppletDetailsDTO
 
   flowId: string | null
   activityId: string
@@ -53,13 +51,13 @@ export const useAnswer = (props: UseAnswerProps) => {
         privateKey = secureUserPrivateKeyStorage.getUserPrivateKey()
       }
 
-      const userPublicKey = generateUserPublicKey(props.appletEncryption, privateKey)
+      const userPublicKey = generateUserPublicKey(props.appletDetails.encryption, privateKey)
 
-      const encryptedAnswers = encryptePayload(props.appletEncryption, preparedItemAnswers.answer, privateKey)
-      const encryptedUserEvents = encryptePayload(props.appletEncryption, params.userEvents, privateKey)
+      const encryptedAnswers = encryptePayload(props.appletDetails.encryption, preparedItemAnswers.answer, privateKey)
+      const encryptedUserEvents = encryptePayload(props.appletDetails.encryption, params.userEvents, privateKey)
 
       const groupInProgress = getGroupInProgressByIds({
-        appletId: props.appletId,
+        appletId: props.appletDetails.id,
         activityId: props.flowId ? props.flowId : props.activityId,
         eventId: props.eventId,
       })
@@ -70,21 +68,29 @@ export const useAnswer = (props: UseAnswerProps) => {
 
       const firstTextItemAnserWithIdentifier = getFirstResponseDataIdentifierTextItem(params.items)
       const encryptedIdentifier = firstTextItemAnserWithIdentifier
-        ? encryptePayload(props.appletEncryption, firstTextItemAnserWithIdentifier, privateKey)
+        ? encryptePayload(props.appletDetails.encryption, firstTextItemAnserWithIdentifier, privateKey)
         : null
 
       const now = new Date()
       const isFlow = groupInProgress.type === ActivityPipelineType.Flow
+      const pipelineAcitivityOrder = isFlow ? groupInProgress.pipelineActivityOrder : null
+
+      const currentFlow = props.appletDetails.activityFlows?.find(({ id }) => id === props.flowId)
+
+      const currentFlowLength = currentFlow?.activityIds.length
+
+      const isFlowCompleted =
+        currentFlowLength && pipelineAcitivityOrder ? currentFlowLength === pipelineAcitivityOrder + 1 : false
 
       // Step 3 - Send answers to backend
       const answer: AnswerPayload = {
-        appletId: props.appletId,
+        appletId: props.appletDetails.id,
         activityId: props.activityId,
         flowId: props.flowId,
         submitId: isFlow ? groupInProgress.executionGroupKey : uuidV4(),
-        version: props.appletVersion,
+        version: props.appletDetails.version,
         createdAt: new Date().getTime(),
-        isFlowCompleted: false, // mocked
+        isFlowCompleted: isFlow ? isFlowCompleted : true,
         answer: {
           answer: encryptedAnswers,
           itemIds: preparedItemAnswers.itemIds,
@@ -118,9 +124,10 @@ export const useAnswer = (props: UseAnswerProps) => {
       generateUserPrivateKey,
       getGroupInProgressByIds,
       props.activityId,
-      props.appletEncryption,
-      props.appletId,
-      props.appletVersion,
+      props.appletDetails.activityFlows,
+      props.appletDetails.encryption,
+      props.appletDetails.id,
+      props.appletDetails.version,
       props.eventId,
       props.eventsRawData,
       props.flowId,

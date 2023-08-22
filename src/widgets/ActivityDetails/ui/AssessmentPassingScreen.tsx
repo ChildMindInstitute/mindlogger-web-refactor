@@ -37,9 +37,7 @@ export const AssessmentPassingScreen = (props: Props) => {
   const [isInvalidAnswerModalOpen, openInvalidAnswerModal, closeInvalidAnswerModal] = useModal()
 
   const { processAnswers } = useAnswer({
-    appletId: props.appletDetails.id,
-    appletEncryption: props.appletDetails.encryption,
-    appletVersion: props.appletDetails.version,
+    appletDetails: props.appletDetails,
     activityId: props.activityDetails.id,
     eventId: props.eventId,
     eventsRawData: props.eventsRawData,
