@@ -1,9 +1,11 @@
 import { ToastContainer } from "react-toastify"
 
 import { Theme } from "~/shared/constants"
+import { useCustomMediaQuery } from "~/shared/utils"
+
+import "./style.scss"
 
 type Props = {
-  position: "top-right" | "top-center" | "top-left" | "bottom-right" | "bottom-center" | "bottom-left"
   autoCloseMs: number
   hideProgressBar?: boolean
   newestOnTop?: boolean
@@ -13,9 +15,10 @@ type Props = {
 }
 
 export const AppToast = (props: Props) => {
+  const { greaterThanSM } = useCustomMediaQuery()
+
   return (
     <ToastContainer
-      position={props.position}
       autoClose={props.autoCloseMs}
       hideProgressBar={props.hideProgressBar || false}
       newestOnTop={props.newestOnTop || false}
@@ -28,7 +31,7 @@ export const AppToast = (props: Props) => {
       toastStyle={{
         backgroundColor: Theme.colors.light.accentGreen,
         color: Theme.colors.light.inverseOnSurface,
-        width: "400px",
+        width: greaterThanSM ? "400px" : "300px",
       }}
     />
   )

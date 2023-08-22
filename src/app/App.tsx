@@ -28,7 +28,7 @@ function App() {
             </ReactQuery>
           </ReduxProvider>
         </RouteProvider>
-        <AppToast position="bottom-left" autoCloseMs={3500} />
+        <AppToast autoCloseMs={3500} />
       </MUIThemeProvider>
     </Suspense>
   )
