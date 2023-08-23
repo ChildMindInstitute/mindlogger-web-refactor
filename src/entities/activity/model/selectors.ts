@@ -8,3 +8,4 @@ export const activityEventProgressSelector = createSelector(
   activitySelector,
   activity => activity.activityEventProgress,
 )
+export const completedEntitiesSelector = createSelector(activitySelector, activity => activity.completedEntities)

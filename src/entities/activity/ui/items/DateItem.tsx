@@ -9,18 +9,18 @@ type Props = {
 }
 
 export const DateItem = ({ value, onValueChange }: Props) => {
-  const onHandleChange = (value: string | null) => {
+  const onHandleChange = (value: Date | null) => {
     if (value === null) {
       return
     }
 
-    return onValueChange([value])
+    return onValueChange([value.toString()])
   }
 
   return (
     <Box display="flex" justifyContent="center">
       <Box>
-        <DateItemBase value={value} onChange={onHandleChange} />
+        <DateItemBase value={value ? new Date(value) : null} onChange={onHandleChange} />
       </Box>
     </Box>
   )

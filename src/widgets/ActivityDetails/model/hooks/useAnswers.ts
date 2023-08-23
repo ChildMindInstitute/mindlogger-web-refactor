@@ -8,15 +8,16 @@ import { getScheduledTimeFromEvents } from "../getScheduledTimeFromEvents"
 import { mapAlerts, mapToAnswers } from "../mappers"
 import { prepareItemAnswers } from "../prepareItemAnswers"
 
-import { activityModel, useEncryptPayload } from "~/entities/activity"
+import { ActivityPipelineType, activityModel, useEncryptPayload } from "~/entities/activity"
 import { AnswerPayload, AppletEncryptionDTO, AppletEventsResponse } from "~/shared/api"
-import { secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
+import { getHHMM, getYYYYDDMM, secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
 
 type UseAnswerProps = {
   appletId: string
   appletVersion: string
   appletEncryption: AppletEncryptionDTO | null
 
+  flowId: string | null
   activityId: string
   eventId: string
 
@@ -34,6 +35,12 @@ export const useAnswer = (props: UseAnswerProps) => {
   const { encryptePayload } = useEncryptPayload()
 
   const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+
+  const getSubmitId = useCallback((groupInProgress: activityModel.types.ProgressState): string => {
+    const isFlow = groupInProgress.type === ActivityPipelineType.Flow
+
+    return isFlow ? groupInProgress.executionGroupKey : uuidV4()
+  }, [])
 
   const processAnswers = useCallback(
     (params: SubmitAnswersProps): AnswerPayload => {
@@ -59,7 +66,7 @@ export const useAnswer = (props: UseAnswerProps) => {
 
       const groupInProgress = getGroupInProgressByIds({
         appletId: props.appletId,
-        activityId: props.activityId,
+        activityId: props.flowId ? props.flowId : props.activityId,
         eventId: props.eventId,
       })
 
@@ -72,13 +79,17 @@ export const useAnswer = (props: UseAnswerProps) => {
         ? encryptePayload(props.appletEncryption, firstTextItemAnserWithIdentifier, privateKey)
         : null
 
+      const now = new Date()
+
       // Step 3 - Send answers to backend
       const answer: AnswerPayload = {
         appletId: props.appletId,
-        version: props.appletVersion,
-        flowId: null,
         activityId: props.activityId,
-        submitId: uuidV4(),
+        flowId: props.flowId,
+        submitId: getSubmitId(groupInProgress),
+        version: props.appletVersion,
+        createdAt: new Date().getTime(),
+        isFlowCompleted: false, // mocked
         answer: {
           answer: encryptedAnswers,
           itemIds: preparedItemAnswers.itemIds,
@@ -87,6 +98,9 @@ export const useAnswer = (props: UseAnswerProps) => {
           startTime: new Date(groupInProgress.startAt!).getTime(),
           endTime: new Date().getTime(),
           identifier: encryptedIdentifier,
+          scheduledEventId: props.eventId,
+          localEndDate: getYYYYDDMM(now),
+          localEndTime: getHHMM(now),
         },
         alerts: preparedAlerts,
         client: {
@@ -108,12 +122,14 @@ export const useAnswer = (props: UseAnswerProps) => {
       encryptePayload,
       generateUserPrivateKey,
       getGroupInProgressByIds,
+      getSubmitId,
       props.activityId,
       props.appletEncryption,
       props.appletId,
       props.appletVersion,
       props.eventId,
       props.eventsRawData,
+      props.flowId,
     ],
   )
 

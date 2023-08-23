@@ -11,7 +11,10 @@ import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
 
 type Props = {
   activityDetails: ActivityDTO
+
+  appletId: string
   eventId: string
+  isPublic: boolean
 }
 
 export const AssessmentWelcomeScreen = (props: Props) => {
@@ -28,8 +31,10 @@ export const AssessmentWelcomeScreen = (props: Props) => {
   return (
     <ActivityAssessmentLayout
       title={props.activityDetails.name}
+      appletId={props.appletId}
       activityId={props.activityDetails.id}
       eventId={props.eventId}
+      isPublic={props.isPublic}
       buttons={<StartAssessmentButton width={greaterThanSM ? "375px" : "335px"} onClick={startAssessment} />}>
       <Box height="100%" width="100%" display="flex" justifyContent="center" paddingTop="80px">
         <Box

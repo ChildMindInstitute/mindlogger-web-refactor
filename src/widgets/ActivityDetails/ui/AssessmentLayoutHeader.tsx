@@ -2,14 +2,17 @@ import Box from "@mui/material/Box"
 
 import { activityModel } from "~/entities/activity"
 import { SaveAndExitButton } from "~/features/SaveAssessmentAndExit"
-import { Theme } from "~/shared/constants"
+import { ROUTES, Theme } from "~/shared/constants"
 import { BaseProgressBar, Text } from "~/shared/ui"
 import { useCustomMediaQuery, useCustomNavigation } from "~/shared/utils"
 
 type Props = {
+  title: string
+
+  appletId: string
   activityId: string
   eventId: string
-  title: string
+  isPublic: boolean
 }
 
 export const AssessmentLayoutHeader = (props: Props) => {
@@ -21,12 +24,14 @@ export const AssessmentLayoutHeader = (props: Props) => {
     eventId: props.eventId,
   })
 
-  const onSaveAndExitClick = () => {
-    return navigator.goBack()
-  }
-
   const cutStringToLength = (str: string, length: number) => {
     return str.length > length ? `${str.substring(0, length)}...` : str
+  }
+
+  const onSaveAndExitClick = () => {
+    return navigator.navigate(
+      props.isPublic ? ROUTES.publicJoin.navigateTo(props.appletId) : ROUTES.activityList.navigateTo(props.appletId),
+    )
   }
 
   return (

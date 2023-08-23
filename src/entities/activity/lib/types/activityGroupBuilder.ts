@@ -7,6 +7,8 @@ export const enum ActivityPipelineType {
   Flow,
 }
 
+export type EntityType = "regular" | "flow"
+
 export type EntityBase = {
   id: string
   name: string

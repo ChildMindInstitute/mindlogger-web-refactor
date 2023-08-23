@@ -29,12 +29,12 @@ type TimeOrNoun = {
 
 export const convertToTimeOnNoun = (date: Date): TimeOrNoun => {
   if (date.getHours() === 12 && date.getMinutes() === 0) {
-    return { translationKey: "applet_list_component:noon" }
+    return { translationKey: "applet_list_component.noon" }
   } else if (
     (date.getHours() === 23 && date.getMinutes() === 59) ||
     (date.getHours() === 0 && date.getMinutes() === 0)
   ) {
-    return { translationKey: "applet_list_component:midnight" }
+    return { translationKey: "applet_list_component.midnight" }
   } else {
     return {
       formattedDate: date.toLocaleString("en-US", {
@@ -53,4 +53,12 @@ export const isSourceTimeBigger = (timeSource: HourMinute, timeTarget: HourMinut
 }
 export const isTimeInInterval = (timeToCheck: HourMinute, intervalFrom: HourMinute, intervalTo: HourMinute) => {
   return isSourceTimeBigger(timeToCheck, intervalFrom) && !isSourceTimeBigger(timeToCheck, intervalTo)
+}
+
+export const getYYYYDDMM = (date: Date) => {
+  return format(date, "yyyy-MM-dd")
+}
+
+export const getHHMM = (date: Date) => {
+  return format(date, "HH:mm")
 }

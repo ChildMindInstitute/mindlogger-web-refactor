@@ -15,8 +15,6 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   const isStatusInProgress = activity.status === ActivityStatus.InProgress
 
-  const hasScheduledAt = isStatusScheduled && !!activity.scheduledAt
-
   const hasAvailableFromTo = isStatusScheduled
 
   const hasAvailableToOnly = isStatusAvailable
@@ -34,8 +32,6 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   return (
     <>
-      {hasScheduledAt && <small>{`${t("activity_due_date.scheduled_at")} ${convert(activity.scheduledAt!)}`}</small>}
-
       {hasAvailableFromTo && (
         <small>
           {`${t("activity_due_date.available")} ${convert(activity.availableFrom!)} ${t(
