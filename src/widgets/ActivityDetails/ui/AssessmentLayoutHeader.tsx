@@ -28,7 +28,7 @@ export const AssessmentLayoutHeader = (props: Props) => {
     return str.length > length ? `${str.substring(0, length)}...` : str
   }
 
-  const onClick = () => {
+  const onSaveAndExitClick = () => {
     return navigator.navigate(
       props.isPublic ? ROUTES.publicJoin.navigateTo(props.appletId) : ROUTES.activityList.navigateTo(props.appletId),
     )
@@ -55,7 +55,7 @@ export const AssessmentLayoutHeader = (props: Props) => {
           <Text color={Theme.colors.light.onSurface} sx={{ textAlign: greaterThanSM ? "center" : "left" }}>
             {greaterThanSM ? props.title : cutStringToLength(props.title, 30)}
           </Text>
-          {!greaterThanSM && <SaveAndExitButton onClick={onClick} asLink={true} />}
+          {!greaterThanSM && <SaveAndExitButton onClick={onSaveAndExitClick} asLink={true} />}
         </Box>
         <BaseProgressBar percentage={progress} />
       </Box>
@@ -68,7 +68,7 @@ export const AssessmentLayoutHeader = (props: Props) => {
           alignItems="center"
           justifyContent="center"
           justifySelf="flex-end">
-          <SaveAndExitButton onClick={onClick} />
+          <SaveAndExitButton onClick={onSaveAndExitClick} />
         </Box>
       )}
     </Box>

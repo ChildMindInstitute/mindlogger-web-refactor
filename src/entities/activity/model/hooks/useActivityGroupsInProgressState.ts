@@ -4,7 +4,6 @@ import { actions } from "../activity.slice"
 import { groupsInProgressSelector } from "../selectors"
 import { GroupsProgressState, InProgressEntity, InProgressFlow, UpsertActionPayload, ProgressState } from "../types"
 
-
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 type GetGroupInProgressByParams = {
