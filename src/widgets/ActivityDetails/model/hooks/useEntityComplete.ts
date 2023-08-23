@@ -26,6 +26,7 @@ export const useEntityComplete = (props: Props) => {
       eventId: props.eventId,
     })
 
+
     const entityCompletedState = {
       isAnswersSubmitted: true,
     }
@@ -47,7 +48,7 @@ export const useEntityComplete = (props: Props) => {
     const entityCompletedState = {
       isAnswersSubmitted: true,
     }
-
+    
     if (props.publicAppletKey) {
       return navigator.navigate(
         ROUTES.publicActivityDetails.navigateTo({
@@ -59,6 +60,7 @@ export const useEntityComplete = (props: Props) => {
           flowId: props.flowId,
         }),
         { replace: true, state: entityCompletedState },
+
       )
     }
 
@@ -110,7 +112,7 @@ export const useEntityComplete = (props: Props) => {
     clearActivityItemsProgressById(props.activityId, props.eventId)
 
     if (!nextActivityId) {
-      return completeEntityAndRedirect()
+      return completeActivityFlowAndRedirect()
     }
 
     return redirectToNextActivity(nextActivityId)
@@ -118,8 +120,8 @@ export const useEntityComplete = (props: Props) => {
 
   const completeActivity = () => {
     clearActivityItemsProgressById(props.activityId, props.eventId)
-
-    return completeEntityAndRedirect()
+    
+    return completeActivityFlowAndRedirect()
   }
 
   return {
