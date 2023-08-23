@@ -1,4 +1,4 @@
-import { activityModel } from "~/entities/activity"
+import { ActivityPipelineType, activityModel } from "~/entities/activity"
 import { AppletDetailsDTO } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
 import { useCustomNavigation } from "~/shared/utils"
@@ -17,57 +17,34 @@ export const useEntityComplete = (props: Props) => {
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { entityCompleted, flowUpdated } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  const completeEntity = () => {
-    clearActivityItemsProgressById(props.activityId, props.eventId)
+  const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+
+  const completeEntityAndRedirect = () => {
     entityCompleted({
       appletId: props.appletDetails.id,
       entityId: props.flowId ? props.flowId : props.activityId,
       eventId: props.eventId,
     })
-  }
 
-  const navigateToAppletDetails = () => {
     const entityCompletedState = {
       isAnswersSubmitted: true,
     }
 
     if (props.publicAppletKey) {
-      return navigator.navigate(ROUTES.publicJoin.navigateTo(props.appletDetails.id), { state: entityCompletedState })
+      return navigator.navigate(ROUTES.publicJoin.navigateTo(props.appletDetails.id), {
+        replace: true,
+        state: entityCompletedState,
+      })
     }
 
-    return navigator.navigate(ROUTES.activityList.navigateTo(props.appletDetails.id), { state: entityCompletedState })
+    return navigator.navigate(ROUTES.activityList.navigateTo(props.appletDetails.id), {
+      replace: true,
+      state: entityCompletedState,
+    })
   }
 
-  const flowCompleted = (flowId: string) => {
-    const { activityFlows } = props.appletDetails
-
-    const currentFlow = activityFlows.find(flow => flow.id === flowId)!
-
-    const currentActivityIndexInFlow = currentFlow.activityIds.findIndex(activityId => activityId === props.activityId)!
-
-    const nextActivityId = currentFlow.activityIds[currentActivityIndexInFlow + 1]
-
-    flowUpdated({
-      appletId: props.appletDetails.id,
-      activityId: nextActivityId ? nextActivityId : currentFlow.activityIds[0],
-      flowId: currentFlow.id,
-      eventId: props.eventId,
-      pipelineActivityOrder: nextActivityId ? currentActivityIndexInFlow + 1 : 0,
-    })
-
-    clearActivityItemsProgressById(props.activityId, props.eventId)
-
-    if (!nextActivityId) {
-      entityCompleted({
-        appletId: props.appletDetails.id,
-        entityId: props.flowId ? props.flowId : props.activityId,
-        eventId: props.eventId,
-      })
-
-      return navigateToAppletDetails()
-    }
-
-    const locationState = {
+  const redirectToNextActivity = (activityId: string) => {
+    const entityCompletedState = {
       isAnswersSubmitted: true,
     }
 
@@ -75,36 +52,78 @@ export const useEntityComplete = (props: Props) => {
       return navigator.navigate(
         ROUTES.publicActivityDetails.navigateTo({
           appletId: props.appletDetails.id,
-          activityId: nextActivityId,
+          activityId,
           eventId: props.eventId,
           entityType: "flow",
           publicAppletKey: props.publicAppletKey,
           flowId: props.flowId,
         }),
-        { state: locationState },
+        { replace: true, state: entityCompletedState },
       )
     }
 
     return navigator.navigate(
       ROUTES.activityDetails.navigateTo({
         appletId: props.appletDetails.id,
-        activityId: nextActivityId,
+        activityId,
         eventId: props.eventId,
         entityType: "flow",
         flowId: props.flowId,
       }),
-      { state: locationState },
+      { replace: true, state: entityCompletedState },
     )
   }
 
-  const activityCompleted = () => {
-    completeEntity()
+  const completeFlow = (flowId: string) => {
+    const { activityFlows } = props.appletDetails
 
-    return navigateToAppletDetails()
+    const groupInProgress = getGroupInProgressByIds({
+      appletId: props.appletDetails.id,
+      activityId: props.flowId ? props.flowId : props.activityId,
+      eventId: props.eventId,
+    })
+
+    if (!groupInProgress) {
+      return
+    }
+
+    const isFlow = groupInProgress.type === ActivityPipelineType.Flow
+
+    if (!isFlow) {
+      return
+    }
+
+    const currentPipelineActivityOrder = groupInProgress.pipelineActivityOrder
+
+    const currentFlow = activityFlows.find(flow => flow.id === flowId)!
+
+    const nextActivityId = currentFlow.activityIds[currentPipelineActivityOrder + 1]
+
+    flowUpdated({
+      appletId: props.appletDetails.id,
+      activityId: nextActivityId ? nextActivityId : currentFlow.activityIds[0],
+      flowId: currentFlow.id,
+      eventId: props.eventId,
+      pipelineActivityOrder: nextActivityId ? currentPipelineActivityOrder + 1 : 0,
+    })
+
+    clearActivityItemsProgressById(props.activityId, props.eventId)
+
+    if (!nextActivityId) {
+      return completeEntityAndRedirect()
+    }
+
+    return redirectToNextActivity(nextActivityId)
+  }
+
+  const completeActivity = () => {
+    clearActivityItemsProgressById(props.activityId, props.eventId)
+
+    return completeEntityAndRedirect()
   }
 
   return {
-    activityCompleted,
-    flowCompleted,
+    completeActivity,
+    completeFlow,
   }
 }

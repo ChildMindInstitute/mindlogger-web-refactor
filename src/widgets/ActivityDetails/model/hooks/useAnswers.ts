@@ -34,6 +34,12 @@ export const useAnswer = (props: UseAnswerProps) => {
 
   const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
 
+  const getSubmitId = useCallback((groupInProgress: activityModel.types.ProgressState): string => {
+    const isFlow = groupInProgress.type === ActivityPipelineType.Flow
+
+    return isFlow ? groupInProgress.executionGroupKey : uuidV4()
+  }, [])
+
   const processAnswers = useCallback(
     (params: SubmitAnswersProps): AnswerPayload => {
       // Step 1 - Collect answers from store and transform to answer payload
@@ -87,7 +93,7 @@ export const useAnswer = (props: UseAnswerProps) => {
         appletId: props.appletDetails.id,
         activityId: props.activityId,
         flowId: props.flowId,
-        submitId: isFlow ? groupInProgress.executionGroupKey : uuidV4(),
+        submitId: getSubmitId(groupInProgress),
         version: props.appletDetails.version,
         createdAt: new Date().getTime(),
         isFlowCompleted: isFlow ? isFlowCompleted : true,
@@ -123,6 +129,7 @@ export const useAnswer = (props: UseAnswerProps) => {
       encryptePayload,
       generateUserPrivateKey,
       getGroupInProgressByIds,
+      getSubmitId,
       props.activityId,
       props.appletDetails.activityFlows,
       props.appletDetails.encryption,

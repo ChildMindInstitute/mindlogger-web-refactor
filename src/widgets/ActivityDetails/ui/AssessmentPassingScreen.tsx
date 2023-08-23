@@ -44,7 +44,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     flowId: flowParams.isFlow ? flowParams.flowId : null,
   })
 
-  const { flowCompleted, activityCompleted } = useEntityComplete({
+  const { completeActivity, completeFlow } = useEntityComplete({
     appletDetails: props.appletDetails,
     activityId: props.activityDetails.id,
     eventId: props.eventId,
@@ -66,9 +66,9 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const onSaveAnswerSuccess = () => {
     if (flowParams.isFlow) {
-      flowCompleted(flowParams.flowId)
+      completeFlow(flowParams.flowId)
     } else {
-      return activityCompleted()
+      return completeActivity()
     }
   }
 
