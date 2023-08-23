@@ -1,16 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { v4 as uuidV4 } from "uuid"
 
+import { ActivityPipelineType } from "../lib"
 import {
   ActivityEventState,
   ClearActivityItemsProgresByIdPayload,
   CompletedEntitiesState,
   GroupsProgressState,
+  InProgressActivity,
   InProgressEntity,
+  InProgressFlow,
+  ProgressState,
   SaveActivityItemAnswerPayload,
   SetActivityEventProgressStep,
   SetUserEventByItemIdPayload,
   UpdateUserEventByIndexPayload,
   UpsertActionPayload,
+  FlowProgress,
 } from "./types"
 
 type InitialActivityState = {
@@ -95,6 +101,49 @@ const activitySlice = createSlice({
 
       activityEventProgressRecord.step = action.payload.step
     },
+
+    activityStarted: (state, action: PayloadAction<InProgressActivity>) => {
+      const { appletId, activityId, eventId } = action.payload
+
+      const activityEvent: ProgressState = {
+        type: ActivityPipelineType.Regular,
+        startAt: new Date().getTime(),
+        endAt: null,
+      }
+
+      state.groupsInProgress[appletId] = state.groupsInProgress[appletId] ?? {}
+      state.groupsInProgress[appletId][activityId] = state.groupsInProgress[appletId][activityId] ?? {}
+      state.groupsInProgress[appletId][activityId][eventId] = activityEvent
+    },
+    flowStarted: (state, action: PayloadAction<InProgressFlow>) => {
+      const { appletId, activityId, flowId, eventId, pipelineActivityOrder } = action.payload
+
+      const flowEvent: ProgressState = {
+        type: ActivityPipelineType.Flow,
+        currentActivityId: activityId,
+        startAt: new Date().getTime(),
+        currentActivityStartAt: new Date().getTime(),
+        endAt: null,
+        executionGroupKey: uuidV4(),
+        pipelineActivityOrder,
+      }
+
+      state.groupsInProgress[appletId] = state.groupsInProgress[appletId] ?? {}
+      state.groupsInProgress[appletId][flowId] = state.groupsInProgress[appletId][flowId] ?? {}
+
+      state.groupsInProgress[appletId][flowId][eventId] = flowEvent
+    },
+
+    flowUpdated: (state, action: PayloadAction<InProgressFlow>) => {
+      const { appletId, activityId, flowId, eventId, pipelineActivityOrder } = action.payload
+
+      const event = state.groupsInProgress[appletId][flowId][eventId] as FlowProgress
+
+      event.currentActivityId = activityId
+      event.pipelineActivityOrder = pipelineActivityOrder
+      event.currentActivityStartAt = new Date().getTime()
+    },
+
     entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {
       const { appletId, entityId, eventId } = action.payload
 

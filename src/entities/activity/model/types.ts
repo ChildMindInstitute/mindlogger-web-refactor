@@ -13,17 +13,19 @@ import {
   TimeRangeItem,
 } from "../lib"
 
-type ActivityFlowProgress = {
+export type FlowProgress = {
   type: ActivityPipelineType.Flow
   currentActivityId: string
   pipelineActivityOrder: number
+  currentActivityStartAt: number | null
+  executionGroupKey: string
 }
 
-type ActivityProgress = {
+export type ActivityProgress = {
   type: ActivityPipelineType.Regular
 }
 
-type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress
+type ActivityOrFlowProgress = FlowProgress | ActivityProgress
 
 type EventProgressTimestampState = {
   startAt: number | null
@@ -45,9 +47,9 @@ export type UserEvents = {
   response?: UserEventResponse
 }
 
-export type EventProgressState = ActivityOrFlowProgress & EventProgressTimestampState
+export type ProgressState = ActivityOrFlowProgress & EventProgressTimestampState
 
-export type ActivityProgressState = Record<string, EventProgressState>
+export type ActivityProgressState = Record<string, ProgressState>
 export type AppletProgressState = Record<string, ActivityProgressState>
 
 export type GroupsProgressState = Record<string, AppletProgressState>
@@ -83,7 +85,7 @@ export type UpsertActionPayload = {
   appletId: string
   activityId: string
   eventId: string
-  progressPayload: EventProgressState
+  progressPayload: ProgressState
 }
 
 export type SaveActivityItemAnswerPayload = {
@@ -118,4 +120,18 @@ export type InProgressEntity = {
   appletId: string
   entityId: string
   eventId: string
+}
+
+export type InProgressActivity = {
+  appletId: string
+  activityId: string
+  eventId: string
+}
+
+export type InProgressFlow = {
+  appletId: string
+  flowId: string
+  activityId: string
+  eventId: string
+  pipelineActivityOrder: number
 }

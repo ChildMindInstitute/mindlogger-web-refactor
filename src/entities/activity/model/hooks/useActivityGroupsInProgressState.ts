@@ -2,8 +2,7 @@ import { useCallback } from "react"
 
 import { actions } from "../activity.slice"
 import { groupsInProgressSelector } from "../selectors"
-import { GroupsProgressState, InProgressEntity, UpsertActionPayload } from "../types"
-import { EventProgressState } from "../types"
+import { GroupsProgressState, InProgressEntity, InProgressFlow, UpsertActionPayload, ProgressState } from "../types"
 
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
@@ -16,8 +15,9 @@ type GetGroupInProgressByParams = {
 type UseActivityGroupsInProgressStateReturn = {
   groupsInProgress: GroupsProgressState
   upsertGroupInProgress: (payload: UpsertActionPayload) => void
-  getGroupInProgressByIds: (params: GetGroupInProgressByParams) => EventProgressState | null
+  getGroupInProgressByIds: (params: GetGroupInProgressByParams) => ProgressState | null
   entityCompleted: (props: InProgressEntity) => void
+  flowUpdated: (props: InProgressFlow) => void
 }
 
 export const useActivityGroupsInProgressState = (): UseActivityGroupsInProgressStateReturn => {
@@ -27,6 +27,13 @@ export const useActivityGroupsInProgressState = (): UseActivityGroupsInProgressS
   const upsertGroupInProgress = useCallback(
     (payload: UpsertActionPayload) => {
       dispatch(actions.insertGroupProgressByParams(payload))
+    },
+    [dispatch],
+  )
+
+  const flowUpdated = useCallback(
+    (props: InProgressFlow) => {
+      dispatch(actions.flowUpdated(props))
     },
     [dispatch],
   )
@@ -65,5 +72,6 @@ export const useActivityGroupsInProgressState = (): UseActivityGroupsInProgressS
     upsertGroupInProgress,
     getGroupInProgressByIds,
     entityCompleted,
+    flowUpdated,
   }
 }

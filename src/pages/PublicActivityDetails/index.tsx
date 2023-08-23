@@ -8,7 +8,7 @@ export const PublicActivityDetailsPage = () => {
   const { appletId, activityId, eventId, publicAppletKey } = useParams()
   const { t } = useCustomTranslation()
 
-  if (!appletId && !activityId && !eventId && !publicAppletKey) {
+  if (!appletId || !activityId || !eventId || !publicAppletKey) {
     return <div>{t("wrondLinkParametrError")}</div>
   }
 
@@ -16,10 +16,10 @@ export const PublicActivityDetailsPage = () => {
     <Container>
       <ActivityDetailsWidget
         isPublic={true}
-        appletId={appletId!}
-        activityId={activityId!}
-        eventId={eventId!}
-        publicAppletKey={publicAppletKey!}
+        appletId={appletId}
+        activityId={activityId}
+        eventId={eventId}
+        publicAppletKey={publicAppletKey}
       />
     </Container>
   )

@@ -29,12 +29,12 @@ type TimeOrNoun = {
 
 export const convertToTimeOnNoun = (date: Date): TimeOrNoun => {
   if (date.getHours() === 12 && date.getMinutes() === 0) {
-    return { translationKey: "applet_list_component:noon" }
+    return { translationKey: "applet_list_component.noon" }
   } else if (
     (date.getHours() === 23 && date.getMinutes() === 59) ||
     (date.getHours() === 0 && date.getMinutes() === 0)
   ) {
-    return { translationKey: "applet_list_component:midnight" }
+    return { translationKey: "applet_list_component.midnight" }
   } else {
     return {
       formattedDate: date.toLocaleString("en-US", {
