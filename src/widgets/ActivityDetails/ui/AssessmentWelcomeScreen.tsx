@@ -1,13 +1,14 @@
 import Box from "@mui/material/Box"
 
 import { ActivityAssessmentLayout } from "./ActivityAssessmentLayout"
+import { ActivityMetaData } from "./ActivityMetaData"
 
 import { activityModel } from "~/entities/activity"
 import { StartAssessmentButton } from "~/features/StartAssessment"
 import { ActivityDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
 import { AvatarBase, Text } from "~/shared/ui"
-import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
+import { useCustomMediaQuery, useCustomTranslation, useFlowType } from "~/shared/utils"
 
 type Props = {
   activityDetails: ActivityDTO
@@ -21,14 +22,22 @@ export const AssessmentWelcomeScreen = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery()
   const { t } = useCustomTranslation()
 
+  const flowParams = useFlowType()
   activityModel.hooks.useAnswerSubmittedToast({ text: t("toast.next_activity") })
 
   const { saveActivityEventRecords } = activityModel.hooks.useSaveActivityEventProgress()
+  const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
 
   const startAssessment = () => {
     const initialStep = 1
     return saveActivityEventRecords(props.activityDetails, props.eventId, initialStep)
   }
+
+  const groupInProgress = getGroupInProgressByIds({
+    appletId: props.appletId,
+    eventId: props.eventId,
+    activityId: flowParams.isFlow ? flowParams.flowId : props.activityDetails.id,
+  })
 
   return (
     <ActivityAssessmentLayout
@@ -53,7 +62,7 @@ export const AssessmentWelcomeScreen = (props: Props) => {
           />
 
           <Text fontSize="18px" fontWeight="400" color={Theme.colors.light.secondary} sx={{ marginTop: "24px" }}>
-            {t("question_count", { length: props.activityDetails.items.length })}
+            <ActivityMetaData activityLength={props.activityDetails.items.length} groupInProgress={groupInProgress} />
           </Text>
           <Text fontSize="18px" fontWeight="700" color={Theme.colors.light.onSurface} margin="16px 0px">
             {props.activityDetails.name}
