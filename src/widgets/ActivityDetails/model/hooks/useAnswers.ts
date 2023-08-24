@@ -78,7 +78,7 @@ export const useAnswer = (props: UseAnswerProps) => {
         : null
 
       const now = new Date()
-      
+
       const isFlow = groupInProgress.type === ActivityPipelineType.Flow
       const pipelineAcitivityOrder = isFlow ? groupInProgress.pipelineActivityOrder : null
 
@@ -88,7 +88,6 @@ export const useAnswer = (props: UseAnswerProps) => {
 
       const isFlowCompleted =
         currentFlowLength && pipelineAcitivityOrder ? currentFlowLength === pipelineAcitivityOrder + 1 : false
-
 
       // Step 3 - Send answers to backend
       const answer: AnswerPayload = {
