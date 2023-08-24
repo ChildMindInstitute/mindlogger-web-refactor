@@ -31,7 +31,7 @@ export const AppToast = (props: Props) => {
       toastStyle={{
         backgroundColor: Theme.colors.light.accentGreen,
         color: Theme.colors.light.inverseOnSurface,
-        width: greaterThanSM ? "400px" : "300px",
+        width: greaterThanSM ? "400px" : "100%",
       }}
     />
   )
