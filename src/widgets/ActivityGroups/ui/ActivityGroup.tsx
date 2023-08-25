@@ -19,9 +19,7 @@ export const ActivityGroup = ({ group, onActivityCardClick, isPublic }: Activity
     <Container>
       <p className={classNames("mt-2", "text-capitalize")}>{t(group.name)}</p>
 
-      <div>
-        <ActivityList activities={group.activities} onActivityCardClick={onActivityCardClick} isPublic={isPublic} />
-      </div>
+      <ActivityList activities={group.activities} onActivityCardClick={onActivityCardClick} isPublic={isPublic} />
     </Container>
   )
 }

@@ -1,3 +1,5 @@
+import Box from "@mui/material/Box"
+
 import { ActivityListItem } from "../lib"
 import { ActivityCard } from "./ActivityCard"
 
@@ -9,7 +11,7 @@ interface ActivityListProps {
 
 export const ActivityList = ({ activities, onActivityCardClick, isPublic }: ActivityListProps) => {
   return (
-    <>
+    <Box display="flex" flex={1} flexDirection="column">
       {activities.map(activity => {
         return (
           <ActivityCard
@@ -20,6 +22,6 @@ export const ActivityList = ({ activities, onActivityCardClick, isPublic }: Acti
           />
         )
       })}
-    </>
+    </Box>
   )
 }

@@ -1,4 +1,4 @@
-import { ActivityListItem, ActivityStatus } from "../lib"
+import { ActivityListItem, ActivityStatus } from "../../lib"
 
 import { convertToTimeOnNoun, useCustomTranslation } from "~/shared/utils"
 
