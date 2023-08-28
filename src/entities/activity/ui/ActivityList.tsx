@@ -16,7 +16,7 @@ export const ActivityList = ({ activities, onActivityCardClick, isPublic }: Acti
         return (
           <ActivityCard
             key={activity.eventId}
-            activity={activity}
+            activityListItem={activity}
             onActivityCardClick={() => onActivityCardClick(activity)}
             isPublic={isPublic}
           />

@@ -1,27 +1,44 @@
+import { useMemo } from "react"
+
 import Box from "@mui/material/Box"
 
-import { ActivityListItem, ActivityStatus, useSupportableActivity } from "../../lib"
+import { ActivityListItem, ActivityStatus, useActivity } from "../../lib"
+import { activityBuilder } from "../../model"
+import { useActivityEventProgressState } from "../../model/hooks"
 import { ActivityCardBase } from "./ActivityCardBase"
 import { ActivityCardDescription } from "./ActivityCardDescription"
 import { ActivityCardIcon } from "./ActivityCardIcon"
 import { ActivityCardTitle } from "./ActivityCardTitle"
+import { ActivityLabel } from "./ActivityLabel"
 import { MobileOnlyLabel } from "./MobileOnlyLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
 import { Loader } from "~/shared/ui"
 
 interface ActivityCardProps {
-  activity: ActivityListItem
+  activityListItem: ActivityListItem
   isPublic: boolean
   onActivityCardClick: () => void
 
   disabled?: boolean
 }
 
-export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic }: ActivityCardProps) => {
-  const { isSupportedActivity, isLoading } = useSupportableActivity({ activityId: activity.activityId, isPublic })
+export const ActivityCard = ({ activityListItem, disabled, onActivityCardClick, isPublic }: ActivityCardProps) => {
+  const { isLoading, activity } = useActivity({
+    activityId: activityListItem.activityId,
+    isPublic,
+  })
 
-  const isDisabled = disabled || activity.status === ActivityStatus.Scheduled || !isSupportedActivity
+  const { activityEvents } = useActivityEventProgressState({
+    activityId: activityListItem.activityId,
+    eventId: activityListItem.eventId,
+  })
+
+  const countOfCompletedQuestions = activityEvents.filter(item => item.answer.length).length
+
+  const isSupportedActivity = useMemo(() => {
+    return activityBuilder.isSupportedActivity(activity)
+  }, [activity])
 
   if (isLoading) {
     return (
@@ -41,9 +58,9 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
         gap="24px"
         data-testid="activity-card-content-wrapper"
         sx={{ textTransform: "none" }}>
-        <ActivityCardIcon src={activity.image} isFlow={Boolean(activity.flowId)} />
+        <ActivityCardIcon src={activityListItem.image} isFlow={Boolean(activityListItem.flowId)} />
 
-        <Box display="flex" flex={1} justifyContent="center" alignItems="flex-start" flexDirection="column">
+        <Box display="flex" flex={1} justifyContent="center" alignItems="flex-start" flexDirection="column" gap="8px">
           {/* {activity.isInActivityFlow && activity.activityFlowDetails!.showActivityFlowBadge && (
             <ActivityFlowStep
               position={activity.activityFlowDetails!.activityPositionInFlow}
@@ -52,10 +69,17 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
             />
           )} */}
 
-          <ActivityCardTitle title={activity.name} />
-          <ActivityCardDescription description={activity.description} />
+          <ActivityCardTitle title={activityListItem.name} />
 
-          {isSupportedActivity && <TimeStatusLabel activity={activity} />}
+          <ActivityLabel
+            isActivityInProgress={activityListItem.status === ActivityStatus.InProgress}
+            activityLength={activity?.items.length || 0}
+            countOfCompletedQuestions={countOfCompletedQuestions}
+          />
+
+          <ActivityCardDescription description={activityListItem.description} />
+
+          {isSupportedActivity && <TimeStatusLabel activity={activityListItem} />}
 
           {!isSupportedActivity && <MobileOnlyLabel />}
         </Box>
