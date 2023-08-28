@@ -1,7 +1,7 @@
 import { ActivityPipelineType, activityModel } from "~/entities/activity"
 import { AppletDetailsDTO } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
-import { useCustomNavigation } from "~/shared/utils"
+import { useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type Props = {
   appletDetails: AppletDetailsDTO
@@ -14,10 +14,14 @@ type Props = {
 
 export const useEntityComplete = (props: Props) => {
   const navigator = useCustomNavigation()
+  const { t } = useCustomTranslation()
+
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { entityCompleted, flowUpdated } = activityModel.hooks.useActivityGroupsInProgressState()
 
   const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+
+  const { showToast } = activityModel.hooks.useAnswerSubmittedToast()
 
   const completeEntityAndRedirect = () => {
     entityCompleted({
@@ -26,27 +30,21 @@ export const useEntityComplete = (props: Props) => {
       eventId: props.eventId,
     })
 
-    const entityCompletedState = {
-      isAnswersSubmitted: true,
-    }
+    showToast(t("toast.answers_submitted"))
 
     if (props.publicAppletKey) {
       return navigator.navigate(ROUTES.publicJoin.navigateTo(props.appletDetails.id), {
         replace: true,
-        state: entityCompletedState,
       })
     }
 
     return navigator.navigate(ROUTES.activityList.navigateTo(props.appletDetails.id), {
       replace: true,
-      state: entityCompletedState,
     })
   }
 
   const redirectToNextActivity = (activityId: string) => {
-    const entityCompletedState = {
-      isAnswersSubmitted: true,
-    }
+    showToast(t("toast.next_activity"))
 
     if (props.publicAppletKey) {
       return navigator.navigate(
@@ -58,7 +56,7 @@ export const useEntityComplete = (props: Props) => {
           publicAppletKey: props.publicAppletKey,
           flowId: props.flowId,
         }),
-        { replace: true, state: entityCompletedState },
+        { replace: true },
       )
     }
 
@@ -70,7 +68,7 @@ export const useEntityComplete = (props: Props) => {
         entityType: "flow",
         flowId: props.flowId,
       }),
-      { replace: true, state: entityCompletedState },
+      { replace: true },
     )
   }
 

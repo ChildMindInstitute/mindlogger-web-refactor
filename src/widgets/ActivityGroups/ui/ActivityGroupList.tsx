@@ -41,8 +41,6 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigator = useCustomNavigation()
 
-  activityModel.hooks.useAnswerSubmittedToast({ text: t("toast.answers_submitted") })
-
   const { data: completedEntities, isLoading: isCompletedEntitiesLoading } = useCompletedEntitiesQuery(
     {
       appletId: props.appletDetails.id,
