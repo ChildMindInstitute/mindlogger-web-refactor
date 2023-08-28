@@ -4,12 +4,14 @@ import { ActivityAvailableLabel } from "./ActivityAvailableLabel"
 import { ActivityFlowAvailableLabel } from "./ActivityFlowAvailableLabel"
 import { ActivityFlowInProgressLabel } from "./ActivityFlowInProgressLabel"
 import { ActivityInProgressLabel } from "./ActivityInProgressLabel"
+import { ActivityUnsupportedLabel } from "./ActivityUnsupportedLabel"
 
 import { ActivityDTO } from "~/shared/api"
 
 type Props = {
   activityListItem: ActivityListItem
   activity?: ActivityDTO
+  isSupportedActivity: boolean
 }
 
 export const ActivityLabel = (props: Props) => {
@@ -26,6 +28,10 @@ export const ActivityLabel = (props: Props) => {
 
   const getCompletedActivitiesFromPosition = (position: number) => {
     return position - 1
+  }
+
+  if (!props.isSupportedActivity) {
+    return <ActivityUnsupportedLabel />
   }
 
   if (isFlow && isActivityInProgress) {

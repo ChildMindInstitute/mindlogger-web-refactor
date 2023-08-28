@@ -9,7 +9,6 @@ import { ActivityCardDescription } from "./ActivityCardDescription"
 import { ActivityCardIcon } from "./ActivityCardIcon"
 import { ActivityCardTitle } from "./ActivityCardTitle"
 import { ActivityLabel } from "./ActivityLabel"
-import { MobileOnlyLabel } from "./MobileOnlyLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
 import { Loader } from "~/shared/ui"
@@ -32,6 +31,14 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
     return activityBuilder.isSupportedActivity(activity)
   }, [activity])
 
+  const onActivityCardClickHandler = () => {
+    if (!isSupportedActivity) {
+      return
+    }
+
+    return onActivityCardClick()
+  }
+
   if (isLoading) {
     return (
       <ActivityCardBase>
@@ -43,7 +50,7 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
   }
 
   return (
-    <ActivityCardBase onClick={onActivityCardClick}>
+    <ActivityCardBase onClick={onActivityCardClickHandler}>
       <Box
         display="flex"
         flex={1}
@@ -55,13 +62,15 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
         <Box display="flex" flex={1} justifyContent="center" alignItems="flex-start" flexDirection="column" gap="8px">
           <ActivityCardTitle title={activityListItem.name} />
 
-          <ActivityLabel activityListItem={activityListItem} activity={activity} />
+          <ActivityLabel
+            activityListItem={activityListItem}
+            activity={activity}
+            isSupportedActivity={isSupportedActivity}
+          />
 
           <ActivityCardDescription description={activityListItem.description} />
 
           {isSupportedActivity && <TimeStatusLabel activity={activityListItem} />}
-
-          {!isSupportedActivity && <MobileOnlyLabel />}
         </Box>
       </Box>
     </ActivityCardBase>
