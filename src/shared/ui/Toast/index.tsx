@@ -3,8 +3,6 @@ import { ToastContainer } from "react-toastify"
 import { Theme } from "~/shared/constants"
 import { useCustomMediaQuery } from "~/shared/utils"
 
-import "./style.scss"
-
 type Props = {
   autoCloseMs: number
   hideProgressBar?: boolean
@@ -19,6 +17,7 @@ export const AppToast = (props: Props) => {
 
   return (
     <ToastContainer
+      position="bottom-left"
       autoClose={props.autoCloseMs}
       hideProgressBar={props.hideProgressBar || false}
       newestOnTop={props.newestOnTop || false}

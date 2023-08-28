@@ -8,7 +8,7 @@ import { StartAssessmentButton } from "~/features/StartAssessment"
 import { ActivityDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
 import { AvatarBase, Text } from "~/shared/ui"
-import { useCustomMediaQuery, useCustomTranslation, useFlowType } from "~/shared/utils"
+import { useCustomMediaQuery, useFlowType } from "~/shared/utils"
 
 type Props = {
   activityDetails: ActivityDTO
@@ -20,10 +20,8 @@ type Props = {
 
 export const AssessmentWelcomeScreen = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery()
-  const { t } = useCustomTranslation()
 
   const flowParams = useFlowType()
-  activityModel.hooks.useAnswerSubmittedToast({ text: t("toast.next_activity") })
 
   const { saveActivityEventRecords } = activityModel.hooks.useSaveActivityEventProgress()
   const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
