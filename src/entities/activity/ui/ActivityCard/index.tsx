@@ -3,11 +3,12 @@ import classNames from "classnames"
 
 import { ActivityListItem, ActivityStatus, useSupportableActivity } from "../../lib"
 import { ActivityCardBase } from "./ActivityCardBase"
+import { ActivityCardIcon } from "./ActivityCardIcon"
 import { ActivityFlowStep } from "./ActivityFlowStep"
 import { MobileOnlyLabel } from "./MobileOnlyLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
-import { AvatarBase, Loader } from "~/shared/ui"
+import { Loader } from "~/shared/ui"
 
 interface ActivityCardProps {
   activity: ActivityListItem
@@ -35,9 +36,7 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
   return (
     <ActivityCardBase onClick={onActivityCardClick}>
       <Box display="flex" flex={1} gap="24px" data-testid="activity-card-content-wrapper">
-        <Box display="flex" justifyContent="center" alignItems="center" width="64px">
-          {activity.image && <AvatarBase src={activity.image} name="" width="64px" height="64px" />}
-        </Box>
+        <ActivityCardIcon src={activity.image} isFlow={Boolean(activity.flowId)} />
 
         <Box display="flex" flex={1} justifyContent="center" alignItems="flex-start" flexDirection="column">
           {activity.isInActivityFlow && activity.activityFlowDetails!.showActivityFlowBadge && (
