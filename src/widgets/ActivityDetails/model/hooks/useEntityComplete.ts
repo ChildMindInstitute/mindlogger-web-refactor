@@ -1,6 +1,7 @@
 import { ActivityPipelineType, activityModel } from "~/entities/activity"
 import { AppletDetailsDTO } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
+import { useToast } from "~/shared/ui"
 import { useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type Props = {
@@ -21,7 +22,7 @@ export const useEntityComplete = (props: Props) => {
 
   const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  const { showToast } = activityModel.hooks.useAnswerSubmittedToast()
+  const { showToast } = useToast()
 
   const completeEntityAndRedirect = () => {
     entityCompleted({
