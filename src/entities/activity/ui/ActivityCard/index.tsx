@@ -2,11 +2,13 @@ import { useMemo } from "react"
 
 import Box from "@mui/material/Box"
 
-import { ActivityListItem, useActivity } from "../../lib"
+import { ActivityListItem, ActivityStatus, useActivity } from "../../lib"
 import { activityBuilder } from "../../model"
+import { useActivityEventProgressState } from "../../model/hooks"
 import { ActivityCardBase } from "./ActivityCardBase"
 import { ActivityCardDescription } from "./ActivityCardDescription"
 import { ActivityCardIcon } from "./ActivityCardIcon"
+import { ActivityCardProgressBar } from "./ActivityCardProgressBar"
 import { ActivityCardTitle } from "./ActivityCardTitle"
 import { ActivityLabel } from "./ActivityLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
@@ -26,6 +28,17 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
     activityId: activityListItem.activityId,
     isPublic,
   })
+
+  const { activityEvents, progress } = useActivityEventProgressState({
+    activityId: activityListItem.activityId,
+    eventId: activityListItem.eventId,
+  })
+
+  const isActivityInProgress = activityListItem.status === ActivityStatus.InProgress
+
+  const countOfCompletedQuestions = activityEvents.filter(item => item.answer.length).length
+
+  const activityLength = activity?.items.length || 0
 
   const isSupportedActivity = useMemo(() => {
     return activityBuilder.isSupportedActivity(activity)
@@ -62,10 +75,14 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
         <Box display="flex" flex={1} justifyContent="center" alignItems="flex-start" flexDirection="column" gap="8px">
           <ActivityCardTitle title={activityListItem.name} />
 
+          {isActivityInProgress && <ActivityCardProgressBar percentage={progress} />}
+
           <ActivityLabel
             activityListItem={activityListItem}
-            activity={activity}
+            activityLength={activityLength}
             isSupportedActivity={isSupportedActivity}
+            isActivityInProgress={isActivityInProgress}
+            countOfCompletedQuestions={countOfCompletedQuestions}
           />
 
           <ActivityCardDescription description={activityListItem.description} />
