@@ -2,9 +2,8 @@ import { useMemo } from "react"
 
 import Box from "@mui/material/Box"
 
-import { ActivityListItem, ActivityStatus, useActivity } from "../../lib"
+import { ActivityListItem, useActivity } from "../../lib"
 import { activityBuilder } from "../../model"
-import { useActivityEventProgressState } from "../../model/hooks"
 import { ActivityCardBase } from "./ActivityCardBase"
 import { ActivityCardDescription } from "./ActivityCardDescription"
 import { ActivityCardIcon } from "./ActivityCardIcon"
@@ -23,18 +22,11 @@ interface ActivityCardProps {
   disabled?: boolean
 }
 
-export const ActivityCard = ({ activityListItem, disabled, onActivityCardClick, isPublic }: ActivityCardProps) => {
+export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }: ActivityCardProps) => {
   const { isLoading, activity } = useActivity({
     activityId: activityListItem.activityId,
     isPublic,
   })
-
-  const { activityEvents } = useActivityEventProgressState({
-    activityId: activityListItem.activityId,
-    eventId: activityListItem.eventId,
-  })
-
-  const countOfCompletedQuestions = activityEvents.filter(item => item.answer.length).length
 
   const isSupportedActivity = useMemo(() => {
     return activityBuilder.isSupportedActivity(activity)
@@ -61,21 +53,9 @@ export const ActivityCard = ({ activityListItem, disabled, onActivityCardClick, 
         <ActivityCardIcon src={activityListItem.image} isFlow={Boolean(activityListItem.flowId)} />
 
         <Box display="flex" flex={1} justifyContent="center" alignItems="flex-start" flexDirection="column" gap="8px">
-          {/* {activity.isInActivityFlow && activity.activityFlowDetails!.showActivityFlowBadge && (
-            <ActivityFlowStep
-              position={activity.activityFlowDetails!.activityPositionInFlow}
-              activityCount={activity.activityFlowDetails!.numberOfActivitiesInFlow}
-              activityFlowName={activity.activityFlowDetails!.activityFlowName}
-            />
-          )} */}
-
           <ActivityCardTitle title={activityListItem.name} />
 
-          <ActivityLabel
-            isActivityInProgress={activityListItem.status === ActivityStatus.InProgress}
-            activityLength={activity?.items.length || 0}
-            countOfCompletedQuestions={countOfCompletedQuestions}
-          />
+          <ActivityLabel activityListItem={activityListItem} activity={activity} />
 
           <ActivityCardDescription description={activityListItem.description} />
 

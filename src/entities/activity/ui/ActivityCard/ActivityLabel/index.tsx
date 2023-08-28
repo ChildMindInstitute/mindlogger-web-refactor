@@ -1,21 +1,57 @@
+import { ActivityListItem, ActivityStatus } from "../../../lib"
+import { useActivityEventProgressState } from "../../../model/hooks"
 import { ActivityAvailableLabel } from "./ActivityAvailableLabel"
+import { ActivityFlowAvailableLabel } from "./ActivityFlowAvailableLabel"
+import { ActivityFlowInProgressLabel } from "./ActivityFlowInProgressLabel"
 import { ActivityInProgressLabel } from "./ActivityInProgressLabel"
 
+import { ActivityDTO } from "~/shared/api"
+
 type Props = {
-  isActivityInProgress: boolean
-  activityLength: number
-  countOfCompletedQuestions: number
+  activityListItem: ActivityListItem
+  activity?: ActivityDTO
 }
 
 export const ActivityLabel = (props: Props) => {
-  if (props.isActivityInProgress) {
+  const isFlow = Boolean(props.activityListItem.flowId)
+  const isActivityInProgress = props.activityListItem.status === ActivityStatus.InProgress
+  const activityLength = props.activity?.items.length || 0
+
+  const { activityEvents } = useActivityEventProgressState({
+    activityId: props.activityListItem.activityId,
+    eventId: props.activityListItem.eventId,
+  })
+
+  const countOfCompletedQuestions = activityEvents.filter(item => item.answer.length).length
+
+  const getCompletedActivitiesFromPosition = (position: number) => {
+    return position - 1
+  }
+
+  if (isFlow && isActivityInProgress) {
     return (
-      <ActivityInProgressLabel
-        activityLength={props.activityLength}
-        countOfCompletedQuestions={props.countOfCompletedQuestions}
+      <ActivityFlowInProgressLabel
+        activityFlowLength={props.activityListItem.activityFlowDetails!.numberOfActivitiesInFlow}
+        countOfCompletedActivities={getCompletedActivitiesFromPosition(
+          props.activityListItem.activityFlowDetails!.activityPositionInFlow,
+        )}
       />
     )
   }
 
-  return <ActivityAvailableLabel activityLength={props.activityLength} />
+  if (isFlow) {
+    return (
+      <ActivityFlowAvailableLabel
+        activityFlowLength={props.activityListItem.activityFlowDetails!.numberOfActivitiesInFlow}
+      />
+    )
+  }
+
+  if (!isFlow && isActivityInProgress) {
+    return (
+      <ActivityInProgressLabel activityLength={activityLength} countOfCompletedQuestions={countOfCompletedQuestions} />
+    )
+  }
+
+  return <ActivityAvailableLabel activityLength={activityLength} />
 }
