@@ -1,10 +1,10 @@
 import Box from "@mui/material/Box"
-import classNames from "classnames"
 
 import { ActivityListItem, ActivityStatus, useSupportableActivity } from "../../lib"
 import { ActivityCardBase } from "./ActivityCardBase"
+import { ActivityCardDescription } from "./ActivityCardDescription"
 import { ActivityCardIcon } from "./ActivityCardIcon"
-import { ActivityFlowStep } from "./ActivityFlowStep"
+import { ActivityCardTitle } from "./ActivityCardTitle"
 import { MobileOnlyLabel } from "./MobileOnlyLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
@@ -35,28 +35,25 @@ export const ActivityCard = ({ activity, disabled, onActivityCardClick, isPublic
 
   return (
     <ActivityCardBase onClick={onActivityCardClick}>
-      <Box display="flex" flex={1} gap="24px" data-testid="activity-card-content-wrapper">
+      <Box
+        display="flex"
+        flex={1}
+        gap="24px"
+        data-testid="activity-card-content-wrapper"
+        sx={{ textTransform: "none" }}>
         <ActivityCardIcon src={activity.image} isFlow={Boolean(activity.flowId)} />
 
         <Box display="flex" flex={1} justifyContent="center" alignItems="flex-start" flexDirection="column">
-          {activity.isInActivityFlow && activity.activityFlowDetails!.showActivityFlowBadge && (
+          {/* {activity.isInActivityFlow && activity.activityFlowDetails!.showActivityFlowBadge && (
             <ActivityFlowStep
               position={activity.activityFlowDetails!.activityPositionInFlow}
               activityCount={activity.activityFlowDetails!.numberOfActivitiesInFlow}
               activityFlowName={activity.activityFlowDetails!.activityFlowName}
             />
-          )}
+          )} */}
 
-          <div
-            className={classNames(
-              "activity-name-date",
-              { "activity-title-active": !isDisabled },
-              { "activity-title-disabled": isDisabled },
-            )}>
-            {activity.name}
-          </div>
-
-          {activity.description && <div className="activity-description">{activity.description}</div>}
+          <ActivityCardTitle title={activity.name} />
+          <ActivityCardDescription description={activity.description} />
 
           {isSupportedActivity && <TimeStatusLabel activity={activity} />}
 
