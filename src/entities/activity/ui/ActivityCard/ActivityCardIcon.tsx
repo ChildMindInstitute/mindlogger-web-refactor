@@ -14,11 +14,7 @@ export const ActivityCardIcon = (props: Props) => {
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" width="64px">
-      {props.src ? (
-        <AvatarBase src={props.src} name="" width="64px" height="64px" />
-      ) : (
-        <AvatarBase src={defaultImage} name="" width="64px" height="64px" />
-      )}
+      <AvatarBase src={props.src ?? defaultImage} name="" width="64px" height="64px" />
     </Box>
   )
 }

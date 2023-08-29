@@ -32,6 +32,7 @@ export type SuccessResponseActivityById = BaseSuccessResponse<ActivityDTO>
 
 export type ActivityDTO = {
   id: ID
+  createdAt: string
   name: string
   description: string
   splashScreen: string | ""
@@ -40,7 +41,8 @@ export type ActivityDTO = {
   isSkippable: boolean
   isReviewable: boolean
   responseIsEditable: boolean
-  ordering: number
+  isHidden: boolean
+  order: number
   items: ActivityItemDetailsDTO[]
 }
 

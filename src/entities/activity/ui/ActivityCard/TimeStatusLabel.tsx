@@ -28,7 +28,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   const hasTimeToComplete = isStatusInProgress && activity.isTimerSet && !!activity.timeLeftToComplete
 
-  const convert = (date: Date): string => {
+  const formatDate = (date: Date): string => {
     const convertResult = convertToTimeOnNoun(date)
     if (convertResult.translationKey) {
       return t(convertResult.translationKey)
@@ -52,9 +52,9 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
       <Box display="flex" alignItems="center" gap="8px">
         <Avatar src={ClockIcon} sx={{ width: "24px", height: "24px" }} />
         <Typography variant="body1" sx={timeStatusLabelSx}>
-          {`${t("activity_due_date.available")} ${convert(activity.availableFrom!)} ${t(
+          {`${t("activity_due_date.available")} ${formatDate(activity.availableFrom!)} ${t(
             "activity_due_date.to",
-          )} ${convert(activity.availableTo!)}`}
+          )} ${formatDate(activity.availableTo!)}`}
         </Typography>
       </Box>
     )
@@ -64,7 +64,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
     return (
       <Box display="flex" alignItems="center" gap="8px">
         <Avatar src={ClockIcon} sx={{ width: "24px", height: "24px" }} />
-        <Typography variant="body1" sx={timeStatusLabelSx}>{`${t("activity_due_date.to")} ${convert(
+        <Typography variant="body1" sx={timeStatusLabelSx}>{`${t("activity_due_date.to")} ${formatDate(
           activity.availableTo!,
         )}`}</Typography>
       </Box>
