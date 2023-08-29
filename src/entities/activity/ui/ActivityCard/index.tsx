@@ -14,6 +14,7 @@ import { ActivityLabel } from "./ActivityLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
 import { Loader } from "~/shared/ui"
+import { useCustomMediaQuery } from "~/shared/utils"
 
 interface ActivityCardProps {
   activityListItem: ActivityListItem
@@ -22,6 +23,8 @@ interface ActivityCardProps {
 }
 
 export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }: ActivityCardProps) => {
+  const { lessThanSM } = useCustomMediaQuery()
+
   const { isLoading, activity } = useActivity({
     activityId: activityListItem.activityId,
     isPublic,
@@ -83,7 +86,8 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
       <Box
         display="flex"
         flex={1}
-        gap="24px"
+        gap={lessThanSM ? "8px" : "24px"}
+        flexDirection={lessThanSM ? "column" : "row"}
         data-testid="activity-card-content-wrapper"
         sx={{ textTransform: "none" }}>
         <ActivityCardIcon src={activityListItem.image} isFlow={Boolean(activityListItem.flowId)} />
