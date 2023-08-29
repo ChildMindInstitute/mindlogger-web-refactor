@@ -12,9 +12,13 @@ type Props = {
 export const ActivityCardIcon = (props: Props) => {
   const defaultImage = props.isFlow ? ActivityFlowDefaultIcon : ActivityDefaultIcon
 
+  const isSrcExist = props.src && props.src !== ""
+
+  const imageSrc = isSrcExist ? props.src : defaultImage
+
   return (
     <Box display="flex" justifyContent="center" alignItems="center" width="64px">
-      <AvatarBase src={props.src ?? defaultImage} name="" width="64px" height="64px" />
+      <AvatarBase src={imageSrc!} name="" width="64px" height="64px" />
     </Box>
   )
 }
