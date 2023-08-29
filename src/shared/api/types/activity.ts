@@ -42,6 +42,7 @@ export type AnswerPayload = {
   flowId: ID | null
   activityId: ID
   isFlowCompleted: boolean | null
+  createdAt: number
   answer: {
     answer: string // Encrypted answer DTO: Array<string | { value: string | string[] | number, text: string | null }>
     events: string // Encrypted user actions DTO

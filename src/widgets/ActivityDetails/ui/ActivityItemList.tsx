@@ -152,6 +152,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
       activityId: activityDetails.id,
       submitId: uuidV4(),
       isFlowCompleted: null,
+      createdAt: new Date().getTime(),
       answer: {
         answer: encryptedAnswers,
         itemIds: preparedItemAnswers.itemIds,
