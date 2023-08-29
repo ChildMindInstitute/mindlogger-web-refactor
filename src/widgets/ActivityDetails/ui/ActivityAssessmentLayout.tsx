@@ -15,6 +15,7 @@ type Props = PropsWithChildren<{
   isPublic: boolean
 
   buttons: React.ReactNode
+  onKeyDownHandler?: (key: string) => void
 }>
 
 export const ActivityAssessmentLayout = ({
@@ -25,9 +26,14 @@ export const ActivityAssessmentLayout = ({
   title,
   appletId,
   isPublic,
+  onKeyDownHandler,
 }: Props) => {
   return (
-    <Box display="flex" flexDirection="column" flex={1}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      flex={1}
+      onKeyDown={event => onKeyDownHandler && onKeyDownHandler(event.key)}>
       <AssessmentLayoutHeader
         title={title}
         appletId={appletId}

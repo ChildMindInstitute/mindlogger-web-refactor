@@ -7,7 +7,8 @@ import { DateLocalizationProvider, MUIThemeProvider, ReactQuery, ReduxProvider, 
 import i18nManager from "./system/locale/i18n"
 
 import ApplicationRouter from "~/pages"
-
+import { AppToast } from "~/shared/ui"
+import "react-toastify/dist/ReactToastify.min.css"
 import "./index.css"
 
 i18nManager.initialize()
@@ -27,6 +28,7 @@ function App() {
             </ReactQuery>
           </ReduxProvider>
         </RouteProvider>
+        <AppToast autoCloseMs={3500} />
       </MUIThemeProvider>
     </Suspense>
   )
