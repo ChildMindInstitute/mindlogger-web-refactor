@@ -34,11 +34,25 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
     eventId: activityListItem.eventId,
   })
 
+  const getCompletedActivitiesFromPosition = (position: number) => {
+    return position - 1
+  }
+
+  const isFlow = Boolean(activityListItem.flowId)
+
   const isActivityInProgress = activityListItem.status === ActivityStatus.InProgress
 
   const countOfCompletedQuestions = activityEvents.filter(item => item.answer.length).length
 
   const activityLength = activity?.items.length || 0
+
+  const numberOfActivitiesInFlow = activityListItem.activityFlowDetails?.numberOfActivitiesInFlow || 0
+
+  const countOfCompletedActivities = getCompletedActivitiesFromPosition(
+    activityListItem.activityFlowDetails?.activityPositionInFlow || 0,
+  )
+
+  const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100
 
   const isSupportedActivity = useMemo(() => {
     return activityBuilder.isSupportedActivity(activity)
@@ -75,14 +89,16 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
         <Box display="flex" flex={1} justifyContent="center" alignItems="flex-start" flexDirection="column" gap="8px">
           <ActivityCardTitle title={activityListItem.name} />
 
-          {isActivityInProgress && <ActivityCardProgressBar percentage={progress} />}
+          {isActivityInProgress && <ActivityCardProgressBar percentage={isFlow ? flowProgress : progress} />}
 
           <ActivityLabel
-            activityListItem={activityListItem}
+            isFlow={isFlow}
             activityLength={activityLength}
             isSupportedActivity={isSupportedActivity}
             isActivityInProgress={isActivityInProgress}
             countOfCompletedQuestions={countOfCompletedQuestions}
+            countOfCompletedActivities={countOfCompletedActivities}
+            numberOfActivitiesInFlow={numberOfActivitiesInFlow}
           />
 
           <ActivityCardDescription description={activityListItem.description} />

@@ -1,4 +1,3 @@
-import { ActivityListItem } from "../../../lib"
 import { ActivityAvailableLabel } from "./ActivityAvailableLabel"
 import { ActivityFlowAvailableLabel } from "./ActivityFlowAvailableLabel"
 import { ActivityFlowInProgressLabel } from "./ActivityFlowInProgressLabel"
@@ -6,44 +5,36 @@ import { ActivityInProgressLabel } from "./ActivityInProgressLabel"
 import { ActivityUnsupportedLabel } from "./ActivityUnsupportedLabel"
 
 type Props = {
-  activityListItem: ActivityListItem
+  isFlow: boolean
+
   isSupportedActivity: boolean
   isActivityInProgress: boolean
   countOfCompletedQuestions: number
   activityLength: number
+
+  numberOfActivitiesInFlow: number
+  countOfCompletedActivities: number
 }
 
 export const ActivityLabel = (props: Props) => {
-  const isFlow = Boolean(props.activityListItem.flowId)
-
-  const getCompletedActivitiesFromPosition = (position: number) => {
-    return position - 1
-  }
-
   if (!props.isSupportedActivity) {
     return <ActivityUnsupportedLabel />
   }
 
-  if (isFlow && props.isActivityInProgress) {
+  if (props.isFlow && props.isActivityInProgress) {
     return (
       <ActivityFlowInProgressLabel
-        activityFlowLength={props.activityListItem.activityFlowDetails!.numberOfActivitiesInFlow}
-        countOfCompletedActivities={getCompletedActivitiesFromPosition(
-          props.activityListItem.activityFlowDetails!.activityPositionInFlow,
-        )}
+        activityFlowLength={props.numberOfActivitiesInFlow}
+        countOfCompletedActivities={props.countOfCompletedActivities}
       />
     )
   }
 
-  if (isFlow) {
-    return (
-      <ActivityFlowAvailableLabel
-        activityFlowLength={props.activityListItem.activityFlowDetails!.numberOfActivitiesInFlow}
-      />
-    )
+  if (props.isFlow) {
+    return <ActivityFlowAvailableLabel activityFlowLength={props.numberOfActivitiesInFlow} />
   }
 
-  if (!isFlow && props.isActivityInProgress) {
+  if (!props.isFlow && props.isActivityInProgress) {
     return (
       <ActivityInProgressLabel
         activityLength={props.activityLength}
