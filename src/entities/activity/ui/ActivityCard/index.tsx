@@ -19,8 +19,6 @@ interface ActivityCardProps {
   activityListItem: ActivityListItem
   isPublic: boolean
   onActivityCardClick: () => void
-
-  disabled?: boolean
 }
 
 export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }: ActivityCardProps) => {
@@ -37,6 +35,10 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
   const getCompletedActivitiesFromPosition = (position: number) => {
     return position - 1
   }
+
+  const isStatusScheduled = activityListItem.status === ActivityStatus.Scheduled
+
+  const isDisabled = isStatusScheduled
 
   const isFlow = Boolean(activityListItem.flowId)
 
@@ -59,7 +61,7 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
   }, [activity])
 
   const onActivityCardClickHandler = () => {
-    if (!isSupportedActivity) {
+    if (!isSupportedActivity || isDisabled) {
       return
     }
 
@@ -77,7 +79,7 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
   }
 
   return (
-    <ActivityCardBase onClick={onActivityCardClickHandler}>
+    <ActivityCardBase onClick={onActivityCardClickHandler} isDisabled={isDisabled}>
       <Box
         display="flex"
         flex={1}

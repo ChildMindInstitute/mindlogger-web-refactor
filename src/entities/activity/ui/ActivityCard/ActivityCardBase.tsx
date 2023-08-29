@@ -26,6 +26,7 @@ export const ActivityCardBase = (props: Props) => {
         maxWidth: "1200px",
         display: "flex",
         flex: 1,
+        opacity: props.isDisabled ? 0.65 : 1,
       }}>
       {props.children}
     </Button>

@@ -1,5 +1,12 @@
+import Avatar from "@mui/material/Avatar"
+import Box from "@mui/material/Box"
+import { SxProps, Theme as MuiTheme } from "@mui/material/styles"
+import Typography from "@mui/material/Typography"
+
 import { ActivityListItem, ActivityStatus } from "../../lib"
 
+import ClockIcon from "~/assets/Clock.svg"
+import { Theme } from "~/shared/constants"
 import { convertToTimeOnNoun, useCustomTranslation } from "~/shared/utils"
 
 interface TimeStatusLabelProps {
@@ -30,21 +37,54 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
     }
   }
 
-  return (
-    <>
-      {hasAvailableFromTo && (
-        <small>
+  const timeStatusLabelSx: SxProps<MuiTheme> = {
+    fontFamily: "Atkinson",
+    fontSize: "16px",
+    fontStyle: "normal",
+    fontWeight: 400,
+    lineHeight: "24px",
+    letterSpacing: "0.15px",
+    color: Theme.colors.light.onSurfaceVariant,
+  }
+
+  if (hasAvailableFromTo) {
+    return (
+      <Box display="flex" alignItems="center" gap="8px">
+        <Avatar src={ClockIcon} sx={{ width: "24px", height: "24px" }} />
+        <Typography variant="body1" sx={timeStatusLabelSx}>
           {`${t("activity_due_date.available")} ${convert(activity.availableFrom!)} ${t(
             "activity_due_date.to",
           )} ${convert(activity.availableTo!)}`}
-        </small>
-      )}
+        </Typography>
+      </Box>
+    )
+  }
 
-      {hasAvailableToOnly && <small>{`${t("activity_due_date.to")} ${convert(activity.availableTo!)}`}</small>}
+  if (hasAvailableToOnly) {
+    return (
+      <Box display="flex" alignItems="center" gap="8px">
+        <Avatar src={ClockIcon} sx={{ width: "24px", height: "24px" }} />
+        <Typography variant="body1" sx={timeStatusLabelSx}>{`${t("activity_due_date.to")} ${convert(
+          activity.availableTo!,
+        )}`}</Typography>
+      </Box>
+    )
+  }
 
-      {hasTimeToComplete && <small>{`${t("time_to_complete_hm", activity.timeLeftToComplete!)}`}</small>}
-    </>
-  )
+  if (hasTimeToComplete) {
+    return (
+      <Box display="flex" alignItems="center" gap="8px">
+        <Avatar src={ClockIcon} sx={{ width: "24px", height: "24px" }} />
+
+        <Typography variant="body1" sx={timeStatusLabelSx}>{`${t(
+          "time_to_complete_hm",
+          activity.timeLeftToComplete!,
+        )}`}</Typography>
+      </Box>
+    )
+  }
+
+  return <></>
 }
 
 export default TimeStatusLabel
