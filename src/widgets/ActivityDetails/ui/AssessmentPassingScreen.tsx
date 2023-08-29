@@ -37,9 +37,7 @@ export const AssessmentPassingScreen = (props: Props) => {
   const [isInvalidAnswerModalOpen, openInvalidAnswerModal, closeInvalidAnswerModal] = useModal()
 
   const { processAnswers } = useAnswer({
-    appletId: props.appletDetails.id,
-    appletEncryption: props.appletDetails.encryption,
-    appletVersion: props.appletDetails.version,
+    appletDetails: props.appletDetails,
     activityId: props.activityDetails.id,
     eventId: props.eventId,
     eventsRawData: props.eventsRawData,
@@ -142,6 +140,20 @@ export const AssessmentPassingScreen = (props: Props) => {
     activityId: props.activityDetails.id,
   })
 
+  const onEnterPress = () => {
+    if (!hasNextStep) {
+      return submitAnswers()
+    }
+
+    return onNextButtonClick()
+  }
+
+  const onKeyDownHandler = (key: string) => {
+    if (key === "Enter") {
+      return onEnterPress()
+    }
+  }
+
   return (
     <>
       <ActivityAssessmentLayout
@@ -150,6 +162,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         activityId={props.activityDetails.id}
         eventId={props.eventId}
         isPublic={props.isPublic}
+        onKeyDownHandler={onKeyDownHandler}
         buttons={
           <ItemCardButton
             currentItem={currentItem}

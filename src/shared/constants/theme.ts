@@ -10,6 +10,8 @@ export const Theme = {
       surface: "#FCFCFF",
       surfaceVariant: "#DEE3EB",
       surface1: "#EFF4FA",
+      accentGreen: "#0F7B6C",
+      inverseOnSurface: "#F0F0F4",
     },
     dark: {},
   },

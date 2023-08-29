@@ -1,7 +1,7 @@
 import { ActivityPipelineType, activityModel } from "~/entities/activity"
 import { AppletDetailsDTO } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
-import { useCustomNavigation } from "~/shared/utils"
+import { useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type Props = {
   appletDetails: AppletDetailsDTO
@@ -14,26 +14,38 @@ type Props = {
 
 export const useEntityComplete = (props: Props) => {
   const navigator = useCustomNavigation()
+  const { t } = useCustomTranslation()
+
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { entityCompleted, flowUpdated } = activityModel.hooks.useActivityGroupsInProgressState()
 
   const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  const completeActivityFlowAndRedirect = () => {
+  const { showToast } = activityModel.hooks.useAnswerSubmittedToast()
+
+  const completeEntityAndRedirect = () => {
     entityCompleted({
       appletId: props.appletDetails.id,
       entityId: props.flowId ? props.flowId : props.activityId,
       eventId: props.eventId,
     })
 
+    showToast(t("toast.answers_submitted"))
+
     if (props.publicAppletKey) {
-      return navigator.navigate(ROUTES.thanks.navigateTo(props.publicAppletKey, true), { replace: true })
+      return navigator.navigate(ROUTES.publicJoin.navigateTo(props.appletDetails.id), {
+        replace: true,
+      })
     }
 
-    return navigator.navigate(ROUTES.thanks.navigateTo(props.appletDetails.id, false), { replace: true })
+    return navigator.navigate(ROUTES.activityList.navigateTo(props.appletDetails.id), {
+      replace: true,
+    })
   }
 
   const redirectToNextActivity = (activityId: string) => {
+    showToast(t("toast.next_activity"))
+
     if (props.publicAppletKey) {
       return navigator.navigate(
         ROUTES.publicActivityDetails.navigateTo({
@@ -96,7 +108,7 @@ export const useEntityComplete = (props: Props) => {
     clearActivityItemsProgressById(props.activityId, props.eventId)
 
     if (!nextActivityId) {
-      return completeActivityFlowAndRedirect()
+      return completeEntityAndRedirect()
     }
 
     return redirectToNextActivity(nextActivityId)
@@ -104,17 +116,8 @@ export const useEntityComplete = (props: Props) => {
 
   const completeActivity = () => {
     clearActivityItemsProgressById(props.activityId, props.eventId)
-    entityCompleted({
-      appletId: props.appletDetails.id,
-      entityId: props.flowId ? props.flowId : props.activityId,
-      eventId: props.eventId,
-    })
 
-    if (props.publicAppletKey) {
-      return navigator.navigate(ROUTES.thanks.navigateTo(props.publicAppletKey, true), { replace: true })
-    }
-
-    return navigator.navigate(ROUTES.thanks.navigateTo(props.appletDetails.id, false), { replace: true })
+    return completeEntityAndRedirect()
   }
 
   return {
