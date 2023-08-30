@@ -44,6 +44,7 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
   const isDisabled = isStatusScheduled
 
   const isFlow = Boolean(activityListItem.flowId)
+  const activityFlowName = activityListItem.activityFlowDetails?.activityFlowName
 
   const isActivityInProgress = activityListItem.status === ActivityStatus.InProgress
 
@@ -56,6 +57,8 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
   const countOfCompletedActivities = getCompletedActivitiesFromPosition(
     activityListItem.activityFlowDetails?.activityPositionInFlow || 0,
   )
+
+  const activityCardTitle = isFlow && activityFlowName ? activityFlowName : activityListItem.name
 
   const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100
 
@@ -90,10 +93,10 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
         flexDirection={lessThanSM ? "column" : "row"}
         data-testid="activity-card-content-wrapper"
         sx={{ textTransform: "none" }}>
-        <ActivityCardIcon src={activityListItem.image} isFlow={Boolean(activityListItem.flowId)} />
+        <ActivityCardIcon src={isFlow ? null : activityListItem.image} isFlow={isFlow} />
 
         <Box display="flex" flex={1} justifyContent="center" alignItems="flex-start" flexDirection="column" gap="8px">
-          <ActivityCardTitle title={activityListItem.name} />
+          <ActivityCardTitle title={activityCardTitle} />
 
           {isActivityInProgress && <ActivityCardProgressBar percentage={isFlow ? flowProgress : progress} />}
 

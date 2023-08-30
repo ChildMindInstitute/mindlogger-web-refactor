@@ -9,5 +9,12 @@ type Props = {
 export const TimeItemBase = ({ label, value, onChange }: Props) => {
   const formatedValue = value ? new Date(value) : null
 
-  return <DesktopTimePicker<Date> label={label} value={formatedValue} onChange={onChange} />
+  return (
+    <DesktopTimePicker<Date>
+      label={label}
+      value={formatedValue}
+      onChange={onChange}
+      slotProps={{ textField: { placeholder: "HH:MM AM/PM" } }}
+    />
+  )
 }
