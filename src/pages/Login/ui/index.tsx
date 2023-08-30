@@ -15,7 +15,7 @@ const LoginPage = () => {
   const location = useLocation()
 
   const onCreateAccountClick = () => {
-    Mixpanel.track("Create account button clicks on login screen")
+    Mixpanel.track("Create account button on login screen click")
   }
 
   useEffect(() => {
