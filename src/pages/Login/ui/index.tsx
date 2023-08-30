@@ -14,6 +14,10 @@ const LoginPage = () => {
   const { t } = useLoginTranslation()
   const location = useLocation()
 
+  const onCreateAccountClick = () => {
+    Mixpanel.track("Create account button clicks on login screen")
+  }
+
   useEffect(() => {
     Mixpanel.trackPageView("Login")
   }, [])
@@ -30,7 +34,7 @@ const LoginPage = () => {
           <LoginForm locationState={location.state} />
 
           <BasicButton type="button" variant="outline-primary" className="mb-3" defaultSize>
-            <Link to={ROUTES.signup.path} relative="path">
+            <Link to={ROUTES.signup.path} relative="path" onClick={onCreateAccountClick}>
               {t("create")}
             </Link>
           </BasicButton>

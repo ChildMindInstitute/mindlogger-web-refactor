@@ -18,7 +18,7 @@ import {
 } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
-import { getYYYYDDMM, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { getYYYYDDMM, Mixpanel, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false
@@ -145,6 +145,8 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     if (activity.status === ActivityStatus.InProgress) {
       setResumeActivityState({ isOpen: true, selectedActivity: activity })
     } else {
+      Mixpanel.track("Assessment Started")
+
       return navigateToActivityDetailsWithEmptyProgress(activity)
     }
   }

@@ -61,6 +61,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
       }
 
       Mixpanel.track("Login Successful")
+      Mixpanel.login(data.data.result.user.id)
     },
   })
 

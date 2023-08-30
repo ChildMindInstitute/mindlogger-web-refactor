@@ -1,14 +1,20 @@
+import { useEffect } from "react"
+
 import { Container } from "react-bootstrap"
 import { Link, useLocation } from "react-router-dom"
 
 import { SignupForm, useSignupTranslation } from "~/features/Signup"
-import { ROUTES } from "~/shared/utils"
+import { Mixpanel, ROUTES } from "~/shared/utils"
 
 import "./styles.scss"
 
 const SignupPage = () => {
   const { t } = useSignupTranslation()
   const location = useLocation()
+
+  useEffect(() => {
+    Mixpanel.trackPageView("Create account")
+  }, [])
 
   return (
     <div className="signupPageContainer align-self-start pt-5 mb-3 w-100">
