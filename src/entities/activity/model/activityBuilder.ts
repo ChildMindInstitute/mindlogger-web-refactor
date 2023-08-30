@@ -1,5 +1,6 @@
 import {
   Activity,
+  ActivityDetails,
   ActivityListItem,
   ActivityPipelineType,
   ActivityProgressPreview,
@@ -80,7 +81,7 @@ class ActivityBuilder {
     }, {})
   }
 
-  public isSupportedActivity(activity: ActivityDTO | undefined) {
+  public isSupportedActivity(activity: ActivityDetails | undefined) {
     if (!activity) {
       return false
     }

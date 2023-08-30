@@ -1,5 +1,4 @@
-import { ActivityItemBase } from "./item"
-
+import { ActivityItemDetailsDTO } from "~/shared/api"
 import { HourMinute } from "~/shared/utils"
 
 export type ActivityListItem = {
@@ -49,12 +48,11 @@ export type ActivityDetails = {
   description: string
   image: string | ""
   splashScreen: string | ""
-  showAllAtOnce: boolean
   isSkippable: boolean
   isReviewable: boolean
   responseIsEditable: boolean
-  ordering: number
-  items: Array<ActivityItemBase>
+  order: number
+  items: ActivityItemDetailsDTO[]
 }
 
 export type ActivityProgressPreview = {

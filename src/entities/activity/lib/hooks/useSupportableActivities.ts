@@ -1,26 +1,20 @@
-import { useMemo } from "react"
-
 import { useActivityByIdQuery } from "../../api"
-import { activityBuilder } from "../../model"
+import { mapActivityDTOToActivity } from "../mapper"
 
 type Props = {
   isPublic: boolean
   activityId: string
 }
 
-export const useSupportableActivity = (props: Props) => {
-  const { data, isError, isLoading } = useActivityByIdQuery(props)
-
-  const activity = useMemo(() => {
-    return data?.data?.result
-  }, [data])
-
-  const isSupportedActivity = useMemo(() => {
-    return activityBuilder.isSupportedActivity(activity)
-  }, [activity])
+export const useActivity = (props: Props) => {
+  const {
+    data: activity,
+    isError,
+    isLoading,
+  } = useActivityByIdQuery(props, { select: data => mapActivityDTOToActivity(data.data.result) })
 
   return {
-    isSupportedActivity,
+    activity,
     isError,
     isLoading,
   }
