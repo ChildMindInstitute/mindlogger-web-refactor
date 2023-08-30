@@ -6,9 +6,10 @@ import { Theme } from "../../constants"
 interface BaseProgressBarProps {
   percentage: number
   hasInitialPercentage?: boolean
+  height?: string
 }
 
-export const BaseProgressBar = ({ percentage, hasInitialPercentage = true }: BaseProgressBarProps) => {
+export const BaseProgressBar = ({ percentage, hasInitialPercentage = true, height = "16px" }: BaseProgressBarProps) => {
   const initialPercentage = hasInitialPercentage ? 3 : 0
 
   const progress = percentage > initialPercentage ? percentage : initialPercentage
@@ -19,7 +20,7 @@ export const BaseProgressBar = ({ percentage, hasInitialPercentage = true }: Bas
         variant="determinate"
         value={progress}
         sx={{
-          height: "16px",
+          height,
           borderRadius: "100px",
           [`&.${linearProgressClasses.colorPrimary}`]: {
             backgroundColor: Theme.colors.light.surfaceVariant,
