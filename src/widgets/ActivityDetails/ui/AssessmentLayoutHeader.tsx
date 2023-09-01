@@ -30,7 +30,7 @@ export const AssessmentLayoutHeader = (props: Props) => {
 
   const onSaveAndExitClick = () => {
     return navigator.navigate(
-      props.isPublic ? ROUTES.publicJoin.navigateTo(props.appletId) : ROUTES.activityList.navigateTo(props.appletId),
+      props.isPublic ? ROUTES.publicJoin.navigateTo(props.appletId) : ROUTES.appletDetails.navigateTo(props.appletId),
     )
   }
 

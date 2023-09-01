@@ -3,8 +3,8 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { Theme } from "../shared/constants"
 import Layout from "../widgets/AppLayout"
 import { ActivityDetailsPage } from "./ActivityDetails"
-import { ActivityListPage } from "./ActivityList"
-import { DashboardPage } from "./Dashboard"
+import { AppletDetailsPage } from "./AppletDetailsPage"
+import { AppletListPage } from "./AppletListPage"
 import { ForgotPasswordPage } from "./ForgotPassword"
 import { InvitationPage } from "./Invitation"
 import { InvitationAcceptPage } from "./InvitationAccept"
@@ -38,8 +38,8 @@ const ApplicationRouter = (): JSX.Element | null => {
             </Route>
 
             <Route element={<Layout />}>
-              <Route path={ROUTES.applets.path} element={<DashboardPage />} />
-              <Route path={ROUTES.activityList.path} element={<ActivityListPage />} />
+              <Route path={ROUTES.appletList.path} element={<AppletListPage />} />
+              <Route path={ROUTES.appletDetails.path} element={<AppletDetailsPage />} />
 
               <Route path={ROUTES.profile.path} element={<ProfilePage />} />
               <Route path={ROUTES.settings.path} element={<SettingsPage />} />
@@ -52,7 +52,7 @@ const ApplicationRouter = (): JSX.Element | null => {
               <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
               <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
 
-              <Route path="*" element={<Navigate to={ROUTES.applets.path} />} />
+              <Route path="*" element={<Navigate to={ROUTES.appletList.path} />} />
             </Route>
           </Route>
         </Routes>

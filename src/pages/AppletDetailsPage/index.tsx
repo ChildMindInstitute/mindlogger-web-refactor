@@ -1,9 +1,10 @@
 import { useParams } from "react-router-dom"
 
+import { PageContainer } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 import { ActivityGroups } from "~/widgets/ActivityGroups"
 
-export const ActivityListPage = () => {
+export const AppletDetailsPage = () => {
   const { appletId } = useParams()
   const { t } = useCustomTranslation()
 
@@ -11,5 +12,9 @@ export const ActivityListPage = () => {
     return <div>{t("wrondLinkParametrError")}</div>
   }
 
-  return <ActivityGroups isPublic={false} appletId={appletId} />
+  return (
+    <PageContainer id="applet-details-page" dataTestId="applet-details-page">
+      <ActivityGroups isPublic={false} appletId={appletId} />
+    </PageContainer>
+  )
 }

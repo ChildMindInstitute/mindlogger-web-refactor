@@ -39,7 +39,7 @@ export const useEntityComplete = (props: Props) => {
       })
     }
 
-    return navigator.navigate(ROUTES.activityList.navigateTo(props.appletDetails.id), {
+    return navigator.navigate(ROUTES.appletDetails.navigateTo(props.appletDetails.id), {
       replace: true,
     })
   }

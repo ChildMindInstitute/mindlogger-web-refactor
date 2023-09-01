@@ -27,7 +27,9 @@ const Layout = ({
       }}>
       {hasHeader && <Header />}
       <Box id="app-content-container" display="flex" flex={1} flexDirection="column" sx={{ overflow: "auto" }}>
-        <Outlet />
+        <Box display="flex" flex={1}>
+          <Outlet />
+        </Box>
         {hasFooter && <Footer />}
       </Box>
     </Box>

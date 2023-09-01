@@ -56,7 +56,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
       if (locationState?.isInvitationFlow) {
         navigate(locationState.backRedirectPath as string)
       } else {
-        navigate(ROUTES.applets.path)
+        navigate(ROUTES.appletList.path)
       }
     },
   })

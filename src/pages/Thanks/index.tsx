@@ -20,7 +20,7 @@ export const ThanksPage = () => {
     }
 
     return navigator.navigate(
-      isPublic ? ROUTES.publicJoin.navigateTo(appletId) : ROUTES.activityList.navigateTo(appletId),
+      isPublic ? ROUTES.publicJoin.navigateTo(appletId) : ROUTES.appletDetails.navigateTo(appletId),
     )
   }
 
