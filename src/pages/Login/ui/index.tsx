@@ -15,8 +15,8 @@ export const LoginPage = () => {
 
   return (
     <Box textAlign="center" display="flex" justifyContent="center" flex={1}>
-      <Box flex={1} margin="24px 0px">
-        <Box margin="24px 0px">
+      <Box flex={1} margin="24px 0px" padding="0px 12px">
+        <Box margin="16px 0px">
           <Typography variant="h5" color={Theme.colors.light.primary}>
             {t("welcomeMessage")}
           </Typography>

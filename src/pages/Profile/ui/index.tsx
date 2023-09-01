@@ -13,19 +13,21 @@ export const ProfilePage = () => {
   const { user } = userModel.hooks.useUserState()
 
   return (
-    <Box sx={{ textAlign: "center" }} marginTop="24px">
-      <Box display="flex" justifyContent="center" alignItems="center">
-        <Box sx={{ padding: "15px" }}>
-          <AvatarBase name={`${user?.firstName} ${user?.lastName}`} height="40px" width="40px" />
+    <Box flex={1} textAlign="center" margin="24px 0px">
+      <Box margin="0 auto" maxWidth="800px" padding="0px 12px">
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Box sx={{ padding: "15px" }}>
+            <AvatarBase name={`${user?.firstName} ${user?.lastName}`} height="40px" width="40px" />
+          </Box>
+          <Typography variant="h4">{`${user?.firstName} ${user?.lastName}`}</Typography>
         </Box>
-        <Typography variant="h4">{`${user?.firstName} ${user?.lastName}`}</Typography>
-      </Box>
-      <hr></hr>
-      <Typography variant="body1" sx={{ cursor: "default" }}>
-        {t("description")}
-      </Typography>
+        <hr></hr>
+        <Typography variant="body1" sx={{ cursor: "default" }}>
+          {t("description")}
+        </Typography>
 
-      {isMobile && <DownloadMobileLinks />}
+        {isMobile && <DownloadMobileLinks />}
+      </Box>
     </Box>
   )
 }

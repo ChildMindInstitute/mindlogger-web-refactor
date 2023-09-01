@@ -1,6 +1,8 @@
-import { Container } from "react-bootstrap"
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
 
 import { ForgotPasswordForm, useForgotPasswordTranslation } from "~/features/ForgotPassword"
+import { Theme } from "~/shared/constants"
 
 import "./style.scss"
 
@@ -8,14 +10,16 @@ export const ForgotPasswordPage = () => {
   const { t } = useForgotPasswordTranslation()
 
   return (
-    <div className="forgotPassowrdPageContainer mp-3 align-self-start align-items-start w-100">
-      <div className="forgotPassword text-center my-2 px-3 pt-5">
-        <h1>{t("title")}</h1>
+    <Box display="flex" flex={1}>
+      <Box flex={1} textAlign="center" margin="24px 0px" padding="0px 12px">
+        <Typography variant="h4" margin="16px 0px">
+          {t("title")}
+        </Typography>
 
-        <Container className="loginForm">
+        <Box bgcolor={Theme.colors.light.onPrimary} padding="10px" maxWidth="400px" margin="0 auto">
           <ForgotPasswordForm />
-        </Container>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   )
 }

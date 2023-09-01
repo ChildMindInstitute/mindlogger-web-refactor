@@ -11,8 +11,8 @@ export const SignupPage = () => {
 
   return (
     <Box display="flex" justifyContent="center" flex={1}>
-      <Box textAlign="center" margin="24px 0px" flex={1}>
-        <Typography variant="h4" margin="24px 0px">
+      <Box textAlign="center" margin="24px 0px" flex={1} padding="0px 12px">
+        <Typography variant="h4" margin="16px 0px">
           {t("title")}
         </Typography>
 
