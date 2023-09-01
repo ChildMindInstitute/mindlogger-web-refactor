@@ -3,7 +3,7 @@ import { useLocation, useParams, useSearchParams } from "react-router-dom"
 
 import { TransferOwnershipAccept } from "~/features/TransferOwnershipAccept"
 import { TransferOwnershipDecline } from "~/features/TransferOwnershipDecline"
-import { PageContainer, PageMessage } from "~/shared/ui"
+import { PageMessage } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 import { AuthorizationGuard } from "~/widgets/AuthorizationGuard"
 import { AuthorizationButtons } from "~/widgets/AuthorizationNavigateButtons"
@@ -28,13 +28,11 @@ export const TransferOwnershipPage = () => {
   }
 
   return (
-    <PageContainer id="transfer-ownership-page" dataTestId="transfer-ownership-page">
-      <Box margin="24px 0px">
-        <AuthorizationGuard fallback={<AuthorizationButtons redirectState={redirectState} />}>
-          {action === "accept" && <TransferOwnershipAccept appletId={appletId} keyParam={key} />}
-          {action === "decline" && <TransferOwnershipDecline appletId={appletId} keyParam={key} />}
-        </AuthorizationGuard>
-      </Box>
-    </PageContainer>
+    <Box margin="24px 0px">
+      <AuthorizationGuard fallback={<AuthorizationButtons redirectState={redirectState} />}>
+        {action === "accept" && <TransferOwnershipAccept appletId={appletId} keyParam={key} />}
+        {action === "decline" && <TransferOwnershipDecline appletId={appletId} keyParam={key} />}
+      </AuthorizationGuard>
+    </Box>
   )
 }

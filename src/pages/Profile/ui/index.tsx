@@ -5,7 +5,7 @@ import { isMobile } from "react-device-detect"
 import { useProfileTranslation } from "../lib/useProfileTranslation"
 
 import { userModel } from "~/entities/user"
-import { AvatarBase, PageContainer } from "~/shared/ui"
+import { AvatarBase } from "~/shared/ui"
 import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
 
 export const ProfilePage = () => {
@@ -13,21 +13,19 @@ export const ProfilePage = () => {
   const { user } = userModel.hooks.useUserState()
 
   return (
-    <PageContainer id="profile-page" dataTestId="profile-page">
-      <Box sx={{ textAlign: "center" }} marginTop="24px">
-        <Box display="flex" justifyContent="center" alignItems="center">
-          <Box sx={{ padding: "15px" }}>
-            <AvatarBase name={`${user?.firstName} ${user?.lastName}`} height="40px" width="40px" />
-          </Box>
-          <Typography variant="h4">{`${user?.firstName} ${user?.lastName}`}</Typography>
+    <Box sx={{ textAlign: "center" }} marginTop="24px">
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Box sx={{ padding: "15px" }}>
+          <AvatarBase name={`${user?.firstName} ${user?.lastName}`} height="40px" width="40px" />
         </Box>
-        <hr></hr>
-        <Typography variant="body1" sx={{ cursor: "default" }}>
-          {t("description")}
-        </Typography>
-
-        {isMobile && <DownloadMobileLinks />}
+        <Typography variant="h4">{`${user?.firstName} ${user?.lastName}`}</Typography>
       </Box>
-    </PageContainer>
+      <hr></hr>
+      <Typography variant="body1" sx={{ cursor: "default" }}>
+        {t("description")}
+      </Typography>
+
+      {isMobile && <DownloadMobileLinks />}
+    </Box>
   )
 }
