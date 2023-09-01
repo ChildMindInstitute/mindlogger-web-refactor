@@ -1,11 +1,10 @@
-import Container from "@mui/material/Container"
-
 import { AppletList } from "~/entities/applet"
+import { PageContainer } from "~/shared/ui"
 
 export const DashboardPage = () => {
   return (
-    <Container id="applet-list-page">
+    <PageContainer id="applet-list-page" dataTestId="applet-list-page">
       <AppletList />
-    </Container>
+    </PageContainer>
   )
 }
