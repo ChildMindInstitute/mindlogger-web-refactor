@@ -13,6 +13,7 @@ type Props = PropsWithChildren<{
   activityId: string
   eventId: string
   isPublic: boolean
+  publicKey: string | null
 
   buttons: React.ReactNode
   onKeyDownHandler?: (key: string) => void
@@ -27,6 +28,7 @@ export const ActivityAssessmentLayout = ({
   appletId,
   isPublic,
   onKeyDownHandler,
+  publicKey,
 }: Props) => {
   return (
     <Box
@@ -40,6 +42,7 @@ export const ActivityAssessmentLayout = ({
         activityId={activityId}
         eventId={eventId}
         isPublic={isPublic}
+        publicKey={publicKey}
       />
 
       <Container sx={{ display: "flex", justifyContent: "center", flex: 1 }}>

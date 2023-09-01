@@ -162,6 +162,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         activityId={props.activityDetails.id}
         eventId={props.eventId}
         isPublic={props.isPublic}
+        publicKey={props.publicAppletKey ?? null}
         onKeyDownHandler={onKeyDownHandler}
         buttons={
           <ItemCardButton

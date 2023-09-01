@@ -13,6 +13,7 @@ type Props = {
   activityId: string
   eventId: string
   isPublic: boolean
+  publicKey: string | null
 }
 
 export const AssessmentLayoutHeader = (props: Props) => {
@@ -30,7 +31,9 @@ export const AssessmentLayoutHeader = (props: Props) => {
 
   const onSaveAndExitClick = () => {
     return navigator.navigate(
-      props.isPublic ? ROUTES.publicJoin.navigateTo(props.appletId) : ROUTES.appletDetails.navigateTo(props.appletId),
+      props.isPublic && props.publicKey
+        ? ROUTES.publicJoin.navigateTo(props.publicKey)
+        : ROUTES.appletDetails.navigateTo(props.appletId),
     )
   }
 
