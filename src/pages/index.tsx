@@ -17,7 +17,6 @@ import { PublicJoinPage } from "./PublicJoin"
 import { RecoveryPasswordPage } from "./RecoveryPassword"
 import { SettingsPage } from "./Settings"
 import { SignupPage } from "./Signup"
-import { ThanksPage } from "./Thanks"
 import { TransferOwnershipPage } from "./TransferOwnership"
 
 import { userModel } from "~/entities/user"
@@ -48,7 +47,6 @@ const ApplicationRouter = (): JSX.Element | null => {
               <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
               <Route path={ROUTES.invitationAccept.path} element={<InvitationAcceptPage />} />
               <Route path={ROUTES.invitationDecline.path} element={<InvitationDeclinePage />} />
-              <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
               <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
               <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
 
@@ -72,7 +70,6 @@ const ApplicationRouter = (): JSX.Element | null => {
         <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
         <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
         <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
-        <Route path={ROUTES.thanks.path} element={<ThanksPage />} />
 
         <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
       </Route>

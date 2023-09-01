@@ -1,8 +1,12 @@
 import { useInvitationTranslation } from "~/entities/invitation"
-import { PageMessage } from "~/shared/ui"
+import { PageContainer, PageMessage } from "~/shared/ui"
 
 export const InvitationAcceptPage = () => {
   const { t } = useInvitationTranslation()
 
-  return <PageMessage message={t("invitationAccepted")} />
+  return (
+    <PageContainer id="invitation-accept-page" dataTestId="invitation-accept-page">
+      <PageMessage message={t("invitationAccepted")} />
+    </PageContainer>
+  )
 }

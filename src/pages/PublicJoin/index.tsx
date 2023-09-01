@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom"
 
+import { PageContainer } from "~/shared/ui"
 import { ActivityGroups } from "~/widgets/ActivityGroups"
 
 export const PublicJoinPage = () => {
@@ -13,5 +14,9 @@ export const PublicJoinPage = () => {
     )
   }
 
-  return <ActivityGroups isPublic publicAppletKey={joinLinkKey} />
+  return (
+    <PageContainer id="public-join-page" dataTestId="public-join-page">
+      <ActivityGroups isPublic publicAppletKey={joinLinkKey} />
+    </PageContainer>
+  )
 }

@@ -1,8 +1,10 @@
-import { Container } from "react-bootstrap"
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
 import { Link, useLocation } from "react-router-dom"
 
 import { SignupForm, useSignupTranslation } from "~/features/Signup"
 import { ROUTES } from "~/shared/constants"
+import { PageContainer } from "~/shared/ui"
 
 import "./styles.scss"
 
@@ -11,18 +13,18 @@ export const SignupPage = () => {
   const location = useLocation()
 
   return (
-    <div className="signupPageContainer align-self-start pt-5 mb-3 w-100">
-      <div className="signup text-center my-2 px-3">
-        <h1>{t("title")}</h1>
+    <PageContainer id="signup-page" dataTestId="signup-page">
+      <Box textAlign="center" margin="24px 0px" display="flex" alignItems="center" flexDirection="column">
+        <Typography variant="h4">{t("title")}</Typography>
 
-        <Container className="signupForm">
+        <Box className="signupForm" width="400px">
           <SignupForm locationState={location.state} />
 
           <p className="my-3">
             {t("account")} <Link to={ROUTES.login.path}> {t("logIn")}</Link>
           </p>
-        </Container>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </PageContainer>
   )
 }

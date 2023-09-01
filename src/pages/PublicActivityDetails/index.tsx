@@ -1,6 +1,6 @@
-import { Container } from "react-bootstrap"
 import { useParams } from "react-router-dom"
 
+import { PageContainer } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 import { ActivityDetailsWidget } from "~/widgets/ActivityDetails"
 
@@ -13,7 +13,7 @@ export const PublicActivityDetailsPage = () => {
   }
 
   return (
-    <Container>
+    <PageContainer id="public-activity-details-page" dataTestId="public-activity-details-page">
       <ActivityDetailsWidget
         isPublic={true}
         appletId={appletId}
@@ -21,6 +21,6 @@ export const PublicActivityDetailsPage = () => {
         eventId={eventId}
         publicAppletKey={publicAppletKey}
       />
-    </Container>
+    </PageContainer>
   )
 }
