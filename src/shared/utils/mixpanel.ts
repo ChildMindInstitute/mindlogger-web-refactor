@@ -1,7 +1,7 @@
 import mixpanel, { Dict } from "mixpanel-browser"
 
-const isProduction = process.env.VITE_ENV === "PRODUCTION"
-const isStaging = process.env.VITE_ENV === "STAGE"
+const isProduction = import.meta.env.VITE_ENV === "PRODUCTION"
+const isStaging = import.meta.env.VITE_ENV === "STAGE"
 const shouldEnableMixpanel = isProduction || isStaging
 
 // A project's token is not a secret value.
