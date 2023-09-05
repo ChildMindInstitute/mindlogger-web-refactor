@@ -46,7 +46,7 @@ export const ActivityCardItem = ({
   }, [activityItem.question, replaceText])
 
   return (
-    <CardItem markdown={questionText} watermark={watermark}>
+    <CardItem markdown={questionText} watermark={watermark} isOptional={activityItem.config.skippableItem}>
       <ItemPicker
         item={activityItem}
         values={values}

@@ -18,6 +18,7 @@ export const Theme = {
       accentOrange30: "rgba(217, 115, 13, 0.30)",
       inverseOnSurface: "#F0F0F4",
       onSurfaceVariant: "#42474E",
+      outline: "#72777F",
     },
     dark: {},
   },
