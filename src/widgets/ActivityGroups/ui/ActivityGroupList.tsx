@@ -49,7 +49,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
       version: props.appletDetails.version,
       fromDate: getYYYYDDMM(subMonths(new Date(), 1)),
     },
-    { select: data => data.data.result },
+    { select: data => data.data.result, enabled: !props.isPublic },
   )
 
   const [isAboutOpen, setIsAboutOpen] = useState(false)
@@ -133,7 +133,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
 
   useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
 
-  if (isCompletedEntitiesLoading) {
+  if (!props.isPublic && isCompletedEntitiesLoading) {
     return <Loader />
   }
 

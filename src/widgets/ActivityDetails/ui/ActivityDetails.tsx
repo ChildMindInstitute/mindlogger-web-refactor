@@ -60,6 +60,7 @@ export const ActivityDetailsWidget = (props: Props) => {
         eventId={props.eventId}
         appletId={appletDetails.id}
         isPublic={props.isPublic}
+        publicKey={props.isPublic ? props.publicAppletKey : null}
       />
     )
   }

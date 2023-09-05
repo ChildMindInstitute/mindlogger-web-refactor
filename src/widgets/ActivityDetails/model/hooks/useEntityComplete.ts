@@ -34,12 +34,12 @@ export const useEntityComplete = (props: Props) => {
     showToast(t("toast.answers_submitted"))
 
     if (props.publicAppletKey) {
-      return navigator.navigate(ROUTES.publicJoin.navigateTo(props.appletDetails.id), {
+      return navigator.navigate(ROUTES.publicJoin.navigateTo(props.publicAppletKey), {
         replace: true,
       })
     }
 
-    return navigator.navigate(ROUTES.activityList.navigateTo(props.appletDetails.id), {
+    return navigator.navigate(ROUTES.appletDetails.navigateTo(props.appletDetails.id), {
       replace: true,
     })
   }

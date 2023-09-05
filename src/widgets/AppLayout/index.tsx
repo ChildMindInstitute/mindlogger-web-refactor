@@ -19,19 +19,19 @@ const Layout = ({
   return (
     <Box
       id="app-main-layout"
-      height="100vh"
       display="flex"
+      flex={1}
       flexDirection="column"
       sx={{
         backgroundColor: bgColor,
       }}>
       {hasHeader && <Header />}
-      <div className="content-container">
-        <div className="content">
+      <Box id="app-content-container" display="flex" flex={1} flexDirection="column" sx={{ overflow: "auto" }}>
+        <Box display="flex" flex={1}>
           <Outlet />
-        </div>
-      </div>
-      {hasFooter && <Footer />}
+        </Box>
+        {hasFooter && <Footer />}
+      </Box>
     </Box>
   )
 }

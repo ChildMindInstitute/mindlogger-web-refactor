@@ -1,4 +1,4 @@
-import { Container } from "react-bootstrap"
+import Box from "@mui/material/Box"
 import { useParams } from "react-router-dom"
 
 import { useCustomTranslation } from "~/shared/utils"
@@ -13,7 +13,7 @@ export const PublicActivityDetailsPage = () => {
   }
 
   return (
-    <Container>
+    <Box height="100vh" display="flex" flex={1}>
       <ActivityDetailsWidget
         isPublic={true}
         appletId={appletId}
@@ -21,6 +21,6 @@ export const PublicActivityDetailsPage = () => {
         eventId={eventId}
         publicAppletKey={publicAppletKey}
       />
-    </Container>
+    </Box>
   )
 }

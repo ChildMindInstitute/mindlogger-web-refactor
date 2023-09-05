@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
 import { isMobile } from "react-device-detect"
 
 import { useProfileTranslation } from "../lib/useProfileTranslation"
@@ -12,19 +13,21 @@ export const ProfilePage = () => {
   const { user } = userModel.hooks.useUserState()
 
   return (
-    <div className="d-flex mp-3 align-self-start justify-content-center w-100 pt-3">
-      <div className="text-center my-2 px-3">
-        <div className="d-flex justify-content-center align-items-center">
+    <Box flex={1} textAlign="center" margin="24px 0px">
+      <Box margin="0 auto" maxWidth="800px" padding="0px 12px">
+        <Box display="flex" justifyContent="center" alignItems="center">
           <Box sx={{ padding: "15px" }}>
             <AvatarBase name={`${user?.firstName} ${user?.lastName}`} height="40px" width="40px" />
           </Box>
-          <h1>{`${user?.firstName} ${user?.lastName}`}</h1>
-        </div>
+          <Typography variant="h4">{`${user?.firstName} ${user?.lastName}`}</Typography>
+        </Box>
         <hr></hr>
-        <div>{t("description")}</div>
+        <Typography variant="body1" sx={{ cursor: "default" }}>
+          {t("description")}
+        </Typography>
 
         {isMobile && <DownloadMobileLinks />}
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 }

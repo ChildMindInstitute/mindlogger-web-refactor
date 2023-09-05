@@ -1,5 +1,4 @@
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
+import Box from "@mui/material/Box"
 import { useLocation, useParams } from "react-router-dom"
 
 import { FetchPrivateInvitation } from "~/widgets/FetchInvitation"
@@ -14,8 +13,8 @@ export const PrivateJoinPage = () => {
   }
 
   return (
-    <Container className={classNames("mt-3", "pt-3")}>
+    <Box margin="24px 0px">
       {joinLinkKey && <FetchPrivateInvitation keyParams={joinLinkKey} redirectState={redirectState} />}
-    </Container>
+    </Box>
   )
 }
