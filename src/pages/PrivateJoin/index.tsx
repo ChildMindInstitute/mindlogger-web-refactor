@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box"
 import { useLocation, useParams } from "react-router-dom"
 
-import {} from "~/shared/ui"
 import { FetchPrivateInvitation } from "~/widgets/FetchInvitation"
 
 export const PrivateJoinPage = () => {
