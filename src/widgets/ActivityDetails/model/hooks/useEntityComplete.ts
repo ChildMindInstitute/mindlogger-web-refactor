@@ -22,7 +22,7 @@ export const useEntityComplete = (props: Props) => {
 
   const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  const { showToast } = useToast()
+  const { showSuccessToast } = useToast()
 
   const completeEntityAndRedirect = () => {
     entityCompleted({
@@ -31,7 +31,7 @@ export const useEntityComplete = (props: Props) => {
       eventId: props.eventId,
     })
 
-    showToast(t("toast.answers_submitted"))
+    showSuccessToast(t("toast.answers_submitted"))
 
     if (props.publicAppletKey) {
       return navigator.navigate(ROUTES.publicJoin.navigateTo(props.publicAppletKey), {
@@ -45,7 +45,7 @@ export const useEntityComplete = (props: Props) => {
   }
 
   const redirectToNextActivity = (activityId: string) => {
-    showToast(t("toast.next_activity"))
+    showSuccessToast(t("toast.next_activity"))
 
     if (props.publicAppletKey) {
       return navigator.navigate(

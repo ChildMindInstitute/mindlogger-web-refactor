@@ -22,12 +22,6 @@ export type ActivityItemType =
   | "unsupportable"
   | "splashScreen"
 
-export type ItemCardButtonsConfig = {
-  isBackShown: boolean
-  isSkippable: boolean
-  isNextDisabled: boolean
-}
-
 export type ButtonsConfig = {
   removeBackButton: boolean
   skippableItem: boolean
