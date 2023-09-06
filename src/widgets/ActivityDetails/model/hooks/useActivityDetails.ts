@@ -3,7 +3,7 @@ import { useItemsInProgress } from "./useItemsInProgress"
 import { useActivityByIdQuery } from "~/entities/activity"
 import { useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
-import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, BaseError } from "~/shared/api"
+import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, BaseError, RespondentMetaDTO } from "~/shared/api"
 
 type PrivateProps = {
   isPublic: false
@@ -33,6 +33,7 @@ export interface ActivityEvents {
 interface UseActivityDetailsReturn {
   isActivityEventInProgress: boolean
   appletDetails: AppletDetailsDTO | null
+  respondentMeta?: RespondentMetaDTO
   activityDetails: ActivityDTO | null
   eventsRawData: AppletEventsResponse | null
   isError: boolean
@@ -77,6 +78,7 @@ export const useActivityDetails = (props: Props): UseActivityDetailsReturn => {
   return {
     isActivityEventInProgress,
     appletDetails: appletById?.data?.result ?? null,
+    respondentMeta: appletById?.data?.respondentMeta,
     activityDetails: activityById?.data?.result ?? null,
     eventsRawData: eventsByIdData?.data?.result ?? null,
     isError: isAppletError || isActivityError || isEventsError,

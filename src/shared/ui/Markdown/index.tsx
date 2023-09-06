@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"
+import remarkGfm from "remark-gfm"
 
 import { markdownBuilder } from "./lib/markdown-builder"
 
@@ -14,7 +15,7 @@ export const Markdown = ({ markdown }: MarkdownProps) => {
 
   return (
     <div id="markdown-wrapper">
-      <ReactMarkdown rehypePlugins={[rehypeRaw]}>{processedMarkdown}</ReactMarkdown>
+      <ReactMarkdown rehypePlugins={[rehypeRaw, remarkGfm]}>{processedMarkdown}</ReactMarkdown>
     </div>
   )
 }
