@@ -42,6 +42,7 @@ type ActivityItemListProps = {
   activityDetails: ActivityDTO
   eventsRawData: AppletEventsResponse | undefined
   eventId: string
+  respondentMeta?: { nickname: string } | undefined
 }
 
 export const ActivityItemList = (props: ActivityItemListProps) => {
@@ -208,6 +209,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
           openInvalidAnswerModal={openInvalidAnswerModal}
           isAllItemsSkippable={isAllItemsSkippable}
           watermark={appletDetails.watermark}
+          respondentNickname={props.respondentMeta?.nickname ?? ""}
         />
       )}
       {!isSummaryScreen && !isOnePageAssessment && (
@@ -219,6 +221,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
           openInvalidAnswerModal={openInvalidAnswerModal}
           isAllItemsSkippable={isAllItemsSkippable}
           watermark={appletDetails.watermark}
+          respondentNickname={props.respondentMeta?.nickname ?? ""}
         />
       )}
 

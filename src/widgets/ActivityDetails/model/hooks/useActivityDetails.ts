@@ -37,6 +37,7 @@ interface UseActivityDetailsReturn {
   isError: boolean
   isLoading: boolean
   error: BaseError | null
+  respondentMeta: { nickname: string } | undefined
 }
 
 type UseActivityDetailsParams = {
@@ -112,6 +113,8 @@ export const useActivityDetails = (props: Props, params: UseActivityDetailsParam
     return appletModel.appletBuilder.convertToAppletDetails(appletDetailsRawData, eventsRawData)
   }, [appletDetailsRawData, eventsRawData])
 
+  const respondentMeta = appletById?.data.respondentMeta
+
   return {
     appletDetails,
     activityDetails: activityDetailsRawData ?? null,
@@ -119,5 +122,6 @@ export const useActivityDetails = (props: Props, params: UseActivityDetailsParam
     isError: isAppletError || isActivityError || isEventsError,
     isLoading: isAppletLoading || isActivityLoading || isEventsLoading,
     error: appletError ?? activityError ?? eventsError,
+    respondentMeta,
   }
 }
