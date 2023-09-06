@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"
+import remarkGfm from "remark-gfm"
 
 import "./style.scss"
 import { markdownBuilder } from "./lib/markdown-builder"
@@ -13,7 +14,9 @@ export const Markdown = ({ markdown }: MarkdownProps) => {
 
   return (
     <div>
-      <ReactMarkdown rehypePlugins={[rehypeRaw]}>{processedMarkdown}</ReactMarkdown>
+      <ReactMarkdown className="table-override" rehypePlugins={[rehypeRaw, remarkGfm]}>
+        {processedMarkdown}
+      </ReactMarkdown>
     </div>
   )
 }
