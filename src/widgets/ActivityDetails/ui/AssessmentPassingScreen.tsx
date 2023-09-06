@@ -15,7 +15,7 @@ import {
   useSaveAnswerMutation,
   useTextVariablesReplacer,
 } from "~/entities/activity"
-import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
+import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { useCustomTranslation, useFlowType, useModal } from "~/shared/utils"
 
 type Props = {
@@ -24,6 +24,7 @@ type Props = {
   activityDetails: ActivityDTO
   eventsRawData: AppletEventsResponse
   appletDetails: AppletDetailsDTO
+  respondentMeta?: RespondentMetaDTO
 
   isPublic: boolean
   publicAppletKey?: string
@@ -138,6 +139,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     items,
     answers: items.map(item => item.answer),
     activityId: props.activityDetails.id,
+    respondentMeta: props.respondentMeta,
   })
 
   const onEnterPress = () => {
