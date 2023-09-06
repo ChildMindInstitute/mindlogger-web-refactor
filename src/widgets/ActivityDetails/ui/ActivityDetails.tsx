@@ -39,7 +39,7 @@ export const ActivityDetailsWidget = (props: WidgetProps) => {
 
   const { t } = useCustomTranslation()
 
-  const { appletDetails, activityDetails, eventsRawData, isLoading, isError, error } =
+  const { appletDetails, activityDetails, eventsRawData, isLoading, isError, error, respondentMeta } =
     activityDetailsModel.hooks.useActivityDetails(props, {
       isRestart,
     })
@@ -106,6 +106,7 @@ export const ActivityDetailsWidget = (props: WidgetProps) => {
               activityDetails={activityDetails}
               isPublic={props.isPublic}
               publicAppletKey={props.isPublic ? props.publicAppletKey : undefined}
+              respondentMeta={respondentMeta}
             />
           ) : (
             <>Data fetching error</>

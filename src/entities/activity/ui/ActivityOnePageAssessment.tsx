@@ -11,6 +11,7 @@ type ActivityOnePageAssessmentProps = {
   openInvalidAnswerModal: () => void
   isAllItemsSkippable: boolean
   watermark?: string
+  respondentNickname: string
 }
 
 export const ActivityOnePageAssessment = ({
@@ -21,6 +22,7 @@ export const ActivityOnePageAssessment = ({
   openInvalidAnswerModal,
   isAllItemsSkippable,
   watermark,
+  respondentNickname,
 }: ActivityOnePageAssessmentProps) => {
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
@@ -33,6 +35,7 @@ export const ActivityOnePageAssessment = ({
     items: currentActivityEventProgress,
     answers: answers,
     activityId,
+    respondentNickname,
   })
 
   const { saveUserEventByType } = useUserEvent({ activityId, eventId })

@@ -18,6 +18,7 @@ type ActivityItemStepperProps = {
   openInvalidAnswerModal: () => void
   isAllItemsSkippable: boolean
   watermark?: string
+  respondentNickname: string
 }
 
 export const ActivityItemStepper = ({
@@ -28,6 +29,7 @@ export const ActivityItemStepper = ({
   openInvalidAnswerModal,
   isAllItemsSkippable,
   watermark,
+  respondentNickname,
 }: ActivityItemStepperProps) => {
   const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
@@ -40,6 +42,7 @@ export const ActivityItemStepper = ({
     items: currentActivityEventProgress,
     answers: answers,
     activityId,
+    respondentNickname,
   })
 
   const { saveUserEventByType } = useUserEvent({ activityId, eventId })
