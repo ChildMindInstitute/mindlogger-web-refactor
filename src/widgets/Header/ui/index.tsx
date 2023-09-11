@@ -3,19 +3,19 @@ import { useState } from "react"
 import { Navbar, Nav } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
-import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 import AccountDropdown from "./AccountDropdown"
 import LoginButton from "./LoginButton"
 
+import MLLogo from "~/assets/ml-logo.svg"
 import { userModel } from "~/entities/user"
 import { LanguageDropdown } from "~/features/language"
 import { Theme } from "~/shared/constants"
 import { ROUTES } from "~/shared/constants"
+import { AvatarBase } from "~/shared/ui"
 
 import "./header.scss"
 
 const Header = (): JSX.Element | null => {
-  const { t } = useNavbarTranslation()
   const navigate = useNavigate()
 
   const { user } = userModel.hooks.useUserState()
@@ -28,7 +28,7 @@ const Header = (): JSX.Element | null => {
 
   const onLogoClick = () => {
     if (user?.id) {
-      navigate(ROUTES.applets.path)
+      navigate(ROUTES.appletList.path)
     } else {
       navigate(ROUTES.login.path)
     }
@@ -49,7 +49,7 @@ const Header = (): JSX.Element | null => {
       onToggle={onNavbarToggle}
       style={{ backgroundColor: Theme.colors.light.primary }}>
       <Navbar.Brand role="button" onClick={onLogoClick}>
-        {t("mindLogger")}
+        <AvatarBase src={MLLogo} name="" width="143px" height="24px" variant="square" />
       </Navbar.Brand>
 
       <Navbar.Toggle aria-controls="basic-navbar-nav" />

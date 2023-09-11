@@ -16,6 +16,7 @@ type Props = {
   appletId: string
   eventId: string
   isPublic: boolean
+  publicKey: string | null
 }
 
 export const AssessmentWelcomeScreen = (props: Props) => {
@@ -44,6 +45,7 @@ export const AssessmentWelcomeScreen = (props: Props) => {
       activityId={props.activityDetails.id}
       eventId={props.eventId}
       isPublic={props.isPublic}
+      publicKey={props.publicKey}
       buttons={<StartAssessmentButton width={greaterThanSM ? "375px" : "335px"} onClick={startAssessment} />}>
       <Box height="100%" width="100%" display="flex" justifyContent="center" paddingTop="80px">
         <Box

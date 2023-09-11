@@ -54,10 +54,10 @@ export const ROUTES = {
   settings: {
     path: "/protected/settings",
   },
-  applets: {
+  appletList: {
     path: "/protected/applets",
   },
-  activityList: {
+  appletDetails: {
     path: "/protected/applets/:appletId",
     navigateTo: (appletId: string | number) => `/protected/applets/${appletId}`,
   },

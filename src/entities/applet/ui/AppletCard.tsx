@@ -13,7 +13,7 @@ const AppletCard = ({ applet }: AppletCardProps) => {
   const navigate = useNavigate()
 
   const onAppletCardClick = () => {
-    navigate(ROUTES.activityList.navigateTo(applet.id))
+    navigate(ROUTES.appletDetails.navigateTo(applet.id))
   }
 
   return (

@@ -1,5 +1,4 @@
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
+import Box from "@mui/material/Box"
 import { useLocation, useParams } from "react-router-dom"
 
 import { AuthorizationGuard } from "~/widgets/AuthorizationGuard"
@@ -16,13 +15,13 @@ const InvitationPage = () => {
   }
 
   return (
-    <Container className={classNames("mt-3", "pt-3")}>
+    <Box margin="24px 0px">
       {inviteId && (
         <AuthorizationGuard fallback={<AuthorizationButtons redirectState={redirectState} />}>
           <FetchInvitation keyParams={inviteId} />
         </AuthorizationGuard>
       )}
-    </Container>
+    </Box>
   )
 }
 

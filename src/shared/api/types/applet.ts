@@ -16,9 +16,11 @@ export type GetPublicAppletActivityByIdPayload = {
   activityId: string
 }
 
+export type RespondentMetaDTO = { nickname: string }
+
 // API Responses - Success
 export type AppletListSuccessResponse = BaseSuccessListResponse<AppletListDTO>
-export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDTO>
+export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDTO> & { respondentMeta: RespondentMetaDTO }
 
 export type AppletListDTO = {
   id: string

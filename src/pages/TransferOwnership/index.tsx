@@ -1,5 +1,4 @@
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
+import Box from "@mui/material/Box"
 import { useLocation, useParams, useSearchParams } from "react-router-dom"
 
 import { TransferOwnershipAccept } from "~/features/TransferOwnershipAccept"
@@ -29,11 +28,11 @@ export const TransferOwnershipPage = () => {
   }
 
   return (
-    <Container className={classNames("mt-3", "pt-3")}>
+    <Box margin="24px 0px">
       <AuthorizationGuard fallback={<AuthorizationButtons redirectState={redirectState} />}>
         {action === "accept" && <TransferOwnershipAccept appletId={appletId} keyParam={key} />}
         {action === "decline" && <TransferOwnershipDecline appletId={appletId} keyParam={key} />}
       </AuthorizationGuard>
-    </Container>
+    </Box>
   )
 }

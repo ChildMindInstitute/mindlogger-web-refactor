@@ -30,8 +30,16 @@ type Props = PrivateActivityAssessmentProps | PublicActivityAssessmentProps
 export const ActivityDetailsWidget = (props: Props) => {
   const { t } = useCustomTranslation()
 
-  const { activityDetails, isLoading, isError, error, isActivityEventInProgress, appletDetails, eventsRawData } =
-    activityDetailsModel.hooks.useActivityDetails(props)
+  const {
+    activityDetails,
+    isLoading,
+    isError,
+    error,
+    isActivityEventInProgress,
+    appletDetails,
+    eventsRawData,
+    respondentMeta,
+  } = activityDetailsModel.hooks.useActivityDetails(props)
 
   if (isLoading) {
     return <Loader />
@@ -60,6 +68,7 @@ export const ActivityDetailsWidget = (props: Props) => {
         eventId={props.eventId}
         appletId={appletDetails.id}
         isPublic={props.isPublic}
+        publicKey={props.isPublic ? props.publicAppletKey : null}
       />
     )
   }
@@ -73,6 +82,7 @@ export const ActivityDetailsWidget = (props: Props) => {
         eventId={props.eventId}
         isPublic={props.isPublic}
         publicAppletKey={props.isPublic ? props.publicAppletKey : undefined}
+        respondentMeta={respondentMeta}
       />
     </>
   )

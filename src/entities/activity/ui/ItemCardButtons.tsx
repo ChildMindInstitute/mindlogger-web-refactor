@@ -2,53 +2,29 @@ import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import CircularProgress from "@mui/material/CircularProgress"
 
-import { ItemCardButtonsConfig } from "../lib"
-import { ActivityEventProgressRecord } from "../model/types"
-
 import { Theme } from "~/shared/constants"
 import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
 
 type ItemCardButtonsProps = {
-  currentItem: ActivityEventProgressRecord | null
-
   isLoading: boolean
-  isAllItemsSkippable: boolean
   isSubmitShown: boolean
-  hasPrevStep: boolean
+  isBackShown: boolean
 
   onBackButtonClick?: () => void
-  onNextButtonClick?: () => void
-  onSubmitButtonClick?: () => void
+  onNextButtonClick: () => void
 }
 
 export const ItemCardButton = ({
   isSubmitShown,
+  isBackShown,
   onBackButtonClick,
   onNextButtonClick,
-  onSubmitButtonClick,
   isLoading,
-  currentItem,
-  isAllItemsSkippable,
-  hasPrevStep,
 }: ItemCardButtonsProps) => {
   const { t } = useCustomTranslation()
   const { greaterThanSM } = useCustomMediaQuery()
 
-  const isMessageItem = currentItem?.responseType === "message"
-  const isAudioPlayerItem = currentItem?.responseType === "audioPlayer"
-
-  const isItemWithoutAnswer = isMessageItem || isAudioPlayerItem
-
-  const config: ItemCardButtonsConfig = {
-    isNextDisabled: isItemWithoutAnswer ? false : !currentItem?.answer || !currentItem.answer.length,
-    isSkippable: currentItem?.config.skippableItem || isAllItemsSkippable,
-    isBackShown: hasPrevStep && !currentItem?.config.removeBackButton,
-  }
-
-  const nextLabel = config.isNextDisabled && config.isSkippable ? t("Consent.skip") : t("Consent.next")
-  const submitLabel = t("submit")
-
-  const nextOrSubmitButtonLabel = isSubmitShown ? submitLabel : nextLabel
+  const nextOrSubmitButtonLabel = isSubmitShown ? t("submit") : t("Consent.next")
 
   return (
     <Box
@@ -59,7 +35,7 @@ export const ItemCardButton = ({
       margin="0 auto"
       padding={greaterThanSM ? "0px 24px" : "0px 16px"}
       maxWidth="900px">
-      {(config.isBackShown && (
+      {(isBackShown && (
         <Button
           variant="outlined"
           onClick={onBackButtonClick}
@@ -71,8 +47,8 @@ export const ItemCardButton = ({
       <Button
         variant="contained"
         sx={{ borderRadius: "100px", padding: "10px 24px", width: greaterThanSM ? "200px" : "120px" }}
-        disabled={isLoading || (!config.isSkippable && config.isNextDisabled)}
-        onClick={isSubmitShown ? onSubmitButtonClick : onNextButtonClick}>
+        disabled={isLoading}
+        onClick={onNextButtonClick}>
         {isLoading ? (
           <CircularProgress size={25} sx={{ color: Theme.colors.light.onPrimary }} />
         ) : (

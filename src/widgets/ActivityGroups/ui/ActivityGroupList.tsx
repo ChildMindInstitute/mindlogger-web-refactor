@@ -1,17 +1,19 @@
 import { useState } from "react"
 
-import classNames from "classnames"
+import { Typography } from "@mui/material"
+import Box from "@mui/material/Box"
+import Container from "@mui/material/Container"
 import { subMonths } from "date-fns"
-import { Col, Container, Row } from "react-bootstrap"
 
 import CustomModal from "../../Modal"
 import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
+import AppletDefaultIcon from "~/assets/AppletDefaultIcon.svg"
 import { ActivityListItem, EntityType, activityModel, useCompletedEntitiesQuery } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
-import { CustomCard, Loader } from "~/shared/ui"
+import { AvatarBase, Loader } from "~/shared/ui"
 import { getYYYYDDMM, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
@@ -47,10 +49,13 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
       version: props.appletDetails.version,
       fromDate: getYYYYDDMM(subMonths(new Date(), 1)),
     },
-    { select: data => data.data.result },
+    { select: data => data.data.result, enabled: !props.isPublic },
   )
 
   const [isAboutOpen, setIsAboutOpen] = useState(false)
+
+  const isAppletAboutExist = props.appletDetails?.about
+  const isAppletImageExist = Boolean(props.appletDetails?.image)
 
   const { groups } = useActivityGroups({
     appletDetails: props.appletDetails,
@@ -60,6 +65,10 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { startActivity, startFlow } = activityModel.hooks.useStartEntity()
 
   const onCardAboutClick = () => {
+    if (!isAppletAboutExist) {
+      return
+    }
+
     setIsAboutOpen(true)
   }
 
@@ -124,38 +133,42 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
 
   useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
 
-  if (isCompletedEntitiesLoading) {
+  if (!props.isPublic && isCompletedEntitiesLoading) {
     return <Loader />
   }
 
   return (
-    <Container fluid>
-      <Row className={classNames("mt-5", "mb-3")}>
-        <Col lg={3} className={classNames("d-flex", "justify-content-center")}>
-          {props.appletDetails && (
-            <CustomCard
-              type="card"
-              id={props.appletDetails.id}
-              title={props.appletDetails.displayName}
-              imageSrc={props.appletDetails.image}
-              buttonLabel={t("about")}
-              buttonOnClick={onCardAboutClick}
-            />
-          )}
-        </Col>
-        <Col lg={7}>
-          {groups
-            ?.filter(g => g.activities.length)
-            .map(g => (
-              <ActivityGroup
-                group={g}
-                key={g.name}
-                onActivityCardClick={startActivityOrFlow}
-                isPublic={props.isPublic}
-              />
-            ))}
-        </Col>
-      </Row>
+    <Container>
+      <Box display="flex" gap="16px" marginTop="24px" alignItems="center">
+        <AvatarBase
+          src={isAppletImageExist ? props.appletDetails.image : AppletDefaultIcon}
+          name={props.appletDetails.displayName}
+          width="48px"
+          height="48px"
+          variant="rounded"
+        />
+        <Typography
+          variant="h4"
+          onClick={onCardAboutClick}
+          sx={{
+            fontFamily: "Atkinson",
+            fontSize: "22px",
+            fontWeight: 400,
+            lineHeight: "28px",
+            fontStyle: "normal",
+            cursor: isAppletAboutExist ? "pointer" : "default",
+          }}>
+          {props.appletDetails.displayName}
+        </Typography>
+      </Box>
+
+      <Box>
+        {groups
+          ?.filter(g => g.activities.length)
+          .map(g => (
+            <ActivityGroup group={g} key={g.name} onActivityCardClick={startActivityOrFlow} isPublic={props.isPublic} />
+          ))}
+      </Box>
       <CustomModal
         show={isAboutOpen}
         onHide={onAboutModalClose}

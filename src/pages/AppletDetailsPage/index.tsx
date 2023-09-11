@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import { useCustomTranslation } from "~/shared/utils"
 import { ActivityGroups } from "~/widgets/ActivityGroups"
 
-export const ActivityListPage = () => {
+export const AppletDetailsPage = () => {
   const { appletId } = useParams()
   const { t } = useCustomTranslation()
 

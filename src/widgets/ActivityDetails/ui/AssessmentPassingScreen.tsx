@@ -1,6 +1,4 @@
-import { useCallback } from "react"
-
-import Modal from "../../Modal"
+import { useToast } from "../../../shared/ui"
 import { useAnswer } from "../model/hooks/useAnswers"
 import { useEntityComplete } from "../model/hooks/useEntityComplete"
 import { useStepperStateManager } from "../model/hooks/useStepperStateManager"
@@ -15,7 +13,7 @@ import {
   useSaveAnswerMutation,
   useTextVariablesReplacer,
 } from "~/entities/activity"
-import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
+import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { useCustomTranslation, useFlowType, useModal } from "~/shared/utils"
 
 type Props = {
@@ -24,6 +22,7 @@ type Props = {
   activityDetails: ActivityDTO
   eventsRawData: AppletEventsResponse
   appletDetails: AppletDetailsDTO
+  respondentMeta?: RespondentMetaDTO
 
   isPublic: boolean
   publicAppletKey?: string
@@ -33,8 +32,7 @@ export const AssessmentPassingScreen = (props: Props) => {
   const { t } = useCustomTranslation()
 
   const flowParams = useFlowType()
-
-  const [isInvalidAnswerModalOpen, openInvalidAnswerModal, closeInvalidAnswerModal] = useModal()
+  const { showWarningToast } = useToast()
 
   const { processAnswers } = useAnswer({
     appletDetails: props.appletDetails,
@@ -83,18 +81,54 @@ export const AssessmentPassingScreen = (props: Props) => {
     },
   })
 
+  const submitAnswers = () => {
+    if (currentItem) {
+      saveUserEventByType("DONE", currentItem)
+    }
+
+    const answer = processAnswers({
+      items,
+      userEvents,
+      isPublic: props.isPublic,
+    })
+
+    return props.isPublic ? publicSaveAnswer(answer) : saveAnswer(answer)
+  }
+
+  const validateIsItemWithoutAnswer = (currentItem: activityModel.types.ActivityEventProgressRecord) => {
+    const isMessageItem = currentItem.responseType === "message"
+    const isAudioPlayerItem = currentItem.responseType === "audioPlayer"
+
+    const isItemWithoutAnswer = isMessageItem || isAudioPlayerItem
+
+    return isItemWithoutAnswer
+  }
+
   const onNextButtonClick = () => {
     if (!currentItem) {
       return
     }
 
-    const isAnswerCorrect = validateItem({ item: currentItem })
+    const isItemWithoutAnswer = validateIsItemWithoutAnswer(currentItem)
 
-    if (!isAnswerCorrect && !isAllItemsSkippable && !currentItem?.config.skippableItem) {
-      return openInvalidAnswerModal()
+    const isItemHasAnswer = currentItem.answer.length
+    const isItemSkippable = currentItem.config.skippableItem || isAllItemsSkippable
+
+    if (!isItemWithoutAnswer && !isItemHasAnswer && !isItemSkippable) {
+      return showWarningToast(t("pleaseAnswerTheQuestion"))
     }
 
-    if (!currentItem?.answer.length && (isAllItemsSkippable || currentItem?.config.skippableItem)) {
+    const isAnswerCorrect = validateItem({ item: currentItem })
+
+    if (!isAnswerCorrect && !isItemSkippable) {
+      return showWarningToast(t("incorrect_answer"))
+    }
+
+    if (!hasNextStep) {
+      return submitAnswers()
+    }
+
+    if (!isItemHasAnswer && isItemSkippable) {
       saveUserEventByType("SKIP", currentItem)
     } else {
       saveUserEventByType("NEXT", currentItem)
@@ -111,89 +145,48 @@ export const AssessmentPassingScreen = (props: Props) => {
     return toPrevStep()
   }
 
-  const submitAnswers = useCallback(() => {
-    if (currentItem) {
-      saveUserEventByType("DONE", currentItem)
-    }
-
-    const answer = processAnswers({
-      items,
-      userEvents,
-      isPublic: props.isPublic,
-    })
-
-    return props.isPublic ? publicSaveAnswer(answer) : saveAnswer(answer)
-  }, [
-    currentItem,
-    items,
-    processAnswers,
-    props.isPublic,
-    publicSaveAnswer,
-    saveAnswer,
-    saveUserEventByType,
-    userEvents,
-  ])
-
   const { replaceTextVariables } = useTextVariablesReplacer({
     items,
     answers: items.map(item => item.answer),
     activityId: props.activityDetails.id,
+    respondentMeta: props.respondentMeta,
   })
-
-  const onEnterPress = () => {
-    if (!hasNextStep) {
-      return submitAnswers()
-    }
-
-    return onNextButtonClick()
-  }
 
   const onKeyDownHandler = (key: string) => {
     if (key === "Enter") {
-      return onEnterPress()
+      return onNextButtonClick()
     }
   }
 
   return (
-    <>
-      <ActivityAssessmentLayout
-        title={props.activityDetails.name}
-        appletId={props.appletDetails.id}
-        activityId={props.activityDetails.id}
-        eventId={props.eventId}
-        isPublic={props.isPublic}
-        onKeyDownHandler={onKeyDownHandler}
-        buttons={
-          <ItemCardButton
-            currentItem={currentItem}
-            isSubmitShown={!hasNextStep}
-            isLoading={submitLoading}
-            hasPrevStep={hasPrevStep}
-            isAllItemsSkippable={isAllItemsSkippable}
-            onNextButtonClick={onNextButtonClick}
-            onBackButtonClick={onBackButtonClick}
-            onSubmitButtonClick={submitAnswers}
-          />
-        }>
-        {currentItem && (
-          <ActivityCardItem
-            key={currentItem.id}
-            activityId={props.activityDetails.id}
-            eventId={props.eventId}
-            activityItem={currentItem}
-            values={currentItem.answer}
-            replaceText={replaceTextVariables}
-            watermark={props.appletDetails.watermark}
-          />
-        )}
-      </ActivityAssessmentLayout>
-
-      <Modal
-        show={isInvalidAnswerModalOpen}
-        onHide={closeInvalidAnswerModal}
-        title={t("failed")}
-        label={t("incorrect_answer")}
-      />
-    </>
+    <ActivityAssessmentLayout
+      title={props.activityDetails.name}
+      appletId={props.appletDetails.id}
+      activityId={props.activityDetails.id}
+      eventId={props.eventId}
+      isPublic={props.isPublic}
+      publicKey={props.publicAppletKey ?? null}
+      onKeyDownHandler={onKeyDownHandler}
+      buttons={
+        <ItemCardButton
+          isSubmitShown={!hasNextStep}
+          isBackShown={hasPrevStep && !currentItem?.config.removeBackButton}
+          isLoading={submitLoading}
+          onNextButtonClick={onNextButtonClick}
+          onBackButtonClick={onBackButtonClick}
+        />
+      }>
+      {currentItem && (
+        <ActivityCardItem
+          key={currentItem.id}
+          activityId={props.activityDetails.id}
+          eventId={props.eventId}
+          activityItem={currentItem}
+          values={currentItem.answer}
+          replaceText={replaceTextVariables}
+          watermark={props.appletDetails.watermark}
+        />
+      )}
+    </ActivityAssessmentLayout>
   )
 }
