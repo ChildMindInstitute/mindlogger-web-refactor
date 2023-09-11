@@ -14,7 +14,7 @@ import {
   useTextVariablesReplacer,
 } from "~/entities/activity"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
-import { useCustomTranslation, useFlowType } from "~/shared/utils"
+import { useCustomTranslation, useFlowType, useModal } from "~/shared/utils"
 
 type Props = {
   eventId: string
