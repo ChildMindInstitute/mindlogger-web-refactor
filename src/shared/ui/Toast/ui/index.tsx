@@ -1,6 +1,5 @@
 import { ToastContainer } from "react-toastify"
 
-import { Theme } from "~/shared/constants"
 import { useCustomMediaQuery } from "~/shared/utils"
 
 type Props = {
@@ -28,8 +27,6 @@ export const AppToast = (props: Props) => {
       pauseOnHover={props.pauseOnHover || true}
       theme="colored"
       toastStyle={{
-        backgroundColor: Theme.colors.light.accentGreen,
-        color: Theme.colors.light.inverseOnSurface,
         width: greaterThanSM ? "400px" : "100%",
       }}
     />
