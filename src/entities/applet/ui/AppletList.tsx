@@ -1,6 +1,4 @@
 import Box from "@mui/material/Box"
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
 
 import { useAppletListQuery } from "../api"
 import { appletBuilder } from "../model"
@@ -22,23 +20,25 @@ const AppletList = () => {
 
   if (isError) {
     return (
-      <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
+      <Box display="flex" flex={1} alignItems="center" justifyContent="center">
         <span>{error.evaluatedMessage}</span>
-      </Container>
+      </Box>
     )
   }
 
   if (isAppletsEmpty) {
     return (
-      <Box display="flex" height="100%" alignItems="center" justifyContent="center">
+      <Box display="flex" flex={1} alignItems="center" justifyContent="center">
         <Text>No applets</Text>
       </Box>
     )
   }
 
   return (
-    <Box display="flex" flexWrap="wrap" justifyContent="center">
-      {!isAppletsEmpty && applets.map(value => <AppletCard key={value.id} applet={value} />)}
+    <Box display="flex" flex={1} flexWrap="wrap" justifyContent="center">
+      {applets.map(value => (
+        <AppletCard key={value.id} applet={value} />
+      ))}
     </Box>
   )
 }
