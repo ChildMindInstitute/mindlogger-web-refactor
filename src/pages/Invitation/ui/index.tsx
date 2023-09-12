@@ -15,7 +15,7 @@ const InvitationPage = () => {
   }
 
   return (
-    <Box margin="24px 0px">
+    <Box display="flex" flex={1} justifyContent="center" alignItems="center" margin="24px">
       {inviteId && (
         <AuthorizationGuard fallback={<AuthorizationButtons redirectState={redirectState} />}>
           <FetchInvitation keyParams={inviteId} />

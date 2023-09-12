@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box"
 import { useNavigate } from "react-router-dom"
 
 import { AppletListItem } from "../lib"
@@ -17,14 +18,16 @@ const AppletCard = ({ applet }: AppletCardProps) => {
   }
 
   return (
-    <CustomCard
-      type="link"
-      id={applet.id}
-      title={applet.displayName}
-      description={applet.description}
-      imageSrc={applet.image}
-      onClick={onAppletCardClick}
-    />
+    <Box>
+      <CustomCard
+        type="link"
+        id={applet.id}
+        title={applet.displayName}
+        description={applet.description}
+        imageSrc={applet.image}
+        onClick={onAppletCardClick}
+      />
+    </Box>
   )
 }
 
