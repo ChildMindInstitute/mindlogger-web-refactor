@@ -12,8 +12,8 @@ export const SettingsPage = () => {
   const { user } = userModel.hooks.useUserState()
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" margin="24px 0px" textAlign="center">
-      <Box>
+    <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
+      <Box margin="24px 0px" padding="0px 12px">
         <Box display="flex" justifyContent="flex-start" alignItems="center">
           <Box sx={{ padding: "0px 15px" }}>
             <AvatarBase name={`${user?.firstName} ${user?.lastName}`} width="40px" height="40px" />
