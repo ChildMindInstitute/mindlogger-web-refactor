@@ -73,19 +73,19 @@ class MarkdownBuilder {
       if (content.includes(leftAlignRule)) {
         const formatedContent = content.replace(leftAlignRule, "")
 
-        markdown = markdown.replace(match[0], `<div style="text-align: left;">${formatedContent}</div>`)
+        markdown = markdown.replace(match[0], `<p style="text-align: left;">${formatedContent}</p>`)
       }
 
       if (content.includes(centerAlignRule)) {
         const formatedContent = content.replace(centerAlignRule, "")
 
-        markdown = markdown.replace(match[0], `<div style="text-align: center;">${formatedContent}</div>`)
+        markdown = markdown.replace(match[0], `<p style="text-align: center;">${formatedContent}</p>`)
       }
 
       if (content.includes(rightAlignRule)) {
         const formatedContent = content.replace(rightAlignRule, "")
 
-        markdown = markdown.replace(match[0], `<div style="text-align: right;">${formatedContent}</div>`)
+        markdown = markdown.replace(match[0], `<p style="text-align: right;">${formatedContent}</p>`)
       }
     })
 
