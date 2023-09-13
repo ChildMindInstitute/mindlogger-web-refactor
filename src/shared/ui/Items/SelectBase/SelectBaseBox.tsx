@@ -10,7 +10,7 @@ type Props = PropsWithChildren<{
   onHandleChange: () => void
 }>
 
-export const RadioBox = (props: Props) => {
+export const SelectBaseBox = (props: Props) => {
   const borderColor = props.checked ? Theme.colors.light.primary : Theme.colors.light.surfaceVariant
   const backgroundColor = props.checked ? Theme.colors.light.secondaryContainer : Theme.colors.light.surface
   const hoverBackgroundColor = props.checked
