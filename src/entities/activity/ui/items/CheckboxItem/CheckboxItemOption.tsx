@@ -48,7 +48,7 @@ export const CheckboxItemOption = (props: Props) => {
       />
 
       <Box display="flex" flex={1} justifyContent="flex-start" alignItems="center" gap="12px">
-        {props.image && <SelectBaseImage src={props.image} size="medium" />}
+        {props.image && <SelectBaseImage src={props.image} />}
 
         <SelectBaseText text={labelText} />
       </Box>
