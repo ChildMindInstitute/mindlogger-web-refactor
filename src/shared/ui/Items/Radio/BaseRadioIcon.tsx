@@ -15,9 +15,6 @@ export const BaseRadioIcon = () => {
           outline: `2px auto ${Theme.colors.light.primary}`,
           outlineOffset: 2,
         },
-        "input:hover ~ &": {
-          backgroundColor: "#ebf1f5",
-        },
         "input:disabled ~ &": {
           boxShadow: "none",
           background: "rgba(206,217,224,.5)",

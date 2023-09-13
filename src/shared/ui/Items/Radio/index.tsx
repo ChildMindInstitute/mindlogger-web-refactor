@@ -1,5 +1,6 @@
 import { useMemo } from "react"
 
+import Box from "@mui/material/Box"
 import Radio from "@mui/material/Radio"
 import Typography from "@mui/material/Typography"
 
@@ -46,7 +47,7 @@ export const RadioItemOption = (props: RadioItemOptionProps) => {
   }, [replaceText, label])
 
   return (
-    <RadioBox color={color} onHandleChange={onHandleChange}>
+    <RadioBox color={color} onHandleChange={onHandleChange} checked={defaultChecked}>
       <Radio
         id={id}
         name={name}
@@ -59,19 +60,21 @@ export const RadioItemOption = (props: RadioItemOptionProps) => {
         icon={<BaseRadioIcon />}
       />
 
-      {image && <RadioImage src={image} size="medium" />}
+      <Box display="flex" flex={1} justifyContent="flex-start" alignItems="center" gap="12px">
+        {image && <RadioImage src={image} size="medium" />}
 
-      <Typography
-        variant="body1"
-        color={Theme.colors.light.onSurface}
-        fontFamily="Atkinson"
-        fontSize="18px"
-        fontStyle="normal"
-        fontWeight={400}
-        lineHeight="28px"
-        sx={{ cursor: "pointer" }}>
-        {labelText}
-      </Typography>
+        <Typography
+          variant="body1"
+          color={Theme.colors.light.onSurface}
+          fontFamily="Atkinson"
+          fontSize="18px"
+          fontStyle="normal"
+          fontWeight={400}
+          lineHeight="28px"
+          sx={{ cursor: "pointer" }}>
+          {labelText}
+        </Typography>
+      </Box>
 
       {tooltipText ? <CustomTooltip markdown={tooltipText} /> : <div className="option-tooltip"></div>}
     </RadioBox>
