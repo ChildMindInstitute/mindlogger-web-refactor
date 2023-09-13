@@ -185,6 +185,7 @@ export const AssessmentPassingScreen = (props: Props) => {
           values={currentItem.answer}
           replaceText={replaceTextVariables}
           watermark={props.appletDetails.watermark}
+          allowToSkipAllItems={isAllItemsSkippable}
         />
       )}
     </ActivityAssessmentLayout>
