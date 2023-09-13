@@ -1,10 +1,10 @@
 import { useMemo } from "react"
 
-import { Col } from "react-bootstrap"
+import Box from "@mui/material/Box"
 
-import { CheckboxItem as CheckboxItemType } from "../../lib/types/item"
+import { CheckboxItem as CheckboxItemType } from "../../../lib/types/item"
+import { CheckboxItemOption } from "./CheckboxItemOption"
 
-import { CheckboxItemOption } from "~/shared/ui"
 import { randomizeArray, splitList } from "~/shared/utils"
 
 type CheckboxItemProps = {
@@ -44,8 +44,8 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
   }
 
   return (
-    <>
-      <Col md={6}>
+    <Box display="flex" flex={1} gap="16px">
+      <Box display="flex" flex={1} gap="16px" flexDirection="column">
         {evenColumn.map(option => {
           return (
             <CheckboxItemOption
@@ -64,9 +64,9 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
             />
           )
         })}
-      </Col>
+      </Box>
 
-      <Col md={6}>
+      <Box display="flex" flex={1} gap="16px" flexDirection="column">
         {oddColumn.map(option => {
           return (
             <CheckboxItemOption
@@ -85,7 +85,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
             />
           )
         })}
-      </Col>
-    </>
+      </Box>
+    </Box>
   )
 }
