@@ -35,6 +35,7 @@ export const ActivityAssessmentLayout = ({
       display="flex"
       flexDirection="column"
       flex={1}
+      height="100vh"
       onKeyDown={event => onKeyDownHandler && onKeyDownHandler(event.key)}>
       <AssessmentLayoutHeader
         title={title}
@@ -45,7 +46,7 @@ export const ActivityAssessmentLayout = ({
         publicKey={publicKey}
       />
 
-      <Container sx={{ display: "flex", justifyContent: "center", flex: 1 }}>
+      <Container sx={{ display: "flex", flex: 1, justifyContent: "center", overflow: "scroll" }}>
         <Box maxWidth="900px">{children}</Box>
       </Container>
 
