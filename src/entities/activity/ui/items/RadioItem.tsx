@@ -1,6 +1,7 @@
 import { useMemo } from "react"
 
-import { Col } from "react-bootstrap"
+import Box from "@mui/material/Box"
+import RadioGroup from "@mui/material/RadioGroup"
 
 import { RadioItem as RadioItemType } from "../../lib"
 
@@ -34,48 +35,50 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText 
   }
 
   return (
-    <>
-      <Col md={6}>
-        {evenColumn.map(option => {
-          return (
-            <RadioItemOption
-              key={option.id}
-              id={option.id}
-              name={item.id}
-              value={option.value}
-              label={option.text}
-              onChange={onHandleValueChange}
-              description={option.tooltip}
-              image={option.image}
-              disabled={isDisabled}
-              defaultChecked={String(option.value) === value}
-              color={option.color}
-              replaceText={replaceText}
-            />
-          )
-        })}
-      </Col>
+    <RadioGroup name={`${item.id}-radio`}>
+      <Box display="flex" flex={1} gap="16px">
+        <Box display="flex" flex={1} gap="16px" flexDirection="column">
+          {evenColumn.map(option => {
+            return (
+              <RadioItemOption
+                key={option.id}
+                id={option.id}
+                name={item.id}
+                value={option.value}
+                label={option.text}
+                onChange={onHandleValueChange}
+                description={option.tooltip}
+                image={option.image}
+                disabled={isDisabled}
+                defaultChecked={String(option.value) === value}
+                color={option.color}
+                replaceText={replaceText}
+              />
+            )
+          })}
+        </Box>
 
-      <Col md={6}>
-        {oddColumn.map(option => {
-          return (
-            <RadioItemOption
-              key={option.id}
-              id={option.id}
-              name={item.id}
-              value={option.value}
-              label={option.text}
-              onChange={onHandleValueChange}
-              description={option.tooltip}
-              image={option.image}
-              disabled={isDisabled}
-              defaultChecked={String(option.value) === value}
-              color={option.color}
-              replaceText={replaceText}
-            />
-          )
-        })}
-      </Col>
-    </>
+        <Box display="flex" flex={1} gap="16px" flexDirection="column">
+          {oddColumn.map(option => {
+            return (
+              <RadioItemOption
+                key={option.id}
+                id={option.id}
+                name={item.id}
+                value={option.value}
+                label={option.text}
+                onChange={onHandleValueChange}
+                description={option.tooltip}
+                image={option.image}
+                disabled={isDisabled}
+                defaultChecked={String(option.value) === value}
+                color={option.color}
+                replaceText={replaceText}
+              />
+            )
+          })}
+        </Box>
+      </Box>
+    </RadioGroup>
   )
 }

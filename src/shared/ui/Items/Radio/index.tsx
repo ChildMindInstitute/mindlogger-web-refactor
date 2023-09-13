@@ -1,11 +1,14 @@
 import { useMemo } from "react"
 
-import { Form, Image } from "react-bootstrap"
+import Radio from "@mui/material/Radio"
+import Typography from "@mui/material/Typography"
 
-import { invertColor } from "../../../utils"
+import { Theme } from "../../../constants"
 import { CustomTooltip } from "../../Tooltip"
-
-import "./style.scss"
+import { BaseRadioActiveIcon } from "./BaseRadioActiveIcon"
+import { BaseRadioIcon } from "./BaseRadioIcon"
+import { RadioBox } from "./RadioBox"
+import { RadioImage } from "./RadioImage"
 
 type RadioItemOptionProps = {
   id: string
@@ -26,7 +29,9 @@ type RadioItemOptionProps = {
 export const RadioItemOption = (props: RadioItemOptionProps) => {
   const { id, name, value, label, description, image, disabled, defaultChecked, color, onChange, replaceText } = props
 
-  const defaultOptionColor = "#333333"
+  const onHandleChange = () => {
+    return onChange(String(value))
+  }
 
   const tooltipText = useMemo(() => {
     if (description) {
@@ -41,22 +46,34 @@ export const RadioItemOption = (props: RadioItemOptionProps) => {
   }, [replaceText, label])
 
   return (
-    <div className="response-option" style={{ background: color ? color : "none" }}>
-      {tooltipText ? <CustomTooltip markdown={tooltipText} /> : <div className="option-tooltip"></div>}
-
-      {image ? <Image src={image} className="option-image" roundedCircle /> : <div className="option-image"></div>}
-      <Form.Check
+    <RadioBox color={color} onHandleChange={onHandleChange}>
+      <Radio
         id={id}
-        type="radio"
         name={name}
-        className="form-check-width"
-        style={{ color: color ? invertColor(color) : defaultOptionColor }}
         value={value}
-        label={labelText}
         disabled={disabled}
-        defaultChecked={defaultChecked}
-        onChange={e => onChange(e.target.value)}
+        checked={defaultChecked}
+        disableRipple
+        color="default"
+        checkedIcon={<BaseRadioActiveIcon />}
+        icon={<BaseRadioIcon />}
       />
-    </div>
+
+      {image && <RadioImage src={image} size="medium" />}
+
+      <Typography
+        variant="body1"
+        color={Theme.colors.light.onSurface}
+        fontFamily="Atkinson"
+        fontSize="18px"
+        fontStyle="normal"
+        fontWeight={400}
+        lineHeight="28px"
+        sx={{ cursor: "pointer" }}>
+        {labelText}
+      </Typography>
+
+      {tooltipText ? <CustomTooltip markdown={tooltipText} /> : <div className="option-tooltip"></div>}
+    </RadioBox>
   )
 }

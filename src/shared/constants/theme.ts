@@ -20,6 +20,7 @@ export const Theme = {
       inverseOnSurface: "#F0F0F4",
       onSurfaceVariant: "#42474E",
       outline: "#72777F",
+      outlineVariant: "#C4C9D0",
     },
     dark: {},
   },
