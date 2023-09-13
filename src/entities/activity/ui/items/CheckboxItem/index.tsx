@@ -5,7 +5,7 @@ import Box from "@mui/material/Box"
 import { CheckboxItem as CheckboxItemType } from "../../../lib/types/item"
 import { CheckboxItemOption } from "./CheckboxItemOption"
 
-import { randomizeArray, splitList } from "~/shared/utils"
+import { randomizeArray, splitList, useCustomMediaQuery } from "~/shared/utils"
 
 type CheckboxItemProps = {
   item: CheckboxItemType
@@ -17,6 +17,8 @@ type CheckboxItemProps = {
 }
 
 export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceText }: CheckboxItemProps) => {
+  const { lessThanSM } = useCustomMediaQuery()
+
   const options = useMemo(() => {
     if (item.config.randomizeOptions) {
       return randomizeArray(item.responseValues.options).filter(x => !x.isHidden)
@@ -44,7 +46,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
   }
 
   return (
-    <Box display="flex" flex={1} gap="16px">
+    <Box display="flex" flex={1} gap="16px" flexDirection={lessThanSM ? "column" : "row"}>
       <Box display="flex" flex={1} gap="16px" flexDirection="column">
         {evenColumn.map(option => {
           return (

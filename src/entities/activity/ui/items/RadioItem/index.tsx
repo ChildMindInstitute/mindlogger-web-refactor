@@ -6,7 +6,7 @@ import RadioGroup from "@mui/material/RadioGroup"
 import { RadioItem as RadioItemType } from "../../../lib"
 import { RadioItemOption } from "./RadioItemOption"
 
-import { randomizeArray, splitList } from "~/shared/utils"
+import { randomizeArray, splitList, useCustomMediaQuery } from "~/shared/utils"
 
 type RadioItemProps = {
   item: RadioItemType
@@ -18,6 +18,8 @@ type RadioItemProps = {
 }
 
 export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText }: RadioItemProps) => {
+  const { lessThanSM } = useCustomMediaQuery()
+
   const options = useMemo(() => {
     if (item.config.randomizeOptions) {
       return randomizeArray(item.responseValues.options).filter(x => !x.isHidden)
@@ -36,7 +38,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText 
 
   return (
     <RadioGroup name={`${item.id}-radio`}>
-      <Box display="flex" flex={1} gap="16px">
+      <Box display="flex" flex={1} gap="16px" flexDirection={lessThanSM ? "column" : "row"}>
         <Box display="flex" flex={1} gap="16px" flexDirection="column">
           {evenColumn.map(option => {
             return (
