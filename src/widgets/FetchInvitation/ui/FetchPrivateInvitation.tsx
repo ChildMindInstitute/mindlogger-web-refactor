@@ -1,12 +1,11 @@
-import classNames from "classnames"
-import { Spinner } from "react-bootstrap"
+import Box from "@mui/material/Box"
 
 import { useAuthorizationGuard } from "../../AuthorizationGuard"
 
 import { Invitation, useInvitationTranslation, usePrivateInvitationQuery } from "~/entities/invitation"
 import { PrivateJoinAcceptButton } from "~/features/PrivateJoinAccept"
 import { PrivateJoinDeclineButton } from "~/features/PrivateJoinDecline"
-import { PageMessage } from "~/shared/ui"
+import { Loader, PageMessage } from "~/shared/ui"
 import { AuthorizationButtons } from "~/widgets/AuthorizationNavigateButtons"
 
 interface FetchPrivateInvitationProps {
@@ -26,10 +25,12 @@ export const FetchPrivateInvitation = ({ keyParams, redirectState }: FetchPrivat
 
   if (isLoading) {
     return (
-      <div className={classNames("d-flex", "justify-content-center", "align-items-center", "text-center")}>
-        <div className="loading">{t("loadingInvitation")}</div>
-        <Spinner animation="border" variant="primary" />
-      </div>
+      <Box display="flex" flex={1} justifyContent="center" alignItems="center" flexDirection="column">
+        <Box>
+          <div className="loading">{t("loadingInvitation")}</div>
+          <Loader />
+        </Box>
+      </Box>
     )
   }
 
@@ -38,7 +39,7 @@ export const FetchPrivateInvitation = ({ keyParams, redirectState }: FetchPrivat
       invite={data?.data?.result}
       isUserAuthenticated={isAuthenticated}
       actionComponent={
-        <div className={classNames("d-flex", "justify-content-center", "align-items-center", "flex-row")}>
+        <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row">
           {isAuthenticated ? (
             <>
               <PrivateJoinAcceptButton invitationKey={keyParams} />
@@ -47,7 +48,7 @@ export const FetchPrivateInvitation = ({ keyParams, redirectState }: FetchPrivat
           ) : (
             <AuthorizationButtons redirectState={redirectState} />
           )}
-        </div>
+        </Box>
       }
     />
   )

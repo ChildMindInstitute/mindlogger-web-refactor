@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import { useAcceptInviteMutation, useInvitationTranslation } from "~/entities/invitation"
 import { ROUTES } from "~/shared/constants"
+import { useToast } from "~/shared/ui"
 import Button from "~/shared/ui/Button"
 
 interface InvitationAcceptButtonProps {
@@ -13,9 +14,12 @@ export const InvitationAcceptButton = ({ invitationKey }: InvitationAcceptButton
   const { t } = useInvitationTranslation()
   const navigate = useNavigate()
 
+  const { showSuccessToast } = useToast()
+
   const { mutate: acceptInvite, isLoading: isAcceptLoading } = useAcceptInviteMutation({
     onSuccess() {
-      navigate(ROUTES.invitationAccept.path)
+      showSuccessToast(t("invitationAccepted"))
+      navigate(ROUTES.appletList.path)
     },
   })
 
