@@ -160,6 +160,15 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
         item.timeLeftToComplete = timeLeft
       }
 
+      if (event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess) {
+        const to = this.getNow()
+        to.setHours(event.availability.timeTo!.hours)
+        to.setMinutes(event.availability.timeTo!.minutes)
+        item.availableTo = to
+      } else {
+        item.availableTo = MIDNIGHT_DATE
+      }
+
       activityItems.push(item)
     }
 
