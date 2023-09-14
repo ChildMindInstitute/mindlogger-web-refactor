@@ -24,7 +24,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   const hasAvailableFromTo = isStatusScheduled
 
-  const hasAvailableToOnly = isStatusAvailable
+  const hasAvailableToOnly = isStatusAvailable || isStatusInProgress
 
   const hasTimeToComplete = isStatusInProgress && activity.isTimerSet && !!activity.timeLeftToComplete
 
