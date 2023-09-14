@@ -1,22 +1,24 @@
 import { useMemo } from "react"
 
-import { Col } from "react-bootstrap"
+import Box from "@mui/material/Box"
 
-import { RadioItem as RadioItemType } from "../../lib"
+import { CheckboxItem as CheckboxItemType } from "../../../lib/types/item"
+import { CheckboxItemOption } from "./CheckboxItemOption"
 
-import { RadioItemOption } from "~/shared/ui"
-import { randomizeArray, splitList } from "~/shared/utils"
+import { randomizeArray, splitList, useCustomMediaQuery } from "~/shared/utils"
 
-type RadioItemProps = {
-  item: RadioItemType
-  value: string
+type CheckboxItemProps = {
+  item: CheckboxItemType
+  values: string[]
 
   onValueChange: (value: string[]) => void
   replaceText: (value: string) => string
   isDisabled: boolean
 }
 
-export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText }: RadioItemProps) => {
+export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceText }: CheckboxItemProps) => {
+  const { lessThanSM } = useCustomMediaQuery()
+
   const options = useMemo(() => {
     if (item.config.randomizeOptions) {
       return randomizeArray(item.responseValues.options).filter(x => !x.isHidden)
@@ -30,15 +32,25 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText 
   }, [options])
 
   const onHandleValueChange = (value: string) => {
-    onValueChange([value])
+    const preparedValues = [...values]
+
+    const isCheckedValueIndexExist = preparedValues.findIndex(x => x === value)
+
+    if (isCheckedValueIndexExist !== -1) {
+      preparedValues.splice(isCheckedValueIndexExist, 1)
+    } else {
+      preparedValues.push(value)
+    }
+
+    onValueChange(preparedValues)
   }
 
   return (
-    <>
-      <Col md={6}>
+    <Box display="flex" flex={1} gap="16px" flexDirection={lessThanSM ? "column" : "row"}>
+      <Box display="flex" flex={1} gap="16px" flexDirection="column">
         {evenColumn.map(option => {
           return (
-            <RadioItemOption
+            <CheckboxItemOption
               key={option.id}
               id={option.id}
               name={item.id}
@@ -48,18 +60,18 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText 
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}
-              defaultChecked={String(option.value) === value}
+              defaultChecked={values.includes(String(option.value))}
               color={option.color}
               replaceText={replaceText}
             />
           )
         })}
-      </Col>
+      </Box>
 
-      <Col md={6}>
+      <Box display="flex" flex={1} gap="16px" flexDirection="column">
         {oddColumn.map(option => {
           return (
-            <RadioItemOption
+            <CheckboxItemOption
               key={option.id}
               id={option.id}
               name={item.id}
@@ -69,13 +81,13 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText 
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}
-              defaultChecked={String(option.value) === value}
+              defaultChecked={values.includes(String(option.value))}
               color={option.color}
               replaceText={replaceText}
             />
           )
         })}
-      </Col>
-    </>
+      </Box>
+    </Box>
   )
 }

@@ -29,7 +29,8 @@ export const CardItem = ({ children, markdown, isOptional }: CardItemProps) => {
       gridTemplateColumns="minmax(300px, 900px)"
       padding={greaterThanSM ? "72px 48px" : "36px 16px"}
       flexDirection="column"
-      gap="48px">
+      gap="48px"
+      sx={{ fontFamily: "Atkinson", fontWeight: "400", fontSize: "18px", lineHeight: "28px" }}>
       <Box>
         <Markdown markdown={markdown} />
         {isOptional && (

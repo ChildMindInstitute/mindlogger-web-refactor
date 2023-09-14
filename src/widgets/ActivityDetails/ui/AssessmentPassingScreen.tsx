@@ -14,7 +14,7 @@ import {
   useTextVariablesReplacer,
 } from "~/entities/activity"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
-import { useCustomTranslation, useFlowType, useModal } from "~/shared/utils"
+import { useCustomTranslation, useFlowType } from "~/shared/utils"
 
 type Props = {
   eventId: string
@@ -185,6 +185,7 @@ export const AssessmentPassingScreen = (props: Props) => {
           values={currentItem.answer}
           replaceText={replaceTextVariables}
           watermark={props.appletDetails.watermark}
+          allowToSkipAllItems={isAllItemsSkippable}
         />
       )}
     </ActivityAssessmentLayout>

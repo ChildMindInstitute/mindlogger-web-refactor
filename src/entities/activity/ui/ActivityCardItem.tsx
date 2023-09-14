@@ -11,6 +11,7 @@ type ActivityCardItemProps = {
   eventId: string
   activityItem: ActivityEventProgressRecord
   watermark?: string
+  allowToSkipAllItems?: boolean | undefined
 
   values: string[]
   replaceText: (value: string) => string
@@ -23,6 +24,7 @@ export const ActivityCardItem = ({
   watermark,
   activityId,
   eventId,
+  allowToSkipAllItems,
 }: ActivityCardItemProps) => {
   const { saveSetAnswerUserEvent } = useSetAnswerUserEvent({
     activityId,
@@ -46,7 +48,10 @@ export const ActivityCardItem = ({
   }, [activityItem.question, replaceText])
 
   return (
-    <CardItem markdown={questionText} watermark={watermark} isOptional={activityItem.config.skippableItem}>
+    <CardItem
+      markdown={questionText}
+      watermark={watermark}
+      isOptional={activityItem.config.skippableItem || allowToSkipAllItems}>
       <ItemPicker
         item={activityItem}
         values={values}
