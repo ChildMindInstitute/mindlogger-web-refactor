@@ -13,7 +13,7 @@ export const PrivateJoinPage = () => {
   }
 
   return (
-    <Box margin="24px 0px">
+    <Box display="flex" flex={1} margin="24px">
       {joinLinkKey && <FetchPrivateInvitation keyParams={joinLinkKey} redirectState={redirectState} />}
     </Box>
   )
