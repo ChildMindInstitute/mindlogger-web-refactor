@@ -35,7 +35,7 @@ export const ActivityAssessmentLayout = ({
       display="flex"
       flexDirection="column"
       flex={1}
-      height="100vh"
+      height="100svh"
       onKeyDown={event => onKeyDownHandler && onKeyDownHandler(event.key)}>
       <AssessmentLayoutHeader
         title={title}
