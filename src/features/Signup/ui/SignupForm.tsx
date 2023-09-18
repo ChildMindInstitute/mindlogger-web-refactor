@@ -83,6 +83,10 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
   })
 
   const onSignupSubmit = (data: TSignupForm) => {
+    if (!terms) {
+      return showFailedToast(t("pleaseAgreeTerms"))
+    }
+
     return signup(data)
   }
 
