@@ -1,13 +1,15 @@
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import CircularProgress from "@mui/material/CircularProgress"
+import Typography from "@mui/material/Typography"
 import { Link, useNavigate } from "react-router-dom"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { LoginSchema, TLoginForm } from "../model/login.schema"
 
 import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
-import { ROUTES } from "~/shared/constants"
-import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
+import { ROUTES, Theme } from "~/shared/constants"
+import { BasicFormProvider, Input, PasswordIcon, useToast } from "~/shared/ui"
 import {
   secureTokensStorage,
   secureUserPrivateKeyStorage,
@@ -24,22 +26,17 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
   const { t } = useLoginTranslation()
   const navigate = useNavigate()
 
+  const { showFailedToast } = useToast()
+
   const [passwordType, onPasswordIconClick] = usePasswordType()
 
   const { setUser } = userModel.hooks.useUserState()
   const { generateUserPrivateKey } = useEncryption()
 
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
-  const {
-    handleSubmit,
-    formState: { isValid },
-  } = form
+  const { handleSubmit } = form
 
-  const {
-    mutate: login,
-    isLoading,
-    error,
-  } = useLoginMutation({
+  const { mutate: login, isLoading } = useLoginMutation({
     onSuccess(data, variables) {
       const userParams = {
         userId: data.data.result.user.id,
@@ -59,6 +56,11 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
         navigate(ROUTES.appletList.path)
       }
     },
+    onError(error) {
+      if (error.evaluatedMessage) {
+        showFailedToast(error.evaluatedMessage)
+      }
+    },
   })
 
   const onLoginSubmit = (data: TLoginForm) => {
@@ -67,36 +69,60 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
-      <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
-      <Input
-        type={passwordType}
-        name="password"
-        placeholder={t("password") || ""}
-        autoComplete="current-password"
-        Icon={<PasswordIcon isSecure={passwordType === "password"} onClick={onPasswordIconClick} />}
-      />
+      <Box display="flex" flex={1} flexDirection="column" gap="24px">
+        <Input
+          id="login-form-email-input"
+          type="text"
+          name="email"
+          placeholder={t("email") || ""}
+          autoComplete="username"
+        />
+        <Input
+          id="login-form-password-input"
+          type={passwordType}
+          name="password"
+          placeholder={t("password") || ""}
+          autoComplete="current-password"
+          Icon={<PasswordIcon isSecure={passwordType === "password"} onClick={onPasswordIconClick} />}
+        />
 
-      <Container className="d-flex justify-content-start p-0 mb-3">
-        <BasicButton type="button" variant="link" className={classNames("p-0", "ms-3")}>
+        <Box display="flex" justifyContent="center">
           <Link to={ROUTES.forgotPassword.path} relative="path">
-            {t("forgotPassword")}
+            <Typography
+              color={Theme.colors.light.primary}
+              fontFamily="Atkinson"
+              fontSize="14px"
+              fontWeight={400}
+              fontStyle="normal"
+              lineHeight="20px"
+              letterSpacing="0.1px"
+              sx={{ textDecoration: "underline" }}>
+              {t("forgotPassword")}
+            </Typography>
           </Link>
-        </BasicButton>
-      </Container>
+        </Box>
 
-      <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
-
-      <Container>
-        <BasicButton
-          className={classNames("mt-3")}
+        <Button
           type="submit"
-          variant="primary"
-          disabled={!isValid || isLoading}
-          loading={isLoading}
-          defaultSize>
-          {t("button")}
-        </BasicButton>
-      </Container>
+          variant="contained"
+          disabled={isLoading}
+          sx={{ borderRadius: "100px", maxWidth: "400px", width: "100%", padding: "10px 24px" }}>
+          {isLoading ? (
+            <CircularProgress size={25} sx={{ color: Theme.colors.light.onPrimary }} />
+          ) : (
+            <Typography
+              fontFamily="Atkinson"
+              fontSize="14px"
+              fontWeight={700}
+              fontStyle="normal"
+              lineHeight="20px"
+              letterSpacing="0.1px"
+              textTransform="none">
+              {t("button")}
+            </Typography>
+          )}
+        </Button>
+      </Box>
     </BasicFormProvider>
   )
 }

@@ -1,28 +1,19 @@
-import { Container } from "react-bootstrap"
+import Box from "@mui/material/Box"
 
-import { useDownloadMobileTranslation } from "../lib/useDownloadMobileTranslation"
-
-import AppStore from "~/assets/AppStore.svg"
-import GooglePlay from "~/assets/GooglePlay.svg"
+import AppStore from "~/assets/d-app-store-button.svg"
+import GooglePlay from "~/assets/d-google-play-button.svg"
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/shared/constants"
 
 const DownloadMobileLinks = () => {
-  const { t } = useDownloadMobileTranslation()
-
   return (
-    <Container>
-      <Container className="mt-3 mb-2">
-        <p>{t("downloadMobile")}</p>
-      </Container>
-      <Container className="d-flex gap-3 justify-content-center">
-        <a href={APPSTORE_LINK} target="_blank" rel="noreferrer">
-          <img src={AppStore} alt="App Store Icon" />
-        </a>
-        <a href={GOOGLEPLAY_LINK} target="_blank" rel="noreferrer">
-          <img src={GooglePlay} alt="Google Play Icon" />
-        </a>
-      </Container>
-    </Container>
+    <Box display="flex" justifyContent="center" gap="16px">
+      <a href={APPSTORE_LINK} target="_blank" rel="noreferrer">
+        <img src={AppStore} alt="App Store Icon" />
+      </a>
+      <a href={GOOGLEPLAY_LINK} target="_blank" rel="noreferrer">
+        <img src={GooglePlay} alt="Google Play Icon" />
+      </a>
+    </Box>
   )
 }
 

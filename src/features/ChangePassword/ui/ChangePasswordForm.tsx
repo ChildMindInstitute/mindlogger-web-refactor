@@ -1,3 +1,6 @@
+import Button from "@mui/material/Button"
+import CircularProgress from "@mui/material/CircularProgress"
+import Typography from "@mui/material/Typography"
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
 
@@ -5,7 +8,8 @@ import { useChangePasswordTranslation } from "../lib/useChangePasswordTranslatio
 import { ChangePasswordSchema, TChangePassword } from "../model/schema"
 
 import { useUpdatePasswordMutation } from "~/entities/user"
-import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
+import { Theme } from "~/shared/constants"
+import { BasicFormProvider, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
 import { useCustomForm, usePasswordType } from "~/shared/utils"
 
 import "./style.scss"
@@ -47,6 +51,7 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
         </Container>
 
         <Input
+          id="change-password-form-old-password"
           type={oldPasswordType}
           name="old"
           placeholder={t("oldPassword") || ""}
@@ -54,6 +59,7 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
           Icon={<PasswordIcon isSecure={oldPasswordType === "password"} onClick={onOldPasswordIconClick} />}
         />
         <Input
+          id="change-password-form-new-password"
           type={newPasswordType}
           name="new"
           placeholder={t("newPassword") || ""}
@@ -61,6 +67,7 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
           Icon={<PasswordIcon isSecure={newPasswordType === "password"} onClick={onNewPasswordIconClick} />}
         />
         <Input
+          id="change-password-form-confirm-password"
           type={confirmNewPasswordType}
           name="confirm"
           placeholder={t("confirmPassword") || ""}
@@ -72,14 +79,26 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
 
         <DisplaySystemMessage errorMessage={error?.evaluatedMessage} successMessage={isSuccess ? t("success") : null} />
 
-        <BasicButton
+        <Button
           type="submit"
-          className={classNames("success-button", "my-3")}
-          variant="primary"
-          loading={isLoading}
-          disabled={isLoading}>
-          {t("submit")}
-        </BasicButton>
+          variant="contained"
+          disabled={isLoading}
+          sx={{ borderRadius: "100px", maxWidth: "400px", width: "100%", padding: "10px 24px" }}>
+          {isLoading ? (
+            <CircularProgress size={25} sx={{ color: Theme.colors.light.onPrimary }} />
+          ) : (
+            <Typography
+              fontFamily="Atkinson"
+              fontSize="14px"
+              fontWeight={700}
+              fontStyle="normal"
+              lineHeight="20px"
+              letterSpacing="0.1px"
+              textTransform="none">
+              {t("submit")}
+            </Typography>
+          )}
+        </Button>
       </BasicFormProvider>
     </Container>
   )

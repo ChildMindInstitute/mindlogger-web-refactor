@@ -1,6 +1,5 @@
 import { BaseSyntheticEvent } from "react"
 
-import { Container } from "react-bootstrap"
 import { FieldValues, FormProvider, FormProviderProps } from "react-hook-form"
 
 interface BasicFormProviderProps {
@@ -14,11 +13,7 @@ const BasicFormProvider = <TFieldValues extends FieldValues>({
 }: FormProviderProps<TFieldValues> & BasicFormProviderProps) => {
   return (
     <FormProvider {...rest}>
-      <form onSubmit={onSubmit}>
-        <Container fluid className="mt-3 mb-2">
-          {children}
-        </Container>
-      </form>
+      <form onSubmit={onSubmit}>{children}</form>
     </FormProvider>
   )
 }

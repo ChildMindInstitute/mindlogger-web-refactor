@@ -81,10 +81,11 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onSignupSubmit)}>
-      <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
-      <Input type="text" name="firstName" placeholder={t("firstName") || ""} />
-      <Input type="text" name="lastName" placeholder={t("lastName") || ""} />
+      <Input id="signup-form-email" type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
+      <Input id="signup-form-firstname" type="text" name="firstName" placeholder={t("firstName") || ""} />
+      <Input id="signup-form-lastname" type="text" name="lastName" placeholder={t("lastName") || ""} />
       <Input
+        id="signup-form-new-password"
         type={passwordType}
         name="password"
         placeholder={t("password") || ""}
@@ -92,6 +93,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
         Icon={<PasswordIcon isSecure={passwordType === "password"} onClick={onPasswordIconClick} />}
       />
       <Input
+        id="signup-form-confirm-password"
         type={confirmPasswordType}
         name="confirmPassword"
         placeholder={t("confirmPassword") || ""}
