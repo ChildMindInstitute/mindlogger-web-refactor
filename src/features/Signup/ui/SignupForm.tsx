@@ -1,9 +1,6 @@
 import { useState } from "react"
 
 import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
-import CircularProgress from "@mui/material/CircularProgress"
-import Typography from "@mui/material/Typography"
 import { useNavigate } from "react-router-dom"
 
 import { TERMS_URL } from "../lib/constants"
@@ -11,8 +8,7 @@ import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
 import { useLoginMutation, userModel, useSignupMutation } from "~/entities/user"
-import { Theme } from "~/shared/constants"
-import { Input, Checkbox, BasicFormProvider, PasswordIcon, useToast } from "~/shared/ui"
+import { Input, Checkbox, BasicFormProvider, PasswordIcon, useToast, BaseButton } from "~/shared/ui"
 import {
   secureTokensStorage,
   secureUserPrivateKeyStorage,
@@ -122,26 +118,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
           </Checkbox>
         </Box>
 
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={isLoading}
-          sx={{ borderRadius: "100px", maxWidth: "400px", width: "100%", padding: "10px 24px" }}>
-          {isLoading ? (
-            <CircularProgress size={25} sx={{ color: Theme.colors.light.onPrimary }} />
-          ) : (
-            <Typography
-              fontFamily="Atkinson"
-              fontSize="14px"
-              fontWeight={700}
-              fontStyle="normal"
-              lineHeight="20px"
-              letterSpacing="0.1px"
-              textTransform="none">
-              {t("create")}
-            </Typography>
-          )}
-        </Button>
+        <BaseButton type="submit" variant="contained" text={t("create")} isLoading={isLoading} />
       </Box>
     </BasicFormProvider>
   )

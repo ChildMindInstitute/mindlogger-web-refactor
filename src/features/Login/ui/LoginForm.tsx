@@ -1,6 +1,4 @@
 import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
-import CircularProgress from "@mui/material/CircularProgress"
 import Typography from "@mui/material/Typography"
 import { Link, useNavigate } from "react-router-dom"
 
@@ -9,7 +7,7 @@ import { LoginSchema, TLoginForm } from "../model/login.schema"
 
 import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
 import { ROUTES, Theme } from "~/shared/constants"
-import { BasicFormProvider, Input, PasswordIcon, useToast } from "~/shared/ui"
+import { BaseButton, BasicFormProvider, Input, PasswordIcon, useToast } from "~/shared/ui"
 import {
   secureTokensStorage,
   secureUserPrivateKeyStorage,
@@ -102,26 +100,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
           </Link>
         </Box>
 
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={isLoading}
-          sx={{ borderRadius: "100px", maxWidth: "400px", width: "100%", padding: "10px 24px" }}>
-          {isLoading ? (
-            <CircularProgress size={25} sx={{ color: Theme.colors.light.onPrimary }} />
-          ) : (
-            <Typography
-              fontFamily="Atkinson"
-              fontSize="14px"
-              fontWeight={700}
-              fontStyle="normal"
-              lineHeight="20px"
-              letterSpacing="0.1px"
-              textTransform="none">
-              {t("button")}
-            </Typography>
-          )}
-        </Button>
+        <BaseButton type="submit" variant="contained" isLoading={isLoading} text={t("button")} />
       </Box>
     </BasicFormProvider>
   )

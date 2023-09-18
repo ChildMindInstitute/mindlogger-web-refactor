@@ -48,7 +48,7 @@ export const SignupPage = () => {
             lineHeight="20px"
             letterSpacing="0.1px"
             sx={{ textDecoration: "underline" }}>
-            <Link to={ROUTES.signup.path} relative="path">
+            <Link to={ROUTES.login.path} relative="path">
               {t("logIn")}
             </Link>
           </Typography>
