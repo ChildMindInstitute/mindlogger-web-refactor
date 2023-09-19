@@ -21,7 +21,7 @@ const Footer = () => {
         <a href="https://childmind.org" className="mx-1 mx-md-2" target="_blank" rel="noreferrer">
           Child Mind Institute
         </a>
-        <span className="d-none d-sm-block">MATTER Lab 2023</span>
+        <span className="d-none d-sm-block">2023</span>
         <a className="mx-1 mx-md-4" href="https://mindlogger.org/terms" target="_blank" rel="noreferrer">
           Terms of Service
         </a>

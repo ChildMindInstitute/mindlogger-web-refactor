@@ -1,14 +1,17 @@
 import React, { HTMLInputTypeAttribute } from "react"
 
-import classNames from "classnames"
-import { Form } from "react-bootstrap"
+import FormControl from "@mui/material/FormControl"
+import FormHelperText from "@mui/material/FormHelperText"
+import InputAdornment from "@mui/material/InputAdornment"
+import InputLabel from "@mui/material/InputLabel"
+import OutlinedInput from "@mui/material/OutlinedInput"
 import { useController, useFormContext } from "react-hook-form"
 
+import { Theme } from "../../constants"
 import { useCustomTranslation } from "../../utils"
 
-import "./style.scss"
-
 interface IInputCommonProps {
+  id: string
   type: HTMLInputTypeAttribute
   autoComplete?: string
 
@@ -21,7 +24,7 @@ interface IInputCommonProps {
 }
 
 const Input = (props: IInputCommonProps) => {
-  const { type, name, placeholder, onChange, className, Icon } = props
+  const { type, name, placeholder, onChange, className, Icon, id } = props
   const { t } = useCustomTranslation()
 
   const { control } = useFormContext()
@@ -41,20 +44,23 @@ const Input = (props: IInputCommonProps) => {
   }
 
   return (
-    <div className={classNames("input-with-icon-wrap")}>
-      <Form.Control
+    <FormControl error={!!error} sx={{ width: "100%", fontFamily: "Atkinson" }} variant="outlined">
+      <InputLabel htmlFor={id}>{placeholder}</InputLabel>
+      <OutlinedInput
+        id={id}
+        label={placeholder}
         type={type}
         name={name}
         placeholder={placeholder}
         value={value}
         onChange={onInputChange}
-        className={classNames("default-input", className, { "input-error-shadow": error })}
+        className={className}
+        error={!!error}
+        endAdornment={<InputAdornment position="end">{Icon}</InputAdornment>}
+        sx={{ backgroundColor: Theme.colors.light.onPrimary }}
       />
-
-      {Icon && <div className={classNames("input-icon")}>{Icon}</div>}
-
-      <span className={classNames("input-error-box")}>{error?.message && t(error.message)}</span>
-    </div>
+      {error?.message && <FormHelperText id={id}>{t(error.message)}</FormHelperText>}
+    </FormControl>
   )
 }
 
