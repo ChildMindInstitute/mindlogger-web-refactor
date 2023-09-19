@@ -1,10 +1,24 @@
-import { EyeSlash, Eye } from "react-bootstrap-icons"
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined"
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined"
+import IconButton from "@mui/material/IconButton"
 
 interface PasswordIconProps {
   isSecure: boolean
-  onClick: () => void
+  onClick?: () => void
 }
 
 export const PasswordIcon = ({ isSecure, onClick }: PasswordIconProps) => {
-  return isSecure ? <EyeSlash onClick={onClick} /> : <Eye onClick={onClick} />
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+  }
+
+  return (
+    <IconButton
+      aria-label="toggle password visibility"
+      onClick={onClick}
+      onMouseDown={handleMouseDownPassword}
+      edge="end">
+      {isSecure ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+    </IconButton>
+  )
 }

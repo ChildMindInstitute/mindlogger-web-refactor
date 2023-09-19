@@ -55,6 +55,7 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
         </Container>
 
         <Input
+          id="recovery-password-new-password"
           type={newPasswordType}
           name="new"
           placeholder={t("newPassword") || ""}
@@ -62,6 +63,7 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
           Icon={<PasswordIcon isSecure={newPasswordType === "password"} onClick={onNewPasswordIconClick} />}
         />
         <Input
+          id="recovery-password-confirm-new-password"
           type={confirmNewPasswordType}
           name="confirm"
           placeholder={t("confirmPassword") || ""}

@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box"
 import classNames from "classnames"
 import { Container } from "react-bootstrap"
 
@@ -5,7 +6,7 @@ import { useChangePasswordTranslation } from "../lib/useChangePasswordTranslatio
 import { ChangePasswordSchema, TChangePassword } from "../model/schema"
 
 import { useUpdatePasswordMutation } from "~/entities/user"
-import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
+import { BaseButton, BasicFormProvider, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
 import { useCustomForm, usePasswordType } from "~/shared/utils"
 
 import "./style.scss"
@@ -42,44 +43,45 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
   return (
     <Container className={classNames("change-password-form-container")}>
       <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
-        <Container className={classNames("overflow-hidden")}>
-          <p>{title}</p>
-        </Container>
+        <Box display="flex" flexDirection="column" gap="24px">
+          <Container className={classNames("overflow-hidden")}>
+            <p>{title}</p>
+          </Container>
 
-        <Input
-          type={oldPasswordType}
-          name="old"
-          placeholder={t("oldPassword") || ""}
-          autoComplete="current-password"
-          Icon={<PasswordIcon isSecure={oldPasswordType === "password"} onClick={onOldPasswordIconClick} />}
-        />
-        <Input
-          type={newPasswordType}
-          name="new"
-          placeholder={t("newPassword") || ""}
-          autoComplete="new-password"
-          Icon={<PasswordIcon isSecure={newPasswordType === "password"} onClick={onNewPasswordIconClick} />}
-        />
-        <Input
-          type={confirmNewPasswordType}
-          name="confirm"
-          placeholder={t("confirmPassword") || ""}
-          autoComplete="new-password"
-          Icon={
-            <PasswordIcon isSecure={confirmNewPasswordType === "password"} onClick={onConfirmNewPasswordIconClick} />
-          }
-        />
+          <Input
+            id="change-password-form-old-password"
+            type={oldPasswordType}
+            name="old"
+            placeholder={t("oldPassword") || ""}
+            autoComplete="current-password"
+            Icon={<PasswordIcon isSecure={oldPasswordType === "password"} onClick={onOldPasswordIconClick} />}
+          />
+          <Input
+            id="change-password-form-new-password"
+            type={newPasswordType}
+            name="new"
+            placeholder={t("newPassword") || ""}
+            autoComplete="new-password"
+            Icon={<PasswordIcon isSecure={newPasswordType === "password"} onClick={onNewPasswordIconClick} />}
+          />
+          <Input
+            id="change-password-form-confirm-password"
+            type={confirmNewPasswordType}
+            name="confirm"
+            placeholder={t("confirmPassword") || ""}
+            autoComplete="new-password"
+            Icon={
+              <PasswordIcon isSecure={confirmNewPasswordType === "password"} onClick={onConfirmNewPasswordIconClick} />
+            }
+          />
 
-        <DisplaySystemMessage errorMessage={error?.evaluatedMessage} successMessage={isSuccess ? t("success") : null} />
+          <DisplaySystemMessage
+            errorMessage={error?.evaluatedMessage}
+            successMessage={isSuccess ? t("success") : null}
+          />
 
-        <BasicButton
-          type="submit"
-          className={classNames("success-button", "my-3")}
-          variant="primary"
-          loading={isLoading}
-          disabled={isLoading}>
-          {t("submit")}
-        </BasicButton>
+          <BaseButton type="submit" variant="contained" isLoading={isLoading} text={t("submit")} />
+        </Box>
       </BasicFormProvider>
     </Container>
   )

@@ -2,16 +2,17 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import { Link, useLocation } from "react-router-dom"
 
-import { SignupForm, useSignupTranslation } from "~/features/Signup"
+import { LoginForm, useLoginTranslation } from "~/features/Login"
 import { ROUTES, Theme } from "~/shared/constants"
+import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
 
-export const SignupPage = () => {
-  const { t } = useSignupTranslation()
+export const LoginPage = () => {
+  const { t } = useLoginTranslation()
   const location = useLocation()
 
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
-      <Box flex={1} padding="24px 32px">
+      <Box flex={1} padding="24px 32px" gap="20px" flexDirection="column">
         <Typography
           variant="h5"
           color={Theme.colors.light.onSurface}
@@ -24,8 +25,8 @@ export const SignupPage = () => {
           {t("title")}
         </Typography>
 
-        <Box className="signupForm" maxWidth="400px" margin="0 auto">
-          <SignupForm locationState={location.state} />
+        <Box className="loginForm" maxWidth="400px" margin="0 auto">
+          <LoginForm locationState={location.state} />
         </Box>
 
         <Box margin="24px 0px" display="flex" justifyContent="center">
@@ -48,11 +49,13 @@ export const SignupPage = () => {
             lineHeight="20px"
             letterSpacing="0.1px"
             sx={{ textDecoration: "underline" }}>
-            <Link to={ROUTES.login.path} relative="path">
-              {t("logIn")}
+            <Link to={ROUTES.signup.path} relative="path">
+              {t("create")}
             </Link>
           </Typography>
         </Box>
+
+        <DownloadMobileLinks />
       </Box>
     </Box>
   )
