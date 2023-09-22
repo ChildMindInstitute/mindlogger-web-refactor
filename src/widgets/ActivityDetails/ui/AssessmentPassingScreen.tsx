@@ -1,9 +1,15 @@
+import Box from "@mui/material/Box"
+import Container from "@mui/material/Container"
+
+import { Theme } from "../../../shared/constants"
 import { useToast } from "../../../shared/ui"
+import Layout from "../../AppLayout"
 import { useAnswer } from "../model/hooks/useAnswers"
 import { useEntityComplete } from "../model/hooks/useEntityComplete"
 import { useStepperStateManager } from "../model/hooks/useStepperStateManager"
 import { validateItem } from "../model/validateItem"
-import { ActivityAssessmentLayout } from "./ActivityAssessmentLayout"
+import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
+import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
 import {
   ActivityCardItem,
@@ -159,35 +165,46 @@ export const AssessmentPassingScreen = (props: Props) => {
   }
 
   return (
-    <ActivityAssessmentLayout
-      title={props.activityDetails.name}
-      appletId={props.appletDetails.id}
-      activityId={props.activityDetails.id}
-      eventId={props.eventId}
-      isPublic={props.isPublic}
-      publicKey={props.publicAppletKey ?? null}
+    <Layout
       onKeyDownHandler={onKeyDownHandler}
-      buttons={
-        <ItemCardButton
-          isSubmitShown={!hasNextStep}
-          isBackShown={hasPrevStep && !currentItem?.config.removeBackButton}
-          isLoading={submitLoading}
-          onNextButtonClick={onNextButtonClick}
-          onBackButtonClick={onBackButtonClick}
-        />
-      }>
-      {currentItem && (
-        <ActivityCardItem
-          key={currentItem.id}
+      bgColor={Theme.colors.light.surface}
+      header={
+        <AssessmentLayoutHeader
+          title={props.activityDetails.name}
+          appletId={props.appletDetails.id}
           activityId={props.activityDetails.id}
           eventId={props.eventId}
-          activityItem={currentItem}
-          values={currentItem.answer}
-          replaceText={replaceTextVariables}
-          watermark={props.appletDetails.watermark}
-          allowToSkipAllItems={isAllItemsSkippable}
+          isPublic={props.isPublic}
+          publicKey={props.publicAppletKey ?? null}
         />
-      )}
-    </ActivityAssessmentLayout>
+      }
+      footer={
+        <AssessmentLayoutFooter>
+          <ItemCardButton
+            isSubmitShown={!hasNextStep}
+            isBackShown={hasPrevStep && !currentItem?.config.removeBackButton}
+            isLoading={submitLoading}
+            onNextButtonClick={onNextButtonClick}
+            onBackButtonClick={onBackButtonClick}
+          />
+        </AssessmentLayoutFooter>
+      }>
+      <Container sx={{ display: "flex", flex: 1, justifyContent: "center", overflow: "scroll" }}>
+        <Box maxWidth="900px">
+          {currentItem && (
+            <ActivityCardItem
+              key={currentItem.id}
+              activityId={props.activityDetails.id}
+              eventId={props.eventId}
+              activityItem={currentItem}
+              values={currentItem.answer}
+              replaceText={replaceTextVariables}
+              watermark={props.appletDetails.watermark}
+              allowToSkipAllItems={isAllItemsSkippable}
+            />
+          )}
+        </Box>
+      </Container>
+    </Layout>
   )
 }
