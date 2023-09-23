@@ -7,8 +7,9 @@ import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
+import { useNotification } from "~/entities/notification"
 import { useLoginMutation, userModel, useSignupMutation } from "~/entities/user"
-import { Input, Checkbox, BasicFormProvider, PasswordIcon, useToast, BaseButton } from "~/shared/ui"
+import { Input, Checkbox, BasicFormProvider, PasswordIcon, BaseButton } from "~/shared/ui"
 import {
   secureTokensStorage,
   secureUserPrivateKeyStorage,
@@ -25,7 +26,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
   const { t } = useSignupTranslation()
   const navigate = useNavigate()
 
-  const { showFailedToast, showSuccessToast } = useToast()
+  const { showErrorNotification, showSuccessNotification } = useNotification()
 
   const [passwordType, onPasswordIconClick] = usePasswordType()
   const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType()
@@ -63,7 +64,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
 
   const { mutate: signup, isLoading } = useSignupMutation({
     onSuccess() {
-      showSuccessToast(t("success"))
+      showSuccessNotification(t("success"))
       if (locationState?.isInvitationFlow) {
         const { email, password } = form.getValues()
         login({ email, password })
@@ -73,14 +74,14 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
     },
     onError(error) {
       if (error.evaluatedMessage) {
-        showFailedToast(error.evaluatedMessage)
+        showErrorNotification(error.evaluatedMessage)
       }
     },
   })
 
   const onSignupSubmit = (data: TSignupForm) => {
     if (!terms) {
-      return showFailedToast(t("pleaseAgreeTerms"))
+      return showErrorNotification(t("pleaseAgreeTerms"))
     }
 
     return signup(data)

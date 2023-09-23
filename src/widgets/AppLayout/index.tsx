@@ -3,6 +3,7 @@ import { PropsWithChildren } from "react"
 import Box from "@mui/material/Box"
 import { Outlet } from "react-router-dom"
 
+import { NotificationCenter } from "~/entities/notification"
 import { Theme } from "~/shared/constants"
 import Footer from "~/widgets/Footer"
 import Header from "~/widgets/Header"
@@ -35,6 +36,7 @@ const Layout = ({
       }}>
       {header ? header : <Header />}
       <Box id="app-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
+        <NotificationCenter />
         {children ? children : <Outlet />}
         {footer ? footer : <Footer />}
       </Box>

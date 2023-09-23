@@ -5,9 +5,10 @@ import { Link, useNavigate } from "react-router-dom"
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { LoginSchema, TLoginForm } from "../model/login.schema"
 
+import { useNotification } from "~/entities/notification"
 import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
 import { ROUTES, Theme } from "~/shared/constants"
-import { BaseButton, BasicFormProvider, Input, PasswordIcon, useToast } from "~/shared/ui"
+import { BaseButton, BasicFormProvider, Input, PasswordIcon } from "~/shared/ui"
 import {
   secureTokensStorage,
   secureUserPrivateKeyStorage,
@@ -24,7 +25,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
   const { t } = useLoginTranslation()
   const navigate = useNavigate()
 
-  const { showFailedToast } = useToast()
+  const { showErrorNotification } = useNotification()
 
   const [passwordType, onPasswordIconClick] = usePasswordType()
 
@@ -56,7 +57,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
     },
     onError(error) {
       if (error.evaluatedMessage) {
-        showFailedToast(error.evaluatedMessage)
+        showErrorNotification(error.evaluatedMessage)
       }
     },
   })

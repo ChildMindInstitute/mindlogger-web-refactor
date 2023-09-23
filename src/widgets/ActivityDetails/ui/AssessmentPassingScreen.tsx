@@ -1,9 +1,6 @@
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 
-import { Theme } from "../../../shared/constants"
-import { useToast } from "../../../shared/ui"
-import Layout from "../../AppLayout"
 import { useAnswer } from "../model/hooks/useAnswers"
 import { useEntityComplete } from "../model/hooks/useEntityComplete"
 import { useStepperStateManager } from "../model/hooks/useStepperStateManager"
@@ -20,7 +17,10 @@ import {
   useTextVariablesReplacer,
 } from "~/entities/activity"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
+import { Theme } from "~/shared/constants"
+import { useToast } from "~/shared/ui"
 import { useCustomTranslation, useFlowType } from "~/shared/utils"
+import Layout from "~/widgets/AppLayout"
 
 type Props = {
   eventId: string

@@ -4,6 +4,7 @@ import persistStore from "redux-persist/es/persistStore"
 import storage from "redux-persist/lib/storage"
 
 import { activityModel } from "~/entities/activity"
+import { notificationModel } from "~/entities/notification"
 import { userModel } from "~/entities/user"
 
 const persistConfig = {
@@ -14,6 +15,7 @@ const persistConfig = {
 export const rootReducer = combineReducers({
   user: userModel.reducer,
   activity: activityModel.reducer,
+  notificationCenter: notificationModel.reducer,
 })
 
 const store = configureStore({
