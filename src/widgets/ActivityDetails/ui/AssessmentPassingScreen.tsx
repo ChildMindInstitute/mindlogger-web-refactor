@@ -16,9 +16,9 @@ import {
   useSaveAnswerMutation,
   useTextVariablesReplacer,
 } from "~/entities/activity"
+import { useNotification } from "~/entities/notification"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
-import { useToast } from "~/shared/ui"
 import { useCustomTranslation, useFlowType } from "~/shared/utils"
 import Layout from "~/widgets/AppLayout"
 
@@ -38,7 +38,7 @@ export const AssessmentPassingScreen = (props: Props) => {
   const { t } = useCustomTranslation()
 
   const flowParams = useFlowType()
-  const { showWarningToast } = useToast()
+  const { showWarningNotification } = useNotification()
 
   const { processAnswers } = useAnswer({
     appletDetails: props.appletDetails,
@@ -121,13 +121,13 @@ export const AssessmentPassingScreen = (props: Props) => {
     const isItemSkippable = currentItem.config.skippableItem || isAllItemsSkippable
 
     if (!isItemWithoutAnswer && !isItemHasAnswer && !isItemSkippable) {
-      return showWarningToast(t("pleaseAnswerTheQuestion"))
+      return showWarningNotification(t("pleaseAnswerTheQuestion"))
     }
 
     const isAnswerCorrect = validateItem({ item: currentItem })
 
     if (!isAnswerCorrect && !isItemSkippable) {
-      return showWarningToast(t("incorrect_answer"))
+      return showWarningNotification(t("incorrect_answer"))
     }
 
     if (!hasNextStep) {

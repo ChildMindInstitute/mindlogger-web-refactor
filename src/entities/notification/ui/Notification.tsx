@@ -1,9 +1,7 @@
-import Box from "@mui/material/Box"
-
 import { NotificationType } from "../model"
-
-import { Theme } from "~/shared/constants"
-import { Markdown } from "~/shared/ui"
+import { ErrorNotification } from "./ErrorNotification"
+import { SuccessNotification } from "./SuccessNotification"
+import { WarningNotification } from "./WarningNotification"
 
 type Props = {
   id: string
@@ -12,31 +10,16 @@ type Props = {
 }
 
 export const Notification = ({ id, message, type }: Props) => {
-  const applyBgColor = (type: NotificationType) => {
-    switch (type) {
-      case "success":
-        return Theme.colors.light.accentGreen
-      case "error":
-        return Theme.colors.light.accentOrange
-      case "warning":
-        return Theme.colors.light.accentYellow
-      case "info":
-        return Theme.colors.light.primary008
-      default:
-        return Theme.colors.light.accentGreen
-    }
+  switch (type) {
+    case "success":
+      return <SuccessNotification id={id} message={message} />
+    case "error":
+      return <ErrorNotification id={id} message={message} />
+    case "warning":
+      return <WarningNotification id={id} message={message} />
+    case "info":
+      return <SuccessNotification id={id} message={message} />
+    default:
+      return <SuccessNotification id={id} message={message} />
   }
-
-  return (
-    <Box
-      id={`notification-${id}`}
-      display="flex"
-      flex={1}
-      justifyContent="center"
-      alignItems="center"
-      padding="12px"
-      bgcolor={applyBgColor(type)}>
-      <Markdown markdown={message} />
-    </Box>
-  )
 }
