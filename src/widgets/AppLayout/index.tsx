@@ -37,9 +37,7 @@ const Layout = ({
       {header ? header : <Header />}
       <Box id="app-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
         <NotificationCenter />
-        <Box display="flex" flex={1}>
-          {children ? children : <Outlet />}
-        </Box>
+        {children ? children : <Outlet />}
         {footer ? footer : <Footer />}
       </Box>
     </Box>
