@@ -24,10 +24,6 @@ export const useNotification = () => {
     }
 
     notificationCenter.addNotification(notification)
-
-    return setTimeout(() => {
-      notificationCenter.removeNotificationById(notification.id)
-    }, notification.duration)
   }
 
   const showSuccessNotification = (msg: string, duration?: number) => {
