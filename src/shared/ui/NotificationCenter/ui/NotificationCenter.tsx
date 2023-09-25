@@ -1,15 +1,16 @@
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 
 import Box from "@mui/material/Box"
 
 import { notificationCenterStore } from "../lib/store"
 import { Notification as TNotification } from "../lib/types"
-import { Notification } from "./Notification"
+import { NotificationAnimation } from "./NotificationAnimation"
 
 import { eventEmitter, useForceUpdate } from "~/shared/utils"
 
 export const NotificationCenter = () => {
   const forceUpdate = useForceUpdate()
+  const refMap: WeakMap<TNotification, HTMLDivElement> = useMemo(() => new WeakMap(), []) // Collect refs for each notification element to calculate their height
 
   const onNotificationAdded = useCallback(
     (notification: Record<string, unknown> | undefined) => {
@@ -42,9 +43,7 @@ export const NotificationCenter = () => {
 
   return (
     <Box id="app-notification-container" width="100%">
-      {notificationCenterStore.notifications.map(data => (
-        <Notification key={data.id} id={data.id} message={data.message} type={data.type} duration={data.duration} />
-      ))}
+      <NotificationAnimation notifications={notificationCenterStore.notifications} refMap={refMap} />
     </Box>
   )
 }

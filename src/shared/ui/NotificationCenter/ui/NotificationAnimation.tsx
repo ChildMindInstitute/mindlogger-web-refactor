@@ -1,46 +1,33 @@
-import { PropsWithChildren, useCallback, useEffect, useRef } from "react"
+import { PropsWithChildren } from "react"
 
-import { useSpring, animated } from "@react-spring/web"
+import { animated, useTransition } from "@react-spring/web"
+
+import { Notification as TNotification } from "../lib/types"
+import { Notification } from "./Notification"
 
 type Props = PropsWithChildren<{
-  notificationLifeTime: number
-  animationDuration?: number | undefined
+  notifications: TNotification[]
+  refMap: WeakMap<TNotification, HTMLDivElement>
 }>
 
-export const NotificationAnimation = ({ children, notificationLifeTime, animationDuration = 350 }: Props) => {
-  const [springs, api] = useSpring(() => ({
+export const NotificationAnimation = ({ notifications, refMap }: Props) => {
+  const transitions = useTransition(notifications, {
     from: { height: "0px" },
-    config: { duration: animationDuration },
-  }))
-  const boxRef = useRef<HTMLDivElement | null>(null)
+    enter: item => async next => {
+      await next({ height: `${refMap.get(item)?.offsetHeight ?? 48}px` })
+    },
+    leave: { height: "0px" },
+  })
 
-  const animationIn = useCallback(() => {
-    const elementHeight = boxRef.current?.clientHeight ?? 48
-
-    api.start({
-      to: {
-        height: `${elementHeight}px`,
-      },
-    })
-  }, [api])
-
-  const animationOut = useCallback(() => {
-    api.start({
-      to: {
-        height: "0px",
-      },
-    })
-  }, [api])
-
-  useEffect(() => {
-    animationIn()
-
-    setTimeout(animationOut, notificationLifeTime - animationDuration)
-  }, [animationIn, animationOut, notificationLifeTime, animationDuration])
-
-  return (
-    <animated.div style={{ ...springs, overflow: "hidden" }}>
-      <div ref={boxRef}>{children}</div>
+  return transitions((style, item) => (
+    <animated.div style={{ ...style, overflow: "hidden" }}>
+      <Notification
+        ref={(ref: HTMLDivElement) => ref && refMap.set(item, ref)}
+        id={item.id}
+        message={item.message}
+        type={item.type}
+        duration={item.duration}
+      />
     </animated.div>
-  )
+  ))
 }

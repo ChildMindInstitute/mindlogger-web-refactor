@@ -1,8 +1,6 @@
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded"
 import Box from "@mui/material/Box"
 
-import { NotificationAnimation } from "./NotificationAnimation"
-
 import { Theme } from "~/shared/constants"
 import { Markdown } from "~/shared/ui"
 
@@ -14,18 +12,16 @@ type Props = {
 
 export const SuccessNotification = (props: Props) => {
   return (
-    <NotificationAnimation notificationLifeTime={props.duration} animationDuration={350}>
-      <Box
-        id={`success-notification-${props.id}`}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        padding="12px"
-        gap="12px"
-        bgcolor={Theme.colors.light.accentGreen30}>
-        <CheckCircleRoundedIcon sx={{ color: Theme.colors.light.accentGreen }} />
-        <Markdown markdown={props.message} />
-      </Box>
-    </NotificationAnimation>
+    <Box
+      id={`success-notification-${props.id}`}
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      padding="12px"
+      gap="12px"
+      bgcolor={Theme.colors.light.accentGreen30}>
+      <CheckCircleRoundedIcon sx={{ color: Theme.colors.light.accentGreen }} />
+      <Markdown markdown={props.message} />
+    </Box>
   )
 }

@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { forwardRef, useEffect } from "react"
 
 import { NotificationType } from "../lib/types"
 import { ErrorNotification } from "./ErrorNotification"
@@ -14,7 +14,7 @@ type Props = {
   duration: number
 }
 
-export const Notification = ({ id, message, type, duration }: Props) => {
+export const Notification = forwardRef<HTMLDivElement, Props>(({ id, message, type, duration }: Props, ref) => {
   useEffect(() => {
     setTimeout(() => {
       eventEmitter.emit("onNotificationRemoved", { notificationId: id })
@@ -27,10 +27,10 @@ export const Notification = ({ id, message, type, duration }: Props) => {
     case "error":
       return <ErrorNotification id={id} message={message} duration={duration} />
     case "warning":
-      return <WarningNotification id={id} message={message} duration={duration} />
+      return <WarningNotification ref={ref} id={id} message={message} duration={duration} />
     case "info":
       return <SuccessNotification id={id} message={message} duration={duration} />
     default:
       return <SuccessNotification id={id} message={message} duration={duration} />
   }
-}
+})
