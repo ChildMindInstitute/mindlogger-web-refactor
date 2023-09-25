@@ -1,16 +1,14 @@
-import { actions, Notification } from "./notification.slice"
+import { Notification } from "./types"
 
-import { useAppDispatch } from "~/shared/utils"
+import { eventEmitter } from "~/shared/utils"
 
 export const useNotificationCenter = () => {
-  const dispatch = useAppDispatch()
-
   const addNotification = (notification: Notification) => {
-    dispatch(actions.add(notification))
+    eventEmitter.emit("onNotificationAdded", notification)
   }
 
   const removeNotificationById = (id: string) => {
-    dispatch(actions.removeById(id))
+    eventEmitter.emit("onNotificationAdded", { notificationId: id })
   }
 
   return {

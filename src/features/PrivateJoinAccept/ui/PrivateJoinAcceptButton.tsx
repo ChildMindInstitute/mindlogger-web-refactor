@@ -2,8 +2,8 @@ import classNames from "classnames"
 import { useNavigate } from "react-router-dom"
 
 import { useAcceptPrivateInviteMutation, useInvitationTranslation } from "~/entities/invitation"
-import { useNotification } from "~/entities/notification"
 import { ROUTES } from "~/shared/constants"
+import { useNotification } from "~/shared/ui"
 import Button from "~/shared/ui/Button"
 
 interface PrivateJoinAcceptButtonProps {

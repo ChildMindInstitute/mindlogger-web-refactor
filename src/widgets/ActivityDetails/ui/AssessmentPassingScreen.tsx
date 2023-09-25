@@ -16,9 +16,9 @@ import {
   useSaveAnswerMutation,
   useTextVariablesReplacer,
 } from "~/entities/activity"
-import { useNotification } from "~/entities/notification"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
+import { useNotification } from "~/shared/ui"
 import { useCustomTranslation, useFlowType } from "~/shared/utils"
 import Layout from "~/widgets/AppLayout"
 

@@ -3,8 +3,8 @@ import { PropsWithChildren } from "react"
 import Box from "@mui/material/Box"
 import { Outlet } from "react-router-dom"
 
-import { NotificationCenter } from "~/entities/notification"
 import { Theme } from "~/shared/constants"
+import { NotificationCenter } from "~/shared/ui"
 import Footer from "~/widgets/Footer"
 import Header from "~/widgets/Header"
 

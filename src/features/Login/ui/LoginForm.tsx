@@ -5,10 +5,9 @@ import { Link, useNavigate } from "react-router-dom"
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { LoginSchema, TLoginForm } from "../model/login.schema"
 
-import { useNotification } from "~/entities/notification"
 import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
 import { ROUTES, Theme } from "~/shared/constants"
-import { BaseButton, BasicFormProvider, Input, PasswordIcon } from "~/shared/ui"
+import { BaseButton, BasicFormProvider, Input, PasswordIcon, useNotification } from "~/shared/ui"
 import {
   secureTokensStorage,
   secureUserPrivateKeyStorage,

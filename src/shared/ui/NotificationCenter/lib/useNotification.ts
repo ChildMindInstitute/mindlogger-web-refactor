@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid"
 
-import { Notification, NotificationType } from "../model"
-import { useNotificationCenter } from "../model/useNotificationCenter"
+import { Notification, NotificationType } from "./types"
+import { useNotificationCenter } from "./useNotificationCenter"
 
 type NotificationParams = {
   message: string

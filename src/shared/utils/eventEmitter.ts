@@ -1,21 +1,26 @@
 export const EVENTS = {
   onTokensChange: "ON_TOKENS_CHANGE",
   onLogout: "ON_LOGOUT",
+
+  onNotificationAdded: "ON_NOTIFICATION_ADDED",
+  onNotificationRemoved: "ON_NOTIFICATION_REMOVED",
 } as const
 
 type Events = keyof typeof EVENTS
 
 class EventEmitter {
-  private _events: Record<Events, Array<() => void>>
+  private _events: Record<Events, Array<(data?: Record<string, unknown>) => void>>
 
   constructor() {
     this._events = {
       onTokensChange: [],
       onLogout: [],
+      onNotificationAdded: [],
+      onNotificationRemoved: [],
     }
   }
 
-  public on(name: Events, listener: () => void) {
+  public on(name: Events, listener: (data?: Record<string, unknown>) => void) {
     if (!this._events[name]) {
       this._events[name] = []
     }
@@ -23,7 +28,7 @@ class EventEmitter {
     this._events[name].push(listener)
   }
 
-  public off(name: Events, listenerToRemove: () => void) {
+  public off(name: Events, listenerToRemove: (data?: Record<string, unknown>) => void) {
     if (!this._events[name]) {
       throw new Error(`Can't remove a listener. Event "${name}" doesn't exits.`)
     }

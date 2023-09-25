@@ -7,9 +7,8 @@ import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
-import { useNotification } from "~/entities/notification"
 import { useLoginMutation, userModel, useSignupMutation } from "~/entities/user"
-import { Input, Checkbox, BasicFormProvider, PasswordIcon, BaseButton } from "~/shared/ui"
+import { Input, Checkbox, BasicFormProvider, PasswordIcon, BaseButton, useNotification } from "~/shared/ui"
 import {
   secureTokensStorage,
   secureUserPrivateKeyStorage,

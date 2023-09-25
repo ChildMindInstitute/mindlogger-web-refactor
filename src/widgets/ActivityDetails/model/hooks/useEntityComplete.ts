@@ -1,7 +1,7 @@
 import { ActivityPipelineType, activityModel } from "~/entities/activity"
-import { useNotification } from "~/entities/notification"
 import { AppletDetailsDTO } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
+import { useNotification } from "~/shared/ui"
 import { useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type Props = {
