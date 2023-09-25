@@ -11,7 +11,6 @@ import ApplicationRouter from "~/pages"
 import "~/assets/fonts/ibmplexsans/ibmplexsans.css"
 import "~/assets/fonts/Atkinson/atkinson.css"
 
-import "react-toastify/dist/ReactToastify.min.css"
 import "./index.css"
 
 i18nManager.initialize()
