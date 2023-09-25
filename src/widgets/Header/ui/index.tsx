@@ -3,10 +3,10 @@ import { useState } from "react"
 import { Navbar, Nav } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
-import { useNavbarTranslation } from "../lib/useNavbarTranslation"
 import AccountDropdown from "./AccountDropdown"
 import LoginButton from "./LoginButton"
 
+import Logo from "~/assets/logo.svg"
 import { userModel } from "~/entities/user"
 import { LanguageDropdown } from "~/features/language"
 import { ROUTES } from "~/shared/utils"
@@ -14,7 +14,6 @@ import { ROUTES } from "~/shared/utils"
 import "./header.scss"
 
 const Header = (): JSX.Element | null => {
-  const { t } = useNavbarTranslation()
   const navigate = useNavigate()
 
   const { user } = userModel.hooks.useUserState()
@@ -42,7 +41,7 @@ const Header = (): JSX.Element | null => {
   return (
     <Navbar expand="md" variant="dark" className="header" expanded={expanded} onToggle={onNavbarToggle}>
       <Navbar.Brand role="button" onClick={onLogoClick}>
-        {t("mindLogger")}
+        <img src={Logo} alt="Mindlogger Logo" />
       </Navbar.Brand>
 
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
