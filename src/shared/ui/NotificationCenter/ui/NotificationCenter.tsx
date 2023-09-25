@@ -1,22 +1,34 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect } from "react"
 
 import Box from "@mui/material/Box"
 
+import { notificationCenterStore } from "../lib/store"
 import { Notification as TNotification } from "../lib/types"
 import { Notification } from "./Notification"
 
-import { eventEmitter } from "~/shared/utils"
+import { eventEmitter, useForceUpdate } from "~/shared/utils"
 
 export const NotificationCenter = () => {
-  const [notifications, setNotifications] = useState<TNotification[]>([])
+  const forceUpdate = useForceUpdate()
 
-  const onNotificationAdded = (notification: Record<string, unknown> | undefined) => {
-    setNotifications(prev => [...prev, notification as TNotification])
-  }
+  const onNotificationAdded = useCallback(
+    (notification: Record<string, unknown> | undefined) => {
+      notificationCenterStore.notifications = [...notificationCenterStore.notifications, notification as TNotification]
 
-  const onNotificationRemoved = (data: Record<string, unknown> | undefined) => {
-    setNotifications(prev => prev.filter(notif => notif.id !== data?.notificationId))
-  }
+      forceUpdate()
+    },
+    [forceUpdate],
+  )
+
+  const onNotificationRemoved = useCallback(
+    (data: Record<string, unknown> | undefined) => {
+      notificationCenterStore.notifications = notificationCenterStore.notifications.filter(
+        notif => notif.id !== data?.notificationId,
+      )
+      forceUpdate()
+    },
+    [forceUpdate],
+  )
 
   useEffect(() => {
     eventEmitter.on("onNotificationAdded", onNotificationAdded)
@@ -26,11 +38,11 @@ export const NotificationCenter = () => {
       eventEmitter.off("onNotificationAdded", onNotificationAdded)
       eventEmitter.off("onNotificationRemoved", onNotificationRemoved)
     }
-  }, [])
+  }, [onNotificationAdded, onNotificationRemoved])
 
   return (
     <Box id="app-notification-container" width="100%">
-      {notifications.map(data => (
+      {notificationCenterStore.notifications.map(data => (
         <Notification key={data.id} id={data.id} message={data.message} type={data.type} duration={data.duration} />
       ))}
     </Box>
