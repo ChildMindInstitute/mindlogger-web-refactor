@@ -4,7 +4,7 @@ import Box from "@mui/material/Box"
 
 import { ActivityListItem, ActivityStatus, useActivity } from "../../lib"
 import { activityBuilder } from "../../model"
-import { useActivityEventProgressState } from "../../model/hooks"
+import { useActivityEventProgressState, useSaveActivityEventProgress } from "../../model/hooks"
 import { ActivityCardBase } from "./ActivityCardBase"
 import { ActivityCardDescription } from "./ActivityCardDescription"
 import { ActivityCardIcon } from "./ActivityCardIcon"
@@ -24,6 +24,8 @@ interface ActivityCardProps {
 
 export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }: ActivityCardProps) => {
   const { lessThanSM } = useCustomMediaQuery()
+
+  const { saveActivityEventRecords } = useSaveActivityEventProgress()
 
   const { isLoading, activity } = useActivity({
     activityId: activityListItem.activityId,
@@ -69,6 +71,15 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
   const onActivityCardClickHandler = () => {
     if (!isSupportedActivity || isDisabled) {
       return
+    }
+
+    const isActivityInProgress = activityListItem.status === ActivityStatus.InProgress
+    const isFlow = Boolean(activityListItem.flowId)
+
+    if (!isActivityInProgress && !isFlow && activity) {
+      const initialStep = 1
+
+      saveActivityEventRecords(activity, activityListItem.eventId, initialStep)
     }
 
     return onActivityCardClick()
