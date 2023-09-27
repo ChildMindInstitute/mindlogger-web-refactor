@@ -8,7 +8,6 @@ import i18nManager from "./system/locale/i18n"
 
 import ApplicationRouter from "~/pages"
 
-import "~/assets/fonts/ibmplexsans/ibmplexsans.css"
 import "~/assets/fonts/Atkinson/atkinson.css"
 
 import "./index.css"

@@ -74,7 +74,7 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
     if (isDisabled) {
       return
     }
-    
+
     if (!isSupportedActivity) {
       const storeLink = isIOS ? APPSTORE_LINK : GOOGLEPLAY_LINK
       return window.open(storeLink, "_blank", "noopener noreferrer")
