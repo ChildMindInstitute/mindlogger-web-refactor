@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box"
 
+import { Theme } from "~/shared/constants"
 import { BaseButton } from "~/shared/ui"
 import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
 
@@ -35,7 +36,13 @@ export const ItemCardButton = ({
       maxWidth="900px">
       {(isBackShown && (
         <Box width={greaterThanSM ? "200px" : "120px"}>
-          <BaseButton type="button" variant="outlined" onClick={onBackButtonClick} text={t("Consent.back")} />
+          <BaseButton
+            type="button"
+            variant="outlined"
+            onClick={onBackButtonClick}
+            text={t("Consent.back")}
+            borderColor={Theme.colors.light.outline}
+          />
         </Box>
       )) || <div></div>}
 

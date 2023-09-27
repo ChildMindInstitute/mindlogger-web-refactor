@@ -8,6 +8,7 @@ type Props = {
   type: "button" | "submit"
   isLoading?: boolean
   variant: "contained" | "outlined"
+  borderColor?: string
 
   text: string
   onClick?: () => void
@@ -26,6 +27,7 @@ export const BaseButton = (props: Props) => {
         width: "100%",
         padding: "10px 24px",
         height: "48px",
+        borderColor: props.borderColor ?? undefined,
       }}>
       {props.isLoading ? (
         <CircularProgress size={25} sx={{ color: Theme.colors.light.primary }} />
