@@ -1,6 +1,7 @@
 import { useMemo } from "react"
 
 import Box from "@mui/material/Box"
+import { isIOS } from "react-device-detect"
 
 import { ActivityListItem, ActivityStatus, useActivity } from "../../lib"
 import { activityBuilder } from "../../model"
@@ -13,6 +14,7 @@ import { ActivityCardTitle } from "./ActivityCardTitle"
 import { ActivityLabel } from "./ActivityLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
+import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/shared/constants"
 import { Loader } from "~/shared/ui"
 import { useCustomMediaQuery } from "~/shared/utils"
 
@@ -69,8 +71,13 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
   }, [activity])
 
   const onActivityCardClickHandler = () => {
-    if (!isSupportedActivity || isDisabled) {
+    if (isDisabled) {
       return
+    }
+    
+    if (!isSupportedActivity) {
+      const storeLink = isIOS ? APPSTORE_LINK : GOOGLEPLAY_LINK
+      return window.open(storeLink, "_blank", "noopener noreferrer")
     }
 
     const isActivityInProgress = activityListItem.status === ActivityStatus.InProgress
