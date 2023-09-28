@@ -91,43 +91,6 @@ class MarkdownBuilder {
 
     return markdown
   }
-
-  private extendTextAlign(markdown: string): string {
-    const rule = new RegExp(/::: ([\s\S]*?):::/g)
-    const matches = [...markdown.matchAll(rule)]
-
-    if (!matches) {
-      return markdown
-    }
-
-    const leftAlignRule = "hljs-left"
-    const centerAlignRule = "hljs-center"
-    const rightAlignRule = "hljs-right"
-
-    matches.forEach(match => {
-      const content = match[1]
-
-      if (content.includes(leftAlignRule)) {
-        const formatedContent = content.replace(leftAlignRule, "")
-
-        markdown = markdown.replace(match[0], `<div style="text-align: left;">${formatedContent}</div>`)
-      }
-
-      if (content.includes(centerAlignRule)) {
-        const formatedContent = content.replace(centerAlignRule, "")
-
-        markdown = markdown.replace(match[0], `<div style="text-align: center;">${formatedContent}</div>`)
-      }
-
-      if (content.includes(rightAlignRule)) {
-        const formatedContent = content.replace(rightAlignRule, "")
-
-        markdown = markdown.replace(match[0], `<div style="text-align: right;">${formatedContent}</div>`)
-      }
-    })
-
-    return markdown
-  }
 }
 
 export const markdownBuilder = new MarkdownBuilder()
