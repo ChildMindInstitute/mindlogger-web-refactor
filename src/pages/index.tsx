@@ -1,6 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 
-import { Theme } from "../shared/constants"
 import Layout from "../widgets/AppLayout"
 import { ActivityDetailsPage } from "./ActivityDetails"
 import { AppletDetailsPage } from "./AppletDetailsPage"
@@ -30,10 +29,8 @@ const ApplicationRouter = (): JSX.Element | null => {
       <LogoutTracker>
         <Routes>
           <Route element={<ProtectedRoute token={tokens?.accessToken} />}>
-            <Route element={<Layout bgColor={Theme.colors.light.surface} hasFooter={false} hasHeader={false} />}>
-              <Route path={ROUTES.activityDetails.path} element={<ActivityDetailsPage />} />
-              <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
-            </Route>
+            <Route path={ROUTES.activityDetails.path} element={<ActivityDetailsPage />} />
+            <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
 
             <Route element={<Layout />}>
               <Route path={ROUTES.appletList.path} element={<AppletListPage />} />
@@ -56,9 +53,7 @@ const ApplicationRouter = (): JSX.Element | null => {
 
   return (
     <Routes>
-      <Route element={<Layout bgColor={Theme.colors.light.surface} hasFooter={false} hasHeader={false} />}>
-        <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
-      </Route>
+      <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
 
       <Route element={<Layout />}>
         <Route index path={ROUTES.login.path} element={<LoginPage />} />

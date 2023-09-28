@@ -16,7 +16,12 @@ type Props = PropsWithChildren<{
 
 export const Text = ({ children, fontSize, fontWeight, color, padding, margin, sx }: Props) => {
   return (
-    <Typography variant="body1" fontSize={fontSize} fontWeight={fontWeight} sx={{ color, padding, margin, ...sx }}>
+    <Typography
+      variant="body1"
+      fontFamily="Atkinson"
+      fontSize={fontSize}
+      fontWeight={fontWeight}
+      sx={{ color, padding, margin, ...sx }}>
       {children}
     </Typography>
   )

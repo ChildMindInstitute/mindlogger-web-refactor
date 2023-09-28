@@ -58,7 +58,7 @@ export const AssessmentLayoutHeader = (props: Props) => {
           <Text color={Theme.colors.light.onSurface} sx={{ textAlign: greaterThanSM ? "center" : "left" }}>
             {greaterThanSM ? props.title : cutStringToLength(props.title, 30)}
           </Text>
-          {!greaterThanSM && <SaveAndExitButton onClick={onSaveAndExitClick} asLink={true} />}
+          {!greaterThanSM && <SaveAndExitButton onClick={onSaveAndExitClick} />}
         </Box>
         <BaseProgressBar percentage={progress} />
       </Box>

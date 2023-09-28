@@ -3,16 +3,16 @@ import { useNavigate } from "react-router-dom"
 
 import { useInvitationTranslation } from "~/entities/invitation"
 import { ROUTES } from "~/shared/constants"
-import { useToast } from "~/shared/ui"
+import { useNotification } from "~/shared/ui"
 import Button from "~/shared/ui/Button"
 
 export const PrivateJoinDeclineButton = () => {
   const { t } = useInvitationTranslation()
   const navigate = useNavigate()
-  const { showFailedToast } = useToast()
+  const { showErrorNotification } = useNotification()
 
   const onInviteDecline = () => {
-    showFailedToast(t("invitationDeclined"))
+    showErrorNotification(t("invitationDeclined"))
     navigate(ROUTES.appletList.path)
   }
 

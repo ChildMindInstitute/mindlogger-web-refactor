@@ -1,9 +1,12 @@
-import { useToast } from "../../../shared/ui"
+import Box from "@mui/material/Box"
+import Container from "@mui/material/Container"
+
 import { useAnswer } from "../model/hooks/useAnswers"
 import { useEntityComplete } from "../model/hooks/useEntityComplete"
 import { useStepperStateManager } from "../model/hooks/useStepperStateManager"
 import { validateItem } from "../model/validateItem"
-import { ActivityAssessmentLayout } from "./ActivityAssessmentLayout"
+import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
+import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
 import {
   ActivityCardItem,
@@ -14,7 +17,10 @@ import {
   useTextVariablesReplacer,
 } from "~/entities/activity"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
+import { Theme } from "~/shared/constants"
+import { useNotification } from "~/shared/ui"
 import { useCustomTranslation, useFlowType } from "~/shared/utils"
+import Layout from "~/widgets/AppLayout"
 
 type Props = {
   eventId: string
@@ -32,7 +38,7 @@ export const AssessmentPassingScreen = (props: Props) => {
   const { t } = useCustomTranslation()
 
   const flowParams = useFlowType()
-  const { showWarningToast } = useToast()
+  const { showWarningNotification } = useNotification()
 
   const { processAnswers } = useAnswer({
     appletDetails: props.appletDetails,
@@ -115,13 +121,13 @@ export const AssessmentPassingScreen = (props: Props) => {
     const isItemSkippable = currentItem.config.skippableItem || isAllItemsSkippable
 
     if (!isItemWithoutAnswer && !isItemHasAnswer && !isItemSkippable) {
-      return showWarningToast(t("pleaseAnswerTheQuestion"))
+      return showWarningNotification(t("pleaseAnswerTheQuestion"))
     }
 
     const isAnswerCorrect = validateItem({ item: currentItem })
 
     if (!isAnswerCorrect && !isItemSkippable) {
-      return showWarningToast(t("incorrect_answer"))
+      return showWarningNotification(t("incorrect_answer"))
     }
 
     if (!hasNextStep) {
@@ -159,35 +165,46 @@ export const AssessmentPassingScreen = (props: Props) => {
   }
 
   return (
-    <ActivityAssessmentLayout
-      title={props.activityDetails.name}
-      appletId={props.appletDetails.id}
-      activityId={props.activityDetails.id}
-      eventId={props.eventId}
-      isPublic={props.isPublic}
-      publicKey={props.publicAppletKey ?? null}
+    <Layout
       onKeyDownHandler={onKeyDownHandler}
-      buttons={
-        <ItemCardButton
-          isSubmitShown={!hasNextStep}
-          isBackShown={hasPrevStep && !currentItem?.config.removeBackButton}
-          isLoading={submitLoading}
-          onNextButtonClick={onNextButtonClick}
-          onBackButtonClick={onBackButtonClick}
-        />
-      }>
-      {currentItem && (
-        <ActivityCardItem
-          key={currentItem.id}
+      bgColor={Theme.colors.light.surface}
+      header={
+        <AssessmentLayoutHeader
+          title={props.activityDetails.name}
+          appletId={props.appletDetails.id}
           activityId={props.activityDetails.id}
           eventId={props.eventId}
-          activityItem={currentItem}
-          values={currentItem.answer}
-          replaceText={replaceTextVariables}
-          watermark={props.appletDetails.watermark}
-          allowToSkipAllItems={isAllItemsSkippable}
+          isPublic={props.isPublic}
+          publicKey={props.publicAppletKey ?? null}
         />
-      )}
-    </ActivityAssessmentLayout>
+      }
+      footer={
+        <AssessmentLayoutFooter>
+          <ItemCardButton
+            isSubmitShown={!hasNextStep}
+            isBackShown={hasPrevStep && !currentItem?.config.removeBackButton}
+            isLoading={submitLoading}
+            onNextButtonClick={onNextButtonClick}
+            onBackButtonClick={onBackButtonClick}
+          />
+        </AssessmentLayoutFooter>
+      }>
+      <Container sx={{ display: "flex", flex: 1, justifyContent: "center", overflow: "scroll" }}>
+        <Box maxWidth="900px">
+          {currentItem && (
+            <ActivityCardItem
+              key={currentItem.id}
+              activityId={props.activityDetails.id}
+              eventId={props.eventId}
+              activityItem={currentItem}
+              values={currentItem.answer}
+              replaceText={replaceTextVariables}
+              watermark={props.appletDetails.watermark}
+              allowToSkipAllItems={isAllItemsSkippable}
+            />
+          )}
+        </Box>
+      </Container>
+    </Layout>
   )
 }

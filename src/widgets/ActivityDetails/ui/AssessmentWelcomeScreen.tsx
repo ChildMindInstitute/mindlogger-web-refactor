@@ -1,7 +1,9 @@
 import Box from "@mui/material/Box"
 
-import { ActivityAssessmentLayout } from "./ActivityAssessmentLayout"
+import Layout from "../../AppLayout"
 import { ActivityMetaData } from "./ActivityMetaData"
+import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
+import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
 import { activityModel } from "~/entities/activity"
 import { StartAssessmentButton } from "~/features/StartAssessment"
@@ -39,14 +41,23 @@ export const AssessmentWelcomeScreen = (props: Props) => {
   })
 
   return (
-    <ActivityAssessmentLayout
-      title={props.activityDetails.name}
-      appletId={props.appletId}
-      activityId={props.activityDetails.id}
-      eventId={props.eventId}
-      isPublic={props.isPublic}
-      publicKey={props.publicKey}
-      buttons={<StartAssessmentButton width={greaterThanSM ? "375px" : "335px"} onClick={startAssessment} />}>
+    <Layout
+      bgColor={Theme.colors.light.surface}
+      header={
+        <AssessmentLayoutHeader
+          title={props.activityDetails.name}
+          appletId={props.appletId}
+          activityId={props.activityDetails.id}
+          eventId={props.eventId}
+          isPublic={props.isPublic}
+          publicKey={props.publicKey}
+        />
+      }
+      footer={
+        <AssessmentLayoutFooter>
+          <StartAssessmentButton width={greaterThanSM ? "375px" : "335px"} onClick={startAssessment} />
+        </AssessmentLayoutFooter>
+      }>
       <Box height="100%" width="100%" display="flex" justifyContent="center" paddingTop="80px">
         <Box
           id="welcome-screen-activity-details"
@@ -73,6 +84,6 @@ export const AssessmentWelcomeScreen = (props: Props) => {
           </Text>
         </Box>
       </Box>
-    </ActivityAssessmentLayout>
+    </Layout>
   )
 }

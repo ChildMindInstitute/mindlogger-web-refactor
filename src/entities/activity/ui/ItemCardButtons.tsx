@@ -1,8 +1,7 @@
 import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
-import CircularProgress from "@mui/material/CircularProgress"
 
 import { Theme } from "~/shared/constants"
+import { BaseButton } from "~/shared/ui"
 import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
 
 type ItemCardButtonsProps = {
@@ -36,25 +35,26 @@ export const ItemCardButton = ({
       padding={greaterThanSM ? "0px 24px" : "0px 16px"}
       maxWidth="900px">
       {(isBackShown && (
-        <Button
-          variant="outlined"
-          onClick={onBackButtonClick}
-          sx={{ borderRadius: "100px", padding: "10px 24px", width: greaterThanSM ? "200px" : "120px" }}>
-          {t("Consent.back")}
-        </Button>
+        <Box width={greaterThanSM ? "200px" : "120px"}>
+          <BaseButton
+            type="button"
+            variant="outlined"
+            onClick={onBackButtonClick}
+            text={t("Consent.back")}
+            borderColor={Theme.colors.light.outline}
+          />
+        </Box>
       )) || <div></div>}
 
-      <Button
-        variant="contained"
-        sx={{ borderRadius: "100px", padding: "10px 24px", width: greaterThanSM ? "200px" : "120px" }}
-        disabled={isLoading}
-        onClick={onNextButtonClick}>
-        {isLoading ? (
-          <CircularProgress size={25} sx={{ color: Theme.colors.light.onPrimary }} />
-        ) : (
-          nextOrSubmitButtonLabel
-        )}
-      </Button>
+      <Box width={greaterThanSM ? "200px" : "120px"}>
+        <BaseButton
+          type="button"
+          variant="contained"
+          isLoading={isLoading}
+          onClick={onNextButtonClick}
+          text={nextOrSubmitButtonLabel}
+        />
+      </Box>
     </Box>
   )
 }

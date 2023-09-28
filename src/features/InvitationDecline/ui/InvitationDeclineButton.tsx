@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import { useDeclineInviteMutation, useInvitationTranslation } from "~/entities/invitation"
 import { ROUTES } from "~/shared/constants"
-import { useToast } from "~/shared/ui"
+import { useNotification } from "~/shared/ui"
 import Button from "~/shared/ui/Button"
 
 interface InvitationDeclineButtonProps {
@@ -14,11 +14,11 @@ export const InvitationDeclineButton = ({ invitationKey }: InvitationDeclineButt
   const { t } = useInvitationTranslation()
   const navigate = useNavigate()
 
-  const { showFailedToast } = useToast()
+  const { showErrorNotification } = useNotification()
 
   const { mutate: declineInvite, isLoading: isDeclineLoading } = useDeclineInviteMutation({
     onSuccess() {
-      showFailedToast(t("invitationDeclined"))
+      showErrorNotification(t("invitationDeclined"))
       navigate(ROUTES.appletList.path)
     },
   })
