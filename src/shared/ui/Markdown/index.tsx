@@ -2,20 +2,24 @@ import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"
 import remarkGfm from "remark-gfm"
 
+import { useMarkdownExtender } from "./lib/useMarkdownExtender"
 import "./style.scss"
-import { markdownBuilder } from "./lib/markdown-builder"
 
 interface MarkdownProps {
   markdown: string
 }
 
-export const Markdown = ({ markdown }: MarkdownProps) => {
-  const processedMarkdown = markdownBuilder.extend(markdown)
+export const Markdown = (props: MarkdownProps) => {
+  const { isLoading, markdown } = useMarkdownExtender(props.markdown)
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div>
       <ReactMarkdown className="table-override" rehypePlugins={[rehypeRaw, remarkGfm]}>
-        {processedMarkdown}
+        {markdown}
       </ReactMarkdown>
     </div>
   )
