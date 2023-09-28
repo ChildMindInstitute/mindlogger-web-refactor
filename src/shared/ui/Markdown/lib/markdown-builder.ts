@@ -1,7 +1,10 @@
+import { validateImage } from "./validate-image"
+
 class MarkdownBuilder {
-  public extend(markdown: string): string {
+  public async extend(markdown: string): Promise<string> {
     markdown = this.extendUnderline(markdown)
-    markdown = this.exendVideo(markdown)
+    markdown = await this.extendMedia(markdown)
+    markdown = this.extendTextAlign(markdown)
 
     return markdown
   }
@@ -21,7 +24,7 @@ class MarkdownBuilder {
     return markdown
   }
 
-  private exendVideo(markdown: string): string {
+  private async extendMedia(markdown: string): Promise<string> {
     const allMediaFilesRule = new RegExp(/!\[[^\]]+\]\([^)]+\)/g)
 
     const matches = [...markdown.matchAll(allMediaFilesRule)]
@@ -30,17 +33,60 @@ class MarkdownBuilder {
       return markdown
     }
 
+    for (const match of matches) {
+      const urlRule = new RegExp(/\((.*?)\)/g)
+      const nameRule = new RegExp(/\[(.*?)\]/g)
+
+      const urlMatchGroup = [...match[0].matchAll(urlRule)][0]
+      const nameMatchGroup = [...match[0].matchAll(nameRule)][0]
+
+      const url = urlMatchGroup?.[1]
+      const name = nameMatchGroup?.[1]
+
+      const isImage = await validateImage(url)
+
+      if (isImage) {
+        markdown = markdown.replace(match[0], `<img src="${url}" alt="${name}">`)
+      } else {
+        markdown = markdown.replace(match[0], `<video controls><source src="${url}" type="video/mp4">${name}</video>`)
+      }
+    }
+
+    return markdown
+  }
+
+  private extendTextAlign(markdown: string): string {
+    const rule = new RegExp(/::: ([\s\S]*?):::/g)
+    const matches = [...markdown.matchAll(rule)]
+
+    if (!matches) {
+      return markdown
+    }
+
+    const leftAlignRule = "hljs-left"
+    const centerAlignRule = "hljs-center"
+    const rightAlignRule = "hljs-right"
+
     matches.forEach(match => {
-      const mp4UrlRule = new RegExp(/\bhttps?:\/\/\S+\.mp4\b/g)
-      const nameRule = new RegExp(/\[(\S+\.mp4)]/)
+      const content = match[1]
 
-      const linkMatch = match[0].match(mp4UrlRule)?.[0]
-      const nameMatch = match[0].match(nameRule)?.[1]
+      if (content.includes(leftAlignRule)) {
+        const formatedContent = content.replace(leftAlignRule, "")
 
-      markdown = markdown.replace(
-        match[0],
-        `<video controls><source src="${linkMatch}" type="video/mp4">${nameMatch}</video>`,
-      )
+        markdown = markdown.replace(match[0], `<p style="text-align: left;">${formatedContent}</p>`)
+      }
+
+      if (content.includes(centerAlignRule)) {
+        const formatedContent = content.replace(centerAlignRule, "")
+
+        markdown = markdown.replace(match[0], `<p style="text-align: center;">${formatedContent}</p>`)
+      }
+
+      if (content.includes(rightAlignRule)) {
+        const formatedContent = content.replace(rightAlignRule, "")
+
+        markdown = markdown.replace(match[0], `<p style="text-align: right;">${formatedContent}</p>`)
+      }
     })
 
     return markdown
