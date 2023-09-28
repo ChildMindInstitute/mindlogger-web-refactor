@@ -1,7 +1,7 @@
 import { ActivityPipelineType, activityModel } from "~/entities/activity"
 import { AppletDetailsDTO } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
-import { useToast } from "~/shared/ui"
+import { useNotification } from "~/shared/ui"
 import { useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type Props = {
@@ -22,7 +22,7 @@ export const useEntityComplete = (props: Props) => {
 
   const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  const { showSuccessToast } = useToast()
+  const { showSuccessNotification } = useNotification()
 
   const completeEntityAndRedirect = () => {
     entityCompleted({
@@ -31,7 +31,7 @@ export const useEntityComplete = (props: Props) => {
       eventId: props.eventId,
     })
 
-    showSuccessToast(t("toast.answers_submitted"))
+    showSuccessNotification(t("toast.answers_submitted"))
 
     if (props.publicAppletKey) {
       return navigator.navigate(ROUTES.publicJoin.navigateTo(props.publicAppletKey), {
@@ -45,7 +45,7 @@ export const useEntityComplete = (props: Props) => {
   }
 
   const redirectToNextActivity = (activityId: string) => {
-    showSuccessToast(t("toast.next_activity"))
+    showSuccessNotification(t("toast.next_activity"))
 
     if (props.publicAppletKey) {
       return navigator.navigate(

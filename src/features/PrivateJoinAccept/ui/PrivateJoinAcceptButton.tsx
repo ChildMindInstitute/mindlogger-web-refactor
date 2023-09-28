@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import { useAcceptPrivateInviteMutation, useInvitationTranslation } from "~/entities/invitation"
 import { ROUTES } from "~/shared/constants"
-import { useToast } from "~/shared/ui"
+import { useNotification } from "~/shared/ui"
 import Button from "~/shared/ui/Button"
 
 interface PrivateJoinAcceptButtonProps {
@@ -13,11 +13,11 @@ interface PrivateJoinAcceptButtonProps {
 export const PrivateJoinAcceptButton = ({ invitationKey }: PrivateJoinAcceptButtonProps) => {
   const { t } = useInvitationTranslation()
   const navigate = useNavigate()
-  const { showSuccessToast } = useToast()
+  const { showSuccessNotification } = useNotification()
 
   const { mutate: acceptPrivateInvite, isLoading } = useAcceptPrivateInviteMutation({
     onSuccess() {
-      showSuccessToast(t("invitationAccepted"))
+      showSuccessNotification(t("invitationAccepted"))
       navigate(ROUTES.appletList.path)
     },
   })
