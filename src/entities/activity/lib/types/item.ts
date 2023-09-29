@@ -58,6 +58,7 @@ export interface ActivityItemBase {
   name: string
   question: string
   order: number
+  isHidden: boolean
   responseType: ActivityItemType
   config: Config
   responseValues: ResponseValues
