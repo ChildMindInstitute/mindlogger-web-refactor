@@ -25,7 +25,7 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
       return []
     }
 
-    return conditionalLogicBuilder.process(activityEventProgress.activityEvents)
+    return conditionalLogicBuilder.process(activityEventProgress.activityEvents.filter(x => !x.isHidden))
   }, [currentActivityEventStateProgress])
 
   const lastActivityEventWithAnswerIndex = useMemo(() => {
@@ -64,5 +64,6 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
     progress,
     userEvents: currentActivityEventStateProgress?.userEvents ?? [],
     activityEvents: currentActivityEventStateProgress?.activityEvents ?? [],
+    nonHiddenActivities: currentActivityEventStateProgress?.activityEvents.filter(x => !x.isHidden) ?? [],
   }
 }

@@ -89,17 +89,16 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
 
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { getGroupInProgressByIds, entityCompleted } = activityModel.hooks.useActivityGroupsInProgressState()
-  const { currentActivityEventProgress, userEvents, activityEvents } =
-    activityModel.hooks.useActivityEventProgressState({
-      activityId: activityDetails.id,
-      eventId,
-    })
+  const { userEvents, activityEvents, nonHiddenActivities } = activityModel.hooks.useActivityEventProgressState({
+    activityId: activityDetails.id,
+    eventId,
+  })
 
   const isOnePageAssessment = activityDetails.showAllAtOnce
   const isSummaryScreen = false // Mock
 
   const onSubmitButtonClick = useCallback(() => {
-    const invalidItemIds = validateAnswerBeforeSubmit(currentActivityEventProgress, { isAllItemsSkippable })
+    const invalidItemIds = validateAnswerBeforeSubmit(nonHiddenActivities, { isAllItemsSkippable })
 
     const hasInvalidItems = invalidItemIds.length > 0
 
@@ -109,14 +108,17 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     }
 
     return openSubmitModal()
-  }, [currentActivityEventProgress, isAllItemsSkippable, openRequiredModal, openSubmitModal])
+  }, [isAllItemsSkippable, nonHiddenActivities, openRequiredModal, openSubmitModal])
 
   const onPrimaryButtonClick = useCallback(() => {
     const now = new Date()
 
     // Step 1 - Collect answers from store and transform to answer payload
+    console.log(activityEvents)
     const itemAnswers = mapToAnswers(activityEvents)
+    console.log(itemAnswers)
     const preparedItemAnswers = prepareItemAnswers(itemAnswers)
+    console.log("preparedItemAnswers", preparedItemAnswers)
 
     const preparedAlerts = mapAlerts(activityEvents)
 

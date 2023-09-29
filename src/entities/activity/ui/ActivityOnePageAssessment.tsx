@@ -24,7 +24,7 @@ export const ActivityOnePageAssessment = ({
   watermark,
   respondentNickname,
 }: ActivityOnePageAssessmentProps) => {
-  const { currentActivityEventProgress } = useActivityEventProgressState({
+  const { currentActivityEventProgress, nonHiddenActivities } = useActivityEventProgressState({
     eventId,
     activityId,
   })
@@ -47,7 +47,7 @@ export const ActivityOnePageAssessment = ({
 
   return (
     <ActivityCardItemList
-      items={currentActivityEventProgress}
+      items={nonHiddenActivities}
       isOnePageAssessment={true}
       isBackShown={isBackShown}
       isSubmitShown={isSubmitShown}

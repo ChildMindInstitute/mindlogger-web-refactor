@@ -31,7 +31,7 @@ export const ActivityItemStepper = ({
   watermark,
   respondentNickname,
 }: ActivityItemStepperProps) => {
-  const { currentActivityEventProgress } = useActivityEventProgressState({
+  const { currentActivityEventProgress, nonHiddenActivities } = useActivityEventProgressState({
     eventId,
     activityId,
   })
@@ -52,8 +52,8 @@ export const ActivityItemStepper = ({
   const { step, setStep } = useStepperState({ activityId, eventId })
 
   const itemsProgress = useMemo(() => {
-    return currentActivityEventProgress.slice(0, step).reverse()
-  }, [currentActivityEventProgress, step])
+    return nonHiddenActivities.slice(0, step).reverse()
+  }, [nonHiddenActivities, step])
 
   const toNextStep = () => {
     setStep(step + 1)
@@ -63,7 +63,7 @@ export const ActivityItemStepper = ({
     setStep(step - 1)
   }
 
-  const isSubmitShown = step === currentActivityEventProgress.length
+  const isSubmitShown = step === nonHiddenActivities.length
   const isBackShown = itemsProgress.length > 1
 
   return (

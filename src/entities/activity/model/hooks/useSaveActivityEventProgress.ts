@@ -25,11 +25,9 @@ export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn =
         splashScreenItem = activityBuilder.convertSplashScreenToItem(activity.splashScreen)
       }
 
-      const preparedActivityItemProgressRecords = activity.items
-        .filter(x => !x.isHidden)
-        .map(item => {
-          return activityBuilder.convertActivityItemToEmptyProgressRecord(item)
-        })
+      const preparedActivityItemProgressRecords = activity.items.map(item => {
+        return activityBuilder.convertActivityItemToEmptyProgressRecord(item)
+      })
 
       const activityEventProgressId = getActivityEventProgressId(activity.id, eventId)
 

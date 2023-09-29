@@ -122,6 +122,7 @@ class ActivityBuilder {
       question: "",
       order: 0,
       responseType: "splashScreen",
+      isHidden: false,
       config: {
         removeBackButton: true,
         skippableItem: true,
