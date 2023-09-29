@@ -5,6 +5,7 @@ class MarkdownBuilder {
     markdown = this.extendUnderline(markdown)
     markdown = await this.extendMedia(markdown)
     markdown = this.extendTextAlign(markdown)
+    markdown = this.extendSuperScript(markdown)
 
     return markdown
   }
@@ -87,6 +88,22 @@ class MarkdownBuilder {
 
         markdown = markdown.replace(match[0], `<p style="text-align: right;">${formatedContent}</p>`)
       }
+    })
+
+    return markdown
+  }
+
+  private extendSuperScript(markdown: string): string {
+    const superScriptRegexp = new RegExp(/\^([^^]+)\^/gm)
+
+    const matches = [...markdown.matchAll(superScriptRegexp)]
+
+    if (!matches) {
+      return markdown
+    }
+
+    matches.forEach(match => {
+      markdown = markdown.replace(match[0], `<sup>${match[1].trim()}</sup>`)
     })
 
     return markdown
