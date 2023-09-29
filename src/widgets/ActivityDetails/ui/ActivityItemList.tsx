@@ -114,11 +114,8 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     const now = new Date()
 
     // Step 1 - Collect answers from store and transform to answer payload
-    console.log(activityEvents)
     const itemAnswers = mapToAnswers(activityEvents)
-    console.log(itemAnswers)
     const preparedItemAnswers = prepareItemAnswers(itemAnswers)
-    console.log("preparedItemAnswers", preparedItemAnswers)
 
     const preparedAlerts = mapAlerts(activityEvents)
 
