@@ -2,8 +2,6 @@ import { validateImage } from "./validate-image"
 
 class MarkdownBuilder {
   public async extend(markdown: string): Promise<string> {
-    console.log(markdown)
-
     markdown = this.extendStrikeThrough(markdown)
     markdown = this.extendUnderline(markdown)
     markdown = await this.extendMedia(markdown)
