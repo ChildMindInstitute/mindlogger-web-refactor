@@ -19,6 +19,7 @@ type ActivityItemStepperProps = {
   isAllItemsSkippable: boolean
   watermark?: string
   respondentNickname: string
+  responseIsEditable: boolean
 }
 
 export const ActivityItemStepper = ({
@@ -30,6 +31,7 @@ export const ActivityItemStepper = ({
   isAllItemsSkippable,
   watermark,
   respondentNickname,
+  responseIsEditable,
 }: ActivityItemStepperProps) => {
   const { currentActivityEventProgress, nonHiddenActivities } = useActivityEventProgressState({
     eventId,
@@ -64,7 +66,7 @@ export const ActivityItemStepper = ({
   }
 
   const isSubmitShown = step === nonHiddenActivities.length
-  const isBackShown = itemsProgress.length > 1
+  const isBackShown = itemsProgress.length > 1 && responseIsEditable
 
   return (
     <ActivityCardItemList

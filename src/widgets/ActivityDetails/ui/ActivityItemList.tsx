@@ -221,6 +221,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
           isAllItemsSkippable={isAllItemsSkippable}
           watermark={appletDetails.watermark}
           respondentNickname={props.respondentMeta?.nickname ?? ""}
+          responseIsEditable={activityDetails.responseIsEditable}
         />
       )}
 
