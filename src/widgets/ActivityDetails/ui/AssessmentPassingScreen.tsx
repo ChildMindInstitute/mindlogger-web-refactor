@@ -182,7 +182,9 @@ export const AssessmentPassingScreen = (props: Props) => {
         <AssessmentLayoutFooter>
           <ItemCardButton
             isSubmitShown={!hasNextStep}
-            isBackShown={hasPrevStep && !currentItem?.config.removeBackButton}
+            isBackShown={
+              hasPrevStep && !currentItem?.config.removeBackButton && props.activityDetails.responseIsEditable
+            }
             isLoading={submitLoading}
             onNextButtonClick={onNextButtonClick}
             onBackButtonClick={onBackButtonClick}
