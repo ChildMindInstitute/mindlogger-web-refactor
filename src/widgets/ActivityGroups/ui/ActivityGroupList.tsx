@@ -138,7 +138,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   }
 
   return (
-    <Container>
+    <Container sx={{ flex: "1" }}>
       <Box display="flex" gap="16px" marginTop="24px" alignItems="center">
         <AvatarBase
           src={isAppletImageExist ? props.appletDetails.image : AppletDefaultIcon}
