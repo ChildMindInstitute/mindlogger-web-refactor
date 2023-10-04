@@ -7,6 +7,7 @@ class MarkdownBuilder {
     markdown = await this.extendMedia(markdown)
     markdown = this.extendTextAlign(markdown)
     markdown = this.extendSubScript(markdown)
+    markdown = this.extendHighlight(markdown)
 
     return markdown
   }
@@ -121,6 +122,22 @@ class MarkdownBuilder {
 
     matches.forEach(match => {
       markdown = markdown.replace(match[0], `<s>${match[1].trim()}</s>`)
+    })
+
+    return markdown
+  }
+
+  private extendHighlight(markdown: string): string {
+    const highlightRegexp = new RegExp(/==([^=]+)==/gm)
+
+    const matches = [...markdown.matchAll(highlightRegexp)]
+
+    if (!matches) {
+      return markdown
+    }
+
+    matches.forEach(match => {
+      markdown = markdown.replace(match[0], `<mark>${match[1].trim()}</mark>`)
     })
 
     return markdown
