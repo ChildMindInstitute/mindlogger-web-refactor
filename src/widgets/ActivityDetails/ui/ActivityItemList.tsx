@@ -89,7 +89,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
 
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { getGroupInProgressByIds, entityCompleted } = activityModel.hooks.useActivityGroupsInProgressState()
-  const { userEvents, activityEvents, nonHiddenActivities, currentActivityEventProgress } =
+  const { userEvents, activityEvents, currentActivityEventProgress } =
     activityModel.hooks.useActivityEventProgressState({
       activityId: activityDetails.id,
       eventId,
