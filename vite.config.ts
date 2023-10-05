@@ -34,9 +34,6 @@ export default defineConfig(async ({ command, mode }) => {
     return {
       define: {
         global: 'globalThis',
-        'process.env': {
-          REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY: env.REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY,
-        },
       },
       plugins: [react(), eslint(), nodePolyfills(), htmlPlugin],
       resolve: {
@@ -50,9 +47,6 @@ export default defineConfig(async ({ command, mode }) => {
     return {
       define: {
         global: 'globalThis',
-        'process.env': {
-          REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY: env.REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY,
-        }
       },
       plugins: [react(), nodePolyfills(), htmlPlugin],
       resolve: {
