@@ -1,4 +1,4 @@
-import { SecureStorage } from "~/shared/libs/secure-storage"
+import { secureSessionStorage } from "~/shared/libs/secure-storage"
 
 interface SecureSessionStorageServiceOutput {
   getItem: (key: string) => string | number | boolean | object | null
@@ -7,23 +7,21 @@ interface SecureSessionStorageServiceOutput {
   clearStorage: () => void
 }
 
-const secureSessionStorageInstance = new SecureStorage(sessionStorage)
-
 const createSecureSessionStorageService = (): SecureSessionStorageServiceOutput => {
   const setItem = (key: string, value: string | number | boolean | object) => {
-    secureSessionStorageInstance.setItem(key, value)
+    secureSessionStorage.setItem(key, value)
   }
 
   const removeItem = (key: string) => {
-    secureSessionStorageInstance.removeItem(key)
+    secureSessionStorage.removeItem(key)
   }
 
   const clearStorage = () => {
-    secureSessionStorageInstance.clear()
+    secureSessionStorage.clear()
   }
 
   const getItem = (key: string) => {
-    return secureSessionStorageInstance.getItem(key)
+    return secureSessionStorage.getItem(key)
   }
 
   return {

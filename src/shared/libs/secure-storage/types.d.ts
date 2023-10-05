@@ -3,9 +3,9 @@
  * object, string, number and Boolean
  * To change the custom secure key, Please add `SECURE_LOCAL_STORAGE_HASH_KEY` or `REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY` to .env and change the value
  */
-declare class SecureLocalStorage {
-  // private _localStorageItems;
-  constructor()
+declare class SecureStorage {
+  // private _storageItems;
+  constructor(storageInstance: Storage)
 
   /**
    * Function to set value to secure local storage
@@ -36,6 +36,6 @@ declare class SecureLocalStorage {
 /**
  * Create an instance of secureLocalStorage
  */
-const secureLocalStorage = new SecureLocalStorage()
+const secureLocalStorage = new SecureStorage()
 
 export default secureLocalStorage

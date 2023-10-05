@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 
 import { activityModel } from "~/entities/activity"
 import { useLogoutMutation, userModel } from "~/entities/user"
-import { ROUTES, secureTokensStorage } from "~/shared/utils"
+import { ROUTES, secureTokensStorage, secureUserPrivateKeyStorage } from "~/shared/utils"
 
 type UseLogoutReturn = {
   logout: () => void
@@ -26,6 +26,7 @@ export const useLogout = (): UseLogoutReturn => {
     clearUser()
     clearActivityInProgressState()
     secureTokensStorage.clearTokens()
+    secureUserPrivateKeyStorage.clearUserPrivateKey()
     navigate(ROUTES.login.path)
   }
 

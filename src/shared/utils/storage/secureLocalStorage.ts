@@ -1,4 +1,4 @@
-import { SecureStorage } from "~/shared/libs/secure-storage"
+import { secureLocalStorage } from "~/shared/libs/secure-storage"
 
 interface SecureLocalStorageServiceOutput {
   getItem: (key: string) => string | number | boolean | object | null
@@ -7,23 +7,21 @@ interface SecureLocalStorageServiceOutput {
   clearStorage: () => void
 }
 
-const secureLocalStorageInstance = new SecureStorage(localStorage)
-
 const createSecureLocalStorageService = (): SecureLocalStorageServiceOutput => {
   const setItem = (key: string, value: string | number | boolean | object) => {
-    secureLocalStorageInstance.setItem(key, value)
+    secureLocalStorage.setItem(key, value)
   }
 
   const removeItem = (key: string) => {
-    secureLocalStorageInstance.removeItem(key)
+    secureLocalStorage.removeItem(key)
   }
 
   const clearStorage = () => {
-    secureLocalStorageInstance.clear()
+    secureLocalStorage.clear()
   }
 
   const getItem = (key: string) => {
-    return secureLocalStorageInstance.getItem(key)
+    return secureLocalStorage.getItem(key)
   }
 
   return {

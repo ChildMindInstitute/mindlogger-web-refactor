@@ -1,6 +1,6 @@
 import { StorageItem } from "./core.types"
 import EncryptionService from "./encryption"
-import getAllStorageItems from "./localStorageHelper"
+import getAllStorageItems from "./storageHelper"
 import { getSecurePrefix } from "./utils"
 
 const KEY_PREFIX = getSecurePrefix()
@@ -28,12 +28,12 @@ const getLocalKey = (key: string, value: string | object | number | boolean | nu
  * This version of local storage supports the following data types as it is and other data types will be treated as string
  * object, string, number and Boolean
  */
-export class SecureStorage {
-  private _localStorageItems: StorageItem = {}
+class SecureStorage {
+  private _storageItems: StorageItem = {}
   private storage: Storage
 
   constructor(storageInstance: Storage) {
-    this._localStorageItems = getAllStorageItems(storageInstance)
+    this._storageItems = getAllStorageItems(storageInstance)
     this.storage = storageInstance
   }
 
@@ -46,7 +46,7 @@ export class SecureStorage {
     const parsedValue = typeof value === "object" ? JSON.stringify(value) : value + ""
     const parsedKeyLocal = getLocalKey(key, value)
     const parsedKey = KEY_PREFIX + key
-    if (key != null) this._localStorageItems[parsedKey] = value
+    if (key !== null) this._storageItems[parsedKey] = value
     const encrypt = new EncryptionService()
     this.storage.setItem(parsedKeyLocal, encrypt.encrypt(parsedValue))
   }
@@ -58,7 +58,7 @@ export class SecureStorage {
    */
   getItem(key: string): string | object | number | boolean | null {
     const parsedKey = KEY_PREFIX + key
-    return this._localStorageItems[parsedKey] || null
+    return this._storageItems[parsedKey] || null
   }
 
   /**
@@ -67,9 +67,9 @@ export class SecureStorage {
    */
   removeItem(key: string) {
     const parsedKey = KEY_PREFIX + key
-    const value = this._localStorageItems[parsedKey]
+    const value = this._storageItems[parsedKey]
     const parsedKeyLocal = getLocalKey(key, value)
-    if (this._localStorageItems[parsedKey] !== undefined) delete this._localStorageItems[parsedKey]
+    if (this._storageItems[parsedKey] !== undefined) delete this._storageItems[parsedKey]
     this.storage.removeItem(parsedKeyLocal)
   }
 
@@ -77,7 +77,10 @@ export class SecureStorage {
    * Function to clear secure local storage
    */
   clear() {
-    this._localStorageItems = {}
+    this._storageItems = {}
     this.storage.clear()
   }
 }
+
+export const secureLocalStorage = new SecureStorage(localStorage)
+export const secureSessionStorage = new SecureStorage(sessionStorage)
