@@ -1,20 +1,20 @@
 import { Tokens } from "~/entities/user/lib"
-import { eventEmitter, securelocalStorageService } from "~/shared/utils"
+import { eventEmitter, secureSessionStorageService } from "~/shared/utils"
 
 const createSecureTokensStorage = () => {
   const name = "tokens"
 
   const setTokens = (data: Tokens) => {
-    securelocalStorageService.setItem(name, data)
+    secureSessionStorageService.setItem(name, data)
     eventEmitter.emit("onTokensChange")
   }
 
   const getTokens = () => {
-    return securelocalStorageService.getItem(name) as Tokens | null
+    return secureSessionStorageService.getItem(name) as Tokens | null
   }
 
   const clearTokens = () => {
-    securelocalStorageService.removeItem(name)
+    secureSessionStorageService.removeItem(name)
     eventEmitter.emit("onTokensChange")
   }
 

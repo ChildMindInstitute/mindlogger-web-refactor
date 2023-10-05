@@ -1,18 +1,18 @@
-import { securelocalStorageService } from "~/shared/utils"
+import { secureSessionStorageService } from "~/shared/utils"
 
 const createSecureUserPrivateKeyStorage = () => {
   const name = "userPrivateKey"
 
   const setUserPrivateKey = (userPrivateKey: number[]) => {
-    securelocalStorageService.setItem(name, userPrivateKey)
+    secureSessionStorageService.setItem(name, userPrivateKey)
   }
 
   const getUserPrivateKey = () => {
-    return securelocalStorageService.getItem(name) as number[] | null
+    return secureSessionStorageService.getItem(name) as number[] | null
   }
 
   const clearUserPrivateKey = () => {
-    securelocalStorageService.removeItem(name)
+    secureSessionStorageService.removeItem(name)
   }
 
   return { setUserPrivateKey, getUserPrivateKey, clearUserPrivateKey }

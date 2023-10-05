@@ -28,11 +28,13 @@ const getLocalKey = (key: string, value: string | object | number | boolean | nu
  * This version of local storage supports the following data types as it is and other data types will be treated as string
  * object, string, number and Boolean
  */
-class SecureLocalStorage {
+export class SecureStorage {
   private _localStorageItems: LocalStorageItem = {}
+  private storage: Storage
 
-  constructor() {
+  constructor(storageInstance: Storage) {
     this._localStorageItems = getAllLocalStorageItems()
+    this.storage = storageInstance
   }
 
   /**
@@ -46,7 +48,7 @@ class SecureLocalStorage {
     const parsedKey = KEY_PREFIX + key
     if (key != null) this._localStorageItems[parsedKey] = value
     const encrypt = new EncryptionService()
-    localStorage.setItem(parsedKeyLocal, encrypt.encrypt(parsedValue))
+    this.storage.setItem(parsedKeyLocal, encrypt.encrypt(parsedValue))
   }
 
   /**
@@ -68,7 +70,7 @@ class SecureLocalStorage {
     const value = this._localStorageItems[parsedKey]
     const parsedKeyLocal = getLocalKey(key, value)
     if (this._localStorageItems[parsedKey] !== undefined) delete this._localStorageItems[parsedKey]
-    localStorage.removeItem(parsedKeyLocal)
+    this.storage.removeItem(parsedKeyLocal)
   }
 
   /**
@@ -76,10 +78,6 @@ class SecureLocalStorage {
    */
   clear() {
     this._localStorageItems = {}
-    localStorage.clear()
+    this.storage.clear()
   }
 }
-
-const secureLocalStorage = new SecureLocalStorage()
-
-export default secureLocalStorage

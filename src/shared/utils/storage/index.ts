@@ -1,4 +1,5 @@
 export * from "./localStorageService"
 export * from "./secureLocalStorage"
+export * from "./secureSessionStorage"
 export * from "./secureTokensStorage"
 export * from "./secureUserPrivateKeyStorage"

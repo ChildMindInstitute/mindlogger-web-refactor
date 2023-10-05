@@ -1,29 +1,29 @@
 import { SecureStorage } from "~/shared/libs/secure-storage"
 
-interface SecureLocalStorageServiceOutput {
+interface SecureSessionStorageServiceOutput {
   getItem: (key: string) => string | number | boolean | object | null
   setItem: (key: string, value: string | number | boolean | object) => void
   removeItem: (key: string) => void
   clearStorage: () => void
 }
 
-const secureLocalStorageInstance = new SecureStorage(localStorage)
+const secureSessionStorageInstance = new SecureStorage(sessionStorage)
 
-const createSecureLocalStorageService = (): SecureLocalStorageServiceOutput => {
+const createSecureSessionStorageService = (): SecureSessionStorageServiceOutput => {
   const setItem = (key: string, value: string | number | boolean | object) => {
-    secureLocalStorageInstance.setItem(key, value)
+    secureSessionStorageInstance.setItem(key, value)
   }
 
   const removeItem = (key: string) => {
-    secureLocalStorageInstance.removeItem(key)
+    secureSessionStorageInstance.removeItem(key)
   }
 
   const clearStorage = () => {
-    secureLocalStorageInstance.clear()
+    secureSessionStorageInstance.clear()
   }
 
   const getItem = (key: string) => {
-    return secureLocalStorageInstance.getItem(key)
+    return secureSessionStorageInstance.getItem(key)
   }
 
   return {
@@ -34,4 +34,4 @@ const createSecureLocalStorageService = (): SecureLocalStorageServiceOutput => {
   }
 }
 
-export const securelocalStorageService = createSecureLocalStorageService()
+export const secureSessionStorageService = createSecureSessionStorageService()

@@ -1,1 +1,1 @@
-export * from "./secure-locale-storage"
+export * from "./secure-storage"
