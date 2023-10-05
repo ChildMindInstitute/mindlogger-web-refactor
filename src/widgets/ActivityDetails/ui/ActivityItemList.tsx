@@ -89,16 +89,17 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
 
   const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
   const { getGroupInProgressByIds, entityCompleted } = activityModel.hooks.useActivityGroupsInProgressState()
-  const { userEvents, activityEvents, nonHiddenActivities } = activityModel.hooks.useActivityEventProgressState({
-    activityId: activityDetails.id,
-    eventId,
-  })
+  const { userEvents, activityEvents, nonHiddenActivities, currentActivityEventProgress } =
+    activityModel.hooks.useActivityEventProgressState({
+      activityId: activityDetails.id,
+      eventId,
+    })
 
   const isOnePageAssessment = activityDetails.showAllAtOnce
   const isSummaryScreen = false // Mock
 
   const onSubmitButtonClick = useCallback(() => {
-    const invalidItemIds = validateAnswerBeforeSubmit(nonHiddenActivities, { isAllItemsSkippable })
+    const invalidItemIds = validateAnswerBeforeSubmit(currentActivityEventProgress, { isAllItemsSkippable })
 
     const hasInvalidItems = invalidItemIds.length > 0
 
@@ -108,7 +109,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     }
 
     return openSubmitModal()
-  }, [isAllItemsSkippable, nonHiddenActivities, openRequiredModal, openSubmitModal])
+  }, [isAllItemsSkippable, currentActivityEventProgress, openRequiredModal, openSubmitModal])
 
   const onPrimaryButtonClick = useCallback(() => {
     const now = new Date()

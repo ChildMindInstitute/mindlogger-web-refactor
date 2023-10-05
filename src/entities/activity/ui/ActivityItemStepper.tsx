@@ -33,7 +33,7 @@ export const ActivityItemStepper = ({
   respondentNickname,
   responseIsEditable,
 }: ActivityItemStepperProps) => {
-  const { currentActivityEventProgress, nonHiddenActivities } = useActivityEventProgressState({
+  const { currentActivityEventProgress } = useActivityEventProgressState({
     eventId,
     activityId,
   })
@@ -54,8 +54,8 @@ export const ActivityItemStepper = ({
   const { step, setStep } = useStepperState({ activityId, eventId })
 
   const itemsProgress = useMemo(() => {
-    return nonHiddenActivities.slice(0, step).reverse()
-  }, [nonHiddenActivities, step])
+    return currentActivityEventProgress.slice(0, step).reverse()
+  }, [currentActivityEventProgress, step])
 
   const toNextStep = () => {
     setStep(step + 1)
@@ -65,7 +65,7 @@ export const ActivityItemStepper = ({
     setStep(step - 1)
   }
 
-  const isSubmitShown = step === nonHiddenActivities.length
+  const isSubmitShown = step === currentActivityEventProgress.length
   const isBackShown = itemsProgress.length > 1 && responseIsEditable
 
   return (
