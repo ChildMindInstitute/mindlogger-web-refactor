@@ -1,4 +1,4 @@
-import { LocalStorageItem } from "./core.types"
+import { StorageItem } from "./core.types"
 import EncryptionService from "./encryption"
 import { getSecurePrefix } from "./utils"
 
@@ -8,14 +8,14 @@ const KEY_PREFIX = getSecurePrefix()
  * Function to preload all the local storage data
  * @returns
  */
-const getAllLocalStorageItems = (): LocalStorageItem => {
-  const localStorageItems: LocalStorageItem = {}
+const getAllStorageItems = (storage: Storage): StorageItem => {
+  const storageItems: StorageItem = {}
 
-  if (typeof window === "undefined") return localStorageItems
+  if (typeof window === "undefined") return storageItems
 
   const encrypt = new EncryptionService()
 
-  for (const [key, value] of Object.entries(localStorage)) {
+  for (const [key, value] of Object.entries(storage)) {
     if (!key.startsWith(KEY_PREFIX)) {
       continue
     }
@@ -44,10 +44,10 @@ const getAllLocalStorageItems = (): LocalStorageItem => {
       default:
         parsedValue = decryptedValue
     }
-    localStorageItems[parsedKey] = parsedValue
+    storageItems[parsedKey] = parsedValue
   }
 
-  return localStorageItems
+  return storageItems
 }
 
-export default getAllLocalStorageItems
+export default getAllStorageItems

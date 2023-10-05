@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit"
 import persistReducer from "redux-persist/es/persistReducer"
 import persistStore from "redux-persist/es/persistStore"
-import storage from "redux-persist/lib/storage"
+import storage from "redux-persist/lib/storage/session"
 
 import { activityModel } from "~/entities/activity"
 import { userModel } from "~/entities/user"

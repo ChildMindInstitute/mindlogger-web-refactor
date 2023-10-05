@@ -30,7 +30,7 @@ const ApplicationRouter = (): JSX.Element | null => {
     return (
       <LogoutTracker>
         <Routes>
-          <Route element={<ProtectedRoute token={tokens?.accessToken} />}>
+          <Route element={<ProtectedRoute token={tokens.accessToken} />}>
             <Route path={ROUTES.applets.path}>
               <Route index element={<Dashboard />} />
               <Route path={ROUTES.activityList.path}>

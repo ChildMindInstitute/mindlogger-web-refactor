@@ -1,6 +1,6 @@
-import { LocalStorageItem } from "./core.types"
+import { StorageItem } from "./core.types"
 import EncryptionService from "./encryption"
-import getAllLocalStorageItems from "./localStorageHelper"
+import getAllStorageItems from "./localStorageHelper"
 import { getSecurePrefix } from "./utils"
 
 const KEY_PREFIX = getSecurePrefix()
@@ -29,11 +29,11 @@ const getLocalKey = (key: string, value: string | object | number | boolean | nu
  * object, string, number and Boolean
  */
 export class SecureStorage {
-  private _localStorageItems: LocalStorageItem = {}
+  private _localStorageItems: StorageItem = {}
   private storage: Storage
 
   constructor(storageInstance: Storage) {
-    this._localStorageItems = getAllLocalStorageItems()
+    this._localStorageItems = getAllStorageItems(storageInstance)
     this.storage = storageInstance
   }
 
