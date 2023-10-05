@@ -13,24 +13,29 @@ type UseActivityEventProgressStateProps = {
 export const useActivityEventProgressState = (props: UseActivityEventProgressStateProps) => {
   const activityEventProgressState = useSelector(activityEventProgressSelector)
 
-  const currentActivityEventStateProgress = useMemo(() => {
+  const currentActivityEventProgressState = useMemo(() => {
     const activityEventId = getActivityEventProgressId(props.activityId, props.eventId)
     return activityEventProgressState[activityEventId]
   }, [activityEventProgressState, props.activityId, props.eventId])
 
-  const currentActivityEventProgress = useMemo(() => {
-    const activityEventProgress = currentActivityEventStateProgress
-
-    if (!activityEventProgress?.activityEvents) {
+  const activitiesInProgress = useMemo(() => {
+    if (!currentActivityEventProgressState?.activityEvents) {
       return []
     }
 
-    return conditionalLogicBuilder.process(activityEventProgress.activityEvents.filter(x => !x.isHidden))
-  }, [currentActivityEventStateProgress])
+    return currentActivityEventProgressState.activityEvents
+  }, [currentActivityEventProgressState])
+
+  const availableActivitiesInProgress = useMemo(() => {
+    return activitiesInProgress.filter(x => !x.isHidden)
+  }, [activitiesInProgress])
+
+  const activitiesInProgressWithConditionalLogic = useMemo(() => {
+    return conditionalLogicBuilder.process(availableActivitiesInProgress)
+  }, [availableActivitiesInProgress])
 
   const lastActivityEventWithAnswerIndex = useMemo(() => {
-    const activityEventProgress = currentActivityEventStateProgress
-    const step = activityEventProgress?.step ?? 1
+    const step = currentActivityEventProgressState?.step ?? 1
 
     // -1 === not foind
     // 0 === start index
@@ -40,30 +45,28 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
     }
 
     return step
-  }, [currentActivityEventStateProgress])
+  }, [currentActivityEventProgressState])
 
   const progress = useMemo(() => {
     const defaultProgressPercentage = 0
 
-    const activityEventRecords = currentActivityEventStateProgress
-
-    if (!activityEventRecords?.activityEvents) {
+    if (!currentActivityEventProgressState?.activityEvents) {
       return defaultProgressPercentage
     }
 
-    const activityEventLength = currentActivityEventProgress.length
-    const lastStep = activityEventRecords?.step
+    const activitiesLength = activitiesInProgressWithConditionalLogic.length
+    const lastStep = currentActivityEventProgressState?.step
 
     // Step always start from 1, but we want to paint progress when we pass some item
-    return ((lastStep - 1) / activityEventLength) * 100
-  }, [currentActivityEventProgress.length, currentActivityEventStateProgress])
+    return ((lastStep - 1) / activitiesLength) * 100
+  }, [activitiesInProgressWithConditionalLogic.length, currentActivityEventProgressState])
 
   return {
-    currentActivityEventProgress,
-    lastActivityEventWithAnswerIndex,
     progress,
-    userEvents: currentActivityEventStateProgress?.userEvents ?? [],
-    activityEvents: currentActivityEventStateProgress?.activityEvents ?? [],
-    nonHiddenActivities: currentActivityEventStateProgress?.activityEvents.filter(x => !x.isHidden) ?? [],
+    lastActivityEventWithAnswerIndex,
+    activityEvents: currentActivityEventProgressState?.activityEvents ?? [],
+    userEvents: currentActivityEventProgressState?.userEvents ?? [],
+    currentActivityEventProgress: activitiesInProgressWithConditionalLogic,
+    nonHiddenActivities: availableActivitiesInProgress ?? [],
   }
 }
