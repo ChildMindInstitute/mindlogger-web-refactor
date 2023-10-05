@@ -1,4 +1,4 @@
-import secureLocalStorage from "react-secure-storage"
+import secureLocalStorage from "~/shared/libs/secure-locale-storage"
 
 interface SecureLocalStorageServiceOutput {
   getItem: (key: string) => string | number | boolean | object | null
