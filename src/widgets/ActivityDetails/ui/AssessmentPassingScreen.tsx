@@ -19,7 +19,7 @@ import {
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
 import { useNotification } from "~/shared/ui"
-import { useCustomTranslation, useFlowType } from "~/shared/utils"
+import { stringContainsOnlyNumbers, useCustomTranslation, useFlowType } from "~/shared/utils"
 import Layout from "~/widgets/AppLayout"
 
 type Props = {
@@ -110,6 +110,22 @@ export const AssessmentPassingScreen = (props: Props) => {
     return isItemWithoutAnswer
   }
 
+  const validateIsNumericOnly = (currentItem: activityModel.types.ActivityEventProgressRecord) => {
+    const isTextItem = currentItem.responseType === "text"
+
+    if (!isTextItem) {
+      return false
+    }
+
+    const isNumericOnly = currentItem.config.numericalResponseRequired
+
+    if (isNumericOnly) {
+      return !stringContainsOnlyNumbers(currentItem.answer[0])
+    }
+
+    return false
+  }
+
   const onNextButtonClick = () => {
     if (!currentItem) {
       return
@@ -128,6 +144,12 @@ export const AssessmentPassingScreen = (props: Props) => {
 
     if (!isAnswerCorrect && !isItemSkippable) {
       return showWarningNotification(t("incorrect_answer"))
+    }
+
+    const isNumericOnly = validateIsNumericOnly(currentItem)
+
+    if (isNumericOnly) {
+      return showWarningNotification(t("onlyNumbersAllowed"))
     }
 
     if (!hasNextStep) {
