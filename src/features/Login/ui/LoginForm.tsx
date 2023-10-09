@@ -89,7 +89,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
             <Typography
               color={Theme.colors.light.primary}
               fontFamily="Atkinson"
-              fontSize="14px"
+              fontSize="16px"
               fontWeight={400}
               fontStyle="normal"
               lineHeight="20px"
