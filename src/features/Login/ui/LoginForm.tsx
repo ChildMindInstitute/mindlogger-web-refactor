@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 import { useLoginTranslation } from "../lib/useLoginTranslation"
 import { LoginSchema, TLoginForm } from "../model/login.schema"
@@ -8,13 +8,7 @@ import { LoginSchema, TLoginForm } from "../model/login.schema"
 import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
 import { ROUTES, Theme } from "~/shared/constants"
 import { BaseButton, BasicFormProvider, Input, PasswordIcon, useNotification } from "~/shared/ui"
-import {
-  secureTokensStorage,
-  secureUserPrivateKeyStorage,
-  useCustomForm,
-  useEncryption,
-  usePasswordType,
-} from "~/shared/utils"
+import { useCustomForm, usePasswordType } from "~/shared/utils"
 
 interface LoginFormProps {
   locationState?: Record<string, unknown>
@@ -22,37 +16,30 @@ interface LoginFormProps {
 
 export const LoginForm = ({ locationState }: LoginFormProps) => {
   const { t } = useLoginTranslation()
-  const navigate = useNavigate()
 
   const { showErrorNotification } = useNotification()
 
   const [passwordType, onPasswordIconClick] = usePasswordType()
 
-  const { setUser } = userModel.hooks.useUserState()
-  const { generateUserPrivateKey } = useEncryption()
-
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const { handleSubmit } = form
 
+  const { onLoginSuccess } = userModel.hooks.useOnLogin({
+    isInvitationFlow: locationState?.isInvitationFlow as boolean,
+    backRedirectPath: locationState?.backRedirectPath as string,
+  })
+
   const { mutate: login, isLoading } = useLoginMutation({
     onSuccess(data, variables) {
-      const userParams = {
-        userId: data.data.result.user.id,
-        email: data.data.result.user.email,
-        password: variables.password,
-      }
+      const { user, token } = data.data.result
 
-      const userPrivateKey = generateUserPrivateKey(userParams)
-      secureUserPrivateKeyStorage.setUserPrivateKey(userPrivateKey)
-
-      setUser(data.data.result.user)
-      secureTokensStorage.setTokens(data.data.result.token)
-
-      if (locationState?.isInvitationFlow) {
-        navigate(locationState.backRedirectPath as string)
-      } else {
-        navigate(ROUTES.appletList.path)
-      }
+      return onLoginSuccess({
+        user: {
+          ...user,
+          password: variables.password,
+        },
+        tokens: token,
+      })
     },
     onError(error) {
       if (error.evaluatedMessage) {
