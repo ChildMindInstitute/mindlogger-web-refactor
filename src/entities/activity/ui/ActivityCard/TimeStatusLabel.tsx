@@ -28,6 +28,8 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   const hasTimeToComplete = isStatusInProgress && activity.isTimerSet && !!activity.timeLeftToComplete
 
+  const isEntityAlwaysAvailable = activity.isAlwaysAvailable
+
   const formatDate = (date: Date): string => {
     const convertResult = convertToTimeOnNoun(date)
     if (convertResult.translationKey) {
@@ -45,6 +47,10 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
     lineHeight: "24px",
     letterSpacing: "0.15px",
     color: Theme.colors.light.onSurfaceVariant,
+  }
+
+  if (isEntityAlwaysAvailable) {
+    return <></>
   }
 
   if (hasAvailableFromTo) {
