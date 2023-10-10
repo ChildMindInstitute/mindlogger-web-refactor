@@ -214,7 +214,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         </AssessmentLayoutFooter>
       }>
       <Container sx={{ display: "flex", flex: 1, justifyContent: "center", overflow: "scroll" }}>
-        <Box maxWidth="900px">
+        <Box maxWidth="900px" display="flex" alignItems="center">
           {currentItem && (
             <ActivityCardItem
               key={currentItem.id}
