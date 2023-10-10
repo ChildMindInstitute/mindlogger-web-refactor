@@ -12,6 +12,12 @@ type Props = {
 export const ActivityAvailableLabel = (props: Props) => {
   const { t } = useCustomTranslation()
 
+  const isActivitiesMoreThanOne = props.activityLength > 1
+
+  const activityLabel = isActivitiesMoreThanOne
+    ? t("question_count_plural", { length: props.activityLength })
+    : t("question_count_singular", { length: props.activityLength })
+
   return (
     <Box
       sx={{
@@ -19,10 +25,7 @@ export const ActivityAvailableLabel = (props: Props) => {
         borderRadius: "8px",
         backgroundColor: Theme.colors.light.primary95,
       }}>
-      <ActivityLabelTypography
-        text={t("question_count", { length: props.activityLength })}
-        color={Theme.colors.light.onPrimaryContainer}
-      />
+      <ActivityLabelTypography text={activityLabel} color={Theme.colors.light.onPrimaryContainer} />
     </Box>
   )
 }
