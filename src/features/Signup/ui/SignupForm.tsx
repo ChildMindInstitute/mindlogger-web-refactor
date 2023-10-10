@@ -10,6 +10,7 @@ import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 import { useLoginMutation, userModel, useSignupMutation } from "~/entities/user"
 import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
 import {
+  Mixpanel,
   secureTokensStorage,
   secureUserPrivateKeyStorage,
   useCustomForm,
@@ -54,6 +55,9 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
       setUser(user)
       secureTokensStorage.setTokens(token)
 
+      Mixpanel.track("Login Successful")
+      Mixpanel.login(data.data.result.user.id)
+
       return navigate(locationState?.backRedirectPath as string)
     },
   })
@@ -69,6 +73,8 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
         const { email, password } = form.getValues()
         login({ email, password })
       }
+
+      Mixpanel.track("Account Creation complete")
 
       reset()
     },

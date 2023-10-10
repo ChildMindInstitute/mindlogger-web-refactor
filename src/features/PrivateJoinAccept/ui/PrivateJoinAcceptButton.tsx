@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import { useAcceptPrivateInviteMutation, useInvitationTranslation } from "~/entities/invitation"
 import Button from "~/shared/ui/Button"
-import { ROUTES } from "~/shared/utils"
+import { Mixpanel, ROUTES } from "~/shared/utils"
 
 interface PrivateJoinAcceptButtonProps {
   invitationKey: string
@@ -16,6 +16,7 @@ export const PrivateJoinAcceptButton = ({ invitationKey }: PrivateJoinAcceptButt
   const { mutate: acceptPrivateInvite, isLoading } = useAcceptPrivateInviteMutation({
     onSuccess() {
       navigate(ROUTES.invitationAccept.path)
+      Mixpanel.track("Invitation Accepted")
     },
   })
 

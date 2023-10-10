@@ -1,9 +1,11 @@
+import { useEffect } from "react"
+
 import { Container } from "react-bootstrap"
 import { Link, useLocation } from "react-router-dom"
 
 import { LoginForm, useLoginTranslation } from "~/features/Login"
 import { BasicButton } from "~/shared/ui"
-import { ROUTES } from "~/shared/utils"
+import { Mixpanel, ROUTES } from "~/shared/utils"
 import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
 
 import "./login.scss"
@@ -11,6 +13,14 @@ import "./login.scss"
 const LoginPage = () => {
   const { t } = useLoginTranslation()
   const location = useLocation()
+
+  const onCreateAccountClick = () => {
+    Mixpanel.track("Create account button on login screen click")
+  }
+
+  useEffect(() => {
+    Mixpanel.trackPageView("Login")
+  }, [])
 
   return (
     <div className="loginPageContainer mp-3 align-self-start w-100">
@@ -24,7 +34,7 @@ const LoginPage = () => {
           <LoginForm locationState={location.state} />
 
           <BasicButton type="button" variant="outline-primary" className="mb-3" defaultSize>
-            <Link to={ROUTES.signup.path} relative="path">
+            <Link to={ROUTES.signup.path} relative="path" onClick={onCreateAccountClick}>
               {t("create")}
             </Link>
           </BasicButton>

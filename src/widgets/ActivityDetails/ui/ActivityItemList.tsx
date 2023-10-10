@@ -25,6 +25,7 @@ import {
 import { ActivityFlow, AppletDetails } from "~/entities/applet"
 import { ActivityDTO, AnswerPayload, AppletEventsResponse } from "~/shared/api"
 import {
+  Mixpanel,
   ROUTES,
   getHHMM,
   getYYYYDDMM,
@@ -70,6 +71,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
       eventId,
     })
 
+    Mixpanel.track("Assessment completed")
     // Step 5 - Redirect to "Thanks screen"
     return navigator.navigate(ROUTES.thanks.navigateTo(isPublic ? props.publicAppletKey! : appletDetails.id, isPublic))
   }

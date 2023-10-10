@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import { useAcceptInviteMutation, useInvitationTranslation } from "~/entities/invitation"
 import Button from "~/shared/ui/Button"
-import { ROUTES } from "~/shared/utils"
+import { Mixpanel, ROUTES } from "~/shared/utils"
 
 interface InvitationAcceptButtonProps {
   invitationKey: string
@@ -16,6 +16,7 @@ export const InvitationAcceptButton = ({ invitationKey }: InvitationAcceptButton
   const { mutate: acceptInvite, isLoading: isAcceptLoading } = useAcceptInviteMutation({
     onSuccess() {
       navigate(ROUTES.invitationAccept.path)
+      Mixpanel.track("Invitation Accepted")
     },
   })
 

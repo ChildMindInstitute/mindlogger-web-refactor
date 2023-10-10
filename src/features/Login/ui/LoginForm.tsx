@@ -8,6 +8,7 @@ import { LoginSchema, TLoginForm } from "../model/login.schema"
 import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
 import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
 import {
+  Mixpanel,
   ROUTES,
   secureTokensStorage,
   secureUserPrivateKeyStorage,
@@ -58,11 +59,18 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
       } else {
         navigate(ROUTES.applets.path)
       }
+
+      Mixpanel.track("Login Successful")
+      Mixpanel.login(data.data.result.user.id)
     },
   })
 
   const onLoginSubmit = (data: TLoginForm) => {
     login(data as ILoginPayload)
+  }
+
+  const onLoginButtonPress = () => {
+    Mixpanel.track("Login Button click")
   }
 
   return (
@@ -90,6 +98,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
         <BasicButton
           className={classNames("mt-3")}
           type="submit"
+          onClick={onLoginButtonPress}
           variant="primary"
           disabled={!isValid || isLoading}
           loading={isLoading}
