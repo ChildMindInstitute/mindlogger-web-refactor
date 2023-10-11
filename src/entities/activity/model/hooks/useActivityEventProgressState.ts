@@ -18,15 +18,19 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
     return activityEventProgressState[activityEventId]
   }, [activityEventProgressState, props.activityId, props.eventId])
 
-  const currentActivityEventProgress = useMemo(() => {
+  const activitiesProgress = useMemo(() => {
     const activityEventProgress = currentActivityEventStateProgress
 
     if (!activityEventProgress?.activityEvents) {
       return []
     }
 
-    return conditionalLogicBuilder.process(activityEventProgress.activityEvents)
+    return activityEventProgress.activityEvents
   }, [currentActivityEventStateProgress])
+
+  const activitiesProgressWithConditionalLogic = useMemo(() => {
+    return conditionalLogicBuilder.process(activitiesProgress)
+  }, [activitiesProgress])
 
   const lastActivityEventWithAnswerIndex = useMemo(() => {
     const activityEventProgress = currentActivityEventStateProgress
@@ -51,15 +55,16 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
       return defaultProgressPercentage
     }
 
-    const activityEventLength = currentActivityEventProgress.length
+    const activityEventLength = activitiesProgressWithConditionalLogic.length
     const lastStep = activityEventRecords?.step
 
     // Step always start from 1, but we want to paint progress when we pass some item
     return ((lastStep - 1) / activityEventLength) * 100
-  }, [currentActivityEventProgress.length, currentActivityEventStateProgress])
+  }, [activitiesProgressWithConditionalLogic.length, currentActivityEventStateProgress])
 
   return {
-    currentActivityEventProgress,
+    currentActivityEventStateProgress,
+    currentActivityEventProgress: activitiesProgressWithConditionalLogic,
     lastActivityEventWithAnswerIndex,
     progress,
     userEvents: currentActivityEventStateProgress?.userEvents ?? [],
