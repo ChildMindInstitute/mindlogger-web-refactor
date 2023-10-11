@@ -25,8 +25,8 @@ export const CardItem = ({ children, markdown, isOptional }: CardItemProps) => {
   return (
     <Box
       data-testid={"active-item"}
-      display="grid"
-      gridTemplateColumns="minmax(300px, 900px)"
+      display="flex"
+      flex={1}
       padding={greaterThanSM ? "72px 48px" : "36px 16px"}
       flexDirection="column"
       gap="48px"

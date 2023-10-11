@@ -11,7 +11,11 @@ export const ActivityMetaData = ({ groupInProgress, activityLength }: Props) => 
 
   const isFlow = groupInProgress?.type === ActivityPipelineType.Flow
 
-  const activityLengthLabel = t("question_count", { length: activityLength })
+  const isActivitiesMoreThanOne = activityLength > 1
+
+  const activityLengthLabel = isActivitiesMoreThanOne
+    ? t("question_count_plural", { length: activityLength })
+    : t("question_count_singular", { length: activityLength })
 
   if (!isFlow) {
     return <>{activityLengthLabel}</>

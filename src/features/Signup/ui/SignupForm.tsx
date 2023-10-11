@@ -1,7 +1,6 @@
 import { useState } from "react"
 
 import Box from "@mui/material/Box"
-import { useNavigate } from "react-router-dom"
 
 import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"
@@ -9,13 +8,7 @@ import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
 import { useLoginMutation, userModel, useSignupMutation } from "~/entities/user"
 import { Input, Checkbox, BasicFormProvider, PasswordIcon, BaseButton, useNotification } from "~/shared/ui"
-import {
-  secureTokensStorage,
-  secureUserPrivateKeyStorage,
-  useCustomForm,
-  useEncryption,
-  usePasswordType,
-} from "~/shared/utils"
+import { useCustomForm, usePasswordType } from "~/shared/utils"
 
 interface SignupFormProps {
   locationState?: Record<string, unknown>
@@ -23,7 +16,6 @@ interface SignupFormProps {
 
 export const SignupForm = ({ locationState }: SignupFormProps) => {
   const { t } = useSignupTranslation()
-  const navigate = useNavigate()
 
   const { showErrorNotification, showSuccessNotification } = useNotification()
 
@@ -31,45 +23,37 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
   const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType()
 
   const [terms, setTerms] = useState<boolean>(false)
-  const { setUser } = userModel.hooks.useUserState()
+  const { onLoginSuccess } = userModel.hooks.useOnLogin({
+    isInvitationFlow: locationState?.isInvitationFlow as boolean,
+    backRedirectPath: locationState?.backRedirectPath as string,
+  })
 
   const form = useCustomForm(
     { defaultValues: { email: "", firstName: "", lastName: "", password: "", confirmPassword: "" } },
     SignupFormSchema,
   )
-  const { handleSubmit, reset } = form
+  const { handleSubmit } = form
 
-  const { generateUserPrivateKey } = useEncryption()
-
-  const { mutate: login } = useLoginMutation({
+  const { mutate: login, isLoading: isLoginLoading } = useLoginMutation({
     onSuccess(data, variables) {
       const { user, token } = data.data.result
 
-      const userParams = {
-        userId: data.data.result.user.id,
-        email: data.data.result.user.email,
-        password: variables.password,
-      }
-
-      const userPrivateKey = generateUserPrivateKey(userParams)
-      secureUserPrivateKeyStorage.setUserPrivateKey(userPrivateKey)
-
-      setUser(user)
-      secureTokensStorage.setTokens(token)
-
-      return navigate(locationState?.backRedirectPath as string)
+      return onLoginSuccess({
+        user: {
+          ...user,
+          password: variables.password,
+        },
+        tokens: token,
+      })
     },
   })
 
-  const { mutate: signup, isLoading } = useSignupMutation({
+  const { mutate: signup, isLoading: isSignupLoading } = useSignupMutation({
     onSuccess() {
       showSuccessNotification(t("success"))
-      if (locationState?.isInvitationFlow) {
-        const { email, password } = form.getValues()
-        login({ email, password })
-      }
+      const { email, password } = form.getValues()
 
-      reset()
+      return login({ email, password })
     },
     onError(error) {
       if (error.evaluatedMessage) {
@@ -118,7 +102,12 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
           </Checkbox>
         </Box>
 
-        <BaseButton type="submit" variant="contained" text={t("create")} isLoading={isLoading} />
+        <BaseButton
+          type="submit"
+          variant="contained"
+          text={t("create")}
+          isLoading={isSignupLoading || isLoginLoading}
+        />
       </Box>
     </BasicFormProvider>
   )

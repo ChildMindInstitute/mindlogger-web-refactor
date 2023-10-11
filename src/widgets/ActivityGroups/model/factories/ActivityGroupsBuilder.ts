@@ -117,6 +117,9 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     const { pipelineType } = entity
     const isFlow = pipelineType === ActivityPipelineType.Flow
 
+    const isAlwaysAvailable =
+      eventActivity.event.availability.availabilityType === AvailabilityLabelType.AlwaysAvailable
+
     const item: ActivityListItem = {
       activityId: isFlow ? "" : entity.id,
       flowId: isFlow ? entity.id : null,
@@ -130,6 +133,8 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       isTimerElapsed: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
+      entityAvailabilityType: event.availability.availabilityType,
+      isAlwaysAvailable,
     }
 
     if (isFlow) {

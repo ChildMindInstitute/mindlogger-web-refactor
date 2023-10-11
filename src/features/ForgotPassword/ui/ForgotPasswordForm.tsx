@@ -53,7 +53,7 @@ export const ForgotPasswordForm = () => {
             ) : (
               <Typography
                 fontFamily="Atkinson"
-                fontSize="14px"
+                fontSize="16px"
                 fontWeight={700}
                 fontStyle="normal"
                 lineHeight="20px"

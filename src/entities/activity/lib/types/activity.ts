@@ -1,3 +1,5 @@
+import { AvailabilityLabelType } from "../../../event"
+
 import { ActivityItemDetailsDTO } from "~/shared/api"
 import { HourMinute } from "~/shared/utils"
 
@@ -9,6 +11,9 @@ export type ActivityListItem = {
   name: string
   description: string
   image?: string | null
+
+  entityAvailabilityType: AvailabilityLabelType
+  isAlwaysAvailable: boolean
 
   status: ActivityStatus
   type: ActivityType

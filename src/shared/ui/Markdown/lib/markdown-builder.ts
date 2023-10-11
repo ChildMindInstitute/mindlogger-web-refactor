@@ -2,9 +2,12 @@ import { validateImage } from "./validate-image"
 
 class MarkdownBuilder {
   public async extend(markdown: string): Promise<string> {
+    markdown = this.extendStrikeThrough(markdown)
     markdown = this.extendUnderline(markdown)
     markdown = await this.extendMedia(markdown)
     markdown = this.extendTextAlign(markdown)
+    markdown = this.extendSubScript(markdown)
+    markdown = this.extendHighlight(markdown)
 
     return markdown
   }
@@ -87,6 +90,54 @@ class MarkdownBuilder {
 
         markdown = markdown.replace(match[0], `<p style="text-align: right;">${formatedContent}</p>`)
       }
+    })
+
+    return markdown
+  }
+
+  private extendSubScript(markdown: string): string {
+    const subScriptRegexp = new RegExp(/~([^~]+)~/gm)
+
+    const matches = [...markdown.matchAll(subScriptRegexp)]
+
+    if (!matches) {
+      return markdown
+    }
+
+    matches.forEach(match => {
+      markdown = markdown.replace(match[0], `<sub>${match[1].trim()}</sub>`)
+    })
+
+    return markdown
+  }
+
+  private extendStrikeThrough(markdown: string): string {
+    const strikeThroughRegexp = new RegExp(/~~([^~]+)~~/gm)
+
+    const matches = [...markdown.matchAll(strikeThroughRegexp)]
+
+    if (!matches) {
+      return markdown
+    }
+
+    matches.forEach(match => {
+      markdown = markdown.replace(match[0], `<s>${match[1].trim()}</s>`)
+    })
+
+    return markdown
+  }
+
+  private extendHighlight(markdown: string): string {
+    const highlightRegexp = new RegExp(/==([^=]+)==/gm)
+
+    const matches = [...markdown.matchAll(highlightRegexp)]
+
+    if (!matches) {
+      return markdown
+    }
+
+    matches.forEach(match => {
+      markdown = markdown.replace(match[0], `<mark>${match[1].trim()}</mark>`)
     })
 
     return markdown
