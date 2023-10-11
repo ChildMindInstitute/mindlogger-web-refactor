@@ -1,10 +1,9 @@
 import { useCallback, useMemo } from "react"
 
-import { useSelector } from "react-redux"
-
 import { getActivityEventProgressId } from "../../lib"
 import { actions } from "../activity.slice"
-import { activityEventProgressSelector } from "../selectors"
+import { ActivityEventProgressRecord } from "../types"
+import { useActivityEventProgressState } from "./useActivityEventProgressState"
 
 import { useAppDispatch } from "~/shared/utils"
 
@@ -16,39 +15,36 @@ type UseStepperStateProps = {
 export const useStepperState = ({ activityId, eventId }: UseStepperStateProps) => {
   const dispatch = useAppDispatch()
 
-  const activityEventProgressState = useSelector(activityEventProgressSelector)
+  const { currentActivityEventStateProgress, currentActivityEventProgress } = useActivityEventProgressState({
+    activityId,
+    eventId,
+  })
 
   const step = useMemo(() => {
-    const activityEventId = getActivityEventProgressId(activityId, eventId)
-    const activityEventProgress = activityEventProgressState[activityEventId]
-
-    if (!activityEventProgress) {
+    if (!currentActivityEventStateProgress) {
       return 1
     }
 
-    return activityEventProgress.step
-  }, [activityEventProgressState, activityId, eventId])
+    return currentActivityEventStateProgress.step
+  }, [currentActivityEventStateProgress])
 
   const setStep = useCallback(
-    (step: number) => {
+    (step: number): void => {
       const activityEventId = getActivityEventProgressId(activityId, eventId)
       dispatch(actions.setActivityEventProgressStepByParams({ activityEventId, step }))
     },
     [activityId, dispatch, eventId],
   )
 
-  const currentItem = useMemo(() => {
-    const activityEventId = getActivityEventProgressId(activityId, eventId)
-    const activityEventProgress = activityEventProgressState[activityEventId]
-
-    if (!activityEventProgress) {
+  const currentItem = useMemo((): ActivityEventProgressRecord | null => {
+    if (!currentActivityEventProgress) {
       return null
     }
 
-    const currentItem = activityEventProgress.activityEvents[step - 1]
+    const currentItem = currentActivityEventProgress[step - 1]
 
     return currentItem
-  }, [activityEventProgressState, activityId, eventId, step])
+  }, [currentActivityEventProgress, step])
 
   return { step, setStep, currentItem }
 }

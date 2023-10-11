@@ -26,6 +26,7 @@ export const CardItem = ({ children, markdown, isOptional }: CardItemProps) => {
     <Box
       data-testid={"active-item"}
       display="flex"
+      flex={1}
       padding={greaterThanSM ? "72px 48px" : "36px 16px"}
       flexDirection="column"
       gap="48px"
