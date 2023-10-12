@@ -18,9 +18,8 @@ import {
 } from "~/entities/activity"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
-import { useNotification } from "~/shared/ui"
+import { NotificationCenter, useNotification } from "~/shared/ui"
 import { stringContainsOnlyNumbers, useCustomTranslation, useFlowType } from "~/shared/utils"
-import Layout from "~/widgets/AppLayout"
 
 type Props = {
   eventId: string
@@ -187,48 +186,51 @@ export const AssessmentPassingScreen = (props: Props) => {
   }
 
   return (
-    <Layout
-      onKeyDownHandler={onKeyDownHandler}
-      bgColor={Theme.colors.light.surface}
-      header={
-        <AssessmentLayoutHeader
-          title={props.activityDetails.name}
-          appletId={props.appletDetails.id}
-          activityId={props.activityDetails.id}
-          eventId={props.eventId}
-          isPublic={props.isPublic}
-          publicKey={props.publicAppletKey ?? null}
+    <Box
+      id="assessment-screen-layout"
+      display="flex"
+      flex={1}
+      flexDirection="column"
+      onKeyDown={event => onKeyDownHandler && onKeyDownHandler(event.key)}
+      bgcolor={Theme.colors.light.surface}>
+      <AssessmentLayoutHeader
+        title={props.activityDetails.name}
+        appletId={props.appletDetails.id}
+        activityId={props.activityDetails.id}
+        eventId={props.eventId}
+        isPublic={props.isPublic}
+        publicKey={props.publicAppletKey ?? null}
+      />
+
+      <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
+        <NotificationCenter />
+        <Container sx={{ display: "flex", flex: 1, justifyContent: "center" }}>
+          <Box maxWidth="900px" display="flex" alignItems="center" flex={1} justifyContent="center">
+            {currentItem && (
+              <ActivityCardItem
+                key={currentItem.id}
+                activityId={props.activityDetails.id}
+                eventId={props.eventId}
+                activityItem={currentItem}
+                values={currentItem.answer}
+                replaceText={replaceTextVariables}
+                watermark={props.appletDetails.watermark}
+                allowToSkipAllItems={isAllItemsSkippable}
+              />
+            )}
+          </Box>
+        </Container>
+      </Box>
+
+      <AssessmentLayoutFooter>
+        <ItemCardButton
+          isSubmitShown={!hasNextStep}
+          isBackShown={hasPrevStep && !currentItem?.config.removeBackButton && props.activityDetails.responseIsEditable}
+          isLoading={submitLoading}
+          onNextButtonClick={onNextButtonClick}
+          onBackButtonClick={onBackButtonClick}
         />
-      }
-      footer={
-        <AssessmentLayoutFooter>
-          <ItemCardButton
-            isSubmitShown={!hasNextStep}
-            isBackShown={
-              hasPrevStep && !currentItem?.config.removeBackButton && props.activityDetails.responseIsEditable
-            }
-            isLoading={submitLoading}
-            onNextButtonClick={onNextButtonClick}
-            onBackButtonClick={onBackButtonClick}
-          />
-        </AssessmentLayoutFooter>
-      }>
-      <Container sx={{ display: "flex", flex: 1, justifyContent: "center", overflow: "scroll" }}>
-        <Box maxWidth="900px" display="flex" alignItems="center" flex={1} justifyContent="center">
-          {currentItem && (
-            <ActivityCardItem
-              key={currentItem.id}
-              activityId={props.activityDetails.id}
-              eventId={props.eventId}
-              activityItem={currentItem}
-              values={currentItem.answer}
-              replaceText={replaceTextVariables}
-              watermark={props.appletDetails.watermark}
-              allowToSkipAllItems={isAllItemsSkippable}
-            />
-          )}
-        </Box>
-      </Container>
-    </Layout>
+      </AssessmentLayoutFooter>
+    </Box>
   )
 }
