@@ -167,6 +167,19 @@ export const AssessmentPassingScreen = (props: Props) => {
     return toNextStep()
   }
 
+  const autoForward = () => {
+    if (!currentItem) {
+      return
+    }
+
+    if (!hasNextStep) {
+      return submitAnswers()
+    }
+
+    saveUserEventByType("NEXT", currentItem)
+    return toNextStep()
+  }
+
   const onBackButtonClick = () => {
     if (currentItem) {
       saveUserEventByType("PREV", currentItem)
@@ -221,6 +234,7 @@ export const AssessmentPassingScreen = (props: Props) => {
                 allowToSkipAllItems={isAllItemsSkippable}
                 step={step}
                 prevStep={prevStep}
+                autoForwardCallback={autoForward}
               />
             )}
           </Box>

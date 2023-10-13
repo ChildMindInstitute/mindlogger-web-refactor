@@ -1,5 +1,6 @@
 import { useMemo } from "react"
 
+import { ActivityItemType } from "../lib"
 import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "../model/hooks"
 import { ActivityEventProgressRecord } from "../model/types"
 import { ItemPicker } from "./items/ItemPicker"
@@ -19,6 +20,8 @@ type ActivityCardItemProps = {
 
   step: number
   prevStep: number | null
+
+  autoForwardCallback: () => void
 }
 
 export const ActivityCardItem = ({
@@ -31,6 +34,7 @@ export const ActivityCardItem = ({
   allowToSkipAllItems,
   step,
   prevStep,
+  autoForwardCallback,
 }: ActivityCardItemProps) => {
   const { saveSetAnswerUserEvent } = useSetAnswerUserEvent({
     activityId,
@@ -41,12 +45,20 @@ export const ActivityCardItem = ({
     eventId,
   })
 
+  const autoForwardItems: ActivityItemType[] = ["singleSelect"]
+
+  const isAutoForwardEnable = autoForwardItems.includes(activityItem.responseType)
+
   const onItemValueChange = (value: string[]) => {
     saveActivityItemAnswer(activityItem.id, value)
     saveSetAnswerUserEvent({
       ...activityItem,
       answer: value,
     })
+
+    if (isAutoForwardEnable) {
+      return autoForwardCallback()
+    }
   }
 
   const questionText = useMemo(() => {
