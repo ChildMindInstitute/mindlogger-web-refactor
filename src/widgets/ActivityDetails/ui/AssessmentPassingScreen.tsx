@@ -19,7 +19,7 @@ import {
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
 import { NotificationCenter, useNotification } from "~/shared/ui"
-import { stringContainsOnlyNumbers, useCustomTranslation, useFlowType } from "~/shared/utils"
+import { stringContainsOnlyNumbers, useCustomTranslation, useFlowType, usePrevious } from "~/shared/utils"
 
 type Props = {
   eventId: string
@@ -55,10 +55,13 @@ export const AssessmentPassingScreen = (props: Props) => {
     flowId: flowParams.isFlow ? flowParams.flowId : null,
   })
 
-  const { toNextStep, toPrevStep, currentItem, items, userEvents, hasNextStep, hasPrevStep } = useStepperStateManager({
-    activityId: props.activityDetails.id,
-    eventId: props.eventId,
-  })
+  const { toNextStep, toPrevStep, currentItem, items, userEvents, hasNextStep, hasPrevStep, step } =
+    useStepperStateManager({
+      activityId: props.activityDetails.id,
+      eventId: props.eventId,
+    })
+
+  const prevStep = usePrevious(step)
 
   const isAllItemsSkippable = props.activityDetails.isSkippable
 
@@ -164,6 +167,19 @@ export const AssessmentPassingScreen = (props: Props) => {
     return toNextStep()
   }
 
+  const autoForward = () => {
+    if (!currentItem) {
+      return
+    }
+
+    if (!hasNextStep) {
+      return submitAnswers()
+    }
+
+    saveUserEventByType("NEXT", currentItem)
+    return toNextStep()
+  }
+
   const onBackButtonClick = () => {
     if (currentItem) {
       saveUserEventByType("PREV", currentItem)
@@ -216,6 +232,9 @@ export const AssessmentPassingScreen = (props: Props) => {
                 replaceText={replaceTextVariables}
                 watermark={props.appletDetails.watermark}
                 allowToSkipAllItems={isAllItemsSkippable}
+                step={step}
+                prevStep={prevStep}
+                autoForwardCallback={autoForward}
               />
             )}
           </Box>
