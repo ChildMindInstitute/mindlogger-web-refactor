@@ -7,6 +7,7 @@ import { Invitation, useInvitationQuery, useInvitationTranslation } from "~/enti
 import { InvitationAcceptButton } from "~/features/InvitationAccept"
 import { InvitationDeclineButton } from "~/features/InvitationDecline"
 import { Loader, Text } from "~/shared/ui"
+import { useCustomMediaQuery } from "~/shared/utils"
 
 interface FetchInvitationProps {
   keyParams: string
@@ -15,6 +16,7 @@ interface FetchInvitationProps {
 export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
   const { t } = useInvitationTranslation()
   const { isAuthenticated } = useAuthorizationGuard()
+  const { lessThanSM } = useCustomMediaQuery()
 
   const { isError, data, error, isLoading } = useInvitationQuery(keyParams)
 
@@ -42,7 +44,7 @@ export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          flexDirection="row"
+          flexDirection={lessThanSM ? "column" : "row"}
           gap="12px"
           margin="16px 0px">
           <InvitationAcceptButton invitationKey={keyParams} />
