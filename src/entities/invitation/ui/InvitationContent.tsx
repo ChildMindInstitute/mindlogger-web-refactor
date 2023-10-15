@@ -1,4 +1,4 @@
-import classNames from "classnames"
+import Box from "@mui/material/Box"
 
 import { useInvitationTranslation } from "../lib"
 
@@ -11,12 +11,12 @@ export const InvitationContent = ({ appletName, isUserAuthenticated }: Invitatio
   const { t } = useInvitationTranslation()
 
   return (
-    <div>
-      <div
+    <Box>
+      <Box
         className="invitationBody"
         dangerouslySetInnerHTML={{ __html: t("inviteContent.description", { displayName: appletName }) }}
       />
-      <div className={classNames("mb-3")}>
+      <Box margin="24px 0px">
         <ol>
           <li>{t("inviteContent.step1")}</li>
           <li>
@@ -24,10 +24,10 @@ export const InvitationContent = ({ appletName, isUserAuthenticated }: Invitatio
             {!isUserAuthenticated ? t("inviteContent.step2_1") : ""}
           </li>
           <li>
-            <div dangerouslySetInnerHTML={{ __html: t("inviteContent.step3", { displayName: appletName }) }} />
+            <Box dangerouslySetInnerHTML={{ __html: t("inviteContent.step3", { displayName: appletName }) }} />
           </li>
         </ol>
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 }

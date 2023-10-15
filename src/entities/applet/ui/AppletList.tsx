@@ -29,7 +29,7 @@ const AppletList = () => {
   if (isAppletsEmpty) {
     return (
       <Box display="flex" flex={1} alignItems="center" justifyContent="center">
-        <Text>No applets</Text>
+        <Text variant="body1">No applets</Text>
       </Box>
     )
   }
