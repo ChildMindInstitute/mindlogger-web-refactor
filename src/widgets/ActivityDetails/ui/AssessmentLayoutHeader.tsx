@@ -55,7 +55,10 @@ export const AssessmentLayoutHeader = (props: Props) => {
           display="flex"
           justifyContent={greaterThanSM ? "center" : "space-between"}
           marginBottom={greaterThanSM ? "8px" : "16px"}>
-          <Text color={Theme.colors.light.onSurface} sx={{ textAlign: greaterThanSM ? "center" : "left" }}>
+          <Text
+            variant="body1"
+            color={Theme.colors.light.onSurface}
+            sx={{ textAlign: greaterThanSM ? "center" : "left" }}>
             {greaterThanSM ? props.title : cutStringToLength(props.title, 30)}
           </Text>
           {!greaterThanSM && <SaveAndExitButton onClick={onSaveAndExitClick} />}

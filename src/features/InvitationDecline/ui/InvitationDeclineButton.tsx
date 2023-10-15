@@ -1,10 +1,9 @@
-import classNames from "classnames"
-import { useNavigate } from "react-router-dom"
+import Box from "@mui/material/Box"
 
 import { useDeclineInviteMutation, useInvitationTranslation } from "~/entities/invitation"
 import { ROUTES } from "~/shared/constants"
-import { useNotification } from "~/shared/ui"
-import Button from "~/shared/ui/Button"
+import { BaseButton, useNotification } from "~/shared/ui"
+import { useCustomNavigation } from "~/shared/utils"
 
 interface InvitationDeclineButtonProps {
   invitationKey: string
@@ -12,7 +11,7 @@ interface InvitationDeclineButtonProps {
 
 export const InvitationDeclineButton = ({ invitationKey }: InvitationDeclineButtonProps) => {
   const { t } = useInvitationTranslation()
-  const navigate = useNavigate()
+  const { navigate } = useCustomNavigation()
 
   const { showErrorNotification } = useNotification()
 
@@ -28,12 +27,14 @@ export const InvitationDeclineButton = ({ invitationKey }: InvitationDeclineButt
   }
 
   return (
-    <Button
-      onClick={onInviteDecline}
-      variant="danger"
-      className={classNames("mx-2", "mb-2", "invitation-buttons", "color-white")}
-      loading={isDeclineLoading}>
-      {t("buttons.declineInvitation")}
-    </Button>
+    <Box width="250px">
+      <BaseButton
+        type="button"
+        variant="contained"
+        color="error"
+        onClick={onInviteDecline}
+        isLoading={isDeclineLoading}
+        text={t("buttons.declineInvitation")}></BaseButton>
+    </Box>
   )
 }

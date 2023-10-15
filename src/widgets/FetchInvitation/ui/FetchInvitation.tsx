@@ -25,7 +25,9 @@ export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" textAlign="center">
-        <Text margin="12px">{t("loadingInvitation")}</Text>
+        <Text variant="body1" margin="12px">
+          {t("loadingInvitation")}
+        </Text>
         <Loader />
       </Box>
     )
@@ -36,7 +38,13 @@ export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
       invite={data?.data?.result}
       isUserAuthenticated={isAuthenticated}
       actionComponent={
-        <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="row"
+          gap="12px"
+          margin="16px 0px">
           <InvitationAcceptButton invitationKey={keyParams} />
           <InvitationDeclineButton invitationKey={keyParams} />
         </Box>

@@ -13,7 +13,7 @@ export const SaveAndExitButton = ({ onClick }: Props) => {
 
   return (
     <ButtonBase onClick={onClick}>
-      <Text color={Theme.colors.light.primary} fontSize="16px">
+      <Text variant="body1" color={Theme.colors.light.primary} fontSize="16px">
         {t("save_and_exit")}
       </Text>
     </ButtonBase>

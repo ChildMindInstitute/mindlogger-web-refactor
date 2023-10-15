@@ -72,14 +72,24 @@ export const AssessmentWelcomeScreen = (props: Props) => {
             height="124px"
           />
 
-          <Text fontSize="18px" fontWeight="400" color={Theme.colors.light.secondary} sx={{ marginTop: "24px" }}>
+          <Text
+            variant="body1"
+            fontSize="18px"
+            fontWeight="400"
+            color={Theme.colors.light.secondary}
+            sx={{ marginTop: "24px" }}>
             <ActivityMetaData activityLength={props.activityDetails.items.length} groupInProgress={groupInProgress} />
           </Text>
-          <Text fontSize="18px" fontWeight="700" color={Theme.colors.light.onSurface} margin="16px 0px">
+          <Text variant="body1" fontSize="18px" fontWeight="700" color={Theme.colors.light.onSurface} margin="16px 0px">
             {props.activityDetails.name}
           </Text>
 
-          <Text fontSize="18px" fontWeight="400" color={Theme.colors.light.onSurface} sx={{ textAlign: "center" }}>
+          <Text
+            variant="body1"
+            fontSize="18px"
+            fontWeight="400"
+            color={Theme.colors.light.onSurface}
+            sx={{ textAlign: "center" }}>
             {props.activityDetails.description}
           </Text>
         </Box>
