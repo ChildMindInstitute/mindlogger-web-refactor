@@ -67,6 +67,10 @@ export class MarkdownVariableReplacer {
       .replaceAll(/\[Time_Activity_Last_Completed]/gi, this.getLastResponseTime())
   }
 
+  private preprocessImageLinks = (markdown: string) => {
+    return markdown.replace(/(!\[.*\]\s*\(.*?) =\d*x\d*(\))/g, "$1$2")
+  }
+
   private getTimeElapsed = () => {
     const interval = intervalToDuration({
       start: this.lastResponseTime!,
@@ -104,24 +108,31 @@ export class MarkdownVariableReplacer {
   }
 
   public process = (markdown: string): string => {
-    const variableNames = this.extractVariables(markdown)
+    let updatedMarkdown = markdown
+
+    const variableNames = this.extractVariables(updatedMarkdown)
 
     try {
       variableNames.forEach(variableName => {
-        const updated = this.getReplaceValue(variableName)
-        markdown = this.updateMarkdown(variableName, updated, markdown)
+        const replaceValue = this.getReplaceValue(variableName)
+        updatedMarkdown = this.updateMarkdown(variableName, replaceValue, markdown)
       })
     } catch (error) {
       /* eslint-disable no-console */
       console.warn(error)
     }
 
-    const nestingVariableNames = this.extractVariables(markdown)
+    const nestingVariableNames = this.extractVariables(updatedMarkdown)
+
     if (nestingVariableNames.length) {
-      return this.process(markdown)
+      updatedMarkdown = this.process(updatedMarkdown)
     }
 
-    return this.parseSystemVariables(markdown)
+    updatedMarkdown = this.parseSystemVariables(updatedMarkdown)
+
+    updatedMarkdown = this.preprocessImageLinks(updatedMarkdown)
+
+    return updatedMarkdown
   }
 
   private escapeSpecialChars = (value: Answer) => {
