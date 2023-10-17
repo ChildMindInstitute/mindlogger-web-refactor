@@ -1,9 +1,10 @@
-import classNames from "classnames"
+import Box from "@mui/material/Box"
 
 import { InvitationDetails, useInvitationTranslation } from "../lib"
 import { InvitationContent } from "./InvitationContent"
 import { InvitationHeader } from "./InvitationHeader"
 
+import { Theme } from "~/shared/constants"
 import { Logo, PageMessage } from "~/shared/ui"
 
 interface InvitationProps {
@@ -24,21 +25,21 @@ export const Invitation = ({ invite, actionComponent, isUserAuthenticated }: Inv
   }
 
   return (
-    <div className={classNames("invitationBody")}>
+    <Box color={Theme.colors.light.onPrimaryContainer} textAlign="left">
       {invite && (
         <>
           <InvitationHeader appletName={invite.appletName} role={invite.role} />
-          <div className={classNames("mb-3")}>{actionComponent}</div>
+          {actionComponent}
           <InvitationContent appletName={invite.appletName} isUserAuthenticated={isUserAuthenticated} />
 
-          <div>
-            <div>
+          <Box margin="12px 0px">
+            <Box>
               <Logo size={{ width: 200, height: 80 }} />
-            </div>
+            </Box>
             <small>{t("inviteContent.footer")}</small>
-          </div>
+          </Box>
         </>
       )}
-    </div>
+    </Box>
   )
 }

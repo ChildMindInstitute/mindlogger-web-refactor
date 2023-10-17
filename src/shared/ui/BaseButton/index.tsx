@@ -12,6 +12,7 @@ type Props = {
 
   text: string
   onClick?: () => void
+  color?: "primary" | "secondary" | "error" | "info" | "success" | "warning"
 }
 
 export const BaseButton = (props: Props) => {
@@ -21,6 +22,7 @@ export const BaseButton = (props: Props) => {
       variant={props.variant}
       disabled={props.isLoading}
       onClick={props.onClick}
+      color={props.color ?? undefined}
       sx={{
         borderRadius: "100px",
         maxWidth: "400px",

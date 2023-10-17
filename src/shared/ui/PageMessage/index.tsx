@@ -1,6 +1,6 @@
-import classNames from "classnames"
+import Box from "@mui/material/Box"
 
-import "./style.scss"
+import { Text } from "../Text"
 
 interface PageMessageProps {
   message: string
@@ -8,8 +8,10 @@ interface PageMessageProps {
 
 export const PageMessage = ({ message }: PageMessageProps) => {
   return (
-    <div className={classNames("d-flex", "justify-content-center", "align-items-center", "text-center")}>
-      <div className={"page-message"}>{message}</div>
-    </div>
+    <Box display="flex" justifyContent="center" alignItems="center" textAlign="center">
+      <Text variant="body1" fontSize="24px" margin="16px 0px">
+        {message}
+      </Text>
+    </Box>
   )
 }
