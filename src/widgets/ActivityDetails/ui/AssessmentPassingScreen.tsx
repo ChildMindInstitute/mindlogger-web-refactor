@@ -1,15 +1,18 @@
+import { useEffect } from "react"
+
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 
 import { useAnswer } from "../model/hooks/useAnswers"
 import { useEntityComplete } from "../model/hooks/useEntityComplete"
 import { useStepperStateManager } from "../model/hooks/useStepperStateManager"
-import { validateItem } from "../model/validateItem"
+import { validateIsItemWithoutAnswer, validateIsNumericOnly, validateItem } from "../model/validateItem"
 import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
 import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
 import {
   ActivityCardItem,
+  ActivityItemType,
   ItemCardButton,
   activityModel,
   usePublicSaveAnswerMutation,
@@ -19,7 +22,7 @@ import {
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
 import { NotificationCenter, useNotification } from "~/shared/ui"
-import { stringContainsOnlyNumbers, useCustomTranslation, useFlowType, usePrevious } from "~/shared/utils"
+import { useCustomTranslation, useFlowType, usePrevious } from "~/shared/utils"
 
 type Props = {
   eventId: string
@@ -89,7 +92,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     },
   })
 
-  const submitAnswers = () => {
+  function submitAnswers() {
     if (currentItem) {
       saveUserEventByType("DONE", currentItem)
     }
@@ -103,32 +106,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     return props.isPublic ? publicSaveAnswer(answer) : saveAnswer(answer)
   }
 
-  const validateIsItemWithoutAnswer = (currentItem: activityModel.types.ActivityEventProgressRecord) => {
-    const isMessageItem = currentItem.responseType === "message"
-    const isAudioPlayerItem = currentItem.responseType === "audioPlayer"
-
-    const isItemWithoutAnswer = isMessageItem || isAudioPlayerItem
-
-    return isItemWithoutAnswer
-  }
-
-  const validateIsNumericOnly = (currentItem: activityModel.types.ActivityEventProgressRecord) => {
-    const isTextItem = currentItem.responseType === "text"
-
-    if (!isTextItem) {
-      return false
-    }
-
-    const isNumericOnly = currentItem.config.numericalResponseRequired
-
-    if (isNumericOnly) {
-      return !stringContainsOnlyNumbers(currentItem.answer[0])
-    }
-
-    return false
-  }
-
-  const onNextButtonClick = () => {
+  function onNextButtonClick() {
     if (!currentItem) {
       return
     }
@@ -167,20 +145,20 @@ export const AssessmentPassingScreen = (props: Props) => {
     return toNextStep()
   }
 
-  const autoForward = () => {
+  function autoForward() {
     if (!currentItem) {
       return
     }
 
     if (!hasNextStep) {
-      return submitAnswers()
+      return
     }
 
     saveUserEventByType("NEXT", currentItem)
     return toNextStep()
   }
 
-  const onBackButtonClick = () => {
+  function onBackButtonClick() {
     if (currentItem) {
       saveUserEventByType("PREV", currentItem)
     }
@@ -195,7 +173,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     respondentMeta: props.respondentMeta,
   })
 
-  const onKeyDownHandler = (key: string) => {
+  function onKeyDownHandler(key: string) {
     if (key === "Enter") {
       return onNextButtonClick()
     }
