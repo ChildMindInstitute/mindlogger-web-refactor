@@ -25,8 +25,8 @@ const Footer = () => {
         <a className="mx-1 mx-md-4" href="https://mindlogger.org/terms" target="_blank" rel="noreferrer">
           Terms of Service
         </a>
-        <a className="mx-4" href="https://mindlogger.org/" target="_blank" rel="noreferrer">
-          Credits
+        <a className="mx-4" href="https://help.mindlogger.org/" target="_blank" rel="noreferrer">
+          Support
         </a>
         {buildVersion && <span className="text-secondary build-label">{buildVersion}</span>}
       </div>
