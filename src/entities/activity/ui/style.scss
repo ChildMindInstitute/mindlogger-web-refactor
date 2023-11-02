@@ -1,0 +1,66 @@
+@use "../../../app/bootstrap-override.scss" as variables;
+
+.button-shadow {
+  box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+}
+
+.ds-activity-button:disabled {
+  opacity: 1 !important;
+  background-color: rgba(230, 230, 230, 0.9) !important;
+  pointer-events: all !important;
+}
+
+.ds-activity-button {
+  background: white !important;
+  border: none;
+  display: flex !important;
+  margin: 0.5rem 0em;
+  text-decoration: none !important;
+  transition: all 0.2s;
+}
+
+.ds-activity-button:hover {
+  background: #e6e6e6 !important;
+}
+
+.ds-activity-button .activity-image {
+  align-self: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+.ds-activity-button .activity-recomended-image {
+  align-self: center;
+  min-width: 64px;
+  width: 92px;
+}
+.ds-activity-button .activity-data {
+  flex-grow: 1;
+  margin: 10px 0px;
+}
+
+.ds-activity-button .activity-name-date {
+  font-weight: 500;
+  font-size: 22px;
+}
+
+.activity-title-active {
+  color: variables.$dark-blue;
+}
+.activity-title-disabled {
+  color: variables.$secondary;
+}
+
+.ds-activity-button .activity-description {
+  font-weight: 500;
+  font-size: 16px;
+  margin-top: 5px;
+  color: grey;
+}
+
+.navigator-button {
+  border-radius: 36px !important;
+}

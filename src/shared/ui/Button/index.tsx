@@ -13,7 +13,7 @@ type BasicButtonProps = ButtonProps &
 
 const BasicButton = ({ children, loading, className, defaultSize, ...rest }: BasicButtonProps) => {
   return (
-    <Button {...rest} className={classNames(className, { "default-button-size": defaultSize })}>
+    <Button {...rest} className={classNames(className, { "default-button-size": defaultSize }, "default-button-style")}>
       {!loading ? children : <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />}
     </Button>
   )

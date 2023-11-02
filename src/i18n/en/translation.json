@@ -1,6 +1,27 @@
 {
   "translation": {
     "downloadMobile": "Download the version for mobile devices:",
+    "about": "About",
+    "time_to_complete": "Time to complete",
+    "time_to_complete_hm": "Time to complete: {{hours}} hours and {{minutes}} minutes",
+    "hours" : "hours",
+    "please": "Please",
+    "login": "Login",
+    "or": "or",
+    "singUp": "Sign Up",
+    "mobileOnly": "Mobile only",
+
+    "wrondLinkParametrError": "You have reached this URL in error. Please reach out to the organizer of this applet for further assistance.",
+    "activity_due_date": {
+      "available_all_day": "Available: All day",
+      "scheduled_at": "Scheduled At",
+      "available": "Available From",
+      "to": "To",
+      "day": "day",
+      "days": "days",
+      "am": "AM"
+    },
+
     "Language": {
       "english": "English",
       "french": "French"
@@ -10,9 +31,46 @@
       "passwordMinLength": "Password must be at least 6 characters.",
       "passwordsUnmatched": "Passwords Do Not Match",
       "emailRequired": "Email address is required.",
-      "invalidEmail": "Invalid email",
+      "invalidEmail": "Email must be valid.",
       "firstNameRequired": "First name is required.",
-      "lastNameRequired": "Last name is required."
+      "lastNameRequired": "Last name is required.",
+      "passwordShouldNotContainSpaces": "Password should not contain spaces."
+    },
+
+    "invitation": {
+      "loadingInvitation": "Loading Invitation",
+      "invitationRemoved": "Invitation Removed",
+      "networkError": "Network Error. Return ",
+      "invitationAlreadyRemoved": "Your invitation has already been removed.",
+      "invitationAlreadyAccepted": "Invitation has already been accepted",
+      "notAssociatedAccount": "This invitation is not associated with the account you are currently logged into. Please log in to the account associated with the email you received the invitation.",
+      "invitationDeclined": "Invitation has been declined",
+      "home": "Home",
+      "invitationAccepted": "Invitation Accepted",
+      "viewInvitation": "to View Invitation",
+      "acceptInvitation": "to Accept this Invitation!",
+      "declineInvitation": "to Decline This Invitation",
+      "notFound": "The invite link is either invalid or no long active.",
+      "buttons": {
+        "acceptInvitation": "Accept Invitation",
+        "declineInvitation": "Decline Invitation"
+      },
+      "inviteContent": {
+        "welcome": "Welcome to ",
+        "title": "You have been invited to become a {{role}} of ",
+        "toAccept": "To accept this invitation, click below:",
+        "description": "After you have accepted the invitation, you will be able to access <strong>{{displayName}}</strong> in the free MindLogger app on your mobile device, if you follow three simple steps (see the <a target='_blank' href='https://mindlogger.org//guides/user-guide.html'>user guide</a> for greater detail):",
+        "step1": "Install the MindLogger app on your mobile device, if it isn’t already installed.",
+        "step2": "Open the MindLogger app on your mobile device, and log in",
+        "step2_1": " (if you have a MindLogger account) or sign up (if you are new to MindLogger). To sign up, tap “New User” on the login screen, and enter the email address where you received this email invitation.",
+        "step3": "Tap <strong>{{displayName}}</strong> on the MindLogger home screen and you are ready to go! If <strong>{{displayName}}</strong> does not appear, refresh the screen by sliding your finger downwards from the top, and a spinning wheel should appear while loading <strong>{{displayName}}</strong>.",
+        "footer": "The Child Mind Institute is the creator of MindLogger, a platform for creating applets, but is not responsible for applet content created by outside parties.",
+        "loading": "Loading invite link",
+        "reviewers": "Users who can see your data for this applet:",
+        "managers": "Users who can change this applet's settings, including who can access your data:",
+        "coordinators": "Users who can change this applet's settings, but who cannot change who can see your data:",
+        "notFound": "The invite link is either invalid or no long active."
+      }
     },
 
     "Login": {
@@ -30,9 +88,7 @@
       "errorMessage": "Incorrect password if that user exists.",
       "logging": "Loggin in..."
     },
-    "About": {
-      "about": "About"
-    },
+
     "SignUp": {
       "title": "Sign up",
       "submit": "Submit",
@@ -44,7 +100,7 @@
       "signUpError": "Sign up failed. Email may already be in use.",
       "accountMessage": " Don't have an account? ",
       "forgotPassword": " Forgot Password?",
-      "create": " Create One ",
+      "create": " Create Account",
       "reset": " Reset it",
       "passwordsUnmatched": "Passwords Do Not Match",
       "account": "Already have an account?",
@@ -70,7 +126,7 @@
       "settingsTitle": "Change Password",
       "oldPassword": "Old Password",
       "newPassword": "New Password",
-      "success": "Success",
+      "success": "Password is updated successfully",
       "confirmPassword": "Confirm Password",
       "title": "Create New Password",
       "formTitle": "Create the new password for {{email}}",
@@ -93,54 +149,6 @@
     "Profile": {
       "title": " Download MindLogger to get started.",
       "description": " Thank you for creating an account with MindLogger. Download MindLogger on an iOS or Android device to get started."
-    },
-    "Invitation": {
-      "please": "Please",
-      "login": "Login",
-      "or": "or",
-      "singUp": "Sign Up",
-      "viewInvitation": "to View Invitation"
-    },
-    "AcceptInvitation": {
-      "please": "Please",
-      "login": "Login",
-      "or": "or",
-      "singUp": "Sign Up",
-      "acceptInvitation": "to Accept this Invitation!"
-    },
-    "DeclineInvitation": {
-      "please": "Please",
-      "login": "Login",
-      "or": "or",
-      "singUp": "Sign Up",
-      "declineInvitation": "to Decline This Invitation"
-    },
-    "InvitationText": {
-      "loadingInvitation": "Loading Invitation",
-      "invitationRemoved": "Invitation Removed",
-      "networkError": "Network Error. Return ",
-      "invitationAlreadyRemoved": "Your invitation has already been removed.",
-      "home": "Home",
-      "acceptInvitation": "Invitation Accepted"
-    },
-    "InviteLink": {
-      "welcome": "Welcome to <strong>{{displayName}}</strong>!",
-      "title": "You have been invited to become a user of <strong>{{displayName}}</strong>.<br/>To accept this invitation, click below:",
-      "description": "After you have accepted the invitation, you will be able to access <strong>{{displayName}}</strong> in the free MindLogger app on your mobile device, if you follow three simple steps (see the <a target='_blank' href='https://mindlogger.org//guides/user-guide.html'>user guide</a> for greater detail):<br/>",
-      "step1": "<ol><li>Install the MindLogger app on your mobile device, if it isn’t already installed.</li>",
-      "step2": "Open the MindLogger app on your mobile device, and log in",
-      "step2_1": " (if you have a MindLogger account) or sign up (if you are new to MindLogger). To sign up, tap “New User” on the login screen, and enter the email address where you received this email invitation.",
-      "step3": "<li>Tap <strong>{{displayName}}</strong> on the MindLogger home screen and you are ready to go! If <strong>{{displayName}}</strong> does not appear, refresh the screen by sliding your finger downwards from the top, and a spinning wheel should appear while loading <strong>{{displayName}}</strong>.</li></ol>",
-      "footer": "The Child Mind Institute is the creator of MindLogger, a platform for creating applets, but is not responsible for applet content created by outside parties.",
-      "loading": "Loading invite link",
-      "reviewers": "Users who can see your data for this applet:",
-      "managers": "Users who can change this applet's settings, including who can access your data:",
-      "coordinators": "Users who can change this applet's settings, but who cannot change who can see your data:",
-      "notFound": "The invite link is either invalid or no long active."
-    },
-    "InvitationButtons": {
-      "acceptInvitation": "Accept Invitation",
-      "declineInvitation": "Decline Invitation"
     },
     "Navbar": {
       "mindLogger": "MindLogger",
@@ -207,10 +215,6 @@
       "fill_out_fields": "Please fill out the required fields"
     },
     "no_markdown": "The authors of this applet have not provided any information!",
-    "no_applets": "You currently do not have any applets.",
-    "timed_activity":{
-      "time_to_complete": "Time to complete",
-      "hours" : "hours"
-    }
+    "no_applets": "You currently do not have any applets."
   }
 }

@@ -5,6 +5,7 @@ import {
   PasswordRecoveryApprovalSuccessResponse,
   PasswordRecoverySuccessResponse,
   RecoveryPasswordApprovalPayload,
+  RecoveryPasswordLinkHealthcheckPayload,
   RecoveryPasswordPayload,
   RefreshTokenPayload,
   RefreshTokenSuccessResponse,
@@ -27,7 +28,7 @@ function authorizationService() {
       }
 
       const body = {
-        deviceId: "someid",
+        deviceId: null,
       }
 
       return axiosService.post("/auth/logout", body, { headers })
@@ -39,6 +40,11 @@ function authorizationService() {
 
     recoveryPassword(data: RecoveryPasswordPayload) {
       return axiosService.post<PasswordRecoverySuccessResponse>(`/users/me/password/recover`, data)
+    },
+    recoveryLinkHealthCheck(params: RecoveryPasswordLinkHealthcheckPayload) {
+      return axiosService.get(`/users/me/password/recover/healthcheck`, {
+        params: params,
+      })
     },
 
     approveRecoveryPassword(data: RecoveryPasswordApprovalPayload) {

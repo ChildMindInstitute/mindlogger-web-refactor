@@ -13,11 +13,7 @@ export const ForgotPasswordForm = () => {
 
   const form = useCustomForm({ defaultValues: { email: "" } }, ForgotPasswordSchema)
 
-  const {
-    handleSubmit,
-    formState: { isValid },
-    watch,
-  } = form
+  const { handleSubmit, watch } = form
 
   const { mutate: recoveryPassword, isLoading, isSuccess, error } = useRecoveryPasswordMutation()
 
@@ -31,13 +27,13 @@ export const ForgotPasswordForm = () => {
         <p>{t("formTitle")}</p>
       </Container>
 
-      <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
+      <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="email" />
 
       <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
       <Container className={classNames("mt-3")}>
         {!isSuccess && (
-          <BasicButton type="submit" variant="primary" disabled={!isValid || isLoading} loading={isLoading} defaultSize>
+          <BasicButton type="submit" variant="primary" disabled={isLoading} loading={isLoading} defaultSize>
             {t("button")}
           </BasicButton>
         )}

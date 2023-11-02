@@ -16,7 +16,8 @@ export interface LogoutPayload {
 
 export interface SignupPayload {
   email: string
-  fullName: string
+  firstName: string
+  lastName: string
   password: string
 }
 
@@ -24,6 +25,11 @@ export type SignupSuccessResponse = BaseSuccessResponse<UserDTO>
 
 export interface RecoveryPasswordPayload {
   email: string
+}
+
+export type RecoveryPasswordLinkHealthcheckPayload = {
+  email: string
+  key: string
 }
 
 export type PasswordRecoverySuccessResponse = BaseSuccessResponse<UserDTO>
@@ -56,7 +62,8 @@ interface AuthorizationDTO {
 }
 
 interface UserDTO {
-  id: number
-  fullName: string
+  id: string
+  firstName: string
+  lastName: string
   email: string
 }

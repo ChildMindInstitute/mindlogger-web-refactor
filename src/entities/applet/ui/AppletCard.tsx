@@ -1,19 +1,29 @@
-import { Applet } from "../lib/applet.schema"
+import { useNavigate } from "react-router-dom"
+
+import { AppletListItem } from "../lib"
 
 import { CustomCard } from "~/shared/ui"
+import { Mixpanel, ROUTES } from "~/shared/utils"
 
 interface AppletCardProps {
-  applet: Applet
+  applet: AppletListItem
 }
 
 const AppletCard = ({ applet }: AppletCardProps) => {
-  const onAppletCardClick = () => {}
+  const navigate = useNavigate()
+
+  const onAppletCardClick = () => {
+    navigate(ROUTES.activityList.navigateTo(applet.id))
+
+    Mixpanel.track("Applet click")
+  }
 
   return (
     <CustomCard
+      type="link"
       id={applet.id}
       title={applet.displayName}
-      description={applet.description.en}
+      description={applet.description}
       imageSrc={applet.image}
       onClick={onAppletCardClick}
     />

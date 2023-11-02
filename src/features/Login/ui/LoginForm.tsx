@@ -7,15 +7,28 @@ import { LoginSchema, TLoginForm } from "../model/login.schema"
 
 import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
 import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
-import { ROUTES, secureTokensStorage, useCustomForm, usePasswordType } from "~/shared/utils"
+import {
+  Mixpanel,
+  ROUTES,
+  secureTokensStorage,
+  secureUserPrivateKeyStorage,
+  useCustomForm,
+  useEncryption,
+  usePasswordType,
+} from "~/shared/utils"
 
-export const LoginForm = () => {
+interface LoginFormProps {
+  locationState?: Record<string, unknown>
+}
+
+export const LoginForm = ({ locationState }: LoginFormProps) => {
   const { t } = useLoginTranslation()
   const navigate = useNavigate()
 
   const [passwordType, onPasswordIconClick] = usePasswordType()
 
   const { setUser } = userModel.hooks.useUserState()
+  const { generateUserPrivateKey } = useEncryption()
 
   const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
   const {
@@ -28,16 +41,36 @@ export const LoginForm = () => {
     isLoading,
     error,
   } = useLoginMutation({
-    onSuccess(data) {
-      setUser(data.data.result.user)
+    onSuccess(data, variables) {
+      const userParams = {
+        userId: data.data.result.user.id,
+        email: data.data.result.user.email,
+        password: variables.password,
+      }
 
+      const userPrivateKey = generateUserPrivateKey(userParams)
+      secureUserPrivateKeyStorage.setUserPrivateKey(userPrivateKey)
+
+      setUser(data.data.result.user)
       secureTokensStorage.setTokens(data.data.result.token)
-      navigate(ROUTES.dashboard.path)
+
+      if (locationState?.isInvitationFlow) {
+        navigate(locationState.backRedirectPath as string)
+      } else {
+        navigate(ROUTES.applets.path)
+      }
+
+      Mixpanel.track("Login Successful")
+      Mixpanel.login(data.data.result.user.id)
     },
   })
 
   const onLoginSubmit = (data: TLoginForm) => {
     login(data as ILoginPayload)
+  }
+
+  const onLoginButtonPress = () => {
+    Mixpanel.track("Login Button click")
   }
 
   return (
@@ -65,6 +98,7 @@ export const LoginForm = () => {
         <BasicButton
           className={classNames("mt-3")}
           type="submit"
+          onClick={onLoginButtonPress}
           variant="primary"
           disabled={!isValid || isLoading}
           loading={isLoading}

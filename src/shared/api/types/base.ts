@@ -1,9 +1,5 @@
-interface Messages {
-  en: string
-}
-
 interface Result {
-  message: Messages
+  message: string
   path: string[]
   type: string
 }

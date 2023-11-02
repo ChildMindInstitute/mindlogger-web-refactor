@@ -15,7 +15,7 @@ const ProfilePage = () => {
       <div className="text-center my-2 px-3">
         <div className="d-flex justify-content-center align-items-center">
           <Avatar />
-          <h1>{user?.fullName}</h1>
+          <h1>{`${user?.firstName} ${user?.lastName}`}</h1>
         </div>
         <hr></hr>
         <div>{t("description")}</div>

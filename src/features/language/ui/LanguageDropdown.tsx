@@ -33,11 +33,13 @@ const LanguageDropdown = ({ onSelectExtended }: LanguageDropdownProps) => {
   }, [t, preparedLanguageList])
 
   return (
-    <Dropdown
-      title={language === SupportableLanguage.English ? t("english") : t("french")}
-      options={preparedLanguageOptions}
-      onSelect={onSelect}
-    />
+    <div data-testid="header-language-dropdown">
+      <Dropdown
+        title={language === SupportableLanguage.English ? t("english") : t("french")}
+        options={preparedLanguageOptions}
+        onSelect={onSelect}
+      />
+    </div>
   )
 }
 

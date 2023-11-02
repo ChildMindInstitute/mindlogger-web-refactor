@@ -1,6 +1,6 @@
-import { UseTranslationOutput, useCustomTranslation } from "~/shared/utils"
+import { useCustomTranslation } from "~/shared/utils"
 
-export const useNavbarTranslation = (): UseTranslationOutput => {
+export const useNavbarTranslation = () => {
   const { t, i18n } = useCustomTranslation({ keyPrefix: "Navbar" })
 
   return { t, i18n }

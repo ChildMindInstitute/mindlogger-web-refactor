@@ -1,27 +1,66 @@
 import { useState } from "react"
 
 import classNames from "classnames"
+import { useNavigate } from "react-router-dom"
 
 import { TERMS_URL } from "../lib/constants"
 import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
-import { useSignupMutation } from "~/entities/user"
+import { useLoginMutation, userModel, useSignupMutation } from "~/entities/user"
 import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
-import { useCustomForm, usePasswordType } from "~/shared/utils"
+import {
+  Mixpanel,
+  secureTokensStorage,
+  secureUserPrivateKeyStorage,
+  useCustomForm,
+  useEncryption,
+  usePasswordType,
+} from "~/shared/utils"
 
-export const SignupForm = () => {
+interface SignupFormProps {
+  locationState?: Record<string, unknown>
+}
+
+export const SignupForm = ({ locationState }: SignupFormProps) => {
   const { t } = useSignupTranslation()
+  const navigate = useNavigate()
+
   const [passwordType, onPasswordIconClick] = usePasswordType()
   const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType()
 
   const [terms, setTerms] = useState<boolean>(false)
+  const { setUser } = userModel.hooks.useUserState()
 
   const form = useCustomForm(
     { defaultValues: { email: "", firstName: "", lastName: "", password: "", confirmPassword: "" } },
     SignupFormSchema,
   )
   const { handleSubmit, reset } = form
+  const { generateUserPrivateKey } = useEncryption()
+
+  const { mutate: login } = useLoginMutation({
+    onSuccess(data, variables) {
+      const { user, token } = data.data.result
+
+      const userParams = {
+        userId: data.data.result.user.id,
+        email: data.data.result.user.email,
+        password: variables.password,
+      }
+
+      const userPrivateKey = generateUserPrivateKey(userParams)
+      secureUserPrivateKeyStorage.setUserPrivateKey(userPrivateKey)
+
+      setUser(user)
+      secureTokensStorage.setTokens(token)
+
+      Mixpanel.track("Login Successful")
+      Mixpanel.login(data.data.result.user.id)
+
+      return navigate(locationState?.backRedirectPath as string)
+    },
+  })
 
   const {
     mutate: signup,
@@ -30,13 +69,19 @@ export const SignupForm = () => {
     isLoading,
   } = useSignupMutation({
     onSuccess() {
+      if (locationState?.isInvitationFlow) {
+        const { email, password } = form.getValues()
+        login({ email, password })
+      }
+
+      Mixpanel.track("Account Creation complete")
+
       reset()
     },
   })
 
   const onSignupSubmit = (data: TSignupForm) => {
-    const { email, password, firstName, lastName } = data
-    return signup({ email, password, fullName: `${firstName} ${lastName}` })
+    return signup(data)
   }
 
   return (
@@ -77,7 +122,7 @@ export const SignupForm = () => {
         disabled={!terms || isLoading}
         defaultSize
         loading={isLoading}>
-        {t("title")}
+        {t("create")}
       </BasicButton>
     </BasicFormProvider>
   )

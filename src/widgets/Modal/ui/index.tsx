@@ -1,15 +1,20 @@
 import { Modal } from "react-bootstrap"
 
-import { BasicButton } from "~/shared/ui"
+import { BasicButton, Markdown } from "~/shared/ui"
+
+import "./style.scss"
 
 export interface CustomModalProps {
   show: boolean
   onHide: () => void
-  title?: string
-  label?: string
-  footerPrimaryButton?: string
+  title?: string | null
+  label?: string | null
+  footerPrimaryButton?: string | null
+  primaryButtonDisabled?: boolean
   onPrimaryButtonClick?: () => void
-  footerSecondaryButton?: string
+
+  footerSecondaryButton?: string | null
+  secondaryButtonDisabled?: boolean
   onSecondaryButtonClick?: () => void
 }
 
@@ -20,29 +25,35 @@ const CustomModal = (props: CustomModalProps) => {
     footerPrimaryButton,
     footerSecondaryButton,
     show,
+    primaryButtonDisabled,
+    secondaryButtonDisabled,
     onHide,
     onPrimaryButtonClick,
     onSecondaryButtonClick,
   } = props
 
   return (
-    <Modal show={show} onHide={onHide} animation={true}>
+    <Modal show={show} onHide={onHide} animation={true} className="modal-align-center">
       {title && (
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
       )}
-      {label && <Modal.Body>{label}</Modal.Body>}
+      {label && (
+        <Modal.Body>
+          <Markdown markdown={label} />
+        </Modal.Body>
+      )}
       {(footerPrimaryButton || footerSecondaryButton) && (
         <Modal.Footer>
-          {footerPrimaryButton && (
-            <BasicButton variant="primary" onClick={onPrimaryButtonClick}>
-              {footerPrimaryButton}
+          {footerSecondaryButton && (
+            <BasicButton variant="secondary" onClick={onSecondaryButtonClick} disabled={secondaryButtonDisabled}>
+              {footerSecondaryButton}
             </BasicButton>
           )}
-          {footerSecondaryButton && (
-            <BasicButton variant="secondary" onClick={onSecondaryButtonClick}>
-              {footerSecondaryButton}
+          {footerPrimaryButton && (
+            <BasicButton variant="primary" onClick={onPrimaryButtonClick} disabled={primaryButtonDisabled}>
+              {footerPrimaryButton}
             </BasicButton>
           )}
         </Modal.Footer>
