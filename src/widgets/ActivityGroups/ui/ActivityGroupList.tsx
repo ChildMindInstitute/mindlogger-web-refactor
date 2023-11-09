@@ -43,7 +43,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigator = useCustomNavigation()
 
-  const { data: completedEntities, isLoading: isCompletedEntitiesLoading } = useCompletedEntitiesQuery(
+  const { data: completedEntities, isFetching: isCompletedEntitiesFetching } = useCompletedEntitiesQuery(
     {
       appletId: props.appletDetails.id,
       version: props.appletDetails.version,
@@ -133,7 +133,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
 
   useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
 
-  if (!props.isPublic && isCompletedEntitiesLoading) {
+  if (isCompletedEntitiesFetching) {
     return <Loader />
   }
 
