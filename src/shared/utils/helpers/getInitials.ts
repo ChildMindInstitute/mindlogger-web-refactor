@@ -3,5 +3,10 @@ export const getInitials = (value: string) => {
     return value
   }
 
-  return `${value.split(" ")[0][0]}${value.split(" ")[1][0]}`
+  const splittedValues = value.split(" ")
+
+  const firstInitial = splittedValues[0][0] || ""
+  const secondInitial = splittedValues[1][0] || ""
+
+  return `${firstInitial}${secondInitial}`
 }
