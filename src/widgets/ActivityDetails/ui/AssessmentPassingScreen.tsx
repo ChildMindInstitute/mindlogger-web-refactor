@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 
-import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "../../../entities/activity/model/hooks"
 import { useAnswer } from "../model/hooks/useAnswers"
 import { useEntityComplete } from "../model/hooks/useEntityComplete"
 import { useStepperStateManager } from "../model/hooks/useStepperStateManager"
@@ -17,6 +16,7 @@ import {
   useSaveAnswerMutation,
   useTextVariablesReplacer,
 } from "~/entities/activity"
+import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "~/entities/activity/model/hooks"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
 import { NotificationCenter, useNotification } from "~/shared/ui"
