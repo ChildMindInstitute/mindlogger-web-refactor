@@ -1,8 +1,7 @@
-import { useEffect } from "react"
-
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 
+import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "../../../entities/activity/model/hooks"
 import { useAnswer } from "../model/hooks/useAnswers"
 import { useEntityComplete } from "../model/hooks/useEntityComplete"
 import { useStepperStateManager } from "../model/hooks/useStepperStateManager"
@@ -12,7 +11,6 @@ import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
 import {
   ActivityCardItem,
-  ActivityItemType,
   ItemCardButton,
   activityModel,
   usePublicSaveAnswerMutation,
@@ -63,6 +61,16 @@ export const AssessmentPassingScreen = (props: Props) => {
       activityId: props.activityDetails.id,
       eventId: props.eventId,
     })
+
+  const { saveActivityItemAnswer } = useSaveActivityItemAnswer({
+    activityId: props.activityDetails.id,
+    eventId: props.eventId,
+  })
+
+  const { saveSetAnswerUserEvent } = useSetAnswerUserEvent({
+    activityId: props.activityDetails.id,
+    eventId: props.eventId,
+  })
 
   const prevStep = usePrevious(step)
 
@@ -159,9 +167,24 @@ export const AssessmentPassingScreen = (props: Props) => {
   }
 
   function onBackButtonClick() {
-    if (currentItem) {
-      saveUserEventByType("PREV", currentItem)
+    if (!currentItem) {
+      return
     }
+
+    const hasConditionlLogic = currentItem.conditionalLogic
+
+    if (hasConditionlLogic) {
+      // If the current item participate in any conditional logic
+      // we need to reset the answer to the initial state
+
+      saveActivityItemAnswer(currentItem.id, [])
+      saveSetAnswerUserEvent({
+        ...currentItem,
+        answer: [],
+      })
+    }
+
+    saveUserEventByType("PREV", currentItem)
 
     return toPrevStep()
   }
