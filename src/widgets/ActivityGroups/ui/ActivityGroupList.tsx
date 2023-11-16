@@ -48,13 +48,13 @@ type NavigateToActivityDetailsPageProps = {
 
 export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
-  const { data: completedEntities, isLoading: isCompletedEntitiesLoading } = useCompletedEntitiesQuery(
+  const { data: completedEntities, isFetching: isCompletedEntitiesFetching } = useCompletedEntitiesQuery(
     {
       appletId: props.appletDetails.id,
       version: props.appletDetails.version,
       fromDate: getYYYYDDMM(subMonths(new Date(), 1)),
     },
-    { select: data => data.data.result },
+    { select: data => data.data.result, enabled: !props.isPublic },
   )
 
   const navigatator = useCustomNavigation()
@@ -174,7 +174,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
 
   useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
 
-  if (isCompletedEntitiesLoading) {
+  if (isCompletedEntitiesFetching) {
     return (
       <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
         <Spinner as="div" animation="border" role="status" aria-hidden="true" />
