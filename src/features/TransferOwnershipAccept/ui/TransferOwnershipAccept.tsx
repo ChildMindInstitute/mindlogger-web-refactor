@@ -5,6 +5,7 @@ import { useAcceptTransferOwnershipQuery } from "../api"
 
 import { useInvitationTranslation } from "~/entities/invitation"
 import { PageMessage } from "~/shared/ui"
+import { Mixpanel } from "~/shared/utils"
 
 type TransferOwnershipProps = {
   appletId: string
@@ -14,7 +15,14 @@ type TransferOwnershipProps = {
 export const TransferOwnershipAccept = ({ appletId, keyParam }: TransferOwnershipProps) => {
   const { t } = useInvitationTranslation()
 
-  const { isLoading, isError } = useAcceptTransferOwnershipQuery({ appletId, key: keyParam })
+  const { isLoading, isError } = useAcceptTransferOwnershipQuery(
+    { appletId, key: keyParam },
+    {
+      onSuccess() {
+        Mixpanel.track("Transfer Ownership Accepted")
+      },
+    },
+  )
 
   if (isLoading) {
     return (
