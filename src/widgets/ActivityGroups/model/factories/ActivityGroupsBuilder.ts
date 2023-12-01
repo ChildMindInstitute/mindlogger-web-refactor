@@ -23,6 +23,7 @@ import {
   MINUTES_IN_HOUR,
   MIDNIGHT_DATE,
   isTimeInInterval,
+  getHourMinute,
 } from "~/shared/utils"
 
 export interface IActivityGroupsBuilder {
@@ -208,11 +209,12 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       const accessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime
 
       const isCurrentTimeInTimeWindow = isScheduled
-        ? isTimeInInterval(
-            { hours: now.getHours(), minutes: now.getMinutes() },
-            event.availability.timeFrom!,
-            event.availability.timeTo!,
-          )
+        ? isTimeInInterval({
+            timeToCheck: getHourMinute(now),
+            intervalFrom: event.availability.timeFrom!,
+            intervalTo: event.availability.timeTo!,
+            including: "from",
+          })
         : null
 
       const conditionForAlwaysAvailable =

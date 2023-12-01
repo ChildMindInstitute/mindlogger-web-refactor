@@ -18,7 +18,7 @@ import {
 } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
-import { getYYYYDDMM, Mixpanel, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { formatToDtoDate, Mixpanel, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false
@@ -52,7 +52,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     {
       appletId: props.appletDetails.id,
       version: props.appletDetails.version,
-      fromDate: getYYYYDDMM(subMonths(new Date(), 1)),
+      fromDate: formatToDtoDate(subMonths(new Date(), 1)),
     },
     { select: data => data.data.result, enabled: !props.isPublic },
   )
