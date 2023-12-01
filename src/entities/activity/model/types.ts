@@ -65,6 +65,10 @@ export type ActivityEventState = Record<string, ActivityEventProgressState>
 
 export type CompletedEntitiesState = Record<string, number>
 
+export type EventCompletions = Record<string, number[]>
+
+export type CompletedEventEntities = Record<string, EventCompletions>
+
 // Payloads
 
 export type ClearActivityItemsProgresByIdPayload = {
