@@ -5,7 +5,6 @@ import {
   ClearActivityItemsProgresByIdPayload,
   CompletedEntitiesState,
   CompletedEventEntities,
-  GroupsProgressState,
   InProgressEntity,
   SaveActivityItemAnswerPayload,
   SetActivityEventProgressStep,
@@ -14,8 +13,10 @@ import {
   UpsertActionPayload,
 } from "./types"
 
+import { Progress } from "~/abstract/lib"
+
 type InitialActivityState = {
-  groupsInProgress: GroupsProgressState
+  groupsInProgress: Progress
   activityEventProgress: ActivityEventState
 
   completedEntities: CompletedEntitiesState
