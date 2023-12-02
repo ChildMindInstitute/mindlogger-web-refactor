@@ -42,13 +42,13 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
         <small>
           {`${t("activity_due_date.available")} ${convert(activity.availableFrom!)} ${t(
             "activity_due_date.to",
-          )} ${convert(activity.availableTo!)} ${isSpreadToNextDay ? t("activity_due_date:the_following_day") : ""}`}
+          )} ${convert(activity.availableTo!)} ${isSpreadToNextDay ? t("activity_due_date.the_following_day") : ""}`}
         </small>
       )}
 
       {hasAvailableToOnly && (
         <small>{`${t("activity_due_date.to")} ${convert(activity.availableTo!)} ${
-          isSpreadToNextDay ? t("activity_due_date:the_following_day") : ""
+          isSpreadToNextDay ? t("activity_due_date.the_following_day") : ""
         }`}</small>
       )}
 
