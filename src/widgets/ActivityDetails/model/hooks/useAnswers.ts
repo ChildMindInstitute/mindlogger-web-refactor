@@ -8,9 +8,10 @@ import { getScheduledTimeFromEvents } from "../getScheduledTimeFromEvents"
 import { mapAlerts, mapToAnswers } from "../mappers"
 import { prepareItemAnswers } from "../prepareItemAnswers"
 
-import { ActivityPipelineType, activityModel, useEncryptPayload } from "~/entities/activity"
+import { ActivityPipelineType, EventProgressState } from "~/abstract/lib"
+import { activityModel, useEncryptPayload } from "~/entities/activity"
 import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
-import { getHHMM, getYYYYDDMM, secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
+import { formatToDtoDate, formatToDtoTime, secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
 
 type UseAnswerProps = {
   appletDetails: AppletDetailsDTO
@@ -34,7 +35,7 @@ export const useAnswer = (props: UseAnswerProps) => {
 
   const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  const getSubmitId = useCallback((groupInProgress: activityModel.types.ProgressState): string => {
+  const getSubmitId = useCallback((groupInProgress: EventProgressState): string => {
     const isFlow = groupInProgress.type === ActivityPipelineType.Flow
 
     return isFlow ? groupInProgress.executionGroupKey : uuidV4()
@@ -107,8 +108,8 @@ export const useAnswer = (props: UseAnswerProps) => {
           endTime: new Date().getTime(),
           identifier: encryptedIdentifier,
           scheduledEventId: props.eventId,
-          localEndDate: getYYYYDDMM(now),
-          localEndTime: getHHMM(now),
+          localEndDate: formatToDtoDate(now),
+          localEndTime: formatToDtoTime(now),
         },
         alerts: preparedAlerts,
         client: {

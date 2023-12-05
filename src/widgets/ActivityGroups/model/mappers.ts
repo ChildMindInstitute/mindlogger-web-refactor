@@ -1,6 +1,7 @@
 import { Activity, ActivityFlow } from "../lib"
 
-import { ActivityPipelineType, ActivityType } from "~/entities/activity"
+import { ActivityPipelineType } from "~/abstract/lib"
+import { ActivityType } from "~/entities/activity"
 import { ActivityFlowDTO, AppletDetailsActivityDTO } from "~/shared/api"
 
 export const mapActivitiesFromDto = (dtos: AppletDetailsActivityDTO[]): Activity[] => {
