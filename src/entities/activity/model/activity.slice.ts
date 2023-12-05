@@ -4,7 +4,7 @@ import {
   ActivityEventState,
   ClearActivityItemsProgresByIdPayload,
   CompletedEntitiesState,
-  GroupsProgressState,
+  CompletedEventEntities,
   InProgressEntity,
   SaveActivityItemAnswerPayload,
   SetActivityEventProgressStep,
@@ -13,17 +13,21 @@ import {
   UpsertActionPayload,
 } from "./types"
 
+import { Progress } from "~/abstract/lib"
+
 type InitialActivityState = {
-  groupsInProgress: GroupsProgressState
+  groupsInProgress: Progress
   activityEventProgress: ActivityEventState
 
   completedEntities: CompletedEntitiesState
+  completions: CompletedEventEntities
 }
 
 const initialState: InitialActivityState = {
   groupsInProgress: {},
   activityEventProgress: {},
   completedEntities: {},
+  completions: {},
 }
 
 const activitySlice = createSlice({
@@ -103,7 +107,22 @@ const activitySlice = createSlice({
 
       const completedEntities = state.completedEntities ?? {}
 
-      completedEntities[entityId] = new Date().getTime()
+      const completions = state.completions ?? {}
+
+      const now = new Date().getTime()
+
+      completedEntities[entityId] = now
+
+      if (!completions[entityId]) {
+        completions[entityId] = {}
+      }
+
+      const entityCompletions = completions[entityId]
+
+      if (!entityCompletions[eventId]) {
+        entityCompletions[eventId] = []
+      }
+      entityCompletions[eventId].push(now)
     },
   },
 })

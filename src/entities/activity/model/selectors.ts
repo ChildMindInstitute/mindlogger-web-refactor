@@ -9,3 +9,5 @@ export const activityEventProgressSelector = createSelector(
   activity => activity.activityEventProgress,
 )
 export const completedEntitiesSelector = createSelector(activitySelector, activity => activity.completedEntities)
+
+export const entityCompletionsSelector = createSelector(activitySelector, activity => activity.completions)

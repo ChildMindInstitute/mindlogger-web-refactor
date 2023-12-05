@@ -1,5 +1,3 @@
-import { Logo } from "~/shared/ui"
-
 import "./style.scss"
 
 const Footer = () => {
