@@ -2,6 +2,7 @@ import Avatar from "@mui/material/Avatar"
 import Box from "@mui/material/Box"
 import { SxProps, Theme as MuiTheme } from "@mui/material/styles"
 import Typography from "@mui/material/Typography"
+import { addDays, startOfDay } from "date-fns"
 
 import { ActivityListItem, ActivityStatus } from "../../lib"
 
@@ -24,9 +25,13 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   const hasAvailableFromTo = isStatusScheduled
 
-  const hasAvailableToOnly = isStatusAvailable || isStatusInProgress
+  const hasAvailableToOnly = isStatusAvailable
 
   const hasTimeToComplete = isStatusInProgress && activity.isTimerSet && !!activity.timeLeftToComplete
+
+  const tomorrow = addDays(startOfDay(new Date()), 1)
+
+  const isSpreadToNextDay = !!activity.availableTo && activity.availableTo > tomorrow
 
   const isEntityAlwaysAvailable = activity.isAlwaysAvailable
 
@@ -60,7 +65,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
         <Typography variant="body1" sx={timeStatusLabelSx}>
           {`${t("activity_due_date.available")} ${formatDate(activity.availableFrom!)} ${t(
             "activity_due_date.to",
-          )} ${formatDate(activity.availableTo!)}`}
+          )} ${formatDate(activity.availableTo!)} ${isSpreadToNextDay ? t("activity_due_date.the_following_day") : ""}`}
         </Typography>
       </Box>
     )
@@ -72,7 +77,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
         <Avatar src={ClockIcon} sx={{ width: "24px", height: "24px" }} />
         <Typography variant="body1" sx={timeStatusLabelSx}>{`${t("activity_due_date.to")} ${formatDate(
           activity.availableTo!,
-        )}`}</Typography>
+        )} ${isSpreadToNextDay ? t("activity_due_date.the_following_day") : ""}`}</Typography>
       </Box>
     )
   }
