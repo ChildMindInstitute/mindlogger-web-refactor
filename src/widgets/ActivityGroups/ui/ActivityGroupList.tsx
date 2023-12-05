@@ -14,7 +14,7 @@ import { ActivityListItem, EntityType, activityModel, useCompletedEntitiesQuery 
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
 import { AvatarBase, Loader } from "~/shared/ui"
-import { getYYYYDDMM, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { formatToDtoDate, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false
@@ -47,7 +47,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     {
       appletId: props.appletDetails.id,
       version: props.appletDetails.version,
-      fromDate: getYYYYDDMM(subMonths(new Date(), 1)),
+      fromDate: formatToDtoDate(subMonths(new Date(), 1)),
     },
     { select: data => data.data.result, enabled: !props.isPublic },
   )

@@ -217,11 +217,12 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
       const accessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime
 
       const isCurrentTimeInTimeWindow = isScheduled
-        ? isTimeInInterval(
-            { hours: now.getHours(), minutes: now.getMinutes() },
-            event.availability.timeFrom!,
-            event.availability.timeTo!,
-          )
+        ? isTimeInInterval({
+            timeToCheck: { hours: now.getHours(), minutes: now.getMinutes() },
+            intervalFrom: event.availability.timeFrom!,
+            intervalTo: event.availability.timeTo!,
+            including: "from",
+          })
         : null
 
       const conditionForAlwaysAvailable =

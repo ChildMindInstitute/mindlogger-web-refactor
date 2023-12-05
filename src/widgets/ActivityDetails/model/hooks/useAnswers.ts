@@ -10,7 +10,7 @@ import { prepareItemAnswers } from "../prepareItemAnswers"
 
 import { ActivityPipelineType, activityModel, useEncryptPayload } from "~/entities/activity"
 import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
-import { getHHMM, getYYYYDDMM, secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
+import { formatToDtoDate, formatToDtoTime, secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
 
 type UseAnswerProps = {
   appletDetails: AppletDetailsDTO
@@ -107,8 +107,8 @@ export const useAnswer = (props: UseAnswerProps) => {
           endTime: new Date().getTime(),
           identifier: encryptedIdentifier,
           scheduledEventId: props.eventId,
-          localEndDate: getYYYYDDMM(now),
-          localEndTime: getHHMM(now),
+          localEndDate: formatToDtoDate(now),
+          localEndTime: formatToDtoTime(now),
         },
         alerts: preparedAlerts,
         client: {
