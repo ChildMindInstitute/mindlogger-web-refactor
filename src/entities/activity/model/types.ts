@@ -1,5 +1,4 @@
 import {
-  ActivityPipelineType,
   AudioPlayerItem,
   CheckboxItem,
   DateItem,
@@ -13,24 +12,7 @@ import {
   TimeRangeItem,
 } from "../lib"
 
-export type FlowProgress = {
-  type: ActivityPipelineType.Flow
-  currentActivityId: string
-  pipelineActivityOrder: number
-  currentActivityStartAt: number | null
-  executionGroupKey: string
-}
-
-export type ActivityProgress = {
-  type: ActivityPipelineType.Regular
-}
-
-type ActivityOrFlowProgress = FlowProgress | ActivityProgress
-
-type EventProgressTimestampState = {
-  startAt: number | null
-  endAt: number | null
-}
+import { EventProgressState } from "~/abstract/lib"
 
 export type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"
 
@@ -46,13 +28,6 @@ export type UserEvents = {
   screen: string
   response?: UserEventResponse
 }
-
-export type ProgressState = ActivityOrFlowProgress & EventProgressTimestampState
-
-export type ActivityProgressState = Record<string, ProgressState>
-export type AppletProgressState = Record<string, ActivityProgressState>
-
-export type GroupsProgressState = Record<string, AppletProgressState>
 
 export type ActivityEventProgressRecord =
   | TextItem
@@ -85,7 +60,7 @@ export type UpsertActionPayload = {
   appletId: string
   activityId: string
   eventId: string
-  progressPayload: ProgressState
+  progressPayload: EventProgressState
 }
 
 export type SaveActivityItemAnswerPayload = {

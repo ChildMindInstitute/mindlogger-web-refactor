@@ -1,9 +1,9 @@
-import { ActivityPipelineType, activityModel } from "~/entities/activity"
+import { ActivityPipelineType, EventProgressState } from "~/abstract/lib"
 import { useCustomTranslation } from "~/shared/utils"
 
 type Props = {
   activityLength: number
-  groupInProgress: activityModel.types.ProgressState | null
+  groupInProgress: EventProgressState | null
 }
 
 export const ActivityMetaData = ({ groupInProgress, activityLength }: Props) => {

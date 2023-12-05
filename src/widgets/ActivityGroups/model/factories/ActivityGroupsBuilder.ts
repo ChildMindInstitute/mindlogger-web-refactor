@@ -2,17 +2,14 @@ import { isToday } from "date-fns"
 
 import { ActivityGroupType, ActivityGroupTypeNames, ActivityListGroup } from "../../lib"
 
+import { ActivityPipelineType, EventProgressState, FlowProgress, Progress } from "~/abstract/lib"
 import {
   Activity,
   ActivityFlow,
-  ActivityFlowProgress,
   ActivityListItem,
-  ActivityPipelineType,
   ActivityStatus,
   ActivityType,
-  EntityProgress,
   EventActivity,
-  ProgressPayload,
 } from "~/entities/activity"
 import { AvailabilityLabelType } from "~/entities/event"
 import { MS_IN_MINUTE, MINUTES_IN_HOUR, MIDNIGHT_DATE } from "~/shared/constants"
@@ -25,7 +22,7 @@ export interface IActivityGroupsBuilder {
 }
 
 class ActivityGroupsBuilder implements IActivityGroupsBuilder {
-  private progress: EntityProgress
+  private progress: Progress
 
   private appletId: string
 
@@ -39,7 +36,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
   private getNow = () => new Date()
 
-  private getProgressRecord(eventActivity: EventActivity): ProgressPayload | null {
+  private getProgressRecord(eventActivity: EventActivity): EventProgressState | null {
     const record = this.progress[this.appletId]?.[eventActivity.entity.id]?.[eventActivity.event.id]
     return record ?? null
   }
@@ -73,7 +70,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     let activity: Activity, position: number
 
     if (isInProgress) {
-      const progressRecord = this.getProgressRecord(activityEvent) as ActivityFlowProgress
+      const progressRecord = this.getProgressRecord(activityEvent) as FlowProgress
 
       activity = this.activities.find(x => x.id === progressRecord.currentActivityId)!
       position = progressRecord.pipelineActivityOrder + 1
@@ -331,7 +328,7 @@ class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
 type ActivityGroupsBuilderInput = {
   allAppletActivities: Activity[]
-  progress: EntityProgress
+  progress: Progress
   appletId: string
 }
 

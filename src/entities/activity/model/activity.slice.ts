@@ -1,26 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { v4 as uuidV4 } from "uuid"
 
-import { ActivityPipelineType } from "../lib"
 import {
   ActivityEventState,
   ClearActivityItemsProgresByIdPayload,
   CompletedEntitiesState,
-  GroupsProgressState,
   InProgressActivity,
   InProgressEntity,
   InProgressFlow,
-  ProgressState,
   SaveActivityItemAnswerPayload,
   SetActivityEventProgressStep,
   SetUserEventByItemIdPayload,
   UpdateUserEventByIndexPayload,
   UpsertActionPayload,
-  FlowProgress,
 } from "./types"
 
+import { ActivityPipelineType, EventProgressState, FlowProgress, Progress } from "~/abstract/lib"
+
 type InitialActivityState = {
-  groupsInProgress: GroupsProgressState
+  groupsInProgress: Progress
   activityEventProgress: ActivityEventState
 
   completedEntities: CompletedEntitiesState
@@ -105,7 +103,7 @@ const activitySlice = createSlice({
     activityStarted: (state, action: PayloadAction<InProgressActivity>) => {
       const { appletId, activityId, eventId } = action.payload
 
-      const activityEvent: ProgressState = {
+      const activityEvent: EventProgressState = {
         type: ActivityPipelineType.Regular,
         startAt: new Date().getTime(),
         endAt: null,
@@ -118,7 +116,7 @@ const activitySlice = createSlice({
     flowStarted: (state, action: PayloadAction<InProgressFlow>) => {
       const { appletId, activityId, flowId, eventId, pipelineActivityOrder } = action.payload
 
-      const flowEvent: ProgressState = {
+      const flowEvent: EventProgressState = {
         type: ActivityPipelineType.Flow,
         currentActivityId: activityId,
         startAt: new Date().getTime(),

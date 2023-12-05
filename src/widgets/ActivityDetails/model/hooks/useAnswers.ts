@@ -8,7 +8,8 @@ import { getScheduledTimeFromEvents } from "../getScheduledTimeFromEvents"
 import { mapAlerts, mapToAnswers } from "../mappers"
 import { prepareItemAnswers } from "../prepareItemAnswers"
 
-import { ActivityPipelineType, activityModel, useEncryptPayload } from "~/entities/activity"
+import { ActivityPipelineType, EventProgressState } from "~/abstract/lib"
+import { activityModel, useEncryptPayload } from "~/entities/activity"
 import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { formatToDtoDate, formatToDtoTime, secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
 
@@ -34,7 +35,7 @@ export const useAnswer = (props: UseAnswerProps) => {
 
   const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
 
-  const getSubmitId = useCallback((groupInProgress: activityModel.types.ProgressState): string => {
+  const getSubmitId = useCallback((groupInProgress: EventProgressState): string => {
     const isFlow = groupInProgress.type === ActivityPipelineType.Flow
 
     return isFlow ? groupInProgress.executionGroupKey : uuidV4()

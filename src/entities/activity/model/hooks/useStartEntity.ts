@@ -1,7 +1,7 @@
 import { actions } from "../activity.slice"
 import { groupsInProgressSelector } from "../selectors"
-import { ProgressState } from "../types"
 
+import { EventProgressState } from "~/abstract/lib"
 import { AppletDetailsDTO } from "~/shared/api"
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
@@ -9,10 +9,10 @@ export const useStartEntity = () => {
   const dispatch = useAppDispatch()
   const allProgresses = useAppSelector(groupsInProgressSelector)
 
-  const getProgress = (appletId: string, entityId: string, eventId: string): ProgressState =>
+  const getProgress = (appletId: string, entityId: string, eventId: string): EventProgressState =>
     allProgresses[appletId]?.[entityId]?.[eventId]
 
-  const isInProgress = (payload: ProgressState): boolean => payload && !payload.endAt
+  const isInProgress = (payload: EventProgressState): boolean => payload && !payload.endAt
 
   function activityStarted(appletId: string, activityId: string, eventId: string) {
     dispatch(

@@ -2,13 +2,13 @@ import {
   Activity,
   ActivityDetails,
   ActivityListItem,
-  ActivityPipelineType,
   ActivityProgressPreview,
   ActivityType,
   supportableItemTypes,
 } from "../lib"
 import { ActivityEventProgressRecord, SupportableActivities } from "./types"
 
+import { ActivityPipelineType } from "~/abstract/lib"
 import { ActivityDTO, ActivityItemDetailsDTO, AppletDetailsActivityDTO } from "~/shared/api"
 
 class ActivityBuilder {
