@@ -91,6 +91,10 @@ export type SupportableActivities = Record<string, boolean>
 
 export type CompletedEntitiesState = Record<string, number>
 
+export type EventCompletions = Record<string, number[]>
+
+export type CompletedEventEntities = Record<string, EventCompletions>
+
 export type InProgressEntity = {
   appletId: string
   entityId: string

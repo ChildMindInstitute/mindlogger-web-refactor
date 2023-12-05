@@ -5,6 +5,7 @@ import {
   ActivityEventState,
   ClearActivityItemsProgresByIdPayload,
   CompletedEntitiesState,
+  CompletedEventEntities,
   InProgressActivity,
   InProgressEntity,
   InProgressFlow,
@@ -20,14 +21,15 @@ import { ActivityPipelineType, EventProgressState, FlowProgress, Progress } from
 type InitialActivityState = {
   groupsInProgress: Progress
   activityEventProgress: ActivityEventState
-
   completedEntities: CompletedEntitiesState
+  completions: CompletedEventEntities
 }
 
 const initialState: InitialActivityState = {
   groupsInProgress: {},
   activityEventProgress: {},
   completedEntities: {},
+  completions: {},
 }
 
 const activitySlice = createSlice({
