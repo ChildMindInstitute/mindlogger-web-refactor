@@ -1,4 +1,5 @@
-import { ActivityPipelineType, activityModel } from "~/entities/activity"
+import { ActivityPipelineType } from "~/abstract/lib"
+import { activityModel } from "~/entities/activity"
 import { AppletDetailsDTO } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
 import { useNotification } from "~/shared/ui"

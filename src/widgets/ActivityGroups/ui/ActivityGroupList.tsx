@@ -14,7 +14,7 @@ import { ActivityListItem, EntityType, activityModel, useCompletedEntitiesQuery 
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
 import { AvatarBase, Loader } from "~/shared/ui"
-import { getYYYYDDMM, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { formatToDtoDate, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false
@@ -43,11 +43,11 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
   const navigator = useCustomNavigation()
 
-  const { data: completedEntities, isLoading: isCompletedEntitiesLoading } = useCompletedEntitiesQuery(
+  const { data: completedEntities, isFetching: isCompletedEntitiesFetching } = useCompletedEntitiesQuery(
     {
       appletId: props.appletDetails.id,
       version: props.appletDetails.version,
-      fromDate: getYYYYDDMM(subMonths(new Date(), 1)),
+      fromDate: formatToDtoDate(subMonths(new Date(), 1)),
     },
     { select: data => data.data.result, enabled: !props.isPublic },
   )
@@ -133,7 +133,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
 
   useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
 
-  if (!props.isPublic && isCompletedEntitiesLoading) {
+  if (isCompletedEntitiesFetching) {
     return <Loader />
   }
 

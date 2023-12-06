@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react"
 
-import { ActivityPipelineType, activityModel } from "~/entities/activity"
+import { ActivityPipelineType } from "~/abstract/lib"
+import { activityModel } from "~/entities/activity"
 import { CompletedEntitiesDTO, CompletedEntityDTO } from "~/shared/api"
 
 type FilterCompletedEntitiesProps = {

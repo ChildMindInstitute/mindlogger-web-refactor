@@ -1,35 +1,35 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { v4 as uuidV4 } from "uuid"
 
-import { ActivityPipelineType } from "../lib"
 import {
   ActivityEventState,
   ClearActivityItemsProgresByIdPayload,
   CompletedEntitiesState,
-  GroupsProgressState,
+  CompletedEventEntities,
   InProgressActivity,
   InProgressEntity,
   InProgressFlow,
-  ProgressState,
   SaveActivityItemAnswerPayload,
   SetActivityEventProgressStep,
   SetUserEventByItemIdPayload,
   UpdateUserEventByIndexPayload,
   UpsertActionPayload,
-  FlowProgress,
 } from "./types"
 
-type InitialActivityState = {
-  groupsInProgress: GroupsProgressState
-  activityEventProgress: ActivityEventState
+import { ActivityPipelineType, EventProgressState, FlowProgress, Progress } from "~/abstract/lib"
 
+type InitialActivityState = {
+  groupsInProgress: Progress
+  activityEventProgress: ActivityEventState
   completedEntities: CompletedEntitiesState
+  completions: CompletedEventEntities
 }
 
 const initialState: InitialActivityState = {
   groupsInProgress: {},
   activityEventProgress: {},
   completedEntities: {},
+  completions: {},
 }
 
 const activitySlice = createSlice({
@@ -105,7 +105,7 @@ const activitySlice = createSlice({
     activityStarted: (state, action: PayloadAction<InProgressActivity>) => {
       const { appletId, activityId, eventId } = action.payload
 
-      const activityEvent: ProgressState = {
+      const activityEvent: EventProgressState = {
         type: ActivityPipelineType.Regular,
         startAt: new Date().getTime(),
         endAt: null,
@@ -118,7 +118,7 @@ const activitySlice = createSlice({
     flowStarted: (state, action: PayloadAction<InProgressFlow>) => {
       const { appletId, activityId, flowId, eventId, pipelineActivityOrder } = action.payload
 
-      const flowEvent: ProgressState = {
+      const flowEvent: EventProgressState = {
         type: ActivityPipelineType.Flow,
         currentActivityId: activityId,
         startAt: new Date().getTime(),
@@ -151,7 +151,22 @@ const activitySlice = createSlice({
 
       const completedEntities = state.completedEntities ?? {}
 
-      completedEntities[entityId] = new Date().getTime()
+      const completions = state.completions ?? {}
+
+      const now = new Date().getTime()
+
+      completedEntities[entityId] = now
+
+      if (!completions[entityId]) {
+        completions[entityId] = {}
+      }
+
+      const entityCompletions = completions[entityId]
+
+      if (!entityCompletions[eventId]) {
+        entityCompletions[eventId] = []
+      }
+      entityCompletions[eventId].push(now)
     },
   },
 })
