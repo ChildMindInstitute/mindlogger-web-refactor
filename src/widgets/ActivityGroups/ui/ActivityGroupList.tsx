@@ -8,17 +8,11 @@ import CustomModal from "../../Modal"
 import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
-import {
-  ActivityListItem,
-  activityModel,
-  ActivityOrFlowProgress,
-  ActivityPipelineType,
-  ActivityStatus,
-  useCompletedEntitiesQuery,
-} from "~/entities/activity"
+import { ActivityOrFlowProgress, ActivityPipelineType } from "~/abstract/lib"
+import { ActivityListItem, activityModel, ActivityStatus, useCompletedEntitiesQuery } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
-import { getYYYYDDMM, Mixpanel, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { formatToDtoDate, Mixpanel, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false
@@ -52,7 +46,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     {
       appletId: props.appletDetails.id,
       version: props.appletDetails.version,
-      fromDate: getYYYYDDMM(subMonths(new Date(), 1)),
+      fromDate: formatToDtoDate(subMonths(new Date(), 1)),
     },
     { select: data => data.data.result, enabled: !props.isPublic },
   )
@@ -113,6 +107,8 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
         type: ActivityPipelineType.Flow,
         currentActivityId: activity.activityId,
         pipelineActivityOrder: 0, // Hardcoded because WEB APP not supported activity flow
+        currentActivityStartAt: null, // Hardcoded because WEB APP not supported activity flow
+        executionGroupKey: "mocked", // Hardcoded because WEB APP not supported activity flow
       }
     } else {
       activityPipelineDetails = {

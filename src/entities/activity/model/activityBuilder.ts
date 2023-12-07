@@ -1,7 +1,6 @@
 import {
   Activity,
   ActivityListItem,
-  ActivityPipelineType,
   ActivityProgressPreview,
   ActivityStatus,
   ActivityType,
@@ -9,6 +8,7 @@ import {
 } from "../lib"
 import { ActivityEventProgressRecord, SupportableActivities } from "./types"
 
+import { ActivityPipelineType } from "~/abstract/lib"
 import {
   ActivityDTO,
   ActivityItemDetailsDTO,
@@ -47,6 +47,7 @@ class ActivityBuilder {
 
       return {
         activityId: activity.id,
+        flowId: null, // Mocked
         eventId: eventByActivityId?.id ?? "",
         name: activity.name,
         description: activity.description,
@@ -56,6 +57,7 @@ class ActivityBuilder {
         type: ActivityType.NotDefined, // Mocked
         isInActivityFlow: false, // Mocked
         isTimerSet: false, // Mocked
+        isTimerElapsed: false, // Mocked
       }
     })
   }

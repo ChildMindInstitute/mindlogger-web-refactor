@@ -27,8 +27,8 @@ import { ActivityDTO, AnswerPayload, AppletEventsResponse } from "~/shared/api"
 import {
   Mixpanel,
   ROUTES,
-  getHHMM,
-  getYYYYDDMM,
+  formatToDtoTime,
+  formatToDtoDate,
   secureUserPrivateKeyStorage,
   useCustomNavigation,
   useCustomTranslation,
@@ -164,8 +164,8 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
         endTime: new Date().getTime(),
         identifier: encryptedIdentifier,
         scheduledEventId: eventId,
-        localEndDate: getYYYYDDMM(now),
-        localEndTime: getHHMM(now),
+        localEndDate: formatToDtoDate(now),
+        localEndTime: formatToDtoTime(now),
       },
       alerts: preparedAlerts,
       client: {

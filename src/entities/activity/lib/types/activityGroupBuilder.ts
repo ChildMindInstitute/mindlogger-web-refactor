@@ -1,11 +1,6 @@
+import { ActivityPipelineType } from "~/abstract/lib"
 import { ActivityType } from "~/entities/activity"
 import { ScheduleEvent } from "~/entities/event"
-
-export const enum ActivityPipelineType {
-  NotDefined = 0,
-  Regular,
-  Flow,
-}
 
 export type EntityBase = {
   id: string
@@ -32,29 +27,4 @@ export type Entity = Activity | ActivityFlow
 export type EventActivity = {
   entity: Entity
   event: ScheduleEvent
-}
-
-export type ActivityFlowProgress = {
-  type: ActivityPipelineType.Flow
-  currentActivityId: string
-  pipelineActivityOrder: number
-}
-
-export type ActivityProgress = {
-  type: ActivityPipelineType.Regular
-}
-
-export type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress
-
-export type ProgressPayload = ActivityOrFlowProgress & {
-  startAt: Date | null
-  endAt: Date | null
-}
-
-export type EntityProgress = {
-  [appletId in string]: {
-    [entityId in string]: {
-      [eventId in string]: ProgressPayload | null
-    }
-  }
 }
