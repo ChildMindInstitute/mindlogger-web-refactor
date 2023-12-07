@@ -27,8 +27,8 @@ import { ActivityDTO, AnswerPayload, AppletEventsResponse } from "~/shared/api"
 import {
   Mixpanel,
   ROUTES,
-  getHHMM,
-  getYYYYDDMM,
+  formatToDtoTime,
+  formatToDtoDate,
   secureUserPrivateKeyStorage,
   useCustomNavigation,
   useCustomTranslation,
@@ -98,7 +98,6 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     })
 
   const isOnePageAssessment = activityDetails.showAllAtOnce
-  const isSummaryScreen = false // Mock
 
   const onSubmitButtonClick = useCallback(() => {
     const invalidItemIds = validateAnswerBeforeSubmit(currentActivityEventProgress, { isAllItemsSkippable })
@@ -165,8 +164,8 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
         endTime: new Date().getTime(),
         identifier: encryptedIdentifier,
         scheduledEventId: eventId,
-        localEndDate: getYYYYDDMM(now),
-        localEndTime: getHHMM(now),
+        localEndDate: formatToDtoDate(now),
+        localEndTime: formatToDtoTime(now),
       },
       alerts: preparedAlerts,
       client: {
@@ -202,7 +201,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
 
   return (
     <>
-      {!isSummaryScreen && isOnePageAssessment && (
+      {isOnePageAssessment && (
         <ActivityOnePageAssessment
           eventId={eventId}
           activityId={activityDetails.id}
@@ -214,7 +213,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
           respondentNickname={props.respondentMeta?.nickname ?? ""}
         />
       )}
-      {!isSummaryScreen && !isOnePageAssessment && (
+      {!isOnePageAssessment && (
         <ActivityItemStepper
           eventId={eventId}
           activityId={activityDetails.id}

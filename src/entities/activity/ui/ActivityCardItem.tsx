@@ -74,6 +74,14 @@ export const ActivityCardItem = ({
     return onSubmitButtonClick()
   }
 
+  const onItemValueChange = (value: string[]) => {
+    setValue(activityItem.id, value)
+    saveSetAnswerUserEvent({
+      ...activityItem,
+      answer: value,
+    })
+  }
+
   const onNextButtonClick = () => {
     if (!toNextStep) {
       return
@@ -99,16 +107,16 @@ export const ActivityCardItem = ({
       return
     }
 
+    const hasConditionalLogic = activityItem.conditionalLogic
+
+    if (hasConditionalLogic) {
+      // If the current item participate in any conditional logic
+      // we need to reset the answer to the initial state
+      onItemValueChange([])
+    }
+
     saveUserEventByType("PREV", activityItem)
     return toPrevStep()
-  }
-
-  const onItemValueChange = (value: string[]) => {
-    setValue(activityItem.id, value)
-    saveSetAnswerUserEvent({
-      ...activityItem,
-      answer: value,
-    })
   }
 
   const questionText = useMemo(() => {

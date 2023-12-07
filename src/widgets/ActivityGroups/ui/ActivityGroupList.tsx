@@ -8,17 +8,11 @@ import CustomModal from "../../Modal"
 import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
-import {
-  ActivityListItem,
-  activityModel,
-  ActivityOrFlowProgress,
-  ActivityPipelineType,
-  ActivityStatus,
-  useCompletedEntitiesQuery,
-} from "~/entities/activity"
+import { ActivityOrFlowProgress, ActivityPipelineType } from "~/abstract/lib"
+import { ActivityListItem, activityModel, ActivityStatus, useCompletedEntitiesQuery } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
-import { getYYYYDDMM, Mixpanel, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { formatToDtoDate, Mixpanel, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false
@@ -48,13 +42,13 @@ type NavigateToActivityDetailsPageProps = {
 
 export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   const { t } = useCustomTranslation()
-  const { data: completedEntities, isLoading: isCompletedEntitiesLoading } = useCompletedEntitiesQuery(
+  const { data: completedEntities, isFetching: isCompletedEntitiesFetching } = useCompletedEntitiesQuery(
     {
       appletId: props.appletDetails.id,
       version: props.appletDetails.version,
-      fromDate: getYYYYDDMM(subMonths(new Date(), 1)),
+      fromDate: formatToDtoDate(subMonths(new Date(), 1)),
     },
-    { select: data => data.data.result },
+    { select: data => data.data.result, enabled: !props.isPublic },
   )
 
   const navigatator = useCustomNavigation()
@@ -113,6 +107,8 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
         type: ActivityPipelineType.Flow,
         currentActivityId: activity.activityId,
         pipelineActivityOrder: 0, // Hardcoded because WEB APP not supported activity flow
+        currentActivityStartAt: null, // Hardcoded because WEB APP not supported activity flow
+        executionGroupKey: "mocked", // Hardcoded because WEB APP not supported activity flow
       }
     } else {
       activityPipelineDetails = {
@@ -174,7 +170,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
 
   useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
 
-  if (isCompletedEntitiesLoading) {
+  if (isCompletedEntitiesFetching) {
     return (
       <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
         <Spinner as="div" animation="border" role="status" aria-hidden="true" />

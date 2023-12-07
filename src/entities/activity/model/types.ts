@@ -1,29 +1,6 @@
-import {
-  ActivityPipelineType,
-  CheckboxItem,
-  RadioItem,
-  SelectorItem,
-  SliderItem,
-  SplashScreenItem,
-  TextItem,
-} from "../lib"
+import { CheckboxItem, RadioItem, SelectorItem, SliderItem, SplashScreenItem, TextItem } from "../lib"
 
-type ActivityFlowProgress = {
-  type: ActivityPipelineType.Flow
-  currentActivityId: string
-  pipelineActivityOrder: number
-}
-
-type ActivityProgress = {
-  type: ActivityPipelineType.Regular
-}
-
-type ActivityOrFlowProgress = ActivityFlowProgress | ActivityProgress
-
-type EventProgressTimestampState = {
-  startAt: Date | null
-  endAt: Date | null
-}
+import { EventProgressState } from "~/abstract/lib"
 
 export type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"
 
@@ -39,13 +16,6 @@ export type UserEvents = {
   screen: string
   response?: UserEventResponse
 }
-
-export type EventProgressState = ActivityOrFlowProgress & EventProgressTimestampState
-
-export type ActivityProgressState = Record<string, EventProgressState>
-export type AppletProgressState = Record<string, ActivityProgressState>
-
-export type GroupsProgressState = Record<string, AppletProgressState>
 
 export type ActivityEventProgressRecord =
   | TextItem
@@ -64,6 +34,10 @@ export type ActivityEventProgressState = {
 export type ActivityEventState = Record<string, ActivityEventProgressState>
 
 export type CompletedEntitiesState = Record<string, number>
+
+export type EventCompletions = Record<string, number[]>
+
+export type CompletedEventEntities = Record<string, EventCompletions>
 
 // Payloads
 
