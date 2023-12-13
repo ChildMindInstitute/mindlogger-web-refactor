@@ -15,12 +15,22 @@ import {
 
 import { Progress } from "~/abstract/lib"
 
+type Consents = {
+  shareToPublic: boolean
+  shareMediaToPublic: boolean
+}
+
+type AppletId = string
+
+type ActivityConsents = Record<AppletId, Consents | undefined>
+
 type InitialActivityState = {
   groupsInProgress: Progress
   activityEventProgress: ActivityEventState
 
   completedEntities: CompletedEntitiesState
   completions: CompletedEventEntities
+  consents: ActivityConsents
 }
 
 const initialState: InitialActivityState = {
@@ -28,6 +38,7 @@ const initialState: InitialActivityState = {
   activityEventProgress: {},
   completedEntities: {},
   completions: {},
+  consents: {},
 }
 
 const activitySlice = createSlice({
@@ -123,6 +134,50 @@ const activitySlice = createSlice({
         entityCompletions[eventId] = []
       }
       entityCompletions[eventId].push(now)
+    },
+
+    applyDataSharingSettings: (state, action: PayloadAction<{ appletId: string }>) => {
+      const { appletId } = action.payload
+
+      state.consents[appletId] = {
+        shareToPublic: true,
+        shareMediaToPublic: true,
+      }
+    },
+
+    removeDataSharingSettings: (state, action: PayloadAction<{ appletId: string }>) => {
+      const { appletId } = action.payload
+
+      delete state.consents[appletId]
+    },
+
+    toggleShareConsent: (state, action: PayloadAction<{ appletId: string }>) => {
+      const { appletId } = action.payload
+
+      const consents = state.consents[appletId]
+
+      if (!consents) {
+        return
+      }
+
+      const currentValue = consents.shareToPublic
+
+      consents.shareToPublic = !currentValue
+      consents.shareMediaToPublic = !currentValue
+    },
+
+    toggleMediaConsent: (state, action: PayloadAction<{ appletId: string }>) => {
+      const { appletId } = action.payload
+
+      const consents = state.consents[appletId]
+
+      if (!consents) {
+        return
+      }
+
+      const currentValue = consents.shareMediaToPublic
+
+      consents.shareMediaToPublic = !currentValue
     },
   },
 })
