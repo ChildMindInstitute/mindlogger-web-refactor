@@ -41,7 +41,10 @@ export type AppletDetailsDTO = {
   activities: AppletDetailsActivityDTO[]
   activityFlows: ActivityFlowDTO[]
   encryption: AppletEncryptionDTO | null
+  integrations: Integration[]
 }
+
+type Integration = "loris"
 
 export type AppletDetailsActivityDTO = {
   id: string
