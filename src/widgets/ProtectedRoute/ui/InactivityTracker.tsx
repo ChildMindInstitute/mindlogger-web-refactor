@@ -24,7 +24,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   }, [logout])
 
   const logoutTimer = useCallback(() => {
-    timerRef.current = setTimeout(() => {
+    timerRef.current = window.setTimeout(() => {
       // clears any pending timer.
       resetTimer()
 
