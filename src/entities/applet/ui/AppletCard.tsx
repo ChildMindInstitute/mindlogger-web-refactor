@@ -5,6 +5,7 @@ import { AppletListItem } from "../lib"
 
 import { ROUTES } from "~/shared/constants"
 import { CustomCard } from "~/shared/ui"
+import { Mixpanel } from "~/shared/utils"
 
 interface AppletCardProps {
   applet: AppletListItem
@@ -15,6 +16,8 @@ const AppletCard = ({ applet }: AppletCardProps) => {
 
   const onAppletCardClick = () => {
     navigate(ROUTES.appletDetails.navigateTo(applet.id))
+
+    Mixpanel.track("Applet click")
   }
 
   return (

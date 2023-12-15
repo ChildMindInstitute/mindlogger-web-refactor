@@ -5,6 +5,7 @@ import { useAcceptPrivateInviteMutation, useInvitationTranslation } from "~/enti
 import { ROUTES } from "~/shared/constants"
 import { useNotification } from "~/shared/ui"
 import Button from "~/shared/ui/Button"
+import { Mixpanel } from "~/shared/utils"
 
 interface PrivateJoinAcceptButtonProps {
   invitationKey: string
@@ -18,7 +19,8 @@ export const PrivateJoinAcceptButton = ({ invitationKey }: PrivateJoinAcceptButt
   const { mutate: acceptPrivateInvite, isLoading } = useAcceptPrivateInviteMutation({
     onSuccess() {
       showSuccessNotification(t("invitationAccepted"))
-      navigate(ROUTES.appletList.path)
+      Mixpanel.track("Invitation Accepted")
+      return navigate(ROUTES.appletList.path)
     },
   })
 

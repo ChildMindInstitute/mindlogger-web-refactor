@@ -12,3 +12,4 @@ export * from "./helpers"
 // Common
 export * from "./eventEmitter"
 export * from "./dictionary.map"
+export * from "./mixpanel"
