@@ -3,7 +3,7 @@ import { useState } from "react"
 import { useCustomTranslation } from "~/shared/utils"
 import CustomModal from "~/widgets/Modal"
 
-export const ConsentPublicModel = () => {
+export const ConsentPublicModal = () => {
   const { t } = useCustomTranslation()
 
   const [isOpen, setIsOpen] = useState(false)

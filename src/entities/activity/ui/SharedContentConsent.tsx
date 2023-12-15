@@ -1,7 +1,7 @@
 import { actions } from "../model"
 import { selectAppletConsents } from "../model/selectors"
 import { ConsentCheckbox } from "./ConsentCheckbox"
-import { ConsentPublicModel } from "./ConsentPublicModel"
+import { ConsentPublicModal } from "./ConsentPublicModal"
 
 import { useAppDispatch, useAppSelector, useCustomTranslation } from "~/shared/utils"
 
@@ -37,7 +37,7 @@ export const SharedContentConsent = ({ appletId }: Props) => {
           onChange={toggleShareConsent}
           label={
             <p>
-              {t("data_sharing.consent")} {<ConsentPublicModel />}
+              {t("data_sharing.consent")} {<ConsentPublicModal />}
             </p>
           }
         />
@@ -48,7 +48,7 @@ export const SharedContentConsent = ({ appletId }: Props) => {
           className="ms-3"
           label={
             <p>
-              {t("data_sharing.media_consent")} {<ConsentPublicModel />}
+              {t("data_sharing.media_consent")} {<ConsentPublicModal />}
             </p>
           }
         />
