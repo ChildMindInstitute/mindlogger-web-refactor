@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box"
-import "./styles.scss"
 import CircularProgress from "@mui/material/CircularProgress"
+
+import "./styles.scss"
 
 export const Loader = () => {
   return (
