@@ -14,7 +14,7 @@ import { ActivityListItem, EntityType, activityModel, useCompletedEntitiesQuery 
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
 import { AvatarBase, Loader } from "~/shared/ui"
-import { formatToDtoDate, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { Mixpanel, formatToDtoDate, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false
@@ -108,6 +108,8 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   }
 
   const startActivityOrFlow = ({ activityId, flowId, eventId }: ActivityListItem) => {
+    Mixpanel.track("Assessment Started")
+
     if (flowId) {
       startFlow(props.appletDetails, flowId, eventId)
 

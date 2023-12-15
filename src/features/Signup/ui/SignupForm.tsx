@@ -8,7 +8,7 @@ import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
 import { useLoginMutation, userModel, useSignupMutation } from "~/entities/user"
 import { Input, Checkbox, BasicFormProvider, PasswordIcon, BaseButton, useNotification } from "~/shared/ui"
-import { useCustomForm, usePasswordType } from "~/shared/utils"
+import { Mixpanel, useCustomForm, usePasswordType } from "~/shared/utils"
 
 interface SignupFormProps {
   locationState?: Record<string, unknown>
@@ -51,6 +51,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
   const { mutate: signup, isLoading: isSignupLoading } = useSignupMutation({
     onSuccess() {
       showSuccessNotification(t("success"))
+      Mixpanel.track("Account Creation complete")
       const { email, password } = form.getValues()
 
       return login({ email, password })

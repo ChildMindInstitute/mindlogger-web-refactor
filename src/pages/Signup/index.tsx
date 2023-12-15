@@ -1,13 +1,20 @@
+import { useEffect } from "react"
+
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import { Link, useLocation } from "react-router-dom"
 
 import { SignupForm, useSignupTranslation } from "~/features/Signup"
 import { ROUTES, Theme } from "~/shared/constants"
+import { Mixpanel } from "~/shared/utils"
 
 export const SignupPage = () => {
   const { t } = useSignupTranslation()
   const location = useLocation()
+
+  useEffect(() => {
+    Mixpanel.trackPageView("Create account")
+  }, [])
 
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">

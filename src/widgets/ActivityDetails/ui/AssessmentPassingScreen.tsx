@@ -20,7 +20,7 @@ import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "~/entities/act
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
 import { NotificationCenter, useNotification } from "~/shared/ui"
-import { useCustomTranslation, useFlowType, usePrevious } from "~/shared/utils"
+import { Mixpanel, useCustomTranslation, useFlowType, usePrevious } from "~/shared/utils"
 
 type Props = {
   eventId: string
@@ -91,11 +91,15 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const { mutate: saveAnswer, isLoading: submitLoading } = useSaveAnswerMutation({
     onSuccess() {
+      Mixpanel.track("Assessment completed")
+
       return onSaveAnswerSuccess()
     },
   })
   const { mutate: publicSaveAnswer } = usePublicSaveAnswerMutation({
     onSuccess() {
+      Mixpanel.track("Assessment completed")
+
       return onSaveAnswerSuccess()
     },
   })

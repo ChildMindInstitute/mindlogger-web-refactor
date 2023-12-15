@@ -1,7 +1,13 @@
 import { useUserState } from "./useUserState"
 
 import { ROUTES } from "~/shared/constants"
-import { secureTokensStorage, secureUserPrivateKeyStorage, useCustomNavigation, useEncryption } from "~/shared/utils"
+import {
+  Mixpanel,
+  secureTokensStorage,
+  secureUserPrivateKeyStorage,
+  useCustomNavigation,
+  useEncryption,
+} from "~/shared/utils"
 
 type Params = {
   isInvitationFlow?: boolean | undefined
@@ -38,6 +44,9 @@ export const useOnLogin = (params: Params) => {
     if (params.isInvitationFlow) {
       navigate(params.backRedirectPath as string)
     } else {
+      Mixpanel.track("Login Successful")
+      Mixpanel.login(user.id)
+
       navigate(ROUTES.appletList.path)
     }
   }

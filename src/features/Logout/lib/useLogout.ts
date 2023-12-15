@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { activityModel } from "~/entities/activity"
 import { useLogoutMutation, userModel } from "~/entities/user"
 import { ROUTES } from "~/shared/constants"
-import { secureTokensStorage } from "~/shared/utils"
+import { Mixpanel, secureTokensStorage } from "~/shared/utils"
 
 type UseLogoutReturn = {
   logout: () => void
@@ -27,7 +27,9 @@ export const useLogout = (): UseLogoutReturn => {
     clearUser()
     clearActivityInProgressState()
     secureTokensStorage.clearTokens()
-    navigate(ROUTES.login.path)
+
+    Mixpanel.logout()
+    return navigate(ROUTES.login.path)
   }
 
   return {
