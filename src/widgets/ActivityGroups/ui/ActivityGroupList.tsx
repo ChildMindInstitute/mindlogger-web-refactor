@@ -9,7 +9,13 @@ import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
 import { ActivityOrFlowProgress, ActivityPipelineType } from "~/abstract/lib"
-import { ActivityListItem, activityModel, ActivityStatus, useCompletedEntitiesQuery } from "~/entities/activity"
+import {
+  ActivityListItem,
+  activityModel,
+  ActivityStatus,
+  SharedContentConsent,
+  useCompletedEntitiesQuery,
+} from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { CustomCard } from "~/shared/ui"
 import { formatToDtoDate, Mixpanel, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
@@ -52,6 +58,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   )
 
   const navigatator = useCustomNavigation()
+
   const navigateToActivityDetailsPage = (
     { appletId, activityId, eventId }: NavigateToActivityDetailsPageProps,
     options: { isRestart: boolean },
@@ -194,6 +201,8 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
           )}
         </Col>
         <Col lg={7}>
+          <SharedContentConsent appletId={props.appletDetails.id} />
+
           {groups
             ?.filter(g => g.activities.length)
             .map(g => (

@@ -11,3 +11,12 @@ export const activityEventProgressSelector = createSelector(
 export const completedEntitiesSelector = createSelector(activitySelector, activity => activity.completedEntities)
 
 export const entityCompletionsSelector = createSelector(activitySelector, activity => activity.completions)
+
+export const selectConsents = createSelector(activitySelector, applets => applets.consents)
+
+const selectAppletId = (_: any, appletId: string) => appletId
+
+export const selectAppletConsents = createSelector(
+  [selectConsents, selectAppletId],
+  (consents, appletId) => consents[appletId],
+)

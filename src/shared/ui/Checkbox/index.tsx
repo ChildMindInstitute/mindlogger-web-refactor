@@ -9,6 +9,7 @@ export interface CheckboxWithLabelProps extends PropsWithChildren {
   uniqId: string
   classNameBox?: string
   classNameLabel?: string
+  checked?: boolean
 }
 
 const CheckboxWithLabel = ({
@@ -18,6 +19,7 @@ const CheckboxWithLabel = ({
   children,
   classNameBox,
   classNameLabel,
+  checked,
 }: CheckboxWithLabelProps) => {
   return (
     <Form.Check className={classNames("cursor-pointer")}>
@@ -25,6 +27,7 @@ const CheckboxWithLabel = ({
         id={uniqId}
         type="checkbox"
         value={value}
+        checked={checked}
         onChange={onChange}
         className={classNames("mr-1", "hover-pointer", classNameBox)}
       />
