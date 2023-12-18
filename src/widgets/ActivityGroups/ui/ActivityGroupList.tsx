@@ -5,7 +5,7 @@ import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import { subMonths } from "date-fns"
 
-import CustomModal from "../../Modal"
+import { CustomModal } from "../../Modal"
 import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
