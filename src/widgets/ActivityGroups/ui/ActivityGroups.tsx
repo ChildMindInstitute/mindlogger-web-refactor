@@ -42,6 +42,8 @@ export const ActivityGroups = (props: FetchActivitiesProps) => {
   }
 
   const appletDetails = appletData?.data?.result
+  appletDetails.integrations = ["loris"] // mock integration - REMOVE BEFORE MERGING
+
   const eventsDetails = eventsData?.data?.result
 
   return (

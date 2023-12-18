@@ -22,6 +22,7 @@ import {
   usePublicSaveAnswerMutation,
   useSaveAnswerMutation,
 } from "~/entities/activity"
+import { selectors } from "~/entities/activity/model"
 import { ActivityFlow, AppletDetails } from "~/entities/applet"
 import { ActivityDTO, AnswerPayload, AppletEventsResponse } from "~/shared/api"
 import {
@@ -34,6 +35,7 @@ import {
   useCustomTranslation,
   useEncryption,
   useModal,
+  useAppSelector,
 } from "~/shared/utils"
 
 type ActivityItemListProps = {
@@ -61,6 +63,8 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
   const { generateUserPrivateKey } = useEncryption()
 
   const isAllItemsSkippable = activityDetails.isSkippable
+
+  const consents = useAppSelector(state => selectors.selectAppletConsents(state, props.appletDetails.id))
 
   const onSaveAnswerSuccess = () => {
     // Step 4 - Clear progress state related to activity
@@ -155,6 +159,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
       submitId: uuidV4(),
       isFlowCompleted: null,
       createdAt: new Date().getTime(),
+      isDataShare: consents?.shareToPublic ?? false,
       answer: {
         answer: encryptedAnswers,
         itemIds: preparedItemAnswers.itemIds,
@@ -188,6 +193,7 @@ export const ActivityItemList = (props: ActivityItemListProps) => {
     appletDetails.encryption,
     appletDetails.id,
     appletDetails.version,
+    consents?.shareToPublic,
     encryptePayload,
     eventId,
     eventsRawData,
