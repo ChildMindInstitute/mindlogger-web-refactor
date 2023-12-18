@@ -8,21 +8,13 @@ type Props = {
   appletDetails: AppletDetailsDTO
 }
 
-const AVAILABLE_INTEGRATIONS = ["loris"]
-
 export const useIntegrationsSync = ({ appletDetails }: Props) => {
   const dispatch = useAppDispatch()
   const rootState = useAppSelector(state => state)
 
-  const isLorisIntegrationAvailable = appletDetails.integrations.some(integration =>
-    AVAILABLE_INTEGRATIONS.includes(integration),
-  )
-
   useEffect(() => {
     const appletIntegrationService = new AppletIntegrationsService(rootState, dispatch)
 
-    if (isLorisIntegrationAvailable) {
-      appletIntegrationService.applyIntegrations(appletDetails)
-    }
-  }, [appletDetails, dispatch, isLorisIntegrationAvailable, rootState])
+    appletIntegrationService.applyIntegrations(appletDetails)
+  }, [appletDetails, dispatch, rootState])
 }
