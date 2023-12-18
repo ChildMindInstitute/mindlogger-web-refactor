@@ -25,7 +25,7 @@ export const ForgotPasswordForm = () => {
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onForgotPasswordSubmit)}>
-      <Container>
+      <Container sx={{ marginBottom: "12px" }}>
         <p>{t("formTitle")}</p>
       </Container>
 
@@ -39,7 +39,7 @@ export const ForgotPasswordForm = () => {
 
       <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
-      <Container className="mt-3">
+      <Container sx={{ marginTop: "12px" }}>
         {!isSuccess && (
           <Button
             type="submit"
