@@ -5,7 +5,7 @@ import { subMonths } from "date-fns"
 import { Col, Container, Row, Spinner } from "react-bootstrap"
 
 import CustomModal from "../../Modal"
-import { useActivityGroups, useEntitiesSync } from "../model/hooks"
+import { useActivityGroups, useEntitiesSync, useIntegrationsSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
 import { ActivityOrFlowProgress, ActivityPipelineType } from "~/abstract/lib"
@@ -56,6 +56,8 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     },
     { select: data => data.data.result, enabled: !props.isPublic },
   )
+
+  useIntegrationsSync({ appletDetails: props.appletDetails })
 
   const navigatator = useCustomNavigation()
 
