@@ -1,5 +1,3 @@
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
 import { useRecoveryPasswordTranslation } from "../lib/useRecoveryPasswordTranslation"
@@ -7,7 +5,7 @@ import { RecoveryPassword, RecoveryPasswordSchema } from "../model/schema"
 
 import { useApproveRecoveryPasswordMutation } from "~/entities/user"
 import { ROUTES } from "~/shared/constants"
-import { BasicButton, BasicFormProvider, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
+import { BasicButton, BasicFormProvider, Container, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
 import { useCustomForm, usePasswordType } from "~/shared/utils"
 
 interface RecoveryPasswordFormProps {
@@ -48,9 +46,9 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
   }
 
   return (
-    <Container className={classNames("change-password-form-container")}>
+    <Container className="change-password-form-container">
       <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
-        <Container className={classNames("overflow-hidden")}>
+        <Container className="overflow-hidden">
           <p>{title}</p>
         </Container>
 
@@ -78,7 +76,7 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
         {status === "success" && (
           <BasicButton
             type="button"
-            className={classNames("success-button", "my-3")}
+            className="success-button my-3"
             variant="primary"
             onClick={backToLogin}
             defaultSize>
@@ -89,7 +87,7 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
         {status !== "success" && (
           <BasicButton
             type="submit"
-            className={classNames("success-button", "my-3")}
+            className="success-button my-3"
             variant="primary"
             loading={isLoading}
             disabled={isLoading}
