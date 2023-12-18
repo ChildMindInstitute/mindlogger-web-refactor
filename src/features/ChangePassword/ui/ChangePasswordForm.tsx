@@ -1,12 +1,10 @@
 import Box from "@mui/material/Box"
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
 
 import { useChangePasswordTranslation } from "../lib/useChangePasswordTranslation"
 import { ChangePasswordSchema, TChangePassword } from "../model/schema"
 
 import { useUpdatePasswordMutation } from "~/entities/user"
-import { BaseButton, BasicFormProvider, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
+import { BaseButton, BasicFormProvider, Container, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
 import { useCustomForm, usePasswordType } from "~/shared/utils"
 
 import "./style.scss"
@@ -41,10 +39,10 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
   }
 
   return (
-    <Container className={classNames("change-password-form-container")}>
+    <Container className="change-password-form-container">
       <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" flexDirection="column" gap="24px">
-          <Container className={classNames("overflow-hidden")}>
+          <Container className="overflow-hidden">
             <p>{title}</p>
           </Container>
 
