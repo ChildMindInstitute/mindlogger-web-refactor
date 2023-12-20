@@ -1,6 +1,8 @@
 import { useMemo } from "react"
 
-import { Form } from "react-bootstrap"
+import Slider from "@mui/material/Slider"
+
+import { Theme } from "../../../constants"
 
 import "./style.scss"
 
@@ -53,13 +55,23 @@ export const SliderItemBase = (props: SliderItemProps) => {
 
   return (
     <div className={`slider-widget ${value ? "no-value" : ""}`}>
-      <Form.Range
+      <Slider
+        size="medium"
         min={minValue}
         max={maxValue}
-        value={value}
-        step={continiusSlider ? 0.1 : defaultStep}
-        onChange={e => onChange(e.target.value)}
         disabled={disabled}
+        step={continiusSlider ? 0.1 : defaultStep}
+        onChange={(e, value) => onChange(String(value))}
+        sx={{
+          height: "8px",
+          color: Theme.colors.light.neutural90,
+          "& .MuiSlider-thumb": {
+            backgroundColor: Theme.colors.light.primary,
+          },
+          "& .MuiSlider-track": {
+            opacity: 0,
+          },
+        }}
       />
 
       {(showStickLabel || showStickMarks) && (

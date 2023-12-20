@@ -22,7 +22,7 @@ export const SelectorItem = ({ value, onValueChange, valueLabelList, disabled }:
       <Select
         id="select-with-label"
         labelId="select-with-label"
-        value={value}
+        value={value ?? ""}
         label={defaultValue}
         onChange={e => onValueChange(e.target.value)}>
         {valueLabelList.map(item => {
