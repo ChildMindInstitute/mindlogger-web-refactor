@@ -6,7 +6,7 @@ import { RecoveryPasswordForm, useRecoveryPasswordTranslation } from "~/features
 import { PageMessage } from "~/shared/ui"
 import Loader from "~/shared/ui/Loader"
 
-export const RecoveryPasswordPage = () => {
+export default function RecoveryPasswordPage() {
   const [searchParams] = useSearchParams()
   const { t } = useRecoveryPasswordTranslation()
 
