@@ -2,7 +2,8 @@ import Box from "@mui/material/Box"
 
 import { SaveAndExitButton } from "~/features/SaveAssessmentAndExit"
 import { ROUTES } from "~/shared/constants"
-import { Loader, NotificationCenter } from "~/shared/ui"
+import { NotificationCenter } from "~/shared/ui"
+import Loader from "~/shared/ui/Loader"
 import { useCustomMediaQuery, useCustomNavigation } from "~/shared/utils"
 
 type Props = {

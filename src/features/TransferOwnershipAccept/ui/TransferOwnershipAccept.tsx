@@ -1,7 +1,8 @@
 import { useAcceptTransferOwnershipQuery } from "../api"
 
 import { useInvitationTranslation } from "~/entities/invitation"
-import { Loader, PageMessage } from "~/shared/ui"
+import { PageMessage } from "~/shared/ui"
+import Loader from "~/shared/ui/Loader"
 import { Mixpanel } from "~/shared/utils"
 
 type TransferOwnershipProps = {

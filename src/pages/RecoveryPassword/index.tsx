@@ -3,7 +3,8 @@ import { useSearchParams } from "react-router-dom"
 
 import { useRecoveryPasswordLinkHealthcheckQuery } from "~/entities/user"
 import { RecoveryPasswordForm, useRecoveryPasswordTranslation } from "~/features/RecoveryPassword"
-import { Loader, PageMessage } from "~/shared/ui"
+import { PageMessage } from "~/shared/ui"
+import Loader from "~/shared/ui/Loader"
 
 export const RecoveryPasswordPage = () => {
   const [searchParams] = useSearchParams()

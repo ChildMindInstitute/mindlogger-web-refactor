@@ -2,7 +2,8 @@ import { ActivityGroupList } from "./ActivityGroupList"
 
 import { useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
-import { Container, Loader } from "~/shared/ui"
+import { Container } from "~/shared/ui"
+import Loader from "~/shared/ui/Loader"
 import { useCustomTranslation } from "~/shared/utils"
 
 type FetchPublicActivitiesProps = {

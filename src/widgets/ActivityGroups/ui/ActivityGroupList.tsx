@@ -13,7 +13,8 @@ import AppletDefaultIcon from "~/assets/AppletDefaultIcon.svg"
 import { ActivityListItem, EntityType, activityModel, useCompletedEntitiesQuery } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
-import { AvatarBase, Loader } from "~/shared/ui"
+import { AvatarBase } from "~/shared/ui"
+import Loader from "~/shared/ui/Loader"
 import { Mixpanel, formatToDtoDate, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
