@@ -10,24 +10,12 @@ export interface CardProps {
   id: string | number
   title: string
   description?: string
-  buttonLabel?: string | null
-  buttonOnClick?: () => void
   imageSrc?: string
   onClick?: () => void
   className?: string
 }
 
-export const CustomCard = ({
-  id,
-  title,
-  description,
-  imageSrc,
-  onClick,
-  buttonLabel,
-  buttonOnClick,
-  type,
-  className,
-}: CardProps) => {
+export const CustomCard = ({ id, title, description, imageSrc, onClick, type, className }: CardProps) => {
   const cardAsLink = type === "link"
   const cardAsCard = type === "card"
 
@@ -43,16 +31,6 @@ export const CustomCard = ({
       <Card.Body className={classNames("custom-card-body")}>
         <Card.Title className={classNames({ "text-center": cardAsCard })}>{title}</Card.Title>
         {description && <Card.Text>{description}</Card.Text>}
-        {/* {buttonLabel && buttonOnClick && (
-          <BaseButton
-            type="button"
-            variant="contained"
-            // className={classNames("card-button-shadow", "card-about-button")}
-            // variant="link"
-            onClick={buttonOnClick}
-            text={buttonLabel}
-          />
-        )} */}
       </Card.Body>
     </Card>
   )
