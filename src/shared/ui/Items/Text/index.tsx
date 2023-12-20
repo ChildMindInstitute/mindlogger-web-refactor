@@ -1,4 +1,4 @@
-import { Form } from "react-bootstrap"
+import TextField from "@mui/material/TextField"
 
 type TextItemProps = {
   value: string | undefined
@@ -8,6 +8,6 @@ type TextItemProps = {
 
 export const TextItem = ({ value = "", onValueChange, disabled }: TextItemProps) => {
   return (
-    <Form.Control type="text" value={value} onChange={event => onValueChange(event.target.value)} disabled={disabled} />
+    <TextField fullWidth size="small" value={value} onChange={e => onValueChange(e.target.value)} disabled={disabled} />
   )
 }
