@@ -1,8 +1,9 @@
 import { useState } from "react"
 
+import MenuIcon from "@mui/icons-material/Menu"
+import Box from "@mui/material/Box"
 import ButtonBase from "@mui/material/ButtonBase"
-import { Navbar, Nav } from "react-bootstrap"
-import { useNavigate } from "react-router-dom"
+import IconButton from "@mui/material/IconButton"
 
 import AccountDropdown from "./AccountDropdown"
 import LoginButton from "./LoginButton"
@@ -13,58 +14,68 @@ import { LanguageDropdown } from "~/features/language"
 import { Theme } from "~/shared/constants"
 import { ROUTES } from "~/shared/constants"
 import { AvatarBase } from "~/shared/ui"
-
-import "./header.scss"
+import { useCustomMediaQuery, useCustomNavigation } from "~/shared/utils"
 
 const Header = (): JSX.Element | null => {
-  const navigate = useNavigate()
+  const navigator = useCustomNavigation()
+  const { lessThanSM } = useCustomMediaQuery()
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const { user } = userModel.hooks.useUserState()
 
-  const [expanded, setExpanded] = useState<boolean>(false)
-
-  const closeExpandedNavbar = () => {
-    setExpanded(false)
+  const toggleMenuOpen = () => {
+    return setIsMenuOpen(prev => !prev)
   }
 
   const onLogoClick = () => {
-    closeExpandedNavbar()
+    toggleMenuOpen()
 
     if (user?.id) {
-      return navigate(ROUTES.appletList.path)
+      return navigator.navigate(ROUTES.appletList.path)
     } else {
-      return navigate(ROUTES.login.path)
+      return navigator.navigate(ROUTES.login.path)
     }
   }
 
-  const onNavbarToggle = () => {
-    setExpanded(prevValue => !prevValue)
-  }
-
   return (
-    <Navbar
-      expand="md"
-      variant="dark"
-      className="header"
-      expanded={expanded}
-      onToggle={onNavbarToggle}
-      style={{ backgroundColor: Theme.colors.light.primary }}>
-      <ButtonBase onClick={onLogoClick} disableRipple sx={{ marginY: "15px" }}>
-        <AvatarBase src={MLLogo} name="" width="143px" height="24px" variant="square" />
-      </ButtonBase>
+    <Box sx={{ backgroundColor: Theme.colors.light.primary, padding: "8px 16px" }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <ButtonBase onClick={onLogoClick} disableRipple sx={{ marginY: "15px" }}>
+          <AvatarBase src={MLLogo} name="" width="143px" height="24px" variant="square" />
+        </ButtonBase>
 
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-        <Nav>
-          <LanguageDropdown onSelectExtended={closeExpandedNavbar} />
+        {lessThanSM && (
+          <IconButton onClick={toggleMenuOpen}>
+            <MenuIcon sx={{ color: "white" }} />
+          </IconButton>
+        )}
+
+        {!lessThanSM && (
+          <Box display="flex">
+            <LanguageDropdown toggleMenuOpen={toggleMenuOpen} />
+
+            {user?.id ? (
+              <AccountDropdown title={`${user?.firstName} ${user?.lastName}`} toggleMenuOpen={toggleMenuOpen} />
+            ) : (
+              <LoginButton toggleMenuOpen={toggleMenuOpen} />
+            )}
+          </Box>
+        )}
+      </Box>
+
+      {lessThanSM && isMenuOpen && (
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <LanguageDropdown toggleMenuOpen={toggleMenuOpen} />
+
           {user?.id ? (
-            <AccountDropdown title={`${user?.firstName} ${user?.lastName}`} onSelectExtended={closeExpandedNavbar} />
+            <AccountDropdown title={`${user?.firstName} ${user?.lastName}`} toggleMenuOpen={toggleMenuOpen} />
           ) : (
-            <LoginButton onClickExtended={closeExpandedNavbar} />
+            <LoginButton toggleMenuOpen={toggleMenuOpen} />
           )}
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
+        </Box>
+      )}
+    </Box>
   )
 }
 

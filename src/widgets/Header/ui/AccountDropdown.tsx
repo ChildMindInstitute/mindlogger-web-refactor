@@ -7,19 +7,17 @@ import { Dropdown, DropdownOptionList } from "~/shared/ui"
 
 export interface IAccountDropdownProps {
   title: string
-  onSelectExtended?: () => void
+  toggleMenuOpen: () => void
 }
 
-const AccountDropdown = ({ title, onSelectExtended }: IAccountDropdownProps) => {
+const AccountDropdown = ({ title, toggleMenuOpen }: IAccountDropdownProps) => {
   const { t } = useNavbarTranslation()
   const { accountDropdownOptions } = useAccountDropdown()
 
   const onSelect = (buttonTag: string | null) => {
     const choosenOption = accountDropdownOptions.find(elementTag => elementTag.tag === buttonTag)
 
-    if (onSelectExtended) {
-      onSelectExtended()
-    }
+    toggleMenuOpen()
 
     return choosenOption?.onSelect()
   }

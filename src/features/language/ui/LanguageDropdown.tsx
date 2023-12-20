@@ -6,11 +6,11 @@ import { useLanguageTranslation } from "../lib/useLanguageTranslation"
 import { SupportableLanguage } from "~/app/system/locale/constants"
 import { DropdownOptionList, Dropdown } from "~/shared/ui"
 
-export interface LanguageDropdownProps {
-  onSelectExtended?: () => void
+type Props = {
+  toggleMenuOpen: () => void
 }
 
-const LanguageDropdown = ({ onSelectExtended }: LanguageDropdownProps) => {
+const LanguageDropdown = (props: Props) => {
   const { t, i18n } = useLanguageTranslation()
   const [language, setLanguage] = useState(i18n.language || SupportableLanguage.English)
   const preparedLanguageList = useLanguageList()
@@ -20,12 +20,10 @@ const LanguageDropdown = ({ onSelectExtended }: LanguageDropdownProps) => {
       return
     }
 
+    props.toggleMenuOpen()
+
     setLanguage(lang)
     i18n.changeLanguage(lang)
-
-    if (onSelectExtended) {
-      onSelectExtended()
-    }
   }
 
   const preparedLanguageOptions: DropdownOptionList = useMemo(() => {
