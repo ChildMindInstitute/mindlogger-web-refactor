@@ -1,4 +1,4 @@
-export { default as Checkbox } from "./Checkbox"
+export * from "./Checkbox"
 export { default as Dropdown } from "./Dropdown"
 export type { DropdownOption, DropdownOptionList } from "./Dropdown"
 export { default as BasicFormProvider } from "./Form"

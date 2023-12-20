@@ -1,38 +1,18 @@
 import { PropsWithChildren } from "react"
 
-import classNames from "classnames"
-import { Form } from "react-bootstrap"
+import Checkbox from "@mui/material/Checkbox"
+import FormControlLabel from "@mui/material/FormControlLabel"
+import FormGroup from "@mui/material/FormGroup"
 
 export interface CheckboxWithLabelProps extends PropsWithChildren {
-  value?: string | number | string[]
+  id?: string
   onChange: () => void
-  uniqId: string
-  classNameBox?: string
-  classNameLabel?: string
 }
 
-const CheckboxWithLabel = ({
-  onChange,
-  value,
-  uniqId,
-  children,
-  classNameBox,
-  classNameLabel,
-}: CheckboxWithLabelProps) => {
+export const CheckboxWithLabel = ({ onChange, children, id }: CheckboxWithLabelProps) => {
   return (
-    <Form.Check className={classNames("cursor-pointer")}>
-      <Form.Check.Input
-        id={uniqId}
-        type="checkbox"
-        value={value}
-        onChange={onChange}
-        className={classNames("mr-1", "hover-pointer", classNameBox)}
-      />
-      <Form.Check.Label htmlFor={uniqId} className={classNames("hover-pointer", classNameLabel)}>
-        {children}
-      </Form.Check.Label>
-    </Form.Check>
+    <FormGroup id={id}>
+      <FormControlLabel control={<Checkbox onChange={onChange} />} label={children} />
+    </FormGroup>
   )
 }
-
-export default CheckboxWithLabel

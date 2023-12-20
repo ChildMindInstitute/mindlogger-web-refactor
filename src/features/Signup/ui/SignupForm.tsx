@@ -7,7 +7,7 @@ import { useSignupTranslation } from "../lib/useSignupTranslation"
 import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
 
 import { useLoginMutation, userModel, useSignupMutation } from "~/entities/user"
-import { Input, Checkbox, BasicFormProvider, PasswordIcon, BaseButton, useNotification } from "~/shared/ui"
+import { Input, CheckboxWithLabel, BasicFormProvider, PasswordIcon, BaseButton, useNotification } from "~/shared/ui"
 import { Mixpanel, useCustomForm, usePasswordType } from "~/shared/utils"
 
 interface SignupFormProps {
@@ -95,12 +95,12 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
         />
 
         <Box display="flex" justifyContent="center">
-          <Checkbox uniqId="terms" onChange={() => setTerms(prev => !prev)}>
+          <CheckboxWithLabel id="terms" onChange={() => setTerms(prev => !prev)}>
             I agree to the{" "}
             <a href={TERMS_URL} target="_blank" rel="noreferrer">
               Terms of Service
             </a>
-          </Checkbox>
+          </CheckboxWithLabel>
         </Box>
 
         <BaseButton
