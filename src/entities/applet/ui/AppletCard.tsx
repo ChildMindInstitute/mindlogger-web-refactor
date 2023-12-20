@@ -23,7 +23,6 @@ const AppletCard = ({ applet }: AppletCardProps) => {
   return (
     <Box>
       <CustomCard
-        type="link"
         id={applet.id}
         title={applet.displayName}
         description={applet.description}
