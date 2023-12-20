@@ -1,5 +1,6 @@
 import { useState } from "react"
 
+import ButtonBase from "@mui/material/ButtonBase"
 import { Navbar, Nav } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
@@ -27,13 +28,13 @@ const Header = (): JSX.Element | null => {
   }
 
   const onLogoClick = () => {
-    if (user?.id) {
-      navigate(ROUTES.appletList.path)
-    } else {
-      navigate(ROUTES.login.path)
-    }
-
     closeExpandedNavbar()
+
+    if (user?.id) {
+      return navigate(ROUTES.appletList.path)
+    } else {
+      return navigate(ROUTES.login.path)
+    }
   }
 
   const onNavbarToggle = () => {
@@ -48,9 +49,9 @@ const Header = (): JSX.Element | null => {
       expanded={expanded}
       onToggle={onNavbarToggle}
       style={{ backgroundColor: Theme.colors.light.primary }}>
-      <Navbar.Brand role="button" onClick={onLogoClick}>
+      <ButtonBase onClick={onLogoClick} disableRipple sx={{ marginY: "15px" }}>
         <AvatarBase src={MLLogo} name="" width="143px" height="24px" variant="square" />
-      </Navbar.Brand>
+      </ButtonBase>
 
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
