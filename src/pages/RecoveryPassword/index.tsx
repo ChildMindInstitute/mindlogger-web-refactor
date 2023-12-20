@@ -1,8 +1,9 @@
+import Box from "@mui/material/Box"
 import { useSearchParams } from "react-router-dom"
 
 import { useRecoveryPasswordLinkHealthcheckQuery } from "~/entities/user"
 import { RecoveryPasswordForm, useRecoveryPasswordTranslation } from "~/features/RecoveryPassword"
-import { Container, Loader, PageMessage } from "~/shared/ui"
+import { Loader, PageMessage } from "~/shared/ui"
 
 export const RecoveryPasswordPage = () => {
   const [searchParams] = useSearchParams()
@@ -22,14 +23,14 @@ export const RecoveryPasswordPage = () => {
   }
 
   return (
-    <div className="d-flex mp-3 align-self-start justify-content-center w-100 pt-3">
-      <div className="text-center my-2 px-3 w-100">
-        <Container>
+    <Box display="flex" flex={1} justifyContent="center" textAlign="center" padding={3} margin={3}>
+      <Box textAlign="center" marginY={2} paddingX={3} flex={1}>
+        <Box>
           <h3 className="text-primary">{t("title")}</h3>
-        </Container>
+        </Box>
 
         <RecoveryPasswordForm title={t("formTitle", { email })} token={key} email={email} />
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 }

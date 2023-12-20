@@ -6,6 +6,7 @@ import { Invitation, useInvitationTranslation, usePrivateInvitationQuery } from 
 import { PrivateJoinAcceptButton } from "~/features/PrivateJoinAccept"
 import { PrivateJoinDeclineButton } from "~/features/PrivateJoinDecline"
 import { Loader, PageMessage } from "~/shared/ui"
+import { useCustomMediaQuery } from "~/shared/utils"
 import { AuthorizationButtons } from "~/widgets/AuthorizationNavigateButtons"
 
 interface FetchPrivateInvitationProps {
@@ -16,6 +17,7 @@ interface FetchPrivateInvitationProps {
 export const FetchPrivateInvitation = ({ keyParams, redirectState }: FetchPrivateInvitationProps) => {
   const { t } = useInvitationTranslation()
   const { isAuthenticated } = useAuthorizationGuard()
+  const { lessThanSM } = useCustomMediaQuery()
 
   const { isError, data, isLoading } = usePrivateInvitationQuery(keyParams)
 
@@ -41,10 +43,16 @@ export const FetchPrivateInvitation = ({ keyParams, redirectState }: FetchPrivat
       actionComponent={
         <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row">
           {isAuthenticated ? (
-            <>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              gap="12px"
+              margin="16px 0px"
+              flexDirection={lessThanSM ? "column" : "row"}>
               <PrivateJoinAcceptButton invitationKey={keyParams} />
               <PrivateJoinDeclineButton />
-            </>
+            </Box>
           ) : (
             <AuthorizationButtons redirectState={redirectState} />
           )}

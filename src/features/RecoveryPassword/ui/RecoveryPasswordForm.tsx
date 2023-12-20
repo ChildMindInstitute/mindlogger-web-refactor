@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box"
 import { useNavigate } from "react-router-dom"
 
 import { useRecoveryPasswordTranslation } from "../lib/useRecoveryPasswordTranslation"
@@ -5,7 +6,7 @@ import { RecoveryPassword, RecoveryPasswordSchema } from "../model/schema"
 
 import { useApproveRecoveryPasswordMutation } from "~/entities/user"
 import { ROUTES } from "~/shared/constants"
-import { BasicButton, BasicFormProvider, Container, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
+import { BaseButton, BasicFormProvider, Container, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
 import { useCustomForm, usePasswordType } from "~/shared/utils"
 
 interface RecoveryPasswordFormProps {
@@ -48,52 +49,49 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
   return (
     <Container className="change-password-form-container">
       <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
-        <Container className="overflow-hidden">
+        <Box className="overflow-hidden" marginBottom={2}>
           <p>{title}</p>
-        </Container>
+        </Box>
 
-        <Input
-          id="recovery-password-new-password"
-          type={newPasswordType}
-          name="new"
-          placeholder={t("newPassword") || ""}
-          autoComplete="new-password"
-          Icon={<PasswordIcon isSecure={newPasswordType === "password"} onClick={onNewPasswordIconClick} />}
-        />
-        <Input
-          id="recovery-password-confirm-new-password"
-          type={confirmNewPasswordType}
-          name="confirm"
-          placeholder={t("confirmPassword") || ""}
-          autoComplete="new-password"
-          Icon={
-            <PasswordIcon isSecure={confirmNewPasswordType === "password"} onClick={onConfirmNewPasswordIconClick} />
-          }
-        />
+        <Box display="flex" flex={1} gap={2} flexDirection="column">
+          <Input
+            id="recovery-password-new-password"
+            type={newPasswordType}
+            name="new"
+            placeholder={t("newPassword") || ""}
+            autoComplete="new-password"
+            Icon={<PasswordIcon isSecure={newPasswordType === "password"} onClick={onNewPasswordIconClick} />}
+          />
+          <Input
+            id="recovery-password-confirm-new-password"
+            type={confirmNewPasswordType}
+            name="confirm"
+            placeholder={t("confirmPassword") || ""}
+            autoComplete="new-password"
+            Icon={
+              <PasswordIcon isSecure={confirmNewPasswordType === "password"} onClick={onConfirmNewPasswordIconClick} />
+            }
+          />
+        </Box>
 
         <DisplaySystemMessage errorMessage={error?.evaluatedMessage} successMessage={isSuccess ? t("success") : null} />
 
         {status === "success" && (
-          <BasicButton
-            type="button"
-            className="success-button my-3"
-            variant="primary"
-            onClick={backToLogin}
-            defaultSize>
-            {t("backToLogin")}
-          </BasicButton>
+          <Box marginY={3}>
+            <BaseButton
+              type="button"
+              onClick={backToLogin}
+              variant="contained"
+              isLoading={isLoading}
+              text={t("backToLogin")}
+            />
+          </Box>
         )}
 
         {status !== "success" && (
-          <BasicButton
-            type="submit"
-            className="success-button my-3"
-            variant="primary"
-            loading={isLoading}
-            disabled={isLoading}
-            defaultSize>
-            {t("submit")}
-          </BasicButton>
+          <Box marginY={3}>
+            <BaseButton type="submit" variant="contained" isLoading={isLoading} text={t("submit")} />
+          </Box>
         )}
       </BasicFormProvider>
     </Container>

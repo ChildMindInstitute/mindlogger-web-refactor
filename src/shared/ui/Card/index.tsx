@@ -2,7 +2,6 @@ import classNames from "classnames"
 import { Card } from "react-bootstrap"
 
 import { getFirstLetters } from "../../utils"
-import Button from "../Button"
 
 import "./style.scss"
 
@@ -18,7 +17,7 @@ export interface CardProps {
   className?: string
 }
 
-const CustomCard = ({
+export const CustomCard = ({
   id,
   title,
   description,
@@ -44,17 +43,17 @@ const CustomCard = ({
       <Card.Body className={classNames("custom-card-body")}>
         <Card.Title className={classNames({ "text-center": cardAsCard })}>{title}</Card.Title>
         {description && <Card.Text>{description}</Card.Text>}
-        {buttonLabel && buttonOnClick && (
-          <Button
-            className={classNames("card-button-shadow", "card-about-button")}
-            variant="link"
-            onClick={buttonOnClick}>
-            {buttonLabel}
-          </Button>
-        )}
+        {/* {buttonLabel && buttonOnClick && (
+          <BaseButton
+            type="button"
+            variant="contained"
+            // className={classNames("card-button-shadow", "card-about-button")}
+            // variant="link"
+            onClick={buttonOnClick}
+            text={buttonLabel}
+          />
+        )} */}
       </Card.Body>
     </Card>
   )
 }
-
-export default CustomCard
