@@ -17,7 +17,12 @@ export const ActivityCardIcon = (props: Props) => {
   const imageSrc = isSrcExist ? props.src : defaultImage
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" width="64px">
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      width="64px"
+      data-testid={props.isFlow ? "flow-card-image" : "activity-card-image"}>
       <AvatarBase src={imageSrc!} name="" width="64px" height="64px" />
     </Box>
   )

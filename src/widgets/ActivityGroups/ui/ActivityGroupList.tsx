@@ -149,10 +149,12 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
           width="48px"
           height="48px"
           variant="rounded"
+          testid="applet-image"
         />
         <Typography
           variant="h4"
           onClick={onCardAboutClick}
+          data-testid="applet-name"
           sx={{
             fontFamily: "Atkinson",
             fontSize: "22px",

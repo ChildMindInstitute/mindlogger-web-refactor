@@ -9,9 +9,10 @@ type Props = {
   width?: string
   height?: string
   variant?: "circular" | "rounded" | "square"
+  testid?: string
 }
 
-export const AvatarBase = ({ src, name, width = "32px", height = "32px", variant = "circular" }: Props) => {
+export const AvatarBase = ({ src, name, width = "32px", height = "32px", variant = "circular", testid }: Props) => {
   const avatarOptions = (name: string, src?: string) => {
     if (src) {
       return {
@@ -24,5 +25,13 @@ export const AvatarBase = ({ src, name, width = "32px", height = "32px", variant
     }
   }
 
-  return <Avatar {...avatarOptions(name, src)} alt={`${name} image`} sx={{ width, height }} variant={variant} />
+  return (
+    <Avatar
+      {...avatarOptions(name, src)}
+      alt={`${name} image`}
+      sx={{ width, height }}
+      variant={variant}
+      data-testid={testid}
+    />
+  )
 }
