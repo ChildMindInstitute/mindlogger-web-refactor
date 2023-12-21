@@ -58,12 +58,13 @@ export const AssessmentLayoutHeader = (props: Props) => {
           <Text
             variant="body1"
             color={Theme.colors.light.onSurface}
+            testid="assessment-activity-title"
             sx={{ textAlign: greaterThanSM ? "center" : "left" }}>
             {greaterThanSM ? props.title : cutStringToLength(props.title, 30)}
           </Text>
           {!greaterThanSM && <SaveAndExitButton onClick={onSaveAndExitClick} />}
         </Box>
-        <BaseProgressBar percentage={progress} />
+        <BaseProgressBar percentage={progress} testid="assessment-activity-progress-bar" />
       </Box>
 
       {greaterThanSM && (
