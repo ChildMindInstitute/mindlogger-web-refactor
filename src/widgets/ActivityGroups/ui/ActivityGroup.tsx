@@ -17,7 +17,7 @@ export const ActivityGroup = ({ group, onActivityCardClick, isPublic }: Activity
   const { t } = useCustomTranslation()
 
   return (
-    <Box>
+    <Box data-testid={`${group.name}-block`}>
       <Typography
         variant="h3"
         color={Theme.colors.light.onSurface}

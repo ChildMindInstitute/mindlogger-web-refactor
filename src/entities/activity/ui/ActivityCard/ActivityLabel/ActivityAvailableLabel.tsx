@@ -20,6 +20,7 @@ export const ActivityAvailableLabel = (props: Props) => {
 
   return (
     <Box
+      data-testid="activity-available-label"
       sx={{
         padding: "4px 8px",
         borderRadius: "8px",

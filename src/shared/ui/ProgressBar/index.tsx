@@ -7,15 +7,21 @@ interface BaseProgressBarProps {
   percentage: number
   hasInitialPercentage?: boolean
   height?: string
+  testid?: string
 }
 
-export const BaseProgressBar = ({ percentage, hasInitialPercentage = true, height = "16px" }: BaseProgressBarProps) => {
+export const BaseProgressBar = ({
+  percentage,
+  hasInitialPercentage = true,
+  height = "16px",
+  testid,
+}: BaseProgressBarProps) => {
   const initialPercentage = hasInitialPercentage ? 3 : 0
 
   const progress = percentage > initialPercentage ? percentage : initialPercentage
 
   return (
-    <Box>
+    <Box data-testid={testid}>
       <LinearProgress
         variant="determinate"
         value={progress}

@@ -11,7 +11,7 @@ type TooltipProps = {
 
 export const CustomTooltip = ({ markdown }: TooltipProps) => {
   return (
-    <Tooltip title={<Markdown markdown={markdown} />}>
+    <Tooltip title={<Markdown markdown={markdown} />} data-testid="tooltip">
       <Avatar src={TooltipIcon} variant="square" sx={{ width: "24px", height: "24px" }} />
     </Tooltip>
   )

@@ -94,7 +94,7 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
 
   if (isLoading) {
     return (
-      <ActivityCardBase>
+      <ActivityCardBase isFlow={isFlow}>
         <div className="activity-data">
           <Loader />
         </div>
@@ -103,7 +103,7 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
   }
 
   return (
-    <ActivityCardBase onClick={onActivityCardClickHandler} isDisabled={isDisabled}>
+    <ActivityCardBase onClick={onActivityCardClickHandler} isDisabled={isDisabled} isFlow={isFlow}>
       <Box
         display="flex"
         flex={1}
@@ -114,9 +114,11 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
         <ActivityCardIcon src={isFlow ? null : activityListItem.image} isFlow={isFlow} />
 
         <Box display="flex" flex={1} justifyContent="center" alignItems="flex-start" flexDirection="column" gap="8px">
-          <ActivityCardTitle title={activityCardTitle} />
+          <ActivityCardTitle title={activityCardTitle} isFlow={isFlow} />
 
-          {isActivityInProgress && <ActivityCardProgressBar percentage={isFlow ? flowProgress : progress} />}
+          {isActivityInProgress && (
+            <ActivityCardProgressBar percentage={isFlow ? flowProgress : progress} isFlow={isFlow} />
+          )}
 
           <ActivityLabel
             isFlow={isFlow}
@@ -128,7 +130,7 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
             numberOfActivitiesInFlow={numberOfActivitiesInFlow}
           />
 
-          <ActivityCardDescription description={activityListItem.description} />
+          <ActivityCardDescription description={activityListItem.description} isFlow={isFlow} />
 
           {isSupportedActivity && <TimeStatusLabel activity={activityListItem} />}
         </Box>

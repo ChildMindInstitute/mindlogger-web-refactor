@@ -5,6 +5,7 @@ import Button from "@mui/material/Button"
 import { Theme } from "~/shared/constants"
 
 type Props = PropsWithChildren<{
+  isFlow: boolean
   isLoading?: boolean
   isDisabled?: boolean
   onClick?: () => void
@@ -13,7 +14,7 @@ type Props = PropsWithChildren<{
 export const ActivityCardBase = (props: Props) => {
   return (
     <Button
-      data-testid="activity-card"
+      data-testid={props.isFlow ? "flow-card" : "activity-card"}
       disabled={props.isDisabled}
       onClick={props.onClick}
       sx={{

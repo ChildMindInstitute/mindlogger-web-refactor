@@ -11,7 +11,7 @@ export const InvitationContent = ({ appletName, isUserAuthenticated }: Invitatio
   const { t } = useInvitationTranslation()
 
   return (
-    <Box>
+    <Box data-testid="invitation-content">
       <Box
         className="invitationBody"
         dangerouslySetInnerHTML={{ __html: t("inviteContent.description", { displayName: appletName }) }}

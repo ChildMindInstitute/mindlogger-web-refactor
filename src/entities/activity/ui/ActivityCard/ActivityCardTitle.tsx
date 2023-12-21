@@ -5,11 +5,12 @@ import { Theme } from "~/shared/constants"
 
 type Props = {
   title: string
+  isFlow: boolean
 }
 
-export const ActivityCardTitle = ({ title }: Props) => {
+export const ActivityCardTitle = ({ title, isFlow }: Props) => {
   return (
-    <Box>
+    <Box data-testid={isFlow ? "flow-card-title" : "activity-card-title"}>
       <Typography
         variant="h3"
         color={Theme.colors.light.primary}

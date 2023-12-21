@@ -15,6 +15,7 @@ export const ActivityInProgressLabel = (props: Props) => {
 
   return (
     <Box
+      data-testid="activity-in-progress-label"
       sx={{
         padding: "4px 8px",
         borderRadius: "8px",
