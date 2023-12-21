@@ -149,7 +149,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
           width="48px"
           height="48px"
           variant="rounded"
-          data-testid="applet-image"
+          testid="applet-image"
         />
         <Typography
           variant="h4"
