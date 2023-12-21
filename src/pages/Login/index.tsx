@@ -1,14 +1,25 @@
+import { useEffect } from "react"
+
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import { Link, useLocation } from "react-router-dom"
 
 import { LoginForm, useLoginTranslation } from "~/features/Login"
 import { ROUTES, Theme } from "~/shared/constants"
+import { Mixpanel } from "~/shared/utils"
 import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
 
 export const LoginPage = () => {
   const { t } = useLoginTranslation()
   const location = useLocation()
+
+  const onCreateAccountClick = () => {
+    Mixpanel.track("Create account button on login screen click")
+  }
+
+  useEffect(() => {
+    Mixpanel.trackPageView("Login")
+  }, [])
 
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
@@ -49,7 +60,7 @@ export const LoginPage = () => {
             lineHeight="20px"
             letterSpacing="0.1px"
             sx={{ textDecoration: "underline" }}>
-            <Link to={ROUTES.signup.path} relative="path">
+            <Link to={ROUTES.signup.path} relative="path" onClick={onCreateAccountClick}>
               {t("create")}
             </Link>
           </Typography>

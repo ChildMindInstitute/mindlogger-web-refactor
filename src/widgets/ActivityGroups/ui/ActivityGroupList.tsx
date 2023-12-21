@@ -5,7 +5,7 @@ import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import { subMonths } from "date-fns"
 
-import CustomModal from "../../Modal"
+import { CustomModal } from "../../Modal"
 import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
@@ -13,8 +13,9 @@ import AppletDefaultIcon from "~/assets/AppletDefaultIcon.svg"
 import { ActivityListItem, EntityType, activityModel, useCompletedEntitiesQuery } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
-import { AvatarBase, Loader } from "~/shared/ui"
-import { formatToDtoDate, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { AvatarBase } from "~/shared/ui"
+import Loader from "~/shared/ui/Loader"
+import { Mixpanel, formatToDtoDate, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityListWidgetProps = {
   isPublic: false
@@ -108,6 +109,8 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
   }
 
   const startActivityOrFlow = ({ activityId, flowId, eventId }: ActivityListItem) => {
+    Mixpanel.track("Assessment Started")
+
     if (flowId) {
       startFlow(props.appletDetails, flowId, eventId)
 

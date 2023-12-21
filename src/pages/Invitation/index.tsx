@@ -5,7 +5,7 @@ import { AuthorizationGuard } from "~/widgets/AuthorizationGuard"
 import { AuthorizationButtons } from "~/widgets/AuthorizationNavigateButtons"
 import { FetchInvitation } from "~/widgets/FetchInvitation"
 
-const InvitationPage = () => {
+export default function InvitationPage() {
   const { inviteId } = useParams()
   const location = useLocation()
 
@@ -24,5 +24,3 @@ const InvitationPage = () => {
     </Box>
   )
 }
-
-export default InvitationPage

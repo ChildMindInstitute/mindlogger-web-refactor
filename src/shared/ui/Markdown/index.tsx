@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm"
 
 import { useMarkdownExtender } from "./lib/useMarkdownExtender"
 
-import "./style.scss"
+import "./style.css"
 
 interface MarkdownProps {
   markdown: string

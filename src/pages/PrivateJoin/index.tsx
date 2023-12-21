@@ -3,7 +3,7 @@ import { useLocation, useParams } from "react-router-dom"
 
 import { FetchPrivateInvitation } from "~/widgets/FetchInvitation"
 
-export const PrivateJoinPage = () => {
+export default function PrivateJoinPage() {
   const { joinLinkKey } = useParams()
   const location = useLocation()
 

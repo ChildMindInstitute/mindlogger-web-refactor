@@ -1,4 +1,4 @@
-import "./style.scss"
+import Box from "@mui/material/Box"
 
 type SplashScreenItemProps = {
   imageSrc: string
@@ -6,8 +6,8 @@ type SplashScreenItemProps = {
 
 export const SplashScreenItem = ({ imageSrc }: SplashScreenItemProps) => {
   return (
-    <div className="splash-container">
-      <img src={imageSrc} className="image-splash" />
-    </div>
+    <Box display="flex" justifyContent="center" alignItems="center" width="90%" margin="auto">
+      <img src={imageSrc} style={{ maxWidth: "100%" }} />
+    </Box>
   )
 }

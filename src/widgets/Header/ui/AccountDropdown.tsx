@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 
 import { useAccountDropdown } from "../lib/account-dropdown-options.constant"
 import { useNavbarTranslation } from "../lib/useNavbarTranslation"
@@ -7,36 +7,37 @@ import { Dropdown, DropdownOptionList } from "~/shared/ui"
 
 export interface IAccountDropdownProps {
   title: string
-  onSelectExtended?: () => void
+  toggleMenuOpen: () => void
 }
 
-const AccountDropdown = ({ title, onSelectExtended }: IAccountDropdownProps) => {
+const AccountDropdown = ({ title, toggleMenuOpen }: IAccountDropdownProps) => {
   const { t } = useNavbarTranslation()
   const { accountDropdownOptions } = useAccountDropdown()
 
-  const onSelect = (buttonTag: string | null) => {
-    const choosenOption = accountDropdownOptions.find(elementTag => elementTag.tag === buttonTag)
+  const onSelect = useCallback(
+    (buttonTag: string | null) => {
+      const choosenOption = accountDropdownOptions.find(elementTag => elementTag.tag === buttonTag)
 
-    if (onSelectExtended) {
-      onSelectExtended()
-    }
+      toggleMenuOpen()
 
-    return choosenOption?.onSelect()
-  }
+      return choosenOption?.onSelect()
+    },
+    [accountDropdownOptions, toggleMenuOpen],
+  )
 
   const preparedAccountDropdownOptions: DropdownOptionList = useMemo(() => {
     return accountDropdownOptions.map(option => ({
       value: t(option.tag),
       key: option.tag,
+      onSelect,
     }))
-  }, [t, accountDropdownOptions])
+  }, [accountDropdownOptions, t, onSelect])
 
   return (
     <div data-testid="header-user-account-dropdown">
       <Dropdown
         title={title}
         options={preparedAccountDropdownOptions}
-        onSelect={onSelect}
         beforeIndexDivider={preparedAccountDropdownOptions.length - 1}
       />
     </div>

@@ -1,7 +1,7 @@
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
 
-import "./styles.scss"
+import { Theme } from "../../constants"
 
 interface ErrorLabelProps {
   errorMessage?: string | null
@@ -10,12 +10,18 @@ interface ErrorLabelProps {
 
 export const DisplaySystemMessage = ({ errorMessage, successMessage }: ErrorLabelProps) => {
   return (
-    <Container className={classNames("system-message-box")}>
-      {errorMessage && <span className={classNames("system-message-label", "failed-message")}>{errorMessage}</span>}
+    <Box minHeight="8px" maxHeight="64px" padding="4px 0">
+      {errorMessage && (
+        <Typography fontSize="14px" color={Theme.colors.light.error}>
+          {errorMessage}
+        </Typography>
+      )}
 
       {successMessage && (
-        <span className={classNames("system-message-label", "success-message")}>{successMessage}</span>
+        <Typography fontSize="14px" color={Theme.colors.light.accentGreen}>
+          {successMessage}
+        </Typography>
       )}
-    </Container>
+    </Box>
   )
 }

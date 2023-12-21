@@ -8,7 +8,7 @@ import { useCustomTranslation } from "~/shared/utils"
 import { AuthorizationGuard } from "~/widgets/AuthorizationGuard"
 import { AuthorizationButtons } from "~/widgets/AuthorizationNavigateButtons"
 
-export const TransferOwnershipPage = () => {
+export default function TransferOwnershipPage() {
   const { appletId } = useParams()
   const [searchParams] = useSearchParams()
   const location = useLocation()

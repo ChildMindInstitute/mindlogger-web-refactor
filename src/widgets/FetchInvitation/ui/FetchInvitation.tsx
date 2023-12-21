@@ -6,7 +6,8 @@ import { FetchInvitationErrorMapper } from "./FetchInvitationErrorMapper"
 import { Invitation, useInvitationQuery, useInvitationTranslation } from "~/entities/invitation"
 import { InvitationAcceptButton } from "~/features/InvitationAccept"
 import { InvitationDeclineButton } from "~/features/InvitationDecline"
-import { Loader, Text } from "~/shared/ui"
+import { Text } from "~/shared/ui"
+import Loader from "~/shared/ui/Loader"
 import { useCustomMediaQuery } from "~/shared/utils"
 
 interface FetchInvitationProps {

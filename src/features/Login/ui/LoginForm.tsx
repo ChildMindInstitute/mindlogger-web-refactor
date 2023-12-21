@@ -8,7 +8,7 @@ import { LoginSchema, TLoginForm } from "../model/login.schema"
 import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
 import { ROUTES, Theme } from "~/shared/constants"
 import { BaseButton, BasicFormProvider, Input, PasswordIcon, useNotification } from "~/shared/ui"
-import { useCustomForm, usePasswordType } from "~/shared/utils"
+import { Mixpanel, useCustomForm, usePasswordType } from "~/shared/utils"
 
 interface LoginFormProps {
   locationState?: Record<string, unknown>
@@ -52,6 +52,10 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
     login(data as ILoginPayload)
   }
 
+  const onLoginButtonClick = () => {
+    Mixpanel.track("Login Button click")
+  }
+
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
       <Box display="flex" flex={1} flexDirection="column" gap="24px">
@@ -87,7 +91,13 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
           </Link>
         </Box>
 
-        <BaseButton type="submit" variant="contained" isLoading={isLoading} text={t("button")} />
+        <BaseButton
+          type="submit"
+          variant="contained"
+          isLoading={isLoading}
+          onClick={onLoginButtonClick}
+          text={t("button")}
+        />
       </Box>
     </BasicFormProvider>
   )

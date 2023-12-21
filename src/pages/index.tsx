@@ -1,3 +1,5 @@
+import { lazy } from "react"
+
 import { Navigate, Route, Routes } from "react-router-dom"
 
 import Layout from "../widgets/AppLayout"
@@ -5,16 +7,18 @@ import { ActivityDetailsPage } from "./ActivityDetails"
 import { AppletDetailsPage } from "./AppletDetailsPage"
 import { AppletListPage } from "./AppletListPage"
 import { ForgotPasswordPage } from "./ForgotPassword"
-import { InvitationPage } from "./Invitation"
 import { LoginPage } from "./Login"
-import { PrivateJoinPage } from "./PrivateJoin"
 import { ProfilePage } from "./Profile"
 import { PublicActivityDetailsPage } from "./PublicActivityDetails"
 import { PublicJoinPage } from "./PublicJoin"
-import { RecoveryPasswordPage } from "./RecoveryPassword"
 import { SettingsPage } from "./Settings"
 import { SignupPage } from "./Signup"
-import { TransferOwnershipPage } from "./TransferOwnership"
+
+// Lazy load pages
+const InvitationPage = lazy(() => import("./Invitation"))
+const PrivateJoinPage = lazy(() => import("./PrivateJoin"))
+const TransferOwnershipPage = lazy(() => import("./TransferOwnership"))
+const RecoveryPasswordPage = lazy(() => import("./RecoveryPassword"))
 
 import { userModel } from "~/entities/user"
 import { ROUTES } from "~/shared/constants"

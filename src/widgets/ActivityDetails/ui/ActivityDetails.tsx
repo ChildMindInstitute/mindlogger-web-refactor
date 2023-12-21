@@ -1,10 +1,10 @@
 import Box from "@mui/material/Box"
 
 import * as activityDetailsModel from "../model"
+import { AssessmentLoadingScreen } from "./AssessmentLoadingScreen"
 import { AssessmentPassingScreen } from "./AssessmentPassingScreen"
 import { AssessmentWelcomeScreen } from "./AssessmentWelcomeScreen"
 
-import { Loader } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 
 type PrivateActivityAssessmentProps = {
@@ -42,7 +42,13 @@ export const ActivityDetailsWidget = (props: Props) => {
   } = activityDetailsModel.hooks.useActivityDetails(props)
 
   if (isLoading) {
-    return <Loader />
+    return (
+      <AssessmentLoadingScreen
+        appletId={props.appletId}
+        isPublic={props.isPublic}
+        publicKey={props.isPublic ? props.publicAppletKey : null}
+      />
+    )
   }
 
   if (isError) {

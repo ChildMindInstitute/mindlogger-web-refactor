@@ -3,7 +3,7 @@ import Box from "@mui/material/Box"
 import { useAcceptInviteMutation, useInvitationTranslation } from "~/entities/invitation"
 import { ROUTES } from "~/shared/constants"
 import { BaseButton, useNotification } from "~/shared/ui"
-import { useCustomNavigation } from "~/shared/utils"
+import { Mixpanel, useCustomNavigation } from "~/shared/utils"
 
 interface InvitationAcceptButtonProps {
   invitationKey: string
@@ -18,6 +18,7 @@ export const InvitationAcceptButton = ({ invitationKey }: InvitationAcceptButton
   const { mutate: acceptInvite, isLoading: isAcceptLoading } = useAcceptInviteMutation({
     onSuccess() {
       showSuccessNotification(t("invitationAccepted"))
+      Mixpanel.track("Invitation Accepted")
       return navigate(ROUTES.appletList.path)
     },
   })
