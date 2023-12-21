@@ -1,32 +1,89 @@
-import React from "react"
+import React, { useState } from "react"
 
-import { DropdownButton, Dropdown } from "react-bootstrap"
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Menu from "@mui/material/Menu"
+import MenuItem from "@mui/material/MenuItem"
 
 import { DropdownOptionList } from "../lib/interfaces"
 
-export interface BaseDropdownProps {
+type BaseDropdownProps = {
   title: string
-  onSelect: (value: string | null) => void
   options: DropdownOptionList
   beforeIndexDivider?: number
 }
 
-const BaseDropdown = ({ title, onSelect, options, beforeIndexDivider }: BaseDropdownProps) => {
-  return (
-    <DropdownButton align="end" title={title} onSelect={onSelect} className="text-center">
-      {options?.map((option, index) => {
-        const beforeThisElement = index === beforeIndexDivider
+const BaseDropdown = ({ title, options, beforeIndexDivider }: BaseDropdownProps) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
 
-        return (
-          <React.Fragment key={option.key}>
-            {beforeIndexDivider && beforeThisElement && <Dropdown.Divider />}
-            <Dropdown.Item key={option.key} eventKey={option.key}>
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    return setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    return setAnchorEl(null)
+  }
+
+  return (
+    <Box>
+      <Button
+        id="customized-button"
+        aria-controls={open ? "customized-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        variant="contained"
+        disableElevation
+        sx={{ textTransform: "none", fontSize: "16px" }}
+        onClick={handleClick}
+        endIcon={<KeyboardArrowDownIcon />}>
+        {title}
+      </Button>
+
+      <Menu
+        id="customized-menu"
+        MenuListProps={{
+          "aria-labelledby": "customized-button",
+        }}
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        elevation={0}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        sx={{
+          "& .MuiPaper-root": {
+            borderRadius: "6px",
+            marginTop: 1,
+            minWidth: 180,
+          },
+        }}>
+        {options.map((option, index) => {
+          const beforeThisElement = index === beforeIndexDivider
+
+          const dividerStyles = beforeIndexDivider &&
+            beforeThisElement && { borderWidth: "1px", borderTop: `1px solid rgba(0,0,0, 0.175)` }
+
+          const onClick = () => {
+            handleClose()
+            return option.onSelect(option.key)
+          }
+
+          return (
+            <MenuItem key={option.key} onClick={onClick} sx={{ ...dividerStyles }}>
               {option.value}
-            </Dropdown.Item>
-          </React.Fragment>
-        )
-      })}
-    </DropdownButton>
+            </MenuItem>
+          )
+        })}
+      </Menu>
+    </Box>
   )
 }
 

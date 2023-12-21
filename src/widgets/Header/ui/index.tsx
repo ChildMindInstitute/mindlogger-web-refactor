@@ -28,8 +28,12 @@ const Header = (): JSX.Element | null => {
     return setIsMenuOpen(prev => !prev)
   }
 
+  const closeMenu = () => {
+    return setIsMenuOpen(false)
+  }
+
   const onLogoClick = () => {
-    toggleMenuOpen()
+    closeMenu()
 
     if (user?.id) {
       return navigator.navigate(ROUTES.appletList.path)
@@ -53,12 +57,12 @@ const Header = (): JSX.Element | null => {
 
         {!lessThanSM && (
           <Box display="flex">
-            <LanguageDropdown toggleMenuOpen={toggleMenuOpen} />
+            <LanguageDropdown toggleMenuOpen={closeMenu} />
 
             {user?.id ? (
-              <AccountDropdown title={`${user?.firstName} ${user?.lastName}`} toggleMenuOpen={toggleMenuOpen} />
+              <AccountDropdown title={`${user?.firstName} ${user?.lastName}`} toggleMenuOpen={closeMenu} />
             ) : (
-              <LoginButton toggleMenuOpen={toggleMenuOpen} />
+              <LoginButton toggleMenuOpen={closeMenu} />
             )}
           </Box>
         )}
@@ -66,12 +70,12 @@ const Header = (): JSX.Element | null => {
 
       {lessThanSM && isMenuOpen && (
         <Box display="flex" flexDirection="column" alignItems="center">
-          <LanguageDropdown toggleMenuOpen={toggleMenuOpen} />
+          <LanguageDropdown toggleMenuOpen={closeMenu} />
 
           {user?.id ? (
-            <AccountDropdown title={`${user?.firstName} ${user?.lastName}`} toggleMenuOpen={toggleMenuOpen} />
+            <AccountDropdown title={`${user?.firstName} ${user?.lastName}`} toggleMenuOpen={closeMenu} />
           ) : (
-            <LoginButton toggleMenuOpen={toggleMenuOpen} />
+            <LoginButton toggleMenuOpen={closeMenu} />
           )}
         </Box>
       )}
