@@ -26,14 +26,14 @@ export const Invitation = ({ invite, actionComponent, isUserAuthenticated }: Inv
   }
 
   return (
-    <Box color={Theme.colors.light.onPrimaryContainer} textAlign="left">
+    <Box color={Theme.colors.light.onPrimaryContainer} textAlign="left" data-testid="invitation-block">
       {invite && (
         <>
           <InvitationHeader appletName={invite.appletName} role={invite.role} />
           {actionComponent}
           <InvitationContent appletName={invite.appletName} isUserAuthenticated={isUserAuthenticated} />
 
-          <Box margin="12px 0px">
+          <Box margin="12px 0px" data-testid="invitation-footer">
             <Box>
               <Logo size={{ width: 200, height: 80 }} />
             </Box>

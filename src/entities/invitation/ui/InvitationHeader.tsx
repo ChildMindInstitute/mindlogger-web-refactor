@@ -13,7 +13,7 @@ export const InvitationHeader = ({ appletName, role }: InvitationHeaderProps) =>
   const { t } = useInvitationTranslation()
 
   return (
-    <Box>
+    <Box data-testid="invitation-header">
       <Text variant="h4" margin="12px 0px">
         {t("inviteContent.welcome")}
         <strong>{` ${appletName}`}</strong>

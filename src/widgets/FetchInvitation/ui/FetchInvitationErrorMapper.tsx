@@ -14,8 +14,8 @@ export const FetchInvitationErrorMapper = ({ error }: Props) => {
   const isInvitationProcessedError = error.evaluatedMessage === InvitationErrorMessages.hasBeenProccesed
 
   if (isInvitationProcessedError) {
-    return <PageMessage message={t("invitationAlreadyRemoved")} />
+    return <PageMessage message={t("invitationAlreadyRemoved")} testid="invitation-removed-message" />
   }
 
-  return <PageMessage message={t("notAssociatedAccount")} />
+  return <PageMessage message={t("notAssociatedAccount")} testid="invitation-not-associated-account-message" />
 }
