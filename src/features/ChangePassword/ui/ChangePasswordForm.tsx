@@ -7,7 +7,7 @@ import { useUpdatePasswordMutation } from "~/entities/user"
 import { BaseButton, BasicFormProvider, Container, DisplaySystemMessage, Input, PasswordIcon } from "~/shared/ui"
 import { useCustomForm, usePasswordType } from "~/shared/utils"
 
-import "./style.scss"
+import "./style.css"
 
 interface ChangePasswordFormProps {
   title?: string | null

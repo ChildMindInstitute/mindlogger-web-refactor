@@ -4,7 +4,7 @@ import Slider from "@mui/material/Slider"
 
 import { Theme } from "../../../constants"
 
-import "./style.scss"
+import "./style.css"
 
 type SliderItemProps = {
   minImage: string | null

@@ -8,7 +8,7 @@ import { useCustomMediaQuery, useCustomTranslation } from "../../utils"
 
 import { Markdown } from "~/shared/ui"
 
-import "./style.scss"
+import "./style.css"
 
 interface CardItemProps extends PropsWithChildren {
   watermark?: string
