@@ -1,11 +1,13 @@
 import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
 
 import { Theme } from "~/shared/constants"
+import { useCustomMediaQuery } from "~/shared/utils"
 
-import "./style.scss"
-
-const Footer = () => {
+export default function Footer() {
   const buildVersion = import.meta.env.VITE_BUILD_VERSION
+
+  const { greaterThanMD } = useCustomMediaQuery()
 
   return (
     <Box
@@ -14,24 +16,24 @@ const Footer = () => {
       justifyContent="center"
       alignItems="center"
       sx={{ backgroundColor: Theme.colors.light.surface, borderTop: `1px solid ${Theme.colors.light.surfaceVariant}` }}>
-      <div className="mt-3 mb-3 text-center d-flex align-items-center">
-        <span className="d-none d-sm-block">
-          Mindlogger is a product of the{" "}
-          <a href="https://childmind.org" target="_blank" rel="noreferrer">
-            Child Mind Institute
-          </a>{" "}
-          &#169; 2023
-        </span>
-        <a className="mx-1 mx-md-4" href="https://mindlogger.org/terms" target="_blank" rel="noreferrer">
+      <Box display="flex" alignItems="center" textAlign="center" marginY={3} gap={2}>
+        {greaterThanMD && (
+          <span>
+            Mindlogger is a product of the{" "}
+            <a href="https://childmind.org" target="_blank" rel="noreferrer">
+              Child Mind Institute
+            </a>{" "}
+            &#169; 2023
+          </span>
+        )}
+        <a href="https://mindlogger.org/terms" target="_blank" rel="noreferrer">
           Terms of Service
         </a>
-        <a className="mx-4" href="https://help.mindlogger.org/" target="_blank" rel="noreferrer">
+        <a href="https://help.mindlogger.org/" target="_blank" rel="noreferrer">
           Support
         </a>
-        {buildVersion && <span className="text-secondary build-label">{buildVersion}</span>}
-      </div>
+        {buildVersion && <Typography color={Theme.colors.light.outlineVariant}>{buildVersion}</Typography>}
+      </Box>
     </Box>
   )
 }
-
-export default Footer

@@ -4,8 +4,6 @@ import Typography from "@mui/material/Typography"
 import { ForgotPasswordForm, useForgotPasswordTranslation } from "~/features/ForgotPassword"
 import { Theme } from "~/shared/constants"
 
-import "./style.scss"
-
 export const ForgotPasswordPage = () => {
   const { t } = useForgotPasswordTranslation()
 
