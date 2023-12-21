@@ -1,60 +1,56 @@
-import classNames from "classnames"
-import { Card } from "react-bootstrap"
+import Box from "@mui/material/Box"
+import Card from "@mui/material/Card"
+import CardContent from "@mui/material/CardContent"
+import CardMedia from "@mui/material/CardMedia"
+import Typography from "@mui/material/Typography"
 
 import { getFirstLetters } from "../../utils"
-import Button from "../Button"
-
-import "./style.scss"
 
 export interface CardProps {
-  type: "card" | "link"
-  id: string | number
+  id: string
   title: string
   description?: string
-  buttonLabel?: string | null
-  buttonOnClick?: () => void
   imageSrc?: string
   onClick?: () => void
-  className?: string
 }
 
-const CustomCard = ({
-  id,
-  title,
-  description,
-  imageSrc,
-  onClick,
-  buttonLabel,
-  buttonOnClick,
-  type,
-  className,
-}: CardProps) => {
-  const cardAsLink = type === "link"
-  const cardAsCard = type === "card"
-
-  const styles = classNames({ "card-link-custom": cardAsLink }, { "card-custom": cardAsCard })
-
+export const CustomCard = ({ id, title, description, imageSrc, onClick }: CardProps) => {
   return (
-    <Card className={classNames(styles, className)} onClick={onClick} key={id}>
-      {imageSrc ? (
-        <Card.Img className="image-card-size image-size" variant="top" src={imageSrc} />
-      ) : (
-        <div className="image-card-size image-size">{getFirstLetters(title)}</div>
-      )}
-      <Card.Body className={classNames("custom-card-body")}>
-        <Card.Title className={classNames({ "text-center": cardAsCard })}>{title}</Card.Title>
-        {description && <Card.Text>{description}</Card.Text>}
-        {buttonLabel && buttonOnClick && (
-          <Button
-            className={classNames("card-button-shadow", "card-about-button")}
-            variant="link"
-            onClick={buttonOnClick}>
-            {buttonLabel}
-          </Button>
+    <Card
+      id={id}
+      onClick={onClick}
+      sx={{
+        width: "280px",
+        minHeight: "390px",
+        margin: "20px",
+        cursor: "pointer",
+        boxShadow: "0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%)",
+      }}>
+      <Box width={280} height={280}>
+        {imageSrc ? (
+          <CardMedia component="img" height="280px" width="280px" image={imageSrc} alt="Applet Logo" />
+        ) : (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            fontSize="93px"
+            width={280}
+            height={280}
+            color="white"
+            bgcolor="rgb(119, 119, 119)">
+            {getFirstLetters(title)}
+          </Box>
         )}
-      </Card.Body>
+      </Box>
+      <CardContent>
+        <Typography gutterBottom component="div" fontSize="20px" sx={{ "&:hover": { textDecoration: "underline" } }}>
+          {title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {description}
+        </Typography>
+      </CardContent>
     </Card>
   )
 }
-
-export default CustomCard

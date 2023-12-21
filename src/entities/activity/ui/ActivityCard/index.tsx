@@ -15,7 +15,7 @@ import { ActivityLabel } from "./ActivityLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/shared/constants"
-import { Loader } from "~/shared/ui"
+import Loader from "~/shared/ui/Loader"
 import { useCustomMediaQuery } from "~/shared/utils"
 
 interface ActivityCardProps {

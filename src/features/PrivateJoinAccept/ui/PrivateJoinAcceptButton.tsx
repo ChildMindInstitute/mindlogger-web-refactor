@@ -1,10 +1,9 @@
-import classNames from "classnames"
+import Box from "@mui/material/Box"
 import { useNavigate } from "react-router-dom"
 
 import { useAcceptPrivateInviteMutation, useInvitationTranslation } from "~/entities/invitation"
 import { ROUTES } from "~/shared/constants"
-import { useNotification } from "~/shared/ui"
-import Button from "~/shared/ui/Button"
+import { BaseButton, useNotification } from "~/shared/ui"
 import { Mixpanel } from "~/shared/utils"
 
 interface PrivateJoinAcceptButtonProps {
@@ -25,16 +24,19 @@ export const PrivateJoinAcceptButton = ({ invitationKey }: PrivateJoinAcceptButt
   })
 
   const onPrivateJoinAccept = () => {
-    acceptPrivateInvite({ invitationId: invitationKey })
+    return acceptPrivateInvite({ invitationId: invitationKey })
   }
 
   return (
-    <Button
-      onClick={onPrivateJoinAccept}
-      variant="success"
-      className={classNames("mx-2", "mb-2", "invitation-buttons", "color-white")}
-      loading={isLoading}>
-      {t("buttons.acceptInvitation")}
-    </Button>
+    <Box width="250px">
+      <BaseButton
+        type="button"
+        variant="contained"
+        color="success"
+        onClick={onPrivateJoinAccept}
+        isLoading={isLoading}
+        text={t("buttons.acceptInvitation")}
+      />
+    </Box>
   )
 }

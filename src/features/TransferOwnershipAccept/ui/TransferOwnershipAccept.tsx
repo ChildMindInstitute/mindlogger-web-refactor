@@ -1,10 +1,8 @@
-import classNames from "classnames"
-import { Spinner } from "react-bootstrap"
-
 import { useAcceptTransferOwnershipQuery } from "../api"
 
 import { useInvitationTranslation } from "~/entities/invitation"
 import { PageMessage } from "~/shared/ui"
+import Loader from "~/shared/ui/Loader"
 import { Mixpanel } from "~/shared/utils"
 
 type TransferOwnershipProps = {
@@ -25,11 +23,7 @@ export const TransferOwnershipAccept = ({ appletId, keyParam }: TransferOwnershi
   )
 
   if (isLoading) {
-    return (
-      <div className={classNames("d-flex", "justify-content-center", "align-items-center", "text-center")}>
-        <Spinner animation="border" variant="primary" />
-      </div>
-    )
+    return <Loader />
   }
 
   if (isError) {

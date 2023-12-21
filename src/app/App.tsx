@@ -7,6 +7,7 @@ import { DateLocalizationProvider, MUIThemeProvider, ReactQuery, ReduxProvider, 
 import i18nManager from "./system/locale/i18n"
 
 import ApplicationRouter from "~/pages"
+import Loader from "~/shared/ui/Loader"
 
 import "~/assets/fonts/Atkinson/atkinson.css"
 
@@ -16,7 +17,7 @@ i18nManager.initialize()
 
 function App() {
   return (
-    <Suspense>
+    <Suspense fallback={<Loader />}>
       <CssBaseline />
       <MUIThemeProvider>
         <RouteProvider>

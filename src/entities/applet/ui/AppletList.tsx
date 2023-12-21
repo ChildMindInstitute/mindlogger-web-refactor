@@ -5,7 +5,8 @@ import { appletBuilder } from "../model"
 import AppletCard from "./AppletCard"
 
 import { userModel } from "~/entities/user"
-import { Loader, Text } from "~/shared/ui"
+import { Text } from "~/shared/ui"
+import Loader from "~/shared/ui/Loader"
 
 const AppletList = () => {
   const { user } = userModel.hooks.useUserState()

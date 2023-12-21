@@ -1,15 +1,13 @@
 import Button from "@mui/material/Button"
 import CircularProgress from "@mui/material/CircularProgress"
 import Typography from "@mui/material/Typography"
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
 
 import { useForgotPasswordTranslation } from "../lib/useForgotPasswordTranslation"
 import { ForgotPasswordSchema, TForgotPasswordForm } from "../model/schemas"
 
 import { useRecoveryPasswordMutation } from "~/entities/user"
 import { Theme } from "~/shared/constants"
-import { BasicFormProvider, DisplaySystemMessage, Input } from "~/shared/ui"
+import { BasicFormProvider, Container, DisplaySystemMessage, Input } from "~/shared/ui"
 import { useCustomForm } from "~/shared/utils"
 
 export const ForgotPasswordForm = () => {
@@ -27,7 +25,7 @@ export const ForgotPasswordForm = () => {
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onForgotPasswordSubmit)}>
-      <Container>
+      <Container sx={{ marginBottom: "12px" }}>
         <p>{t("formTitle")}</p>
       </Container>
 
@@ -41,7 +39,7 @@ export const ForgotPasswordForm = () => {
 
       <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
-      <Container className={classNames("mt-3")}>
+      <Container sx={{ marginTop: "12px" }}>
         {!isSuccess && (
           <Button
             type="submit"

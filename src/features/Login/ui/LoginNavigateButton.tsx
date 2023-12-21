@@ -1,8 +1,7 @@
-import classNames from "classnames"
 import { useNavigate } from "react-router-dom"
 
 import { ROUTES } from "~/shared/constants"
-import Button from "~/shared/ui/Button"
+import { BaseButton } from "~/shared/ui"
 import { useCustomTranslation } from "~/shared/utils"
 
 interface LoginNavigateButtonProps {
@@ -17,9 +16,5 @@ export const LoginNavigateButton = ({ redirectState }: LoginNavigateButtonProps)
     navigate(ROUTES.login.path, { state: redirectState })
   }
 
-  return (
-    <Button type="button" className={classNames("btn", "btn-primary", "mx-1", "color-white")} onClick={onLoginClick}>
-      {t("login")}
-    </Button>
-  )
+  return <BaseButton type="button" variant="contained" onClick={onLoginClick} text={t("login")} />
 }

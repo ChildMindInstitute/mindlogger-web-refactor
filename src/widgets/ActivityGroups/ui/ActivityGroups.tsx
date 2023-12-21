@@ -1,11 +1,9 @@
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
-
 import { ActivityGroupList } from "./ActivityGroupList"
 
 import { useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
-import { Loader } from "~/shared/ui"
+import { Container } from "~/shared/ui"
+import Loader from "~/shared/ui/Loader"
 import { useCustomTranslation } from "~/shared/utils"
 
 type FetchPublicActivitiesProps = {
@@ -32,7 +30,8 @@ export const ActivityGroups = (props: FetchActivitiesProps) => {
 
   if (isEventsError || isAppletError) {
     return (
-      <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
+      <Container
+        sx={{ display: "flex", height: "100%", width: "100%", justifyContent: "center", alignItems: "center" }}>
         <span>{t("additional.invalid_public_url")}</span>
       </Container>
     )
