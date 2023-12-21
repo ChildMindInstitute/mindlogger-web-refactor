@@ -15,7 +15,7 @@ export const ActivityUnsupportedLabel = () => {
 
   if (lessThanSM) {
     return (
-      <Box display="flex" gap="8px" flexDirection="column" textAlign="left">
+      <Box display="flex" gap="8px" flexDirection="column" textAlign="left" data-testid="unsupported-activity-label">
         <Box
           display="flex"
           alignItems="center"

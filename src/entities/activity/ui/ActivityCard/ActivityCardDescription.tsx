@@ -5,11 +5,12 @@ import { Theme } from "~/shared/constants"
 
 type Props = {
   description: string
+  isFlow: boolean
 }
 
-export const ActivityCardDescription = ({ description }: Props) => {
+export const ActivityCardDescription = ({ description, isFlow }: Props) => {
   return (
-    <Box>
+    <Box data-testid={isFlow ? "flow-card-description" : "activity-card-description"}>
       <Typography
         variant="body1"
         color={Theme.colors.light.onSurface}
