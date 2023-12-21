@@ -37,6 +37,7 @@ export const CardItem = ({ children, markdown, isOptional }: CardItemProps) => {
           <Typography
             variant="body1"
             color={Theme.colors.light.outline}
+            data-testid={"optional-item-label"}
             sx={{ fontFamily: "Atkinson", fontWeight: "400", fontSize: "18px", lineHeight: "28px" }}>
             {`(${t("optional")})`}
           </Typography>

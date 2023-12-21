@@ -18,7 +18,7 @@ export const Markdown = (props: MarkdownProps) => {
   }
 
   return (
-    <div id="markdown-wrapper">
+    <div id="markdown-wrapper" data-testid="markdown">
       <ReactMarkdown rehypePlugins={[rehypeRaw, remarkGfm]}>{markdown}</ReactMarkdown>
     </div>
   )

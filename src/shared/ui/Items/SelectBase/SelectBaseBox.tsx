@@ -31,6 +31,7 @@ export const SelectBaseBox = (props: Props) => {
       border={`2px solid ${borderColor}`}
       bgcolor={props.color ? props.color : backgroundColor}
       onClick={props.onHandleChange}
+      data-testid="select-box"
       sx={{
         transition: "background-color 0.2s ease-in-out",
         cursor: "pointer",

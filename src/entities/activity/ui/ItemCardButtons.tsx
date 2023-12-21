@@ -35,7 +35,7 @@ export const ItemCardButton = ({
       padding={greaterThanSM ? "0px 24px" : "0px 16px"}
       maxWidth="900px">
       {(isBackShown && (
-        <Box width={greaterThanSM ? "200px" : "120px"}>
+        <Box width={greaterThanSM ? "200px" : "120px"} data-testid="assessment-back-button">
           <BaseButton
             type="button"
             variant="outlined"
@@ -46,7 +46,7 @@ export const ItemCardButton = ({
         </Box>
       )) || <div></div>}
 
-      <Box width={greaterThanSM ? "200px" : "120px"}>
+      <Box width={greaterThanSM ? "200px" : "120px"} data-testid="assessment-next-button">
         <BaseButton
           type="button"
           variant="contained"

@@ -12,5 +12,5 @@ export const SelectBaseImage = (props: Props) => {
   const width = lessThanSM ? "44px" : "64px"
   const height = lessThanSM ? "44px" : "64px"
 
-  return <Avatar src={props.src} sx={{ width, height }} variant="rounded" />
+  return <Avatar src={props.src} sx={{ width, height }} variant="rounded" data-testid="select-image" />
 }
