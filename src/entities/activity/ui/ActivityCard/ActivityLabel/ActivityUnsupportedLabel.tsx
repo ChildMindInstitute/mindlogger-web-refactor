@@ -62,6 +62,7 @@ export const ActivityUnsupportedLabel = () => {
       display="flex"
       alignItems="center"
       gap="8px"
+      data-testid="unsupported-activity-label"
       sx={{
         padding: "4px 8px",
         borderRadius: "8px",
