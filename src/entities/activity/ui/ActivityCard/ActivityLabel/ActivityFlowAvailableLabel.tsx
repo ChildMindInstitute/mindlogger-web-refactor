@@ -19,6 +19,7 @@ export const ActivityFlowAvailableLabel = ({ activityFlowLength }: Props) => {
       display="flex"
       alignItems="center"
       gap="8px"
+      data-testid="flow-available-label"
       sx={{
         padding: "4px 8px",
         borderRadius: "8px",
