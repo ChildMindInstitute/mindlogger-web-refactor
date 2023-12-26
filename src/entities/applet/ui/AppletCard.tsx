@@ -21,7 +21,7 @@ const AppletCard = ({ applet }: AppletCardProps) => {
   }
 
   return (
-    <Box>
+    <Box data-testid="applet-card">
       <CustomCard
         id={applet.id}
         title={applet.displayName}

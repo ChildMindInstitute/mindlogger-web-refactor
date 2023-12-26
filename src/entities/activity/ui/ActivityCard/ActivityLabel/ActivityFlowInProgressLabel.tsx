@@ -20,6 +20,7 @@ export const ActivityFlowInProgressLabel = (props: Props) => {
       display="flex"
       alignItems="center"
       gap="8px"
+      data-testid="flow-in-progress-label"
       sx={{
         padding: "4px 8px",
         borderRadius: "8px",
