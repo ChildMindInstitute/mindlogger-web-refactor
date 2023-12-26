@@ -36,7 +36,7 @@ const AppletList = () => {
   }
 
   return (
-    <Box display="flex" flex={1} flexWrap="wrap" justifyContent="center">
+    <Box display="flex" flex={1} flexWrap="wrap" justifyContent="center" data-testid="applet-list">
       {applets.map(value => (
         <AppletCard key={value.id} applet={value} />
       ))}
