@@ -51,7 +51,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
   const { mutate: signup, isLoading: isSignupLoading } = useSignupMutation({
     onSuccess() {
       showSuccessNotification(t("success"))
-      Mixpanel.track("Account Creation complete")
+      Mixpanel.track("Signup Successful")
       const { email, password } = form.getValues()
 
       return login({ email, password })
