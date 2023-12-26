@@ -28,6 +28,7 @@ export const useLogout = (): UseLogoutReturn => {
     secureTokensStorage.clearTokens()
     navigate(ROUTES.login.path)
 
+    Mixpanel.track("Logout")
     Mixpanel.logout()
   }
 
