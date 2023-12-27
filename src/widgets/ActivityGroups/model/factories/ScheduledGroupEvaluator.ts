@@ -66,11 +66,11 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
 
       const considerSpread = doAdvancedSpreadCheck
 
-      const voidInterval: DatesFromTo = this.utility.getVoidTimeInterval(eventEntity.event, considerSpread)
+      const voidInterval: DatesFromTo = this.utility.getVoidInterval(eventEntity.event, considerSpread)
 
-      const isInVoidInterval = this.utility.isInTimeInterval(voidInterval, now, "from")
+      const isInVoidInterval = this.utility.isInInterval(voidInterval, now, "from")
 
-      const isCompletedInVoidInterval = this.utility.isInTimeInterval(
+      const isCompletedInVoidInterval = this.utility.isInInterval(
         voidInterval,
         this.utility.getCompletedAt(eventEntity),
         "from",

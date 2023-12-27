@@ -107,6 +107,10 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
     for (const eventEntity of notInProgress) {
       const { event } = eventEntity
 
+      if (!this.utility.isInsideValidDatesInterval(event)) {
+        continue
+      }
+
       const isAlwaysAvailable = event.availability.availabilityType === AvailabilityLabelType.AlwaysAvailable
 
       const isScheduled = event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess
