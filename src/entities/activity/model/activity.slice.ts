@@ -101,7 +101,7 @@ const activitySlice = createSlice({
     entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {
       const { appletId, entityId, eventId } = action.payload
 
-      state.groupsInProgress[appletId][entityId][eventId].endAt = new Date()
+      state.groupsInProgress[appletId][entityId][eventId].endAt = new Date().getTime()
 
       const completedEntities = state.completedEntities ?? {}
 

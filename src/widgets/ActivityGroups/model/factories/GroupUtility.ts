@@ -38,7 +38,7 @@ export class GroupUtility {
   private getStartedAt(eventActivity: EventEntity): Date {
     const record = this.getProgressRecord(eventActivity)!
 
-    return record.startAt!
+    return new Date(record.startAt!)
   }
 
   private getAllowedTimeInterval(
@@ -114,7 +114,7 @@ export class GroupUtility {
   public getCompletedAt(eventActivity: EventEntity): Date | null {
     const progressRecord = this.getProgressRecord(eventActivity)
 
-    return progressRecord?.endAt ?? null
+    return progressRecord?.endAt ? new Date(progressRecord.endAt) : null
   }
 
   public isInProgress(eventActivity: EventEntity): boolean {

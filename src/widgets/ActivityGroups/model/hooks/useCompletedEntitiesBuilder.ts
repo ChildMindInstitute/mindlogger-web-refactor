@@ -29,7 +29,7 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
           progressPayload: {
             type: ActivityPipelineType.Regular,
             startAt: null,
-            endAt: new Date(endAtDate),
+            endAt: new Date(endAtDate).getTime(),
           },
         })
       }
@@ -47,7 +47,7 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
           eventId: entity.scheduledEventId,
           progressPayload: {
             ...inProgressEvent,
-            endAt: new Date(endAtDate),
+            endAt: new Date(endAtDate).getTime(),
           },
         })
       }
