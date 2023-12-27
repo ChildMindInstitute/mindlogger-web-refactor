@@ -19,8 +19,8 @@ export type ActivityProgress = {
 export type ActivityOrFlowProgress = FlowProgress | ActivityProgress
 
 type EventProgressTimestampState = {
-  startAt: Date | null
-  endAt: Date | null
+  startAt: number | null
+  endAt: number | null
 }
 
 type EventId = string
@@ -34,3 +34,9 @@ export type EventsProgress = Record<EventId, EventProgressState>
 export type EntitiesProgress = Record<EntityId, EventsProgress>
 
 export type Progress = Record<AppletId, EntitiesProgress>
+
+export type CompletedEntitiesState = Record<EntityId, number>
+
+export type EventCompletions = Record<EventId, number[]>
+
+export type CompletedEventEntities = Record<EntityId, EventCompletions>

@@ -42,7 +42,7 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
 
     const endAt = progressRecord?.endAt
 
-    const isCompletedToday = !!endAt && this.utility.isToday(endAt)
+    const isCompletedToday = !!endAt && this.utility.isToday(new Date(endAt))
 
     return isScheduledToday && now > event.scheduledAt! && isCurrentTimeInTimeWindow && !isCompletedToday
   }
