@@ -10,9 +10,7 @@ type FilterCompletedEntitiesProps = {
 }
 
 export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
-  const { upsertGroupInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
-
-  const { groupsInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { upsertGroupInProgress, groupsInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
 
   const syncEntity = useCallback(
     (entity: CompletedEntityDTO) => {
