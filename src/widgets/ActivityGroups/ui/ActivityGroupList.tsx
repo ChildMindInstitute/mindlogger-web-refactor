@@ -51,6 +51,8 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     { select: data => data.data.result, enabled: !props.isPublic },
   )
 
+  useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
+
   const navigatator = useCustomNavigation()
   const navigateToActivityDetailsPage = (
     { appletId, activityId, eventId }: NavigateToActivityDetailsPageProps,
@@ -167,8 +169,6 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
       return navigateToActivityDetailsWithEmptyProgress(selectedActivity)
     }
   }
-
-  useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
 
   if (isCompletedEntitiesFetching) {
     return (

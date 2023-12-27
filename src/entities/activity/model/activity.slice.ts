@@ -3,8 +3,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import {
   ActivityEventState,
   ClearActivityItemsProgresByIdPayload,
-  CompletedEntitiesState,
-  CompletedEventEntities,
   InProgressEntity,
   SaveActivityItemAnswerPayload,
   SetActivityEventProgressStep,
@@ -13,7 +11,7 @@ import {
   UpsertActionPayload,
 } from "./types"
 
-import { Progress } from "~/abstract/lib"
+import { CompletedEntitiesState, CompletedEventEntities, Progress } from "~/abstract/lib"
 
 type InitialActivityState = {
   groupsInProgress: Progress

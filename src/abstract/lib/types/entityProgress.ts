@@ -34,3 +34,9 @@ export type EventsProgress = Record<EventId, EventProgressState>
 export type EntitiesProgress = Record<EntityId, EventsProgress>
 
 export type Progress = Record<AppletId, EntitiesProgress>
+
+export type CompletedEntitiesState = Record<EntityId, number>
+
+export type EventCompletions = Record<EventId, number[]>
+
+export type CompletedEventEntities = Record<EntityId, EventCompletions>
