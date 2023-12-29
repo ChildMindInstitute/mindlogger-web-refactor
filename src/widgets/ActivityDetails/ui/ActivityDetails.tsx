@@ -1,5 +1,8 @@
+import { useContext } from "react"
+
 import Box from "@mui/material/Box"
 
+import { ActivityDetailsContext } from "../lib"
 import * as activityDetailsModel from "../model"
 import { AssessmentLoadingScreen } from "./AssessmentLoadingScreen"
 import { AssessmentPassingScreen } from "./AssessmentPassingScreen"
@@ -7,28 +10,10 @@ import { AssessmentWelcomeScreen } from "./AssessmentWelcomeScreen"
 
 import { useCustomTranslation } from "~/shared/utils"
 
-type PrivateActivityAssessmentProps = {
-  isPublic: false
-
-  appletId: string
-  activityId: string
-  eventId: string
-}
-
-type PublicActivityAssessmentProps = {
-  isPublic: true
-
-  appletId: string
-  activityId: string
-  eventId: string
-
-  publicAppletKey: string
-}
-
-type Props = PrivateActivityAssessmentProps | PublicActivityAssessmentProps
-
-export const ActivityDetailsWidget = (props: Props) => {
+export const ActivityDetailsWidget = () => {
   const { t } = useCustomTranslation()
+
+  const context = useContext(ActivityDetailsContext)
 
   const {
     activityDetails,
@@ -39,22 +24,16 @@ export const ActivityDetailsWidget = (props: Props) => {
     appletDetails,
     eventsRawData,
     respondentMeta,
-  } = activityDetailsModel.hooks.useActivityDetails(props)
+  } = activityDetailsModel.hooks.useActivityDetails()
 
   if (isLoading) {
-    return (
-      <AssessmentLoadingScreen
-        appletId={props.appletId}
-        isPublic={props.isPublic}
-        publicKey={props.isPublic ? props.publicAppletKey : null}
-      />
-    )
+    return <AssessmentLoadingScreen />
   }
 
   if (isError) {
     return (
       <Box height="100vh" width="100%" display="flex" justifyContent="center" alignItems="center">
-        <span>{props.isPublic ? t("additional.invalid_public_url") : error?.evaluatedMessage}</span>
+        <span>{context.isPublic ? t("additional.invalid_public_url") : error?.evaluatedMessage}</span>
       </Box>
     )
   }
@@ -68,15 +47,7 @@ export const ActivityDetailsWidget = (props: Props) => {
   }
 
   if (!isActivityEventInProgress && activityDetails) {
-    return (
-      <AssessmentWelcomeScreen
-        activityDetails={activityDetails}
-        eventId={props.eventId}
-        appletId={appletDetails.id}
-        isPublic={props.isPublic}
-        publicKey={props.isPublic ? props.publicAppletKey : null}
-      />
-    )
+    return <AssessmentWelcomeScreen activityDetails={activityDetails} />
   }
 
   return (
@@ -84,9 +55,6 @@ export const ActivityDetailsWidget = (props: Props) => {
       appletDetails={appletDetails}
       activityDetails={activityDetails}
       eventsRawData={eventsRawData}
-      eventId={props.eventId}
-      isPublic={props.isPublic}
-      publicAppletKey={props.isPublic ? props.publicAppletKey : undefined}
       respondentMeta={respondentMeta}
     />
   )

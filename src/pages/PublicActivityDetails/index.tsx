@@ -2,7 +2,7 @@ import Box from "@mui/material/Box"
 import { useParams } from "react-router-dom"
 
 import { useCustomTranslation } from "~/shared/utils"
-import { ActivityDetailsWidget } from "~/widgets/ActivityDetails"
+import { ActivityDetailsContext, ActivityDetailsWidget } from "~/widgets/ActivityDetails"
 
 export const PublicActivityDetailsPage = () => {
   const { appletId, activityId, eventId, publicAppletKey } = useParams()
@@ -13,14 +13,10 @@ export const PublicActivityDetailsPage = () => {
   }
 
   return (
-    <Box height="100vh" display="flex" flex={1}>
-      <ActivityDetailsWidget
-        isPublic={true}
-        appletId={appletId}
-        activityId={activityId}
-        eventId={eventId}
-        publicAppletKey={publicAppletKey}
-      />
+    <Box display="flex" flex={1}>
+      <ActivityDetailsContext.Provider value={{ appletId, activityId, eventId, publicAppletKey, isPublic: true }}>
+        <ActivityDetailsWidget />
+      </ActivityDetailsContext.Provider>
     </Box>
   )
 }

@@ -1,29 +1,12 @@
+import { useContext } from "react"
+
+import { ActivityDetailsContext } from "../../lib"
 import { useItemsInProgress } from "./useItemsInProgress"
 
 import { useActivityByIdQuery } from "~/entities/activity"
 import { useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, BaseError, RespondentMetaDTO } from "~/shared/api"
-
-type PrivateProps = {
-  isPublic: false
-
-  appletId: string
-  activityId: string
-  eventId: string
-}
-
-type PublicProps = {
-  isPublic: true
-
-  appletId: string
-  activityId: string
-  eventId: string
-
-  publicAppletKey: string
-}
-
-type Props = PrivateProps | PublicProps
 
 export interface ActivityEvents {
   eventId: string
@@ -41,8 +24,10 @@ interface UseActivityDetailsReturn {
   error: BaseError | null
 }
 
-export const useActivityDetails = (props: Props): UseActivityDetailsReturn => {
-  const { currentActivityEventProgress } = useItemsInProgress(props.eventId, props.activityId)
+export const useActivityDetails = (): UseActivityDetailsReturn => {
+  const context = useContext(ActivityDetailsContext)
+
+  const { currentActivityEventProgress } = useItemsInProgress(context.eventId, context.activityId)
 
   const isActivityEventInProgress = currentActivityEventProgress.length > 0
 
@@ -52,9 +37,9 @@ export const useActivityDetails = (props: Props): UseActivityDetailsReturn => {
     isLoading: isAppletLoading,
     error: appletError,
   } = useAppletByIdQuery(
-    props.isPublic
-      ? { isPublic: props.isPublic, publicAppletKey: props.publicAppletKey }
-      : { isPublic: props.isPublic, appletId: props.appletId },
+    context.isPublic
+      ? { isPublic: context.isPublic, publicAppletKey: context.publicAppletKey }
+      : { isPublic: context.isPublic, appletId: context.appletId },
   )
 
   const {
@@ -62,7 +47,7 @@ export const useActivityDetails = (props: Props): UseActivityDetailsReturn => {
     isError: isActivityError,
     isLoading: isActivityLoading,
     error: activityError,
-  } = useActivityByIdQuery({ isPublic: props.isPublic, activityId: props.activityId })
+  } = useActivityByIdQuery({ isPublic: context.isPublic, activityId: context.activityId })
 
   const {
     data: eventsByIdData,
@@ -70,9 +55,9 @@ export const useActivityDetails = (props: Props): UseActivityDetailsReturn => {
     isLoading: isEventsLoading,
     error: eventsError,
   } = useEventsbyAppletIdQuery(
-    props.isPublic
-      ? { isPublic: props.isPublic, publicAppletKey: props.publicAppletKey }
-      : { isPublic: props.isPublic, appletId: props.appletId },
+    context.isPublic
+      ? { isPublic: context.isPublic, publicAppletKey: context.publicAppletKey }
+      : { isPublic: context.isPublic, appletId: context.appletId },
   )
 
   return {

@@ -28,9 +28,7 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
     return activityEventProgress.activityEvents
   }, [currentActivityEventStateProgress])
 
-  const activitiesProgressWithConditionalLogic = useMemo(() => {
-    return conditionalLogicBuilder.process(activitiesProgress)
-  }, [activitiesProgress])
+  const activitiesProgressWithConditionalLogic = conditionalLogicBuilder.process(activitiesProgress)
 
   const lastActivityEventWithAnswerIndex = useMemo(() => {
     const activityEventProgress = currentActivityEventStateProgress

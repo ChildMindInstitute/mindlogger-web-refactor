@@ -1,10 +1,13 @@
+import { useCallback, useContext, useEffect } from "react"
+
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 
+import { ActivityDetailsContext } from "../lib"
 import { useAnswer } from "../model/hooks/useAnswers"
 import { useEntityComplete } from "../model/hooks/useEntityComplete"
 import { useStepperStateManager } from "../model/hooks/useStepperStateManager"
-import { validateIsItemWithoutAnswer, validateIsNumericOnly, validateItem } from "../model/validateItem"
+import { validateIsItemAnswerShouldBeEmpty, validateIsNumericOnly, validateItem } from "../model/validateItem"
 import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
 import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
@@ -20,22 +23,20 @@ import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "~/entities/act
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
 import { NotificationCenter, useNotification } from "~/shared/ui"
-import { Mixpanel, useCustomTranslation, useFlowType, usePrevious } from "~/shared/utils"
+import { Mixpanel, eventEmitter, useCustomTranslation, useFlowType, usePrevious } from "~/shared/utils"
 
 type Props = {
-  eventId: string
-
   activityDetails: ActivityDTO
   eventsRawData: AppletEventsResponse
   appletDetails: AppletDetailsDTO
   respondentMeta?: RespondentMetaDTO
-
-  isPublic: boolean
-  publicAppletKey?: string
 }
 
 export const AssessmentPassingScreen = (props: Props) => {
   const { t } = useCustomTranslation()
+
+  const context = useContext(ActivityDetailsContext)
+  const publicAppletKey = context.isPublic ? context.publicAppletKey : null
 
   const flowParams = useFlowType()
   const { showWarningNotification } = useNotification()
@@ -43,7 +44,7 @@ export const AssessmentPassingScreen = (props: Props) => {
   const { processAnswers } = useAnswer({
     appletDetails: props.appletDetails,
     activityId: props.activityDetails.id,
-    eventId: props.eventId,
+    eventId: context.eventId,
     eventsRawData: props.eventsRawData,
     flowId: flowParams.isFlow ? flowParams.flowId : null,
   })
@@ -51,25 +52,25 @@ export const AssessmentPassingScreen = (props: Props) => {
   const { completeActivity, completeFlow } = useEntityComplete({
     appletDetails: props.appletDetails,
     activityId: props.activityDetails.id,
-    eventId: props.eventId,
-    publicAppletKey: props.publicAppletKey ?? null,
+    eventId: context.eventId,
+    publicAppletKey,
     flowId: flowParams.isFlow ? flowParams.flowId : null,
   })
 
   const { toNextStep, toPrevStep, currentItem, items, userEvents, hasNextStep, hasPrevStep, step } =
     useStepperStateManager({
       activityId: props.activityDetails.id,
-      eventId: props.eventId,
+      eventId: context.eventId,
     })
 
   const { saveActivityItemAnswer } = useSaveActivityItemAnswer({
     activityId: props.activityDetails.id,
-    eventId: props.eventId,
+    eventId: context.eventId,
   })
 
   const { saveSetAnswerUserEvent } = useSetAnswerUserEvent({
     activityId: props.activityDetails.id,
-    eventId: props.eventId,
+    eventId: context.eventId,
   })
 
   const prevStep = usePrevious(step)
@@ -78,7 +79,7 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const { saveUserEventByType } = activityModel.hooks.useUserEvent({
     activityId: props.activityDetails.id,
-    eventId: props.eventId,
+    eventId: context.eventId,
   })
 
   const onSaveAnswerSuccess = () => {
@@ -105,30 +106,31 @@ export const AssessmentPassingScreen = (props: Props) => {
   })
 
   function submitAnswers() {
-    if (currentItem) {
-      saveUserEventByType("DONE", currentItem)
+    if (!currentItem) {
+      throw new Error("[Submit answers] CurrentItem is not defined")
     }
+    saveUserEventByType("DONE", currentItem)
 
     const answer = processAnswers({
       items,
       userEvents,
-      isPublic: props.isPublic,
+      isPublic: context.isPublic,
     })
 
-    return props.isPublic ? publicSaveAnswer(answer) : saveAnswer(answer)
+    return context.isPublic ? publicSaveAnswer(answer) : saveAnswer(answer)
   }
 
   function onNextButtonClick() {
     if (!currentItem) {
-      return
+      throw new Error("[Next button click] CurrentItem is not defined")
     }
 
-    const isItemWithoutAnswer = validateIsItemWithoutAnswer(currentItem)
+    const shouldBeEmpty = validateIsItemAnswerShouldBeEmpty(currentItem)
 
     const isItemHasAnswer = currentItem.answer.length
     const isItemSkippable = currentItem.config.skippableItem || isAllItemsSkippable
 
-    if (!isItemWithoutAnswer && !isItemHasAnswer && !isItemSkippable) {
+    if (!shouldBeEmpty && !isItemHasAnswer && !isItemSkippable) {
       return showWarningNotification(t("pleaseAnswerTheQuestion"))
     }
 
@@ -157,9 +159,9 @@ export const AssessmentPassingScreen = (props: Props) => {
     return toNextStep()
   }
 
-  function autoForward() {
+  const autoForward = useCallback(() => {
     if (!currentItem) {
-      return
+      throw new Error("[Auto forward] CurrentItem is not defined")
     }
 
     if (!hasNextStep) {
@@ -168,11 +170,11 @@ export const AssessmentPassingScreen = (props: Props) => {
 
     saveUserEventByType("NEXT", currentItem)
     return toNextStep()
-  }
+  }, [currentItem, hasNextStep, saveUserEventByType, toNextStep])
 
   function onBackButtonClick() {
     if (!currentItem) {
-      return
+      throw new Error("[Back button click] CurrentItem is not defined")
     }
 
     const hasConditionlLogic = currentItem.conditionalLogic
@@ -200,11 +202,18 @@ export const AssessmentPassingScreen = (props: Props) => {
     respondentMeta: props.respondentMeta,
   })
 
-  function onKeyDownHandler(key: string) {
-    if (key === "Enter") {
-      return onNextButtonClick()
+  useEffect(() => {
+    const test = () => {
+      console.log("onSingleSelectAnswered triggered")
+      autoForward()
     }
-  }
+
+    eventEmitter.on("onSingleSelectAnswered", test)
+
+    return () => {
+      eventEmitter.off("onSingleSelectAnswered", test)
+    }
+  }, [autoForward])
 
   return (
     <Box
@@ -212,15 +221,14 @@ export const AssessmentPassingScreen = (props: Props) => {
       display="flex"
       flex={1}
       flexDirection="column"
-      onKeyDown={event => onKeyDownHandler && onKeyDownHandler(event.key)}
       bgcolor={Theme.colors.light.surface}>
       <AssessmentLayoutHeader
         title={props.activityDetails.name}
         appletId={props.appletDetails.id}
         activityId={props.activityDetails.id}
-        eventId={props.eventId}
-        isPublic={props.isPublic}
-        publicKey={props.publicAppletKey ?? null}
+        eventId={context.eventId}
+        isPublic={context.isPublic}
+        publicKey={publicAppletKey}
       />
 
       <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
@@ -231,7 +239,7 @@ export const AssessmentPassingScreen = (props: Props) => {
               <ActivityCardItem
                 key={currentItem.id}
                 activityId={props.activityDetails.id}
-                eventId={props.eventId}
+                eventId={context.eventId}
                 activityItem={currentItem}
                 values={currentItem.answer}
                 replaceText={replaceTextVariables}
@@ -239,7 +247,6 @@ export const AssessmentPassingScreen = (props: Props) => {
                 allowToSkipAllItems={isAllItemsSkippable}
                 step={step}
                 prevStep={prevStep}
-                autoForwardCallback={autoForward}
               />
             )}
           </Box>

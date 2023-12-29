@@ -1,6 +1,9 @@
+import { useContext } from "react"
+
 import Box from "@mui/material/Box"
 
 import Layout from "../../AppLayout"
+import { ActivityDetailsContext } from "../lib"
 import { ActivityMetaData } from "./ActivityMetaData"
 import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
 import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
@@ -14,15 +17,12 @@ import { useCustomMediaQuery, useFlowType } from "~/shared/utils"
 
 type Props = {
   activityDetails: ActivityDTO
-
-  appletId: string
-  eventId: string
-  isPublic: boolean
-  publicKey: string | null
 }
 
 export const AssessmentWelcomeScreen = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery()
+
+  const context = useContext(ActivityDetailsContext)
 
   const flowParams = useFlowType()
 
@@ -31,12 +31,12 @@ export const AssessmentWelcomeScreen = (props: Props) => {
 
   const startAssessment = () => {
     const initialStep = 1
-    return saveActivityEventRecords(props.activityDetails, props.eventId, initialStep)
+    return saveActivityEventRecords(props.activityDetails, context.eventId, initialStep)
   }
 
   const groupInProgress = getGroupInProgressByIds({
-    appletId: props.appletId,
-    eventId: props.eventId,
+    appletId: context.appletId,
+    eventId: context.eventId,
     activityId: flowParams.isFlow ? flowParams.flowId : props.activityDetails.id,
   })
 
@@ -46,11 +46,11 @@ export const AssessmentWelcomeScreen = (props: Props) => {
       header={
         <AssessmentLayoutHeader
           title={props.activityDetails.name}
-          appletId={props.appletId}
+          appletId={context.appletId}
           activityId={props.activityDetails.id}
-          eventId={props.eventId}
-          isPublic={props.isPublic}
-          publicKey={props.publicKey}
+          eventId={context.eventId}
+          isPublic={context.isPublic}
+          publicKey={context.isPublic ? context.publicAppletKey : null}
         />
       }
       footer={

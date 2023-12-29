@@ -15,7 +15,7 @@ export function validateItem(props: ValidateItemProps) {
   return true
 }
 
-export function validateIsItemWithoutAnswer(currentItem: activityModel.types.ActivityEventProgressRecord) {
+export function validateIsItemAnswerShouldBeEmpty(currentItem: activityModel.types.ActivityEventProgressRecord) {
   const isMessageItem = currentItem.responseType === "message"
   const isAudioPlayerItem = currentItem.responseType === "audioPlayer"
 
