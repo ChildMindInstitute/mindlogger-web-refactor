@@ -43,10 +43,10 @@ export const TransferOwnershipAccept = ({ appletId, keyParam }: TransferOwnershi
       alignItems="center"
       textAlign="center"
       data-testid="transfer-ownership-accepted">
-      <Typography variant="body1" fontSize="30px" margin="16px 0px">
+      <Typography variant="body1" fontSize="30px" margin="16px 0px" data-testid="transfer-ownership-accepted-title">
         {t("accepted.title")}
       </Typography>
-      <Box>
+      <Box data-testid="transfer-ownership-accepted-content">
         <Typography variant="body2" fontSize="18px">
           {t("accepted.message1")}
         </Typography>
