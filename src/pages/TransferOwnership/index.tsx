@@ -28,7 +28,7 @@ export default function TransferOwnershipPage() {
   }
 
   return (
-    <Box margin="24px 0px">
+    <Box display="flex" flex={1} justifyContent="center" margin="24px 0px">
       <AuthorizationGuard fallback={<AuthorizationButtons redirectState={redirectState} />}>
         {action === "accept" && <TransferOwnershipAccept appletId={appletId} keyParam={key} />}
         {action === "decline" && <TransferOwnershipDecline appletId={appletId} keyParam={key} />}

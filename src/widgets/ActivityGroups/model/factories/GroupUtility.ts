@@ -1,4 +1,4 @@
-import { addDays, isEqual, startOfDay, subDays, subSeconds } from "date-fns"
+import { addDays, addYears, isEqual, startOfDay, subDays, subSeconds, subYears } from "date-fns"
 
 import { EventEntity, Activity } from "../../lib"
 
@@ -6,6 +6,8 @@ import { EventProgressState, Progress } from "~/abstract/lib"
 import { AvailabilityLabelType, PeriodicityType, ScheduleEvent } from "~/entities/event"
 import { MINUTES_IN_HOUR, MS_IN_MINUTE } from "~/shared/constants"
 import { DatesFromTo, HourMinute, getMsFromHours, getMsFromMinutes, isSourceLess } from "~/shared/utils"
+
+const ManyYears = 100
 
 export type GroupsBuildContext = {
   allAppletActivities: Activity[]
@@ -79,7 +81,7 @@ export class GroupUtility {
 
   public getYesterday = () => subDays(this.getToday(), 1)
 
-  public getEndOfDay = () => subSeconds(addDays(this.getToday(), 1), 1)
+  public getEndOfDay = (date: Date = this.getToday()) => subSeconds(addDays(date, 1), 1)
 
   public getTomorrow = () => addDays(this.getToday(), 1)
 
@@ -116,8 +118,8 @@ export class GroupUtility {
     return !!record.startAt && !record.endAt
   }
 
-  public isInTimeInterval(
-    interval: DatesFromTo,
+  public isInInterval(
+    interval: Partial<DatesFromTo>,
     valueToCheck: Date | null,
     including: "from" | "to" | "both" | "none",
   ): boolean {
@@ -125,19 +127,25 @@ export class GroupUtility {
       return false
     }
 
+    const deepPast = subYears(this.getToday(), ManyYears)
+    const deepFuture = addYears(this.getToday(), ManyYears)
+
+    const from = interval.from ?? deepPast
+    const to = interval.to ?? deepFuture
+
     switch (including) {
       case "both":
-        return interval.from <= valueToCheck && valueToCheck <= interval.to
+        return from <= valueToCheck && valueToCheck <= to
       case "from":
-        return interval.from <= valueToCheck && valueToCheck < interval.to
+        return from <= valueToCheck && valueToCheck < to
       case "to":
-        return interval.from < valueToCheck && valueToCheck <= interval.to
+        return from < valueToCheck && valueToCheck <= to
       case "none":
-        return interval.from < valueToCheck && valueToCheck < interval.to
+        return from < valueToCheck && valueToCheck < to
     }
   }
 
-  public getVoidTimeInterval(event: ScheduleEvent, considerSpread: boolean): DatesFromTo {
+  public getVoidInterval(event: ScheduleEvent, considerSpread: boolean): DatesFromTo {
     const buildFrom = considerSpread && this.isSpreadToNextDay(event)
 
     const { timeFrom, timeTo } = event.availability
@@ -189,6 +197,21 @@ export class GroupUtility {
     } else {
       return allowedFrom <= completedAt && completedAt < allowedTo
     }
+  }
+
+  public isInsideValidDatesInterval(event: ScheduleEvent) {
+    const { startDate, endDate } = event.availability
+
+    const now = this.getNow()
+
+    return this.isInInterval(
+      {
+        from: startDate ?? undefined,
+        to: endDate ?? undefined,
+      },
+      now,
+      "both",
+    )
   }
 
   public isScheduledYesterday(event: ScheduleEvent): boolean {
