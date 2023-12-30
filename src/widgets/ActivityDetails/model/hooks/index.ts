@@ -1,2 +1,1 @@
-export * from "./useActivityDetails"
-export * from "./useItemsInProgress"
+export * from "./useActivityDetailsQuery"

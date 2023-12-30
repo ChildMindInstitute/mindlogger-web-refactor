@@ -26,12 +26,12 @@ export const AssessmentWelcomeScreen = (props: Props) => {
 
   const flowParams = useFlowType()
 
-  const { saveActivityEventRecords } = activityModel.hooks.useSaveActivityEventProgress()
+  const { saveItemsRecord } = activityModel.hooks.useSaveActivityEventProgress()
   const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
 
   const startAssessment = () => {
     const initialStep = 1
-    return saveActivityEventRecords(props.activityDetails, context.eventId, initialStep)
+    return saveItemsRecord(props.activityDetails, context.eventId, initialStep)
   }
 
   const groupInProgress = getGroupInProgressByIds({

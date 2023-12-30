@@ -1,20 +1,13 @@
 import { useContext } from "react"
 
 import { ActivityDetailsContext } from "../../lib"
-import { useItemsInProgress } from "./useItemsInProgress"
 
 import { useActivityByIdQuery } from "~/entities/activity"
 import { useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, BaseError, RespondentMetaDTO } from "~/shared/api"
 
-export interface ActivityEvents {
-  eventId: string
-  activityId: string
-}
-
 interface UseActivityDetailsReturn {
-  isActivityEventInProgress: boolean
   appletDetails: AppletDetailsDTO | null
   respondentMeta?: RespondentMetaDTO
   activityDetails: ActivityDTO | null
@@ -24,12 +17,8 @@ interface UseActivityDetailsReturn {
   error: BaseError | null
 }
 
-export const useActivityDetails = (): UseActivityDetailsReturn => {
+export const useActivityDetailsQuery = (): UseActivityDetailsReturn => {
   const context = useContext(ActivityDetailsContext)
-
-  const { currentActivityEventProgress } = useItemsInProgress(context.eventId, context.activityId)
-
-  const isActivityEventInProgress = currentActivityEventProgress.length > 0
 
   const {
     data: appletById,
@@ -61,7 +50,6 @@ export const useActivityDetails = (): UseActivityDetailsReturn => {
   )
 
   return {
-    isActivityEventInProgress,
     appletDetails: appletById?.data?.result ?? null,
     respondentMeta: appletById?.data?.respondentMeta,
     activityDetails: activityById?.data?.result ?? null,

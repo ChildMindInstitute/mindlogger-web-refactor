@@ -1,40 +1,28 @@
 import { useMemo } from "react"
 
-import { useSelector } from "react-redux"
-
 import { conditionalLogicBuilder, getActivityEventProgressId } from "../../lib"
-import { activityEventProgressSelector } from "../selectors"
+import { selectActivityProgress } from "../selectors"
 
-type UseActivityEventProgressStateProps = {
+import { useAppSelector } from "~/shared/utils"
+
+type Props = {
   activityId: string
   eventId: string
 }
 
-export const useActivityEventProgressState = (props: UseActivityEventProgressStateProps) => {
-  const activityEventProgressState = useSelector(activityEventProgressSelector)
+export const useActivityEventProgressState = (props: Props) => {
+  const activityEventId = getActivityEventProgressId(props.activityId, props.eventId)
 
-  const currentActivityEventStateProgress = useMemo(() => {
-    const activityEventId = getActivityEventProgressId(props.activityId, props.eventId)
-    return activityEventProgressState[activityEventId]
-  }, [activityEventProgressState, props.activityId, props.eventId])
+  const activityProgress = useAppSelector(state => selectActivityProgress(state, activityEventId))
 
-  const activitiesProgress = useMemo(() => {
-    const activityEventProgress = currentActivityEventStateProgress
+  const rawItems = useMemo(() => activityProgress?.items ?? [], [activityProgress])
 
-    if (!activityEventProgress?.activityEvents) {
-      return []
-    }
+  const items = conditionalLogicBuilder.process(rawItems)
 
-    return activityEventProgress.activityEvents
-  }, [currentActivityEventStateProgress])
+  const lastItemWithAnswerIndex = useMemo(() => {
+    const step = activityProgress?.step ?? 1
 
-  const activitiesProgressWithConditionalLogic = conditionalLogicBuilder.process(activitiesProgress)
-
-  const lastActivityEventWithAnswerIndex = useMemo(() => {
-    const activityEventProgress = currentActivityEventStateProgress
-    const step = activityEventProgress?.step ?? 1
-
-    // -1 === not foind
+    // -1 === not found
     // 0 === start index
     // If not found return start index
     if (step > 1) {
@@ -42,30 +30,28 @@ export const useActivityEventProgressState = (props: UseActivityEventProgressSta
     }
 
     return step
-  }, [currentActivityEventStateProgress])
+  }, [activityProgress])
 
   const progress = useMemo(() => {
     const defaultProgressPercentage = 0
 
-    const activityEventRecords = currentActivityEventStateProgress
-
-    if (!activityEventRecords?.activityEvents) {
+    if (!rawItems) {
       return defaultProgressPercentage
     }
 
-    const activityEventLength = activitiesProgressWithConditionalLogic.length
-    const lastStep = activityEventRecords?.step
+    const activityEventLength = items.length
+    const lastStep = activityProgress?.step
 
     // Step always start from 1, but we want to paint progress when we pass some item
     return ((lastStep - 1) / activityEventLength) * 100
-  }, [activitiesProgressWithConditionalLogic.length, currentActivityEventStateProgress])
+  }, [items.length, activityProgress?.step, rawItems])
 
   return {
-    currentActivityEventStateProgress,
-    currentActivityEventProgress: activitiesProgressWithConditionalLogic,
-    lastActivityEventWithAnswerIndex,
+    rawItems,
+    items,
+    currentActivityEventStateProgress: activityProgress,
+    lastActivityEventWithAnswerIndex: lastItemWithAnswerIndex,
     progress,
-    userEvents: currentActivityEventStateProgress?.userEvents ?? [],
-    activityEvents: currentActivityEventStateProgress?.activityEvents ?? [],
+    userEvents: activityProgress?.userEvents ?? [],
   }
 }

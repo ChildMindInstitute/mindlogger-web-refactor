@@ -43,7 +43,7 @@ export type ActivityEventProgressRecord =
   | AudioPlayerItem
 
 export type ActivityEventProgressState = {
-  activityEvents: ActivityEventProgressRecord[]
+  items: ActivityEventProgressRecord[]
   step: number
   userEvents: Array<UserEvents>
 }

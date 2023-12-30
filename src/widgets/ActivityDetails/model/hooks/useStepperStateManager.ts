@@ -22,7 +22,7 @@ type UseStepperStateManagerOutput = {
 }
 
 export const useStepperStateManager = (props: UseStepperStateManagerProps): UseStepperStateManagerOutput => {
-  const { currentActivityEventProgress, userEvents } = activityModel.hooks.useActivityEventProgressState({
+  const { items, userEvents } = activityModel.hooks.useActivityEventProgressState({
     eventId: props.eventId,
     activityId: props.activityId,
   })
@@ -32,7 +32,7 @@ export const useStepperStateManager = (props: UseStepperStateManagerProps): UseS
     eventId: props.eventId,
   })
 
-  const hasNextStep = step < currentActivityEventProgress.length
+  const hasNextStep = step < items.length
 
   const hasPrevStep = step > 1
 
@@ -55,7 +55,7 @@ export const useStepperStateManager = (props: UseStepperStateManagerProps): UseS
     toPrevStep,
     hasNextStep,
     hasPrevStep,
-    items: currentActivityEventProgress,
+    items,
     userEvents,
   }
 }

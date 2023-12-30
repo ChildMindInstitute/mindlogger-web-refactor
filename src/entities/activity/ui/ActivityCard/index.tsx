@@ -27,14 +27,14 @@ interface ActivityCardProps {
 export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }: ActivityCardProps) => {
   const { lessThanSM } = useCustomMediaQuery()
 
-  const { saveActivityEventRecords } = useSaveActivityEventProgress()
+  const { saveItemsRecord } = useSaveActivityEventProgress()
 
   const { isLoading, activity } = useActivity({
     activityId: activityListItem.activityId,
     isPublic,
   })
 
-  const { activityEvents, progress } = useActivityEventProgressState({
+  const { items, progress } = useActivityEventProgressState({
     activityId: activityListItem.activityId,
     eventId: activityListItem.eventId,
   })
@@ -52,7 +52,7 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
 
   const isActivityInProgress = activityListItem.status === ActivityStatus.InProgress
 
-  const countOfCompletedQuestions = activityEvents.filter(item => item.answer.length).length
+  const countOfCompletedQuestions = items.filter(item => item.answer.length).length
 
   const activityLength = activity?.items.length || 0
 
@@ -86,7 +86,7 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
     if (!isActivityInProgress && !isFlow && activity) {
       const initialStep = 1
 
-      saveActivityEventRecords(activity, activityListItem.eventId, initialStep)
+      saveItemsRecord(activity, activityListItem.eventId, initialStep)
     }
 
     return onActivityCardClick()

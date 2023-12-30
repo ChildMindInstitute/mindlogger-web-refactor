@@ -8,6 +8,7 @@ import { AssessmentLoadingScreen } from "./AssessmentLoadingScreen"
 import { AssessmentPassingScreen } from "./AssessmentPassingScreen"
 import { AssessmentWelcomeScreen } from "./AssessmentWelcomeScreen"
 
+import { activityModel } from "~/entities/activity"
 import { useCustomTranslation } from "~/shared/utils"
 
 export const ActivityDetailsWidget = () => {
@@ -15,16 +16,17 @@ export const ActivityDetailsWidget = () => {
 
   const context = useContext(ActivityDetailsContext)
 
-  const {
-    activityDetails,
-    isLoading,
-    isError,
-    error,
-    isActivityEventInProgress,
-    appletDetails,
-    eventsRawData,
-    respondentMeta,
-  } = activityDetailsModel.hooks.useActivityDetails()
+  const { items } = activityModel.hooks.useActivityEventProgressState({
+    eventId: context.eventId,
+    activityId: context.activityId,
+  })
+
+  console.log(items)
+
+  const isActivityEventInProgress = items.length > 0
+
+  const { activityDetails, isLoading, isError, error, appletDetails, eventsRawData, respondentMeta } =
+    activityDetailsModel.hooks.useActivityDetailsQuery()
 
   if (isLoading) {
     return <AssessmentLoadingScreen />
@@ -46,7 +48,7 @@ export const ActivityDetailsWidget = () => {
     )
   }
 
-  if (!isActivityEventInProgress && activityDetails) {
+  if (!isActivityEventInProgress) {
     return <AssessmentWelcomeScreen activityDetails={activityDetails} />
   }
 

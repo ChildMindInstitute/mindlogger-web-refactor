@@ -1,29 +1,21 @@
-import { useCallback, useContext, useEffect } from "react"
+import { useContext, useEffect } from "react"
 
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 
 import { ActivityDetailsContext } from "../lib"
-import { useAnswer } from "../model/hooks/useAnswers"
-import { useEntityComplete } from "../model/hooks/useEntityComplete"
+import { useAssessmentActions } from "../model/hooks/useAssessmentActions"
 import { useStepperStateManager } from "../model/hooks/useStepperStateManager"
 import { validateIsItemAnswerShouldBeEmpty, validateIsNumericOnly, validateItem } from "../model/validateItem"
 import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
 import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
-import {
-  ActivityCardItem,
-  ItemCardButton,
-  activityModel,
-  usePublicSaveAnswerMutation,
-  useSaveAnswerMutation,
-  useTextVariablesReplacer,
-} from "~/entities/activity"
+import { ActivityCardItem, ItemCardButton, activityModel, useTextVariablesReplacer } from "~/entities/activity"
 import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "~/entities/activity/model/hooks"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
 import { NotificationCenter, useNotification } from "~/shared/ui"
-import { Mixpanel, eventEmitter, useCustomTranslation, useFlowType, usePrevious } from "~/shared/utils"
+import { eventEmitter, useCustomTranslation, usePrevious } from "~/shared/utils"
 
 type Props = {
   activityDetails: ActivityDTO
@@ -38,30 +30,12 @@ export const AssessmentPassingScreen = (props: Props) => {
   const context = useContext(ActivityDetailsContext)
   const publicAppletKey = context.isPublic ? context.publicAppletKey : null
 
-  const flowParams = useFlowType()
   const { showWarningNotification } = useNotification()
 
-  const { processAnswers } = useAnswer({
-    appletDetails: props.appletDetails,
+  const { toNextStep, toPrevStep, currentItem, items, hasNextStep, hasPrevStep, step } = useStepperStateManager({
     activityId: props.activityDetails.id,
     eventId: context.eventId,
-    eventsRawData: props.eventsRawData,
-    flowId: flowParams.isFlow ? flowParams.flowId : null,
   })
-
-  const { completeActivity, completeFlow } = useEntityComplete({
-    appletDetails: props.appletDetails,
-    activityId: props.activityDetails.id,
-    eventId: context.eventId,
-    publicAppletKey,
-    flowId: flowParams.isFlow ? flowParams.flowId : null,
-  })
-
-  const { toNextStep, toPrevStep, currentItem, items, userEvents, hasNextStep, hasPrevStep, step } =
-    useStepperStateManager({
-      activityId: props.activityDetails.id,
-      eventId: context.eventId,
-    })
 
   const { saveActivityItemAnswer } = useSaveActivityItemAnswer({
     activityId: props.activityDetails.id,
@@ -82,45 +56,9 @@ export const AssessmentPassingScreen = (props: Props) => {
     eventId: context.eventId,
   })
 
-  const onSaveAnswerSuccess = () => {
-    if (flowParams.isFlow) {
-      completeFlow(flowParams.flowId)
-    } else {
-      return completeActivity()
-    }
-  }
+  const { onSubmit, onSubmitLoading } = useAssessmentActions(props)
 
-  const { mutate: saveAnswer, isLoading: submitLoading } = useSaveAnswerMutation({
-    onSuccess() {
-      Mixpanel.track("Assessment completed")
-
-      return onSaveAnswerSuccess()
-    },
-  })
-  const { mutate: publicSaveAnswer } = usePublicSaveAnswerMutation({
-    onSuccess() {
-      Mixpanel.track("Assessment completed")
-
-      return onSaveAnswerSuccess()
-    },
-  })
-
-  function submitAnswers() {
-    if (!currentItem) {
-      throw new Error("[Submit answers] CurrentItem is not defined")
-    }
-    saveUserEventByType("DONE", currentItem)
-
-    const answer = processAnswers({
-      items,
-      userEvents,
-      isPublic: context.isPublic,
-    })
-
-    return context.isPublic ? publicSaveAnswer(answer) : saveAnswer(answer)
-  }
-
-  function onNextButtonClick() {
+  const onNextButtonClick = (props = { isForce: false }) => {
     if (!currentItem) {
       throw new Error("[Next button click] CurrentItem is not defined")
     }
@@ -146,8 +84,8 @@ export const AssessmentPassingScreen = (props: Props) => {
       return showWarningNotification(t("onlyNumbersAllowed"))
     }
 
-    if (!hasNextStep) {
-      return submitAnswers()
+    if (!hasNextStep && !props.isForce) {
+      return onSubmit()
     }
 
     if (!isItemHasAnswer && isItemSkippable) {
@@ -158,19 +96,6 @@ export const AssessmentPassingScreen = (props: Props) => {
 
     return toNextStep()
   }
-
-  const autoForward = useCallback(() => {
-    if (!currentItem) {
-      throw new Error("[Auto forward] CurrentItem is not defined")
-    }
-
-    if (!hasNextStep) {
-      return
-    }
-
-    saveUserEventByType("NEXT", currentItem)
-    return toNextStep()
-  }, [currentItem, hasNextStep, saveUserEventByType, toNextStep])
 
   function onBackButtonClick() {
     if (!currentItem) {
@@ -205,7 +130,6 @@ export const AssessmentPassingScreen = (props: Props) => {
   useEffect(() => {
     const test = () => {
       console.log("onSingleSelectAnswered triggered")
-      autoForward()
     }
 
     eventEmitter.on("onSingleSelectAnswered", test)
@@ -213,7 +137,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     return () => {
       eventEmitter.off("onSingleSelectAnswered", test)
     }
-  }, [autoForward])
+  }, [])
 
   return (
     <Box
@@ -257,7 +181,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         <ItemCardButton
           isSubmitShown={!hasNextStep}
           isBackShown={hasPrevStep && !currentItem?.config.removeBackButton && props.activityDetails.responseIsEditable}
-          isLoading={submitLoading}
+          isLoading={onSubmitLoading}
           onNextButtonClick={onNextButtonClick}
           onBackButtonClick={onBackButtonClick}
         />

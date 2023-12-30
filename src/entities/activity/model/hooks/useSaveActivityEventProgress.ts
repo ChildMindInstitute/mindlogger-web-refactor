@@ -8,14 +8,14 @@ import { ActivityEventProgressRecord } from "../types"
 import { useAppDispatch } from "~/shared/utils"
 
 type UseActivityEventProgressReturn = {
-  saveActivityEventRecords: (activity: ActivityDetails, eventId: string, step: number) => void
-  resetActivityEventRecordsByParams: (activityId: string, eventId: string) => void
+  saveItemsRecord: (activity: ActivityDetails, eventId: string, step: number) => void
+  clearItemsRecord: (activityId: string, eventId: string) => void
 }
 
 export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn => {
   const dispatch = useAppDispatch()
 
-  const saveActivityEventRecords = useCallback(
+  const saveItemsRecord = useCallback(
     (activity: ActivityDetails, eventId: string, step: number) => {
       const isSplashScreenExist = !!activity.splashScreen
       let splashScreenItem: ActivityEventProgressRecord | undefined
@@ -32,14 +32,14 @@ export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn =
 
       const activityEventProgressId = getActivityEventProgressId(activity.id, eventId)
 
-      const activityEvents = splashScreenItem
+      const items = splashScreenItem
         ? [splashScreenItem, ...preparedActivityItemProgressRecords]
         : preparedActivityItemProgressRecords
 
       return dispatch(
         actions.saveActivityEventRecords({
           [activityEventProgressId]: {
-            activityEvents,
+            items,
             step,
             userEvents: [],
           },
@@ -49,14 +49,14 @@ export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn =
     [dispatch],
   )
 
-  const resetActivityEventRecordsByParams = useCallback(
+  const clearItemsRecord = useCallback(
     (activityId: string, eventId: string) => {
       const activityEventProgressId = getActivityEventProgressId(activityId, eventId)
 
       dispatch(
         actions.saveActivityEventRecords({
           [activityEventProgressId]: {
-            activityEvents: [],
+            items: [],
             step: 1,
             userEvents: [],
           },
@@ -67,7 +67,7 @@ export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn =
   )
 
   return {
-    saveActivityEventRecords,
-    resetActivityEventRecordsByParams,
+    saveItemsRecord,
+    clearItemsRecord,
   }
 }

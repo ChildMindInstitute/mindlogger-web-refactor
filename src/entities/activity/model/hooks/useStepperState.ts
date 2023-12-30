@@ -15,7 +15,7 @@ type UseStepperStateProps = {
 export const useStepperState = ({ activityId, eventId }: UseStepperStateProps) => {
   const dispatch = useAppDispatch()
 
-  const { currentActivityEventStateProgress, currentActivityEventProgress } = useActivityEventProgressState({
+  const { currentActivityEventStateProgress, items } = useActivityEventProgressState({
     activityId,
     eventId,
   })
@@ -37,14 +37,14 @@ export const useStepperState = ({ activityId, eventId }: UseStepperStateProps) =
   )
 
   const currentItem = useMemo((): ActivityEventProgressRecord | null => {
-    if (!currentActivityEventProgress) {
+    if (!items) {
       return null
     }
 
-    const currentItem = currentActivityEventProgress[step - 1]
+    const currentItem = items[step - 1]
 
     return currentItem
-  }, [currentActivityEventProgress, step])
+  }, [items, step])
 
   return { step, setStep, currentItem }
 }
