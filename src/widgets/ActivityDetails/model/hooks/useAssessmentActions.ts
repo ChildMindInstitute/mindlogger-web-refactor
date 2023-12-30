@@ -1,26 +1,36 @@
 import { useContext } from "react"
 
 import { ActivityDetailsContext } from "../../lib"
+import { validateIsItemAnswerShouldBeEmpty, validateIsNumericOnly, validateItem } from "../validateItem"
 import { useAnswer } from "./useAnswers"
 import { useEntityComplete } from "./useEntityComplete"
 import { useStepperStateManager } from "./useStepperStateManager"
 
 import { activityModel, usePublicSaveAnswerMutation, useSaveAnswerMutation } from "~/entities/activity"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
-import { Mixpanel, useFlowType } from "~/shared/utils"
+import { useNotification } from "~/shared/ui"
+import { Mixpanel, useCustomTranslation, useFlowType } from "~/shared/utils"
 
 type Props = {
   activityDetails: ActivityDTO
   eventsRawData: AppletEventsResponse
   appletDetails: AppletDetailsDTO
   respondentMeta?: RespondentMetaDTO
+
+  toNextStep: () => void
+  toPrevStep: () => void
+  hasNextStep: boolean
 }
 
 export const useAssessmentActions = (props: Props) => {
+  const { t } = useCustomTranslation()
+
   const flowParams = useFlowType()
 
   const context = useContext(ActivityDetailsContext)
   const publicAppletKey = context.isPublic ? context.publicAppletKey : null
+
+  const { showWarningNotification } = useNotification()
 
   const { currentItem, items, userEvents } = useStepperStateManager({
     activityId: props.activityDetails.id,
@@ -28,6 +38,16 @@ export const useAssessmentActions = (props: Props) => {
   })
 
   const { saveUserEventByType } = activityModel.hooks.useUserEvent({
+    activityId: props.activityDetails.id,
+    eventId: context.eventId,
+  })
+
+  const { saveActivityItemAnswer } = activityModel.hooks.useSaveActivityItemAnswer({
+    activityId: props.activityDetails.id,
+    eventId: context.eventId,
+  })
+
+  const { saveSetAnswerUserEvent } = activityModel.hooks.useSetAnswerUserEvent({
     activityId: props.activityDetails.id,
     eventId: context.eventId,
   })
@@ -86,8 +106,72 @@ export const useAssessmentActions = (props: Props) => {
     return context.isPublic ? publicSaveAnswer(answer) : saveAnswer(answer)
   }
 
+  function onNextButtonClick() {
+    if (!currentItem) {
+      throw new Error("[Next button click] CurrentItem is not defined")
+    }
+
+    const shouldBeEmpty = validateIsItemAnswerShouldBeEmpty(currentItem)
+
+    const isItemHasAnswer = currentItem.answer.length
+    const isItemSkippable = currentItem.config.skippableItem || props.activityDetails.isSkippable
+
+    if (!shouldBeEmpty && !isItemHasAnswer && !isItemSkippable) {
+      return showWarningNotification(t("pleaseAnswerTheQuestion"))
+    }
+
+    const isAnswerCorrect = validateItem({ item: currentItem })
+
+    if (!isAnswerCorrect && !isItemSkippable) {
+      return showWarningNotification(t("incorrect_answer"))
+    }
+
+    const isNumericOnly = validateIsNumericOnly(currentItem)
+
+    if (isNumericOnly) {
+      return showWarningNotification(t("onlyNumbersAllowed"))
+    }
+
+    if (!props.hasNextStep) {
+      return submitAnswers()
+    }
+
+    if (!isItemHasAnswer && isItemSkippable) {
+      saveUserEventByType("SKIP", currentItem)
+    } else {
+      saveUserEventByType("NEXT", currentItem)
+    }
+
+    return props.toNextStep()
+  }
+
+  function onBackButtonClick() {
+    if (!currentItem) {
+      throw new Error("[Back button click] CurrentItem is not defined")
+    }
+
+    const hasConditionlLogic = currentItem.conditionalLogic
+
+    if (hasConditionlLogic) {
+      // If the current item participate in any conditional logic
+      // we need to reset the answer to the initial state
+
+      saveActivityItemAnswer(currentItem.id, [])
+      saveSetAnswerUserEvent({
+        ...currentItem,
+        answer: [],
+      })
+    }
+
+    saveUserEventByType("PREV", currentItem)
+
+    return props.toPrevStep()
+  }
+
   return {
     onSubmit: submitAnswers,
     onSubmitLoading: submitLoading,
+    onBack: onBackButtonClick,
+    onNext: onNextButtonClick,
   }
 }

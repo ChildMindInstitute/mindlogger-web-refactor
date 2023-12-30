@@ -1,6 +1,6 @@
-import { useCallback, useMemo } from "react"
+import { useCallback } from "react"
 
-import { activityModel, getActivityEventProgressId } from "~/entities/activity"
+import { activityModel } from "~/entities/activity"
 import { useAppDispatch } from "~/shared/utils"
 
 type Props = {
@@ -30,14 +30,6 @@ export const useStepperStateManager = (props: Props): Return => {
     activityId: props.activityId,
   })
 
-  const setStep = useCallback(
-    (step: number): void => {
-      const activityEventId = getActivityEventProgressId(props.activityId, props.eventId)
-      dispatch(activityModel.actions.setActivityEventProgressStepByParams({ activityEventId, step }))
-    },
-    [dispatch, props.activityId, props.eventId],
-  )
-
   const currentItem = items[lastStep - 1] ?? null
 
   const hasNextStep = lastStep < items.length
@@ -45,12 +37,16 @@ export const useStepperStateManager = (props: Props): Return => {
   const hasPrevStep = lastStep > 1
 
   const toNextStep = useCallback(() => {
-    if (hasNextStep) setStep(lastStep + 1)
-  }, [hasNextStep, setStep, lastStep])
+    if (!hasNextStep) return
+
+    dispatch(activityModel.actions.incrementStep({ activityId: props.activityId, eventId: props.eventId }))
+  }, [dispatch, hasNextStep, props.activityId, props.eventId])
 
   const toPrevStep = useCallback(() => {
-    if (hasPrevStep) setStep(lastStep - 1)
-  }, [hasPrevStep, setStep, lastStep])
+    if (!hasPrevStep) return
+
+    dispatch(activityModel.actions.decrementStep({ activityId: props.activityId, eventId: props.eventId }))
+  }, [dispatch, hasPrevStep, props.activityId, props.eventId])
 
   return {
     step: lastStep,

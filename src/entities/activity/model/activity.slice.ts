@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { v4 as uuidV4 } from "uuid"
 
+import { getActivityEventProgressId } from "../lib"
 import {
   ActivityEventState,
   ClearActivityItemsProgresByIdPayload,
@@ -10,8 +11,9 @@ import {
   InProgressEntity,
   InProgressFlow,
   SaveActivityItemAnswerPayload,
-  SetActivityEventProgressStep,
+  SaveActivityProgressPayload,
   SetUserEventByItemIdPayload,
+  UpdateStepPayload,
   UpdateUserEventByIndexPayload,
   UpsertActionPayload,
 } from "./types"
@@ -58,8 +60,10 @@ const activitySlice = createSlice({
       state.groupsInProgress[appletId][activityId][eventId] = updatedProgress
     },
 
-    saveActivityEventRecords: (state, action: PayloadAction<ActivityEventState>) => {
-      state.activityEventProgress = { ...state.activityEventProgress, ...action.payload }
+    saveActivityProgress: (state, action: PayloadAction<SaveActivityProgressPayload>) => {
+      const id = getActivityEventProgressId(action.payload.activityId, action.payload.eventId)
+
+      state.activityEventProgress[id] = action.payload.progress
     },
 
     saveActivityEventAnswerById: (state, action: PayloadAction<SaveActivityItemAnswerPayload>) => {
@@ -96,10 +100,20 @@ const activitySlice = createSlice({
       activityProgress.userEvents[action.payload.userEventIndex] = action.payload.userEvent
     },
 
-    setActivityEventProgressStepByParams: (state, action: PayloadAction<SetActivityEventProgressStep>) => {
-      const activityProgress = state.activityEventProgress[action.payload.activityEventId]
+    incrementStep: (state, action: PayloadAction<UpdateStepPayload>) => {
+      const id = getActivityEventProgressId(action.payload.activityId, action.payload.eventId)
 
-      activityProgress.step = action.payload.step
+      const activityProgress = state.activityEventProgress[id]
+
+      activityProgress.step += 1
+    },
+
+    decrementStep: (state, action: PayloadAction<UpdateStepPayload>) => {
+      const id = getActivityEventProgressId(action.payload.activityId, action.payload.eventId)
+
+      const activityProgress = state.activityEventProgress[id]
+
+      activityProgress.step -= 1
     },
 
     activityStarted: (state, action: PayloadAction<InProgressActivity>) => {

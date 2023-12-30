@@ -52,6 +52,12 @@ export type ActivityEventState = Record<string, ActivityEventProgressState>
 
 // Payloads
 
+export type SaveActivityProgressPayload = {
+  activityId: string
+  eventId: string
+  progress: ActivityEventProgressState
+}
+
 export type ClearActivityItemsProgresByIdPayload = {
   activityEventId: string
 }
@@ -69,9 +75,9 @@ export type SaveActivityItemAnswerPayload = {
   answer: string[]
 }
 
-export type SetActivityEventProgressStep = {
-  activityEventId: string
-  step: number
+export type UpdateStepPayload = {
+  activityId: string
+  eventId: string
 }
 
 export type SetUserEventByItemIdPayload = {

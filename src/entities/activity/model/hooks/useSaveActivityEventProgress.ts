@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 
-import { ActivityDetails, getActivityEventProgressId } from "../../lib"
+import { ActivityDetails } from "../../lib"
 import { actions } from "../activity.slice"
 import { activityBuilder } from "../activityBuilder"
 import { ActivityEventProgressRecord } from "../types"
@@ -30,15 +30,15 @@ export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn =
           return activityBuilder.convertActivityItemToEmptyProgressRecord(item)
         })
 
-      const activityEventProgressId = getActivityEventProgressId(activity.id, eventId)
-
       const items = splashScreenItem
         ? [splashScreenItem, ...preparedActivityItemProgressRecords]
         : preparedActivityItemProgressRecords
 
       return dispatch(
-        actions.saveActivityEventRecords({
-          [activityEventProgressId]: {
+        actions.saveActivityProgress({
+          activityId: activity.id,
+          eventId,
+          progress: {
             items,
             step,
             userEvents: [],
@@ -51,11 +51,11 @@ export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn =
 
   const clearItemsRecord = useCallback(
     (activityId: string, eventId: string) => {
-      const activityEventProgressId = getActivityEventProgressId(activityId, eventId)
-
       dispatch(
-        actions.saveActivityEventRecords({
-          [activityEventProgressId]: {
+        actions.saveActivityProgress({
+          activityId,
+          eventId,
+          progress: {
             items: [],
             step: 1,
             userEvents: [],
