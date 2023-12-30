@@ -1,13 +1,14 @@
-import { useCallback } from "react"
+import { useCallback, useMemo } from "react"
 
-import { activityModel } from "~/entities/activity"
+import { activityModel, getActivityEventProgressId } from "~/entities/activity"
+import { useAppDispatch } from "~/shared/utils"
 
-type UseStepperStateManagerProps = {
+type Props = {
   activityId: string
   eventId: string
 }
 
-type UseStepperStateManagerOutput = {
+type Return = {
   step: number
 
   hasNextStep: boolean
@@ -21,35 +22,38 @@ type UseStepperStateManagerOutput = {
   userEvents: activityModel.types.UserEvents[]
 }
 
-export const useStepperStateManager = (props: UseStepperStateManagerProps): UseStepperStateManagerOutput => {
-  const { items, userEvents } = activityModel.hooks.useActivityEventProgressState({
+export const useStepperStateManager = (props: Props): Return => {
+  const dispatch = useAppDispatch()
+
+  const { items, userEvents, lastStep } = activityModel.hooks.useActivityEventProgressState({
     eventId: props.eventId,
     activityId: props.activityId,
   })
 
-  const { step, setStep, currentItem } = activityModel.hooks.useStepperState({
-    activityId: props.activityId,
-    eventId: props.eventId,
-  })
+  const setStep = useCallback(
+    (step: number): void => {
+      const activityEventId = getActivityEventProgressId(props.activityId, props.eventId)
+      dispatch(activityModel.actions.setActivityEventProgressStepByParams({ activityEventId, step }))
+    },
+    [dispatch, props.activityId, props.eventId],
+  )
 
-  const hasNextStep = step < items.length
+  const currentItem = items[lastStep - 1] ?? null
 
-  const hasPrevStep = step > 1
+  const hasNextStep = lastStep < items.length
+
+  const hasPrevStep = lastStep > 1
 
   const toNextStep = useCallback(() => {
-    if (hasNextStep) {
-      setStep(step + 1)
-    }
-  }, [hasNextStep, setStep, step])
+    if (hasNextStep) setStep(lastStep + 1)
+  }, [hasNextStep, setStep, lastStep])
 
   const toPrevStep = useCallback(() => {
-    if (hasPrevStep) {
-      setStep(step - 1)
-    }
-  }, [hasPrevStep, setStep, step])
+    if (hasPrevStep) setStep(lastStep - 1)
+  }, [hasPrevStep, setStep, lastStep])
 
   return {
-    step,
+    step: lastStep,
     currentItem,
     toNextStep,
     toPrevStep,

@@ -58,7 +58,7 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const { onSubmit, onSubmitLoading } = useAssessmentActions(props)
 
-  const onNextButtonClick = (props = { isForce: false }) => {
+  const onNextButtonClick = () => {
     if (!currentItem) {
       throw new Error("[Next button click] CurrentItem is not defined")
     }
@@ -84,7 +84,7 @@ export const AssessmentPassingScreen = (props: Props) => {
       return showWarningNotification(t("onlyNumbersAllowed"))
     }
 
-    if (!hasNextStep && !props.isForce) {
+    if (!hasNextStep) {
       return onSubmit()
     }
 

@@ -21,8 +21,6 @@ export const ActivityDetailsWidget = () => {
     activityId: context.activityId,
   })
 
-  console.log(items)
-
   const isActivityEventInProgress = items.length > 0
 
   const { activityDetails, isLoading, isError, error, appletDetails, eventsRawData, respondentMeta } =
