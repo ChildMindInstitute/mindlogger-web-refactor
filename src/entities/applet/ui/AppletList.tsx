@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box"
 
 import { useAppletListQuery } from "../api"
-import { appletBuilder } from "../model"
+import { mapToAppletList } from "../lib"
 import AppletCard from "./AppletCard"
 
 import { userModel } from "~/entities/user"
@@ -10,10 +10,19 @@ import Loader from "~/shared/ui/Loader"
 
 const AppletList = () => {
   const { user } = userModel.hooks.useUserState()
-  const { data, isLoading, isError, error } = useAppletListQuery({ userId: user.id! })
+  const {
+    data: applets,
+    isLoading,
+    isError,
+    error,
+  } = useAppletListQuery(
+    { userId: user.id! },
+    {
+      select: data => mapToAppletList(data?.data?.result),
+    },
+  )
 
-  const applets = appletBuilder.convertToAppletList(data?.data?.result)
-  const isAppletsEmpty = !applets.length
+  const isAppletsEmpty = !applets?.length
 
   if (isLoading) {
     return <Loader />
