@@ -1,4 +1,3 @@
-export * from "./getActivityEventProgressId"
 export * from "./getActivityItemScreenId"
 export * from "./types"
 export * from "./hooks"

@@ -2,7 +2,7 @@ import { groupsInProgressSelector } from "../selectors"
 import { actions } from "../slice"
 
 import { EventProgressState } from "~/abstract/lib"
-import { AppletDetailsDTO } from "~/shared/api"
+import { ActivityFlowDTO } from "~/shared/api"
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 export const useStartEntity = () => {
@@ -52,19 +52,19 @@ export const useStartEntity = () => {
     return activityStarted(appletId, activityId, eventId)
   }
 
-  function startFlow(appletDetails: AppletDetailsDTO, flowId: string, eventId: string) {
-    const isFlowInProgress = isInProgress(getProgress(appletDetails.id, flowId, eventId))
+  function startFlow(appletId: string, flowId: string, eventId: string, flows: ActivityFlowDTO[]) {
+    const isFlowInProgress = isInProgress(getProgress(appletId, flowId, eventId))
 
     if (isFlowInProgress) {
       return
     }
 
-    const flow = appletDetails.activityFlows.find(x => x.id === flowId)!
+    const flow = flows.find(x => x.id === flowId)!
     const flowActivities: string[] = flow.activityIds
 
     const firstActivityId: string = flowActivities[0]
 
-    return flowStarted(appletDetails.id, flowId, firstActivityId, eventId, 0)
+    return flowStarted(appletId, flowId, firstActivityId, eventId, 0)
   }
 
   return { startActivity, startFlow }
