@@ -1,4 +1,4 @@
-import { ActivityEventProgressRecord } from "../model/types"
+import { ActivityEventProgressRecord } from "../../applet/model/types"
 import { Answer } from "./types"
 
 import { Condition } from "~/shared/api"

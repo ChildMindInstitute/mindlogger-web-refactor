@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { v4 as uuidV4 } from "uuid"
 
-import { getActivityEventProgressId } from "../lib"
+import { getActivityEventProgressId } from "../../activity/lib"
 import {
   ActivityEventState,
   ClearActivityItemsProgresByIdPayload,
@@ -20,22 +20,22 @@ import {
 
 import { ActivityPipelineType, EventProgressState, FlowProgress, Progress } from "~/abstract/lib"
 
-type InitialActivityState = {
+type InitialState = {
   groupsInProgress: Progress
   activityEventProgress: ActivityEventState
   completedEntities: CompletedEntitiesState
   completions: CompletedEventEntities
 }
 
-const initialState: InitialActivityState = {
+const initialState: InitialState = {
   groupsInProgress: {},
   activityEventProgress: {},
   completedEntities: {},
   completions: {},
 }
 
-const activitySlice = createSlice({
-  name: "activityProgress",
+const appletsSlice = createSlice({
+  name: "applets",
   initialState,
   reducers: {
     clearActivity: () => {
@@ -185,5 +185,5 @@ const activitySlice = createSlice({
   },
 })
 
-export const actions = activitySlice.actions
-export const reducer = activitySlice.reducer
+export const actions = appletsSlice.actions
+export const reducer = appletsSlice.reducer

@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 
-import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "../model/hooks"
-import { ActivityEventProgressRecord } from "../model/types"
+import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "../../applet/model/hooks"
+import { ActivityEventProgressRecord } from "../../applet/model/types"
 import { ItemPicker } from "./items/ItemPicker"
 
 import { SliderAnimation } from "~/shared/animations"

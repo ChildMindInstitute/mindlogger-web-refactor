@@ -1,4 +1,4 @@
-import { ActivityEventProgressRecord } from "../../model/types"
+import { ActivityEventProgressRecord } from "../../../applet/model/types"
 import { AudioPlayerItem } from "./AudioPlayerItem"
 import { CheckboxItem } from "./CheckboxItem"
 import { DateItem } from "./DateItem"

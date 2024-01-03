@@ -9,7 +9,8 @@ import { mapAlerts, mapToAnswers } from "../mappers"
 import { prepareItemAnswers } from "../prepareItemAnswers"
 
 import { ActivityPipelineType, EventProgressState } from "~/abstract/lib"
-import { activityModel, useEncryptPayload } from "~/entities/activity"
+import { useEncryptPayload } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { formatToDtoDate, formatToDtoTime, secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
 
@@ -24,8 +25,8 @@ type UseAnswerProps = {
 }
 
 type SubmitAnswersProps = {
-  items: activityModel.types.ActivityEventProgressRecord[]
-  userEvents: activityModel.types.UserEvents[]
+  items: appletModel.ActivityEventProgressRecord[]
+  userEvents: appletModel.UserEvents[]
   isPublic: boolean
 }
 
@@ -33,7 +34,7 @@ export const useAnswer = (props: UseAnswerProps) => {
   const { generateUserPrivateKey } = useEncryption()
   const { encryptePayload } = useEncryptPayload()
 
-  const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { getGroupInProgressByIds } = appletModel.hooks.useActivityGroupsInProgressState()
 
   const getSubmitId = useCallback((groupInProgress: EventProgressState): string => {
     const isFlow = groupInProgress.type === ActivityPipelineType.Flow

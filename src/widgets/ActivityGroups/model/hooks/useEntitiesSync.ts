@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react"
 
 import { ActivityPipelineType } from "~/abstract/lib"
-import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { CompletedEntitiesDTO, CompletedEntityDTO } from "~/shared/api"
 
 type FilterCompletedEntitiesProps = {
@@ -10,9 +10,9 @@ type FilterCompletedEntitiesProps = {
 }
 
 export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
-  const { upsertGroupInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { upsertGroupInProgress } = appletModel.hooks.useActivityGroupsInProgressState()
 
-  const { groupsInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { groupsInProgress } = appletModel.hooks.useActivityGroupsInProgressState()
 
   const syncEntity = useCallback(
     (entity: CompletedEntityDTO) => {

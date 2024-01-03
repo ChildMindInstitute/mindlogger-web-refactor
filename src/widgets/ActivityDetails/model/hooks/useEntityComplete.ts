@@ -1,5 +1,5 @@
 import { ActivityPipelineType } from "~/abstract/lib"
-import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { AppletDetailsDTO } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
 import { useNotification } from "~/shared/ui"
@@ -18,10 +18,10 @@ export const useEntityComplete = (props: Props) => {
   const navigator = useCustomNavigation()
   const { t } = useCustomTranslation()
 
-  const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
-  const { entityCompleted, flowUpdated } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { clearActivityItemsProgressById } = appletModel.hooks.useActivityClearState()
+  const { entityCompleted, flowUpdated } = appletModel.hooks.useActivityGroupsInProgressState()
 
-  const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { getGroupInProgressByIds } = appletModel.hooks.useActivityGroupsInProgressState()
 
   const { showSuccessNotification } = useNotification()
 

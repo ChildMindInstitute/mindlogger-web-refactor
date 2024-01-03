@@ -10,7 +10,7 @@ import {
   TextItem,
   TimeItem,
   TimeRangeItem,
-} from "../lib"
+} from "../../activity/lib"
 
 import { EventProgressState } from "~/abstract/lib"
 

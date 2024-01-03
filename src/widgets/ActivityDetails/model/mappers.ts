@@ -11,8 +11,8 @@ import {
   TextItem,
   TimeItem,
   TimeRangeItem,
-  activityModel,
 } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import {
   AlertDTO,
   AnswerTypesPayload,
@@ -30,7 +30,7 @@ import {
 import { dateToDayMonthYearDTO, dateToHourMinuteDTO } from "~/shared/utils"
 
 export function mapToAnswers(
-  items: Array<activityModel.types.ActivityEventProgressRecord>,
+  items: Array<appletModel.ActivityEventProgressRecord>,
 ): Array<ItemAnswer<AnswerTypesPayload>> {
   const answers = items.map(item => {
     switch (item.responseType) {
@@ -222,7 +222,7 @@ function convertToAudioPlayerAnswer(item: AudioPlayerItem): ItemAnswer<AudioPlay
   }
 }
 
-export function mapAlerts(items: Array<activityModel.types.ActivityEventProgressRecord>): Array<AlertDTO> {
+export function mapAlerts(items: Array<appletModel.ActivityEventProgressRecord>): Array<AlertDTO> {
   const alerts = items.map(item => {
     switch (item.responseType) {
       case "singleSelect":

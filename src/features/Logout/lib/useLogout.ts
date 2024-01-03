@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 
-import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { useLogoutMutation, userModel } from "~/entities/user"
 import { ROUTES } from "~/shared/constants"
 import { Mixpanel, secureTokensStorage } from "~/shared/utils"
@@ -13,7 +13,7 @@ type UseLogoutReturn = {
 export const useLogout = (): UseLogoutReturn => {
   const navigate = useNavigate()
   const { clearUser } = userModel.hooks.useUserState()
-  const { clearActivityInProgressState } = activityModel.hooks.useActivityClearState()
+  const { clearActivityInProgressState } = appletModel.hooks.useActivityClearState()
 
   const { mutate: logoutMutation, isLoading } = useLogoutMutation()
 

@@ -10,7 +10,8 @@ import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
 import AppletDefaultIcon from "~/assets/AppletDefaultIcon.svg"
-import { ActivityListItem, EntityType, activityModel, useCompletedEntitiesQuery } from "~/entities/activity"
+import { ActivityListItem, EntityType, useCompletedEntitiesQuery } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
 import { AvatarBase } from "~/shared/ui"
@@ -63,7 +64,7 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     eventsDetails: props.eventsDetails,
   })
 
-  const { startActivity, startFlow } = activityModel.hooks.useStartEntity()
+  const { startActivity, startFlow } = appletModel.hooks.useStartEntity()
 
   const onCardAboutClick = () => {
     if (!isAppletAboutExist) {

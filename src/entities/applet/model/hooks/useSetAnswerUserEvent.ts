@@ -1,11 +1,11 @@
 import { useCallback } from "react"
 
-import { getActivityEventProgressId, getActivityItemScreenId } from "../../lib"
-import { actions } from "../activity.slice"
-import { mapItemAnswerToUserEventResponse } from "../itemAnswerToUserEventResponse.mapper"
+import { mapItemAnswerToUserEventResponse } from "../mapper"
 import { activityEventProgressSelector } from "../selectors"
+import { actions } from "../slice"
 import { ActivityEventProgressRecord } from "../types"
 
+import { getActivityEventProgressId, getActivityItemScreenId } from "~/entities/activity/lib"
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 type UseSetAnswerUserEventProps = {

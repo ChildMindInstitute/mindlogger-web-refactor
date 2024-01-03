@@ -1,8 +1,8 @@
-import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { stringContainsOnlyNumbers } from "~/shared/utils"
 
 type ValidateItemProps = {
-  item: activityModel.types.ActivityEventProgressRecord
+  item: appletModel.ActivityEventProgressRecord
 }
 
 export function validateItem(props: ValidateItemProps) {
@@ -15,7 +15,7 @@ export function validateItem(props: ValidateItemProps) {
   return true
 }
 
-export function validateIsItemAnswerShouldBeEmpty(currentItem: activityModel.types.ActivityEventProgressRecord) {
+export function validateIsItemAnswerShouldBeEmpty(currentItem: appletModel.ActivityEventProgressRecord) {
   const isMessageItem = currentItem.responseType === "message"
   const isAudioPlayerItem = currentItem.responseType === "audioPlayer"
 
@@ -24,7 +24,7 @@ export function validateIsItemAnswerShouldBeEmpty(currentItem: activityModel.typ
   return isItemWithoutAnswer
 }
 
-export function validateIsNumericOnly(currentItem: activityModel.types.ActivityEventProgressRecord) {
+export function validateIsNumericOnly(currentItem: appletModel.ActivityEventProgressRecord) {
   const isTextItem = currentItem.responseType === "text"
 
   if (!isTextItem) {

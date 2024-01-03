@@ -1,4 +1,4 @@
-export const supportableItemTypes = [
+export const supportableResponseTypes = [
   "text",
   "singleSelect",
   "multiSelect",

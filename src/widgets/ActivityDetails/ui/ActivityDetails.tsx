@@ -8,7 +8,7 @@ import { AssessmentLoadingScreen } from "./AssessmentLoadingScreen"
 import { AssessmentPassingScreen } from "./AssessmentPassingScreen"
 import { AssessmentWelcomeScreen } from "./AssessmentWelcomeScreen"
 
-import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { useCustomTranslation } from "~/shared/utils"
 
 export const ActivityDetailsWidget = () => {
@@ -16,7 +16,7 @@ export const ActivityDetailsWidget = () => {
 
   const context = useContext(ActivityDetailsContext)
 
-  const { items } = activityModel.hooks.useActivityEventProgressState({
+  const { items } = appletModel.hooks.useActivityEventProgressState({
     eventId: context.eventId,
     activityId: context.activityId,
   })

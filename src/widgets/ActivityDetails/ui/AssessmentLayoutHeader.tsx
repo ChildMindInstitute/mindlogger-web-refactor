@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box"
 
-import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { SaveAndExitButton } from "~/features/SaveAssessmentAndExit"
 import { ROUTES, Theme } from "~/shared/constants"
 import { BaseProgressBar, Text } from "~/shared/ui"
@@ -20,7 +20,7 @@ export const AssessmentLayoutHeader = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery()
   const navigator = useCustomNavigation()
 
-  const { progress } = activityModel.hooks.useActivityEventProgressState({
+  const { progress } = appletModel.hooks.useActivityEventProgressState({
     activityId: props.activityId,
     eventId: props.eventId,
   })

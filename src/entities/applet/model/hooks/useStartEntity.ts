@@ -1,5 +1,5 @@
-import { actions } from "../activity.slice"
 import { groupsInProgressSelector } from "../selectors"
+import { actions } from "../slice"
 
 import { EventProgressState } from "~/abstract/lib"
 import { AppletDetailsDTO } from "~/shared/api"

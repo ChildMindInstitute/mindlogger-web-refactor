@@ -1,8 +1,8 @@
 import { useCallback } from "react"
 
-import { getActivityEventProgressId } from "../../lib"
-import { actions } from "../activity.slice"
+import { actions } from "../slice"
 
+import { getActivityEventProgressId } from "~/entities/activity/lib"
 import { useAppDispatch } from "~/shared/utils"
 
 type UseSaveActivityItemAnswerProps = {

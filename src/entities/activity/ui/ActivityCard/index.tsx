@@ -1,11 +1,7 @@
-import { useMemo } from "react"
-
 import Box from "@mui/material/Box"
 import { isIOS } from "react-device-detect"
 
 import { ActivityListItem, ActivityStatus, useActivity } from "../../lib"
-import { activityBuilder } from "../../model"
-import { useActivityEventProgressState, useSaveActivityEventProgress } from "../../model/hooks"
 import { ActivityCardBase } from "./ActivityCardBase"
 import { ActivityCardDescription } from "./ActivityCardDescription"
 import { ActivityCardIcon } from "./ActivityCardIcon"
@@ -14,6 +10,7 @@ import { ActivityCardTitle } from "./ActivityCardTitle"
 import { ActivityLabel } from "./ActivityLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
+import { appletModel } from "~/entities/applet"
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/shared/constants"
 import Loader from "~/shared/ui/Loader"
 import { useCustomMediaQuery } from "~/shared/utils"
@@ -27,14 +24,14 @@ interface ActivityCardProps {
 export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }: ActivityCardProps) => {
   const { lessThanSM } = useCustomMediaQuery()
 
-  const { saveItemsRecord } = useSaveActivityEventProgress()
+  const { saveItemsRecord } = appletModel.hooks.useSaveActivityEventProgress()
 
   const { isLoading, activity } = useActivity({
     activityId: activityListItem.activityId,
     isPublic,
   })
 
-  const { items, progress } = useActivityEventProgressState({
+  const { items, progress } = appletModel.hooks.useActivityEventProgressState({
     activityId: activityListItem.activityId,
     eventId: activityListItem.eventId,
   })
@@ -66,16 +63,14 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
 
   const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100
 
-  const isSupportedActivity = useMemo(() => {
-    return activityBuilder.isSupportedActivity(activity)
-  }, [activity])
+  const isActivitySupported = appletModel.helpers.isSupportedActivity(activity)
 
   const onActivityCardClickHandler = () => {
     if (isDisabled) {
       return
     }
 
-    if (!isSupportedActivity) {
+    if (!isActivitySupported) {
       const storeLink = isIOS ? APPSTORE_LINK : GOOGLEPLAY_LINK
       return window.open(storeLink, "_blank", "noopener noreferrer")
     }
@@ -123,7 +118,7 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
           <ActivityLabel
             isFlow={isFlow}
             activityLength={activityLength}
-            isSupportedActivity={isSupportedActivity}
+            isSupportedActivity={isActivitySupported}
             isActivityInProgress={isActivityInProgress}
             countOfCompletedQuestions={countOfCompletedQuestions}
             countOfCompletedActivities={countOfCompletedActivities}
@@ -132,7 +127,7 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
 
           <ActivityCardDescription description={activityListItem.description} isFlow={isFlow} />
 
-          {isSupportedActivity && <TimeStatusLabel activity={activityListItem} />}
+          {isActivitySupported && <TimeStatusLabel activity={activityListItem} />}
         </Box>
       </Box>
     </ActivityCardBase>

@@ -1,7 +1,7 @@
 import { ActivityListGroup } from "../../lib"
 import ActivityGroupsBuildManager from "../services/ActivityGroupsBuildManager"
 
-import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 
 type UseActivityGroupsParams = {
@@ -15,7 +15,7 @@ type UseActivityGroupsReturn = {
 }
 
 export const useActivityGroups = (props: UseActivityGroupsParams): UseActivityGroupsReturn => {
-  const { groupsInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { groupsInProgress } = appletModel.hooks.useActivityGroupsInProgressState()
 
   const groupsResult = ActivityGroupsBuildManager.process({
     appletDetails: props.appletDetails,

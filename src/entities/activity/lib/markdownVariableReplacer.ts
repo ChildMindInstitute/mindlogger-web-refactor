@@ -1,6 +1,6 @@
 import { format, intervalToDuration, isSameDay, addDays } from "date-fns"
 
-import { ActivityEventProgressRecord } from "../model/types"
+import { ActivityEventProgressRecord } from "../../applet/model/types"
 import { Answer, Answers } from "./types"
 
 export class MarkdownVariableReplacer {

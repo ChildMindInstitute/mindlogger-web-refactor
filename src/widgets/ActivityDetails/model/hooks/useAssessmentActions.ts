@@ -6,7 +6,8 @@ import { useAnswer } from "./useAnswers"
 import { useEntityComplete } from "./useEntityComplete"
 import { useStepperStateManager } from "./useStepperStateManager"
 
-import { activityModel, usePublicSaveAnswerMutation, useSaveAnswerMutation } from "~/entities/activity"
+import { usePublicSaveAnswerMutation, useSaveAnswerMutation } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { useNotification } from "~/shared/ui"
 import { Mixpanel, useCustomTranslation, useFlowType } from "~/shared/utils"
@@ -37,17 +38,17 @@ export const useAssessmentActions = (props: Props) => {
     eventId: context.eventId,
   })
 
-  const { saveUserEventByType } = activityModel.hooks.useUserEvent({
+  const { saveUserEventByType } = appletModel.hooks.useUserEvent({
     activityId: props.activityDetails.id,
     eventId: context.eventId,
   })
 
-  const { saveActivityItemAnswer } = activityModel.hooks.useSaveActivityItemAnswer({
+  const { saveActivityItemAnswer } = appletModel.hooks.useSaveActivityItemAnswer({
     activityId: props.activityDetails.id,
     eventId: context.eventId,
   })
 
-  const { saveSetAnswerUserEvent } = activityModel.hooks.useSetAnswerUserEvent({
+  const { saveSetAnswerUserEvent } = appletModel.hooks.useSetAnswerUserEvent({
     activityId: props.activityDetails.id,
     eventId: context.eventId,
   })

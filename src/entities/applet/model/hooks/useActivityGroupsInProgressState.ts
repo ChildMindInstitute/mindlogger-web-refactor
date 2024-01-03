@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 
-import { actions } from "../activity.slice"
 import { groupsInProgressSelector } from "../selectors"
+import { actions } from "../slice"
 import { InProgressEntity, InProgressFlow, UpsertActionPayload } from "../types"
 
 import { EventProgressState, Progress } from "~/abstract/lib"

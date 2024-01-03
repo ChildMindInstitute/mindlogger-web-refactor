@@ -1,5 +1,5 @@
-import { completedEntitiesSelector } from "../../model/selectors"
-import { ActivityEventProgressRecord } from "../../model/types"
+import { completedEntitiesSelector } from "../../../applet/model/selectors"
+import { ActivityEventProgressRecord } from "../../../applet/model/types"
 import { MarkdownVariableReplacer } from "../markdownVariableReplacer"
 import { Answers } from "../types"
 

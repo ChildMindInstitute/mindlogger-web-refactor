@@ -1,10 +1,10 @@
 import { useCallback } from "react"
 
-import { ActivityDetails } from "../../lib"
-import { actions } from "../activity.slice"
-import { activityBuilder } from "../activityBuilder"
+import { mapItemToRecord, mapSplashScreenToRecord } from "../mapper"
+import { actions } from "../slice"
 import { ActivityEventProgressRecord } from "../types"
 
+import { ActivityDetails } from "~/entities/activity/lib"
 import { useAppDispatch } from "~/shared/utils"
 
 type UseActivityEventProgressReturn = {
@@ -21,13 +21,13 @@ export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn =
       let splashScreenItem: ActivityEventProgressRecord | undefined
 
       if (isSplashScreenExist) {
-        splashScreenItem = activityBuilder.convertSplashScreenToItem(activity.splashScreen)
+        splashScreenItem = mapSplashScreenToRecord(activity.splashScreen)
       }
 
       const preparedActivityItemProgressRecords = activity.items
         .filter(x => !x.isHidden)
         .map(item => {
-          return activityBuilder.convertActivityItemToEmptyProgressRecord(item)
+          return mapItemToRecord(item)
         })
 
       const items = splashScreenItem

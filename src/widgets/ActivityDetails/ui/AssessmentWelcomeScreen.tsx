@@ -8,7 +8,7 @@ import { ActivityMetaData } from "./ActivityMetaData"
 import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
 import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
-import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { StartAssessmentButton } from "~/features/StartAssessment"
 import { ActivityDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
@@ -26,8 +26,8 @@ export const AssessmentWelcomeScreen = (props: Props) => {
 
   const flowParams = useFlowType()
 
-  const { saveItemsRecord } = activityModel.hooks.useSaveActivityEventProgress()
-  const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { saveItemsRecord } = appletModel.hooks.useSaveActivityEventProgress()
+  const { getGroupInProgressByIds } = appletModel.hooks.useActivityGroupsInProgressState()
 
   const startAssessment = () => {
     const initialStep = 1

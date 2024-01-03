@@ -1,10 +1,10 @@
 import { useCallback } from "react"
 
-import { getActivityEventProgressId, getActivityItemScreenId } from "../../lib"
-import { actions } from "../activity.slice"
 import { activityEventProgressSelector } from "../selectors"
+import { actions } from "../slice"
 import { ActivityEventProgressRecord, UserEventTypes } from "../types"
 
+import { getActivityEventProgressId, getActivityItemScreenId } from "~/entities/activity/lib"
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 type UseUserEventProps = {
