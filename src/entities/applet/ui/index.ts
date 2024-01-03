@@ -1,1 +1,1 @@
-export { default as AppletList } from "./AppletList"
+export * from "./AppletList"

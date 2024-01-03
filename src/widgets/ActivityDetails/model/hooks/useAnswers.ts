@@ -25,7 +25,7 @@ type UseAnswerProps = {
 }
 
 type SubmitAnswersProps = {
-  items: appletModel.ActivityEventProgressRecord[]
+  items: appletModel.ItemRecord[]
   userEvents: appletModel.UserEvents[]
   isPublic: boolean
 }

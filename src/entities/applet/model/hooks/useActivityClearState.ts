@@ -2,15 +2,15 @@ import { useCallback } from "react"
 
 import { actions } from "../slice"
 
-import { getActivityEventProgressId } from "~/entities/activity/lib"
+import { getActivityEventProgressId } from "~/abstract/lib"
 import { useAppDispatch } from "~/shared/utils"
 
-type UseActivityClearStateReturn = {
+type Return = {
   clearActivityInProgressState: () => void
   clearActivityItemsProgressById: (activityId: string, eventId: string) => void
 }
 
-export const useActivityClearState = (): UseActivityClearStateReturn => {
+export const useActivityClearState = (): Return => {
   const dispatch = useAppDispatch()
 
   const clearActivityInProgressState = useCallback(() => {

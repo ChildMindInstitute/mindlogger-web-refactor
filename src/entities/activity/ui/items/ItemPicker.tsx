@@ -1,4 +1,4 @@
-import { ActivityEventProgressRecord } from "../../../applet/model/types"
+import { ItemRecord } from "../../../applet/model/types"
 import { AudioPlayerItem } from "./AudioPlayerItem"
 import { CheckboxItem } from "./CheckboxItem"
 import { DateItem } from "./DateItem"
@@ -11,7 +11,7 @@ import { TimeItem } from "./TimeItem"
 import { TimeRangeItem } from "./TimeRangeItem"
 
 type ItemPickerProps = {
-  item: ActivityEventProgressRecord
+  item: ItemRecord
 
   values: string[]
   onValueChange: (value: string[]) => void

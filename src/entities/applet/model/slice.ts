@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { v4 as uuidV4 } from "uuid"
 
-import { getActivityEventProgressId } from "../../activity/lib"
 import {
   ActivityEventState,
   ClearActivityItemsProgresByIdPayload,
@@ -18,7 +17,13 @@ import {
   UpsertActionPayload,
 } from "./types"
 
-import { ActivityPipelineType, EventProgressState, FlowProgress, Progress } from "~/abstract/lib"
+import {
+  ActivityPipelineType,
+  EventProgressState,
+  FlowProgress,
+  getActivityEventProgressId,
+  Progress,
+} from "~/abstract/lib"
 
 type InitialState = {
   groupsInProgress: Progress

@@ -1,21 +1,16 @@
 import { format, intervalToDuration, isSameDay, addDays } from "date-fns"
 
-import { ActivityEventProgressRecord } from "../../applet/model/types"
+import { ItemRecord } from "../../applet/model/types"
 import { Answer, Answers } from "./types"
 
 export class MarkdownVariableReplacer {
-  private readonly activityItems: ActivityEventProgressRecord[]
+  private readonly activityItems: ItemRecord[]
   private readonly answers: Answers
   private readonly nickName: string
   private readonly lastResponseTime: Date | number | null
   private readonly now: number
 
-  constructor(
-    activityItems: ActivityEventProgressRecord[],
-    answers: Answers,
-    lastResponseTime: Date | number | null,
-    nickName = "",
-  ) {
+  constructor(activityItems: ItemRecord[], answers: Answers, lastResponseTime: Date | number | null, nickName = "") {
     this.activityItems = activityItems
     this.answers = answers
     this.nickName = nickName

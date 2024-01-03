@@ -29,7 +29,7 @@ export type UserEvents = {
   response?: UserEventResponse
 }
 
-export type ActivityEventProgressRecord =
+export type ItemRecord =
   | TextItem
   | CheckboxItem
   | RadioItem
@@ -43,7 +43,7 @@ export type ActivityEventProgressRecord =
   | AudioPlayerItem
 
 export type ActivityEventProgressState = {
-  items: ActivityEventProgressRecord[]
+  items: ItemRecord[]
   step: number
   userEvents: Array<UserEvents>
 }

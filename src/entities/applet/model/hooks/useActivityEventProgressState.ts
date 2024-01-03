@@ -2,7 +2,8 @@ import { useMemo } from "react"
 
 import { selectActivityProgress } from "../selectors"
 
-import { conditionalLogicBuilder, getActivityEventProgressId } from "~/entities/activity/lib"
+import { getActivityEventProgressId } from "~/abstract/lib"
+import { conditionalLogicBuilder } from "~/entities/activity/lib"
 import { useAppSelector } from "~/shared/utils"
 
 type Props = {

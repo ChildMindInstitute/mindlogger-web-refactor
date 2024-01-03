@@ -1,5 +1,5 @@
 import { completedEntitiesSelector } from "../../../applet/model/selectors"
-import { ActivityEventProgressRecord } from "../../../applet/model/types"
+import { ItemRecord } from "../../../applet/model/types"
 import { MarkdownVariableReplacer } from "../markdownVariableReplacer"
 import { Answers } from "../types"
 
@@ -7,7 +7,7 @@ import { RespondentMetaDTO } from "~/shared/api"
 import { useAppSelector } from "~/shared/utils"
 
 type UseTextVariablesReplacerProps = {
-  items: ActivityEventProgressRecord[]
+  items: ItemRecord[]
   answers: Answers
   activityId: string
   respondentMeta?: RespondentMetaDTO

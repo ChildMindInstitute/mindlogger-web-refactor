@@ -2,23 +2,23 @@ import { useCallback } from "react"
 
 import { mapItemToRecord, mapSplashScreenToRecord } from "../mapper"
 import { actions } from "../slice"
-import { ActivityEventProgressRecord } from "../types"
+import { ItemRecord } from "../types"
 
 import { ActivityDetails } from "~/entities/activity/lib"
 import { useAppDispatch } from "~/shared/utils"
 
-type UseActivityEventProgressReturn = {
+type Return = {
   saveItemsRecord: (activity: ActivityDetails, eventId: string, step: number) => void
   clearItemsRecord: (activityId: string, eventId: string) => void
 }
 
-export const useSaveActivityEventProgress = (): UseActivityEventProgressReturn => {
+export const useSaveActivityEventProgress = (): Return => {
   const dispatch = useAppDispatch()
 
   const saveItemsRecord = useCallback(
     (activity: ActivityDetails, eventId: string, step: number) => {
       const isSplashScreenExist = !!activity.splashScreen
-      let splashScreenItem: ActivityEventProgressRecord | undefined
+      let splashScreenItem: ItemRecord | undefined
 
       if (isSplashScreenExist) {
         splashScreenItem = mapSplashScreenToRecord(activity.splashScreen)

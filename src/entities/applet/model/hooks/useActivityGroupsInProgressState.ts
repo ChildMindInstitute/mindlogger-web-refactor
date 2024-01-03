@@ -4,7 +4,7 @@ import { groupsInProgressSelector } from "../selectors"
 import { actions } from "../slice"
 import { InProgressEntity, InProgressFlow, UpsertActionPayload } from "../types"
 
-import { EventProgressState, Progress } from "~/abstract/lib"
+import { EventProgressState } from "~/abstract/lib"
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 type GetGroupInProgressByParams = {
@@ -13,15 +13,14 @@ type GetGroupInProgressByParams = {
   eventId: string
 }
 
-type UseActivityGroupsInProgressStateReturn = {
-  groupsInProgress: Progress
+type Return = {
   upsertGroupInProgress: (payload: UpsertActionPayload) => void
   getGroupInProgressByIds: (params: GetGroupInProgressByParams) => EventProgressState | null
   entityCompleted: (props: InProgressEntity) => void
   flowUpdated: (props: InProgressFlow) => void
 }
 
-export const useActivityGroupsInProgressState = (): UseActivityGroupsInProgressStateReturn => {
+export const useActivityGroupsInProgressState = (): Return => {
   const dispatch = useAppDispatch()
   const groupsInProgress = useAppSelector(groupsInProgressSelector)
 
@@ -48,28 +47,27 @@ export const useActivityGroupsInProgressState = (): UseActivityGroupsInProgressS
 
   const getGroupInProgressByIds = useCallback(
     (params: GetGroupInProgressByParams) => {
-      const groupByAppletId = groupsInProgress[params.appletId]
-      if (!groupByAppletId) {
+      const appletProgress = groupsInProgress[params.appletId]
+      if (!appletProgress) {
         return null
       }
 
-      const groupByActivityId = groupByAppletId[params.activityId]
-      if (!groupByActivityId) {
+      const activityProgress = appletProgress[params.activityId]
+      if (!activityProgress) {
         return null
       }
 
-      const groupByEventId = groupByActivityId[params.eventId]
-      if (!groupByEventId) {
+      const eventProgress = activityProgress[params.eventId]
+      if (!eventProgress) {
         return null
       }
 
-      return groupByEventId
+      return eventProgress
     },
     [groupsInProgress],
   )
 
   return {
-    groupsInProgress,
     upsertGroupInProgress,
     getGroupInProgressByIds,
     entityCompleted,

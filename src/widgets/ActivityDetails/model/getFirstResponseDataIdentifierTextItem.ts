@@ -1,7 +1,7 @@
 import { appletModel } from "~/entities/applet"
 
 export const getFirstResponseDataIdentifierTextItem = (
-  activityEventProgress: appletModel.ActivityEventProgressRecord[],
+  activityEventProgress: appletModel.ItemRecord[],
 ): string | null => {
   const firstResponseDataIdentifier = activityEventProgress.find(item => {
     if (item.responseType === "text") {

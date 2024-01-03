@@ -1,16 +1,15 @@
 import { useMemo } from "react"
 
-import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "../../applet/model/hooks"
-import { ActivityEventProgressRecord } from "../../applet/model/types"
 import { ItemPicker } from "./items/ItemPicker"
 
+import { appletModel } from "~/entities/applet"
 import { SliderAnimation } from "~/shared/animations"
 import { CardItem } from "~/shared/ui"
 
 type ActivityCardItemProps = {
   activityId: string
   eventId: string
-  activityItem: ActivityEventProgressRecord
+  activityItem: appletModel.ItemRecord
   watermark?: string
   allowToSkipAllItems?: boolean | undefined
 
@@ -32,17 +31,17 @@ export const ActivityCardItem = ({
   step,
   prevStep,
 }: ActivityCardItemProps) => {
-  const { saveSetAnswerUserEvent } = useSetAnswerUserEvent({
+  const { saveSetAnswerUserEvent } = appletModel.hooks.useUserEvents({
     activityId,
     eventId,
   })
-  const { saveActivityItemAnswer } = useSaveActivityItemAnswer({
+  const { saveItemAnswer } = appletModel.hooks.useSaveItemAnswer({
     activityId,
     eventId,
   })
 
   const onItemValueChange = (value: string[]) => {
-    saveActivityItemAnswer(activityItem.id, value)
+    saveItemAnswer(activityItem.id, value)
     saveSetAnswerUserEvent({
       ...activityItem,
       answer: value,

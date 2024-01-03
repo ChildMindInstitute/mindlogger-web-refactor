@@ -2,7 +2,7 @@ import { appletModel } from "~/entities/applet"
 import { stringContainsOnlyNumbers } from "~/shared/utils"
 
 type ValidateItemProps = {
-  item: appletModel.ActivityEventProgressRecord
+  item: appletModel.ItemRecord
 }
 
 export function validateItem(props: ValidateItemProps) {
@@ -15,7 +15,7 @@ export function validateItem(props: ValidateItemProps) {
   return true
 }
 
-export function validateIsItemAnswerShouldBeEmpty(currentItem: appletModel.ActivityEventProgressRecord) {
+export function validateIsItemAnswerShouldBeEmpty(currentItem: appletModel.ItemRecord) {
   const isMessageItem = currentItem.responseType === "message"
   const isAudioPlayerItem = currentItem.responseType === "audioPlayer"
 
@@ -24,7 +24,7 @@ export function validateIsItemAnswerShouldBeEmpty(currentItem: appletModel.Activ
   return isItemWithoutAnswer
 }
 
-export function validateIsNumericOnly(currentItem: appletModel.ActivityEventProgressRecord) {
+export function validateIsNumericOnly(currentItem: appletModel.ItemRecord) {
   const isTextItem = currentItem.responseType === "text"
 
   if (!isTextItem) {

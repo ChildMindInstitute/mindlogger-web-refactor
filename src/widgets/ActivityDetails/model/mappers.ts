@@ -29,9 +29,7 @@ import {
 } from "~/shared/api"
 import { dateToDayMonthYearDTO, dateToHourMinuteDTO } from "~/shared/utils"
 
-export function mapToAnswers(
-  items: Array<appletModel.ActivityEventProgressRecord>,
-): Array<ItemAnswer<AnswerTypesPayload>> {
+export function mapToAnswers(items: Array<appletModel.ItemRecord>): Array<ItemAnswer<AnswerTypesPayload>> {
   const answers = items.map(item => {
     switch (item.responseType) {
       case "text":
@@ -222,7 +220,7 @@ function convertToAudioPlayerAnswer(item: AudioPlayerItem): ItemAnswer<AudioPlay
   }
 }
 
-export function mapAlerts(items: Array<appletModel.ActivityEventProgressRecord>): Array<AlertDTO> {
+export function mapAlerts(items: Array<appletModel.ItemRecord>): Array<AlertDTO> {
   const alerts = items.map(item => {
     switch (item.responseType) {
       case "singleSelect":

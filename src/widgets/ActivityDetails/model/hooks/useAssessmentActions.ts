@@ -38,17 +38,12 @@ export const useAssessmentActions = (props: Props) => {
     eventId: context.eventId,
   })
 
-  const { saveUserEventByType } = appletModel.hooks.useUserEvent({
+  const { saveUserEventByType, saveSetAnswerUserEvent } = appletModel.hooks.useUserEvents({
     activityId: props.activityDetails.id,
     eventId: context.eventId,
   })
 
-  const { saveActivityItemAnswer } = appletModel.hooks.useSaveActivityItemAnswer({
-    activityId: props.activityDetails.id,
-    eventId: context.eventId,
-  })
-
-  const { saveSetAnswerUserEvent } = appletModel.hooks.useSetAnswerUserEvent({
+  const { saveItemAnswer } = appletModel.hooks.useSaveItemAnswer({
     activityId: props.activityDetails.id,
     eventId: context.eventId,
   })
@@ -157,7 +152,7 @@ export const useAssessmentActions = (props: Props) => {
       // If the current item participate in any conditional logic
       // we need to reset the answer to the initial state
 
-      saveActivityItemAnswer(currentItem.id, [])
+      saveItemAnswer(currentItem.id, [])
       saveSetAnswerUserEvent({
         ...currentItem,
         answer: [],

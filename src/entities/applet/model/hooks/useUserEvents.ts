@@ -1,31 +1,55 @@
 import { useCallback } from "react"
 
+import { getActivityItemScreenId } from "../../lib"
 import { mapItemAnswerToUserEventResponse } from "../mapper"
-import { activityEventProgressSelector } from "../selectors"
+import { selectActivityProgress } from "../selectors"
 import { actions } from "../slice"
-import { ActivityEventProgressRecord } from "../types"
+import { ItemRecord, UserEventTypes } from "../types"
 
-import { getActivityEventProgressId, getActivityItemScreenId } from "~/entities/activity/lib"
+import { getActivityEventProgressId } from "~/abstract/lib"
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
-type UseSetAnswerUserEventProps = {
+type Props = {
   activityId: string
   eventId: string
 }
 
-export const useSetAnswerUserEvent = (props: UseSetAnswerUserEventProps) => {
+export const useUserEvents = (props: Props) => {
   const dispatch = useAppDispatch()
-  const activityEventProgress = useAppSelector(activityEventProgressSelector)
 
   const activityEventId = getActivityEventProgressId(props.activityId, props.eventId)
-  const activityEventProgressRecord = activityEventProgress[activityEventId]
 
-  const saveSetAnswerUserEvent = useCallback(
-    (item: ActivityEventProgressRecord) => {
-      if (!activityEventProgressRecord) {
+  const activityProgress = useAppSelector(state => selectActivityProgress(state, activityEventId))
+
+  const saveUserEventByType = useCallback(
+    (type: UserEventTypes, item: ItemRecord) => {
+      if (!activityProgress) {
         return
       }
-      const userEvents = activityEventProgressRecord.userEvents
+
+      const activityItemScreenId = getActivityItemScreenId(props.activityId, item.id)
+
+      dispatch(
+        actions.insertUserEventById({
+          activityEventId,
+          itemId: item.id,
+          userEvent: {
+            type,
+            screen: activityItemScreenId,
+            time: Date.now(),
+          },
+        }),
+      )
+    },
+    [activityEventId, activityProgress, dispatch, props.activityId],
+  )
+
+  const saveSetAnswerUserEvent = useCallback(
+    (item: ItemRecord) => {
+      if (!activityProgress) {
+        return
+      }
+      const userEvents = activityProgress.userEvents
 
       const activityItemScreenId = getActivityItemScreenId(props.activityId, item.id)
 
@@ -62,8 +86,8 @@ export const useSetAnswerUserEvent = (props: UseSetAnswerUserEventProps) => {
         }),
       )
     },
-    [activityEventId, activityEventProgressRecord, dispatch, props.activityId],
+    [activityEventId, activityProgress, dispatch, props.activityId],
   )
 
-  return { saveSetAnswerUserEvent }
+  return { saveUserEventByType, saveSetAnswerUserEvent }
 }

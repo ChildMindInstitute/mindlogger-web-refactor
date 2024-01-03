@@ -1,6 +1,13 @@
-import { AppletListItem } from "."
-
 import { AppletListDTO } from "~/shared/api"
+
+export type AppletListItem = {
+  id: string
+  displayName: string
+  description: string
+  about: string
+  image: string | ""
+  watermark: string | ""
+}
 
 export function mapToAppletList(applets?: AppletListDTO[]): AppletListItem[] {
   if (!applets) {

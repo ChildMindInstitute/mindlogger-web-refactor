@@ -1,20 +1,16 @@
-import { ActivityEventProgressRecord } from "../../applet/model/types"
+import { ItemRecord } from "../../applet/model/types"
 import { Answer } from "./types"
 
 import { Condition } from "~/shared/api"
 
-export type ItemMapByName = Record<string, ActivityEventProgressRecord>
+export type ItemMapByName = Record<string, ItemRecord>
 
 class ConditionalLogicBuilder {
-  public process(items: ActivityEventProgressRecord[]): ActivityEventProgressRecord[] {
+  public process(items: ItemRecord[]): ItemRecord[] {
     return items.filter((item, index, array) => this.conditionalLogicFilter(item, index, array))
   }
 
-  private conditionalLogicFilter(
-    item: ActivityEventProgressRecord,
-    index: number,
-    array: ActivityEventProgressRecord[],
-  ): boolean {
+  private conditionalLogicFilter(item: ItemRecord, index: number, array: ItemRecord[]): boolean {
     const { conditionalLogic } = item
 
     if (!conditionalLogic) {
@@ -106,7 +102,7 @@ class ConditionalLogicBuilder {
     }
   }
 
-  private getOptionIdByValue(item: ActivityEventProgressRecord): string[] {
+  private getOptionIdByValue(item: ItemRecord): string[] {
     if (item.responseType === "multiSelect" || item.responseType === "singleSelect") {
       const { answer, responseValues } = item
       const optionIds = answer

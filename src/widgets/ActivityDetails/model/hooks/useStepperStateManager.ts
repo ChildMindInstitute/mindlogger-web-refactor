@@ -17,8 +17,8 @@ type Return = {
   toNextStep: () => void
   toPrevStep: () => void
 
-  items: appletModel.ActivityEventProgressRecord[]
-  currentItem: appletModel.ActivityEventProgressRecord | null
+  items: appletModel.ItemRecord[]
+  currentItem: appletModel.ItemRecord | null
   userEvents: appletModel.UserEvents[]
 }
 

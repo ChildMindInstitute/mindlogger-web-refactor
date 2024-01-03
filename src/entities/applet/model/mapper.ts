@@ -1,8 +1,8 @@
-import { ActivityEventProgressRecord, UserEventResponse } from "./types"
+import { ItemRecord, UserEventResponse } from "./types"
 
 import { ActivityItemDetailsDTO } from "~/shared/api"
 
-export const mapItemAnswerToUserEventResponse = (item: ActivityEventProgressRecord): UserEventResponse => {
+export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventResponse => {
   const responseType = item.responseType
   const itemAnswer = item.answer
 
@@ -21,7 +21,7 @@ export const mapItemAnswerToUserEventResponse = (item: ActivityEventProgressReco
   return itemAnswer[0]
 }
 
-export function mapItemToRecord(item: ActivityItemDetailsDTO): ActivityEventProgressRecord {
+export function mapItemToRecord(item: ActivityItemDetailsDTO): ItemRecord {
   if (item.responseType === "message") {
     return {
       ...item,
@@ -39,7 +39,7 @@ export function mapItemToRecord(item: ActivityItemDetailsDTO): ActivityEventProg
   }
 }
 
-export function mapSplashScreenToRecord(splashScreen: string): ActivityEventProgressRecord {
+export function mapSplashScreenToRecord(splashScreen: string): ItemRecord {
   return {
     id: splashScreen,
     name: "",
