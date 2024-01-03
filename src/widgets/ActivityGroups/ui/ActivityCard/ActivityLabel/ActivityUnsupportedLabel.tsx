@@ -3,8 +3,9 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import { isIOS } from "react-device-detect"
 
+import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/abstract/lib/constants"
 import ExclamationIcon from "~/assets/exclamation-circle.svg"
-import { APPSTORE_LINK, GOOGLEPLAY_LINK, Theme } from "~/shared/constants"
+import { Theme } from "~/shared/constants"
 import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
 
 export const ActivityUnsupportedLabel = () => {

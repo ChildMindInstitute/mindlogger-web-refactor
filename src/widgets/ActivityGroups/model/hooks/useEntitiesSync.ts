@@ -10,24 +10,28 @@ type FilterCompletedEntitiesProps = {
 }
 
 export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
-  const { upsertGroupInProgress } = appletModel.hooks.useActivityGroupsInProgressState()
-
-  const { groupsInProgress } = appletModel.hooks.useActivityGroupsInProgressState()
+  const { upsertGroupInProgress, getGroupInProgressByIds } = appletModel.hooks.useActivityGroupsInProgressState()
 
   const syncEntity = useCallback(
     (entity: CompletedEntityDTO) => {
       const hoursMinutes = entity.localEndTime.split(":")
       const endAtDate = new Date(entity.localEndDate).setHours(Number(hoursMinutes[0]), Number(hoursMinutes[1]))
 
-      const appletInProgress = groupsInProgress[props.appletId] ?? {}
-      const inProgressEntity = appletInProgress[entity.id] ?? {}
-      const inProgressEvent = inProgressEntity[entity.scheduledEventId]
+      const appletId = props.appletId
+      const activityId = entity.id
+      const eventId = entity.scheduledEventId
 
-      if (!inProgressEvent) {
+      const eventProgress = getGroupInProgressByIds({
+        appletId,
+        activityId,
+        eventId,
+      })
+
+      if (!eventProgress) {
         return upsertGroupInProgress({
-          appletId: props.appletId,
-          activityId: entity.id,
-          eventId: entity.scheduledEventId,
+          appletId,
+          activityId,
+          eventId,
           progressPayload: {
             type: ActivityPipelineType.Regular,
             startAt: null,
@@ -36,25 +40,25 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
         })
       }
 
-      if (inProgressEvent.endAt) {
-        const isServerEndAtBigger = endAtDate > new Date(inProgressEvent.endAt).getTime()
+      if (eventProgress.endAt) {
+        const isServerEndAtBigger = endAtDate > new Date(eventProgress.endAt).getTime()
 
         if (!isServerEndAtBigger) {
           return
         }
 
         return upsertGroupInProgress({
-          appletId: props.appletId,
-          activityId: entity.id,
-          eventId: entity.scheduledEventId,
+          appletId,
+          activityId,
+          eventId,
           progressPayload: {
-            ...inProgressEvent,
+            ...eventProgress,
             endAt: new Date(endAtDate).getTime(),
           },
         })
       }
     },
-    [groupsInProgress, props.appletId, upsertGroupInProgress],
+    [getGroupInProgressByIds, props.appletId, upsertGroupInProgress],
   )
 
   useEffect(() => {

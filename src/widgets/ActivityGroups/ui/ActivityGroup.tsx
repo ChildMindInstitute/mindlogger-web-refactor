@@ -2,18 +2,16 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 
 import { ActivityListGroup } from "../lib/types"
+import { ActivityCardList } from "./ActivityCardList"
 
-import { ActivityList, ActivityListItem } from "~/entities/activity"
 import { Theme } from "~/shared/constants"
 import { useCustomTranslation } from "~/shared/utils"
 
-interface ActivityGroupProps {
+type Props = {
   group: ActivityListGroup
-  isPublic: boolean
-  onActivityCardClick: (activity: ActivityListItem) => void
 }
 
-export const ActivityGroup = ({ group, onActivityCardClick, isPublic }: ActivityGroupProps) => {
+export const ActivityGroup = ({ group }: Props) => {
   const { t } = useCustomTranslation()
 
   return (
@@ -33,7 +31,7 @@ export const ActivityGroup = ({ group, onActivityCardClick, isPublic }: Activity
         {t(group.name)}
       </Typography>
 
-      <ActivityList activities={group.activities} onActivityCardClick={onActivityCardClick} isPublic={isPublic} />
+      <ActivityCardList activities={group.activities} />
     </Box>
   )
 }

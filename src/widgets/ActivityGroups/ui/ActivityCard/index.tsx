@@ -1,7 +1,10 @@
+import { useContext } from "react"
+
 import Box from "@mui/material/Box"
 import { isIOS } from "react-device-detect"
 
-import { ActivityListItem, ActivityStatus, useActivity } from "../../lib"
+import { ActivityListItem, ActivityStatus, AppletDetailsContext } from "../../lib"
+import { useStartEntity } from "../../model/hooks/useStartEntity"
 import { ActivityCardBase } from "./ActivityCardBase"
 import { ActivityCardDescription } from "./ActivityCardDescription"
 import { ActivityCardIcon } from "./ActivityCardIcon"
@@ -10,26 +13,31 @@ import { ActivityCardTitle } from "./ActivityCardTitle"
 import { ActivityLabel } from "./ActivityLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
+import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/abstract/lib/constants"
+import { isSupportedActivity, mapActivityDTOToActivity, useActivityByIdQuery } from "~/entities/activity"
 import { appletModel } from "~/entities/applet"
-import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/shared/constants"
 import Loader from "~/shared/ui/Loader"
 import { useCustomMediaQuery } from "~/shared/utils"
 
-interface ActivityCardProps {
+type Props = {
   activityListItem: ActivityListItem
-  isPublic: boolean
-  onActivityCardClick: () => void
 }
 
-export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }: ActivityCardProps) => {
+export const ActivityCard = ({ activityListItem }: Props) => {
   const { lessThanSM } = useCustomMediaQuery()
 
-  const { saveItemsRecord } = appletModel.hooks.useSaveActivityEventProgress()
+  const context = useContext(AppletDetailsContext)
 
-  const { isLoading, activity } = useActivity({
-    activityId: activityListItem.activityId,
-    isPublic,
+  const { startActivityOrFlow } = useStartEntity({
+    applet: context.appletDetails,
+    isPublic: context.isPublic,
+    publicAppletKey: context.isPublic ? context.publicAppletKey : null,
   })
+
+  const { data: activity, isLoading } = useActivityByIdQuery(
+    { activityId: activityListItem.activityId, isPublic: context.isPublic },
+    { select: data => mapActivityDTOToActivity(data.data.result) },
+  )
 
   const { items, progress } = appletModel.hooks.useActivityEventProgressState({
     activityId: activityListItem.activityId,
@@ -63,36 +71,28 @@ export const ActivityCard = ({ activityListItem, onActivityCardClick, isPublic }
 
   const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100
 
-  const isActivitySupported = appletModel.helpers.isSupportedActivity(activity)
+  const isActivitySupported = isSupportedActivity(activity)
 
-  const onActivityCardClickHandler = () => {
-    if (isDisabled) {
-      return
-    }
+  function onActivityCardClickHandler() {
+    if (isDisabled || !activity) return
 
     if (!isActivitySupported) {
       const storeLink = isIOS ? APPSTORE_LINK : GOOGLEPLAY_LINK
       return window.open(storeLink, "_blank", "noopener noreferrer")
     }
 
-    const isActivityInProgress = activityListItem.status === ActivityStatus.InProgress
-    const isFlow = Boolean(activityListItem.flowId)
-
-    if (!isActivityInProgress && !isFlow && activity) {
-      const initialStep = 1
-
-      saveItemsRecord(activity, activityListItem.eventId, initialStep)
-    }
-
-    return onActivityCardClick()
+    return startActivityOrFlow({
+      activity,
+      eventId: activityListItem.eventId,
+      status: activityListItem.status,
+      flowId: activityListItem.flowId,
+    })
   }
 
   if (isLoading) {
     return (
       <ActivityCardBase isFlow={isFlow}>
-        <div className="activity-data">
-          <Loader />
-        </div>
+        <Loader />
       </ActivityCardBase>
     )
   }
