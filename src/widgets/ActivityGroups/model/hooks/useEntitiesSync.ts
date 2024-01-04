@@ -18,19 +18,19 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
       const endAtDate = new Date(entity.localEndDate).setHours(Number(hoursMinutes[0]), Number(hoursMinutes[1]))
 
       const appletId = props.appletId
-      const activityId = entity.id
+      const entityId = entity.id
       const eventId = entity.scheduledEventId
 
       const eventProgress = getGroupInProgressByIds({
         appletId,
-        activityId,
+        entityId,
         eventId,
       })
 
       if (!eventProgress) {
         return upsertGroupInProgress({
           appletId,
-          activityId,
+          activityId: entityId,
           eventId,
           progressPayload: {
             type: ActivityPipelineType.Regular,
@@ -49,7 +49,7 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
 
         return upsertGroupInProgress({
           appletId,
-          activityId,
+          activityId: entityId,
           eventId,
           progressPayload: {
             ...eventProgress,

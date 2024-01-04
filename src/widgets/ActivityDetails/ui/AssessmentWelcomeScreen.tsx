@@ -37,7 +37,7 @@ export const AssessmentWelcomeScreen = (props: Props) => {
   const groupInProgress = getGroupInProgressByIds({
     appletId: context.appletId,
     eventId: context.eventId,
-    activityId: flowParams.isFlow ? flowParams.flowId : props.activityDetails.id,
+    entityId: flowParams.isFlow ? flowParams.flowId : props.activityDetails.id,
   })
 
   return (

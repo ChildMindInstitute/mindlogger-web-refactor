@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { v4 as uuidV4 } from "uuid"
 
 import {
-  ActivityEventState,
-  ClearActivityItemsProgresByIdPayload,
+  ProgressState,
+  RemoveActivityProgressPayload,
   CompletedEntitiesState,
   CompletedEventEntities,
   InProgressActivity,
@@ -22,19 +22,19 @@ import {
   EventProgressState,
   FlowProgress,
   getActivityEventProgressId,
-  Progress,
+  GroupProgress,
 } from "~/abstract/lib"
 
 type InitialState = {
-  groupsInProgress: Progress
-  activityEventProgress: ActivityEventState
+  groupsInProgress: GroupProgress
+  progress: ProgressState
   completedEntities: CompletedEntitiesState
   completions: CompletedEventEntities
 }
 
 const initialState: InitialState = {
   groupsInProgress: {},
-  activityEventProgress: {},
+  progress: {},
   completedEntities: {},
   completions: {},
 }
@@ -43,12 +43,14 @@ const appletsSlice = createSlice({
   name: "applets",
   initialState,
   reducers: {
-    clearActivity: () => {
+    resetAppletsStore: () => {
       return initialState
     },
 
-    clearActivityItemsProgressById: (state, action: PayloadAction<ClearActivityItemsProgresByIdPayload>) => {
-      delete state.activityEventProgress[action.payload.activityEventId]
+    removeActivityProgress: (state, action: PayloadAction<RemoveActivityProgressPayload>) => {
+      const id = getActivityEventProgressId(action.payload.activityId, action.payload.eventId)
+
+      delete state.progress[id]
     },
 
     insertGroupProgressByParams: (state, action: PayloadAction<UpsertActionPayload>) => {
@@ -68,11 +70,11 @@ const appletsSlice = createSlice({
     saveActivityProgress: (state, action: PayloadAction<SaveActivityProgressPayload>) => {
       const id = getActivityEventProgressId(action.payload.activityId, action.payload.eventId)
 
-      state.activityEventProgress[id] = action.payload.progress
+      state.progress[id] = action.payload.progress
     },
 
     saveActivityEventAnswerById: (state, action: PayloadAction<SaveActivityItemAnswerPayload>) => {
-      const activityProgress = state.activityEventProgress[action.payload.activityEventId]
+      const activityProgress = state.progress[action.payload.activityEventId]
 
       if (!activityProgress) {
         return state
@@ -83,7 +85,7 @@ const appletsSlice = createSlice({
       activityProgress.items[itemIndex].answer = action.payload.answer
     },
     insertUserEventById: (state, action: PayloadAction<SetUserEventByItemIdPayload>) => {
-      const activityProgress = state.activityEventProgress[action.payload.activityEventId]
+      const activityProgress = state.progress[action.payload.activityEventId]
 
       if (!activityProgress) {
         return state
@@ -92,7 +94,7 @@ const appletsSlice = createSlice({
       activityProgress.userEvents.push(action.payload.userEvent)
     },
     updateUserEventByIndex: (state, action: PayloadAction<UpdateUserEventByIndexPayload>) => {
-      const activityProgress = state.activityEventProgress[action.payload.activityEventId]
+      const activityProgress = state.progress[action.payload.activityEventId]
 
       if (!activityProgress) {
         return state
@@ -108,7 +110,7 @@ const appletsSlice = createSlice({
     incrementStep: (state, action: PayloadAction<UpdateStepPayload>) => {
       const id = getActivityEventProgressId(action.payload.activityId, action.payload.eventId)
 
-      const activityProgress = state.activityEventProgress[id]
+      const activityProgress = state.progress[id]
 
       activityProgress.step += 1
     },
@@ -116,7 +118,7 @@ const appletsSlice = createSlice({
     decrementStep: (state, action: PayloadAction<UpdateStepPayload>) => {
       const id = getActivityEventProgressId(action.payload.activityId, action.payload.eventId)
 
-      const activityProgress = state.activityEventProgress[id]
+      const activityProgress = state.progress[id]
 
       activityProgress.step -= 1
     },

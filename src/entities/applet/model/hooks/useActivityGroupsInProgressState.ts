@@ -7,15 +7,9 @@ import { InProgressEntity, InProgressFlow, UpsertActionPayload } from "../types"
 import { EventProgressState } from "~/abstract/lib"
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
-type GetGroupInProgressByParams = {
-  appletId: string
-  activityId: string
-  eventId: string
-}
-
 type Return = {
   upsertGroupInProgress: (payload: UpsertActionPayload) => void
-  getGroupInProgressByIds: (params: GetGroupInProgressByParams) => EventProgressState | null
+  getGroupInProgressByIds: (params: InProgressEntity) => EventProgressState | null
   entityCompleted: (props: InProgressEntity) => void
   flowUpdated: (props: InProgressFlow) => void
 }
@@ -46,13 +40,13 @@ export const useActivityGroupsInProgressState = (): Return => {
   )
 
   const getGroupInProgressByIds = useCallback(
-    (params: GetGroupInProgressByParams) => {
+    (params: InProgressEntity) => {
       const appletProgress = groupsInProgress[params.appletId]
       if (!appletProgress) {
         return null
       }
 
-      const activityProgress = appletProgress[params.activityId]
+      const activityProgress = appletProgress[params.entityId]
       if (!activityProgress) {
         return null
       }

@@ -42,24 +42,25 @@ export type ItemRecord =
   | TimeRangeItem
   | AudioPlayerItem
 
-export type ActivityEventProgressState = {
+export type ActivityProgress = {
   items: ItemRecord[]
   step: number
   userEvents: Array<UserEvents>
 }
 
-export type ActivityEventState = Record<string, ActivityEventProgressState>
+export type ProgressState = Record<string, ActivityProgress>
 
 // Payloads
 
 export type SaveActivityProgressPayload = {
   activityId: string
   eventId: string
-  progress: ActivityEventProgressState
+  progress: ActivityProgress
 }
 
-export type ClearActivityItemsProgresByIdPayload = {
-  activityEventId: string
+export type RemoveActivityProgressPayload = {
+  activityId: string
+  eventId: string
 }
 
 export type UpsertActionPayload = {

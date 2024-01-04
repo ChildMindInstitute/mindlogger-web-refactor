@@ -66,7 +66,7 @@ export const useAnswer = (props: UseAnswerProps) => {
 
       const groupInProgress = getGroupInProgressByIds({
         appletId: props.appletDetails.id,
-        activityId: props.flowId ? props.flowId : props.activityId,
+        entityId: props.flowId ? props.flowId : props.activityId,
         eventId: props.eventId,
       })
 

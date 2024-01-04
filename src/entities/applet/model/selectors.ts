@@ -6,12 +6,12 @@ export const appletsSelector = (state: RootState) => state.applets
 
 export const groupsInProgressSelector = createSelector(appletsSelector, applets => applets.groupsInProgress)
 
-export const activityEventProgressSelector = createSelector(appletsSelector, applets => applets.activityEventProgress)
+export const activityProgressSelector = createSelector(appletsSelector, applets => applets.progress)
 
 const selectEntityId = (_: unknown, entityId: string) => entityId
 
 export const selectActivityProgress = createSelector(
-  [activityEventProgressSelector, selectEntityId],
+  [activityProgressSelector, selectEntityId],
   (progress, entityId) => progress[entityId],
 )
 

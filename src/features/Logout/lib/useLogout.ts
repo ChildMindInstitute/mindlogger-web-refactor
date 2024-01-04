@@ -1,3 +1,5 @@
+import { useCallback } from "react"
+
 import { useNavigate } from "react-router-dom"
 
 import { appletModel } from "~/entities/applet"
@@ -13,11 +15,11 @@ type UseLogoutReturn = {
 export const useLogout = (): UseLogoutReturn => {
   const navigate = useNavigate()
   const { clearUser } = userModel.hooks.useUserState()
-  const { clearActivityInProgressState } = appletModel.hooks.useActivityClearState()
+  const { resetAppletsStore } = appletModel.hooks.useResetAppletsStore()
 
   const { mutate: logoutMutation, isLoading } = useLogoutMutation()
 
-  const logout = () => {
+  const logout = useCallback(() => {
     const tokens = secureTokensStorage.getTokens()
 
     if (tokens?.accessToken) {
@@ -25,13 +27,13 @@ export const useLogout = (): UseLogoutReturn => {
     }
 
     clearUser()
-    clearActivityInProgressState()
+    resetAppletsStore()
     secureTokensStorage.clearTokens()
 
     Mixpanel.track("logout")
     Mixpanel.logout()
     return navigate(ROUTES.login.path)
-  }
+  }, [clearUser, logoutMutation, navigate, resetAppletsStore])
 
   return {
     logout,

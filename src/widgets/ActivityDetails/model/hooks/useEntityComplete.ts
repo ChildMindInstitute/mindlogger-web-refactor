@@ -79,7 +79,7 @@ export const useEntityComplete = (props: Props) => {
 
     const groupInProgress = getGroupInProgressByIds({
       appletId: props.appletDetails.id,
-      activityId: props.flowId ? props.flowId : props.activityId,
+      entityId: props.flowId ? props.flowId : props.activityId,
       eventId: props.eventId,
     })
 
