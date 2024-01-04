@@ -1,4 +1,4 @@
-import { groupsInProgressSelector } from "../selectors"
+import { groupProgressSelector } from "../selectors"
 import { actions } from "../slice"
 
 import { EventProgressState } from "~/abstract/lib"
@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 export const useStartEntity = () => {
   const dispatch = useAppDispatch()
-  const allProgresses = useAppSelector(groupsInProgressSelector)
+  const allProgresses = useAppSelector(groupProgressSelector)
 
   const getProgress = (appletId: string, entityId: string, eventId: string): EventProgressState =>
     allProgresses[appletId]?.[entityId]?.[eventId]

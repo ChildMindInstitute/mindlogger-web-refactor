@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 
-import { groupsInProgressSelector } from "../selectors"
+import { groupProgressSelector } from "../selectors"
 import { actions } from "../slice"
 import { InProgressEntity, InProgressFlow, SaveGroupProgressPayload } from "../types"
 
@@ -16,7 +16,7 @@ type Return = {
 
 export const useGroupProgressState = (): Return => {
   const dispatch = useAppDispatch()
-  const groupsInProgress = useAppSelector(groupsInProgressSelector)
+  const groupsInProgress = useAppSelector(groupProgressSelector)
 
   const flowUpdated = useCallback(
     (props: InProgressFlow) => {
