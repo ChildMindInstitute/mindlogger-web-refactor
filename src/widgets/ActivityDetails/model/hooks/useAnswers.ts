@@ -15,7 +15,7 @@ import { userModel } from "~/entities/user"
 import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { formatToDtoDate, formatToDtoTime, useEncryption } from "~/shared/utils"
 
-type UseAnswerProps = {
+type Props = {
   appletDetails: AppletDetailsDTO
 
   flowId: string | null
@@ -31,9 +31,9 @@ type SubmitAnswersProps = {
   isPublic: boolean
 }
 
-export const useAnswer = (props: UseAnswerProps) => {
+export const useAnswer = (props: Props) => {
   const { generateUserPrivateKey } = useEncryption()
-  const { encryptePayload } = useEncryptPayload()
+  const { encryptPayload } = useEncryptPayload()
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState()
 
@@ -62,8 +62,8 @@ export const useAnswer = (props: UseAnswerProps) => {
 
       const userPublicKey = generateUserPublicKey(props.appletDetails.encryption, privateKey)
 
-      const encryptedAnswers = encryptePayload(props.appletDetails.encryption, preparedItemAnswers.answer, privateKey)
-      const encryptedUserEvents = encryptePayload(props.appletDetails.encryption, params.userEvents, privateKey)
+      const encryptedAnswers = encryptPayload(props.appletDetails.encryption, preparedItemAnswers.answer, privateKey)
+      const encryptedUserEvents = encryptPayload(props.appletDetails.encryption, params.userEvents, privateKey)
 
       const groupProgress = getGroupProgress({
         entityId: props.flowId ? props.flowId : props.activityId,
@@ -76,7 +76,7 @@ export const useAnswer = (props: UseAnswerProps) => {
 
       const firstTextItemAnserWithIdentifier = getFirstResponseDataIdentifierTextItem(params.items)
       const encryptedIdentifier = firstTextItemAnserWithIdentifier
-        ? encryptePayload(props.appletDetails.encryption, firstTextItemAnserWithIdentifier, privateKey)
+        ? encryptPayload(props.appletDetails.encryption, firstTextItemAnserWithIdentifier, privateKey)
         : null
 
       const now = new Date()
@@ -129,7 +129,7 @@ export const useAnswer = (props: UseAnswerProps) => {
       return answer
     },
     [
-      encryptePayload,
+      encryptPayload,
       generateUserPrivateKey,
       getGroupProgress,
       props.activityId,

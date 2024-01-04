@@ -1,6 +1,6 @@
-import { ItemRecord } from "../../applet/model/types"
-import { Answer } from "./types"
+import { ItemRecord } from "./types"
 
+import { Answer } from "~/abstract/lib"
 import { Condition } from "~/shared/api"
 
 export type ItemMapByName = Record<string, ItemRecord>

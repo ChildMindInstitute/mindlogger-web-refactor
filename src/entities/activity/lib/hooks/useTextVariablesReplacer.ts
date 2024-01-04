@@ -1,28 +1,17 @@
-import { completedEntitiesSelector } from "../../../applet/model/selectors"
-import { ItemRecord } from "../../../applet/model/types"
 import { MarkdownVariableReplacer } from "../markdownVariableReplacer"
-import { Answers } from "../types"
 
+import { Answers } from "~/abstract/lib"
+import { appletModel } from "~/entities/applet"
 import { RespondentMetaDTO } from "~/shared/api"
-import { useAppSelector } from "~/shared/utils"
 
-type UseTextVariablesReplacerProps = {
-  items: ItemRecord[]
+type Props = {
+  items: appletModel.ItemRecord[]
   answers: Answers
-  activityId: string
   respondentMeta?: RespondentMetaDTO
+  completedEntityTime: number
 }
 
-export const useTextVariablesReplacer = ({
-  items,
-  answers,
-  activityId,
-  respondentMeta,
-}: UseTextVariablesReplacerProps) => {
-  const completedEntities = useAppSelector(completedEntitiesSelector)
-
-  const completedEntityTime = completedEntities[activityId]
-
+export const useTextVariablesReplacer = ({ items, answers, respondentMeta, completedEntityTime }: Props) => {
   const replaceTextVariables = (text: string) => {
     if (items && answers) {
       const nickname = respondentMeta?.nickname

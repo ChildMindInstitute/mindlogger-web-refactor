@@ -10,10 +10,11 @@ import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
 import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
 import { ActivityCardItem, ItemCardButton, useTextVariablesReplacer } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
 import { NotificationCenter } from "~/shared/ui"
-import { eventEmitter, usePrevious } from "~/shared/utils"
+import { eventEmitter, useAppSelector, usePrevious } from "~/shared/utils"
 
 type Props = {
   activityDetails: ActivityDTO
@@ -24,7 +25,10 @@ type Props = {
 
 export const AssessmentPassingScreen = (props: Props) => {
   const context = useContext(ActivityDetailsContext)
+
   const publicAppletKey = context.isPublic ? context.publicAppletKey : null
+
+  const completedEntities = useAppSelector(appletModel.selectors.completedEntitiesSelector)
 
   const { toNextStep, toPrevStep, currentItem, items, hasNextStep, hasPrevStep, step } = useStepperStateManager({
     activityId: props.activityDetails.id,
@@ -38,8 +42,8 @@ export const AssessmentPassingScreen = (props: Props) => {
   const { replaceTextVariables } = useTextVariablesReplacer({
     items,
     answers: items.map(item => item.answer),
-    activityId: props.activityDetails.id,
     respondentMeta: props.respondentMeta,
+    completedEntityTime: completedEntities[props.activityDetails.id],
   })
 
   useEffect(() => {

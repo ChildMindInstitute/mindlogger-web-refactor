@@ -1,7 +1,7 @@
 import { format, intervalToDuration, isSameDay, addDays } from "date-fns"
 
-import { ItemRecord } from "../../applet/model/types"
-import { Answer, Answers } from "./types"
+import { Answer, Answers } from "~/abstract/lib"
+import { ItemRecord } from "~/entities/applet/model/types"
 
 export class MarkdownVariableReplacer {
   private readonly activityItems: ItemRecord[]

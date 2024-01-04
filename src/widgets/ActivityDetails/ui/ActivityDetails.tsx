@@ -16,12 +16,12 @@ export const ActivityDetailsWidget = () => {
 
   const context = useContext(ActivityDetailsContext)
 
-  const { items } = appletModel.hooks.useProgressState({
+  const { rawItems } = appletModel.hooks.useProgressState({
     eventId: context.eventId,
     activityId: context.activityId,
   })
 
-  const isActivityEventInProgress = items.length > 0
+  const isActivityStarted = rawItems.length > 0
 
   const { activityDetails, isLoading, isError, error, appletDetails, eventsRawData, respondentMeta } =
     activityDetailsModel.hooks.useActivityDetailsQuery()
@@ -46,7 +46,7 @@ export const ActivityDetailsWidget = () => {
     )
   }
 
-  if (!isActivityEventInProgress) {
+  if (!isActivityStarted) {
     return <AssessmentWelcomeScreen activityDetails={activityDetails} />
   }
 
