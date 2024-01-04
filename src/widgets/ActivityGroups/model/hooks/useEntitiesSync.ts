@@ -10,7 +10,7 @@ type FilterCompletedEntitiesProps = {
 }
 
 export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
-  const { upsertGroupInProgress, getGroupInProgressByIds } = appletModel.hooks.useActivityGroupsInProgressState()
+  const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressState()
 
   const syncEntity = useCallback(
     (entity: CompletedEntityDTO) => {
@@ -21,14 +21,14 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
       const entityId = entity.id
       const eventId = entity.scheduledEventId
 
-      const eventProgress = getGroupInProgressByIds({
+      const eventProgress = getGroupProgress({
         appletId,
         entityId,
         eventId,
       })
 
       if (!eventProgress) {
-        return upsertGroupInProgress({
+        return saveGroupProgress({
           appletId,
           activityId: entityId,
           eventId,
@@ -47,7 +47,7 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
           return
         }
 
-        return upsertGroupInProgress({
+        return saveGroupProgress({
           appletId,
           activityId: entityId,
           eventId,
@@ -58,7 +58,7 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
         })
       }
     },
-    [getGroupInProgressByIds, props.appletId, upsertGroupInProgress],
+    [getGroupProgress, props.appletId, saveGroupProgress],
   )
 
   useEffect(() => {

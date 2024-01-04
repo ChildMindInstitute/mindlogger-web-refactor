@@ -2,28 +2,21 @@ import { useCallback } from "react"
 
 import { groupsInProgressSelector } from "../selectors"
 import { actions } from "../slice"
-import { InProgressEntity, InProgressFlow, UpsertActionPayload } from "../types"
+import { InProgressEntity, InProgressFlow, SaveGroupProgressPayload } from "../types"
 
 import { EventProgressState } from "~/abstract/lib"
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 type Return = {
-  upsertGroupInProgress: (payload: UpsertActionPayload) => void
-  getGroupInProgressByIds: (params: InProgressEntity) => EventProgressState | null
+  saveGroupProgress: (payload: SaveGroupProgressPayload) => void
+  getGroupProgress: (params: InProgressEntity) => EventProgressState | null
   entityCompleted: (props: InProgressEntity) => void
   flowUpdated: (props: InProgressFlow) => void
 }
 
-export const useActivityGroupsInProgressState = (): Return => {
+export const useGroupProgressState = (): Return => {
   const dispatch = useAppDispatch()
   const groupsInProgress = useAppSelector(groupsInProgressSelector)
-
-  const upsertGroupInProgress = useCallback(
-    (payload: UpsertActionPayload) => {
-      dispatch(actions.insertGroupProgressByParams(payload))
-    },
-    [dispatch],
-  )
 
   const flowUpdated = useCallback(
     (props: InProgressFlow) => {
@@ -39,19 +32,29 @@ export const useActivityGroupsInProgressState = (): Return => {
     [dispatch],
   )
 
-  const getGroupInProgressByIds = useCallback(
+  const saveGroupProgress = useCallback(
+    (payload: SaveGroupProgressPayload) => {
+      dispatch(actions.saveGroupProgress(payload))
+    },
+    [dispatch],
+  )
+
+  const getGroupProgress = useCallback(
     (params: InProgressEntity) => {
       const appletProgress = groupsInProgress[params.appletId]
+
       if (!appletProgress) {
         return null
       }
 
       const activityProgress = appletProgress[params.entityId]
+
       if (!activityProgress) {
         return null
       }
 
       const eventProgress = activityProgress[params.eventId]
+
       if (!eventProgress) {
         return null
       }
@@ -62,8 +65,8 @@ export const useActivityGroupsInProgressState = (): Return => {
   )
 
   return {
-    upsertGroupInProgress,
-    getGroupInProgressByIds,
+    saveGroupProgress,
+    getGroupProgress,
     entityCompleted,
     flowUpdated,
   }

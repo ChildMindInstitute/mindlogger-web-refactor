@@ -2,7 +2,6 @@ import { useCallback } from "react"
 
 import { actions } from "../slice"
 
-import { getActivityEventProgressId } from "~/abstract/lib"
 import { useAppDispatch } from "~/shared/utils"
 
 type Props = {
@@ -15,11 +14,10 @@ export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
 
   const saveItemAnswer = useCallback(
     (itemId: string, answer: string[]) => {
-      const activityEventId = getActivityEventProgressId(activityId, eventId)
-
       dispatch(
-        actions.saveActivityEventAnswerById({
-          activityEventId,
+        actions.saveItemAnswer({
+          entityId: activityId,
+          eventId,
           itemId,
           answer,
         }),

@@ -1,13 +1,8 @@
+import { secureUserPrivateKeyStorage } from "../secureUserPrivateKeyStorage"
 import { useUserState } from "./useUserState"
 
 import { ROUTES } from "~/shared/constants"
-import {
-  Mixpanel,
-  secureTokensStorage,
-  secureUserPrivateKeyStorage,
-  useCustomNavigation,
-  useEncryption,
-} from "~/shared/utils"
+import { Mixpanel, secureTokensStorage, useCustomNavigation, useEncryption } from "~/shared/utils"
 
 type Params = {
   isInvitationFlow?: boolean | undefined

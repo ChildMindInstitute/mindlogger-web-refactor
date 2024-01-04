@@ -9,12 +9,12 @@ import {
   InProgressActivity,
   InProgressEntity,
   InProgressFlow,
-  SaveActivityItemAnswerPayload,
+  SaveItemAnswerPayload,
   SaveActivityProgressPayload,
-  SetUserEventByItemIdPayload,
+  SaveUserEventPayload,
   UpdateStepPayload,
   UpdateUserEventByIndexPayload,
-  UpsertActionPayload,
+  SaveGroupProgressPayload,
 } from "./types"
 
 import {
@@ -53,12 +53,14 @@ const appletsSlice = createSlice({
       delete state.progress[id]
     },
 
-    insertGroupProgressByParams: (state, action: PayloadAction<UpsertActionPayload>) => {
+    saveGroupProgress: (state, action: PayloadAction<SaveGroupProgressPayload>) => {
       const { appletId, activityId, eventId, progressPayload } = action.payload
 
       state.groupsInProgress[appletId] = state.groupsInProgress[appletId] ?? {}
       state.groupsInProgress[appletId][activityId] = state.groupsInProgress[appletId][activityId] ?? {}
+
       const group = state.groupsInProgress[appletId][activityId][eventId]
+
       const updatedProgress = {
         ...group,
         ...progressPayload,
@@ -73,8 +75,9 @@ const appletsSlice = createSlice({
       state.progress[id] = action.payload.progress
     },
 
-    saveActivityEventAnswerById: (state, action: PayloadAction<SaveActivityItemAnswerPayload>) => {
-      const activityProgress = state.progress[action.payload.activityEventId]
+    saveItemAnswer: (state, action: PayloadAction<SaveItemAnswerPayload>) => {
+      const id = getActivityEventProgressId(action.payload.entityId, action.payload.eventId)
+      const activityProgress = state.progress[id]
 
       if (!activityProgress) {
         return state
@@ -84,8 +87,9 @@ const appletsSlice = createSlice({
 
       activityProgress.items[itemIndex].answer = action.payload.answer
     },
-    insertUserEventById: (state, action: PayloadAction<SetUserEventByItemIdPayload>) => {
-      const activityProgress = state.progress[action.payload.activityEventId]
+    saveUserEvent: (state, action: PayloadAction<SaveUserEventPayload>) => {
+      const id = getActivityEventProgressId(action.payload.entityId, action.payload.eventId)
+      const activityProgress = state.progress[id]
 
       if (!activityProgress) {
         return state
@@ -94,7 +98,8 @@ const appletsSlice = createSlice({
       activityProgress.userEvents.push(action.payload.userEvent)
     },
     updateUserEventByIndex: (state, action: PayloadAction<UpdateUserEventByIndexPayload>) => {
-      const activityProgress = state.progress[action.payload.activityEventId]
+      const id = getActivityEventProgressId(action.payload.entityId, action.payload.eventId)
+      const activityProgress = state.progress[id]
 
       if (!activityProgress) {
         return state
@@ -136,6 +141,7 @@ const appletsSlice = createSlice({
       state.groupsInProgress[appletId][activityId] = state.groupsInProgress[appletId][activityId] ?? {}
       state.groupsInProgress[appletId][activityId][eventId] = activityEvent
     },
+
     flowStarted: (state, action: PayloadAction<InProgressFlow>) => {
       const { appletId, activityId, flowId, eventId, pipelineActivityOrder } = action.payload
 

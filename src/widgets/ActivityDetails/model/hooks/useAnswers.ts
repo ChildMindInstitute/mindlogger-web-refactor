@@ -11,8 +11,9 @@ import { prepareItemAnswers } from "../prepareItemAnswers"
 import { ActivityPipelineType, EventProgressState } from "~/abstract/lib"
 import { useEncryptPayload } from "~/entities/activity"
 import { appletModel } from "~/entities/applet"
+import { userModel } from "~/entities/user"
 import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
-import { formatToDtoDate, formatToDtoTime, secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
+import { formatToDtoDate, formatToDtoTime, useEncryption } from "~/shared/utils"
 
 type UseAnswerProps = {
   appletDetails: AppletDetailsDTO
@@ -34,7 +35,7 @@ export const useAnswer = (props: UseAnswerProps) => {
   const { generateUserPrivateKey } = useEncryption()
   const { encryptePayload } = useEncryptPayload()
 
-  const { getGroupInProgressByIds } = appletModel.hooks.useActivityGroupsInProgressState()
+  const { getGroupProgress } = appletModel.hooks.useGroupProgressState()
 
   const getSubmitId = useCallback((groupInProgress: EventProgressState): string => {
     const isFlow = groupInProgress.type === ActivityPipelineType.Flow
@@ -56,7 +57,7 @@ export const useAnswer = (props: UseAnswerProps) => {
       if (params.isPublic) {
         privateKey = generateUserPrivateKey({ userId: uuidV4(), email: uuidV4(), password: uuidV4() })
       } else {
-        privateKey = secureUserPrivateKeyStorage.getUserPrivateKey()
+        privateKey = userModel.secureUserPrivateKeyStorage.getUserPrivateKey()
       }
 
       const userPublicKey = generateUserPublicKey(props.appletDetails.encryption, privateKey)
@@ -64,7 +65,7 @@ export const useAnswer = (props: UseAnswerProps) => {
       const encryptedAnswers = encryptePayload(props.appletDetails.encryption, preparedItemAnswers.answer, privateKey)
       const encryptedUserEvents = encryptePayload(props.appletDetails.encryption, params.userEvents, privateKey)
 
-      const groupInProgress = getGroupInProgressByIds({
+      const groupInProgress = getGroupProgress({
         appletId: props.appletDetails.id,
         entityId: props.flowId ? props.flowId : props.activityId,
         eventId: props.eventId,
@@ -131,7 +132,7 @@ export const useAnswer = (props: UseAnswerProps) => {
     [
       encryptePayload,
       generateUserPrivateKey,
-      getGroupInProgressByIds,
+      getGroupProgress,
       getSubmitId,
       props.activityId,
       props.appletDetails,

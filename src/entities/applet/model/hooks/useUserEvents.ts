@@ -23,15 +23,12 @@ export const useUserEvents = (props: Props) => {
 
   const saveUserEventByType = useCallback(
     (type: UserEventTypes, item: ItemRecord) => {
-      if (!activityProgress) {
-        return
-      }
-
       const activityItemScreenId = getActivityItemScreenId(props.activityId, item.id)
 
       dispatch(
-        actions.insertUserEventById({
-          activityEventId,
+        actions.saveUserEvent({
+          entityId: props.activityId,
+          eventId: props.eventId,
           itemId: item.id,
           userEvent: {
             type,
@@ -41,7 +38,7 @@ export const useUserEvents = (props: Props) => {
         }),
       )
     },
-    [activityEventId, activityProgress, dispatch, props.activityId],
+    [dispatch, props.activityId, props.eventId],
   )
 
   const saveSetAnswerUserEvent = useCallback(
@@ -49,6 +46,7 @@ export const useUserEvents = (props: Props) => {
       if (!activityProgress) {
         return
       }
+
       const userEvents = activityProgress.userEvents
 
       const activityItemScreenId = getActivityItemScreenId(props.activityId, item.id)
@@ -59,8 +57,8 @@ export const useUserEvents = (props: Props) => {
         if (lastUserEvent.screen === activityItemScreenId && lastUserEvent.type === "SET_ANSWER") {
           return dispatch(
             actions.updateUserEventByIndex({
-              activityEventId,
-              itemId: item.id,
+              entityId: props.activityId,
+              eventId: props.eventId,
               userEventIndex: userEvents.length - 1,
               userEvent: {
                 type: "SET_ANSWER",
@@ -74,8 +72,9 @@ export const useUserEvents = (props: Props) => {
       }
 
       return dispatch(
-        actions.insertUserEventById({
-          activityEventId,
+        actions.saveUserEvent({
+          entityId: props.activityId,
+          eventId: props.eventId,
           itemId: item.id,
           userEvent: {
             type: "SET_ANSWER",
@@ -86,7 +85,7 @@ export const useUserEvents = (props: Props) => {
         }),
       )
     },
-    [activityEventId, activityProgress, dispatch, props.activityId],
+    [activityProgress, dispatch, props.activityId, props.eventId],
   )
 
   return { saveUserEventByType, saveSetAnswerUserEvent }

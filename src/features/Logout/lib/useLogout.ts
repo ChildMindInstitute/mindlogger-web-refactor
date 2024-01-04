@@ -1,11 +1,9 @@
 import { useCallback } from "react"
 
-import { useNavigate } from "react-router-dom"
-
 import { appletModel } from "~/entities/applet"
 import { useLogoutMutation, userModel } from "~/entities/user"
 import { ROUTES } from "~/shared/constants"
-import { Mixpanel, secureTokensStorage } from "~/shared/utils"
+import { Mixpanel, secureTokensStorage, useCustomNavigation } from "~/shared/utils"
 
 type UseLogoutReturn = {
   logout: () => void
@@ -13,7 +11,8 @@ type UseLogoutReturn = {
 }
 
 export const useLogout = (): UseLogoutReturn => {
-  const navigate = useNavigate()
+  const navigator = useCustomNavigation()
+
   const { clearUser } = userModel.hooks.useUserState()
   const { resetAppletsStore } = appletModel.hooks.useResetAppletsStore()
 
@@ -29,11 +28,12 @@ export const useLogout = (): UseLogoutReturn => {
     clearUser()
     resetAppletsStore()
     secureTokensStorage.clearTokens()
+    userModel.secureUserPrivateKeyStorage.clearUserPrivateKey()
 
     Mixpanel.track("logout")
     Mixpanel.logout()
-    return navigate(ROUTES.login.path)
-  }, [clearUser, logoutMutation, navigate, resetAppletsStore])
+    return navigator.navigate(ROUTES.login.path)
+  }, [clearUser, logoutMutation, navigator, resetAppletsStore])
 
   return {
     logout,

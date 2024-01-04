@@ -1,3 +1,4 @@
+import { EventProgressState } from "~/abstract/lib"
 import {
   AudioPlayerItem,
   CheckboxItem,
@@ -10,9 +11,7 @@ import {
   TextItem,
   TimeItem,
   TimeRangeItem,
-} from "../../activity/lib"
-
-import { EventProgressState } from "~/abstract/lib"
+} from "~/entities/activity/lib"
 
 export type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"
 
@@ -63,15 +62,16 @@ export type RemoveActivityProgressPayload = {
   eventId: string
 }
 
-export type UpsertActionPayload = {
+export type SaveGroupProgressPayload = {
   appletId: string
   activityId: string
   eventId: string
   progressPayload: EventProgressState
 }
 
-export type SaveActivityItemAnswerPayload = {
-  activityEventId: string
+export type SaveItemAnswerPayload = {
+  entityId: string
+  eventId: string
   itemId: string
   answer: string[]
 }
@@ -81,15 +81,16 @@ export type UpdateStepPayload = {
   eventId: string
 }
 
-export type SetUserEventByItemIdPayload = {
-  activityEventId: string
+export type SaveUserEventPayload = {
+  entityId: string
+  eventId: string
   itemId: string
   userEvent: UserEvents
 }
 
 export type UpdateUserEventByIndexPayload = {
-  activityEventId: string
-  itemId: string
+  entityId: string
+  eventId: string
   userEventIndex: number
   userEvent: UserEvents
 }

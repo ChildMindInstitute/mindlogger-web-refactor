@@ -18,10 +18,8 @@ export const useEntityComplete = (props: Props) => {
   const navigator = useCustomNavigation()
   const { t } = useCustomTranslation()
 
-  const { clearActivityItemsProgressById } = appletModel.hooks.useActivityClearState()
-  const { entityCompleted, flowUpdated } = appletModel.hooks.useActivityGroupsInProgressState()
-
-  const { getGroupInProgressByIds } = appletModel.hooks.useActivityGroupsInProgressState()
+  const { removeActivityProgress } = appletModel.hooks.useRemoveActivityProgress()
+  const { entityCompleted, flowUpdated, getGroupProgress } = appletModel.hooks.useGroupProgressState()
 
   const { showSuccessNotification } = useNotification()
 
@@ -77,7 +75,7 @@ export const useEntityComplete = (props: Props) => {
   const completeFlow = (flowId: string) => {
     const { activityFlows } = props.appletDetails
 
-    const groupInProgress = getGroupInProgressByIds({
+    const groupInProgress = getGroupProgress({
       appletId: props.appletDetails.id,
       entityId: props.flowId ? props.flowId : props.activityId,
       eventId: props.eventId,
@@ -107,7 +105,7 @@ export const useEntityComplete = (props: Props) => {
       pipelineActivityOrder: nextActivityId ? currentPipelineActivityOrder + 1 : 0,
     })
 
-    clearActivityItemsProgressById(props.activityId, props.eventId)
+    removeActivityProgress({ activityId: props.activityId, eventId: props.eventId })
 
     if (!nextActivityId) {
       return completeEntityAndRedirect()
@@ -117,7 +115,7 @@ export const useEntityComplete = (props: Props) => {
   }
 
   const completeActivity = () => {
-    clearActivityItemsProgressById(props.activityId, props.eventId)
+    removeActivityProgress({ activityId: props.activityId, eventId: props.eventId })
 
     return completeEntityAndRedirect()
   }
