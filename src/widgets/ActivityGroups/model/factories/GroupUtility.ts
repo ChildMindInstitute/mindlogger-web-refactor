@@ -2,7 +2,7 @@ import { addDays, addYears, isEqual, startOfDay, subDays, subSeconds, subYears }
 
 import { EventEntity, Activity } from "../../lib"
 
-import { EventProgressState, GroupProgress } from "~/abstract/lib"
+import { EventProgressState, GroupProgressState } from "~/abstract/lib"
 import { AvailabilityLabelType, PeriodicityType, ScheduleEvent } from "~/entities/event"
 import { MINUTES_IN_HOUR, MS_IN_MINUTE } from "~/shared/constants"
 import { DatesFromTo, HourMinute, getMsFromHours, getMsFromMinutes, isSourceLess } from "~/shared/utils"
@@ -11,12 +11,12 @@ const ManyYears = 100
 
 export type GroupsBuildContext = {
   allAppletActivities: Activity[]
-  progress: GroupProgress
+  progress: GroupProgressState
   appletId: string
 }
 
 export class GroupUtility {
-  protected progress: GroupProgress
+  protected progress: GroupProgressState
 
   protected appletId: string
 

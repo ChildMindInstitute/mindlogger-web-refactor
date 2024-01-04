@@ -2,7 +2,7 @@ import { Activity, ActivityFlow, ActivityListGroup, Entity, EventEntity } from "
 import { createActivityGroupsBuilder } from "../factories/ActivityGroupsBuilder"
 import { mapActivitiesFromDto, mapActivityFlowsFromDto } from "../mappers"
 
-import { ActivityPipelineType, GroupProgress } from "~/abstract/lib"
+import { ActivityPipelineType, GroupProgressState } from "~/abstract/lib"
 import { EventModel, ScheduleEvent } from "~/entities/event"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 
@@ -13,7 +13,7 @@ type BuildResult = {
 type ProcessParams = {
   appletDetails: AppletDetailsDTO
   eventsDetails: AppletEventsResponse
-  entityProgress: GroupProgress
+  entityProgress: GroupProgressState
 }
 
 const createActivityGroupsBuildManager = () => {

@@ -4,7 +4,7 @@ import { RootState } from "~/shared/utils"
 
 export const appletsSelector = (state: RootState) => state.applets
 
-export const groupsInProgressSelector = createSelector(appletsSelector, applets => applets.groupsInProgress)
+export const groupsInProgressSelector = createSelector(appletsSelector, applets => applets.groupProgress)
 
 export const activityProgressSelector = createSelector(appletsSelector, applets => applets.progress)
 

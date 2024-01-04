@@ -22,18 +22,18 @@ import {
   EventProgressState,
   FlowProgress,
   getActivityEventProgressId,
-  GroupProgress,
+  GroupProgressState,
 } from "~/abstract/lib"
 
 type InitialState = {
-  groupsInProgress: GroupProgress
+  groupProgress: GroupProgressState
   progress: ProgressState
   completedEntities: CompletedEntitiesState
   completions: CompletedEventEntities
 }
 
 const initialState: InitialState = {
-  groupsInProgress: {},
+  groupProgress: {},
   progress: {},
   completedEntities: {},
   completions: {},
@@ -56,17 +56,17 @@ const appletsSlice = createSlice({
     saveGroupProgress: (state, action: PayloadAction<SaveGroupProgressPayload>) => {
       const { appletId, activityId, eventId, progressPayload } = action.payload
 
-      state.groupsInProgress[appletId] = state.groupsInProgress[appletId] ?? {}
-      state.groupsInProgress[appletId][activityId] = state.groupsInProgress[appletId][activityId] ?? {}
+      state.groupProgress[appletId] = state.groupProgress[appletId] ?? {}
+      state.groupProgress[appletId][activityId] = state.groupProgress[appletId][activityId] ?? {}
 
-      const group = state.groupsInProgress[appletId][activityId][eventId]
+      const group = state.groupProgress[appletId][activityId][eventId]
 
       const updatedProgress = {
         ...group,
         ...progressPayload,
       }
 
-      state.groupsInProgress[appletId][activityId][eventId] = updatedProgress
+      state.groupProgress[appletId][activityId][eventId] = updatedProgress
     },
 
     saveActivityProgress: (state, action: PayloadAction<SaveActivityProgressPayload>) => {
@@ -137,9 +137,9 @@ const appletsSlice = createSlice({
         endAt: null,
       }
 
-      state.groupsInProgress[appletId] = state.groupsInProgress[appletId] ?? {}
-      state.groupsInProgress[appletId][activityId] = state.groupsInProgress[appletId][activityId] ?? {}
-      state.groupsInProgress[appletId][activityId][eventId] = activityEvent
+      state.groupProgress[appletId] = state.groupProgress[appletId] ?? {}
+      state.groupProgress[appletId][activityId] = state.groupProgress[appletId][activityId] ?? {}
+      state.groupProgress[appletId][activityId][eventId] = activityEvent
     },
 
     flowStarted: (state, action: PayloadAction<InProgressFlow>) => {
@@ -155,16 +155,16 @@ const appletsSlice = createSlice({
         pipelineActivityOrder,
       }
 
-      state.groupsInProgress[appletId] = state.groupsInProgress[appletId] ?? {}
-      state.groupsInProgress[appletId][flowId] = state.groupsInProgress[appletId][flowId] ?? {}
+      state.groupProgress[appletId] = state.groupProgress[appletId] ?? {}
+      state.groupProgress[appletId][flowId] = state.groupProgress[appletId][flowId] ?? {}
 
-      state.groupsInProgress[appletId][flowId][eventId] = flowEvent
+      state.groupProgress[appletId][flowId][eventId] = flowEvent
     },
 
     flowUpdated: (state, action: PayloadAction<InProgressFlow>) => {
       const { appletId, activityId, flowId, eventId, pipelineActivityOrder } = action.payload
 
-      const event = state.groupsInProgress[appletId][flowId][eventId] as FlowProgress
+      const event = state.groupProgress[appletId][flowId][eventId] as FlowProgress
 
       event.currentActivityId = activityId
       event.pipelineActivityOrder = pipelineActivityOrder
@@ -174,7 +174,7 @@ const appletsSlice = createSlice({
     entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {
       const { appletId, entityId, eventId } = action.payload
 
-      state.groupsInProgress[appletId][entityId][eventId].endAt = new Date().getTime()
+      state.groupProgress[appletId][entityId][eventId].endAt = new Date().getTime()
 
       const completedEntities = state.completedEntities ?? {}
 

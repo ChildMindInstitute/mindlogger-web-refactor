@@ -33,4 +33,4 @@ export type EventsProgress = Record<EventId, EventProgressState>
 
 export type EntitiesProgress = Record<EntityId, EventsProgress>
 
-export type GroupProgress = Record<AppletId, EntitiesProgress>
+export type GroupProgressState = Record<AppletId, EntitiesProgress>
