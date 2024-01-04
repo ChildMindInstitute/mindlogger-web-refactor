@@ -71,7 +71,7 @@ export const useStartEntity = (props: Props) => {
     }
 
     if (flowId) {
-      startFlow(appletId, flowId, eventId, flows)
+      startFlow(flowId, eventId, flows)
 
       return navigateToEntity({
         activityId,
@@ -80,7 +80,7 @@ export const useStartEntity = (props: Props) => {
         flowId,
       })
     } else {
-      startActivity(appletId, activityId, eventId)
+      startActivity(activityId, eventId)
 
       return navigateToEntity({
         activityId,

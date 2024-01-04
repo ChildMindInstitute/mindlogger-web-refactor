@@ -27,18 +27,15 @@ export const AssessmentWelcomeScreen = (props: Props) => {
   const flowParams = useFlowType()
 
   const { saveItemsRecord } = appletModel.hooks.useSaveActivityEventProgress()
+
+  const entityId = flowParams.isFlow ? flowParams.flowId : props.activityDetails.id
+
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState()
 
   const startAssessment = () => {
     const initialStep = 1
     return saveItemsRecord(props.activityDetails, context.eventId, initialStep)
   }
-
-  const groupInProgress = getGroupProgress({
-    appletId: context.appletId,
-    eventId: context.eventId,
-    entityId: flowParams.isFlow ? flowParams.flowId : props.activityDetails.id,
-  })
 
   return (
     <Layout
@@ -78,7 +75,10 @@ export const AssessmentWelcomeScreen = (props: Props) => {
             fontWeight="400"
             color={Theme.colors.light.secondary}
             sx={{ marginTop: "24px" }}>
-            <ActivityMetaData activityLength={props.activityDetails.items.length} groupInProgress={groupInProgress} />
+            <ActivityMetaData
+              activityLength={props.activityDetails.items.length}
+              groupInProgress={getGroupProgress({ entityId, eventId: context.eventId })}
+            />
           </Text>
           <Text variant="body1" fontSize="18px" fontWeight="700" color={Theme.colors.light.onSurface} margin="16px 0px">
             {props.activityDetails.name}

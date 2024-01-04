@@ -19,13 +19,13 @@ export const useEntityComplete = (props: Props) => {
   const { t } = useCustomTranslation()
 
   const { removeActivityProgress } = appletModel.hooks.useRemoveActivityProgress()
+
   const { entityCompleted, flowUpdated, getGroupProgress } = appletModel.hooks.useGroupProgressState()
 
   const { showSuccessNotification } = useNotification()
 
   const completeEntityAndRedirect = () => {
     entityCompleted({
-      appletId: props.appletDetails.id,
       entityId: props.flowId ? props.flowId : props.activityId,
       eventId: props.eventId,
     })
@@ -75,30 +75,28 @@ export const useEntityComplete = (props: Props) => {
   const completeFlow = (flowId: string) => {
     const { activityFlows } = props.appletDetails
 
-    const groupInProgress = getGroupProgress({
-      appletId: props.appletDetails.id,
+    const groupProgress = getGroupProgress({
       entityId: props.flowId ? props.flowId : props.activityId,
       eventId: props.eventId,
     })
 
-    if (!groupInProgress) {
+    if (!groupProgress) {
       return
     }
 
-    const isFlow = groupInProgress.type === ActivityPipelineType.Flow
+    const isFlow = groupProgress.type === ActivityPipelineType.Flow
 
     if (!isFlow) {
       return
     }
 
-    const currentPipelineActivityOrder = groupInProgress.pipelineActivityOrder
+    const currentPipelineActivityOrder = groupProgress.pipelineActivityOrder
 
     const currentFlow = activityFlows.find(flow => flow.id === flowId)!
 
     const nextActivityId = currentFlow.activityIds[currentPipelineActivityOrder + 1]
 
     flowUpdated({
-      appletId: props.appletDetails.id,
       activityId: nextActivityId ? nextActivityId : currentFlow.activityIds[0],
       flowId: currentFlow.id,
       eventId: props.eventId,

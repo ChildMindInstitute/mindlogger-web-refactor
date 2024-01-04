@@ -16,7 +16,7 @@ export const ActivityDetailsWidget = () => {
 
   const context = useContext(ActivityDetailsContext)
 
-  const { items } = appletModel.hooks.useActivityEventProgressState({
+  const { items } = appletModel.hooks.useProgressState({
     eventId: context.eventId,
     activityId: context.activityId,
   })

@@ -5,7 +5,6 @@ import { appletModel } from "~/entities/applet"
 import { CompletedEntitiesDTO, CompletedEntityDTO } from "~/shared/api"
 
 type FilterCompletedEntitiesProps = {
-  appletId: string
   completedEntities: CompletedEntitiesDTO | undefined
 }
 
@@ -17,19 +16,16 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
       const hoursMinutes = entity.localEndTime.split(":")
       const endAtDate = new Date(entity.localEndDate).setHours(Number(hoursMinutes[0]), Number(hoursMinutes[1]))
 
-      const appletId = props.appletId
       const entityId = entity.id
       const eventId = entity.scheduledEventId
 
-      const eventProgress = getGroupProgress({
-        appletId,
+      const groupProgress = getGroupProgress({
         entityId,
         eventId,
       })
 
-      if (!eventProgress) {
+      if (!groupProgress) {
         return saveGroupProgress({
-          appletId,
           activityId: entityId,
           eventId,
           progressPayload: {
@@ -40,25 +36,24 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
         })
       }
 
-      if (eventProgress.endAt) {
-        const isServerEndAtBigger = endAtDate > new Date(eventProgress.endAt).getTime()
+      if (groupProgress.endAt) {
+        const isServerEndAtBigger = endAtDate > new Date(groupProgress.endAt).getTime()
 
         if (!isServerEndAtBigger) {
           return
         }
 
         return saveGroupProgress({
-          appletId,
           activityId: entityId,
           eventId,
           progressPayload: {
-            ...eventProgress,
+            ...groupProgress,
             endAt: new Date(endAtDate).getTime(),
           },
         })
       }
     },
-    [getGroupProgress, props.appletId, saveGroupProgress],
+    [getGroupProgress, saveGroupProgress],
   )
 
   useEffect(() => {

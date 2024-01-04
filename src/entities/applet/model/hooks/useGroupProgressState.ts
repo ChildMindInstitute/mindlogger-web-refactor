@@ -4,19 +4,27 @@ import { groupProgressSelector } from "../selectors"
 import { actions } from "../slice"
 import { InProgressEntity, InProgressFlow, SaveGroupProgressPayload } from "../types"
 
-import { EventProgressState } from "~/abstract/lib"
+import { GroupProgress, getProgressId } from "~/abstract/lib"
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 type Return = {
+  getGroupProgress: (params: InProgressEntity) => GroupProgress | null
   saveGroupProgress: (payload: SaveGroupProgressPayload) => void
-  getGroupProgress: (params: InProgressEntity) => EventProgressState | null
+
   entityCompleted: (props: InProgressEntity) => void
   flowUpdated: (props: InProgressFlow) => void
 }
 
 export const useGroupProgressState = (): Return => {
   const dispatch = useAppDispatch()
-  const groupsInProgress = useAppSelector(groupProgressSelector)
+  const groupProgresses = useAppSelector(groupProgressSelector)
+
+  const getGroupProgress = useCallback(
+    (params: InProgressEntity) => {
+      return groupProgresses[getProgressId(params.entityId, params.eventId)] ?? null
+    },
+    [groupProgresses],
+  )
 
   const flowUpdated = useCallback(
     (props: InProgressFlow) => {
@@ -39,34 +47,11 @@ export const useGroupProgressState = (): Return => {
     [dispatch],
   )
 
-  const getGroupProgress = useCallback(
-    (params: InProgressEntity) => {
-      const appletProgress = groupsInProgress[params.appletId]
-
-      if (!appletProgress) {
-        return null
-      }
-
-      const activityProgress = appletProgress[params.entityId]
-
-      if (!activityProgress) {
-        return null
-      }
-
-      const eventProgress = activityProgress[params.eventId]
-
-      if (!eventProgress) {
-        return null
-      }
-
-      return eventProgress
-    },
-    [groupsInProgress],
-  )
-
   return {
-    saveGroupProgress,
     getGroupProgress,
+
+    saveGroupProgress,
+
     entityCompleted,
     flowUpdated,
   }

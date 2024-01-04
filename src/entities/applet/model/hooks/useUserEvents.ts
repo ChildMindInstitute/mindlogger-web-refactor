@@ -6,7 +6,7 @@ import { selectActivityProgress } from "../selectors"
 import { actions } from "../slice"
 import { ItemRecord, UserEventTypes } from "../types"
 
-import { getActivityEventProgressId } from "~/abstract/lib"
+import { getProgressId } from "~/abstract/lib"
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 type Props = {
@@ -17,9 +17,9 @@ type Props = {
 export const useUserEvents = (props: Props) => {
   const dispatch = useAppDispatch()
 
-  const activityEventId = getActivityEventProgressId(props.activityId, props.eventId)
+  const progressId = getProgressId(props.activityId, props.eventId)
 
-  const activityProgress = useAppSelector(state => selectActivityProgress(state, activityEventId))
+  const activityProgress = useAppSelector(state => selectActivityProgress(state, progressId))
 
   const saveUserEventByType = useCallback(
     (type: UserEventTypes, item: ItemRecord) => {

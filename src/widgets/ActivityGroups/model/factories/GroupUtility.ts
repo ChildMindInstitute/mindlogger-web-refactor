@@ -2,7 +2,7 @@ import { addDays, addYears, isEqual, startOfDay, subDays, subSeconds, subYears }
 
 import { EventEntity, Activity } from "../../lib"
 
-import { EventProgressState, GroupProgressState } from "~/abstract/lib"
+import { GroupProgress, GroupProgressState, getProgressId } from "~/abstract/lib"
 import { AvailabilityLabelType, PeriodicityType, ScheduleEvent } from "~/entities/event"
 import { MINUTES_IN_HOUR, MS_IN_MINUTE } from "~/shared/constants"
 import { DatesFromTo, HourMinute, getMsFromHours, getMsFromMinutes, isSourceLess } from "~/shared/utils"
@@ -99,8 +99,8 @@ export class GroupUtility {
     return isEqual(this.getYesterday(), startOfDay(date))
   }
 
-  public getProgressRecord(eventActivity: EventEntity): EventProgressState | null {
-    const record = this.progress[this.appletId]?.[eventActivity.entity.id]?.[eventActivity.event.id]
+  public getProgressRecord(eventActivity: EventEntity): GroupProgress | null {
+    const record = this.progress[getProgressId(eventActivity.entity.id, eventActivity.event.id)]
     return record ?? null
   }
 

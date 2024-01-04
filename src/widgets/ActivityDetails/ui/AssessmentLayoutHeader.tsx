@@ -20,7 +20,7 @@ export const AssessmentLayoutHeader = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery()
   const navigator = useCustomNavigation()
 
-  const { progress } = appletModel.hooks.useActivityEventProgressState({
+  const { progress } = appletModel.hooks.useProgressState({
     activityId: props.activityId,
     eventId: props.eventId,
   })

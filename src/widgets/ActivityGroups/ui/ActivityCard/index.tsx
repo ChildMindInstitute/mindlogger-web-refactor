@@ -39,7 +39,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     { select: data => mapActivityDTOToActivity(data.data.result) },
   )
 
-  const { items, progress } = appletModel.hooks.useActivityEventProgressState({
+  const { items, progress } = appletModel.hooks.useProgressState({
     activityId: activityListItem.activityId,
     eventId: activityListItem.eventId,
   })

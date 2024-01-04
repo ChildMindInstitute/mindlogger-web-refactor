@@ -8,7 +8,7 @@ import { getScheduledTimeFromEvents } from "../getScheduledTimeFromEvents"
 import { mapAlerts, mapToAnswers } from "../mappers"
 import { prepareItemAnswers } from "../prepareItemAnswers"
 
-import { ActivityPipelineType, EventProgressState } from "~/abstract/lib"
+import { ActivityPipelineType, GroupProgress } from "~/abstract/lib"
 import { useEncryptPayload } from "~/entities/activity"
 import { appletModel } from "~/entities/applet"
 import { userModel } from "~/entities/user"
@@ -37,11 +37,11 @@ export const useAnswer = (props: UseAnswerProps) => {
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState()
 
-  const getSubmitId = useCallback((groupInProgress: EventProgressState): string => {
+  const getSubmitId = (groupInProgress: GroupProgress): string => {
     const isFlow = groupInProgress.type === ActivityPipelineType.Flow
 
     return isFlow ? groupInProgress.executionGroupKey : uuidV4()
-  }, [])
+  }
 
   const processAnswers = useCallback(
     (params: SubmitAnswersProps): AnswerPayload => {
@@ -65,13 +65,12 @@ export const useAnswer = (props: UseAnswerProps) => {
       const encryptedAnswers = encryptePayload(props.appletDetails.encryption, preparedItemAnswers.answer, privateKey)
       const encryptedUserEvents = encryptePayload(props.appletDetails.encryption, params.userEvents, privateKey)
 
-      const groupInProgress = getGroupProgress({
-        appletId: props.appletDetails.id,
+      const groupProgress = getGroupProgress({
         entityId: props.flowId ? props.flowId : props.activityId,
         eventId: props.eventId,
       })
 
-      if (!groupInProgress) {
+      if (!groupProgress) {
         throw new Error("[Activity item list] Group in progress not found")
       }
 
@@ -82,8 +81,8 @@ export const useAnswer = (props: UseAnswerProps) => {
 
       const now = new Date()
 
-      const isFlow = groupInProgress.type === ActivityPipelineType.Flow
-      const pipelineAcitivityOrder = isFlow ? groupInProgress.pipelineActivityOrder : null
+      const isFlow = groupProgress.type === ActivityPipelineType.Flow
+      const pipelineAcitivityOrder = isFlow ? groupProgress.pipelineActivityOrder : null
 
       const currentFlow = props.appletDetails.activityFlows?.find(({ id }) => id === props.flowId)
 
@@ -97,7 +96,7 @@ export const useAnswer = (props: UseAnswerProps) => {
         appletId: props.appletDetails.id,
         activityId: props.activityId,
         flowId: props.flowId,
-        submitId: getSubmitId(groupInProgress),
+        submitId: getSubmitId(groupProgress),
         version: props.appletDetails.version,
         createdAt: new Date().getTime(),
         isFlowCompleted: isFlow ? isFlowCompleted : true,
@@ -106,7 +105,7 @@ export const useAnswer = (props: UseAnswerProps) => {
           itemIds: preparedItemAnswers.itemIds,
           events: encryptedUserEvents,
           userPublicKey,
-          startTime: new Date(groupInProgress.startAt!).getTime(),
+          startTime: new Date(groupProgress.startAt!).getTime(),
           endTime: new Date().getTime(),
           identifier: encryptedIdentifier,
           scheduledEventId: props.eventId,
@@ -133,9 +132,11 @@ export const useAnswer = (props: UseAnswerProps) => {
       encryptePayload,
       generateUserPrivateKey,
       getGroupProgress,
-      getSubmitId,
       props.activityId,
-      props.appletDetails,
+      props.appletDetails.activityFlows,
+      props.appletDetails.encryption,
+      props.appletDetails.id,
+      props.appletDetails.version,
       props.eventId,
       props.eventsRawData,
       props.flowId,

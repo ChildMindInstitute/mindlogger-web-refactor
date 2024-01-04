@@ -1,39 +1,31 @@
 import { groupProgressSelector } from "../selectors"
 import { actions } from "../slice"
 
-import { EventProgressState } from "~/abstract/lib"
+import { GroupProgress, getProgressId } from "~/abstract/lib"
 import { ActivityFlowDTO } from "~/shared/api"
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 export const useStartEntity = () => {
   const dispatch = useAppDispatch()
-  const allProgresses = useAppSelector(groupProgressSelector)
+  const groupProgress = useAppSelector(groupProgressSelector)
 
-  const getProgress = (appletId: string, entityId: string, eventId: string): EventProgressState =>
-    allProgresses[appletId]?.[entityId]?.[eventId]
+  const getProgress = (entityId: string, eventId: string): GroupProgress =>
+    groupProgress[getProgressId(entityId, eventId)]
 
-  const isInProgress = (payload: EventProgressState): boolean => payload && !payload.endAt
+  const isInProgress = (payload: GroupProgress): boolean => payload && !payload.endAt
 
-  function activityStarted(appletId: string, activityId: string, eventId: string) {
+  function activityStarted(activityId: string, eventId: string): void {
     dispatch(
       actions.activityStarted({
-        appletId,
         activityId,
         eventId,
       }),
     )
   }
 
-  function flowStarted(
-    appletId: string,
-    flowId: string,
-    activityId: string,
-    eventId: string,
-    pipelineActivityOrder: number,
-  ) {
+  function flowStarted(flowId: string, activityId: string, eventId: string, pipelineActivityOrder: number): void {
     dispatch(
       actions.flowStarted({
-        appletId,
         flowId,
         activityId,
         eventId,
@@ -42,18 +34,18 @@ export const useStartEntity = () => {
     )
   }
 
-  function startActivity(appletId: string, activityId: string, eventId: string): void {
-    const isActivityInProgress = isInProgress(getProgress(appletId, activityId, eventId))
+  function startActivity(activityId: string, eventId: string): void {
+    const isActivityInProgress = isInProgress(getProgress(activityId, eventId))
 
     if (isActivityInProgress) {
       return
     }
 
-    return activityStarted(appletId, activityId, eventId)
+    return activityStarted(activityId, eventId)
   }
 
-  function startFlow(appletId: string, flowId: string, eventId: string, flows: ActivityFlowDTO[]) {
-    const isFlowInProgress = isInProgress(getProgress(appletId, flowId, eventId))
+  function startFlow(flowId: string, eventId: string, flows: ActivityFlowDTO[]): void {
+    const isFlowInProgress = isInProgress(getProgress(flowId, eventId))
 
     if (isFlowInProgress) {
       return
@@ -64,7 +56,7 @@ export const useStartEntity = () => {
 
     const firstActivityId: string = flowActivities[0]
 
-    return flowStarted(appletId, flowId, firstActivityId, eventId, 0)
+    return flowStarted(flowId, firstActivityId, eventId, 0)
   }
 
   return { startActivity, startFlow }

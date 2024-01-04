@@ -1,3 +1,3 @@
-export const getActivityEventProgressId = (activityId: string, eventId: string): string => {
-  return `${activityId}/${eventId}`
+export const getProgressId = (entityId: string, eventId: string): string => {
+  return `${entityId}/${eventId}`
 }

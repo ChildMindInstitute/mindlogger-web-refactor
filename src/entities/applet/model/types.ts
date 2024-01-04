@@ -1,4 +1,4 @@
-import { EventProgressState } from "~/abstract/lib"
+import { GroupProgress } from "~/abstract/lib"
 import {
   AudioPlayerItem,
   CheckboxItem,
@@ -47,7 +47,9 @@ export type ActivityProgress = {
   userEvents: Array<UserEvents>
 }
 
-export type ProgressState = Record<string, ActivityProgress>
+type ProgressId = string // Progress ID is a combination of activityId and eventId (activityId/eventId)
+
+export type ProgressState = Record<ProgressId, ActivityProgress>
 
 // Payloads
 
@@ -63,10 +65,9 @@ export type RemoveActivityProgressPayload = {
 }
 
 export type SaveGroupProgressPayload = {
-  appletId: string
   activityId: string
   eventId: string
-  progressPayload: EventProgressState
+  progressPayload: GroupProgress
 }
 
 export type SaveItemAnswerPayload = {
@@ -104,19 +105,16 @@ export type EventCompletions = Record<string, number[]>
 export type CompletedEventEntities = Record<string, EventCompletions>
 
 export type InProgressEntity = {
-  appletId: string
   entityId: string
   eventId: string
 }
 
 export type InProgressActivity = {
-  appletId: string
   activityId: string
   eventId: string
 }
 
 export type InProgressFlow = {
-  appletId: string
   flowId: string
   activityId: string
   eventId: string

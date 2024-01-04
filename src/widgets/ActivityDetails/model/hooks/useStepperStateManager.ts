@@ -25,7 +25,7 @@ type Return = {
 export const useStepperStateManager = (props: Props): Return => {
   const dispatch = useAppDispatch()
 
-  const { items, userEvents, lastStep } = appletModel.hooks.useActivityEventProgressState({
+  const { items, userEvents, lastStep } = appletModel.hooks.useProgressState({
     eventId: props.eventId,
     activityId: props.activityId,
   })

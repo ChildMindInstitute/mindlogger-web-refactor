@@ -46,7 +46,7 @@ export const ActivityGroupList = () => {
     setIsAboutOpen(true)
   }
 
-  useEntitiesSync({ completedEntities, appletId: applet.id })
+  useEntitiesSync({ completedEntities })
 
   if (isCompletedEntitiesFetching) {
     return <Loader />
