@@ -24,7 +24,7 @@ export const useStartEntity = (props: Props) => {
   const appletId = props.applet.id
   const flows = props.applet.activityFlows
 
-  const { saveItemsRecord } = appletModel.hooks.useSaveActivityEventProgress()
+  const { setInitialProgress } = appletModel.hooks.useActivityProgress()
 
   const { startActivity, startFlow } = appletModel.hooks.useStartEntity()
 
@@ -65,9 +65,7 @@ export const useStartEntity = (props: Props) => {
     const isActivityInProgress = status === ActivityStatus.InProgress
 
     if (!isActivityInProgress && !isFlow && params.activity) {
-      const initialStep = 1
-
-      saveItemsRecord(activity, params.eventId, initialStep)
+      setInitialProgress({ activity, eventId: params.eventId })
     }
 
     if (flowId) {

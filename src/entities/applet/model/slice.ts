@@ -74,9 +74,13 @@ const appletsSlice = createSlice({
         return state
       }
 
-      const itemIndex = activityProgress.items.findIndex(item => item.id === action.payload.itemId)
+      const item = activityProgress.items[action.payload.step]
 
-      activityProgress.items[itemIndex].answer = action.payload.answer
+      if (!item) {
+        return state
+      }
+
+      activityProgress.items[action.payload.step].answer = action.payload.answer
     },
     saveUserEvent: (state, action: PayloadAction<SaveUserEventPayload>) => {
       const id = getProgressId(action.payload.entityId, action.payload.eventId)

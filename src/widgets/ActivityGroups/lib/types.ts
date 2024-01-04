@@ -1,5 +1,5 @@
-import { ActivityDetails } from "~/entities/activity"
 import { AvailabilityLabelType } from "~/entities/event"
+import { ActivityDTO } from "~/shared/api"
 import { HourMinute } from "~/shared/utils"
 
 export type ActivityListItem = {
@@ -70,5 +70,5 @@ export type OnActivityCardClickProps = {
   status: ActivityStatus
   flowId: string | null
   eventId: string
-  activity: ActivityDetails
+  activity: ActivityDTO
 }

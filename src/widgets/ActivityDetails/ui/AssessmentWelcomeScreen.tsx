@@ -26,15 +26,14 @@ export const AssessmentWelcomeScreen = (props: Props) => {
 
   const flowParams = useFlowType()
 
-  const { saveItemsRecord } = appletModel.hooks.useSaveActivityEventProgress()
+  const { setInitialProgress } = appletModel.hooks.useActivityProgress()
 
   const entityId = flowParams.isFlow ? flowParams.flowId : props.activityDetails.id
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState()
 
   const startAssessment = () => {
-    const initialStep = 1
-    return saveItemsRecord(props.activityDetails, context.eventId, initialStep)
+    return setInitialProgress({ activity: props.activityDetails, eventId: context.eventId })
   }
 
   return (

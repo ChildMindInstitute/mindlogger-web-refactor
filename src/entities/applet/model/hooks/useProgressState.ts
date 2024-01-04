@@ -1,10 +1,11 @@
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 
 import { conditionalLogicBuilder } from "../ConditionalLogicBuilder"
 import { selectActivityProgress } from "../selectors"
+import { actions } from "../slice"
 
 import { getProgressId } from "~/abstract/lib"
-import { useAppSelector } from "~/shared/utils"
+import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
 type Props = {
   activityId: string
@@ -12,6 +13,8 @@ type Props = {
 }
 
 export const useProgressState = (props: Props) => {
+  const dispatch = useAppDispatch()
+
   const activityEventId = getProgressId(props.activityId, props.eventId)
 
   const activityProgress = useAppSelector(state => selectActivityProgress(state, activityEventId))
@@ -20,7 +23,17 @@ export const useProgressState = (props: Props) => {
 
   const items = conditionalLogicBuilder.process(rawItems)
 
-  const lastStep = activityProgress?.step ?? 1
+  const step = activityProgress?.step ?? 0
+
+  const item = items[step]
+
+  const itemHasAnswer = item?.answer.length > 0
+
+  const hasNextStep = step < items.length - 1
+
+  const hasPrevStep = step > 0
+
+  const canMoveNext = hasNextStep && itemHasAnswer
 
   const progress = useMemo(() => {
     const defaultProgressPercentage = 0
@@ -29,15 +42,34 @@ export const useProgressState = (props: Props) => {
       return defaultProgressPercentage
     }
 
-    // Step always start from 1, but we want to paint progress when we pass some item
-    return ((lastStep - 1) / items.length) * 100
-  }, [rawItems, lastStep, items.length])
+    return ((step + 1) / rawItems.length) * 100
+  }, [rawItems, step])
+
+  const toNextStep = useCallback(() => {
+    if (!canMoveNext) {
+      return
+    }
+
+    dispatch(actions.incrementStep({ activityId: props.activityId, eventId: props.eventId }))
+  }, [canMoveNext, dispatch, props.activityId, props.eventId])
+
+  const toPrevStep = useCallback(() => {
+    dispatch(actions.decrementStep({ activityId: props.activityId, eventId: props.eventId }))
+  }, [dispatch, props.activityId, props.eventId])
 
   return {
     activityProgress,
     rawItems,
+
     items,
-    lastStep,
+    item,
+
+    toNextStep,
+    toPrevStep,
+    hasNextStep,
+    hasPrevStep,
+    step,
+
     progress,
     userEvents: activityProgress?.userEvents ?? [],
   }

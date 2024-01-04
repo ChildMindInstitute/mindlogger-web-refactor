@@ -1,8 +1,10 @@
+import { useEffect } from "react"
+
 import Box from "@mui/material/Box"
 
 import { Theme } from "~/shared/constants"
 import { BaseButton } from "~/shared/ui"
-import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
+import { eventEmitter, useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
 
 type ItemCardButtonsProps = {
   isLoading: boolean
@@ -10,7 +12,7 @@ type ItemCardButtonsProps = {
   isBackShown: boolean
 
   onBackButtonClick?: () => void
-  onNextButtonClick: () => void
+  onNextButtonClick: (force: boolean) => void
 }
 
 export const ItemCardButton = ({
@@ -24,6 +26,18 @@ export const ItemCardButton = ({
   const { greaterThanSM } = useCustomMediaQuery()
 
   const nextOrSubmitButtonLabel = isSubmitShown ? t("submit") : t("Consent.next")
+
+  useEffect(() => {
+    const autoForward = () => {
+      onNextButtonClick(true)
+    }
+
+    eventEmitter.on("onSingleSelectAnswered", autoForward)
+
+    return () => {
+      eventEmitter.off("onSingleSelectAnswered", autoForward)
+    }
+  }, [onNextButtonClick])
 
   return (
     <Box
@@ -51,7 +65,7 @@ export const ItemCardButton = ({
           type="button"
           variant="contained"
           isLoading={isLoading}
-          onClick={onNextButtonClick}
+          onClick={() => onNextButtonClick(false)}
           text={nextOrSubmitButtonLabel}
         />
       </Box>

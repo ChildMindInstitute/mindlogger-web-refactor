@@ -7,13 +7,13 @@ import { SliderAnimation } from "~/shared/animations"
 import { CardItem } from "~/shared/ui"
 
 type ActivityCardItemProps = {
-  activityId: string
-  eventId: string
-  activityItem: appletModel.ItemRecord
+  item: appletModel.ItemRecord
   watermark?: string
   allowToSkipAllItems?: boolean | undefined
 
   values: string[]
+  onValueChange: (value: string[]) => void
+
   replaceText: (value: string) => string
 
   step: number
@@ -21,47 +21,29 @@ type ActivityCardItemProps = {
 }
 
 export const ActivityCardItem = ({
-  activityItem,
+  item,
   values,
   replaceText,
   watermark,
-  activityId,
-  eventId,
   allowToSkipAllItems,
   step,
   prevStep,
+  onValueChange,
 }: ActivityCardItemProps) => {
-  const { saveSetAnswerUserEvent } = appletModel.hooks.useUserEvents({
-    activityId,
-    eventId,
-  })
-  const { saveItemAnswer } = appletModel.hooks.useSaveItemAnswer({
-    activityId,
-    eventId,
-  })
-
-  const onItemValueChange = (value: string[]) => {
-    saveItemAnswer(activityItem.id, value)
-    saveSetAnswerUserEvent({
-      ...activityItem,
-      answer: value,
-    })
-  }
-
   const questionText = useMemo(() => {
-    return replaceText(activityItem.question)
-  }, [activityItem.question, replaceText])
+    return replaceText(item.question)
+  }, [item.question, replaceText])
 
   return (
     <SliderAnimation step={step} prevStep={prevStep ?? step}>
       <CardItem
         markdown={questionText}
         watermark={watermark}
-        isOptional={activityItem.config.skippableItem || allowToSkipAllItems}>
+        isOptional={item.config.skippableItem || allowToSkipAllItems}>
         <ItemPicker
-          item={activityItem}
+          item={item}
           values={values}
-          onValueChange={onItemValueChange}
+          onValueChange={onValueChange}
           isDisabled={false}
           replaceText={replaceText}
         />

@@ -14,7 +14,7 @@ import { ActivityLabel } from "./ActivityLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/abstract/lib/constants"
-import { isSupportedActivity, mapActivityDTOToActivity, useActivityByIdQuery } from "~/entities/activity"
+import { isSupportedActivity, useActivityByIdQuery } from "~/entities/activity"
 import { appletModel } from "~/entities/applet"
 import Loader from "~/shared/ui/Loader"
 import { useCustomMediaQuery } from "~/shared/utils"
@@ -36,7 +36,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
   const { data: activity, isLoading } = useActivityByIdQuery(
     { activityId: activityListItem.activityId, isPublic: context.isPublic },
-    { select: data => mapActivityDTOToActivity(data.data.result) },
+    { select: data => data.data.result },
   )
 
   const { items, progress } = appletModel.hooks.useProgressState({
