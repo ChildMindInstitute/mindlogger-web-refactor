@@ -13,11 +13,12 @@ import { ActivityCardTitle } from "./ActivityCardTitle"
 import { ActivityLabel } from "./ActivityLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
+import { getProgressId } from "~/abstract/lib"
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/abstract/lib/constants"
 import { isSupportedActivity, useActivityByIdQuery } from "~/entities/activity"
 import { appletModel } from "~/entities/applet"
 import Loader from "~/shared/ui/Loader"
-import { useCustomMediaQuery } from "~/shared/utils"
+import { useAppSelector, useCustomMediaQuery } from "~/shared/utils"
 
 type Props = {
   activityListItem: ActivityListItem
@@ -39,10 +40,15 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     { select: data => data.data.result },
   )
 
-  const { items, progress } = appletModel.hooks.useProgressState({
-    activityId: activityListItem.activityId,
-    eventId: activityListItem.eventId,
-  })
+  const activityEventId = getProgressId(activityListItem.activityId, activityListItem.eventId)
+
+  const activityProgress = useAppSelector(state => appletModel.selectors.selectActivityProgress(state, activityEventId))
+
+  const step = activityProgress?.step || 0
+
+  const items = activityProgress?.items || []
+
+  const progress = ((step + 1) / items.length) * 100
 
   const getCompletedActivitiesFromPosition = (position: number) => {
     return position - 1
@@ -57,7 +63,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
   const isActivityInProgress = activityListItem.status === ActivityStatus.InProgress
 
-  const countOfCompletedQuestions = items.filter(item => item.answer.length).length
+  const countOfCompletedQuestions = items.filter(item => item.answer.length).length || 0
 
   const activityLength = activity?.items.length || 0
 

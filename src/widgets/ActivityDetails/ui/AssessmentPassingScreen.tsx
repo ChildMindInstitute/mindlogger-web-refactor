@@ -50,7 +50,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     eventId,
   })
 
-  const { items, userEvents, step, item, hasNextStep, hasPrevStep, toNextStep, toPrevStep } =
+  const { items, userEvents, step, item, hasNextStep, hasPrevStep, toNextStep, toPrevStep, progress } =
     appletModel.hooks.useProgressState({
       eventId,
       activityId,
@@ -216,6 +216,7 @@ export const AssessmentPassingScreen = (props: Props) => {
       bgcolor={Theme.colors.light.surface}>
       <AssessmentLayoutHeader
         title={props.activityDetails.name}
+        progress={progress}
         appletId={applet.id}
         activityId={activityId}
         eventId={eventId}

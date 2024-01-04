@@ -42,6 +42,7 @@ export const AssessmentWelcomeScreen = (props: Props) => {
       header={
         <AssessmentLayoutHeader
           title={props.activityDetails.name}
+          progress={0}
           appletId={context.appletId}
           activityId={props.activityDetails.id}
           eventId={context.eventId}

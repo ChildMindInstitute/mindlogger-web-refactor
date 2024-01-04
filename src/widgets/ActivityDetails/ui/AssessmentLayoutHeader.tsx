@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box"
 
-import { appletModel } from "~/entities/applet"
 import { SaveAndExitButton } from "~/features/SaveAssessmentAndExit"
 import { ROUTES, Theme } from "~/shared/constants"
 import { BaseProgressBar, Text } from "~/shared/ui"
@@ -14,16 +13,13 @@ type Props = {
   eventId: string
   isPublic: boolean
   publicKey: string | null
+
+  progress: number
 }
 
 export const AssessmentLayoutHeader = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery()
   const navigator = useCustomNavigation()
-
-  const { progress } = appletModel.hooks.useProgressState({
-    activityId: props.activityId,
-    eventId: props.eventId,
-  })
 
   const cutStringToLength = (str: string, length: number) => {
     return str.length > length ? `${str.substring(0, length)}...` : str
@@ -64,7 +60,7 @@ export const AssessmentLayoutHeader = (props: Props) => {
           </Text>
           {!greaterThanSM && <SaveAndExitButton onClick={onSaveAndExitClick} />}
         </Box>
-        <BaseProgressBar percentage={progress} testid="assessment-activity-progress-bar" />
+        <BaseProgressBar percentage={props.progress} testid="assessment-activity-progress-bar" />
       </Box>
 
       {greaterThanSM && (

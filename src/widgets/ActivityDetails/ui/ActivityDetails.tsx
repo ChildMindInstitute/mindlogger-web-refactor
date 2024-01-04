@@ -8,20 +8,22 @@ import { AssessmentLoadingScreen } from "./AssessmentLoadingScreen"
 import { AssessmentPassingScreen } from "./AssessmentPassingScreen"
 import { AssessmentWelcomeScreen } from "./AssessmentWelcomeScreen"
 
+import { getProgressId } from "~/abstract/lib"
 import { appletModel } from "~/entities/applet"
-import { useCustomTranslation } from "~/shared/utils"
+import { useAppSelector, useCustomTranslation } from "~/shared/utils"
 
 export const ActivityDetailsWidget = () => {
   const { t } = useCustomTranslation()
 
   const context = useContext(ActivityDetailsContext)
 
-  const { rawItems } = appletModel.hooks.useProgressState({
-    eventId: context.eventId,
-    activityId: context.activityId,
-  })
+  const activityEventId = getProgressId(context.activityId, context.eventId)
 
-  const isActivityStarted = rawItems.length > 0
+  const activityProgress = useAppSelector(state => appletModel.selectors.selectActivityProgress(state, activityEventId))
+
+  const items = activityProgress?.items ?? []
+
+  const isActivityStarted = items.length > 0
 
   const { activityDetails, isLoading, isError, error, appletDetails, eventsRawData, respondentMeta } =
     activityDetailsModel.hooks.useActivityDetailsQuery()
