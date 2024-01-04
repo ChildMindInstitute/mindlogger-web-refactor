@@ -6,7 +6,7 @@ import { useNotification } from "~/shared/ui"
 import { useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type Props = {
-  appletDetails: AppletDetailsDTO
+  applet: AppletDetailsDTO
   activityId: string
   eventId: string
 
@@ -38,7 +38,7 @@ export const useEntityComplete = (props: Props) => {
       })
     }
 
-    return navigator.navigate(ROUTES.appletDetails.navigateTo(props.appletDetails.id), {
+    return navigator.navigate(ROUTES.appletDetails.navigateTo(props.applet.id), {
       replace: true,
     })
   }
@@ -49,7 +49,7 @@ export const useEntityComplete = (props: Props) => {
     if (props.publicAppletKey) {
       return navigator.navigate(
         ROUTES.publicActivityDetails.navigateTo({
-          appletId: props.appletDetails.id,
+          appletId: props.applet.id,
           activityId,
           eventId: props.eventId,
           entityType: "flow",
@@ -62,7 +62,7 @@ export const useEntityComplete = (props: Props) => {
 
     return navigator.navigate(
       ROUTES.activityDetails.navigateTo({
-        appletId: props.appletDetails.id,
+        appletId: props.applet.id,
         activityId,
         eventId: props.eventId,
         entityType: "flow",
@@ -73,7 +73,7 @@ export const useEntityComplete = (props: Props) => {
   }
 
   const completeFlow = (flowId: string) => {
-    const { activityFlows } = props.appletDetails
+    const { activityFlows } = props.applet
 
     const groupProgress = getGroupProgress({
       entityId: props.flowId ? props.flowId : props.activityId,

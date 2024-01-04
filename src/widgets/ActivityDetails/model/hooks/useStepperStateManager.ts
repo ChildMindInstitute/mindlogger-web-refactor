@@ -4,37 +4,30 @@ import { appletModel } from "~/entities/applet"
 import { useAppDispatch } from "~/shared/utils"
 
 type Props = {
+  items: appletModel.ItemRecord[]
+  step: number
   activityId: string
   eventId: string
 }
 
 type Return = {
-  step: number
-
   hasNextStep: boolean
   hasPrevStep: boolean
 
   toNextStep: () => void
   toPrevStep: () => void
 
-  items: appletModel.ItemRecord[]
   currentItem: appletModel.ItemRecord | null
-  userEvents: appletModel.UserEvents[]
 }
 
 export const useStepperStateManager = (props: Props): Return => {
   const dispatch = useAppDispatch()
 
-  const { items, userEvents, lastStep } = appletModel.hooks.useProgressState({
-    eventId: props.eventId,
-    activityId: props.activityId,
-  })
+  const currentItem = props.items[props.step - 1] ?? null
 
-  const currentItem = items[lastStep - 1] ?? null
+  const hasNextStep = props.step < props.items.length
 
-  const hasNextStep = lastStep < items.length
-
-  const hasPrevStep = lastStep > 1
+  const hasPrevStep = props.step > 1
 
   const toNextStep = useCallback(() => {
     if (!hasNextStep) return
@@ -49,13 +42,10 @@ export const useStepperStateManager = (props: Props): Return => {
   }, [dispatch, hasPrevStep, props.activityId, props.eventId])
 
   return {
-    step: lastStep,
     currentItem,
     toNextStep,
     toPrevStep,
     hasNextStep,
     hasPrevStep,
-    items,
-    userEvents,
   }
 }

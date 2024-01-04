@@ -16,7 +16,7 @@ import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from "~/shared/
 import { formatToDtoDate, formatToDtoTime, useEncryption } from "~/shared/utils"
 
 type Props = {
-  appletDetails: AppletDetailsDTO
+  applet: AppletDetailsDTO
 
   flowId: string | null
   activityId: string
@@ -60,10 +60,10 @@ export const useAnswer = (props: Props) => {
         privateKey = userModel.secureUserPrivateKeyStorage.getUserPrivateKey()
       }
 
-      const userPublicKey = generateUserPublicKey(props.appletDetails.encryption, privateKey)
+      const userPublicKey = generateUserPublicKey(props.applet.encryption, privateKey)
 
-      const encryptedAnswers = encryptPayload(props.appletDetails.encryption, preparedItemAnswers.answer, privateKey)
-      const encryptedUserEvents = encryptPayload(props.appletDetails.encryption, params.userEvents, privateKey)
+      const encryptedAnswers = encryptPayload(props.applet.encryption, preparedItemAnswers.answer, privateKey)
+      const encryptedUserEvents = encryptPayload(props.applet.encryption, params.userEvents, privateKey)
 
       const groupProgress = getGroupProgress({
         entityId: props.flowId ? props.flowId : props.activityId,
@@ -76,7 +76,7 @@ export const useAnswer = (props: Props) => {
 
       const firstTextItemAnserWithIdentifier = getFirstResponseDataIdentifierTextItem(params.items)
       const encryptedIdentifier = firstTextItemAnserWithIdentifier
-        ? encryptPayload(props.appletDetails.encryption, firstTextItemAnserWithIdentifier, privateKey)
+        ? encryptPayload(props.applet.encryption, firstTextItemAnserWithIdentifier, privateKey)
         : null
 
       const now = new Date()
@@ -84,7 +84,7 @@ export const useAnswer = (props: Props) => {
       const isFlow = groupProgress.type === ActivityPipelineType.Flow
       const pipelineAcitivityOrder = isFlow ? groupProgress.pipelineActivityOrder : null
 
-      const currentFlow = props.appletDetails.activityFlows?.find(({ id }) => id === props.flowId)
+      const currentFlow = props.applet.activityFlows?.find(({ id }) => id === props.flowId)
 
       const currentFlowLength = currentFlow?.activityIds.length
 
@@ -93,11 +93,11 @@ export const useAnswer = (props: Props) => {
 
       // Step 3 - Send answers to backend
       const answer: AnswerPayload = {
-        appletId: props.appletDetails.id,
+        appletId: props.applet.id,
         activityId: props.activityId,
         flowId: props.flowId,
         submitId: getSubmitId(groupProgress),
-        version: props.appletDetails.version,
+        version: props.applet.version,
         createdAt: new Date().getTime(),
         isFlowCompleted: isFlow ? isFlowCompleted : true,
         answer: {
@@ -133,10 +133,10 @@ export const useAnswer = (props: Props) => {
       generateUserPrivateKey,
       getGroupProgress,
       props.activityId,
-      props.appletDetails.activityFlows,
-      props.appletDetails.encryption,
-      props.appletDetails.id,
-      props.appletDetails.version,
+      props.applet.activityFlows,
+      props.applet.encryption,
+      props.applet.id,
+      props.applet.version,
       props.eventId,
       props.eventsRawData,
       props.flowId,
