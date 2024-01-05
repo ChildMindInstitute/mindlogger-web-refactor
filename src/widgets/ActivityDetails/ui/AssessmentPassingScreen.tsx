@@ -63,6 +63,8 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const { step, item, hasPrevStep, hasNextStep, progress } = useSurvey(activityProgress)
 
+  const prevStep = usePrevious(step)
+
   const { completeActivity, completeFlow } = useEntityComplete({
     applet,
     activityId,
@@ -92,8 +94,6 @@ export const AssessmentPassingScreen = (props: Props) => {
     eventsRawData: props.eventsRawData,
     flowId: flowParams.isFlow ? flowParams.flowId : null,
   })
-
-  const prevStep = usePrevious(step)
 
   const onSubmit = useCallback(() => {
     saveUserEventByType("DONE", item)

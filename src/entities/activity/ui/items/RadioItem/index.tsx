@@ -6,7 +6,7 @@ import RadioGroup from "@mui/material/RadioGroup"
 import { RadioItem as RadioItemType } from "../../../lib"
 import { RadioItemOption } from "./RadioItemOption"
 
-import { eventEmitter, randomizeArray, splitList, useCustomMediaQuery } from "~/shared/utils"
+import { randomizeArray, splitList, useCustomMediaQuery } from "~/shared/utils"
 
 type RadioItemProps = {
   item: RadioItemType
@@ -33,9 +33,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText 
   }, [options])
 
   const onHandleValueChange = (value: string) => {
-    onValueChange([value])
-
-    return eventEmitter.emit("onSingleSelectAnswered")
+    return onValueChange([value])
   }
 
   return (
