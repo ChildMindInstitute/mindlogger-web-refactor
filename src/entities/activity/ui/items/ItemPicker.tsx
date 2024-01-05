@@ -1,4 +1,4 @@
-import { ActivityEventProgressRecord } from "../../model/types"
+import { ItemRecord } from "../../../applet/model/types"
 import { AudioPlayerItem } from "./AudioPlayerItem"
 import { CheckboxItem } from "./CheckboxItem"
 import { DateItem } from "./DateItem"
@@ -11,15 +11,16 @@ import { TimeItem } from "./TimeItem"
 import { TimeRangeItem } from "./TimeRangeItem"
 
 type ItemPickerProps = {
-  item: ActivityEventProgressRecord
+  item: ItemRecord
 
-  values: string[]
   onValueChange: (value: string[]) => void
   isDisabled: boolean
   replaceText: (value: string) => string
 }
 
-export const ItemPicker = ({ item, values, onValueChange, isDisabled, replaceText }: ItemPickerProps) => {
+export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: ItemPickerProps) => {
+  const values = item.answer
+
   switch (item.responseType) {
     case "splashScreen":
       return <SplashScreen imageSrc={item.config.imageSrc} />

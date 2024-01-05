@@ -1,3 +1,4 @@
+import { Answer } from "~/abstract/lib"
 import { ConditionalLogic } from "~/shared/api"
 
 export type ActivityItemType =
@@ -37,9 +38,6 @@ export type AdditionalResponseConfig = {
     textInputRequired: boolean
   }
 }
-
-export type Answer = Array<string>
-export type Answers = Array<Answer>
 
 export interface ActivityItemBase {
   id: string

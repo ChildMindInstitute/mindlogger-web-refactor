@@ -1,13 +1,9 @@
-import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { stringContainsOnlyNumbers } from "~/shared/utils"
 
-type ValidateItemProps = {
-  item: activityModel.types.ActivityEventProgressRecord
-}
-
-export function validateItem(props: ValidateItemProps) {
-  if (props.item.responseType === "text" && props.item.config.correctAnswerRequired) {
-    const isAnswerCorrect = props.item.answer[0] === props.item.config.correctAnswer
+export function isAnswerShouldBeCorrect(item: appletModel.ItemRecord) {
+  if (item.responseType === "text" && item.config.correctAnswerRequired) {
+    const isAnswerCorrect = item.answer[0] === item.config.correctAnswer
 
     return isAnswerCorrect
   }
@@ -15,26 +11,26 @@ export function validateItem(props: ValidateItemProps) {
   return true
 }
 
-export function validateIsItemWithoutAnswer(currentItem: activityModel.types.ActivityEventProgressRecord) {
-  const isMessageItem = currentItem.responseType === "message"
-  const isAudioPlayerItem = currentItem.responseType === "audioPlayer"
+export function isAnswerShouldBeEmpty(item: appletModel.ItemRecord) {
+  const isMessageItem = item.responseType === "message"
+  const isAudioPlayerItem = item.responseType === "audioPlayer"
 
   const isItemWithoutAnswer = isMessageItem || isAudioPlayerItem
 
   return isItemWithoutAnswer
 }
 
-export function validateIsNumericOnly(currentItem: activityModel.types.ActivityEventProgressRecord) {
-  const isTextItem = currentItem.responseType === "text"
+export function isAnswerShouldBeNumeric(item: appletModel.ItemRecord) {
+  const isTextItem = item.responseType === "text"
 
   if (!isTextItem) {
     return false
   }
 
-  const isNumericOnly = currentItem.config.numericalResponseRequired
+  const isNumericOnly = item.config.numericalResponseRequired
 
   if (isNumericOnly) {
-    return !stringContainsOnlyNumbers(currentItem.answer[0])
+    return !stringContainsOnlyNumbers(item.answer[0])
   }
 
   return false

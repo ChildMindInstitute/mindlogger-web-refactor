@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 
 import { Typography } from "@mui/material"
 import Box from "@mui/material/Box"
@@ -6,135 +6,47 @@ import Container from "@mui/material/Container"
 import { subMonths } from "date-fns"
 
 import { CustomModal } from "../../Modal"
+import { AppletDetailsContext } from "../lib"
 import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 import { ActivityGroup } from "./ActivityGroup"
 
 import AppletDefaultIcon from "~/assets/AppletDefaultIcon.svg"
-import { ActivityListItem, EntityType, activityModel, useCompletedEntitiesQuery } from "~/entities/activity"
-import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
-import { ROUTES } from "~/shared/constants"
+import { useCompletedEntitiesQuery } from "~/entities/activity"
 import { AvatarBase } from "~/shared/ui"
 import Loader from "~/shared/ui/Loader"
-import { Mixpanel, formatToDtoDate, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import { formatToDtoDate, useCustomTranslation } from "~/shared/utils"
 
-type PrivateActivityListWidgetProps = {
-  isPublic: false
-  appletDetails: AppletDetailsDTO
-  eventsDetails: AppletEventsResponse
-}
-
-type PublicActivityListWidgetProps = {
-  isPublic: true
-  publicAppletKey: string | null
-  appletDetails: AppletDetailsDTO
-  eventsDetails: AppletEventsResponse
-}
-
-type ActivityListWidgetProps = PublicActivityListWidgetProps | PrivateActivityListWidgetProps
-
-type NavigateToActivityDetailsPageProps = {
-  appletId: string
-  flowId: string | null
-  activityId: string
-  entityType: EntityType
-  eventId: string
-}
-
-export const ActivityGroupList = (props: ActivityListWidgetProps) => {
+export const ActivityGroupList = () => {
   const { t } = useCustomTranslation()
-  const navigator = useCustomNavigation()
+
+  const { appletDetails: applet, eventsDetails, isPublic } = useContext(AppletDetailsContext)
 
   const { data: completedEntities, isFetching: isCompletedEntitiesFetching } = useCompletedEntitiesQuery(
     {
-      appletId: props.appletDetails.id,
-      version: props.appletDetails.version,
+      appletId: applet.id,
+      version: applet.version,
       fromDate: formatToDtoDate(subMonths(new Date(), 1)),
     },
-    { select: data => data.data.result, enabled: !props.isPublic },
+    { select: data => data.data.result, enabled: !isPublic },
   )
 
   const [isAboutOpen, setIsAboutOpen] = useState(false)
 
-  const isAppletAboutExist = props.appletDetails?.about
-  const isAppletImageExist = Boolean(props.appletDetails?.image)
+  const isAppletAboutExist = Boolean(applet?.about)
+  const isAppletImageExist = Boolean(applet?.image)
 
   const { groups } = useActivityGroups({
-    appletDetails: props.appletDetails,
-    eventsDetails: props.eventsDetails,
+    appletDetails: applet,
+    eventsDetails: eventsDetails,
   })
 
-  const { startActivity, startFlow } = activityModel.hooks.useStartEntity()
-
   const onCardAboutClick = () => {
-    if (!isAppletAboutExist) {
-      return
-    }
+    if (!isAppletAboutExist) return
 
     setIsAboutOpen(true)
   }
 
-  const onAboutModalClose = () => {
-    setIsAboutOpen(false)
-  }
-
-  const navigateToEntity = ({
-    appletId,
-    activityId,
-    flowId,
-    eventId,
-    entityType,
-  }: NavigateToActivityDetailsPageProps) => {
-    if (props.isPublic && props.publicAppletKey) {
-      return navigator.navigate(
-        ROUTES.publicActivityDetails.navigateTo({
-          appletId,
-          activityId,
-          eventId,
-          entityType,
-          publicAppletKey: props.publicAppletKey,
-          flowId,
-        }),
-      )
-    }
-
-    return navigator.navigate(
-      ROUTES.activityDetails.navigateTo({
-        appletId,
-        activityId,
-        eventId,
-        entityType,
-        flowId,
-      }),
-    )
-  }
-
-  const startActivityOrFlow = ({ activityId, flowId, eventId }: ActivityListItem) => {
-    Mixpanel.track("Assessment Started")
-
-    if (flowId) {
-      startFlow(props.appletDetails, flowId, eventId)
-
-      return navigateToEntity({
-        appletId: props.appletDetails.id,
-        activityId,
-        entityType: "flow",
-        eventId: eventId,
-        flowId,
-      })
-    } else {
-      startActivity(props.appletDetails.id, activityId, eventId)
-
-      return navigateToEntity({
-        appletId: props.appletDetails.id,
-        activityId,
-        entityType: "regular",
-        eventId: eventId,
-        flowId: null,
-      })
-    }
-  }
-
-  useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
+  useEntitiesSync({ completedEntities })
 
   if (isCompletedEntitiesFetching) {
     return <Loader />
@@ -144,8 +56,8 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
     <Container sx={{ flex: "1" }}>
       <Box display="flex" gap="16px" marginTop="24px" alignItems="center">
         <AvatarBase
-          src={isAppletImageExist ? props.appletDetails.image : AppletDefaultIcon}
-          name={props.appletDetails.displayName}
+          src={isAppletImageExist ? applet.image : AppletDefaultIcon}
+          name={applet.displayName}
           width="48px"
           height="48px"
           variant="rounded"
@@ -163,22 +75,22 @@ export const ActivityGroupList = (props: ActivityListWidgetProps) => {
             fontStyle: "normal",
             cursor: isAppletAboutExist ? "pointer" : "default",
           }}>
-          {props.appletDetails.displayName}
+          {applet.displayName}
         </Typography>
       </Box>
 
       <Box>
         {groups
-          ?.filter(g => g.activities.length)
+          .filter(g => g.activities.length)
           .map(g => (
-            <ActivityGroup group={g} key={g.name} onActivityCardClick={startActivityOrFlow} isPublic={props.isPublic} />
+            <ActivityGroup group={g} key={g.name} />
           ))}
       </Box>
       <CustomModal
         show={isAboutOpen}
-        onHide={onAboutModalClose}
+        onHide={() => setIsAboutOpen(false)}
         title={t("about")}
-        label={props.appletDetails?.about ? props.appletDetails.about : t("no_markdown")}
+        label={applet.about ? applet.about : t("no_markdown")}
       />
     </Container>
   )

@@ -1,5 +1,4 @@
-import { QueryOptions, ReturnAwaited, useBaseQuery } from "~/shared/api"
-import { activityService } from "~/shared/api/"
+import { QueryOptions, ReturnAwaited, activityService, useBaseQuery } from "~/shared/api"
 
 type FetchFn = typeof activityService.getById
 type Options<TData> = QueryOptions<FetchFn, TData>

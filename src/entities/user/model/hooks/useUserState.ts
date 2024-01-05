@@ -6,16 +6,17 @@ import { actions, UserStore } from "../user.slice"
 
 import { useAppDispatch, useAppSelector } from "~/shared/utils"
 
-interface UseUserStateReturn {
+type Return = {
   user: UserStore
   setUser: (data: User) => void
   clearUser: () => void
 }
 
-export const useUserState = (): UseUserStateReturn => {
+export const useUserState = (): Return => {
   const dispatch = useAppDispatch()
 
   const user = useAppSelector(userSelector)
+
   const setUser = useCallback(
     (data: User) => {
       dispatch(actions.save(data))

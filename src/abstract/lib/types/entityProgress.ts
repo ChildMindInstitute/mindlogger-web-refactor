@@ -23,14 +23,8 @@ type EventProgressTimestampState = {
   endAt: number | null
 }
 
-type AppletId = string
-type EntityId = string
-type EventId = string
+export type GroupProgress = ActivityOrFlowProgress & EventProgressTimestampState
 
-export type EventProgressState = ActivityOrFlowProgress & EventProgressTimestampState
+type GroupProgressId = string // Group progress id is a combination of activityId and eventId (activityId/eventId)
 
-export type EventsProgress = Record<EventId, EventProgressState>
-
-export type EntitiesProgress = Record<EntityId, EventsProgress>
-
-export type Progress = Record<AppletId, EntitiesProgress>
+export type GroupProgressState = Record<GroupProgressId, GroupProgress>

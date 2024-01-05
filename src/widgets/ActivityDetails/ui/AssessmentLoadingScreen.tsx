@@ -1,4 +1,8 @@
+import { useContext } from "react"
+
 import Box from "@mui/material/Box"
+
+import { ActivityDetailsContext } from "../lib"
 
 import { SaveAndExitButton } from "~/features/SaveAssessmentAndExit"
 import { ROUTES } from "~/shared/constants"
@@ -6,22 +10,20 @@ import { NotificationCenter } from "~/shared/ui"
 import Loader from "~/shared/ui/Loader"
 import { useCustomMediaQuery, useCustomNavigation } from "~/shared/utils"
 
-type Props = {
-  appletId: string
-  isPublic: boolean
-  publicKey: string | null
-}
-
-export const AssessmentLoadingScreen = (props: Props) => {
+export const AssessmentLoadingScreen = () => {
   const navigator = useCustomNavigation()
+
+  const context = useContext(ActivityDetailsContext)
 
   const { greaterThanSM } = useCustomMediaQuery()
 
   const onSaveAndExitClick = () => {
+    const publicKey = context.isPublic ? context.publicAppletKey : null
+
     return navigator.navigate(
-      props.isPublic && props.publicKey
-        ? ROUTES.publicJoin.navigateTo(props.publicKey)
-        : ROUTES.appletDetails.navigateTo(props.appletId),
+      context.isPublic && publicKey
+        ? ROUTES.publicJoin.navigateTo(publicKey)
+        : ROUTES.appletDetails.navigateTo(context.appletId),
     )
   }
 

@@ -2,28 +2,28 @@ import Box from "@mui/material/Box"
 
 import { Theme } from "~/shared/constants"
 import { BaseButton } from "~/shared/ui"
-import { useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
+import { useCustomMediaQuery } from "~/shared/utils"
 
 type ItemCardButtonsProps = {
   isLoading: boolean
-  isSubmitShown: boolean
   isBackShown: boolean
+
+  backButtonText: string
+  nextButtonText: string
 
   onBackButtonClick?: () => void
   onNextButtonClick: () => void
 }
 
 export const ItemCardButton = ({
-  isSubmitShown,
   isBackShown,
   onBackButtonClick,
   onNextButtonClick,
   isLoading,
+  nextButtonText,
+  backButtonText,
 }: ItemCardButtonsProps) => {
-  const { t } = useCustomTranslation()
   const { greaterThanSM } = useCustomMediaQuery()
-
-  const nextOrSubmitButtonLabel = isSubmitShown ? t("submit") : t("Consent.next")
 
   return (
     <Box
@@ -40,7 +40,7 @@ export const ItemCardButton = ({
             type="button"
             variant="outlined"
             onClick={onBackButtonClick}
-            text={t("Consent.back")}
+            text={backButtonText}
             borderColor={Theme.colors.light.outline}
           />
         </Box>
@@ -52,7 +52,7 @@ export const ItemCardButton = ({
           variant="contained"
           isLoading={isLoading}
           onClick={onNextButtonClick}
-          text={nextOrSubmitButtonLabel}
+          text={nextButtonText}
         />
       </Box>
     </Box>

@@ -4,6 +4,7 @@ export const EVENTS = {
 
   onNotificationAdded: "ON_NOTIFICATION_ADDED",
   onNotificationRemoved: "ON_NOTIFICATION_REMOVED",
+  onSingleSelectAnswered: "ON_SINGLE_SELECT_ANSWERED",
 } as const
 
 type Events = keyof typeof EVENTS
@@ -17,6 +18,7 @@ class EventEmitter {
       onLogout: [],
       onNotificationAdded: [],
       onNotificationRemoved: [],
+      onSingleSelectAnswered: [],
     }
   }
 
