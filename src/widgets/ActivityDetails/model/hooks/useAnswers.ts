@@ -8,13 +8,15 @@ import { getScheduledTimeFromEvents } from "../getScheduledTimeFromEvents"
 import { mapAlerts, mapToAnswers } from "../mappers"
 import { prepareItemAnswers } from "../prepareItemAnswers"
 
-import { ActivityPipelineType, EventProgressState } from "~/abstract/lib"
-import { activityModel, useEncryptPayload } from "~/entities/activity"
+import { ActivityPipelineType, GroupProgress } from "~/abstract/lib"
+import { useEncryptPayload } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
+import { userModel } from "~/entities/user"
 import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
-import { formatToDtoDate, formatToDtoTime, secureUserPrivateKeyStorage, useEncryption } from "~/shared/utils"
+import { formatToDtoDate, formatToDtoTime, useEncryption } from "~/shared/utils"
 
-type UseAnswerProps = {
-  appletDetails: AppletDetailsDTO
+type Props = {
+  applet: AppletDetailsDTO
 
   flowId: string | null
   activityId: string
@@ -24,22 +26,22 @@ type UseAnswerProps = {
 }
 
 type SubmitAnswersProps = {
-  items: activityModel.types.ActivityEventProgressRecord[]
-  userEvents: activityModel.types.UserEvents[]
+  items: appletModel.ItemRecord[]
+  userEvents: appletModel.UserEvents[]
   isPublic: boolean
 }
 
-export const useAnswer = (props: UseAnswerProps) => {
+export const useAnswer = (props: Props) => {
   const { generateUserPrivateKey } = useEncryption()
-  const { encryptePayload } = useEncryptPayload()
+  const { encryptPayload } = useEncryptPayload()
 
-  const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { getGroupProgress } = appletModel.hooks.useGroupProgressState()
 
-  const getSubmitId = useCallback((groupInProgress: EventProgressState): string => {
+  const getSubmitId = (groupInProgress: GroupProgress): string => {
     const isFlow = groupInProgress.type === ActivityPipelineType.Flow
 
     return isFlow ? groupInProgress.executionGroupKey : uuidV4()
-  }, [])
+  }
 
   const processAnswers = useCallback(
     (params: SubmitAnswersProps): AnswerPayload => {
@@ -55,35 +57,34 @@ export const useAnswer = (props: UseAnswerProps) => {
       if (params.isPublic) {
         privateKey = generateUserPrivateKey({ userId: uuidV4(), email: uuidV4(), password: uuidV4() })
       } else {
-        privateKey = secureUserPrivateKeyStorage.getUserPrivateKey()
+        privateKey = userModel.secureUserPrivateKeyStorage.getUserPrivateKey()
       }
 
-      const userPublicKey = generateUserPublicKey(props.appletDetails.encryption, privateKey)
+      const userPublicKey = generateUserPublicKey(props.applet.encryption, privateKey)
 
-      const encryptedAnswers = encryptePayload(props.appletDetails.encryption, preparedItemAnswers.answer, privateKey)
-      const encryptedUserEvents = encryptePayload(props.appletDetails.encryption, params.userEvents, privateKey)
+      const encryptedAnswers = encryptPayload(props.applet.encryption, preparedItemAnswers.answer, privateKey)
+      const encryptedUserEvents = encryptPayload(props.applet.encryption, params.userEvents, privateKey)
 
-      const groupInProgress = getGroupInProgressByIds({
-        appletId: props.appletDetails.id,
-        activityId: props.flowId ? props.flowId : props.activityId,
+      const groupProgress = getGroupProgress({
+        entityId: props.flowId ? props.flowId : props.activityId,
         eventId: props.eventId,
       })
 
-      if (!groupInProgress) {
+      if (!groupProgress) {
         throw new Error("[Activity item list] Group in progress not found")
       }
 
       const firstTextItemAnserWithIdentifier = getFirstResponseDataIdentifierTextItem(params.items)
       const encryptedIdentifier = firstTextItemAnserWithIdentifier
-        ? encryptePayload(props.appletDetails.encryption, firstTextItemAnserWithIdentifier, privateKey)
+        ? encryptPayload(props.applet.encryption, firstTextItemAnserWithIdentifier, privateKey)
         : null
 
       const now = new Date()
 
-      const isFlow = groupInProgress.type === ActivityPipelineType.Flow
-      const pipelineAcitivityOrder = isFlow ? groupInProgress.pipelineActivityOrder : null
+      const isFlow = groupProgress.type === ActivityPipelineType.Flow
+      const pipelineAcitivityOrder = isFlow ? groupProgress.pipelineActivityOrder : null
 
-      const currentFlow = props.appletDetails.activityFlows?.find(({ id }) => id === props.flowId)
+      const currentFlow = props.applet.activityFlows?.find(({ id }) => id === props.flowId)
 
       const currentFlowLength = currentFlow?.activityIds.length
 
@@ -92,11 +93,11 @@ export const useAnswer = (props: UseAnswerProps) => {
 
       // Step 3 - Send answers to backend
       const answer: AnswerPayload = {
-        appletId: props.appletDetails.id,
+        appletId: props.applet.id,
         activityId: props.activityId,
         flowId: props.flowId,
-        submitId: getSubmitId(groupInProgress),
-        version: props.appletDetails.version,
+        submitId: getSubmitId(groupProgress),
+        version: props.applet.version,
         createdAt: new Date().getTime(),
         isFlowCompleted: isFlow ? isFlowCompleted : true,
         answer: {
@@ -104,7 +105,7 @@ export const useAnswer = (props: UseAnswerProps) => {
           itemIds: preparedItemAnswers.itemIds,
           events: encryptedUserEvents,
           userPublicKey,
-          startTime: new Date(groupInProgress.startAt!).getTime(),
+          startTime: new Date(groupProgress.startAt!).getTime(),
           endTime: new Date().getTime(),
           identifier: encryptedIdentifier,
           scheduledEventId: props.eventId,
@@ -128,12 +129,14 @@ export const useAnswer = (props: UseAnswerProps) => {
       return answer
     },
     [
-      encryptePayload,
+      encryptPayload,
       generateUserPrivateKey,
-      getGroupInProgressByIds,
-      getSubmitId,
+      getGroupProgress,
       props.activityId,
-      props.appletDetails,
+      props.applet.activityFlows,
+      props.applet.encryption,
+      props.applet.id,
+      props.applet.version,
       props.eventId,
       props.eventsRawData,
       props.flowId,

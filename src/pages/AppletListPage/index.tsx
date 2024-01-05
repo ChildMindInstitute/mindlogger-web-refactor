@@ -1,12 +1,12 @@
 import { useEffect } from "react"
 
-import { AppletList } from "~/entities/applet"
 import { Mixpanel } from "~/shared/utils"
+import { AppletListWidget } from "~/widgets/AppletList"
 
 export const AppletListPage = () => {
   useEffect(() => {
     Mixpanel.trackPageView("Dashboard")
   }, [])
 
-  return <AppletList />
+  return <AppletListWidget />
 }

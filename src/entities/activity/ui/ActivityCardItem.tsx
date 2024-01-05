@@ -1,83 +1,44 @@
 import { useMemo } from "react"
 
-import { ActivityItemType } from "../lib"
-import { useSaveActivityItemAnswer, useSetAnswerUserEvent } from "../model/hooks"
-import { ActivityEventProgressRecord } from "../model/types"
 import { ItemPicker } from "./items/ItemPicker"
 
+import { appletModel } from "~/entities/applet"
 import { SliderAnimation } from "~/shared/animations"
 import { CardItem } from "~/shared/ui"
 
 type ActivityCardItemProps = {
-  activityId: string
-  eventId: string
-  activityItem: ActivityEventProgressRecord
+  item: appletModel.ItemRecord
   watermark?: string
   allowToSkipAllItems?: boolean | undefined
 
-  values: string[]
+  onValueChange: (value: string[]) => void
+
   replaceText: (value: string) => string
 
   step: number
   prevStep: number | null
-
-  autoForwardCallback: () => void
 }
 
 export const ActivityCardItem = ({
-  activityItem,
-  values,
+  item,
   replaceText,
   watermark,
-  activityId,
-  eventId,
   allowToSkipAllItems,
   step,
   prevStep,
-  autoForwardCallback,
+  onValueChange,
 }: ActivityCardItemProps) => {
-  const { saveSetAnswerUserEvent } = useSetAnswerUserEvent({
-    activityId,
-    eventId,
-  })
-  const { saveActivityItemAnswer } = useSaveActivityItemAnswer({
-    activityId,
-    eventId,
-  })
-
-  const autoForwardItems: ActivityItemType[] = ["singleSelect"]
-
-  const isAutoForwardEnable = autoForwardItems.includes(activityItem.responseType)
-
-  const onItemValueChange = (value: string[]) => {
-    saveActivityItemAnswer(activityItem.id, value)
-    saveSetAnswerUserEvent({
-      ...activityItem,
-      answer: value,
-    })
-
-    if (isAutoForwardEnable) {
-      return autoForwardCallback()
-    }
-  }
-
   const questionText = useMemo(() => {
-    return replaceText(activityItem.question)
-  }, [activityItem.question, replaceText])
+    return replaceText(item.question)
+  }, [item.question, replaceText])
 
   return (
     <SliderAnimation step={step} prevStep={prevStep ?? step}>
       <CardItem
         markdown={questionText}
         watermark={watermark}
-        isOptional={activityItem.config.skippableItem || allowToSkipAllItems}>
-        <ItemPicker
-          item={activityItem}
-          values={values}
-          onValueChange={onItemValueChange}
-          isDisabled={false}
-          replaceText={replaceText}
-        />
+        isOptional={item.config.skippableItem || allowToSkipAllItems}>
+        <ItemPicker item={item} onValueChange={onValueChange} isDisabled={false} replaceText={replaceText} />
       </CardItem>
     </SliderAnimation>
   )

@@ -1,30 +1,29 @@
 import { ActivityListGroup } from "../../lib"
 import ActivityGroupsBuildManager from "../services/ActivityGroupsBuildManager"
 
-import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
+import { useAppSelector } from "~/shared/utils"
 
-type UseActivityGroupsParams = {
+type Props = {
   appletDetails: AppletDetailsDTO
   eventsDetails: AppletEventsResponse
 }
 
-type UseActivityGroupsReturn = {
+type Return = {
   groups: ActivityListGroup[]
-  appletDetails?: AppletDetailsDTO
 }
 
-export const useActivityGroups = (props: UseActivityGroupsParams): UseActivityGroupsReturn => {
-  const { groupsInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
+export const useActivityGroups = ({ appletDetails, eventsDetails }: Props): Return => {
+  const groupsInProgress = useAppSelector(appletModel.selectors.groupProgressSelector)
 
   const groupsResult = ActivityGroupsBuildManager.process({
-    appletDetails: props.appletDetails,
-    eventsDetails: props.eventsDetails,
+    appletDetails,
+    eventsDetails,
     entityProgress: groupsInProgress,
   })
 
   return {
     groups: groupsResult.groups,
-    appletDetails: props.appletDetails,
   }
 }

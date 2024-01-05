@@ -1,3 +1,5 @@
+import { forwardRef } from "react"
+
 import Button from "@mui/material/Button"
 import CircularProgress from "@mui/material/CircularProgress"
 import Typography from "@mui/material/Typography"
@@ -15,9 +17,10 @@ type Props = {
   color?: "primary" | "secondary" | "error" | "info" | "success" | "warning"
 }
 
-export const BaseButton = (props: Props) => {
+export const BaseButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
   return (
     <Button
+      ref={ref}
       type={props.type}
       variant={props.variant}
       disabled={props.isLoading}
@@ -47,4 +50,4 @@ export const BaseButton = (props: Props) => {
       )}
     </Button>
   )
-}
+})

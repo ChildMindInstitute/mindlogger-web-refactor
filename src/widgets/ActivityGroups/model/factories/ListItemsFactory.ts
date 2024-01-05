@@ -1,8 +1,7 @@
-import { EventEntity, Activity, ActivityFlow } from "../../lib"
+import { EventEntity, Activity, ActivityFlow, ActivityListItem, ActivityType, ActivityStatus } from "../../lib"
 import { GroupUtility, GroupsBuildContext } from "./GroupUtility"
 
 import { ActivityPipelineType, FlowProgress } from "~/abstract/lib"
-import { ActivityListItem, ActivityStatus, ActivityType } from "~/entities/activity"
 import { AvailabilityLabelType } from "~/entities/event"
 import { MIDNIGHT_DATE } from "~/shared/constants"
 

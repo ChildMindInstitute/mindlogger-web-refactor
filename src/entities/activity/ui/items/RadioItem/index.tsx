@@ -33,7 +33,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText 
   }, [options])
 
   const onHandleValueChange = (value: string) => {
-    onValueChange([value])
+    return onValueChange([value])
   }
 
   return (

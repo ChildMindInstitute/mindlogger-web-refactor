@@ -1,23 +1,21 @@
 import Box from "@mui/material/Box"
-import { useNavigate } from "react-router-dom"
 
 import { AppletListItem } from "../lib"
 
 import { ROUTES } from "~/shared/constants"
 import { CustomCard } from "~/shared/ui"
-import { Mixpanel } from "~/shared/utils"
+import { Mixpanel, useCustomNavigation } from "~/shared/utils"
 
-interface AppletCardProps {
+type Props = {
   applet: AppletListItem
 }
 
-const AppletCard = ({ applet }: AppletCardProps) => {
-  const navigate = useNavigate()
+export const AppletCard = ({ applet }: Props) => {
+  const navigator = useCustomNavigation()
 
   const onAppletCardClick = () => {
-    navigate(ROUTES.appletDetails.navigateTo(applet.id))
-
     Mixpanel.track("Applet click")
+    return navigator.navigate(ROUTES.appletDetails.navigateTo(applet.id))
   }
 
   return (
@@ -32,5 +30,3 @@ const AppletCard = ({ applet }: AppletCardProps) => {
     </Box>
   )
 }
-
-export default AppletCard

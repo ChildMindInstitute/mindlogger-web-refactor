@@ -1,3 +1,4 @@
+import { AppletDetailsContext } from "../lib"
 import { ActivityGroupList } from "./ActivityGroupList"
 
 import { useAppletByIdQuery } from "~/entities/applet"
@@ -6,23 +7,34 @@ import { Container } from "~/shared/ui"
 import Loader from "~/shared/ui/Loader"
 import { useCustomTranslation } from "~/shared/utils"
 
-type FetchPublicActivitiesProps = {
+type PublicAppletDetails = {
   isPublic: true
   publicAppletKey: string
 }
 
-type FetchPrivateActivitiesProps = {
+type PrivateAppletDetails = {
   isPublic: false
   appletId: string
 }
 
-type FetchActivitiesProps = FetchPublicActivitiesProps | FetchPrivateActivitiesProps
+type Props = PublicAppletDetails | PrivateAppletDetails
 
-export const ActivityGroups = (props: FetchActivitiesProps) => {
+export const ActivityGroups = (props: Props) => {
   const { t } = useCustomTranslation()
 
-  const { isError: isAppletError, isLoading: isAppletLoading, data: appletData } = useAppletByIdQuery(props)
-  const { isError: isEventsError, isLoading: isEventsLoading, data: eventsData } = useEventsbyAppletIdQuery(props)
+  const {
+    isError: isAppletError,
+    isLoading: isAppletLoading,
+    data: appletDetails,
+  } = useAppletByIdQuery(props, { select: data => data.data.result })
+
+  const {
+    isError: isEventsError,
+    isLoading: isEventsLoading,
+    data: eventsDetails,
+  } = useEventsbyAppletIdQuery(props, {
+    select: data => data.data.result,
+  })
 
   if (isAppletLoading || isEventsLoading) {
     return <Loader />
@@ -37,17 +49,9 @@ export const ActivityGroups = (props: FetchActivitiesProps) => {
     )
   }
 
-  const appletDetails = appletData?.data?.result
-  const eventsDetails = eventsData?.data?.result
-
   return (
-    appletDetails && (
-      <ActivityGroupList
-        appletDetails={appletDetails}
-        eventsDetails={eventsDetails}
-        isPublic={props.isPublic}
-        publicAppletKey={props.isPublic ? props.publicAppletKey : null}
-      />
-    )
+    <AppletDetailsContext.Provider value={{ ...props, appletDetails, eventsDetails }}>
+      <ActivityGroupList />
+    </AppletDetailsContext.Provider>
   )
 }

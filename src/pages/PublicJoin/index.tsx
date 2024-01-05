@@ -13,5 +13,5 @@ export const PublicJoinPage = () => {
     )
   }
 
-  return <ActivityGroups isPublic publicAppletKey={joinLinkKey} />
+  return <ActivityGroups isPublic={true} publicAppletKey={joinLinkKey} />
 }

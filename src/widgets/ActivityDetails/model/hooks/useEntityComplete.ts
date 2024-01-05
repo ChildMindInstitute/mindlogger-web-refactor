@@ -1,12 +1,12 @@
 import { ActivityPipelineType } from "~/abstract/lib"
-import { activityModel } from "~/entities/activity"
+import { appletModel } from "~/entities/applet"
 import { AppletDetailsDTO } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
 import { useNotification } from "~/shared/ui"
 import { useCustomNavigation, useCustomTranslation } from "~/shared/utils"
 
 type Props = {
-  appletDetails: AppletDetailsDTO
+  applet: AppletDetailsDTO
   activityId: string
   eventId: string
 
@@ -18,16 +18,14 @@ export const useEntityComplete = (props: Props) => {
   const navigator = useCustomNavigation()
   const { t } = useCustomTranslation()
 
-  const { clearActivityItemsProgressById } = activityModel.hooks.useActivityClearState()
-  const { entityCompleted, flowUpdated } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { removeActivityProgress } = appletModel.hooks.useRemoveActivityProgress()
 
-  const { getGroupInProgressByIds } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { entityCompleted, flowUpdated, getGroupProgress } = appletModel.hooks.useGroupProgressState()
 
   const { showSuccessNotification } = useNotification()
 
   const completeEntityAndRedirect = () => {
     entityCompleted({
-      appletId: props.appletDetails.id,
       entityId: props.flowId ? props.flowId : props.activityId,
       eventId: props.eventId,
     })
@@ -40,7 +38,7 @@ export const useEntityComplete = (props: Props) => {
       })
     }
 
-    return navigator.navigate(ROUTES.appletDetails.navigateTo(props.appletDetails.id), {
+    return navigator.navigate(ROUTES.appletDetails.navigateTo(props.applet.id), {
       replace: true,
     })
   }
@@ -51,7 +49,7 @@ export const useEntityComplete = (props: Props) => {
     if (props.publicAppletKey) {
       return navigator.navigate(
         ROUTES.publicActivityDetails.navigateTo({
-          appletId: props.appletDetails.id,
+          appletId: props.applet.id,
           activityId,
           eventId: props.eventId,
           entityType: "flow",
@@ -64,7 +62,7 @@ export const useEntityComplete = (props: Props) => {
 
     return navigator.navigate(
       ROUTES.activityDetails.navigateTo({
-        appletId: props.appletDetails.id,
+        appletId: props.applet.id,
         activityId,
         eventId: props.eventId,
         entityType: "flow",
@@ -75,39 +73,37 @@ export const useEntityComplete = (props: Props) => {
   }
 
   const completeFlow = (flowId: string) => {
-    const { activityFlows } = props.appletDetails
+    const { activityFlows } = props.applet
 
-    const groupInProgress = getGroupInProgressByIds({
-      appletId: props.appletDetails.id,
-      activityId: props.flowId ? props.flowId : props.activityId,
+    const groupProgress = getGroupProgress({
+      entityId: props.flowId ? props.flowId : props.activityId,
       eventId: props.eventId,
     })
 
-    if (!groupInProgress) {
+    if (!groupProgress) {
       return
     }
 
-    const isFlow = groupInProgress.type === ActivityPipelineType.Flow
+    const isFlow = groupProgress.type === ActivityPipelineType.Flow
 
     if (!isFlow) {
       return
     }
 
-    const currentPipelineActivityOrder = groupInProgress.pipelineActivityOrder
+    const currentPipelineActivityOrder = groupProgress.pipelineActivityOrder
 
     const currentFlow = activityFlows.find(flow => flow.id === flowId)!
 
     const nextActivityId = currentFlow.activityIds[currentPipelineActivityOrder + 1]
 
     flowUpdated({
-      appletId: props.appletDetails.id,
       activityId: nextActivityId ? nextActivityId : currentFlow.activityIds[0],
       flowId: currentFlow.id,
       eventId: props.eventId,
       pipelineActivityOrder: nextActivityId ? currentPipelineActivityOrder + 1 : 0,
     })
 
-    clearActivityItemsProgressById(props.activityId, props.eventId)
+    removeActivityProgress({ activityId: props.activityId, eventId: props.eventId })
 
     if (!nextActivityId) {
       return completeEntityAndRedirect()
@@ -117,7 +113,7 @@ export const useEntityComplete = (props: Props) => {
   }
 
   const completeActivity = () => {
-    clearActivityItemsProgressById(props.activityId, props.eventId)
+    removeActivityProgress({ activityId: props.activityId, eventId: props.eventId })
 
     return completeEntityAndRedirect()
   }
