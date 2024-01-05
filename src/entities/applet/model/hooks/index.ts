@@ -4,7 +4,6 @@ export * from "./useResetAppletsStore"
 export * from "./useRemoveActivityProgress"
 
 export * from "./useGroupProgressState"
-export * from "./useProgressState"
 
 export * from "./useActivityProgress"
 

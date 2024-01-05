@@ -1,14 +1,15 @@
-import { useCallback, useContext } from "react"
+import { useCallback, useContext, useMemo } from "react"
 
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 
 import { ActivityDetailsContext } from "../lib"
-import { validateIsItemAnswerShouldBeEmpty, validateIsNumericOnly, validateItem } from "../model"
-import { useAnswer, useEntityComplete, useSubmitAnswersMutations } from "../model/hooks"
+import { isAnswerShouldBeEmpty, isAnswerShouldBeNumeric, isAnswerShouldBeCorrect } from "../model"
+import { useAnswer, useEntityComplete, useSubmitAnswersMutations, useSurvey } from "../model/hooks"
 import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
 import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
+import { getProgressId } from "~/abstract/lib"
 import { ActivityCardItem, ItemCardButton, useTextVariablesReplacer } from "~/entities/activity"
 import { appletModel } from "~/entities/applet"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
@@ -38,7 +39,15 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const eventId = context.eventId
 
+  const activityEventId = getProgressId(activityId, eventId)
+
+  const activityProgress = useAppSelector(state => appletModel.selectors.selectActivityProgress(state, activityEventId))
+
   const completedEntities = useAppSelector(appletModel.selectors.completedEntitiesSelector)
+
+  const userEvents = useMemo(() => activityProgress?.userEvents ?? [], [activityProgress?.userEvents])
+
+  const { incrementStep, decrementStep } = appletModel.hooks.useActivityProgress()
 
   const { saveUserEventByType, saveSetAnswerUserEvent } = appletModel.hooks.useUserEvents({
     activityId,
@@ -50,11 +59,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     eventId,
   })
 
-  const { items, userEvents, step, item, hasNextStep, hasPrevStep, toNextStep, toPrevStep, progress } =
-    appletModel.hooks.useProgressState({
-      eventId,
-      activityId,
-    })
+  const { items, step, item, hasNextStep, hasPrevStep, progress } = useSurvey(activityProgress)
 
   console.log("item", item)
 
@@ -64,6 +69,13 @@ export const AssessmentPassingScreen = (props: Props) => {
     eventId,
     publicAppletKey: context.isPublic ? context.publicAppletKey : null,
     flowId: flowParams.isFlow ? flowParams.flowId : null,
+  })
+
+  const { replaceTextVariables } = useTextVariablesReplacer({
+    items,
+    answers: items.map(item => item.answer),
+    respondentMeta: props.respondentMeta,
+    completedEntityTime: completedEntities[activityId],
   })
 
   const onSubmitSuccess = () => (flowParams.isFlow ? completeFlow(flowParams.flowId) : completeActivity())
@@ -99,40 +111,6 @@ export const AssessmentPassingScreen = (props: Props) => {
     return submitAnswers(answer)
   }, [context.isPublic, item, items, processAnswers, saveUserEventByType, submitAnswers, userEvents])
 
-  const onBeforeMoveForward = useCallback((): boolean => {
-    if (!item) {
-      throw new Error("[onBeforeMoveForward] CurrentItem is not defined")
-    }
-
-    const shouldBeEmpty = validateIsItemAnswerShouldBeEmpty(item)
-
-    console.log("onBeforeMoveForward", item)
-
-    const isItemHasAnswer = item.answer.length
-    const isItemSkippable = item.config.skippableItem || props.activityDetails.isSkippable
-
-    if (!shouldBeEmpty && !isItemHasAnswer && !isItemSkippable) {
-      showWarningNotification(t("pleaseAnswerTheQuestion"))
-      return false
-    }
-
-    const isAnswerCorrect = validateItem({ item })
-
-    if (!isAnswerCorrect && !isItemSkippable) {
-      showWarningNotification(t("incorrect_answer"))
-      return false
-    }
-
-    const isNumericOnly = validateIsNumericOnly(item)
-
-    if (isNumericOnly) {
-      showWarningNotification(t("onlyNumbersAllowed"))
-      return false
-    }
-
-    return true
-  }, [item, props.activityDetails.isSkippable, showWarningNotification, t])
-
   const onNext = useCallback(() => {
     if (!item) {
       throw new Error("[onNext] CurrentItem is not defined")
@@ -147,8 +125,8 @@ export const AssessmentPassingScreen = (props: Props) => {
       saveUserEventByType("NEXT", item)
     }
 
-    return toNextStep()
-  }, [item, props.activityDetails.isSkippable, saveUserEventByType, toNextStep])
+    return incrementStep({ activityId, eventId })
+  }, [activityId, eventId, incrementStep, item, props.activityDetails.isSkippable, saveUserEventByType])
 
   const onBack = useCallback(() => {
     if (!item) {
@@ -170,25 +148,40 @@ export const AssessmentPassingScreen = (props: Props) => {
 
     saveUserEventByType("PREV", item)
 
-    return toPrevStep()
-  }, [item, saveItemAnswer, saveSetAnswerUserEvent, saveUserEventByType, step, toPrevStep])
-
-  const { replaceTextVariables } = useTextVariablesReplacer({
-    items: items,
-    answers: items.map(item => item.answer),
-    respondentMeta: props.respondentMeta,
-    completedEntityTime: completedEntities[activityId],
-  })
+    return decrementStep({ activityId, eventId })
+  }, [activityId, decrementStep, eventId, item, saveItemAnswer, saveSetAnswerUserEvent, saveUserEventByType, step])
 
   const onMoveForward = useCallback(
     (force = false) => {
-      const ok = onBeforeMoveForward()
-
-      if (!ok) {
-        return
+      if (!item) {
+        throw new Error("[onMoveForward] CurrentItem is not defined")
       }
 
-      console.log(`hasNextStep: ${hasNextStep}`)
+      console.log("onMoveForward", item)
+
+      const shouldBeEmpty = isAnswerShouldBeEmpty(item)
+
+      const isItemHasAnswer = item.answer.length
+      const isItemSkippable = item.config.skippableItem || props.activityDetails.isSkippable
+
+      if (!shouldBeEmpty && !isItemHasAnswer && !isItemSkippable) {
+        showWarningNotification(t("pleaseAnswerTheQuestion"))
+        return false
+      }
+
+      const isAnswerCorrect = isAnswerShouldBeCorrect(item)
+
+      if (!isAnswerCorrect && !isItemSkippable) {
+        showWarningNotification(t("incorrect_answer"))
+        return false
+      }
+
+      const isNumericOnly = isAnswerShouldBeNumeric(item)
+
+      if (isNumericOnly) {
+        showWarningNotification(t("onlyNumbersAllowed"))
+        return false
+      }
 
       if (!hasNextStep && !force) {
         return onSubmit()
@@ -196,7 +189,7 @@ export const AssessmentPassingScreen = (props: Props) => {
 
       return onNext()
     },
-    [hasNextStep, onBeforeMoveForward, onNext, onSubmit],
+    [hasNextStep, item, onNext, onSubmit, props.activityDetails.isSkippable, showWarningNotification, t],
   )
 
   const onItemValueChange = (value: string[]) => {

@@ -12,6 +12,11 @@ type SaveProgressProps = {
   eventId: string
 }
 
+type UpdateStepProps = {
+  activityId: string
+  eventId: string
+}
+
 export const useActivityProgress = () => {
   const dispatch = useAppDispatch()
 
@@ -51,7 +56,23 @@ export const useActivityProgress = () => {
     [dispatch],
   )
 
+  const incrementStep = useCallback(
+    (props: UpdateStepProps) => {
+      dispatch(actions.incrementStep(props))
+    },
+    [dispatch],
+  )
+
+  const decrementStep = useCallback(
+    (props: UpdateStepProps) => {
+      dispatch(actions.decrementStep(props))
+    },
+    [dispatch],
+  )
+
   return {
     setInitialProgress,
+    incrementStep,
+    decrementStep,
   }
 }
