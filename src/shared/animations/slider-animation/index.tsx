@@ -18,7 +18,5 @@ export const SliderAnimation = (props: Props) => {
     ...getTransitionConfig(direction),
   })
 
-  return transitions(style => (
-    <animated.div style={{ display: "flex", flex: 1, ...style }}>{props.children}</animated.div>
-  ))
+  return transitions(style => <animated.div style={{ flex: 1, ...style }}>{props.children}</animated.div>)
 }

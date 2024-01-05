@@ -1,7 +1,6 @@
 import { useCallback, useContext, useMemo } from "react"
 
 import Box from "@mui/material/Box"
-import Container from "@mui/material/Container"
 
 import { ActivityDetailsContext } from "../lib"
 import { isAnswerShouldBeEmpty, isAnswerShouldBeNumeric, isAnswerShouldBeCorrect } from "../model"
@@ -199,10 +198,11 @@ export const AssessmentPassingScreen = (props: Props) => {
 
       <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
         <NotificationCenter />
-        <Container sx={{ display: "flex", flex: 1, justifyContent: "center" }}>
-          <Box maxWidth="900px" display="flex" alignItems="center" flex={1} justifyContent="center">
+        <Box display="flex" flex={1} justifyContent="center">
+          <Box maxWidth="900px" display="flex" alignItems="center" flex={1}>
             {item && (
               <ActivityCardItem
+                key={item.id}
                 item={item}
                 replaceText={replaceTextVariables}
                 watermark={props.appletDetails.watermark}
@@ -213,7 +213,7 @@ export const AssessmentPassingScreen = (props: Props) => {
               />
             )}
           </Box>
-        </Container>
+        </Box>
       </Box>
 
       <AssessmentLayoutFooter>
