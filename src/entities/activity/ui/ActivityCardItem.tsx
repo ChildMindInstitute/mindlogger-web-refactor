@@ -11,7 +11,6 @@ type ActivityCardItemProps = {
   watermark?: string
   allowToSkipAllItems?: boolean | undefined
 
-  values: string[]
   onValueChange: (value: string[]) => void
 
   replaceText: (value: string) => string
@@ -22,7 +21,6 @@ type ActivityCardItemProps = {
 
 export const ActivityCardItem = ({
   item,
-  values,
   replaceText,
   watermark,
   allowToSkipAllItems,
@@ -40,13 +38,7 @@ export const ActivityCardItem = ({
         markdown={questionText}
         watermark={watermark}
         isOptional={item.config.skippableItem || allowToSkipAllItems}>
-        <ItemPicker
-          item={item}
-          values={values}
-          onValueChange={onValueChange}
-          isDisabled={false}
-          replaceText={replaceText}
-        />
+        <ItemPicker item={item} onValueChange={onValueChange} isDisabled={false} replaceText={replaceText} />
       </CardItem>
     </SliderAnimation>
   )

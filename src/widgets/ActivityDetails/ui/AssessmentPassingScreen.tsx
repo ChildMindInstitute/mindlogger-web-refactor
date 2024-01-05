@@ -203,9 +203,7 @@ export const AssessmentPassingScreen = (props: Props) => {
           <Box maxWidth="900px" display="flex" alignItems="center" flex={1} justifyContent="center">
             {item && (
               <ActivityCardItem
-                key={item.id}
                 item={item}
-                values={item.answer}
                 replaceText={replaceTextVariables}
                 watermark={props.appletDetails.watermark}
                 allowToSkipAllItems={props.activityDetails.isSkippable}

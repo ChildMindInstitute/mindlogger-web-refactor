@@ -13,13 +13,14 @@ import { TimeRangeItem } from "./TimeRangeItem"
 type ItemPickerProps = {
   item: ItemRecord
 
-  values: string[]
   onValueChange: (value: string[]) => void
   isDisabled: boolean
   replaceText: (value: string) => string
 }
 
-export const ItemPicker = ({ item, values, onValueChange, isDisabled, replaceText }: ItemPickerProps) => {
+export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: ItemPickerProps) => {
+  const values = item.answer
+
   switch (item.responseType) {
     case "splashScreen":
       return <SplashScreen imageSrc={item.config.imageSrc} />
