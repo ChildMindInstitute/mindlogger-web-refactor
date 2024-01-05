@@ -7,7 +7,7 @@ import { useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, BaseError, RespondentMetaDTO } from "~/shared/api"
 
-interface UseActivityDetailsReturn {
+type Return = {
   appletDetails: AppletDetailsDTO | null
   respondentMeta?: RespondentMetaDTO
   activityDetails: ActivityDTO | null
@@ -17,7 +17,7 @@ interface UseActivityDetailsReturn {
   error: BaseError | null
 }
 
-export const useActivityDetailsQuery = (): UseActivityDetailsReturn => {
+export const useActivityDetailsQuery = (): Return => {
   const context = useContext(ActivityDetailsContext)
 
   const {
