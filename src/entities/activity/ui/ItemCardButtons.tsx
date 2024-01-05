@@ -1,43 +1,29 @@
-import { useEffect } from "react"
-
 import Box from "@mui/material/Box"
 
 import { Theme } from "~/shared/constants"
 import { BaseButton } from "~/shared/ui"
-import { eventEmitter, useCustomMediaQuery, useCustomTranslation } from "~/shared/utils"
+import { useCustomMediaQuery } from "~/shared/utils"
 
 type ItemCardButtonsProps = {
   isLoading: boolean
-  isSubmitShown: boolean
   isBackShown: boolean
 
+  backButtonText: string
+  nextButtonText: string
+
   onBackButtonClick?: () => void
-  onNextButtonClick: (force: boolean) => void
+  onNextButtonClick: () => void
 }
 
 export const ItemCardButton = ({
-  isSubmitShown,
   isBackShown,
   onBackButtonClick,
   onNextButtonClick,
   isLoading,
+  nextButtonText,
+  backButtonText,
 }: ItemCardButtonsProps) => {
-  const { t } = useCustomTranslation()
   const { greaterThanSM } = useCustomMediaQuery()
-
-  const nextOrSubmitButtonLabel = isSubmitShown ? t("submit") : t("Consent.next")
-
-  useEffect(() => {
-    const autoForward = () => {
-      onNextButtonClick(true)
-    }
-
-    eventEmitter.on("onSingleSelectAnswered", autoForward)
-
-    return () => {
-      eventEmitter.off("onSingleSelectAnswered", autoForward)
-    }
-  }, [onNextButtonClick])
 
   return (
     <Box
@@ -54,7 +40,7 @@ export const ItemCardButton = ({
             type="button"
             variant="outlined"
             onClick={onBackButtonClick}
-            text={t("Consent.back")}
+            text={backButtonText}
             borderColor={Theme.colors.light.outline}
           />
         </Box>
@@ -65,8 +51,8 @@ export const ItemCardButton = ({
           type="button"
           variant="contained"
           isLoading={isLoading}
-          onClick={() => onNextButtonClick(false)}
-          text={nextOrSubmitButtonLabel}
+          onClick={onNextButtonClick}
+          text={nextButtonText}
         />
       </Box>
     </Box>

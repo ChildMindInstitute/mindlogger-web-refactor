@@ -5,7 +5,7 @@ import Container from "@mui/material/Container"
 
 import { ActivityDetailsContext } from "../lib"
 import { isAnswerShouldBeEmpty, isAnswerShouldBeNumeric, isAnswerShouldBeCorrect } from "../model"
-import { useAnswer, useEntityComplete, useSubmitAnswersMutations, useSurvey } from "../model/hooks"
+import { useAnswer, useAutoForward, useEntityComplete, useSubmitAnswersMutations, useSurvey } from "../model/hooks"
 import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
 import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
@@ -47,6 +47,8 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const userEvents = useMemo(() => activityProgress?.userEvents ?? [], [activityProgress?.userEvents])
 
+  const items = useMemo(() => activityProgress?.items ?? [], [activityProgress.items])
+
   const { incrementStep, decrementStep } = appletModel.hooks.useActivityProgress()
 
   const { saveUserEventByType, saveSetAnswerUserEvent } = appletModel.hooks.useUserEvents({
@@ -59,9 +61,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     eventId,
   })
 
-  const { items, step, item, hasNextStep, hasPrevStep, progress } = useSurvey(activityProgress)
-
-  console.log("item", item)
+  const { step, item, hasPrevStep, hasNextStep, progress } = useSurvey(activityProgress)
 
   const { completeActivity, completeFlow } = useEntityComplete({
     applet,
@@ -96,10 +96,6 @@ export const AssessmentPassingScreen = (props: Props) => {
   const prevStep = usePrevious(step)
 
   const onSubmit = useCallback(() => {
-    if (!item) {
-      throw new Error("[onSubmit] CurrentItem is not defined")
-    }
-
     saveUserEventByType("DONE", item)
 
     const answer = processAnswers({
@@ -112,10 +108,6 @@ export const AssessmentPassingScreen = (props: Props) => {
   }, [context.isPublic, item, items, processAnswers, saveUserEventByType, submitAnswers, userEvents])
 
   const onNext = useCallback(() => {
-    if (!item) {
-      throw new Error("[onNext] CurrentItem is not defined")
-    }
-
     const isItemHasAnswer = item.answer.length
     const isItemSkippable = item.config.skippableItem || props.activityDetails.isSkippable
 
@@ -129,68 +121,50 @@ export const AssessmentPassingScreen = (props: Props) => {
   }, [activityId, eventId, incrementStep, item, props.activityDetails.isSkippable, saveUserEventByType])
 
   const onBack = useCallback(() => {
-    if (!item) {
-      throw new Error("[onBack] CurrentItem is not defined")
-    }
-
-    const hasConditionlLogic = item.conditionalLogic
-
-    if (hasConditionlLogic) {
-      // If the current item participate in any conditional logic
-      // we need to reset the answer to the initial state
-
-      saveItemAnswer(step, [])
-      saveSetAnswerUserEvent({
-        ...item,
-        answer: [],
-      })
-    }
-
     saveUserEventByType("PREV", item)
 
+    if (!hasPrevStep) {
+      return
+    }
+
     return decrementStep({ activityId, eventId })
-  }, [activityId, decrementStep, eventId, item, saveItemAnswer, saveSetAnswerUserEvent, saveUserEventByType, step])
+  }, [activityId, decrementStep, eventId, hasPrevStep, item, saveUserEventByType])
 
-  const onMoveForward = useCallback(
-    (force = false) => {
-      if (!item) {
-        throw new Error("[onMoveForward] CurrentItem is not defined")
-      }
+  const onMoveForward = useCallback(() => {
+    if (!item) {
+      throw new Error("[onMoveForward] CurrentItem is not defined")
+    }
 
-      console.log("onMoveForward", item)
+    const shouldBeEmpty = isAnswerShouldBeEmpty(item)
 
-      const shouldBeEmpty = isAnswerShouldBeEmpty(item)
+    const isItemHasAnswer = item.answer.length
+    const isItemSkippable = item.config.skippableItem || props.activityDetails.isSkippable
 
-      const isItemHasAnswer = item.answer.length
-      const isItemSkippable = item.config.skippableItem || props.activityDetails.isSkippable
+    if (!shouldBeEmpty && !isItemHasAnswer && !isItemSkippable) {
+      showWarningNotification(t("pleaseAnswerTheQuestion"))
+      return false
+    }
 
-      if (!shouldBeEmpty && !isItemHasAnswer && !isItemSkippable) {
-        showWarningNotification(t("pleaseAnswerTheQuestion"))
-        return false
-      }
+    const isAnswerCorrect = isAnswerShouldBeCorrect(item)
 
-      const isAnswerCorrect = isAnswerShouldBeCorrect(item)
+    if (!isAnswerCorrect && !isItemSkippable) {
+      showWarningNotification(t("incorrect_answer"))
+      return false
+    }
 
-      if (!isAnswerCorrect && !isItemSkippable) {
-        showWarningNotification(t("incorrect_answer"))
-        return false
-      }
+    const isNumericOnly = isAnswerShouldBeNumeric(item)
 
-      const isNumericOnly = isAnswerShouldBeNumeric(item)
+    if (isNumericOnly) {
+      showWarningNotification(t("onlyNumbersAllowed"))
+      return false
+    }
 
-      if (isNumericOnly) {
-        showWarningNotification(t("onlyNumbersAllowed"))
-        return false
-      }
+    if (!hasNextStep) {
+      return onSubmit()
+    }
 
-      if (!hasNextStep && !force) {
-        return onSubmit()
-      }
-
-      return onNext()
-    },
-    [hasNextStep, item, onNext, onSubmit, props.activityDetails.isSkippable, showWarningNotification, t],
-  )
+    return onNext()
+  }, [hasNextStep, item, onNext, onSubmit, props.activityDetails.isSkippable, showWarningNotification, t])
 
   const onItemValueChange = (value: string[]) => {
     saveItemAnswer(step, value)
@@ -199,6 +173,12 @@ export const AssessmentPassingScreen = (props: Props) => {
       answer: value,
     })
   }
+
+  useAutoForward({
+    item,
+    hasNextStep,
+    onForward: onNext,
+  })
 
   return (
     <Box
@@ -240,11 +220,12 @@ export const AssessmentPassingScreen = (props: Props) => {
 
       <AssessmentLayoutFooter>
         <ItemCardButton
-          isSubmitShown={!hasNextStep}
-          isBackShown={hasPrevStep && !item?.config.removeBackButton && props.activityDetails.responseIsEditable}
           isLoading={isLoading}
-          onNextButtonClick={onMoveForward}
+          isBackShown={hasPrevStep && !item?.config.removeBackButton && props.activityDetails.responseIsEditable}
           onBackButtonClick={onBack}
+          onNextButtonClick={onMoveForward}
+          backButtonText={t("Consent.back")}
+          nextButtonText={hasNextStep ? t("Consent.next") : t("submit")}
         />
       </AssessmentLayoutFooter>
     </Box>

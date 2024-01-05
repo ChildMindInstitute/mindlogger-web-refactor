@@ -3,42 +3,34 @@ import { useMemo } from "react"
 import { appletModel } from "~/entities/applet"
 
 export const useSurvey = (activityProgress: appletModel.ActivityProgress) => {
-  const rawItems = useMemo(() => activityProgress?.items ?? [], [activityProgress])
+  const items = useMemo(() => activityProgress?.items ?? [], [activityProgress.items])
 
-  const items = appletModel.conditionalLogicBuilder.process(rawItems)
+  const processedItems = appletModel.conditionalLogicBuilder.process(items)
 
   const step = activityProgress?.step ?? 0
 
-  const item = items[step]
+  const item = processedItems[step]
 
-  const itemHasAnswer = item?.answer.length > 0
-
-  const hasNextStep = step < items.length - 1
+  const hasNextStep = step < processedItems.length - 1
 
   const hasPrevStep = step > 0
-
-  const canMoveNext = hasNextStep && itemHasAnswer
 
   const progress = useMemo(() => {
     const defaultProgressPercentage = 0
 
-    if (!rawItems) {
+    if (!items) {
       return defaultProgressPercentage
     }
 
-    return ((step + 1) / rawItems.length) * 100
-  }, [rawItems, step])
+    return ((step + 1) / items.length) * 100
+  }, [items, step])
 
   return {
-    rawItems,
-
-    items,
     item,
 
     hasNextStep,
     hasPrevStep,
     step,
-    canMoveNext,
 
     progress,
   }
