@@ -26,13 +26,13 @@ import { LogoutTracker } from "~/widgets/LogoutTracker"
 import { ProtectedRoute } from "~/widgets/ProtectedRoute"
 
 const ApplicationRouter = (): JSX.Element | null => {
-  const tokens = userModel.hooks.useTokensState()
+  const { isAuthorized, tokens } = userModel.hooks.useAuthorization()
 
-  if (tokens?.accessToken) {
+  if (isAuthorized) {
     return (
       <LogoutTracker>
         <Routes>
-          <Route element={<ProtectedRoute token={tokens?.accessToken} />}>
+          <Route element={<ProtectedRoute token={tokens.refreshToken} />}>
             <Route path={ROUTES.activityDetails.path} element={<ActivityDetailsPage />} />
             <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
 

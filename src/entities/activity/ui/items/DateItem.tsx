@@ -18,7 +18,7 @@ export const DateItem = ({ value, onValueChange }: Props) => {
   }
 
   return (
-    <Box display="flex" justifyContent="center">
+    <Box display="flex" justifyContent="center" data-testid="date-item">
       <Box>
         <DateItemBase value={value ? new Date(value) : null} onChange={onHandleChange} />
       </Box>

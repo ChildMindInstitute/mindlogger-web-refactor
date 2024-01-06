@@ -12,7 +12,7 @@ export const AudioPlayerItem = ({ item }: Props) => {
   const isAbleToPlayOnce = item.config.playOnce
 
   return (
-    <Box display="flex" justifyContent="center">
+    <Box display="flex" justifyContent="center" data-testid="audio-player-item">
       <AudioPlayerItemBase src={item.responseValues.file} playOnce={isAbleToPlayOnce} />
     </Box>
   )

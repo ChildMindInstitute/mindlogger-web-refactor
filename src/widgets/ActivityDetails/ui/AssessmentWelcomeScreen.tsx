@@ -67,6 +67,7 @@ export const AssessmentWelcomeScreen = (props: Props) => {
             name={props.activityDetails?.name}
             width="124px"
             height="124px"
+            testid="flow-welcome-screen-avatar"
           />
 
           <Text
@@ -80,7 +81,13 @@ export const AssessmentWelcomeScreen = (props: Props) => {
               groupInProgress={getGroupProgress({ entityId, eventId: context.eventId })}
             />
           </Text>
-          <Text variant="body1" fontSize="18px" fontWeight="700" color={Theme.colors.light.onSurface} margin="16px 0px">
+          <Text
+            variant="body1"
+            fontSize="18px"
+            fontWeight="700"
+            color={Theme.colors.light.onSurface}
+            margin="16px 0px"
+            testid="flow-welcome-screen-title">
             {props.activityDetails.name}
           </Text>
 
@@ -89,6 +96,7 @@ export const AssessmentWelcomeScreen = (props: Props) => {
             fontSize="18px"
             fontWeight="400"
             color={Theme.colors.light.onSurface}
+            testid="flow-welcome-screen-decription"
             sx={{ textAlign: "center" }}>
             {props.activityDetails.description}
           </Text>
