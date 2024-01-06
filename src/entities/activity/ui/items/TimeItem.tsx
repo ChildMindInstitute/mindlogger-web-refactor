@@ -19,7 +19,7 @@ export const TimeItem = ({ value, label, onValueChange }: Props) => {
   }
 
   return (
-    <Box display="flex" justifyContent="center">
+    <Box display="flex" justifyContent="center" data-testid="time-item">
       <Box>
         <TimeItemBase value={value} label={label} onChange={onHandleChange} />
       </Box>
