@@ -13,7 +13,7 @@ export const ProtectedRoute = ({ redirectUrl = ROUTES.login.path, token }: Prote
   if (!token) return <Navigate to={redirectUrl} replace />
 
   return (
-    <InactivityTracker token={token}>
+    <InactivityTracker>
       <Outlet />
     </InactivityTracker>
   )

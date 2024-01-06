@@ -1,3 +1,6 @@
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
+
 import { ActivityPipelineType, GroupProgress } from "~/abstract/lib"
 import { useCustomTranslation } from "~/shared/utils"
 
@@ -22,10 +25,15 @@ export const ActivityMetaData = ({ groupInProgress, activityLength }: Props) => 
   }
 
   return (
-    <>
-      {`Activity ${groupInProgress.pipelineActivityOrder + 1} `}
+    <Box data-testid="flow-welcome-screen-metadata">
+      <Typography variant="body1" component="span" data-testid="metadata-activity-serial-number">{`Activity ${
+        groupInProgress.pipelineActivityOrder + 1
+      } `}</Typography>
       &bull;
-      {` ${activityLengthLabel}`}
-    </>
+      <Typography
+        variant="body1"
+        component="span"
+        data-testid="metadata-activity-length">{` ${activityLengthLabel}`}</Typography>
+    </Box>
   )
 }

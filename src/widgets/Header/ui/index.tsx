@@ -22,7 +22,7 @@ const Header = (): JSX.Element | null => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const { user } = userModel.hooks.useUserState()
+  const { isAuthorized, user } = userModel.hooks.useAuthorization()
 
   const toggleMenuOpen = () => {
     return setIsMenuOpen(prev => !prev)
@@ -35,7 +35,7 @@ const Header = (): JSX.Element | null => {
   const onLogoClick = () => {
     closeMenu()
 
-    if (user?.id) {
+    if (isAuthorized) {
       return navigator.navigate(ROUTES.appletList.path)
     } else {
       return navigator.navigate(ROUTES.login.path)
@@ -59,8 +59,8 @@ const Header = (): JSX.Element | null => {
           <Box display="flex">
             <LanguageDropdown toggleMenuOpen={closeMenu} />
 
-            {user?.id ? (
-              <AccountDropdown title={`${user?.firstName} ${user?.lastName}`} toggleMenuOpen={closeMenu} />
+            {isAuthorized ? (
+              <AccountDropdown title={`${user.firstName} ${user.lastName}`} toggleMenuOpen={closeMenu} />
             ) : (
               <LoginButton toggleMenuOpen={closeMenu} />
             )}
@@ -72,8 +72,8 @@ const Header = (): JSX.Element | null => {
         <Box display="flex" flexDirection="column" alignItems="center">
           <LanguageDropdown toggleMenuOpen={closeMenu} />
 
-          {user?.id ? (
-            <AccountDropdown title={`${user?.firstName} ${user?.lastName}`} toggleMenuOpen={closeMenu} />
+          {isAuthorized ? (
+            <AccountDropdown title={`${user.firstName} ${user.lastName}`} toggleMenuOpen={closeMenu} />
           ) : (
             <LoginButton toggleMenuOpen={closeMenu} />
           )}

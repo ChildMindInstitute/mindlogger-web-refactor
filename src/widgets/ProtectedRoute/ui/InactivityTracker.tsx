@@ -2,7 +2,7 @@ import { PropsWithChildren, useCallback, useEffect, useRef } from "react"
 
 import { useLogout } from "~/features/Logout"
 
-export type InactivityTrackerProps = PropsWithChildren<{ token: string }>
+export type InactivityTrackerProps = PropsWithChildren<unknown>
 
 const events = ["load", "click", "scroll", "keypress"]
 
@@ -19,10 +19,6 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
     if (timerRef) window.clearTimeout(timerRef.current)
   }, [timerRef])
 
-  const logoutAction = useCallback(() => {
-    logout
-  }, [logout])
-
   const logoutTimer = useCallback(() => {
     timerRef.current = window.setTimeout(() => {
       // clears any pending timer.
@@ -34,9 +30,9 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
       })
 
       // logs out user
-      logoutAction()
+      logout()
     }, LOGOUT_TIME_LIMIT)
-  }, [resetTimer, logoutAction])
+  }, [resetTimer, logout])
 
   const onActivityEventHandler = useCallback(() => {
     resetTimer()
