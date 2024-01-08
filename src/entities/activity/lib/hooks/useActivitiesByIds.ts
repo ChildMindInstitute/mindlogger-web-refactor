@@ -2,19 +2,14 @@ import { useMemo } from "react"
 
 import { useActivitiesByIdsQuery } from "../../api"
 
-import { AppletDetailsDTO } from "~/shared/api"
-
 type Props = {
-  appletDetails: AppletDetailsDTO
+  ids: Array<string>
+  enabled?: boolean
 }
 
-export const useActivitiesByIds = ({ appletDetails }: Props) => {
-  const activitiesIds = useMemo(() => {
-    return appletDetails.activities.map(x => x.id)
-  }, [appletDetails])
-
-  const queryResults = useActivitiesByIdsQuery({ activitiesIds })
-
+export const useActivitiesByIds = ({ ids, enabled }: Props) => {
+  const queryResults = useActivitiesByIdsQuery({ ids, enabled })
+  ids
   const { isError, isLoading, data } = useMemo(() => {
     const isLoading = queryResults.some(item => item.isLoading)
     const isError = queryResults.some(item => item.isError)
