@@ -3,15 +3,17 @@ import { useQueries } from "@tanstack/react-query"
 import { activityService } from "~/shared/api"
 
 type Props = {
-  activitiesIds: Array<string>
+  ids: Array<string>
+  enabled?: boolean
 }
 
-export const useActivitiesByIdsQuery = ({ activitiesIds }: Props) => {
+export const useActivitiesByIdsQuery = ({ ids, enabled }: Props) => {
   return useQueries({
-    queries: activitiesIds.map(activityId => {
+    queries: ids.map(activityId => {
       return {
         queryKey: ["activity", activityId],
         queryFn: () => activityService.getById({ activityId }),
+        enabled: enabled,
       }
     }),
   })
