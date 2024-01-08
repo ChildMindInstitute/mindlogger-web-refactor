@@ -1,7 +1,6 @@
 import { useContext } from "react"
 
 import Box from "@mui/material/Box"
-import { isIOS } from "react-device-detect"
 
 import { ActivityListItem, ActivityStatus, AppletDetailsContext } from "../../lib"
 import { useStartEntity } from "../../model/hooks/useStartEntity"
@@ -13,9 +12,8 @@ import { ActivityCardTitle } from "./ActivityCardTitle"
 import { ActivityLabel } from "./ActivityLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
 
-import { getProgressId } from "~/abstract/lib"
-import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/abstract/lib/constants"
-import { isSupportedActivity, useActivityByIdQuery } from "~/entities/activity"
+import { getProgressId, openStoreLink } from "~/abstract/lib"
+import { isSupportedActivity, useActivitiesByIds, useActivityByIdQuery } from "~/entities/activity"
 import { appletModel } from "~/entities/applet"
 import Loader from "~/shared/ui/Loader"
 import { useAppSelector, useCustomMediaQuery } from "~/shared/utils"
@@ -29,16 +27,15 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
   const context = useContext(AppletDetailsContext)
 
-  const { startActivityOrFlow } = useStartEntity({
-    applet: context.appletDetails,
-    isPublic: context.isPublic,
-    publicAppletKey: context.isPublic ? context.publicAppletKey : null,
-  })
+  const isStatusScheduled = activityListItem.status === ActivityStatus.Scheduled
 
-  const { data: activity, isLoading } = useActivityByIdQuery(
-    { activityId: activityListItem.activityId, isPublic: context.isPublic },
-    { select: data => data.data.result },
-  )
+  const isDisabled = isStatusScheduled
+
+  const isFlow = Boolean(activityListItem.flowId && activityListItem.activityFlowDetails)
+
+  const activityFlowName = activityListItem.activityFlowDetails?.activityFlowName
+
+  const isActivityInProgress = activityListItem.status === ActivityStatus.InProgress
 
   const activityEventId = getProgressId(activityListItem.activityId, activityListItem.eventId)
 
@@ -50,28 +47,34 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
   const progress = ((step + 1) / items.length) * 100
 
-  const getCompletedActivitiesFromPosition = (position: number) => {
-    return position - 1
-  }
-
-  const isStatusScheduled = activityListItem.status === ActivityStatus.Scheduled
-
-  const isDisabled = isStatusScheduled
-
-  const isFlow = Boolean(activityListItem.flowId)
-  const activityFlowName = activityListItem.activityFlowDetails?.activityFlowName
-
-  const isActivityInProgress = activityListItem.status === ActivityStatus.InProgress
-
   const countOfCompletedQuestions = items.filter(item => item.answer.length).length || 0
 
-  const activityLength = activity?.items.length || 0
-
   const numberOfActivitiesInFlow = activityListItem.activityFlowDetails?.numberOfActivitiesInFlow || 0
+
+  const { startActivityOrFlow } = useStartEntity({
+    applet: context.appletDetails,
+    isPublic: context.isPublic,
+    publicAppletKey: context.isPublic ? context.publicAppletKey : null,
+  })
+
+  const { data: activity, isLoading: activityLoading } = useActivityByIdQuery(
+    { activityId: activityListItem.activityId, isPublic: context.isPublic },
+    { select: data => data.data.result },
+  )
+
+  const flow = context.appletDetails?.activityFlows.find(flow => flow.id === activityListItem.flowId)
+
+  const activityIdsInFlow = flow?.activityIds || []
+
+  const { data: activities, isLoading: isFlowLoading } = useActivitiesByIds({ ids: activityIdsInFlow, enabled: isFlow })
+
+  const getCompletedActivitiesFromPosition = (position: number) => position - 1
 
   const countOfCompletedActivities = getCompletedActivitiesFromPosition(
     activityListItem.activityFlowDetails?.activityPositionInFlow || 0,
   )
+
+  const activityLength = activity?.items.length || 0
 
   const activityCardTitle = isFlow && activityFlowName ? activityFlowName : activityListItem.name
 
@@ -79,12 +82,15 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
   const isActivitySupported = isSupportedActivity(activity)
 
+  const isFlowSupported = activities?.every(activity => isSupportedActivity(activity))
+
+  const isEntitySupported = isFlow ? isFlowSupported : isActivitySupported
+
   function onActivityCardClickHandler() {
     if (isDisabled || !activity) return
 
-    if (!isActivitySupported) {
-      const storeLink = isIOS ? APPSTORE_LINK : GOOGLEPLAY_LINK
-      return window.open(storeLink, "_blank", "noopener noreferrer")
+    if (!isEntitySupported) {
+      return openStoreLink()
     }
 
     return startActivityOrFlow({
@@ -95,7 +101,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     })
   }
 
-  if (isLoading) {
+  if (activityLoading || isFlowLoading) {
     return (
       <ActivityCardBase isFlow={isFlow}>
         <Loader />
@@ -124,7 +130,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
           <ActivityLabel
             isFlow={isFlow}
             activityLength={activityLength}
-            isSupportedActivity={isActivitySupported}
+            isSupportedActivity={isEntitySupported}
             isActivityInProgress={isActivityInProgress}
             countOfCompletedQuestions={countOfCompletedQuestions}
             countOfCompletedActivities={countOfCompletedActivities}
@@ -133,7 +139,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
           <ActivityCardDescription description={activityListItem.description} isFlow={isFlow} />
 
-          {isActivitySupported && <TimeStatusLabel activity={activityListItem} />}
+          {isEntitySupported && <TimeStatusLabel activity={activityListItem} />}
         </Box>
       </Box>
     </ActivityCardBase>
