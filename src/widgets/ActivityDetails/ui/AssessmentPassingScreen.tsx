@@ -4,7 +4,14 @@ import Box from "@mui/material/Box"
 
 import { ActivityDetailsContext } from "../lib"
 import { isAnswerShouldBeEmpty, isAnswerShouldBeNumeric, isAnswerShouldBeCorrect } from "../model"
-import { useAnswer, useAutoForward, useEntityComplete, useSubmitAnswersMutations, useSurvey } from "../model/hooks"
+import {
+  useAnswer,
+  useAutoForward,
+  useEntityComplete,
+  useSubmitAnswersMutations,
+  useSurvey,
+  useTrackAnswerChanges,
+} from "../model/hooks"
 import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
 import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
@@ -14,7 +21,7 @@ import { appletModel } from "~/entities/applet"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
 import { NotificationCenter, useNotification } from "~/shared/ui"
-import { useAppSelector, useCustomTranslation, useFlowType, usePrevious } from "~/shared/utils"
+import { eventEmitter, useAppSelector, useCustomTranslation, useFlowType, usePrevious } from "~/shared/utils"
 
 type Props = {
   activityDetails: ActivityDTO
@@ -165,7 +172,21 @@ export const AssessmentPassingScreen = (props: Props) => {
     return onNext()
   }, [hasNextStep, item, onNext, onSubmit, props.activityDetails.isSkippable, showWarningNotification, t])
 
+  const itemTypesConditionalLogicIsBased = ["singleSelect", "multiSelect", "slider"]
+
   const onItemValueChange = (value: string[]) => {
+    const currentAnswer = item?.answer ?? []
+
+    const isCurrentAnswerEmpty = currentAnswer.length === 0
+
+    const isAnswerChanged = currentAnswer.toString() !== value.toString()
+
+    const isConditionalLogicBasedItems = itemTypesConditionalLogicIsBased.includes(item.responseType)
+
+    if (!isCurrentAnswerEmpty && isAnswerChanged && isConditionalLogicBasedItems) {
+      eventEmitter.emit("onItemAnswerChanged", { item })
+    }
+
     saveItemAnswer(step, value)
     saveSetAnswerUserEvent({
       ...item,
@@ -177,6 +198,12 @@ export const AssessmentPassingScreen = (props: Props) => {
     item,
     hasNextStep,
     onForward: onNext,
+  })
+
+  useTrackAnswerChanges({
+    eventId,
+    activityId,
+    items,
   })
 
   return (
