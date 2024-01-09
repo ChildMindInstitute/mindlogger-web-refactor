@@ -10,6 +10,10 @@ class ConditionalLogicBuilder {
     return items.filter((item, index, array) => this.conditionalLogicFilter(item, index, array))
   }
 
+  public validate(item: ItemRecord): boolean {
+    return this.conditionalLogicFilter(item, 0, [item])
+  }
+
   private conditionalLogicFilter(item: ItemRecord, index: number, array: ItemRecord[]): boolean {
     const { conditionalLogic } = item
 
@@ -39,9 +43,9 @@ class ConditionalLogicBuilder {
 
   private checkAllRules(rules: Condition[], itemsMap: ItemMapByName): boolean {
     const checkResult = rules.every(rule => {
-      const answer = itemsMap[rule.itemName].answer
+      const answer = itemsMap[rule.itemName]?.answer
 
-      if (!answer.length) {
+      if (!answer?.length) {
         return false
       }
 
@@ -53,9 +57,9 @@ class ConditionalLogicBuilder {
 
   private checkAnyRules(rules: Condition[], itemsMap: ItemMapByName): boolean {
     const checkResult = rules.some(rule => {
-      const answer = itemsMap[rule.itemName].answer
+      const answer = itemsMap[rule.itemName]?.answer
 
-      if (!answer.length) {
+      if (!answer?.length) {
         return false
       }
 

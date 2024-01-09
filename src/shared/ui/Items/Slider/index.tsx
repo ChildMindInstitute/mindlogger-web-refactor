@@ -59,7 +59,7 @@ export const SliderItemBase = (props: SliderItemProps) => {
         size="medium"
         min={minValue}
         max={maxValue}
-        value={Number(value) ?? minValue}
+        value={value ? Number(value) : 0}
         disabled={disabled}
         step={continiusSlider ? 0.1 : defaultStep}
         onChange={(e, value) => onChange(String(value))}
