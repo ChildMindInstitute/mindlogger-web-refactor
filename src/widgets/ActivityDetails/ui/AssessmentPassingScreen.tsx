@@ -10,7 +10,7 @@ import {
   useEntityComplete,
   useSubmitAnswersMutations,
   useSurvey,
-  useTrackAnswerChanges,
+  useResponseChangeTracker,
 } from "../model/hooks"
 import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
 import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
@@ -184,7 +184,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     const isConditionalLogicBasedItems = itemTypesConditionalLogicIsBased.includes(item.responseType)
 
     if (!isCurrentAnswerEmpty && isAnswerChanged && isConditionalLogicBasedItems) {
-      eventEmitter.emit("onItemAnswerChanged", { item })
+      eventEmitter.emit("onResponseChanged", { item })
     }
 
     saveItemAnswer(step, value)
@@ -200,7 +200,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     onForward: onNext,
   })
 
-  useTrackAnswerChanges({
+  useResponseChangeTracker({
     eventId,
     activityId,
     items,

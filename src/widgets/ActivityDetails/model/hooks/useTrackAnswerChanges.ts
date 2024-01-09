@@ -13,7 +13,7 @@ type EventEmitterPayload = {
   item: appletModel.ItemRecord
 }
 
-export const useTrackAnswerChanges = ({ items, activityId, eventId }: Props) => {
+export const useResponseChangeTracker = ({ items, activityId, eventId }: Props) => {
   const { saveItemAnswer } = appletModel.hooks.useSaveItemAnswer({
     activityId,
     eventId,
@@ -45,10 +45,10 @@ export const useTrackAnswerChanges = ({ items, activityId, eventId }: Props) => 
   )
 
   useEffect(() => {
-    eventEmitter.on("onItemAnswerChanged", onItemAnswerChanged)
+    eventEmitter.on("onResponseChanged", onItemAnswerChanged)
 
     return () => {
-      eventEmitter.off("onItemAnswerChanged", onItemAnswerChanged)
+      eventEmitter.off("onResponseChanged", onItemAnswerChanged)
     }
   }, [onItemAnswerChanged])
 }
