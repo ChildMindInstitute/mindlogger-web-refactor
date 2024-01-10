@@ -151,11 +151,11 @@ export type TimeAnswerPayload = {
 
 export type TimeRangeAnswerPayload = {
   value: {
-    startTime: {
+    from: {
       hour: number
       minute: number
     }
-    endTime: {
+    to: {
       hour: number
       minute: number
     }
