@@ -1,6 +1,6 @@
 import { appletModel } from "~/entities/applet"
 import { ActivityDTO } from "~/shared/api"
-import { dateToDayMonthYearDTO, dateToHourMinuteDTO, stringContainsOnlyNumbers } from "~/shared/utils"
+import { stringContainsOnlyNumbers, validateDate, validateTime } from "~/shared/utils"
 
 function isAnswerShouldBeEmpty(item: appletModel.ItemRecord) {
   const isMessageItem = item.responseType === "message"
@@ -38,37 +38,18 @@ function isAnswerEmpty(item: appletModel.ItemRecord): boolean {
   return item.answer.length > 0
 }
 
-function isDateValid(date: Date): boolean {
-  const dayMonthYear = dateToDayMonthYearDTO(date)
-
-  const isDayValid = 0 < dayMonthYear.day && dayMonthYear.day < 32
-  const isMonthValid = 0 < dayMonthYear.month && dayMonthYear.month < 13
-  const isYearValid = 1901 < dayMonthYear.year && dayMonthYear.year < 2099
-
-  return isDayValid && isMonthValid && isYearValid
-}
-
-function isTimeValid(date: Date): boolean {
-  const hourMinute = dateToHourMinuteDTO(date)
-
-  const isHourValid = 0 <= hourMinute.hour && hourMinute.hour < 13 // AM / PM System
-  const isMinuteValid = 0 <= hourMinute.minute && hourMinute.minute < 60
-
-  return isHourValid && isMinuteValid
-}
-
 function validateResponseCorrectness(item: appletModel.ItemRecord): boolean {
   if (item.responseType === "date") {
-    return isDateValid(new Date(item.answer[0]))
+    return validateDate(new Date(item.answer[0]))
   }
 
   if (item.responseType === "time") {
-    return isTimeValid(new Date(item.answer[0]))
+    return validateTime(new Date(item.answer[0]))
   }
 
   if (item.responseType === "timeRange") {
-    const isFromTimeValid = isTimeValid(new Date(item.answer[0]))
-    const isToTimeValid = isTimeValid(new Date(item.answer[1]))
+    const isFromTimeValid = validateTime(new Date(item.answer[0]))
+    const isToTimeValid = validateTime(new Date(item.answer[1]))
 
     return isFromTimeValid && isToTimeValid
   }
