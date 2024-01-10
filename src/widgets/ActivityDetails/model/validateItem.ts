@@ -1,7 +1,8 @@
 import { appletModel } from "~/entities/applet"
+import { ActivityDTO } from "~/shared/api"
 import { stringContainsOnlyNumbers } from "~/shared/utils"
 
-export function isAnswerShouldBeCorrect(item: appletModel.ItemRecord) {
+function isAnswerShouldBeCorrect(item: appletModel.ItemRecord) {
   if (item.responseType === "text" && item.config.correctAnswerRequired) {
     const isAnswerCorrect = item.answer[0] === item.config.correctAnswer
 
@@ -11,7 +12,7 @@ export function isAnswerShouldBeCorrect(item: appletModel.ItemRecord) {
   return true
 }
 
-export function isAnswerShouldBeEmpty(item: appletModel.ItemRecord) {
+function isAnswerShouldBeEmpty(item: appletModel.ItemRecord) {
   const isMessageItem = item.responseType === "message"
   const isAudioPlayerItem = item.responseType === "audioPlayer"
 
@@ -20,7 +21,7 @@ export function isAnswerShouldBeEmpty(item: appletModel.ItemRecord) {
   return isItemWithoutAnswer
 }
 
-export function isAnswerShouldBeNumeric(item: appletModel.ItemRecord) {
+function isAnswerShouldBeNumeric(item: appletModel.ItemRecord) {
   const isTextItem = item.responseType === "text"
 
   if (!isTextItem) {
@@ -34,4 +35,53 @@ export function isAnswerShouldBeNumeric(item: appletModel.ItemRecord) {
   }
 
   return false
+}
+
+function isAnswerEmpty(item: appletModel.ItemRecord): boolean {
+  if (item.responseType === "timeRange") {
+    const fromTime = Date.parse(item.answer[0])
+    const toTime = Date.parse(item.answer[1])
+
+    return Boolean(fromTime) && Boolean(toTime)
+  }
+
+  return item.answer.length > 0
+}
+
+type ValidateItemProps = {
+  item: appletModel.ItemRecord
+  showWarning: (translationKey: string) => void
+  activity: ActivityDTO
+}
+
+export function validateBeforeMoveForward({ item, activity, showWarning }: ValidateItemProps): boolean {
+  const isSkippable = item.config.skippableItem || activity.isSkippable
+
+  if (isSkippable) {
+    return true
+  }
+
+  const shouldBeEmpty = isAnswerShouldBeEmpty(item)
+  const isEmpty = isAnswerEmpty(item)
+
+  if (!shouldBeEmpty && !isEmpty) {
+    showWarning("pleaseAnswerTheQuestion")
+    return false
+  }
+
+  const isAnswerCorrect = isAnswerShouldBeCorrect(item)
+
+  if (!isAnswerCorrect) {
+    showWarning("incorrect_answer")
+    return false
+  }
+
+  const isNumericOnly = isAnswerShouldBeNumeric(item)
+
+  if (isNumericOnly) {
+    showWarning("onlyNumbersAllowed")
+    return false
+  }
+
+  return true
 }
