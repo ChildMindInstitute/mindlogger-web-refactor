@@ -39,9 +39,13 @@ export const TimeRangeItem = ({ values, onValueChange }: Props) => {
   return (
     <Box display="flex" justifyContent="center" data-testid="time-range-item">
       <Box display="flex" alignItems="center" gap={smMatch ? 0.5 : 2}>
-        <TimeItemBase value={values[0]} onChange={onFromTimeHandleChange} />
+        <Box component="span" data-testid="from-time">
+          <TimeItemBase value={values[0]} onChange={onFromTimeHandleChange} />
+        </Box>
         <span>-</span>
-        <TimeItemBase value={values[1]} onChange={onToTimeHandleChange} />
+        <Box component="span" data-testid="to-time">
+          <TimeItemBase value={values[1]} onChange={onToTimeHandleChange} />
+        </Box>
       </Box>
     </Box>
   )
