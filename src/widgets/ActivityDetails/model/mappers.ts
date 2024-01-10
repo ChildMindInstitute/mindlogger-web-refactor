@@ -204,8 +204,8 @@ function convertToTimeRangeAnswer(item: TimeRangeItem): ItemAnswer<TimeRangeAnsw
   return {
     answer: {
       value: {
-        startTime: dateToHourMinuteDTO(new Date(item.answer[0])),
-        endTime: dateToHourMinuteDTO(new Date(item.answer[1])),
+        from: dateToHourMinuteDTO(new Date(item.answer[0])),
+        to: dateToHourMinuteDTO(new Date(item.answer[1])),
       },
       text: null,
     },
