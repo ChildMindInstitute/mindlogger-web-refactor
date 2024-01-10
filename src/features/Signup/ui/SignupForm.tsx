@@ -74,7 +74,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
         login({ email, password })
       }
 
-      Mixpanel.track("Account Creation complete")
+      Mixpanel.track("Signup Successful")
 
       reset()
     },

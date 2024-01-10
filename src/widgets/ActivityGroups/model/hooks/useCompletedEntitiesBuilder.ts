@@ -10,9 +10,7 @@ type FilterCompletedEntitiesProps = {
 }
 
 export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
-  const { upsertGroupInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
-
-  const { groupsInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
+  const { upsertGroupInProgress, groupsInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
 
   const syncEntity = useCallback(
     (entity: CompletedEntityDTO) => {
@@ -31,7 +29,7 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
           progressPayload: {
             type: ActivityPipelineType.Regular,
             startAt: null,
-            endAt: new Date(endAtDate),
+            endAt: new Date(endAtDate).getTime(),
           },
         })
       }
@@ -49,7 +47,7 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
           eventId: entity.scheduledEventId,
           progressPayload: {
             ...inProgressEvent,
-            endAt: new Date(endAtDate),
+            endAt: new Date(endAtDate).getTime(),
           },
         })
       }

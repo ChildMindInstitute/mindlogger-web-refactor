@@ -3,6 +3,7 @@ import ActivityGroupsBuildManager from "../services/ActivityGroupsBuildManager"
 
 import { activityModel } from "~/entities/activity"
 import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
+import { useAppSelector } from "~/shared/utils"
 
 type UseActivityGroupsReturn = {
   groups: ActivityListGroup[]
@@ -13,7 +14,7 @@ export const useActivityGroups = (
   appletDetails: AppletDetailsDTO,
   eventsDetails: AppletEventsResponse,
 ): UseActivityGroupsReturn => {
-  const { groupsInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
+  const groupsInProgress = useAppSelector(activityModel.selectors.groupsInProgressSelector)
 
   const groupsResult = ActivityGroupsBuildManager.process({
     appletDetails,
