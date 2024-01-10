@@ -3,7 +3,7 @@ import { useCallback, useContext, useMemo } from "react"
 import Box from "@mui/material/Box"
 
 import { ActivityDetailsContext } from "../lib"
-import { isAnswerShouldBeEmpty, isAnswerShouldBeNumeric, isAnswerShouldBeCorrect } from "../model"
+import { validateBeforeMoveForward } from "../model"
 import { useAnswer, useAutoForward, useEntityComplete, useSubmitAnswersMutations, useSurvey } from "../model/hooks"
 import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
 import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
@@ -134,28 +134,14 @@ export const AssessmentPassingScreen = (props: Props) => {
       throw new Error("[onMoveForward] CurrentItem is not defined")
     }
 
-    const shouldBeEmpty = isAnswerShouldBeEmpty(item)
+    const isValid = validateBeforeMoveForward({
+      item,
+      activity: props.activityDetails,
+      showWarning: (key: string) => showWarningNotification(t(key)),
+    })
 
-    const isItemHasAnswer = item.answer.length
-    const isItemSkippable = item.config.skippableItem || props.activityDetails.isSkippable
-
-    if (!shouldBeEmpty && !isItemHasAnswer && !isItemSkippable) {
-      showWarningNotification(t("pleaseAnswerTheQuestion"))
-      return false
-    }
-
-    const isAnswerCorrect = isAnswerShouldBeCorrect(item)
-
-    if (!isAnswerCorrect && !isItemSkippable) {
-      showWarningNotification(t("incorrect_answer"))
-      return false
-    }
-
-    const isNumericOnly = isAnswerShouldBeNumeric(item)
-
-    if (isNumericOnly) {
-      showWarningNotification(t("onlyNumbersAllowed"))
-      return false
+    if (!isValid) {
+      return
     }
 
     if (!hasNextStep) {
@@ -163,7 +149,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     }
 
     return onNext()
-  }, [hasNextStep, item, onNext, onSubmit, props.activityDetails.isSkippable, showWarningNotification, t])
+  }, [hasNextStep, item, onNext, onSubmit, props.activityDetails, showWarningNotification, t])
 
   const onItemValueChange = (value: string[]) => {
     saveItemAnswer(step, value)
