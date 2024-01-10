@@ -1,2 +1,2 @@
-export * from "./toDayMonthYearDTO"
-export * from "./toHourMinuteDTO"
+export * from "./toDayMonthYear"
+export * from "./toHourMinute"

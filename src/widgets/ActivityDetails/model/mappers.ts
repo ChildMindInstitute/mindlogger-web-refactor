@@ -27,7 +27,7 @@ import {
   TimeAnswerPayload,
   TimeRangeAnswerPayload,
 } from "~/shared/api"
-import { dateToDayMonthYearDTO, dateToHourMinuteDTO } from "~/shared/utils"
+import { dateToDayMonthYear, dateToHourMinute } from "~/shared/utils"
 
 export function mapToAnswers(items: Array<appletModel.ItemRecord>): Array<ItemAnswer<AnswerTypesPayload>> {
   const answers = items.map(item => {
@@ -169,7 +169,7 @@ function convertToDateAnswer(item: DateItem): ItemAnswer<DateAnswerPayload> {
 
   return {
     answer: {
-      value: dateToDayMonthYearDTO(new Date(item.answer[0])),
+      value: dateToDayMonthYear(new Date(item.answer[0])),
       text: null,
     },
     itemId: item.id,
@@ -186,7 +186,7 @@ function convertToTimeAnswer(item: TimeItem): ItemAnswer<TimeAnswerPayload> {
 
   return {
     answer: {
-      value: dateToHourMinuteDTO(new Date(item.answer[0])),
+      value: dateToHourMinute(new Date(item.answer[0])),
       text: null,
     },
     itemId: item.id,
@@ -204,8 +204,8 @@ function convertToTimeRangeAnswer(item: TimeRangeItem): ItemAnswer<TimeRangeAnsw
   return {
     answer: {
       value: {
-        startTime: dateToHourMinuteDTO(new Date(item.answer[0])),
-        endTime: dateToHourMinuteDTO(new Date(item.answer[1])),
+        from: dateToHourMinute(new Date(item.answer[0])),
+        to: dateToHourMinute(new Date(item.answer[1])),
       },
       text: null,
     },
