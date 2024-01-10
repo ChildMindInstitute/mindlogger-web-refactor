@@ -1,16 +1,6 @@
 import { appletModel } from "~/entities/applet"
 import { ActivityDTO } from "~/shared/api"
-import { stringContainsOnlyNumbers } from "~/shared/utils"
-
-function isAnswerShouldBeCorrect(item: appletModel.ItemRecord) {
-  if (item.responseType === "text" && item.config.correctAnswerRequired) {
-    const isAnswerCorrect = item.answer[0] === item.config.correctAnswer
-
-    return isAnswerCorrect
-  }
-
-  return true
-}
+import { dateToDayMonthYearDTO, dateToHourMinuteDTO, stringContainsOnlyNumbers } from "~/shared/utils"
 
 function isAnswerShouldBeEmpty(item: appletModel.ItemRecord) {
   const isMessageItem = item.responseType === "message"
@@ -48,6 +38,50 @@ function isAnswerEmpty(item: appletModel.ItemRecord): boolean {
   return item.answer.length > 0
 }
 
+function isDateValid(date: Date): boolean {
+  const dayMonthYear = dateToDayMonthYearDTO(date)
+
+  const isDayValid = 0 < dayMonthYear.day && dayMonthYear.day < 32
+  const isMonthValid = 0 < dayMonthYear.month && dayMonthYear.month < 13
+  const isYearValid = 1901 < dayMonthYear.year && dayMonthYear.year < 2099
+
+  return isDayValid && isMonthValid && isYearValid
+}
+
+function isTimeValid(date: Date): boolean {
+  const hourMinute = dateToHourMinuteDTO(date)
+
+  const isHourValid = 0 <= hourMinute.hour && hourMinute.hour < 13 // AM / PM System
+  const isMinuteValid = 0 <= hourMinute.minute && hourMinute.minute < 60
+
+  return isHourValid && isMinuteValid
+}
+
+function validateResponseCorrectness(item: appletModel.ItemRecord): boolean {
+  if (item.responseType === "date") {
+    return isDateValid(new Date(item.answer[0]))
+  }
+
+  if (item.responseType === "time") {
+    return isTimeValid(new Date(item.answer[0]))
+  }
+
+  if (item.responseType === "timeRange") {
+    const isFromTimeValid = isTimeValid(new Date(item.answer[0]))
+    const isToTimeValid = isTimeValid(new Date(item.answer[1]))
+
+    return isFromTimeValid && isToTimeValid
+  }
+
+  if (item.responseType === "text" && item.config.correctAnswerRequired) {
+    const isAnswerCorrect = item.answer[0] === item.config.correctAnswer
+
+    return isAnswerCorrect
+  }
+
+  return true
+}
+
 type ValidateItemProps = {
   item: appletModel.ItemRecord
   showWarning: (translationKey: string) => void
@@ -69,7 +103,7 @@ export function validateBeforeMoveForward({ item, activity, showWarning }: Valid
     return false
   }
 
-  const isAnswerCorrect = isAnswerShouldBeCorrect(item)
+  const isAnswerCorrect = validateResponseCorrectness(item)
 
   if (!isAnswerCorrect) {
     showWarning("incorrect_answer")
