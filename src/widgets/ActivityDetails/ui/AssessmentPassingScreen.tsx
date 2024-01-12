@@ -152,7 +152,7 @@ export const AssessmentPassingScreen = (props: Props) => {
   }, [hasNextStep, item, onNext, onSubmit, props.activityDetails, showWarningNotification, t])
 
   const onItemValueChange = (value: string[]) => {
-    saveItemAnswer(step, value)
+    saveItemAnswer(item.id, value)
     saveSetAnswerUserEvent({
       ...item,
       answer: value,

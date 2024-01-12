@@ -73,7 +73,7 @@ export type SaveGroupProgressPayload = {
 export type SaveItemAnswerPayload = {
   entityId: string
   eventId: string
-  step: number
+  itemId: string
   answer: string[]
 }
 
