@@ -13,12 +13,12 @@ export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
   const dispatch = useAppDispatch()
 
   const saveItemAnswer = useCallback(
-    (step: number, answer: string[]) => {
+    (itemId: string, answer: string[]) => {
       dispatch(
         actions.saveItemAnswer({
           entityId: activityId,
           eventId,
-          step,
+          itemId,
           answer,
         }),
       )
