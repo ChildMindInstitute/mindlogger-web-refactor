@@ -17,8 +17,9 @@ export const SuccessNotification = (props: Props) => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      padding="12px"
+      padding="12px 16px"
       gap="12px"
+      minHeight="72px"
       bgcolor={Theme.colors.light.accentGreen30}>
       <CheckCircleRoundedIcon sx={{ color: Theme.colors.light.accentGreen }} />
       <Markdown markdown={props.message} />
