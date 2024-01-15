@@ -23,14 +23,14 @@ export const Notification = forwardRef<HTMLDivElement, Props>(({ id, message, ty
 
   switch (type) {
     case "success":
-      return <SuccessNotification id={id} message={message} duration={duration} />
+      return <SuccessNotification ref={ref} id={id} message={message} duration={duration} />
     case "error":
-      return <ErrorNotification id={id} message={message} duration={duration} />
+      return <ErrorNotification ref={ref} id={id} message={message} duration={duration} />
     case "warning":
       return <WarningNotification ref={ref} id={id} message={message} duration={duration} />
     case "info":
-      return <SuccessNotification id={id} message={message} duration={duration} />
+      return <SuccessNotification ref={ref} id={id} message={message} duration={duration} />
     default:
-      return <SuccessNotification id={id} message={message} duration={duration} />
+      return <SuccessNotification ref={ref} id={id} message={message} duration={duration} />
   }
 })

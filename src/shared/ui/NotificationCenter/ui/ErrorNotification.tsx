@@ -1,3 +1,5 @@
+import { forwardRef } from "react"
+
 import ReportRoundedIcon from "@mui/icons-material/ReportRounded"
 import Box from "@mui/material/Box"
 
@@ -10,9 +12,10 @@ type Props = {
   duration: number
 }
 
-export const ErrorNotification = (props: Props) => {
+export const ErrorNotification = forwardRef((props: Props, ref) => {
   return (
     <Box
+      ref={ref}
       id={`error-notification-${props.id}`}
       display="flex"
       flex={1}
@@ -26,4 +29,4 @@ export const ErrorNotification = (props: Props) => {
       <Markdown markdown={props.message} />
     </Box>
   )
-}
+})

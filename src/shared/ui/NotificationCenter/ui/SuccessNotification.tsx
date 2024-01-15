@@ -1,3 +1,5 @@
+import { forwardRef } from "react"
+
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded"
 import Box from "@mui/material/Box"
 
@@ -10,9 +12,10 @@ type Props = {
   duration: number
 }
 
-export const SuccessNotification = (props: Props) => {
+export const SuccessNotification = forwardRef((props: Props, ref) => {
   return (
     <Box
+      ref={ref}
       id={`success-notification-${props.id}`}
       display="flex"
       justifyContent="center"
@@ -25,4 +28,4 @@ export const SuccessNotification = (props: Props) => {
       <Markdown markdown={props.message} />
     </Box>
   )
-}
+})
