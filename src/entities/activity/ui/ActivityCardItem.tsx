@@ -32,12 +32,14 @@ export const ActivityCardItem = ({
     return replaceText(item.question)
   }, [item.question, replaceText])
 
+  const isOptionalFlagHidden = ["message", "audioPlayer", "splashScreen"].includes(item.responseType)
+
   return (
     <SliderAnimation step={step} prevStep={prevStep ?? step}>
       <CardItem
         markdown={questionText}
         watermark={watermark}
-        isOptional={item.config.skippableItem || allowToSkipAllItems}>
+        isOptional={!isOptionalFlagHidden && (item.config.skippableItem || allowToSkipAllItems)}>
         <ItemPicker item={item} onValueChange={onValueChange} isDisabled={false} replaceText={replaceText} />
       </CardItem>
     </SliderAnimation>
