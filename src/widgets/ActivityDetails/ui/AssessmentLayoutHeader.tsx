@@ -50,7 +50,8 @@ export const AssessmentLayoutHeader = (props: Props) => {
         <Box
           display="flex"
           justifyContent={greaterThanSM ? "center" : "space-between"}
-          marginBottom={greaterThanSM ? "8px" : "16px"}>
+          alignItems="center"
+          marginBottom={greaterThanSM ? "8px" : "10px"}>
           <Text
             variant="body1"
             color={Theme.colors.light.onSurface}

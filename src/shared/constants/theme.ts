@@ -8,6 +8,7 @@ export const Theme = {
       onSurfaceOpacity008: "rgba(26, 28, 30, 0.08)",
       primary: "#0067A0",
       primary008: "rgba(0, 103, 160, 0.08)",
+      primary012: "rgba(0, 103, 160, 0.12)",
       primary95: "#E8F2FF",
       secondary: "#51606F",
       secondaryContainer: "#D5E4F7",
