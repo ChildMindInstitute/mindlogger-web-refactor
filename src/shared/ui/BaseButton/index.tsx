@@ -33,6 +33,9 @@ export const BaseButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
         padding: "10px 24px",
         height: "48px",
         borderColor: props.borderColor ?? undefined,
+        "&:hover": {
+          border: `1px solid ${props.borderColor}`,
+        },
       }}>
       {props.isLoading ? (
         <CircularProgress size={25} sx={{ color: Theme.colors.light.primary }} />
