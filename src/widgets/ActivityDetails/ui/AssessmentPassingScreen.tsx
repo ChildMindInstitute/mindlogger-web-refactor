@@ -2,11 +2,11 @@ import { useCallback, useContext, useMemo } from "react"
 
 import Box from "@mui/material/Box"
 
+import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
+import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 import { ActivityDetailsContext } from "../lib"
 import { validateBeforeMoveForward } from "../model"
 import { useAnswer, useAutoForward, useEntityComplete, useSubmitAnswersMutations, useSurvey } from "../model/hooks"
-import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
-import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
 
 import { getProgressId } from "~/abstract/lib"
 import { ActivityCardItem, ItemCardButton, useTextVariablesReplacer } from "~/entities/activity"

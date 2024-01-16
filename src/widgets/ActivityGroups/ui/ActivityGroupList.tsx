@@ -5,10 +5,10 @@ import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import { subMonths } from "date-fns"
 
+import { ActivityGroup } from "./ActivityGroup"
 import { CustomModal } from "../../Modal"
 import { AppletDetailsContext } from "../lib"
 import { useActivityGroups, useEntitiesSync } from "../model/hooks"
-import { ActivityGroup } from "./ActivityGroup"
 
 import AppletDefaultIcon from "~/assets/AppletDefaultIcon.svg"
 import { useCompletedEntitiesQuery } from "~/entities/activity"

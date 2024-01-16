@@ -1,3 +1,4 @@
+import axiosService from "./axios"
 import {
   AcceptInvitationByIdPayload,
   DeclineInvitationByIdPayload,
@@ -5,7 +6,6 @@ import {
   GetInvitationSuccessResponse,
   TransferOwnershipPayload,
 } from "../types/invitation"
-import axiosService from "./axios"
 
 function invitationService() {
   return {

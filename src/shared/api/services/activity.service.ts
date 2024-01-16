@@ -1,3 +1,4 @@
+import axiosService from "./axios"
 import {
   AnswerPayload,
   CompletedEntitiesDTOSuccessResponse,
@@ -6,7 +7,6 @@ import {
   GetPublicActivityById,
   SuccessResponseActivityById,
 } from "../types"
-import axiosService from "./axios"
 
 function activityService() {
   return {

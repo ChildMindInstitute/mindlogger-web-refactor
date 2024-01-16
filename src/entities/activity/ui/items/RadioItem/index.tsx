@@ -3,8 +3,8 @@ import { useMemo } from "react"
 import Box from "@mui/material/Box"
 import RadioGroup from "@mui/material/RadioGroup"
 
-import { RadioItem as RadioItemType } from "../../../lib"
 import { RadioItemOption } from "./RadioItemOption"
+import { RadioItem as RadioItemType } from "../../../lib"
 
 import { randomizeArray, splitList, useCustomMediaQuery } from "~/shared/utils"
 

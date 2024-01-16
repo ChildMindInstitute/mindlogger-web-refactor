@@ -1,4 +1,3 @@
-import { ItemRecord } from "../../../applet/model/types"
 import { AudioPlayerItem } from "./AudioPlayerItem"
 import { CheckboxItem } from "./CheckboxItem"
 import { DateItem } from "./DateItem"
@@ -9,6 +8,8 @@ import { SplashScreen } from "./SplashScreen"
 import { TextItem } from "./TextItem"
 import { TimeItem } from "./TimeItem"
 import { TimeRangeItem } from "./TimeRangeItem"
+
+import { ItemRecord } from "~/entities/applet/model/types"
 
 type ItemPickerProps = {
   item: ItemRecord

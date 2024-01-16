@@ -1,6 +1,6 @@
-import { HourMinute } from "../../utils"
 import { BaseSuccessListResponse, BaseSuccessResponse } from "./base"
 import { PeriodicityTypeDTO } from "./events"
+import { HourMinute } from "../../utils"
 
 // API payloads
 export type GetAppletByIdPayload = {
@@ -28,8 +28,8 @@ export type AppletListDTO = {
   version: string
   description: string
   about: string
-  image: string | ""
-  watermark: string | ""
+  image: string
+  watermark: string
 }
 
 export type AppletDetailsDTO = {
@@ -38,8 +38,8 @@ export type AppletDetailsDTO = {
   version: string
   description: string
   about: string
-  image: string | ""
-  watermark: string | ""
+  image: string
+  watermark: string
   activities: AppletDetailsActivityDTO[]
   activityFlows: ActivityFlowDTO[]
   encryption: AppletEncryptionDTO | null
@@ -49,8 +49,8 @@ export type AppletDetailsActivityDTO = {
   id: string
   name: string
   description: string
-  splashScreen: string | ""
-  image: string | ""
+  splashScreen: string
+  image: string
   showAllAtOnce: boolean
   isSkippable: boolean
   isReviewable: boolean
@@ -63,7 +63,7 @@ export type ActivityFlowDTO = {
   id: string
   name: string
   description: string
-  image: string | ""
+  image: string
   isSingleReport: boolean
   hideBadge: boolean
   order: number

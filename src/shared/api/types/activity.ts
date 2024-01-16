@@ -35,8 +35,8 @@ export type ActivityDTO = {
   createdAt: string
   name: string
   description: string
-  splashScreen: string | ""
-  image: string | ""
+  splashScreen: string
+  image: string
   showAllAtOnce: boolean
   isSkippable: boolean
   isReviewable: boolean
@@ -94,19 +94,17 @@ export type AlertDTO = {
 }
 
 export type AnswerTypesPayload =
-  | SkippedAnswerPayload
+  | EmptyAnswerPayload
   | TextAnswerPayload
   | MultiSelectAnswerPayload
   | SingleSelectAnswerPayload
   | SliderAnswerPayload
   | NumberSelectAnswerPayload
-  | MessageAnswerPayload
   | DateAnswerPayload
   | TimeAnswerPayload
   | TimeRangeAnswerPayload
-  | AudioPlayerAnswerPayload
 
-export type SkippedAnswerPayload = null
+export type EmptyAnswerPayload = null
 
 export type TextAnswerPayload = string
 

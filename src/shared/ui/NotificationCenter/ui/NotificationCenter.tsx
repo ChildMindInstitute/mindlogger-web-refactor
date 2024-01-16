@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo } from "react"
 
 import Box from "@mui/material/Box"
 
+import { NotificationAnimation } from "./NotificationAnimation"
 import { notificationCenterStore } from "../lib/store"
 import { Notification as TNotification } from "../lib/types"
-import { NotificationAnimation } from "./NotificationAnimation"
 
 import { eventEmitter, useForceUpdate } from "~/shared/utils"
 

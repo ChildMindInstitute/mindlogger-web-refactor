@@ -1,5 +1,5 @@
-import { AppletDetailsContext } from "../lib"
 import { ActivityGroupList } from "./ActivityGroupList"
+import { AppletDetailsContext } from "../lib"
 
 import { useAppletByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"

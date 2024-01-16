@@ -2,8 +2,6 @@ import { useContext } from "react"
 
 import Box from "@mui/material/Box"
 
-import { ActivityListItem, ActivityStatus, AppletDetailsContext } from "../../lib"
-import { useStartEntity } from "../../model/hooks/useStartEntity"
 import { ActivityCardBase } from "./ActivityCardBase"
 import { ActivityCardDescription } from "./ActivityCardDescription"
 import { ActivityCardIcon } from "./ActivityCardIcon"
@@ -11,6 +9,8 @@ import { ActivityCardProgressBar } from "./ActivityCardProgressBar"
 import { ActivityCardTitle } from "./ActivityCardTitle"
 import { ActivityLabel } from "./ActivityLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
+import { ActivityListItem, ActivityStatus, AppletDetailsContext } from "../../lib"
+import { useStartEntity } from "../../model/hooks/useStartEntity"
 
 import { getProgressId, openStoreLink } from "~/abstract/lib"
 import { isSupportedActivity, useActivitiesByIds, useActivityByIdQuery } from "~/entities/activity"

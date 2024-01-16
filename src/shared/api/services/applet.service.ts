@@ -1,3 +1,4 @@
+import axiosService from "./axios"
 import {
   AppletListSuccessResponse,
   AppletSuccessResponse,
@@ -5,7 +6,6 @@ import {
   GetPublicAppletActivityByIdPayload,
   GetPublicAppletByIdPayload,
 } from "../types/applet"
-import axiosService from "./axios"
 
 function appletService() {
   return {

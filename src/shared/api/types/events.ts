@@ -1,6 +1,6 @@
-import { HourMinute } from "../../utils"
 import { AppletEventsResponse } from "./applet"
 import { BaseSuccessResponse } from "./base"
+import { HourMinute } from "../../utils"
 
 export type TimerTypeDTO = "NOT_SET"
 export type PeriodicityTypeDTO = "ONCE" | "DAILY" | "WEEKLY" | "WEEKDAYS" | "MONTHLY" | "ALWAYS"

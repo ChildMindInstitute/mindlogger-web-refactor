@@ -2,7 +2,6 @@ import { lazy } from "react"
 
 import { Navigate, Route, Routes } from "react-router-dom"
 
-import Layout from "../widgets/AppLayout"
 import { ActivityDetailsPage } from "./ActivityDetails"
 import { AppletDetailsPage } from "./AppletDetailsPage"
 import { AppletListPage } from "./AppletListPage"
@@ -22,6 +21,7 @@ const RecoveryPasswordPage = lazy(() => import("./RecoveryPassword"))
 
 import { userModel } from "~/entities/user"
 import { ROUTES } from "~/shared/constants"
+import Layout from "~/widgets/AppLayout"
 import { LogoutTracker } from "~/widgets/LogoutTracker"
 import { ProtectedRoute } from "~/widgets/ProtectedRoute"
 
