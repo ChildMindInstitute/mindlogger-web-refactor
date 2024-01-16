@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box"
 
-import { useAuthorizationGuard } from "../../AuthorizationGuard"
 import { FetchInvitationErrorMapper } from "./FetchInvitationErrorMapper"
+import { useAuthorizationGuard } from "../../AuthorizationGuard"
 
 import { Invitation, useInvitationQuery, useInvitationTranslation } from "~/entities/invitation"
 import { InvitationAcceptButton } from "~/features/InvitationAccept"

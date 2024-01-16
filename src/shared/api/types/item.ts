@@ -45,21 +45,19 @@ export type ConfigDTO =
   | AudioPlayerItemConfigDTO
 
 export type ResponseValuesDTO =
-  | TextItemResponseValuesDTO
+  | EmptyResponseValuesDTO
   | CheckboxItemResponseValuesDTO
   | RadioItemResponseValuesDTO
   | SliderItemResponseValuesDTO
   | SelectorItemResponseValues
-  | MessageItemResponseValuesDTO
-  | DateItemResponseValuesDTO
-  | TimeItemResponseValuesDTO
-  | TimeRangeItemResponseValuesDTO
   | AudioPlayerItemResponseValuesDTO
+
+export type EmptyResponseValuesDTO = null
 
 export interface TextItemDTO extends ItemDetailsBaseDTO {
   responseType: "text"
   config: TextItemConfigDTO
-  responseValues: TextItemResponseValuesDTO
+  responseValues: EmptyResponseValuesDTO
 }
 
 export type TextItemConfigDTO = {
@@ -72,8 +70,6 @@ export type TextItemConfigDTO = {
   removeBackButton: boolean
   skippableItem: boolean
 }
-
-export type TextItemResponseValuesDTO = null
 
 export interface CheckboxItemDTO extends ItemDetailsBaseDTO {
   responseType: "multiSelect"
@@ -205,19 +201,18 @@ export type SelectorItemResponseValues = {
 export interface MessageItemDTO extends ItemDetailsBaseDTO {
   responseType: "message"
   config: MessageItemConfigDTO
-  responseValues: MessageItemResponseValuesDTO
+  responseValues: EmptyResponseValuesDTO
 }
 
 export type MessageItemConfigDTO = {
   removeBackButton: boolean
   timer: number | null
 }
-export type MessageItemResponseValuesDTO = null
 
 export interface DateItemDTO extends ItemDetailsBaseDTO {
   responseType: "date"
   config: DateItemConfigDTO
-  responseValues: DateItemResponseValuesDTO
+  responseValues: EmptyResponseValuesDTO
 }
 
 export type DateItemConfigDTO = {
@@ -229,12 +224,11 @@ export type DateItemConfigDTO = {
     textInputRequired: boolean
   }
 }
-export type DateItemResponseValuesDTO = null
 
 export interface TimeItemDTO extends ItemDetailsBaseDTO {
   responseType: "time"
   config: TimeItemConfigDTO
-  responseValues: TimeItemResponseValuesDTO
+  responseValues: EmptyResponseValuesDTO
 }
 
 export type TimeItemConfigDTO = {
@@ -247,12 +241,10 @@ export type TimeItemConfigDTO = {
   }
 }
 
-export type TimeItemResponseValuesDTO = null
-
 export interface TimeRangeItemDTO extends ItemDetailsBaseDTO {
   responseType: "timeRange"
   config: TimeRangeItemConfigDTO
-  responseValues: TimeRangeItemResponseValuesDTO
+  responseValues: EmptyResponseValuesDTO
 }
 
 export type TimeRangeItemConfigDTO = {
@@ -264,8 +256,6 @@ export type TimeRangeItemConfigDTO = {
     textInputRequired: boolean
   }
 }
-
-export type TimeRangeItemResponseValuesDTO = null
 
 export interface AudioPlayerItemDTO extends ItemDetailsBaseDTO {
   responseType: "audioPlayer"

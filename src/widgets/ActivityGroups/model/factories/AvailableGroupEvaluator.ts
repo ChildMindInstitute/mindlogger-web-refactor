@@ -1,5 +1,5 @@
-import { EventEntity } from "../../lib"
 import { GroupUtility, GroupsBuildContext } from "./GroupUtility"
+import { EventEntity } from "../../lib"
 
 import { IEvaluator } from "~/abstract/lib"
 import { AvailabilityLabelType } from "~/entities/event"

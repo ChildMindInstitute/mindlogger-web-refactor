@@ -5,8 +5,8 @@ export type AppletListItem = {
   displayName: string
   description: string
   about: string
-  image: string | ""
-  watermark: string | ""
+  image: string
+  watermark: string
 }
 
 export function mapToAppletList(applets?: AppletListDTO[]): AppletListItem[] {

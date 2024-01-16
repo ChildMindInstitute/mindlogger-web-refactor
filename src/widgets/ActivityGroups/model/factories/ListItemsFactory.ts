@@ -1,5 +1,5 @@
-import { EventEntity, Activity, ActivityFlow, ActivityListItem, ActivityType, ActivityStatus } from "../../lib"
 import { GroupUtility, GroupsBuildContext } from "./GroupUtility"
+import { EventEntity, Activity, ActivityFlow, ActivityListItem, ActivityType, ActivityStatus } from "../../lib"
 
 import { ActivityPipelineType, FlowProgress } from "~/abstract/lib"
 import { AvailabilityLabelType } from "~/entities/event"

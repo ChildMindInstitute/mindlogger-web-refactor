@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios"
 
-import { eventEmitter, secureTokensStorage } from "../../utils"
 import authorizationService from "./authorization.service"
+import { eventEmitter, secureTokensStorage } from "../../utils"
 
 type RequestConfig = AxiosRequestConfig<any> & {
   retry?: boolean

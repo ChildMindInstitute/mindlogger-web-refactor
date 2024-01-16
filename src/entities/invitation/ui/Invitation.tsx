@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box"
 
-import { InvitationDetails, useInvitationTranslation } from "../lib"
 import { InvitationContent } from "./InvitationContent"
 import { InvitationHeader } from "./InvitationHeader"
+import { InvitationDetails, useInvitationTranslation } from "../lib"
 
 import { Theme } from "~/shared/constants"
 import { PageMessage } from "~/shared/ui"

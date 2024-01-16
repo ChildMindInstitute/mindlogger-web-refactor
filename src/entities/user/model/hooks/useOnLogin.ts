@@ -1,5 +1,5 @@
-import { secureUserPrivateKeyStorage } from "../secureUserPrivateKeyStorage"
 import { useUserState } from "./useUserState"
+import { secureUserPrivateKeyStorage } from "../secureUserPrivateKeyStorage"
 
 import { ROUTES } from "~/shared/constants"
 import { Mixpanel, secureTokensStorage, useCustomNavigation, useEncryption } from "~/shared/utils"

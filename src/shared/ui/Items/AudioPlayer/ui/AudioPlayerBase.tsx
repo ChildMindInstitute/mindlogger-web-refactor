@@ -2,11 +2,11 @@ import { useRef } from "react"
 
 import Box from "@mui/material/Box"
 
-import { useAudioControls, useAudioDuration, useAudioVolume } from "../lib"
 import { AudioPlayerControls } from "./AudioPlayerControls"
 import { AudioPlayerDuration } from "./AudioPlayerDuration"
 import { AudioPlayerVolume } from "./AudioPlayerVolume"
 import { AudioPlayerProgressBar } from "./AudipPlayerProgressBar"
+import { useAudioControls, useAudioDuration, useAudioVolume } from "../lib"
 
 import { useCustomMediaQuery } from "~/shared/utils"
 

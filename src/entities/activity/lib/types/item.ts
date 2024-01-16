@@ -65,22 +65,19 @@ export type Config =
   | AudioPlayerItemConfig
 
 export type ResponseValues =
-  | TextValues
+  | EmptyResponseValues
   | CheckboxValues
   | RadioValues
   | SliderValues
   | SelectorValues
-  | SplashScreenItemValues
-  | MessageItemValues
-  | DateItemValues
-  | TimeItemValues
-  | TimeRangeItemValues
   | AudioPlayerItemValues
+
+export type EmptyResponseValues = null
 
 export interface TextItem extends ActivityItemBase {
   responseType: "text"
   config: TextItemConfig
-  responseValues: TextValues
+  responseValues: EmptyResponseValues
 }
 
 export type TextItemConfig = ButtonsConfig & {
@@ -91,8 +88,6 @@ export type TextItemConfig = ButtonsConfig & {
   responseDataIdentifier: boolean // default false
   responseRequired: boolean // default false
 }
-
-export type TextValues = null
 
 export interface CheckboxItem extends ActivityItemBase {
   responseType: "multiSelect"
@@ -201,49 +196,44 @@ export type SelectorValues = {
 export interface SplashScreenItem extends ActivityItemBase {
   responseType: "splashScreen"
   config: SplashScreenItemConfig
-  responseValues: SplashScreenItemValues
+  responseValues: EmptyResponseValues
 }
 
 export type SplashScreenItemConfig = ButtonsConfig & {
   imageSrc: string
 }
-export type SplashScreenItemValues = null
 
 export interface MessageItem extends ActivityItemBase {
   responseType: "message"
   config: MessageItemConfig
-  responseValues: MessageItemValues
+  responseValues: EmptyResponseValues
 }
 
 export type MessageItemConfig = ButtonsConfig
-export type MessageItemValues = null
 
 export interface DateItem extends ActivityItemBase {
   responseType: "date"
   config: DateItemConfig
-  responseValues: DateItemValues
+  responseValues: EmptyResponseValues
 }
 
 export type DateItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig
-export type DateItemValues = null
 
 export interface TimeItem extends ActivityItemBase {
   responseType: "time"
   config: TimeItemItemConfig
-  responseValues: TimeItemValues
+  responseValues: EmptyResponseValues
 }
 
 export type TimeItemItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig
-export type TimeItemValues = null
 
 export interface TimeRangeItem extends ActivityItemBase {
   responseType: "timeRange"
   config: TimeRangeItemConfig
-  responseValues: TimeRangeItemValues
+  responseValues: EmptyResponseValues
 }
 
 export type TimeRangeItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig
-export type TimeRangeItemValues = null
 
 export interface AudioPlayerItem extends ActivityItemBase {
   responseType: "audioPlayer"

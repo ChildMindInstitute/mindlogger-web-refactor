@@ -1,3 +1,4 @@
+import axiosService from "./axios"
 import {
   LoginPayload,
   LoginSuccessResponse,
@@ -14,7 +15,6 @@ import {
   UpdatePasswordPayload,
   UpdatePasswordSuccessResponse,
 } from "../types"
-import axiosService from "./axios"
 
 function authorizationService() {
   return {

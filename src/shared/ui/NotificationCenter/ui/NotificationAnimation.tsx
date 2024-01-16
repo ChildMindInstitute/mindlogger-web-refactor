@@ -2,8 +2,8 @@ import { PropsWithChildren } from "react"
 
 import { animated, useTransition } from "@react-spring/web"
 
-import { Notification as TNotification } from "../lib/types"
 import { Notification } from "./Notification"
+import { Notification as TNotification } from "../lib/types"
 
 type Props = PropsWithChildren<{
   notifications: TNotification[]

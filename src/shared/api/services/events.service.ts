@@ -1,5 +1,5 @@
-import { GetEventsByAppletIdPayload, GetEventsByPublicAppletKey, SuccessEventsByAppletIdResponse } from "../types"
 import axiosService from "./axios"
+import { GetEventsByAppletIdPayload, GetEventsByPublicAppletKey, SuccessEventsByAppletIdResponse } from "../types"
 
 function eventService() {
   return {

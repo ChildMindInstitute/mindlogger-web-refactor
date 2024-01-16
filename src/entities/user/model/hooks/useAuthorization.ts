@@ -1,7 +1,7 @@
-import { Tokens } from "../../lib"
-import { UserStore } from "../user.slice"
 import { useTokensState } from "./useTokensState"
 import { useUserState } from "./useUserState"
+import { Tokens } from "../../lib"
+import { UserStore } from "../user.slice"
 
 type AuthorizedReturn = {
   isAuthorized: true

@@ -2,11 +2,11 @@ import { useContext } from "react"
 
 import Box from "@mui/material/Box"
 
-import Layout from "../../AppLayout"
-import { ActivityDetailsContext } from "../lib"
 import { ActivityMetaData } from "./ActivityMetaData"
 import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
 import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
+import Layout from "../../AppLayout"
+import { ActivityDetailsContext } from "../lib"
 
 import { appletModel } from "~/entities/applet"
 import { StartAssessmentButton } from "~/features/StartAssessment"
