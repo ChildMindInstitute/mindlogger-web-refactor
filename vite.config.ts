@@ -29,7 +29,11 @@ export default defineConfig(async ({ command, mode }) => {
       test: {
         globals: true,
         environment: 'jsdom',
-        css: true
+        css: true,
+        alias: {
+          '~': resolve(__dirname, 'src'),
+          Buffer: 'buffer'
+        },
       }
     }
   } else if(command === 'build') {
@@ -47,6 +51,15 @@ export default defineConfig(async ({ command, mode }) => {
           Buffer: 'buffer'
         },
       },
+      test: {
+        globals: true,
+        environment: 'jsdom',
+        css: true,
+        alias: {
+          '~': resolve(__dirname, 'src'),
+          Buffer: 'buffer'
+        },
+      }
     }
   }
 })
