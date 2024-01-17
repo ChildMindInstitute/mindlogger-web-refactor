@@ -32,8 +32,27 @@ export const useEncryption = () => {
     return { encrypt }
   }
 
+  const createDecryptionService = (params: InputProps) => {
+    const aesKey = encryption.getAESKey({
+      appletPrime: JSON.parse(params.prime),
+      appletBase: JSON.parse(params.base),
+      appletPublicKey: JSON.parse(params.publicKey),
+      userPrivateKey: params.privateKey,
+    })
+
+    const decrypt = (json: string) => {
+      return encryption.decryptData({
+        text: json,
+        key: aesKey,
+      })
+    }
+
+    return { decrypt }
+  }
+
   return {
     createEncryptionService,
+    createDecryptionService,
     generateUserPrivateKey,
   }
 }

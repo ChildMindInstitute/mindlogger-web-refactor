@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   readonly NODE_ENV: string
   readonly VITE_ENV: "prod" | "stage" | "dev"
   readonly VITE_BUILD_VERSION: string
+  readonly VITE_IV_LENGTH: string
 }
 
 interface ImportMeta {

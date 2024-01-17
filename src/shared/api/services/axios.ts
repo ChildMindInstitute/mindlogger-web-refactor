@@ -19,7 +19,7 @@ axiosService.interceptors.request.use(
     const tokens = secureTokensStorage.getTokens()
 
     if (tokens?.accessToken && tokens?.tokenType) {
-      config.headers!.Authorization = `${tokens.tokenType} ${tokens.accessToken}`
+      config.headers.Authorization = `${tokens.tokenType} ${tokens.accessToken}`
     }
 
     return config
