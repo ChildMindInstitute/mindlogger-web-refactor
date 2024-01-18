@@ -1,5 +1,5 @@
 import { Buffer } from "buffer"
-import * as crypto from "crypto-browserify"
+import crypto from "node:crypto"
 
 import { VITE_IV_LENGTH } from "~/shared/constants"
 
@@ -49,7 +49,8 @@ class Encryption {
 
   public encryptData = ({ text, key }: EncryptDataProps): string => {
     const iv: Buffer = crypto.randomBytes(Number(VITE_IV_LENGTH))
-    const cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(key), iv)
+    const keyBuffer = Buffer.from(key)
+    const cipher = crypto.createCipheriv("aes-256-cbc", keyBuffer, iv)
     let encrypted: Buffer = cipher.update(text)
     encrypted = Buffer.concat([encrypted, cipher.final()])
     return `${iv.toString("hex")}:${encrypted.toString("hex")}`
