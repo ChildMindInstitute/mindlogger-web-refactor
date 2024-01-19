@@ -76,6 +76,10 @@ describe("Encryption", () => {
     })
   })
 
+  // TODO: Fix encryption tests
+  // It is commented now because crypto.createCipheriv is not working for some reason.
+  // crypto.createCipheriv is used in encryptData method return empty Uint8Array
+
   // describe("encryptData", () => {
   //   it("should return an encrypted string", () => {
   //     const text = "Hello world!"
@@ -135,6 +139,10 @@ describe("Encryption", () => {
       expect(generatedPrivateKey).toStrictEqual(result)
     })
   })
+
+  // TODO: Fix encryption tests
+  // It is commented now because crypto.createCipheriv is not working for some reason.
+  // crypto.createCipheriv is used in encryptData method return empty Uint8Array
 
   // describe("encrypt AnswerRequest", () => {
   //   it("should return an encrypted string of real answer request", () => {
