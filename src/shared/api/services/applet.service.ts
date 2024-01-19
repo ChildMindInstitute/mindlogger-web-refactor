@@ -1,5 +1,6 @@
 import axiosService from "./axios"
 import {
+  AppletDetailsBaseInfoSuccess,
   AppletListSuccessResponse,
   AppletSuccessResponse,
   GetAppletByIdPayload,
@@ -21,6 +22,12 @@ function appletService() {
     },
     getPublicAppletActivityById(payload: GetPublicAppletActivityByIdPayload) {
       return axiosService.get(`/public/applet/${payload.publicAppletKey}/activity/${payload.activityId}`)
+    },
+    getBaseDetailsById(id: string) {
+      return axiosService.get<AppletDetailsBaseInfoSuccess>(`/applets/${id}/base_info`)
+    },
+    getPublicBaseDetailsByKey(key: string) {
+      return axiosService.get<AppletDetailsBaseInfoSuccess>(`/public/applets/${key}/base_info`)
     },
   }
 }
