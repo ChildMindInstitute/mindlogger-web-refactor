@@ -1,18 +1,19 @@
 import { Activity, ActivityFlow, ActivityType } from "../lib"
 
 import { ActivityPipelineType } from "~/abstract/lib"
-import { ActivityFlowDTO, AppletDetailsActivityDTO } from "~/shared/api"
+import { ActivityBaseInfoDTO, ActivityFlowDTO } from "~/shared/api"
 
-export const mapActivitiesFromDto = (dtos: AppletDetailsActivityDTO[]): Activity[] => {
+export const mapActivitiesFromDto = (dtos: ActivityBaseInfoDTO[]): Activity[] => {
   return dtos.map(dto => ({
-    description: dto.description,
     id: dto.id,
+    description: dto.description,
     image: dto.image,
     name: dto.name,
     isHidden: dto.isHidden,
     order: dto.order,
     pipelineType: ActivityPipelineType.Regular,
     type: ActivityType.NotDefined,
+    containsResponseTypes: dto.containsResponseTypes,
   }))
 }
 
@@ -26,5 +27,7 @@ export const mapActivityFlowsFromDto = (dtos: ActivityFlowDTO[]): ActivityFlow[]
     name: dto.name,
     isHidden: dto.isHidden,
     pipelineType: ActivityPipelineType.Flow,
+    containsResponseTypes: null,
+    image: null,
   }))
 }

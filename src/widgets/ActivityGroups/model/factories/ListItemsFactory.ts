@@ -65,6 +65,7 @@ export class ListItemsFactory {
       isTimerElapsed: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
+      containsResponseTypes: isFlow ? null : (entity as Activity).containsResponseTypes,
     }
 
     if (isFlow) {

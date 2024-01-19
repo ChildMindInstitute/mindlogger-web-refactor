@@ -58,24 +58,18 @@ export type AppletDetailsBaseInfoDTO = {
   watermark: string
   createdAt: string
   updatedAt: string
-  activities: Array<{
-    id: string
-    name: string
-    description: string
-    image: string
-    isHidden: boolean
-    order: number
-    containsResponseTypes: Array<ItemResponseTypeDTO>
-  }>
-  activityFlows: Array<{
-    id: string
-    name: string
-    description: string
-    hideBadge: boolean
-    order: number
-    isHidden: boolean
-    activityIds: Array<string>
-  }>
+  activities: Array<ActivityBaseInfoDTO>
+  activityFlows: Array<ActivityFlowDTO>
+}
+
+export type ActivityBaseInfoDTO = {
+  id: string
+  name: string
+  description: string
+  image: string
+  isHidden: boolean
+  order: number
+  containsResponseTypes: Array<ItemResponseTypeDTO>
 }
 
 export type AppletDetailsActivityDTO = {

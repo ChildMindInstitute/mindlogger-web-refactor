@@ -1,7 +1,7 @@
 import { ActivityStatus, EntityType, OnActivityCardClickProps } from "../../lib"
 
 import { appletModel } from "~/entities/applet"
-import { AppletDetailsDTO } from "~/shared/api"
+import { AppletDetailsBaseInfoDTO } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
 import { Mixpanel, useCustomNavigation } from "~/shared/utils"
 
@@ -13,7 +13,7 @@ type NavigateToEntityProps = {
 }
 
 type Props = {
-  applet: AppletDetailsDTO
+  applet: AppletDetailsBaseInfoDTO
   isPublic: boolean
   publicAppletKey: string | null
 }
