@@ -10,7 +10,7 @@ import { Mixpanel } from "~/shared/utils"
 
 const DownloadMobileLinks = lazy(() => import("~/widgets/DownloadMobileLinks"))
 
-export const LoginPage = () => {
+function LoginPage() {
   const { t } = useLoginTranslation()
   const location = useLocation()
 
@@ -72,3 +72,5 @@ export const LoginPage = () => {
     </Box>
   )
 }
+
+export default LoginPage

@@ -2,12 +2,9 @@ import { lazy } from "react"
 
 import { Navigate, Route, Routes } from "react-router-dom"
 
-import { AppletListPage } from "./AppletListPage"
-import { LoginPage } from "./Login"
-import { SettingsPage } from "./Settings"
-import { SignupPage } from "./Signup"
-
 // Lazy load pages
+const AppletListPage = lazy(() => import("./AppletListPage"))
+
 const AppletDetailsPage = lazy(() => import("./AppletDetailsPage"))
 const PublicAppeltDetailsPage = lazy(() => import("./PublicJoin"))
 
@@ -15,8 +12,11 @@ const ActivityDetailsPage = lazy(() => import("./ActivityDetails"))
 const PublicActivityDetailsPage = lazy(() => import("./PublicActivityDetails"))
 
 const ProfilePage = lazy(() => import("./Profile"))
+const SettingsPage = lazy(() => import("./Settings"))
 
+const LoginPage = lazy(() => import("./Login"))
 const ForgotPasswordPage = lazy(() => import("./ForgotPassword"))
+const SignupPage = lazy(() => import("./Signup"))
 
 const InvitationPage = lazy(() => import("./Invitation"))
 const PrivateJoinPage = lazy(() => import("./PrivateJoin"))
@@ -25,8 +25,8 @@ const RecoveryPasswordPage = lazy(() => import("./RecoveryPassword"))
 
 import { userModel } from "~/entities/user"
 import { ROUTES } from "~/shared/constants"
-import Layout from "~/widgets/AppLayout"
-import { LogoutTracker } from "~/widgets/LogoutTracker"
+const Layout = lazy(() => import("~/widgets/AppLayout"))
+const LogoutTracker = lazy(() => import("~/widgets/LogoutTracker"))
 import { ProtectedRoute } from "~/widgets/ProtectedRoute"
 
 function ApplicationRouter(): JSX.Element | null {

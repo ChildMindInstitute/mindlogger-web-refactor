@@ -1,7 +1,6 @@
 import { Suspense, lazy } from "react"
 
 import CssBaseline from "@mui/material/CssBaseline"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 import { DateLocalizationProvider, MUIThemeProvider, ReactQuery, ReduxProvider, RouteProvider } from "./providers"
 import i18nManager from "./system/locale/i18n"
@@ -29,7 +28,6 @@ function App() {
               <DateLocalizationProvider>
                 <ApplicationRouter />
               </DateLocalizationProvider>
-              <ReactQueryDevtools initialIsOpen={false} />
             </ReactQuery>
           </ReduxProvider>
         </RouteProvider>

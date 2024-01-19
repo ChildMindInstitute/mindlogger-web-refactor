@@ -8,7 +8,7 @@ import { SignupForm, useSignupTranslation } from "~/features/Signup"
 import { ROUTES, Theme } from "~/shared/constants"
 import { Mixpanel } from "~/shared/utils"
 
-export const SignupPage = () => {
+function SignupPage() {
   const { t } = useSignupTranslation()
   const location = useLocation()
 
@@ -64,3 +64,5 @@ export const SignupPage = () => {
     </Box>
   )
 }
+
+export default SignupPage
