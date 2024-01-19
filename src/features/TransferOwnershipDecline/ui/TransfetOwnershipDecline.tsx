@@ -3,9 +3,8 @@ import { Spinner } from "react-bootstrap"
 
 import { useDeclineTransferOwnershipQuery } from "../api"
 
-import { useInvitationTranslation } from "~/entities/invitation"
 import { PageMessage } from "~/shared/ui"
-import { Mixpanel } from "~/shared/utils"
+import { Mixpanel, useCustomTranslation } from "~/shared/utils"
 
 type TransferOwnershipProps = {
   appletId: string
@@ -13,7 +12,7 @@ type TransferOwnershipProps = {
 }
 
 export const TransferOwnershipDecline = ({ appletId, keyParam }: TransferOwnershipProps) => {
-  const { t } = useInvitationTranslation()
+  const { t } = useCustomTranslation()
 
   const { isLoading, isError } = useDeclineTransferOwnershipQuery(
     { appletId, key: keyParam },
@@ -33,8 +32,21 @@ export const TransferOwnershipDecline = ({ appletId, keyParam }: TransferOwnersh
   }
 
   if (isError) {
-    return <PageMessage message={t("notFound")} />
+    return <PageMessage message={t("transferOwnership.notFound")} />
   }
 
-  return <PageMessage message={t("invitationDeclined")} />
+  return (
+    <div
+      className={classNames(
+        "d-flex",
+        "flex-column",
+        "justify-content-center",
+        "align-items-center",
+        "text-center",
+        "gap-3",
+      )}>
+      <h2>{t("transferOwnership.declined.title")}</h2>
+      <h5>{t("transferOwnership.declined.message")}</h5>
+    </div>
+  )
 }
