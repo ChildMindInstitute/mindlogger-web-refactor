@@ -1,5 +1,7 @@
 import { Buffer } from "buffer"
-import * as crypto from "crypto-browserify"
+import crypto from "node:crypto"
+
+import { VITE_IV_LENGTH } from "~/shared/constants"
 
 type GetPrivateKeyProps = { userId: string; email: string; password: string }
 type GetPublicKeyProps = { privateKey: number[]; appletPrime: number[]; appletBase: number[] }
@@ -12,7 +14,7 @@ type GetAESKeyProps = {
 }
 
 type EncryptDataProps = { text: string; key: number[] }
-type DecryptDataProps = { text: string; key: string }
+type DecryptDataProps = { text: string; key: number[] }
 
 class Encryption {
   public getPrivateKey = ({ userId, email, password }: GetPrivateKeyProps): number[] => {
@@ -46,8 +48,9 @@ class Encryption {
   }
 
   public encryptData = ({ text, key }: EncryptDataProps): string => {
-    const iv: Buffer = crypto.randomBytes(Number(import.meta.env.VITE_IV_LENGTH))
-    const cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(key), iv)
+    const iv: Buffer = crypto.randomBytes(Number(VITE_IV_LENGTH))
+    const keyBuffer = Buffer.from(key)
+    const cipher = crypto.createCipheriv("aes-256-cbc", keyBuffer, iv)
     let encrypted: Buffer = cipher.update(text)
     encrypted = Buffer.concat([encrypted, cipher.final()])
     return `${iv.toString("hex")}:${encrypted.toString("hex")}`
