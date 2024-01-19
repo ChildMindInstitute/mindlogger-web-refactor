@@ -29,7 +29,7 @@ import Layout from "~/widgets/AppLayout"
 import { LogoutTracker } from "~/widgets/LogoutTracker"
 import { ProtectedRoute } from "~/widgets/ProtectedRoute"
 
-const ApplicationRouter = (): JSX.Element | null => {
+function ApplicationRouter(): JSX.Element | null {
   const { isAuthorized, tokens } = userModel.hooks.useAuthorization()
 
   if (isAuthorized) {
