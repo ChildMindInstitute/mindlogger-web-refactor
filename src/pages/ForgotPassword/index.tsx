@@ -1,11 +1,12 @@
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 
-import { ForgotPasswordForm, useForgotPasswordTranslation } from "~/features/ForgotPassword"
+import { ForgotPasswordForm } from "~/features/ForgotPassword"
 import { Theme } from "~/shared/constants"
+import { useCustomTranslation } from "~/shared/utils"
 
-export const ForgotPasswordPage = () => {
-  const { t } = useForgotPasswordTranslation()
+function ForgotPasswordPage() {
+  const { t } = useCustomTranslation({ keyPrefix: "ForgotPassword" })
 
   return (
     <Box display="flex" flex={1}>
@@ -21,3 +22,4 @@ export const ForgotPasswordPage = () => {
     </Box>
   )
 }
+export default ForgotPasswordPage

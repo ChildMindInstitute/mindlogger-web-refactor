@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { lazy, useEffect } from "react"
 
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
@@ -7,7 +7,8 @@ import { Link, useLocation } from "react-router-dom"
 import { LoginForm, useLoginTranslation } from "~/features/Login"
 import { ROUTES, Theme } from "~/shared/constants"
 import { Mixpanel } from "~/shared/utils"
-import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
+
+const DownloadMobileLinks = lazy(() => import("~/widgets/DownloadMobileLinks"))
 
 export const LoginPage = () => {
   const { t } = useLoginTranslation()

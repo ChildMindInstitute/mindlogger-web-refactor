@@ -6,7 +6,7 @@ import { AvatarBase } from "~/shared/ui"
 
 type Props = {
   isFlow: boolean
-  src?: string | null
+  src: string | null
 }
 
 export const ActivityCardIcon = (props: Props) => {

@@ -2,18 +2,22 @@ import { lazy } from "react"
 
 import { Navigate, Route, Routes } from "react-router-dom"
 
-import { ActivityDetailsPage } from "./ActivityDetails"
-import { AppletDetailsPage } from "./AppletDetailsPage"
 import { AppletListPage } from "./AppletListPage"
-import { ForgotPasswordPage } from "./ForgotPassword"
 import { LoginPage } from "./Login"
-import { ProfilePage } from "./Profile"
-import { PublicActivityDetailsPage } from "./PublicActivityDetails"
-import { PublicJoinPage } from "./PublicJoin"
 import { SettingsPage } from "./Settings"
 import { SignupPage } from "./Signup"
 
 // Lazy load pages
+const AppletDetailsPage = lazy(() => import("./AppletDetailsPage"))
+const PublicAppeltDetailsPage = lazy(() => import("./PublicJoin"))
+
+const ActivityDetailsPage = lazy(() => import("./ActivityDetails"))
+const PublicActivityDetailsPage = lazy(() => import("./PublicActivityDetails"))
+
+const ProfilePage = lazy(() => import("./Profile"))
+
+const ForgotPasswordPage = lazy(() => import("./ForgotPassword"))
+
 const InvitationPage = lazy(() => import("./Invitation"))
 const PrivateJoinPage = lazy(() => import("./PrivateJoin"))
 const TransferOwnershipPage = lazy(() => import("./TransferOwnership"))
@@ -44,7 +48,7 @@ const ApplicationRouter = (): JSX.Element | null => {
               <Route path={ROUTES.settings.path} element={<SettingsPage />} />
               <Route path={ROUTES.invitation.path} element={<InvitationPage />} />
               <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
-              <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
+              <Route path={ROUTES.publicJoin.path} element={<PublicAppeltDetailsPage />} />
               <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
 
               <Route path="*" element={<Navigate to={ROUTES.appletList.path} />} />
@@ -68,7 +72,7 @@ const ApplicationRouter = (): JSX.Element | null => {
         <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
         <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
 
-        <Route path={ROUTES.publicJoin.path} element={<PublicJoinPage />} />
+        <Route path={ROUTES.publicJoin.path} element={<PublicAppeltDetailsPage />} />
 
         <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
       </Route>
