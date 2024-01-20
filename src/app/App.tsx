@@ -1,13 +1,10 @@
-import { Suspense, lazy } from "react"
+import { lazy } from "react"
 
-import CssBaseline from "@mui/material/CssBaseline"
-
-import { DateLocalizationProvider, MUIThemeProvider, ReactQuery, ReduxProvider, RouteProvider } from "./providers"
 import i18nManager from "./system/locale/i18n"
 
-import Loader from "~/shared/ui/Loader"
 import { Mixpanel } from "~/shared/utils"
 
+const Providers = lazy(() => import("./providers"))
 const ApplicationRouter = lazy(() => import("~/pages"))
 
 import "~/assets/fonts/Atkinson/atkinson.css"
@@ -19,20 +16,9 @@ i18nManager.initialize()
 
 function App() {
   return (
-    <Suspense fallback={<Loader />}>
-      <CssBaseline />
-      <MUIThemeProvider>
-        <RouteProvider>
-          <ReduxProvider>
-            <ReactQuery>
-              <DateLocalizationProvider>
-                <ApplicationRouter />
-              </DateLocalizationProvider>
-            </ReactQuery>
-          </ReduxProvider>
-        </RouteProvider>
-      </MUIThemeProvider>
-    </Suspense>
+    <Providers>
+      <ApplicationRouter />
+    </Providers>
   )
 }
 

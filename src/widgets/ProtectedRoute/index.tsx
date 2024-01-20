@@ -9,7 +9,7 @@ export interface ProtectedRouteProps {
   token: string | undefined
 }
 
-export const ProtectedRoute = ({ redirectUrl = ROUTES.login.path, token }: ProtectedRouteProps) => {
+function ProtectedRoute({ redirectUrl = ROUTES.login.path, token }: ProtectedRouteProps) {
   if (!token) return <Navigate to={redirectUrl} replace />
 
   return (
@@ -18,3 +18,5 @@ export const ProtectedRoute = ({ redirectUrl = ROUTES.login.path, token }: Prote
     </InactivityTracker>
   )
 }
+
+export default ProtectedRoute
