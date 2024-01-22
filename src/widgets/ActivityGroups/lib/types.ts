@@ -8,6 +8,7 @@ export type ActivityListItem = {
   eventId: string
 
   containsResponseTypes: Array<ItemResponseTypeDTO> | null
+  itemCount: number | null
 
   name: string
   description: string

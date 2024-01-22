@@ -70,6 +70,7 @@ export type ActivityBaseInfoDTO = {
   isHidden: boolean
   order: number
   containsResponseTypes: Array<ItemResponseTypeDTO>
+  itemCount: number
 }
 
 export type AppletDetailsActivityDTO = {
