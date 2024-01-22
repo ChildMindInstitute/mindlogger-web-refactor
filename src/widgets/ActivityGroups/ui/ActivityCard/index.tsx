@@ -14,7 +14,7 @@ import { useEntityCardDetails } from "../../model/hooks"
 import { useStartEntity } from "../../model/hooks/useStartEntity"
 
 import { getProgressId, openStoreLink } from "~/abstract/lib"
-import { useActivityByIdQuery } from "~/entities/activity"
+import { useActivityByIdMutation } from "~/entities/activity"
 import { appletModel } from "~/entities/applet"
 import Loader from "~/shared/ui/Loader"
 import { useAppSelector, useCustomMediaQuery } from "~/shared/utils"
@@ -53,9 +53,24 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     publicAppletKey: context.isPublic ? context.publicAppletKey : null,
   })
 
-  const { data: activity, isLoading: activityLoading } = useActivityByIdQuery(
-    { activityId: activityListItem.activityId, isPublic: context.isPublic },
-    { select: data => data.data.result },
+  const { mutate: getActivityById, isLoading } = useActivityByIdMutation(
+    { isPublic: context.isPublic },
+    {
+      onSuccess(data) {
+        const activity = data.data.result
+
+        if (!activity) {
+          throw new Error("[useActivityByIdMutation]: Activity not found")
+        }
+
+        return startActivityOrFlow({
+          activity,
+          eventId: activityListItem.eventId,
+          status: activityListItem.status,
+          flowId: activityListItem.flowId,
+        })
+      },
+    },
   )
 
   const getCompletedActivitiesFromPosition = (position: number) => position - 1
@@ -64,26 +79,21 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     activityListItem.activityFlowDetails?.activityPositionInFlow || 0,
   )
 
-  const activityLength = activity?.items.length || 0
+  const activityLength = activityListItem.itemCount
 
   const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100
 
   function onActivityCardClickHandler() {
-    if (isDisabled || !activity) return
+    if (isDisabled || !activityListItem) return
 
     if (!isEntitySupported) {
       return openStoreLink()
     }
 
-    return startActivityOrFlow({
-      activity,
-      eventId: activityListItem.eventId,
-      status: activityListItem.status,
-      flowId: activityListItem.flowId,
-    })
+    return getActivityById({ activityId: activityListItem.activityId })
   }
 
-  if (activityLoading) {
+  if (isLoading) {
     return (
       <ActivityCardBase isFlow={isFlow}>
         <Loader />
@@ -109,7 +119,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
           <ActivityLabel
             isFlow={isFlow}
-            activityLength={activityLength}
+            activityLength={activityLength ?? 0}
             isSupportedActivity={isEntitySupported}
             isActivityInProgress={isInProgress}
             countOfCompletedQuestions={countOfCompletedQuestions}

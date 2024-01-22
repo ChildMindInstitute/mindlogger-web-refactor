@@ -36,10 +36,15 @@ export const useEntityCardDetails = (props: Props): Return => {
 
   const activitiesInFlow = props.applet.activities.filter(({ id }) => flow?.activityIds.includes(id))
 
-  const isEntitySupported =
-    isFlow && props.activityListItem.containsResponseTypes
-      ? isSupportedActivity(props.activityListItem.containsResponseTypes)
-      : activitiesInFlow?.every(activity => isSupportedActivity(activity.containsResponseTypes))
+  const isActivitySupported =
+    props.activityListItem.containsResponseTypes && isSupportedActivity(props.activityListItem.containsResponseTypes)
+
+  const isFlowSupported =
+    isFlow &&
+    activitiesInFlow &&
+    activitiesInFlow.every(activity => isSupportedActivity(activity.containsResponseTypes))
+
+  const isEntitySupported = isFlow ? isFlowSupported : Boolean(isActivitySupported)
 
   return {
     title: entityName,

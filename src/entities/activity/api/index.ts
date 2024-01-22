@@ -1,6 +1,5 @@
 export * from "./useActivityByIdQuery"
 export * from "./useActivityByIdMutation"
-export * from "./usePublicActivityByIdMutation"
 
 export * from "./useSaveAnswerMutation"
 export * from "./useActivitiesByIdsQuery"
