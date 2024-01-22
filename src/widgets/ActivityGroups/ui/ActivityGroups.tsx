@@ -1,7 +1,7 @@
-import { AppletDetailsContext } from "../lib"
 import { ActivityGroupList } from "./ActivityGroupList"
+import { AppletDetailsContext } from "../lib"
 
-import { useAppletByIdQuery } from "~/entities/applet"
+import { useAppletBaseInfoByIdQuery } from "~/entities/applet"
 import { useEventsbyAppletIdQuery } from "~/entities/event"
 import { Container } from "~/shared/ui"
 import Loader from "~/shared/ui/Loader"
@@ -25,13 +25,13 @@ export const ActivityGroups = (props: Props) => {
   const {
     isError: isAppletError,
     isLoading: isAppletLoading,
-    data: appletDetails,
-  } = useAppletByIdQuery(props, { select: data => data.data.result })
+    data: applet,
+  } = useAppletBaseInfoByIdQuery(props, { select: data => data.data.result })
 
   const {
     isError: isEventsError,
     isLoading: isEventsLoading,
-    data: eventsDetails,
+    data: events,
   } = useEventsbyAppletIdQuery(props, {
     select: data => data.data.result,
   })
@@ -50,7 +50,7 @@ export const ActivityGroups = (props: Props) => {
   }
 
   return (
-    <AppletDetailsContext.Provider value={{ ...props, appletDetails, eventsDetails }}>
+    <AppletDetailsContext.Provider value={{ ...props, applet, events }}>
       <ActivityGroupList />
     </AppletDetailsContext.Provider>
   )

@@ -5,7 +5,7 @@ import { eventEmitter } from "~/shared/utils"
 
 type LogoutTrackerProps = PropsWithChildren<unknown>
 
-export const LogoutTracker = ({ children }: LogoutTrackerProps) => {
+function LogoutTracker({ children }: LogoutTrackerProps) {
   const { logout } = useLogout()
 
   useEffect(() => {
@@ -18,3 +18,5 @@ export const LogoutTracker = ({ children }: LogoutTrackerProps) => {
 
   return children as JSX.Element
 }
+
+export default LogoutTracker

@@ -14,6 +14,8 @@ interface ReactQueryProps {
   children: React.ReactNode
 }
 
-export const ReactQuery = (props: ReactQueryProps) => {
+function ReactQuery(props: ReactQueryProps) {
   return <QueryClientProvider client={queryClient}>{props.children}</QueryClientProvider>
 }
+
+export default ReactQuery

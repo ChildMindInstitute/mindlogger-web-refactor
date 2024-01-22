@@ -2,14 +2,17 @@ import { ActivityType } from "./types"
 
 import { ActivityPipelineType } from "~/abstract/lib"
 import { ScheduleEvent } from "~/entities/event"
+import { ItemResponseTypeDTO } from "~/shared/api"
 
 export type EntityBase = {
   id: string
   name: string
   description: string
-  image?: string | null
+  image: string | null
   isHidden: boolean
   order: number
+  containsResponseTypes: Array<ItemResponseTypeDTO> | null
+  itemCount: number | null
 }
 
 export type Activity = EntityBase & {

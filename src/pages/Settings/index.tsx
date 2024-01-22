@@ -7,7 +7,7 @@ import { ChangePasswordForm, useChangePasswordTranslation } from "~/features/Cha
 import { Theme } from "~/shared/constants"
 import { AvatarBase } from "~/shared/ui"
 
-export const SettingsPage = () => {
+function SettingsPage() {
   const { t } = useChangePasswordTranslation()
   const { user } = userModel.hooks.useUserState()
 
@@ -35,3 +35,5 @@ export const SettingsPage = () => {
     </Box>
   )
 }
+
+export default SettingsPage

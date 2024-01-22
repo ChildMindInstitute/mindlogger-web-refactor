@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios"
 
-import { eventEmitter, secureTokensStorage } from "../../utils"
 import authorizationService from "./authorization.service"
+import { eventEmitter, secureTokensStorage } from "../../utils"
 
 type RequestConfig = AxiosRequestConfig<any> & {
   retry?: boolean
@@ -19,7 +19,7 @@ axiosService.interceptors.request.use(
     const tokens = secureTokensStorage.getTokens()
 
     if (tokens?.accessToken && tokens?.tokenType) {
-      config.headers!.Authorization = `${tokens.tokenType} ${tokens.accessToken}`
+      config.headers.Authorization = `${tokens.tokenType} ${tokens.accessToken}`
     }
 
     return config

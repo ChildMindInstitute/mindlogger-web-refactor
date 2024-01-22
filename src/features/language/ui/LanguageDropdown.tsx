@@ -13,7 +13,9 @@ type Props = {
 
 const LanguageDropdown = (props: Props) => {
   const { t, i18n } = useLanguageTranslation()
-  const [language, setLanguage] = useState(i18n.language || SupportableLanguage.English)
+  const [language, setLanguage] = useState<SupportableLanguage>(
+    (i18n.language as SupportableLanguage) || SupportableLanguage.English,
+  )
   const preparedLanguageList = useLanguageList()
 
   const onSelect = useCallback(
@@ -24,7 +26,7 @@ const LanguageDropdown = (props: Props) => {
 
       props.toggleMenuOpen()
 
-      setLanguage(lang)
+      setLanguage(lang as SupportableLanguage)
       i18n.changeLanguage(lang)
     },
     [i18n, props],

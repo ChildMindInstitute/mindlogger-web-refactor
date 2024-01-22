@@ -1,11 +1,10 @@
-import { ActivityDetails } from "./types"
-
 import { supportableResponseTypes } from "~/abstract/lib/constants"
+import { ItemResponseTypeDTO } from "~/shared/api"
 
-export function isSupportedActivity(activity: ActivityDetails | undefined) {
-  if (!activity) {
+export function isSupportedActivity(itemResponseTypes?: Array<ItemResponseTypeDTO>): boolean {
+  if (!itemResponseTypes) {
     return false
   }
 
-  return activity.items.every(item => supportableResponseTypes.includes(item.responseType))
+  return itemResponseTypes.every(type => supportableResponseTypes.includes(type))
 }

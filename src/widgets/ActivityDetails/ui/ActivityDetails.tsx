@@ -2,11 +2,11 @@ import { useContext } from "react"
 
 import Box from "@mui/material/Box"
 
-import { ActivityDetailsContext } from "../lib"
-import * as activityDetailsModel from "../model"
 import { AssessmentLoadingScreen } from "./AssessmentLoadingScreen"
 import { AssessmentPassingScreen } from "./AssessmentPassingScreen"
 import { AssessmentWelcomeScreen } from "./AssessmentWelcomeScreen"
+import { ActivityDetailsContext } from "../lib"
+import * as activityDetailsModel from "../model"
 
 import { getProgressId } from "~/abstract/lib"
 import { appletModel } from "~/entities/applet"

@@ -1,14 +1,14 @@
 import { useContext, useState } from "react"
 
-import { Typography } from "@mui/material"
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
+import Typography from "@mui/material/Typography"
 import { subMonths } from "date-fns"
 
+import { ActivityGroup } from "./ActivityGroup"
 import { CustomModal } from "../../Modal"
 import { AppletDetailsContext } from "../lib"
 import { useActivityGroups, useEntitiesSync } from "../model/hooks"
-import { ActivityGroup } from "./ActivityGroup"
 
 import AppletDefaultIcon from "~/assets/AppletDefaultIcon.svg"
 import { useCompletedEntitiesQuery } from "~/entities/activity"
@@ -19,7 +19,7 @@ import { formatToDtoDate, useCustomTranslation } from "~/shared/utils"
 export const ActivityGroupList = () => {
   const { t } = useCustomTranslation()
 
-  const { appletDetails: applet, eventsDetails, isPublic } = useContext(AppletDetailsContext)
+  const { applet, events, isPublic } = useContext(AppletDetailsContext)
 
   const { data: completedEntities, isFetching: isCompletedEntitiesFetching } = useCompletedEntitiesQuery(
     {
@@ -35,10 +35,7 @@ export const ActivityGroupList = () => {
   const isAppletAboutExist = Boolean(applet?.about)
   const isAppletImageExist = Boolean(applet?.image)
 
-  const { groups } = useActivityGroups({
-    appletDetails: applet,
-    eventsDetails: eventsDetails,
-  })
+  const { groups } = useActivityGroups({ applet, events })
 
   const onCardAboutClick = () => {
     if (!isAppletAboutExist) return

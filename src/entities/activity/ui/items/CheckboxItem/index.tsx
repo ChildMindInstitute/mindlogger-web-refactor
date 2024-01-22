@@ -2,8 +2,8 @@ import { useMemo } from "react"
 
 import Box from "@mui/material/Box"
 
-import { CheckboxItem as CheckboxItemType } from "../../../lib/types/item"
 import { CheckboxItemOption } from "./CheckboxItemOption"
+import { CheckboxItem as CheckboxItemType } from "../../../lib/types/item"
 
 import { randomizeArray, splitList, useCustomMediaQuery } from "~/shared/utils"
 

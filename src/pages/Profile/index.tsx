@@ -1,15 +1,17 @@
+import { lazy } from "react"
+
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import { isMobile } from "react-device-detect"
 
-import { useProfileTranslation } from "../lib/useProfileTranslation"
-
 import { userModel } from "~/entities/user"
 import { AvatarBase } from "~/shared/ui"
-import DownloadMobileLinks from "~/widgets/DownloadMobileLinks"
+import { useCustomTranslation } from "~/shared/utils"
 
-export const ProfilePage = () => {
-  const { t } = useProfileTranslation()
+const DownloadMobileLinks = lazy(() => import("~/widgets/DownloadMobileLinks"))
+
+function ProfilePage() {
+  const { t } = useCustomTranslation({ keyPrefix: "Profile" })
   const { user } = userModel.hooks.useUserState()
 
   return (
@@ -31,3 +33,5 @@ export const ProfilePage = () => {
     </Box>
   )
 }
+
+export default ProfilePage

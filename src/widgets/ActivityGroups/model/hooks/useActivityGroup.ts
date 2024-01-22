@@ -2,24 +2,24 @@ import { ActivityListGroup } from "../../lib"
 import ActivityGroupsBuildManager from "../services/ActivityGroupsBuildManager"
 
 import { appletModel } from "~/entities/applet"
-import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
+import { AppletDetailsBaseInfoDTO, AppletEventsResponse } from "~/shared/api"
 import { useAppSelector } from "~/shared/utils"
 
 type Props = {
-  appletDetails: AppletDetailsDTO
-  eventsDetails: AppletEventsResponse
+  applet: AppletDetailsBaseInfoDTO
+  events: AppletEventsResponse
 }
 
 type Return = {
   groups: ActivityListGroup[]
 }
 
-export const useActivityGroups = ({ appletDetails, eventsDetails }: Props): Return => {
+export const useActivityGroups = ({ applet, events }: Props): Return => {
   const groupsInProgress = useAppSelector(appletModel.selectors.groupProgressSelector)
 
   const groupsResult = ActivityGroupsBuildManager.process({
-    appletDetails,
-    eventsDetails,
+    applet,
+    events,
     entityProgress: groupsInProgress,
   })
 

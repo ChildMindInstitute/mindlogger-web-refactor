@@ -4,8 +4,8 @@ export type ActivityDetails = {
   id: string
   name: string
   description: string
-  image: string | ""
-  splashScreen: string | ""
+  image: string
+  splashScreen: string
   isSkippable: boolean
   isReviewable: boolean
   responseIsEditable: boolean

@@ -1,5 +1,5 @@
-import { EventEntity, Activity, ActivityFlow, ActivityListItem, ActivityType, ActivityStatus } from "../../lib"
 import { GroupUtility, GroupsBuildContext } from "./GroupUtility"
+import { EventEntity, Activity, ActivityFlow, ActivityListItem, ActivityType, ActivityStatus } from "../../lib"
 
 import { ActivityPipelineType, FlowProgress } from "~/abstract/lib"
 import { AvailabilityLabelType } from "~/entities/event"
@@ -65,6 +65,8 @@ export class ListItemsFactory {
       isTimerElapsed: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
+      containsResponseTypes: isFlow ? null : (entity as Activity).containsResponseTypes,
+      itemCount: isFlow ? null : (entity as Activity).itemCount,
     }
 
     if (isFlow) {

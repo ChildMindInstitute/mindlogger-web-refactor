@@ -1,10 +1,12 @@
-import Box from "@mui/material/Box"
 import CircularProgress from "@mui/material/CircularProgress"
 
+// This Loader component is very common component
+// Don`t remove default export
+// Don`t remove inline styles. It was made for component lightness
 export default function Loader() {
   return (
-    <Box height="100%" width="100%" display="flex" justifyContent="center" alignItems="center">
+    <div style={{ height: "100%", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <CircularProgress />
-    </Box>
+    </div>
   )
 }

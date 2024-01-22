@@ -1,9 +1,9 @@
 import { forwardRef, useEffect } from "react"
 
-import { NotificationType } from "../lib/types"
 import { ErrorNotification } from "./ErrorNotification"
 import { SuccessNotification } from "./SuccessNotification"
 import { WarningNotification } from "./WarningNotification"
+import { NotificationType } from "../lib/types"
 
 import { eventEmitter } from "~/shared/utils"
 

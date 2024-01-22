@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import { useCustomTranslation } from "~/shared/utils"
 import { ActivityDetailsContext, ActivityDetailsWidget } from "~/widgets/ActivityDetails"
 
-export const PublicActivityDetailsPage = () => {
+function PublicActivityDetailsPage() {
   const { appletId, activityId, eventId, publicAppletKey } = useParams()
   const { t } = useCustomTranslation()
 
@@ -20,3 +20,5 @@ export const PublicActivityDetailsPage = () => {
     </Box>
   )
 }
+
+export default PublicActivityDetailsPage

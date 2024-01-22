@@ -26,6 +26,10 @@ export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
       timeFrom: dto.availability.timeFrom,
       timeTo: dto.availability.timeTo,
     },
+    notificationSettings: {
+      notifications: [],
+      reminder: null,
+    },
   }
 }
 
