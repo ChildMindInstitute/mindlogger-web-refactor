@@ -46,6 +46,9 @@ const getActivity = (): Entity => {
     isHidden: false,
     order: 0,
     type: ActivityType.NotDefined,
+    containsResponseTypes: [],
+    image: null,
+    itemCount: 1,
   }
   return result
 }
@@ -93,6 +96,9 @@ const getExpectedItem = (): ActivityListItem => {
     isTimerElapsed: false,
     timeLeftToComplete: null,
     isInActivityFlow: false,
+    image: null,
+    containsResponseTypes: [],
+    itemCount: 1,
   }
   return expectedItem
 }
@@ -297,7 +303,7 @@ describe("ActivityGroupsBuilder", () => {
       const expectedItem: ActivityListItem = getExpectedInProgressItem()
       expectedItem.entityAvailabilityType = AvailabilityLabelType.ScheduledAccess
       expectedItem.isAlwaysAvailable = false
-      expectedItem.image = undefined
+      expectedItem.image = null
 
       const expectedResult: ActivityListGroup = {
         name: "additional.in_progress",
@@ -343,7 +349,7 @@ describe("ActivityGroupsBuilder", () => {
       expectedItem.timeLeftToComplete = { hours: 2, minutes: 8 }
       expectedItem.entityAvailabilityType = AvailabilityLabelType.ScheduledAccess
       expectedItem.isAlwaysAvailable = false
-      expectedItem.image = undefined
+      expectedItem.image = null
 
       const expectedResult: ActivityListGroup = {
         name: "additional.in_progress",
@@ -389,7 +395,7 @@ describe("ActivityGroupsBuilder", () => {
       expectedItem.timeLeftToComplete = { hours: 0, minutes: 1 }
       expectedItem.entityAvailabilityType = AvailabilityLabelType.ScheduledAccess
       expectedItem.isAlwaysAvailable = false
-      expectedItem.image = undefined
+      expectedItem.image = null
 
       const expectedResult: ActivityListGroup = {
         name: "additional.in_progress",
@@ -435,7 +441,7 @@ describe("ActivityGroupsBuilder", () => {
       expectedItem.timeLeftToComplete = null
       expectedItem.entityAvailabilityType = AvailabilityLabelType.ScheduledAccess
       expectedItem.isAlwaysAvailable = false
-      expectedItem.image = undefined
+      expectedItem.image = null
 
       const expectedResult: ActivityListGroup = {
         name: "additional.in_progress",
@@ -600,7 +606,7 @@ describe("ActivityGroupsBuilder", () => {
         expectedItem.availableTo.setHours(16)
         expectedItem.availableTo.setMinutes(30)
         expectedItem.isAlwaysAvailable = false
-        expectedItem.image = undefined
+        expectedItem.image = null
         expectedItem.entityAvailabilityType = AvailabilityLabelType.ScheduledAccess
 
         const expectedResult: ActivityListGroup = {
@@ -743,7 +749,7 @@ describe("ActivityGroupsBuilder", () => {
       expectedItem.availableTo = new Date(startOfDay(scheduledAt))
       expectedItem.availableTo.setHours(16)
       expectedItem.availableTo.setMinutes(30)
-      expectedItem.image = undefined
+      expectedItem.image = null
       expectedItem.isAlwaysAvailable = false
       expectedItem.entityAvailabilityType = AvailabilityLabelType.ScheduledAccess
 
@@ -1012,7 +1018,7 @@ describe("ActivityGroupsBuilder", () => {
         expectedItem.availableTo.setMinutes(30)
         expectedItem.entityAvailabilityType = AvailabilityLabelType.ScheduledAccess
         expectedItem.isAlwaysAvailable = false
-        expectedItem.image = undefined
+        expectedItem.image = null
 
         const expectedResult: ActivityListGroup = {
           name: "additional.available",
@@ -1151,7 +1157,7 @@ describe("ActivityGroupsBuilder", () => {
       expectedItem.availableTo.setMinutes(30)
       expectedItem.entityAvailabilityType = AvailabilityLabelType.ScheduledAccess
       expectedItem.isAlwaysAvailable = false
-      expectedItem.image = undefined
+      expectedItem.image = null
 
       const expectedResult: ActivityListGroup = {
         name: "additional.available",
@@ -1606,6 +1612,9 @@ describe("ActivityGroupsBuilder", () => {
             pipelineType: ActivityPipelineType.Regular,
             type: ActivityType.NotDefined,
             order: 0,
+            containsResponseTypes: [],
+            itemCount: 1,
+            image: null,
           },
           {
             description: "test-description-2",
@@ -1615,6 +1624,9 @@ describe("ActivityGroupsBuilder", () => {
             pipelineType: ActivityPipelineType.Regular,
             type: ActivityType.NotDefined,
             order: 1,
+            containsResponseTypes: [],
+            itemCount: 1,
+            image: null,
           },
         ],
         progress,
@@ -1632,6 +1644,9 @@ describe("ActivityGroupsBuilder", () => {
         hideBadge: false,
         isHidden: false,
         order: 0,
+        containsResponseTypes: null,
+        itemCount: 1,
+        image: null,
       }
 
       const eventEntity: EventEntity = {
@@ -1669,6 +1684,9 @@ describe("ActivityGroupsBuilder", () => {
             isTimerSet: false,
             isTimerElapsed: false,
             timeLeftToComplete: null,
+            image: null,
+            containsResponseTypes: null,
+            itemCount: null,
             isInActivityFlow: true,
             activityFlowDetails: {
               showActivityFlowBadge: true,
@@ -1708,6 +1726,9 @@ describe("ActivityGroupsBuilder", () => {
             isTimerSet: false,
             isTimerElapsed: false,
             timeLeftToComplete: null,
+            containsResponseTypes: null,
+            itemCount: null,
+            image: null,
             isInActivityFlow: true,
             activityFlowDetails: {
               showActivityFlowBadge: false,

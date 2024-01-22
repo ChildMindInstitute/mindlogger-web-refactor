@@ -1,7 +1,9 @@
 import PauseIcon from "@mui/icons-material/Pause"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
-import { IconButton, useMediaQuery, useTheme } from "@mui/material"
 import Box from "@mui/material/Box"
+import IconButton from "@mui/material/IconButton"
+import { useTheme } from "@mui/material/styles"
+import useMediaQuery from "@mui/material/useMediaQuery"
 
 type Props = {
   isPlaying: boolean

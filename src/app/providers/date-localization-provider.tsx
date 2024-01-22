@@ -5,6 +5,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 
 type Props = PropsWithChildren<unknown>
 
-export const DateLocalizationProvider = ({ children }: Props) => {
+function DateLocalizationProvider({ children }: Props) {
   return <LocalizationProvider dateAdapter={AdapterDateFns}>{children}</LocalizationProvider>
 }
+
+export default DateLocalizationProvider

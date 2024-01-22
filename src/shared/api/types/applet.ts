@@ -1,5 +1,6 @@
 import { BaseSuccessListResponse, BaseSuccessResponse } from "./base"
 import { PeriodicityTypeDTO } from "./events"
+import { ItemResponseTypeDTO } from "./item"
 import { HourMinute } from "../../utils"
 
 // API payloads
@@ -22,6 +23,8 @@ export type RespondentMetaDTO = { nickname: string }
 export type AppletListSuccessResponse = BaseSuccessListResponse<AppletListDTO>
 export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDTO> & { respondentMeta: RespondentMetaDTO }
 
+export type AppletDetailsBaseInfoSuccess = BaseSuccessResponse<AppletDetailsBaseInfoDTO>
+
 export type AppletListDTO = {
   id: string
   displayName: string
@@ -43,6 +46,31 @@ export type AppletDetailsDTO = {
   activities: AppletDetailsActivityDTO[]
   activityFlows: ActivityFlowDTO[]
   encryption: AppletEncryptionDTO | null
+}
+
+export type AppletDetailsBaseInfoDTO = {
+  id: string
+  displayName: string
+  version: string
+  description: string
+  about: string
+  image: string
+  watermark: string
+  createdAt: string
+  updatedAt: string
+  activities: Array<ActivityBaseInfoDTO>
+  activityFlows: Array<ActivityFlowDTO>
+}
+
+export type ActivityBaseInfoDTO = {
+  id: string
+  name: string
+  description: string
+  image: string
+  isHidden: boolean
+  order: number
+  containsResponseTypes: Array<ItemResponseTypeDTO>
+  itemCount: number
 }
 
 export type AppletDetailsActivityDTO = {

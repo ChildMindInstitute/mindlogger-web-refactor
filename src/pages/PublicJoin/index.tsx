@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom"
 
 import { ActivityGroups } from "~/widgets/ActivityGroups"
 
-export const PublicJoinPage = () => {
+function PublicJoinPage() {
   const { joinLinkKey } = useParams()
 
   if (!joinLinkKey) {
@@ -15,3 +15,5 @@ export const PublicJoinPage = () => {
 
   return <ActivityGroups isPublic={true} publicAppletKey={joinLinkKey} />
 }
+
+export default PublicJoinPage
