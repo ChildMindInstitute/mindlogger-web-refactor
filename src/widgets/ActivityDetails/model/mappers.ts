@@ -201,11 +201,14 @@ function convertToTimeRangeAnswer(item: TimeRangeItem): ItemAnswer<TimeRangeAnsw
     }
   }
 
+  const fromDate = new Date(item.answer[0])
+  const toDate = new Date(item.answer[1])
+
   return {
     answer: {
       value: {
-        from: dateToHourMinute(new Date(item.answer[0])),
-        to: dateToHourMinute(new Date(item.answer[1])),
+        from: { hour: fromDate.getHours(), minute: fromDate.getMinutes() },
+        to: { hour: toDate.getHours(), minute: toDate.getMinutes() },
       },
       text: null,
     },

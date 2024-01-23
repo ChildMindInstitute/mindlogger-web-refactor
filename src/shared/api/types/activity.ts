@@ -140,10 +140,7 @@ export type DateAnswerPayload = {
 }
 
 export type TimeAnswerPayload = {
-  value: {
-    hour: number
-    minute: number
-  }
+  value: { hours: number; minutes: number }
   text: string | null
 }
 
