@@ -19,6 +19,8 @@ axiosService.interceptors.request.use(
     const tokens = secureTokensStorage.getTokens()
 
     if (tokens?.accessToken && tokens?.tokenType) {
+      // @ts-expect-error This error was introduced in https://github.com/ChildMindInstitute/mindlogger-web-refactor/pull/342
+      // and I don't really want to change it as part of this PR
       config.headers.Authorization = `${tokens.tokenType} ${tokens.accessToken}`
     }
 
