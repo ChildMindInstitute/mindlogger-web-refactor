@@ -41,6 +41,11 @@ export type ItemRecord =
   | TimeRangeItem
   | AudioPlayerItem
 
+export type ItemWithAdditionalResponse = Extract<
+  ItemRecord,
+  CheckboxItem | RadioItem | SliderItem | SelectorItem | DateItem | TimeItem | TimeRangeItem | AudioPlayerItem
+>
+
 export type ActivityProgress = {
   items: ItemRecord[]
   step: number
