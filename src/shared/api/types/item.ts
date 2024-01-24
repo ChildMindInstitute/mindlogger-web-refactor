@@ -121,6 +121,7 @@ export type RadioItemConfigDTO = {
   setAlerts: boolean
   addTooltip: boolean
   setPalette: boolean
+  autoAdvance: boolean
   additionalResponseOption: {
     textInputOption: boolean
     textInputRequired: boolean

@@ -133,6 +133,7 @@ export type RadioItemConfig = ButtonsConfig &
     setAlerts: boolean
     addTooltip: boolean
     setPalette: boolean
+    autoAdvance: boolean
   }
 
 export type RadioValues = {

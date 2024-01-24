@@ -27,9 +27,11 @@ export const useAutoForward = ({ item, onForward, hasNextStep }: Props) => {
 
     const isSingleSelect = item.responseType === "singleSelect"
 
+    const isAutoForwardEnabled = isSingleSelect && item.config.autoAdvance
+
     const isHasAnswer = item.answer.length > 0
 
-    if (isSingleSelect && isHasAnswer && hasNextStep && isAnswerChanged) {
+    if (isSingleSelect && isHasAnswer && hasNextStep && isAnswerChanged && isAutoForwardEnabled) {
       onForward()
     }
   }, [hasNextStep, item, onForward, prevItem?.answer, prevItem?.id])
