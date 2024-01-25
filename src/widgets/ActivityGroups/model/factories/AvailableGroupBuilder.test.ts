@@ -42,7 +42,6 @@ const getActivity = (): Entity => {
     type: ActivityType.NotDefined,
     containsResponseTypes: [],
     image: null,
-    itemCount: 1,
   }
   return result
 }

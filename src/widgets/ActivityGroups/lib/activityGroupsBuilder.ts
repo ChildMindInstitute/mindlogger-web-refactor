@@ -12,7 +12,6 @@ export type EntityBase = {
   isHidden: boolean
   order: number
   containsResponseTypes: Array<ItemResponseTypeDTO> | null
-  itemCount: number | null
 }
 
 export type Activity = EntityBase & {
