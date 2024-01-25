@@ -30,8 +30,6 @@ export const useEntityCardDetails = (props: Props): Return => {
 
   const showActivityFlowBudget = Boolean(props.activityListItem.activityFlowDetails?.showActivityFlowBadge)
 
-  console.log("showActivityFlowBudget", showActivityFlowBudget)
-
   const flowName = props.activityListItem.activityFlowDetails?.activityFlowName ?? null
   const flowDescription = flow ? flow.description : null
   const flowImage = flow ? flow.image : null
@@ -49,10 +47,11 @@ export const useEntityCardDetails = (props: Props): Return => {
   const isScheduled = props.activityListItem.status === ActivityStatus.Scheduled
   const isInProgress = props.activityListItem.status === ActivityStatus.InProgress
 
+  const activity = props.applet.activities.find(activity => activity.id === props.activityListItem.activityId) ?? null
+
   const activitiesInFlow = props.applet.activities.filter(({ id }) => flow?.activityIds.includes(id))
 
-  const isActivitySupported =
-    props.activityListItem.containsResponseTypes && isSupportedActivity(props.activityListItem.containsResponseTypes)
+  const isActivitySupported = activity && isSupportedActivity(activity.containsResponseTypes)
 
   const isFlowSupported =
     isFlow &&

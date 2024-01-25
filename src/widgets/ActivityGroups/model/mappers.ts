@@ -13,7 +13,6 @@ export const mapActivitiesFromDto = (dtos: ActivityBaseInfoDTO[]): Activity[] =>
     order: dto.order,
     pipelineType: ActivityPipelineType.Regular,
     type: ActivityType.NotDefined,
-    containsResponseTypes: dto.containsResponseTypes,
   }))
 }
 
@@ -27,7 +26,6 @@ export const mapActivityFlowsFromDto = (dtos: ActivityFlowDTO[]): ActivityFlow[]
     name: dto.name,
     isHidden: dto.isHidden,
     pipelineType: ActivityPipelineType.Flow,
-    containsResponseTypes: null,
     image: null,
   }))
 }

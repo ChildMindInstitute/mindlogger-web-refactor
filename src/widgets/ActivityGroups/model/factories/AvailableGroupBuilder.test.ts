@@ -40,7 +40,6 @@ const getActivity = (): Entity => {
     isHidden: false,
     order: 0,
     type: ActivityType.NotDefined,
-    containsResponseTypes: [],
     image: null,
   }
   return result
