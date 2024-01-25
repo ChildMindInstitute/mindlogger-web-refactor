@@ -28,10 +28,11 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
   const context = useContext(AppletDetailsContext)
 
-  const { title, image, isFlow, isDisabled, isInProgress, isEntitySupported } = useEntityCardDetails({
-    activityListItem,
-    applet: context.applet,
-  })
+  const { title, image, description, isFlow, showActivityFlowBudget, isDisabled, isInProgress, isEntitySupported } =
+    useEntityCardDetails({
+      activityListItem,
+      applet: context.applet,
+    })
 
   const activityEventId = getProgressId(activityListItem.activityId, activityListItem.eventId)
 
@@ -79,7 +80,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     activityListItem.activityFlowDetails?.activityPositionInFlow || 0,
   )
 
-  const activityLength = activityListItem.itemCount
+  const activityLength = context.applet?.activities.find(act => act.id === activityListItem.activityId)?.itemCount
 
   const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100
 
@@ -115,10 +116,15 @@ export const ActivityCard = ({ activityListItem }: Props) => {
         <Box display="flex" flex={1} justifyContent="center" alignItems="flex-start" flexDirection="column" gap="8px">
           <ActivityCardTitle title={title} isFlow={isFlow} />
 
-          {isInProgress && <ActivityCardProgressBar percentage={isFlow ? flowProgress : progress} isFlow={isFlow} />}
+          {isInProgress && (
+            <ActivityCardProgressBar
+              percentage={isFlow && showActivityFlowBudget ? flowProgress : progress}
+              isFlow={isFlow}
+            />
+          )}
 
           <ActivityLabel
-            isFlow={isFlow}
+            isFlow={isFlow && showActivityFlowBudget}
             activityLength={activityLength ?? 0}
             isSupportedActivity={isEntitySupported}
             isActivityInProgress={isInProgress}
@@ -127,7 +133,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
             numberOfActivitiesInFlow={numberOfActivitiesInFlow}
           />
 
-          <ActivityCardDescription description={activityListItem.description} isFlow={isFlow} />
+          {description && <ActivityCardDescription description={description} isFlow={isFlow} />}
 
           {isEntitySupported && <TimeStatusLabel activity={activityListItem} />}
         </Box>

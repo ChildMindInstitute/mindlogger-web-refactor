@@ -46,9 +46,7 @@ const getActivity = (): Entity => {
     isHidden: false,
     order: 0,
     type: ActivityType.NotDefined,
-    containsResponseTypes: [],
     image: null,
-    itemCount: 1,
   }
   return result
 }
@@ -97,8 +95,6 @@ const getExpectedItem = (): ActivityListItem => {
     timeLeftToComplete: null,
     isInActivityFlow: false,
     image: null,
-    containsResponseTypes: [],
-    itemCount: 1,
   }
   return expectedItem
 }
@@ -1612,8 +1608,6 @@ describe("ActivityGroupsBuilder", () => {
             pipelineType: ActivityPipelineType.Regular,
             type: ActivityType.NotDefined,
             order: 0,
-            containsResponseTypes: [],
-            itemCount: 1,
             image: null,
           },
           {
@@ -1624,8 +1618,6 @@ describe("ActivityGroupsBuilder", () => {
             pipelineType: ActivityPipelineType.Regular,
             type: ActivityType.NotDefined,
             order: 1,
-            containsResponseTypes: [],
-            itemCount: 1,
             image: null,
           },
         ],
@@ -1644,8 +1636,6 @@ describe("ActivityGroupsBuilder", () => {
         hideBadge: false,
         isHidden: false,
         order: 0,
-        containsResponseTypes: null,
-        itemCount: 1,
         image: null,
       }
 
@@ -1685,8 +1675,6 @@ describe("ActivityGroupsBuilder", () => {
             isTimerElapsed: false,
             timeLeftToComplete: null,
             image: null,
-            containsResponseTypes: null,
-            itemCount: null,
             isInActivityFlow: true,
             activityFlowDetails: {
               showActivityFlowBadge: true,
@@ -1726,8 +1714,6 @@ describe("ActivityGroupsBuilder", () => {
             isTimerSet: false,
             isTimerElapsed: false,
             timeLeftToComplete: null,
-            containsResponseTypes: null,
-            itemCount: null,
             image: null,
             isInActivityFlow: true,
             activityFlowDetails: {

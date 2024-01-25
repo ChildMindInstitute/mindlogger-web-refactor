@@ -1,14 +1,11 @@
 import { AvailabilityLabelType } from "~/entities/event"
-import { ActivityDTO, ItemResponseTypeDTO } from "~/shared/api"
+import { ActivityDTO } from "~/shared/api"
 import { HourMinute } from "~/shared/utils"
 
 export type ActivityListItem = {
   activityId: string
   flowId: string | null
   eventId: string
-
-  containsResponseTypes: Array<ItemResponseTypeDTO> | null
-  itemCount: number | null
 
   name: string
   description: string

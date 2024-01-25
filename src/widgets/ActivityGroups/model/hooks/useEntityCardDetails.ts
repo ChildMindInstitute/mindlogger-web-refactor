@@ -11,8 +11,10 @@ type Props = {
 type Return = {
   title: string
   image: string | null
+  description: string | null
 
   isFlow: boolean
+  showActivityFlowBudget: boolean
   isDisabled: boolean
 
   isScheduled: boolean
@@ -24,20 +26,32 @@ type Return = {
 export const useEntityCardDetails = (props: Props): Return => {
   const isFlow = Boolean(props.activityListItem.flowId && props.activityListItem.activityFlowDetails)
 
-  const activityFlowName = props.activityListItem.activityFlowDetails?.activityFlowName
+  const flow = props.applet.activityFlows.find(flow => flow.id === props.activityListItem.flowId)
 
-  const entityName = isFlow && activityFlowName ? activityFlowName : props.activityListItem.name
-  const entityImage = isFlow ? null : props.activityListItem.image
+  const showActivityFlowBudget = Boolean(props.activityListItem.activityFlowDetails?.showActivityFlowBadge)
+
+  const flowName = props.activityListItem.activityFlowDetails?.activityFlowName ?? null
+  const flowDescription = flow ? flow.description : null
+  const flowImage = flow ? flow.image : null
+
+  const activityName = props.activityListItem.name
+  const activityDescription = props.activityListItem.description
+  const activityImage = props.activityListItem.image
+
+  const showFlowDetails = isFlow && showActivityFlowBudget && flowName
+
+  const entityName = showFlowDetails ? flowName : activityName
+  const entityImage = showFlowDetails ? flowImage : activityImage
+  const entityDescription = showFlowDetails ? flowDescription : activityDescription
 
   const isScheduled = props.activityListItem.status === ActivityStatus.Scheduled
   const isInProgress = props.activityListItem.status === ActivityStatus.InProgress
 
-  const flow = props.applet.activityFlows.find(flow => flow.id === props.activityListItem.flowId)
+  const activity = props.applet.activities.find(activity => activity.id === props.activityListItem.activityId) ?? null
 
   const activitiesInFlow = props.applet.activities.filter(({ id }) => flow?.activityIds.includes(id))
 
-  const isActivitySupported =
-    props.activityListItem.containsResponseTypes && isSupportedActivity(props.activityListItem.containsResponseTypes)
+  const isActivitySupported = activity && isSupportedActivity(activity.containsResponseTypes)
 
   const isFlowSupported =
     isFlow &&
@@ -49,7 +63,9 @@ export const useEntityCardDetails = (props: Props): Return => {
   return {
     title: entityName,
     image: entityImage,
+    description: entityDescription,
     isFlow,
+    showActivityFlowBudget,
     isDisabled: isScheduled,
     isScheduled,
     isInProgress,
