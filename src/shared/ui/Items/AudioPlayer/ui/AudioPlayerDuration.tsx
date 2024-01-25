@@ -17,7 +17,7 @@ export const AudioPlayerDuration = ({ currentDuration, totalDuration }: Props) =
   const width = lessThanSM ? "75px" : "100px"
 
   return (
-    <Box width={width}>
+    <Box width={width} data-testid="audio-player-duration">
       <Text
         variant="body1"
         fontSize={fontSize}
