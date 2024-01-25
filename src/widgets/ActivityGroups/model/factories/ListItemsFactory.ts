@@ -131,6 +131,17 @@ export class ListItemsFactory {
 
     const { event } = eventActivity
 
+    if (event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess) {
+      const isSpread = this.utility.isSpreadToNextDay(event)
+
+      const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday()
+      to.setHours(event.availability.timeTo!.hours)
+      to.setMinutes(event.availability.timeTo!.minutes)
+      item.availableTo = to
+    } else {
+      item.availableTo = MIDNIGHT_DATE
+    }
+
     item.isTimerSet = !!event.timers?.timer
 
     if (item.isTimerSet) {
