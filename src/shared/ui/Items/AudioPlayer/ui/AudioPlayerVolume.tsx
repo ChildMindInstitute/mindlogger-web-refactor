@@ -33,15 +33,17 @@ export const AudioPlayerVolume = ({
 
   const iconSize = mediaQuery?.sm ? "small" : "medium"
 
+  const muteButtonTestId = isMuted ? "audio-player-unmute-button" : "audio-player-mute-button"
+
   return (
     <Box display="flex" alignItems="center" gap={mediaQuery?.sm ? 0.5 : 1}>
       <Box>
-        <IconButton onClick={isMuted ? onHandleUnmute : onHandleMute}>
+        <IconButton onClick={isMuted ? onHandleUnmute : onHandleMute} data-testid={muteButtonTestId}>
           {isMuted ? <VolumeOffIcon fontSize={iconSize} /> : <VolumeUpIcon fontSize={iconSize} />}
         </IconButton>
       </Box>
 
-      <Box display="flex">
+      <Box display="flex" data-testid="audio-player-volume-slider">
         <Slider
           size="small"
           value={value}

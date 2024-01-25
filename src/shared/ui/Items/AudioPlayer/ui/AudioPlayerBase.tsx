@@ -49,8 +49,14 @@ export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
   }
 
   return (
-    <Box>
-      <audio ref={audioRef} src={src} loop={false} onTimeUpdate={updateCurrentDuration} />
+    <Box data-testid="audio-player-wrap">
+      <audio
+        ref={audioRef}
+        src={src}
+        loop={false}
+        onTimeUpdate={updateCurrentDuration}
+        data-testid="audio-player-source"
+      />
 
       <Box
         display="flex"
