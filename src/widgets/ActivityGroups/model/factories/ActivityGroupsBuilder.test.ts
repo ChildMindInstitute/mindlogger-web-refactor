@@ -206,6 +206,7 @@ describe("ActivityGroupsBuilder", () => {
       const result = builder.buildInProgress([eventEntity])
 
       const expectedItem: ActivityListItem = getExpectedInProgressItem()
+      expectedItem.availableTo = MIDNIGHT_DATE
 
       const expectedResult: ActivityListGroup = {
         name: "additional.in_progress",
@@ -292,7 +293,12 @@ describe("ActivityGroupsBuilder", () => {
         scheduledAt: startOfDay(date),
       })
 
-      mockGetNow(builder, addDays(date, 10))
+      const mockDatePlusTenDays = addDays(date, 10)
+
+      eventEntity.event.availability.timeFrom = { hours: mockDatePlusTenDays.getHours() - 1, minutes: 0 }
+      eventEntity.event.availability.timeTo = { hours: mockDatePlusTenDays.getHours() + 1, minutes: 0 }
+
+      mockGetNow(builder, mockDatePlusTenDays)
 
       const result = builder.buildInProgress([eventEntity])
 
@@ -300,6 +306,12 @@ describe("ActivityGroupsBuilder", () => {
       expectedItem.entityAvailabilityType = AvailabilityLabelType.ScheduledAccess
       expectedItem.isAlwaysAvailable = false
       expectedItem.image = null
+
+      mockDatePlusTenDays.setHours(mockDatePlusTenDays.getHours() + 1)
+      mockDatePlusTenDays.setMinutes(0)
+      mockDatePlusTenDays.setSeconds(0)
+
+      expectedItem.availableTo = mockDatePlusTenDays
 
       const expectedResult: ActivityListGroup = {
         name: "additional.in_progress",
@@ -330,6 +342,8 @@ describe("ActivityGroupsBuilder", () => {
         scheduledAt: day,
       })
       eventEntity.event.timers.timer = { hours: 5, minutes: 20 }
+      eventEntity.event.availability.timeFrom = { hours: date.getHours() - 1, minutes: 0 }
+      eventEntity.event.availability.timeTo = { hours: date.getHours() + 1, minutes: 0 }
 
       const mockedNowDate = new Date(date)
       mockedNowDate.setHours(date.getHours() + 3)
@@ -346,6 +360,7 @@ describe("ActivityGroupsBuilder", () => {
       expectedItem.entityAvailabilityType = AvailabilityLabelType.ScheduledAccess
       expectedItem.isAlwaysAvailable = false
       expectedItem.image = null
+      expectedItem.availableTo = new Date(2023, 8, 1, 16, 0, 0)
 
       const expectedResult: ActivityListGroup = {
         name: "additional.in_progress",
@@ -376,6 +391,8 @@ describe("ActivityGroupsBuilder", () => {
         scheduledAt: day,
       })
       eventEntity.event.timers.timer = { hours: 5, minutes: 20 }
+      eventEntity.event.availability.timeFrom = { hours: date.getHours() - 1, minutes: 0 }
+      eventEntity.event.availability.timeTo = { hours: date.getHours() + 1, minutes: 0 }
 
       const mockedNowDate = new Date(date)
       mockedNowDate.setHours(date.getHours() + 5)
@@ -392,6 +409,7 @@ describe("ActivityGroupsBuilder", () => {
       expectedItem.entityAvailabilityType = AvailabilityLabelType.ScheduledAccess
       expectedItem.isAlwaysAvailable = false
       expectedItem.image = null
+      expectedItem.availableTo = new Date(2023, 8, 1, 16, 0, 0)
 
       const expectedResult: ActivityListGroup = {
         name: "additional.in_progress",
@@ -422,6 +440,8 @@ describe("ActivityGroupsBuilder", () => {
         scheduledAt: day,
       })
       eventEntity.event.timers.timer = { hours: 5, minutes: 20 }
+      eventEntity.event.availability.timeFrom = { hours: date.getHours() - 1, minutes: 0 }
+      eventEntity.event.availability.timeTo = { hours: date.getHours() + 1, minutes: 0 }
 
       const mockedNowDate = new Date(date)
       mockedNowDate.setHours(date.getHours() + 5)
@@ -438,6 +458,7 @@ describe("ActivityGroupsBuilder", () => {
       expectedItem.entityAvailabilityType = AvailabilityLabelType.ScheduledAccess
       expectedItem.isAlwaysAvailable = false
       expectedItem.image = null
+      expectedItem.availableTo = new Date(2023, 8, 1, 16, 0, 0)
 
       const expectedResult: ActivityListGroup = {
         name: "additional.in_progress",
@@ -1663,6 +1684,7 @@ describe("ActivityGroupsBuilder", () => {
         activities: [
           {
             activityId: "test-id-1",
+            availableTo: MIDNIGHT_DATE,
             flowId: "test-flow-id-1",
             eventId: "test-event-id-1",
             name: "test-activity-name-1",
@@ -1703,6 +1725,7 @@ describe("ActivityGroupsBuilder", () => {
         activities: [
           {
             activityId: "test-id-2",
+            availableTo: MIDNIGHT_DATE,
             flowId: "test-flow-id-1",
             eventId: "test-event-id-1",
             name: "test-activity-name-2",

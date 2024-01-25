@@ -19,13 +19,9 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   const isStatusScheduled = activity.status === ActivityStatus.Scheduled
 
-  const isStatusAvailable = activity.status === ActivityStatus.Available
-
   const isStatusInProgress = activity.status === ActivityStatus.InProgress
 
   const hasAvailableFromTo = isStatusScheduled
-
-  const hasAvailableToOnly = isStatusAvailable
 
   const hasTimeToComplete = isStatusInProgress && activity.isTimerSet && !!activity.timeLeftToComplete
 
@@ -71,17 +67,6 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
     )
   }
 
-  if (hasAvailableToOnly) {
-    return (
-      <Box display="flex" alignItems="center" gap="8px">
-        <Avatar src={ClockIcon} sx={{ width: "24px", height: "24px" }} />
-        <Typography variant="body1" sx={timeStatusLabelSx}>{`${t("activity_due_date.to")} ${formatDate(
-          activity.availableTo!,
-        )} ${isSpreadToNextDay ? t("activity_due_date.the_following_day") : ""}`}</Typography>
-      </Box>
-    )
-  }
-
   if (hasTimeToComplete) {
     return (
       <Box display="flex" alignItems="center" gap="8px">
@@ -95,7 +80,14 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
     )
   }
 
-  return <></>
+  return (
+    <Box display="flex" alignItems="center" gap="8px">
+      <Avatar src={ClockIcon} sx={{ width: "24px", height: "24px" }} />
+      <Typography variant="body1" sx={timeStatusLabelSx}>{`${t("activity_due_date.to")} ${formatDate(
+        activity.availableTo!,
+      )} ${isSpreadToNextDay ? t("activity_due_date.the_following_day") : ""}`}</Typography>
+    </Box>
+  )
 }
 
 export default TimeStatusLabel
