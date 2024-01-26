@@ -19,9 +19,7 @@ export class YoutubeBuilder {
 
   private getIframe(embedUrl: string, name: string): string {
     // className="embed-container" is a hack to make the iframe responsive
-    return `<div className="embed-container">
-    <iframe src="${embedUrl}" title="${name}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    </div>`
+    return `<div className="embed-container"><iframe src="${embedUrl}" title="${name}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`
   }
 
   public process(url: string, name: string): string | null {
