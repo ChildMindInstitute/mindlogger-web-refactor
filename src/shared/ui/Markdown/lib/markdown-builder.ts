@@ -1,4 +1,5 @@
 import { validateImage } from "./validate-image"
+import { VimeoBuilder } from "./Vimeo.builder"
 import { YoutubeBuilder } from "./YouTube.builder"
 
 class MarkdownBuilder {
@@ -58,6 +59,15 @@ class MarkdownBuilder {
 
       if (youtubeIframe) {
         markdown = markdown.replace(item, youtubeIframe)
+        continue
+      }
+
+      const vimeoBuilder = new VimeoBuilder()
+
+      const vimeoIframe = vimeoBuilder.process(url, name)
+
+      if (vimeoIframe) {
+        markdown = markdown.replace(item, vimeoIframe)
         continue
       }
 
