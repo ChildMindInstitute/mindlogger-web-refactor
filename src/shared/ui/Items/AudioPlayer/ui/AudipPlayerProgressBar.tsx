@@ -33,7 +33,7 @@ export const AudioPlayerProgressBar = ({ progress, buffer, onProgressBarClick, i
   const width = lessThanSM ? "60px" : defaultWidth
 
   return (
-    <Box sx={{ width }}>
+    <Box sx={{ width }} data-testid="audio-player-progress">
       <LinearProgress
         variant="determinate"
         value={progress}

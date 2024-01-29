@@ -1,13 +1,15 @@
 import { validateImage } from "./validate-image"
+import { VimeoBuilder } from "./Vimeo.builder"
+import { YoutubeBuilder } from "./YouTube.builder"
 
 class MarkdownBuilder {
   public async extend(markdown: string): Promise<string> {
     markdown = this.extendStrikeThrough(markdown)
     markdown = this.extendUnderline(markdown)
-    markdown = await this.extendMedia(markdown)
     markdown = this.extendTextAlign(markdown)
     markdown = this.extendSubScript(markdown)
     markdown = this.extendHighlight(markdown)
+    markdown = await this.extendMedia(markdown)
 
     return markdown
   }
@@ -28,30 +30,53 @@ class MarkdownBuilder {
   }
 
   private async extendMedia(markdown: string): Promise<string> {
-    const allMediaFilesRule = new RegExp(/!\[[^\]]+\]\([^)]+\)/g)
+    const allMediaFilesRule = new RegExp(/!\[[^\]]*\]\([^)]+\)/g)
 
-    const matches = [...markdown.matchAll(allMediaFilesRule)]
+    const mediaItems = [...markdown.matchAll(allMediaFilesRule)]
 
-    if (!matches) {
+    if (!mediaItems) {
       return markdown
     }
 
-    for (const match of matches) {
+    // Take first element of the match group - it's the whole match
+    for (const [item] of mediaItems) {
       const urlRule = new RegExp(/\((.*?)\)/g)
       const nameRule = new RegExp(/\[(.*?)\]/g)
 
-      const urlMatchGroup = [...match[0].matchAll(urlRule)][0]
-      const nameMatchGroup = [...match[0].matchAll(nameRule)][0]
+      const urlMatchGroup = item.match(urlRule)
+      const nameMatchGroup = item.match(nameRule)
 
-      const url = urlMatchGroup?.[1]
-      const name = nameMatchGroup?.[1]
+      if (!urlMatchGroup || !nameMatchGroup) {
+        continue
+      }
+
+      const url = urlMatchGroup.map(el => el.slice(1, -1))[0]
+      const name = nameMatchGroup.map(el => el.slice(1, -1))[0]
+
+      const youtubeBuilder = new YoutubeBuilder()
+
+      const youtubeIframe = youtubeBuilder.process(url, name)
+
+      if (youtubeIframe) {
+        markdown = markdown.replace(item, youtubeIframe)
+        continue
+      }
+
+      const vimeoBuilder = new VimeoBuilder()
+
+      const vimeoIframe = vimeoBuilder.process(url, name)
+
+      if (vimeoIframe) {
+        markdown = markdown.replace(item, vimeoIframe)
+        continue
+      }
 
       const isImage = await validateImage(url)
 
       if (isImage) {
-        markdown = markdown.replace(match[0], `<img src="${url}" alt="${name}">`)
+        markdown = markdown.replace(item, `<img src="${url}" alt="${name}">`)
       } else {
-        markdown = markdown.replace(match[0], `<video controls><source src="${url}" type="video/mp4">${name}</video>`)
+        markdown = markdown.replace(item, `<video controls><source src="${url}" type="video/mp4">${name}</video>`)
       }
     }
 

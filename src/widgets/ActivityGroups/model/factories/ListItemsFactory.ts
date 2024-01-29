@@ -65,8 +65,6 @@ export class ListItemsFactory {
       isTimerElapsed: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
-      containsResponseTypes: isFlow ? null : (entity as Activity).containsResponseTypes,
-      itemCount: isFlow ? null : (entity as Activity).itemCount,
     }
 
     if (isFlow) {
@@ -132,6 +130,17 @@ export class ListItemsFactory {
     item.status = ActivityStatus.InProgress
 
     const { event } = eventActivity
+
+    if (event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess) {
+      const isSpread = this.utility.isSpreadToNextDay(event)
+
+      const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday()
+      to.setHours(event.availability.timeTo!.hours)
+      to.setMinutes(event.availability.timeTo!.minutes)
+      item.availableTo = to
+    } else {
+      item.availableTo = MIDNIGHT_DATE
+    }
 
     item.isTimerSet = !!event.timers?.timer
 

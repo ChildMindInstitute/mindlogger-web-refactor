@@ -17,9 +17,11 @@ export const AudioPlayerControls = ({ isPlaying, onClick, isDisabled }: Props) =
   const smMatch = useMediaQuery(theme.breakpoints.down("sm"))
   const iconSize = smMatch ? "small" : "medium"
 
+  const testid = isPlaying ? "audio-player-pause-button" : "audio-player-play-button"
+
   return (
     <Box>
-      <IconButton onClick={onClick} disabled={isDisabled}>
+      <IconButton onClick={onClick} disabled={isDisabled} data-testid={testid}>
         {isPlaying ? <PauseIcon fontSize={iconSize} /> : <PlayArrowIcon fontSize={iconSize} />}
       </IconButton>
     </Box>
