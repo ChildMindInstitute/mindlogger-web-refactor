@@ -21,7 +21,7 @@ export interface CustomModalProps {
   onSecondaryButtonClick?: () => void
 }
 
-export const CustomModal = (props: CustomModalProps) => {
+export const BootstrapModal = (props: CustomModalProps) => {
   const {
     title,
     label,

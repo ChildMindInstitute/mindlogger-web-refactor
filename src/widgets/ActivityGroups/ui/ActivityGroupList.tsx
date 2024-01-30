@@ -6,12 +6,12 @@ import Typography from "@mui/material/Typography"
 import { subMonths } from "date-fns"
 
 import { ActivityGroup } from "./ActivityGroup"
-import { CustomModal } from "../../Modal"
 import { AppletDetailsContext } from "../lib"
 import { useActivityGroups, useEntitiesSync } from "../model/hooks"
 
 import AppletDefaultIcon from "~/assets/AppletDefaultIcon.svg"
 import { useCompletedEntitiesQuery } from "~/entities/activity"
+import { BootstrapModal } from "~/shared/ui"
 import { AvatarBase } from "~/shared/ui"
 import Loader from "~/shared/ui/Loader"
 import { formatToDtoDate, useCustomTranslation } from "~/shared/utils"
@@ -83,7 +83,7 @@ export const ActivityGroupList = () => {
             <ActivityGroup group={g} key={g.name} />
           ))}
       </Box>
-      <CustomModal
+      <BootstrapModal
         show={isAboutOpen}
         onHide={() => setIsAboutOpen(false)}
         title={t("about")}
