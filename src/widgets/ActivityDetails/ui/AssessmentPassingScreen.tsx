@@ -209,7 +209,7 @@ export const AssessmentPassingScreen = (props: Props) => {
           onBackButtonClick={onBack}
           onNextButtonClick={onMoveForward}
           backButtonText={t("Consent.back")}
-          nextButtonText={hasNextStep ? t("Consent.next") : t("submit")}
+          nextButtonText={t("Consent.next")}
         />
       </AssessmentLayoutFooter>
     </Box>
