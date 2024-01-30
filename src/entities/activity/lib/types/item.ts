@@ -48,6 +48,7 @@ export interface ActivityItemBase {
   config: Config
   responseValues: ResponseValues
   answer: Answer
+  additionalText?: string | null
   conditionalLogic: ConditionalLogic | null
 }
 
