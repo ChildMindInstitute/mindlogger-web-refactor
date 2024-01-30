@@ -95,7 +95,7 @@ function convertToSingleSelectAnswer(item: RadioItem): ItemAnswer<SingleSelectAn
   return {
     answer: {
       value: Number(item.answer[0]),
-      text: null,
+      text: item.additionalText || null,
     },
     itemId: item.id,
   }
@@ -112,7 +112,7 @@ function convertToMultiSelectAnswer(item: CheckboxItem): ItemAnswer<MultiSelectA
   return {
     answer: {
       value: item.answer.map(strValue => Number(strValue)),
-      text: null,
+      text: item.additionalText || null,
     },
     itemId: item.id,
   }
@@ -129,7 +129,7 @@ function convertToSliderAnswer(item: SliderItem): ItemAnswer<SliderAnswerPayload
   return {
     answer: {
       value: Number(item.answer[0]),
-      text: null,
+      text: item.additionalText || null,
     },
     itemId: item.id,
   }
@@ -146,7 +146,7 @@ function convertToNumberSelectAnswer(item: SelectorItem): ItemAnswer<NumberSelec
   return {
     answer: {
       value: Number(item.answer[0]),
-      text: null,
+      text: item.additionalText || null,
     },
     itemId: item.id,
   }
@@ -170,7 +170,7 @@ function convertToDateAnswer(item: DateItem): ItemAnswer<DateAnswerPayload> {
   return {
     answer: {
       value: dateToDayMonthYear(new Date(item.answer[0])),
-      text: null,
+      text: item.additionalText || null,
     },
     itemId: item.id,
   }
@@ -187,7 +187,7 @@ function convertToTimeAnswer(item: TimeItem): ItemAnswer<TimeAnswerPayload> {
   return {
     answer: {
       value: dateToHourMinute(new Date(item.answer[0])),
-      text: null,
+      text: item.additionalText || null,
     },
     itemId: item.id,
   }
@@ -210,7 +210,7 @@ function convertToTimeRangeAnswer(item: TimeRangeItem): ItemAnswer<TimeRangeAnsw
         from: { hour: fromDate.getHours(), minute: fromDate.getMinutes() },
         to: { hour: toDate.getHours(), minute: toDate.getMinutes() },
       },
-      text: null,
+      text: item.additionalText || null,
     },
     itemId: item.id,
   }
