@@ -13,6 +13,7 @@ const axiosService = axios.create({
 })
 
 axiosService.defaults.headers.common["Content-Type"] = "application/json"
+axiosService.defaults.headers.common["Mindlogger-Content-Source"] = "web"
 
 axiosService.interceptors.request.use(
   config => {
