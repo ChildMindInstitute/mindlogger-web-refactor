@@ -82,6 +82,13 @@ export type SaveItemAnswerPayload = {
   answer: string[]
 }
 
+export type SaveItemAdditionalTextPayload = {
+  entityId: string
+  eventId: string
+  itemId: string
+  additionalText: string
+}
+
 export type UpdateStepPayload = {
   activityId: string
   eventId: string

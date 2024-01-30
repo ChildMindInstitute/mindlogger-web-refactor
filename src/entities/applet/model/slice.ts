@@ -15,6 +15,7 @@ import {
   UpdateStepPayload,
   UpdateUserEventByIndexPayload,
   SaveGroupProgressPayload,
+  SaveItemAdditionalTextPayload,
 } from "./types"
 
 import { ActivityPipelineType, GroupProgress, FlowProgress, getProgressId, GroupProgressState } from "~/abstract/lib"
@@ -82,6 +83,30 @@ const appletsSlice = createSlice({
 
       activityProgress.items[itemIndex].answer = action.payload.answer
     },
+
+    /**
+     * Reducer for saving additionaltext
+     * @param state
+     * @param action
+     * @returns
+     */
+    saveAdditionalText: (state, action: PayloadAction<SaveItemAdditionalTextPayload>) => {
+      const id = getProgressId(action.payload.entityId, action.payload.eventId)
+      const activityProgress = state.progress[id]
+
+      if (!activityProgress) {
+        return state
+      }
+
+      const itemIndex = activityProgress.items.findIndex(({ id }) => id === action.payload.itemId)
+
+      if (itemIndex === -1) {
+        return state
+      }
+
+      activityProgress.items[itemIndex].additionalText = action.payload.additionalText
+    },
+
     saveUserEvent: (state, action: PayloadAction<SaveUserEventPayload>) => {
       const id = getProgressId(action.payload.entityId, action.payload.eventId)
       const activityProgress = state.progress[id]
