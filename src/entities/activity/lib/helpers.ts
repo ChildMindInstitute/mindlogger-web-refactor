@@ -42,3 +42,12 @@ export const supportsAdditonalResponseField = (
 export const hasAdditionalResponse = (item: appletModel.ItemRecord): boolean => {
   return supportsAdditonalResponseField(item) && item.config.additionalResponseOption.textInputOption
 }
+
+/**
+ * Check whether an item has been configured with a required additional response field
+ * @param item Any item, even those that don't support additional response fields
+ * @returns Whether the item requires an additional response
+ */
+export const requiresAdditionalResponse = (item: appletModel.ItemRecord): boolean => {
+  return supportsAdditonalResponseField(item) && item.config.additionalResponseOption.textInputRequired
+}

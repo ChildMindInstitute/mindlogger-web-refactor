@@ -1,3 +1,4 @@
+import { hasAdditionalResponse, requiresAdditionalResponse } from "~/entities/activity/lib/helpers"
 import { appletModel } from "~/entities/applet"
 import { ActivityDTO } from "~/shared/api"
 import { stringContainsOnlyNumbers, validateDate, validateTime } from "~/shared/utils"
@@ -95,6 +96,15 @@ export function validateBeforeMoveForward({ item, activity, showWarning }: Valid
 
   if (isNumericOnly) {
     showWarning("onlyNumbersAllowed")
+    return false
+  }
+
+  const hasAdditionalTextField = hasAdditionalResponse(item)
+  const isAdditionalTextRequired = hasAdditionalTextField && requiresAdditionalResponse(item)
+  const isAdditionalTextEmpty = hasAdditionalTextField && !item.additionalText
+
+  if (isAdditionalTextRequired && isAdditionalTextEmpty) {
+    showWarning("pleaseProvideAdditionalText")
     return false
   }
 
