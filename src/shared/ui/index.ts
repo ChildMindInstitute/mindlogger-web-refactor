@@ -18,6 +18,7 @@ export * from "./BaseButton"
 export * from "./NotificationCenter"
 
 export * from "./BootstrapModal"
+export * from "./MuiModal"
 
 // Common - UI
 export * from "./Container"
