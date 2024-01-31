@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from "react"
+import { useCallback, useContext, useMemo, useState } from "react"
 
 import Box from "@mui/material/Box"
 
@@ -25,6 +25,8 @@ type Props = {
 
 export const AssessmentPassingScreen = (props: Props) => {
   const { t } = useCustomTranslation()
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { showWarningNotification } = useNotification()
 
@@ -61,6 +63,8 @@ export const AssessmentPassingScreen = (props: Props) => {
   })
 
   const { step, item, hasPrevStep, hasNextStep, progress } = useSurvey(activityProgress)
+
+  const canGoBack = !item?.config.removeBackButton && props.activityDetails.responseIsEditable
 
   const prevStep = usePrevious(step)
 
@@ -145,11 +149,12 @@ export const AssessmentPassingScreen = (props: Props) => {
     }
 
     if (!hasNextStep) {
-      return onSubmit()
+      return setIsModalOpen(true)
+      // return onSubmit()
     }
 
     return onNext()
-  }, [hasNextStep, item, onNext, onSubmit, props.activityDetails, showWarningNotification, t])
+  }, [hasNextStep, item, onNext, props.activityDetails, showWarningNotification, t])
 
   const onItemValueChange = (value: string[]) => {
     saveItemAnswer(item.id, value)
@@ -205,8 +210,8 @@ export const AssessmentPassingScreen = (props: Props) => {
 
         <AssessmentLayoutFooter>
           <ItemCardButton
-            isLoading={isLoading}
-            isBackShown={hasPrevStep && !item?.config.removeBackButton && props.activityDetails.responseIsEditable}
+            isLoading={false}
+            isBackShown={hasPrevStep && canGoBack}
             onBackButtonClick={onBack}
             onNextButtonClick={onMoveForward}
             backButtonText={t("Consent.back")}
@@ -214,8 +219,17 @@ export const AssessmentPassingScreen = (props: Props) => {
           />
         </AssessmentLayoutFooter>
       </Box>
-      {/* Mock for now */}
-      <MuiModal isOpen={true} onHide={() => console.log("hide")} title={"Submit answer?"} label={"test"} />
+      <MuiModal
+        isOpen={isModalOpen}
+        onHide={() => setIsModalOpen(false)}
+        title={t("submitAnswerModalTitle")}
+        label={t("submitAnswerModalDescription")}
+        footerPrimaryButton={t("submit")}
+        onPrimaryButtonClick={onSubmit}
+        isPrimaryButtonLoading={isLoading}
+        footerSecondaryButton={canGoBack ? t("goBack") : undefined}
+        onSecondaryButtonClick={canGoBack ? () => setIsModalOpen(false) : undefined}
+      />
     </>
   )
 }
