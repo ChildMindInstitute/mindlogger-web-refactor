@@ -1,6 +1,67 @@
-import { hasAdditionalResponse, requiresAdditionalResponse, supportsAdditionalResponseField } from "./helpers"
+import {
+  hasAdditionalResponse,
+  isSupportedActivity,
+  requiresAdditionalResponse,
+  supportsAdditionalResponseField,
+} from "./helpers"
+
+import { ItemResponseTypeDTO } from "~/shared/api"
 
 describe("Activity helpers", () => {
+  describe("isSupportedActivity", () => {
+    it("Returns false if no response types are provided", () => {
+      expect(isSupportedActivity()).toEqual(false)
+    })
+
+    it("Returns false for unsupported response types", () => {
+      const unsupportedResponseTypes: ItemResponseTypeDTO[] = [
+        "geolocation",
+        "drawing",
+        "photo",
+        "video",
+        "sliderRows",
+        "singleSelectRows",
+        "multiSelectRows",
+        "audio",
+      ]
+
+      expect(isSupportedActivity(unsupportedResponseTypes)).toEqual(false)
+    })
+
+    it("Returns false for a mix of supported and unsupported response types", () => {
+      const mixedResponseTypes: ItemResponseTypeDTO[] = [
+        "text",
+        "geolocation",
+        "drawing",
+        "photo",
+        "video",
+        "sliderRows",
+        "singleSelectRows",
+        "multiSelectRows",
+        "audio",
+      ]
+
+      expect(isSupportedActivity(mixedResponseTypes)).toEqual(false)
+    })
+
+    it("Returns true if all response types are supported", () => {
+      const supportedResponseTypes: ItemResponseTypeDTO[] = [
+        "text",
+        "singleSelect",
+        "multiSelect",
+        "slider",
+        "numberSelect",
+        "message",
+        "date",
+        "time",
+        "timeRange",
+        "audioPlayer",
+      ]
+
+      expect(isSupportedActivity(supportedResponseTypes)).toEqual(true)
+    })
+  })
+
   describe("supportsAdditionalResponseField", () => {
     it("Text item should return false", () => {
       expect(supportsAdditionalResponseField({ responseType: "text" })).toEqual(false)
