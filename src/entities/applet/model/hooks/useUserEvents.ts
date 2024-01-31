@@ -88,5 +88,52 @@ export const useUserEvents = (props: Props) => {
     [activityProgress, dispatch, props.activityId, props.eventId],
   )
 
-  return { saveUserEventByType, saveSetAnswerUserEvent }
+  const saveSetAdditionalTextUserEvent = useCallback(
+    (item: ItemRecord) => {
+      if (!activityProgress || item.additionalText === null || item.additionalText === undefined) {
+        return
+      }
+
+      const userEvents = activityProgress.userEvents
+
+      const activityItemScreenId = getActivityItemScreenId(props.activityId, item.id)
+
+      if (userEvents.length > 0) {
+        const lastUserEvent = userEvents[userEvents.length - 1]
+
+        if (lastUserEvent.screen === activityItemScreenId && lastUserEvent.type === "SET_ADDITIONAL_TEXT") {
+          return dispatch(
+            actions.updateUserEventByIndex({
+              entityId: props.activityId,
+              eventId: props.eventId,
+              userEventIndex: userEvents.length - 1,
+              userEvent: {
+                type: "SET_ADDITIONAL_TEXT",
+                screen: activityItemScreenId,
+                time: Date.now(),
+                response: item.additionalText,
+              },
+            }),
+          )
+        }
+      }
+
+      return dispatch(
+        actions.saveUserEvent({
+          entityId: props.activityId,
+          eventId: props.eventId,
+          itemId: item.id,
+          userEvent: {
+            type: "SET_ADDITIONAL_TEXT",
+            screen: activityItemScreenId,
+            time: Date.now(),
+            response: item.additionalText,
+          },
+        }),
+      )
+    },
+    [activityProgress, dispatch, props.activityId, props.eventId],
+  )
+
+  return { saveUserEventByType, saveSetAnswerUserEvent, saveSetAdditionalTextUserEvent }
 }

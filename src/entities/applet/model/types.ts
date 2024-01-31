@@ -13,7 +13,7 @@ import {
   TimeRangeItem,
 } from "~/entities/activity/lib"
 
-export type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"
+export type UserEventTypes = "SET_ANSWER" | "SET_ADDITIONAL_TEXT" | "PREV" | "NEXT" | "SKIP" | "DONE"
 
 export type UserEventResponse =
   | string

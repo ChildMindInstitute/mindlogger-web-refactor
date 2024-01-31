@@ -50,10 +50,11 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const { incrementStep, decrementStep } = appletModel.hooks.useActivityProgress()
 
-  const { saveUserEventByType, saveSetAnswerUserEvent } = appletModel.hooks.useUserEvents({
-    activityId,
-    eventId,
-  })
+  const { saveUserEventByType, saveSetAnswerUserEvent, saveSetAdditionalTextUserEvent } =
+    appletModel.hooks.useUserEvents({
+      activityId,
+      eventId,
+    })
 
   const { saveItemAnswer, saveItemAdditionalText } = appletModel.hooks.useSaveItemAnswer({
     activityId,
@@ -161,7 +162,10 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const onItemAdditionalTextChange = (value: string) => {
     saveItemAdditionalText(item.id, value)
-    // TODO: saveSetAdditionalTextUserEvent
+    saveSetAdditionalTextUserEvent({
+      ...item,
+      additionalText: value,
+    })
   }
 
   useAutoForward({
