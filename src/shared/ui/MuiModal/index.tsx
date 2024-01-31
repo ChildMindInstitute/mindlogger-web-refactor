@@ -1,10 +1,13 @@
-import Button from "@mui/material/Button"
+import Box from "@mui/material/Box"
 import Dialog from "@mui/material/Dialog"
 import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import DialogTitle from "@mui/material/DialogTitle"
+import Typography from "@mui/material/Typography"
 
-import { Markdown } from "~/shared/ui"
+import { BaseButton } from "../BaseButton"
+
+import { Theme } from "~/shared/constants"
 
 type Props = {
   isOpen: boolean
@@ -13,23 +16,27 @@ type Props = {
   label?: string | null
   footerPrimaryButton?: string | null
   primaryButtonDisabled?: boolean
+  isPrimaryButtonLoading?: boolean
   onPrimaryButtonClick?: () => void
   footerSecondaryButton?: string | null
   secondaryButtonDisabled?: boolean
   onSecondaryButtonClick?: () => void
+  isSecondaryButtonLoading?: boolean
 }
 
 export const MuiModal = (props: Props) => {
   const {
     title,
     label,
-    footerPrimaryButton,
-    footerSecondaryButton,
+
     isOpen,
-    primaryButtonDisabled,
-    secondaryButtonDisabled,
     onHide,
+
+    footerPrimaryButton,
     onPrimaryButtonClick,
+    isPrimaryButtonLoading,
+
+    footerSecondaryButton,
     onSecondaryButtonClick,
   } = props
 
@@ -43,37 +50,90 @@ export const MuiModal = (props: Props) => {
       sx={{
         "& .MuiPaper-root": {
           borderRadius: "16px",
+          padding: "24px",
         },
-
+        "& .MuiDialogTitle-root": {
+          padding: "0",
+        },
         "& .MuiDialogContent-root": {
-          padding: 2,
+          padding: "0",
         },
         "& .MuiDialogActions-root": {
-          padding: 1,
+          justifyContent: "center",
+          paddingTop: "24px",
         },
       }}>
       {title && (
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          {title}
+        <DialogTitle id="customized-dialog-title">
+          <Typography
+            fontFamily="Atkinson"
+            fontSize="22px"
+            fontWeight={700}
+            fontStyle="normal"
+            lineHeight="28px"
+            letterSpacing="0.1px"
+            textTransform="none"
+            paddingBottom="8px"
+            color={Theme.colors.light.onSurface}>
+            {title}
+          </Typography>
         </DialogTitle>
       )}
       {label && (
         <DialogContent>
-          <Markdown markdown={label} />
+          <Typography
+            fontFamily="Atkinson"
+            fontSize="16px"
+            fontWeight={400}
+            fontStyle="normal"
+            lineHeight="24px"
+            letterSpacing="0.15px"
+            textTransform="none"
+            color={Theme.colors.light.onSurface}>
+            {label}
+          </Typography>
         </DialogContent>
       )}
       {(footerPrimaryButton || footerSecondaryButton) && (
         <DialogActions>
           {footerSecondaryButton && (
-            <Button onClick={onSecondaryButtonClick} disabled={secondaryButtonDisabled}>
-              {footerSecondaryButton}
-            </Button>
+            <Box width="120px" data-testid="assessment-back-button">
+              <BaseButton
+                type="button"
+                variant="text"
+                onClick={onSecondaryButtonClick}
+                text={footerSecondaryButton}
+                borderColor={Theme.colors.light.outline}
+                sx={{
+                  "&:hover": {
+                    border: "none",
+                  },
+                }}>
+                <Typography
+                  fontFamily="Atkinson"
+                  fontSize="14px"
+                  fontWeight={400}
+                  fontStyle="normal"
+                  lineHeight="20px"
+                  letterSpacing="0.1px"
+                  textTransform="none"
+                  color={Theme.colors.light.primary}>
+                  {footerSecondaryButton}
+                </Typography>
+              </BaseButton>
+            </Box>
           )}
 
           {footerPrimaryButton && (
-            <Button onClick={onPrimaryButtonClick} disabled={primaryButtonDisabled}>
-              {footerPrimaryButton}
-            </Button>
+            <Box width="120px" data-testid="popup-primary-button">
+              <BaseButton
+                type="button"
+                variant="contained"
+                isLoading={isPrimaryButtonLoading}
+                onClick={onPrimaryButtonClick}
+                text={footerPrimaryButton}
+              />
+            </Box>
           )}
         </DialogActions>
       )}
