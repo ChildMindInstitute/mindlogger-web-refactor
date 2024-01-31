@@ -42,10 +42,6 @@ export const ActivityCardItem = ({
 
   const { t } = useCustomTranslation()
 
-  const additionalTextLabel = requiresAdditionalResponse(item)
-    ? t("additional.additional_text")
-    : t("additional.additional_text_required")
-
   return (
     <SliderAnimation step={step} prevStep={prevStep ?? step}>
       <CardItem
@@ -56,9 +52,9 @@ export const ActivityCardItem = ({
       </CardItem>
       {hasAdditionalResponse(item) && (
         <CardItem
-          markdown={additionalTextLabel}
+          markdown={t("additional.additional_text")}
           watermark={watermark}
-          isOptional={!isOptionalFlagHidden && (item.config.skippableItem || allowToSkipAllItems)}>
+          isOptional={!requiresAdditionalResponse(item)}>
           <AdditionalTextResponse value={item.additionalText || ""} onValueChange={onItemAdditionalTextChange} />
         </CardItem>
       )}
