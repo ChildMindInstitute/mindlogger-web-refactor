@@ -15,7 +15,7 @@ export function isSupportedActivity(itemResponseTypes?: Array<ItemResponseTypeDT
  * @param item Any item
  * @returns Whether the item type supports additional text responses
  */
-export const supportsAdditonalResponseField = (
+export const supportsAdditionalResponseField = (
   item: appletModel.ItemRecord,
 ): item is appletModel.ItemWithAdditionalResponse => {
   return [
@@ -40,7 +40,7 @@ export const supportsAdditonalResponseField = (
  * @returns Whether the item has an additional response field
  */
 export const hasAdditionalResponse = (item: appletModel.ItemRecord): boolean => {
-  return supportsAdditonalResponseField(item) && item.config.additionalResponseOption.textInputOption
+  return supportsAdditionalResponseField(item) && item.config.additionalResponseOption.textInputOption
 }
 
 /**
@@ -49,5 +49,5 @@ export const hasAdditionalResponse = (item: appletModel.ItemRecord): boolean => 
  * @returns Whether the item requires an additional response
  */
 export const requiresAdditionalResponse = (item: appletModel.ItemRecord): boolean => {
-  return supportsAdditonalResponseField(item) && item.config.additionalResponseOption.textInputRequired
+  return supportsAdditionalResponseField(item) && item.config.additionalResponseOption.textInputRequired
 }
