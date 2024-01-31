@@ -16,22 +16,11 @@ export function isSupportedActivity(itemResponseTypes?: Array<ItemResponseTypeDT
  * @returns Whether the item type supports additional text responses
  */
 export const supportsAdditionalResponseField = (
-  item: appletModel.ItemRecord,
+  item: Pick<appletModel.ItemRecord, "responseType">,
 ): item is appletModel.ItemWithAdditionalResponse => {
-  return [
-    "singleSelect",
-    "multiSelect",
-    "slider",
-    "date",
-    "numberSelect",
-    "time",
-    "timeRange",
-    "drawing",
-    "photo",
-    "video",
-    "geolocation",
-    "audio",
-  ].includes(item.responseType)
+  return ["singleSelect", "multiSelect", "slider", "date", "numberSelect", "time", "timeRange", "audioPlayer"].includes(
+    item.responseType,
+  )
 }
 
 /**
@@ -39,7 +28,7 @@ export const supportsAdditionalResponseField = (
  * @param item Any item, even those that don't support additional response fields
  * @returns Whether the item has an additional response field
  */
-export const hasAdditionalResponse = (item: appletModel.ItemRecord): boolean => {
+export const hasAdditionalResponse = (item: Pick<appletModel.ItemRecord, "responseType" | "config">): boolean => {
   return supportsAdditionalResponseField(item) && item.config.additionalResponseOption.textInputOption
 }
 
@@ -48,6 +37,6 @@ export const hasAdditionalResponse = (item: appletModel.ItemRecord): boolean => 
  * @param item Any item, even those that don't support additional response fields
  * @returns Whether the item requires an additional response
  */
-export const requiresAdditionalResponse = (item: appletModel.ItemRecord): boolean => {
+export const requiresAdditionalResponse = (item: Pick<appletModel.ItemRecord, "responseType" | "config">): boolean => {
   return supportsAdditionalResponseField(item) && item.config.additionalResponseOption.textInputRequired
 }
