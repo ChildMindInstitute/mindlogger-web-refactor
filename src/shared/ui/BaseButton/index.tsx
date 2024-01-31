@@ -1,20 +1,47 @@
-import { forwardRef } from "react"
+import { PropsWithChildren, forwardRef } from "react"
 
+import { SxProps } from "@mui/material"
 import Button from "@mui/material/Button"
 import CircularProgress from "@mui/material/CircularProgress"
 import Typography from "@mui/material/Typography"
 
 import { Theme } from "../../constants"
 
-type Props = {
+type Props = PropsWithChildren<{
   type: "button" | "submit"
   isLoading?: boolean
-  variant: "contained" | "outlined"
+  variant: "text" | "contained" | "outlined"
   borderColor?: string
 
-  text: string
+  text?: string | null
   onClick?: () => void
   color?: "primary" | "secondary" | "error" | "info" | "success" | "warning"
+
+  sx?: SxProps
+}>
+
+type ButtonTextComponentProps = {
+  text?: string | null
+  textComponent?: React.ReactNode
+}
+
+const ButtonTextComponent = (props: ButtonTextComponentProps): JSX.Element => {
+  if (props.textComponent) {
+    return <>{props.textComponent}</>
+  }
+
+  return (
+    <Typography
+      fontFamily="Atkinson"
+      fontSize="16px"
+      fontWeight={700}
+      fontStyle="normal"
+      lineHeight="20px"
+      letterSpacing="0.1px"
+      textTransform="none">
+      {props.text}
+    </Typography>
+  )
 }
 
 export const BaseButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
@@ -36,20 +63,12 @@ export const BaseButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
         "&:hover": {
           border: `1px solid ${props.borderColor}`,
         },
+        ...props.sx,
       }}>
       {props.isLoading ? (
         <CircularProgress size={25} sx={{ color: Theme.colors.light.primary }} />
       ) : (
-        <Typography
-          fontFamily="Atkinson"
-          fontSize="16px"
-          fontWeight={700}
-          fontStyle="normal"
-          lineHeight="20px"
-          letterSpacing="0.1px"
-          textTransform="none">
-          {props.text}
-        </Typography>
+        <ButtonTextComponent text={props.text} textComponent={props.children} />
       )}
     </Button>
   )
