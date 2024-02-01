@@ -9,12 +9,14 @@ export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventRes
   if (responseType === "singleSelect") {
     return {
       value: [Number(itemAnswer[0])],
+      text: item.additionalText ?? undefined,
     }
   }
 
   if (responseType === "multiSelect") {
     return {
       value: itemAnswer.map(answer => Number(answer)),
+      text: item.additionalText ?? undefined,
     }
   }
 
