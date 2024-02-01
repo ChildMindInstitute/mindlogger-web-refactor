@@ -20,7 +20,10 @@ export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventRes
     }
   }
 
-  return itemAnswer[0]
+  return {
+    value: itemAnswer[0],
+    text: item.additionalText ?? undefined,
+  }
 }
 
 export function mapItemToRecord(item: ActivityItemDetailsDTO): ItemRecord {

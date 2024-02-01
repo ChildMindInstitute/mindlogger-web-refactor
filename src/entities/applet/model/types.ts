@@ -18,7 +18,7 @@ export type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"
 export type UserEventResponse =
   | string
   | {
-      value: number[]
+      value: string | string[] | number[]
       text?: string
     }
 

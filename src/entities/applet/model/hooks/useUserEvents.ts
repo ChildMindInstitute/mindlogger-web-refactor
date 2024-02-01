@@ -98,6 +98,14 @@ export const useUserEvents = (props: Props) => {
         return
       }
 
+      const response = mapItemAnswerToUserEventResponse(item)
+
+      if (typeof response !== "object") {
+        // This should never happen since text items don't have additional text
+        // but the TS compiler doesn't know that
+        return
+      }
+
       const userEvents = activityProgress.userEvents
 
       const activityItemScreenId = getActivityItemScreenId(props.activityId, item.id)
@@ -108,11 +116,10 @@ export const useUserEvents = (props: Props) => {
         if (
           previousUserEvent.screen === activityItemScreenId &&
           previousUserEvent.type === "SET_ANSWER" &&
-          typeof previousUserEvent.response !== "string"
+          typeof previousUserEvent.response === "object" &&
+          previousUserEvent.response.text !== undefined
         ) {
-          // We want to always update the previous event when it is a SET_ANSWER event for
-          // the same item. However, the data model currently only supports additional text
-          // on events for singleSelect and multiSelect items
+          // Update the text of the previous response if it contains text (to prevent incremental events)
           return dispatch(
             actions.updateUserEventByIndex({
               entityId: props.activityId,
@@ -123,10 +130,7 @@ export const useUserEvents = (props: Props) => {
                 screen: activityItemScreenId,
                 time: Date.now(),
                 response: {
-                  // The type doesn't allow setting a null value here, but the flow logic
-                  // prevents proceeding without setting the actual answer so using []
-                  // should be fine
-                  value: previousUserEvent.response?.value ?? [],
+                  value: previousUserEvent.response.value,
                   text: item.additionalText,
                 },
               },
@@ -136,51 +140,19 @@ export const useUserEvents = (props: Props) => {
       }
 
       // Create a new event in all other cases
-      if (item.responseType === "singleSelect" || item.responseType === "multiSelect") {
-        const response = mapItemAnswerToUserEventResponse(item)
-
-        if (typeof response !== "object") {
-          // This should never happen since text items don't have additional text
-          // but the TS compiler doesn't know that
-          return
-        }
-
-        return dispatch(
-          actions.saveUserEvent({
-            entityId: props.activityId,
-            eventId: props.eventId,
-            itemId: item.id,
-            userEvent: {
-              type: "SET_ANSWER",
-              screen: activityItemScreenId,
-              time: Date.now(),
-              response: {
-                value: response.value,
-                text: item.additionalText,
-              },
-            },
-          }),
-        )
-      } else {
-        // The user event data model for other item types don't yet
-        // support additional text, so we just save the additional text
-        return dispatch(
-          actions.saveUserEvent({
-            entityId: props.activityId,
-            eventId: props.eventId,
-            itemId: item.id,
-            userEvent: {
-              type: "SET_ANSWER",
-              screen: activityItemScreenId,
-              time: Date.now(),
-              response: {
-                value: [],
-                text: item.additionalText,
-              },
-            },
-          }),
-        )
-      }
+      return dispatch(
+        actions.saveUserEvent({
+          entityId: props.activityId,
+          eventId: props.eventId,
+          itemId: item.id,
+          userEvent: {
+            type: "SET_ANSWER",
+            screen: activityItemScreenId,
+            time: Date.now(),
+            response,
+          },
+        }),
+      )
     },
     [activityProgress, dispatch, props.activityId, props.eventId],
   )
