@@ -5,7 +5,7 @@ import { useTimer } from "~/shared/utils"
 
 export type InactivityTrackerProps = PropsWithChildren<unknown>
 
-const events = ["load", "click", "scroll", "keypress"]
+const events = ["load", "click", "scroll", "keypress", "mousemove"]
 
 const ONE_SEC = 1000
 const ONE_MIN = 60 * ONE_SEC
