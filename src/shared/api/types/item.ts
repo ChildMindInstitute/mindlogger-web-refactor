@@ -54,6 +54,13 @@ export type ResponseValuesDTO =
 
 export type EmptyResponseValuesDTO = null
 
+export type AdditionalResponseOptionConfigDTO = {
+  additionalResponseOption: {
+    textInputOption: boolean
+    textInputRequired: boolean
+  }
+}
+
 export interface TextItemDTO extends ItemDetailsBaseDTO {
   responseType: "text"
   config: TextItemConfigDTO
@@ -77,7 +84,7 @@ export interface CheckboxItemDTO extends ItemDetailsBaseDTO {
   responseValues: CheckboxItemResponseValuesDTO
 }
 
-export type CheckboxItemConfigDTO = {
+export type CheckboxItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   removeBackButton: boolean
   skippableItem: boolean
   randomizeOptions: boolean
@@ -86,10 +93,6 @@ export type CheckboxItemConfigDTO = {
   setAlerts: boolean
   addTooltip: boolean
   setPalette: boolean
-  additionalResponseOption: {
-    textInputOption: boolean
-    textInputRequired: boolean
-  }
 }
 
 export type CheckboxItemResponseValuesDTO = {
@@ -112,7 +115,7 @@ export interface RadioItemDTO extends ItemDetailsBaseDTO {
   responseValues: RadioItemResponseValuesDTO
 }
 
-export type RadioItemConfigDTO = {
+export type RadioItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   removeBackButton: boolean
   skippableItem: boolean
   randomizeOptions: boolean
@@ -122,10 +125,6 @@ export type RadioItemConfigDTO = {
   addTooltip: boolean
   setPalette: boolean
   autoAdvance: boolean
-  additionalResponseOption: {
-    textInputOption: boolean
-    textInputRequired: boolean
-  }
 }
 
 export type RadioItemResponseValuesDTO = {
@@ -148,7 +147,7 @@ export interface SliderItemDTO extends ItemDetailsBaseDTO {
   responseValues: SliderItemResponseValuesDTO
 }
 
-export type SliderItemConfigDTO = {
+export type SliderItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   addScores: boolean
   setAlerts: boolean
   showTickMarks: boolean
@@ -157,10 +156,6 @@ export type SliderItemConfigDTO = {
   removeBackButton: boolean
   skippableItem: boolean
   timer: number | null
-  additionalResponseOption: {
-    textInputOption: boolean
-    textInputRequired: boolean
-  }
 }
 
 export type SliderItemResponseValuesDTO = {
@@ -185,13 +180,9 @@ export interface SelectorItemDTO extends ItemDetailsBaseDTO {
   responseValues: SelectorItemResponseValues
 }
 
-export type SelectorItemConfigDTO = {
+export type SelectorItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   removeBackButton: boolean
   skippableItem: boolean
-  additionalResponseOption: {
-    textInputOption: boolean
-    textInputRequired: boolean
-  }
 }
 
 export type SelectorItemResponseValues = {
@@ -216,14 +207,10 @@ export interface DateItemDTO extends ItemDetailsBaseDTO {
   responseValues: EmptyResponseValuesDTO
 }
 
-export type DateItemConfigDTO = {
+export type DateItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   removeBackButton: boolean
   skippableItem: boolean
   timer: number | null
-  additionalResponseOption: {
-    textInputOption: boolean
-    textInputRequired: boolean
-  }
 }
 
 export interface TimeItemDTO extends ItemDetailsBaseDTO {
@@ -232,14 +219,10 @@ export interface TimeItemDTO extends ItemDetailsBaseDTO {
   responseValues: EmptyResponseValuesDTO
 }
 
-export type TimeItemConfigDTO = {
+export type TimeItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   removeBackButton: boolean
   skippableItem: boolean
   timer: number | null
-  additionalResponseOption: {
-    textInputOption: boolean
-    textInputRequired: boolean
-  }
 }
 
 export interface TimeRangeItemDTO extends ItemDetailsBaseDTO {
@@ -248,14 +231,10 @@ export interface TimeRangeItemDTO extends ItemDetailsBaseDTO {
   responseValues: EmptyResponseValuesDTO
 }
 
-export type TimeRangeItemConfigDTO = {
+export type TimeRangeItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   removeBackButton: boolean
   skippableItem: boolean
   timer: number | null
-  additionalResponseOption: {
-    textInputOption: boolean
-    textInputRequired: boolean
-  }
 }
 
 export interface AudioPlayerItemDTO extends ItemDetailsBaseDTO {
@@ -264,14 +243,10 @@ export interface AudioPlayerItemDTO extends ItemDetailsBaseDTO {
   responseValues: AudioPlayerItemResponseValuesDTO
 }
 
-export type AudioPlayerItemConfigDTO = {
+export type AudioPlayerItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   playOnce: boolean
   removeBackButton: boolean
   skippableItem: boolean
-  additionalResponseOption: {
-    textInputOption: boolean
-    textInputRequired: boolean
-  }
 }
 
 export type AudioPlayerItemResponseValuesDTO = {
