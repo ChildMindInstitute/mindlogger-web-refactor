@@ -3,11 +3,11 @@ import { vi } from "vitest"
 
 import { AvailableGroupEvaluator } from "./AvailableGroupEvaluator"
 import { GroupsBuildContext } from "./GroupUtility"
-import { EventEntity, Entity } from "../../lib"
 
 import { ActivityPipelineType, GroupProgressState } from "~/abstract/lib"
 import { AvailabilityLabelType, EventAvailability, PeriodicityType } from "~/entities/event"
 import { HourMinute } from "~/shared/utils"
+import { EventEntity, Entity } from "~/widgets/ActivityGroups/lib"
 import { ActivityType } from "~/widgets/ActivityGroups/lib"
 
 jest.mock("@app/shared/lib/constants", () => ({

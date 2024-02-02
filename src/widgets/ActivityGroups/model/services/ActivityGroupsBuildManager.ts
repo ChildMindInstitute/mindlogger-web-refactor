@@ -1,8 +1,8 @@
 import { Activity, ActivityFlow, ActivityListGroup, Entity, EventEntity } from "../../lib"
-import { createActivityGroupsBuilder } from "../factories/ActivityGroupsBuilder"
 import { mapActivitiesFromDto, mapActivityFlowsFromDto } from "../mappers"
 
 import { ActivityPipelineType, GroupProgressState } from "~/abstract/lib"
+import { createActivityGroupsBuilder } from "~/abstract/lib/GroupBuilder"
 import { EventModel, ScheduleEvent } from "~/entities/event"
 import { AppletDetailsBaseInfoDTO, AppletEventsResponse } from "~/shared/api"
 
@@ -88,4 +88,4 @@ const createActivityGroupsBuildManager = () => {
   }
 }
 
-export default createActivityGroupsBuildManager()
+export const ActivityGroupsBuildManager = createActivityGroupsBuildManager()

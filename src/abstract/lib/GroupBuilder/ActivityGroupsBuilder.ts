@@ -2,7 +2,14 @@ import { AvailableGroupEvaluator } from "./AvailableGroupEvaluator"
 import { GroupsBuildContext, GroupUtility } from "./GroupUtility"
 import { ListItemsFactory } from "./ListItemsFactory"
 import { ScheduledGroupEvaluator } from "./ScheduledGroupEvaluator"
-import { ActivityGroupType, ActivityGroupTypeNames, ActivityListGroup, ActivityListItem, EventEntity } from "../../lib"
+
+import {
+  ActivityGroupType,
+  ActivityGroupTypeNames,
+  ActivityListGroup,
+  ActivityListItem,
+  EventEntity,
+} from "~/widgets/ActivityGroups/lib"
 
 export interface IActivityGroupsBuilder {
   buildInProgress: (eventsActivities: Array<EventEntity>) => ActivityListGroup

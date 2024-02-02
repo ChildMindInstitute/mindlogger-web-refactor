@@ -1,5 +1,5 @@
 import { ActivityListGroup } from "../../lib"
-import ActivityGroupsBuildManager from "../services/ActivityGroupsBuildManager"
+import { ActivityGroupsBuildManager } from "../services/ActivityGroupsBuildManager"
 
 import { appletModel } from "~/entities/applet"
 import { AppletDetailsBaseInfoDTO, AppletEventsResponse } from "~/shared/api"

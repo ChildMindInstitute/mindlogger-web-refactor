@@ -1,9 +1,9 @@
 import { GroupUtility, GroupsBuildContext } from "./GroupUtility"
-import { EventEntity } from "../../lib"
 
 import { IEvaluator } from "~/abstract/lib"
 import { AvailabilityLabelType } from "~/entities/event"
 import { getHourMinute, isTimeInInterval } from "~/shared/utils"
+import { EventEntity } from "~/widgets/ActivityGroups/lib"
 
 export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
   private utility: GroupUtility

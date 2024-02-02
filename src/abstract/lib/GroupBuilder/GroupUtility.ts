@@ -1,11 +1,10 @@
 import { addDays, addYears, isEqual, startOfDay, subDays, subSeconds, subYears } from "date-fns"
 
-import { EventEntity, Activity } from "../../lib"
-
 import { GroupProgress, GroupProgressState, getProgressId } from "~/abstract/lib"
 import { AvailabilityLabelType, PeriodicityType, ScheduleEvent } from "~/entities/event"
 import { MINUTES_IN_HOUR, MS_IN_MINUTE } from "~/shared/constants"
 import { DatesFromTo, HourMinute, getMsFromHours, getMsFromMinutes, isSourceLess } from "~/shared/utils"
+import { EventEntity, Activity } from "~/widgets/ActivityGroups/lib"
 
 const ManyYears = 100
 
