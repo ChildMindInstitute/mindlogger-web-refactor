@@ -150,7 +150,6 @@ export const AssessmentPassingScreen = (props: Props) => {
 
     if (!hasNextStep) {
       return setIsModalOpen(true)
-      // return onSubmit()
     }
 
     return onNext()
