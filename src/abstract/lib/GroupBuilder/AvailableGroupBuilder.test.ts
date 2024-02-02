@@ -1,6 +1,7 @@
 import { addDays, addHours, addMinutes, subDays, subHours, subMinutes } from "date-fns"
 import { vi } from "vitest"
 
+import { Entity, EventEntity } from "./activityGroups.types"
 import { AvailableGroupEvaluator } from "./AvailableGroupEvaluator"
 import { GroupsBuildContext } from "./GroupUtility"
 import { ActivityType } from "./types"
@@ -8,7 +9,6 @@ import { ActivityType } from "./types"
 import { ActivityPipelineType, GroupProgressState } from "~/abstract/lib"
 import { AvailabilityLabelType, EventAvailability, PeriodicityType } from "~/entities/event"
 import { HourMinute } from "~/shared/utils"
-import { EventEntity, Entity } from "~/widgets/ActivityGroups/lib"
 
 jest.mock("@app/shared/lib/constants", () => ({
   ...jest.requireActual("@app/shared/lib/constants"),

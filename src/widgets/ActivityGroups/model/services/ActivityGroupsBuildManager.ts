@@ -1,8 +1,14 @@
-import { Activity, ActivityFlow, Entity, EventEntity } from "../../lib"
 import { mapActivitiesFromDto, mapActivityFlowsFromDto } from "../mappers"
 
 import { ActivityPipelineType, GroupProgressState } from "~/abstract/lib"
-import { ActivityListGroup, createActivityGroupsBuilder } from "~/abstract/lib/GroupBuilder"
+import {
+  Activity,
+  ActivityFlow,
+  ActivityListGroup,
+  Entity,
+  EventEntity,
+  createActivityGroupsBuilder,
+} from "~/abstract/lib/GroupBuilder"
 import { EventModel, ScheduleEvent } from "~/entities/event"
 import { ActivityBaseInfoDTO, ActivityFlowDTO, AppletEventsResponse } from "~/shared/api"
 

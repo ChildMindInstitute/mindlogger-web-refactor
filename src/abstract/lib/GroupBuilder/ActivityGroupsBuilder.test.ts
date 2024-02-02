@@ -11,6 +11,7 @@ import {
 } from "date-fns"
 import { vi } from "vitest"
 
+import { Entity, EventEntity } from "./activityGroups.types"
 import { ActivityGroupsBuilder, createActivityGroupsBuilder } from "./ActivityGroupsBuilder"
 import { GroupsBuildContext } from "./GroupUtility"
 import { ActivityType, ActivityListItem, ActivityStatus, ActivityListGroup } from "./types"
@@ -19,7 +20,6 @@ import { ActivityPipelineType, FlowProgress, GroupProgressState } from "~/abstra
 import { AvailabilityLabelType, EventAvailability } from "~/entities/event"
 import { PeriodicityType } from "~/entities/event"
 import { MIDNIGHT_DATE } from "~/shared/constants"
-import { Entity, EventEntity } from "~/widgets/ActivityGroups/lib"
 
 const getProgress = (startAt: Date, endAt: Date | null) => {
   const result: GroupProgressState = {

@@ -1,10 +1,10 @@
+import { Activity, ActivityFlow, EventEntity } from "./activityGroups.types"
 import { GroupUtility, GroupsBuildContext } from "./GroupUtility"
 import { ActivityListItem, ActivityStatus, ActivityType } from "./types"
 
 import { ActivityPipelineType, FlowProgress } from "~/abstract/lib"
 import { AvailabilityLabelType } from "~/entities/event"
 import { MIDNIGHT_DATE } from "~/shared/constants"
-import { EventEntity, Activity, ActivityFlow } from "~/widgets/ActivityGroups/lib"
 
 export class ListItemsFactory {
   private utility: GroupUtility
