@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 
+import { hasAdditionalResponse } from "~/entities/activity/lib/helpers"
 import { appletModel } from "~/entities/applet"
 import { usePrevious } from "~/shared/utils"
 
@@ -31,7 +32,18 @@ export const useAutoForward = ({ item, onForward, hasNextStep }: Props) => {
 
     const isHasAnswer = item.answer.length > 0
 
-    if (isSingleSelect && isHasAnswer && hasNextStep && isAnswerChanged && isAutoForwardEnabled) {
+    // If there's an additional text field we probably shouldn't auto advance,
+    // even if the field is populated
+    const hasAdditionalTextField = hasAdditionalResponse(item)
+
+    if (
+      isSingleSelect &&
+      isHasAnswer &&
+      hasNextStep &&
+      isAnswerChanged &&
+      isAutoForwardEnabled &&
+      !hasAdditionalTextField
+    ) {
       onForward()
     }
   }, [hasNextStep, item, onForward, prevItem?.answer, prevItem?.id])

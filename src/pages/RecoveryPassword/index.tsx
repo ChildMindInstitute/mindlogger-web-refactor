@@ -3,8 +3,8 @@ import { useSearchParams } from "react-router-dom"
 
 import { useRecoveryPasswordLinkHealthcheckQuery } from "~/entities/user"
 import { RecoveryPasswordForm, useRecoveryPasswordTranslation } from "~/features/RecoveryPassword"
-import { PageMessage } from "~/shared/ui"
 import Loader from "~/shared/ui/Loader"
+import { Text } from "~/shared/ui/Text"
 
 export default function RecoveryPasswordPage() {
   const [searchParams] = useSearchParams()
@@ -13,14 +13,20 @@ export default function RecoveryPasswordPage() {
   const key = searchParams.get("key")
   const email = searchParams.get("email")
 
-  const { isError, isLoading, error } = useRecoveryPasswordLinkHealthcheckQuery({ email: email!, key: key! })
+  const { isError, isLoading } = useRecoveryPasswordLinkHealthcheckQuery({ email: email!, key: key! })
 
   if (isLoading) {
     return <Loader />
   }
 
   if (isError) {
-    return <PageMessage message={error.evaluatedMessage!} />
+    return (
+      <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
+        <Text variant="body1" fontSize="24px" margin="16px 0px">
+          <Box dangerouslySetInnerHTML={{ __html: t("invalidLink") }} />
+        </Text>
+      </Box>
+    )
   }
 
   return (
