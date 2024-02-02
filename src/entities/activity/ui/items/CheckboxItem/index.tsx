@@ -27,18 +27,32 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
     return item.responseValues.options.filter(x => !x.isHidden)
   }, [item?.config?.randomizeOptions, item?.responseValues?.options])
 
+  const noneAboveOptionChecked = options.some(x => x.isNoneAbove && values.includes(String(x.value)))
+
   const [evenColumn, oddColumn] = useMemo(() => {
     return splitList(options)
   }, [options])
 
-  const onHandleValueChange = (value: string) => {
+  const onHandleValueChange = (value: string, isNoneAbove: boolean) => {
     const preparedValues = [...values]
 
-    const isCheckedValueIndexExist = preparedValues.findIndex(x => x === value)
+    const changedValueIndex = preparedValues.findIndex(x => x === value)
+    const isChangedIndexExist = changedValueIndex !== -1
 
-    if (isCheckedValueIndexExist !== -1) {
-      preparedValues.splice(isCheckedValueIndexExist, 1)
-    } else {
+    if (isChangedIndexExist) {
+      preparedValues.splice(changedValueIndex, 1)
+    }
+
+    if (noneAboveOptionChecked) {
+      return onValueChange(preparedValues)
+    }
+
+    if (!isChangedIndexExist && !isNoneAbove) {
+      preparedValues.push(value)
+    }
+
+    if (!isChangedIndexExist && isNoneAbove) {
+      preparedValues.splice(0, preparedValues.length)
       preparedValues.push(value)
     }
 
@@ -49,6 +63,11 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
     <Box display="flex" flex={1} gap="16px" flexDirection={lessThanSM ? "column" : "row"}>
       <Box display="flex" flex={1} gap="16px" flexDirection="column">
         {evenColumn.map(option => {
+          const isChecked = values.includes(String(option.value))
+          const isNoneAbove = option.isNoneAbove
+
+          const disabledDueNoneAbove = !isNoneAbove && noneAboveOptionChecked
+
           return (
             <CheckboxItemOption
               key={option.id}
@@ -56,11 +75,11 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
               name={item.id}
               value={option.value}
               label={option.text}
-              onChange={onHandleValueChange}
+              onChange={(value: string) => onHandleValueChange(value, isNoneAbove)}
               description={option.tooltip}
               image={option.image}
-              disabled={isDisabled}
-              defaultChecked={values.includes(String(option.value))}
+              disabled={isDisabled || disabledDueNoneAbove}
+              defaultChecked={isChecked}
               color={option.color}
               replaceText={replaceText}
             />
@@ -70,6 +89,11 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
 
       <Box display="flex" flex={1} gap="16px" flexDirection="column">
         {oddColumn.map(option => {
+          const isChecked = values.includes(String(option.value))
+          const isNoneAbove = option.isNoneAbove
+
+          const disabledDueNoneAbove = !isNoneAbove && noneAboveOptionChecked
+
           return (
             <CheckboxItemOption
               key={option.id}
@@ -77,11 +101,11 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
               name={item.id}
               value={option.value}
               label={option.text}
-              onChange={onHandleValueChange}
+              onChange={(value: string) => onHandleValueChange(value, isNoneAbove)}
               description={option.tooltip}
               image={option.image}
-              disabled={isDisabled}
-              defaultChecked={values.includes(String(option.value))}
+              disabled={isDisabled || disabledDueNoneAbove}
+              defaultChecked={isChecked}
               color={option.color}
               replaceText={replaceText}
             />
