@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton"
 
 import { Markdown } from "~/shared/ui"
 
-export interface CustomModalProps {
+type Props = {
   show: boolean
   onHide: () => void
   title?: string | null
@@ -21,7 +21,7 @@ export interface CustomModalProps {
   onSecondaryButtonClick?: () => void
 }
 
-export const CustomModal = (props: CustomModalProps) => {
+export const BootstrapModal = (props: Props) => {
   const {
     title,
     label,
