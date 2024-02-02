@@ -18,7 +18,8 @@ export const useActivityGroups = ({ applet, events }: Props): Return => {
   const groupsInProgress = useAppSelector(appletModel.selectors.groupProgressSelector)
 
   const groupsResult = ActivityGroupsBuildManager.process({
-    applet,
+    activities: applet.activities,
+    flows: applet.activityFlows,
     events,
     entityProgress: groupsInProgress,
   })

@@ -4,14 +4,15 @@ import { mapActivitiesFromDto, mapActivityFlowsFromDto } from "../mappers"
 import { ActivityPipelineType, GroupProgressState } from "~/abstract/lib"
 import { createActivityGroupsBuilder } from "~/abstract/lib/GroupBuilder"
 import { EventModel, ScheduleEvent } from "~/entities/event"
-import { AppletDetailsBaseInfoDTO, AppletEventsResponse } from "~/shared/api"
+import { ActivityBaseInfoDTO, ActivityFlowDTO, AppletEventsResponse } from "~/shared/api"
 
 type BuildResult = {
   groups: ActivityListGroup[]
 }
 
 type ProcessParams = {
-  applet: AppletDetailsBaseInfoDTO
+  activities: ActivityBaseInfoDTO[]
+  flows: ActivityFlowDTO[]
   events: AppletEventsResponse
   entityProgress: GroupProgressState
 }
@@ -35,11 +36,9 @@ const createActivityGroupsBuildManager = () => {
   }
 
   const process = (params: ProcessParams): BuildResult => {
-    const appletResponse = params.applet
+    const activities: Activity[] = mapActivitiesFromDto(params.activities)
 
-    const activities: Activity[] = mapActivitiesFromDto(appletResponse.activities)
-
-    const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(appletResponse.activityFlows)
+    const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(params.flows)
 
     const eventsResponse = params.events
 
