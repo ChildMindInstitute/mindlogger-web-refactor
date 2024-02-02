@@ -13,13 +13,13 @@ import { vi } from "vitest"
 
 import { ActivityGroupsBuilder, createActivityGroupsBuilder } from "./ActivityGroupsBuilder"
 import { GroupsBuildContext } from "./GroupUtility"
+import { ActivityType, ActivityListItem, ActivityStatus, ActivityListGroup } from "./types"
 
 import { ActivityPipelineType, FlowProgress, GroupProgressState } from "~/abstract/lib"
 import { AvailabilityLabelType, EventAvailability } from "~/entities/event"
 import { PeriodicityType } from "~/entities/event"
 import { MIDNIGHT_DATE } from "~/shared/constants"
-import { ActivityListGroup, Entity, EventEntity } from "~/widgets/ActivityGroups/lib"
-import { ActivityListItem, ActivityStatus, ActivityType } from "~/widgets/ActivityGroups/lib"
+import { Entity, EventEntity } from "~/widgets/ActivityGroups/lib"
 
 const getProgress = (startAt: Date, endAt: Date | null) => {
   const result: GroupProgressState = {

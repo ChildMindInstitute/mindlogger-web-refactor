@@ -2,8 +2,8 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 
 import { ActivityCardList } from "./ActivityCardList"
-import { ActivityListGroup } from "../lib/types"
 
+import { ActivityListGroup } from "~/abstract/lib/GroupBuilder"
 import { Theme } from "~/shared/constants"
 import { useCustomTranslation } from "~/shared/utils"
 

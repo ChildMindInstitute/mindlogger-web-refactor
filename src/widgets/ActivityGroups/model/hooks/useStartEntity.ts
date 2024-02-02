@@ -1,5 +1,6 @@
-import { ActivityStatus, EntityType, OnActivityCardClickProps } from "../../lib"
+import { EntityType, OnActivityCardClickProps } from "../../lib"
 
+import { ActivityStatus } from "~/abstract/lib/GroupBuilder"
 import { appletModel } from "~/entities/applet"
 import { AppletDetailsBaseInfoDTO } from "~/shared/api"
 import { ROUTES } from "~/shared/constants"
