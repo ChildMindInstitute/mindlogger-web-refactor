@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from "react"
+import { useCallback, useContext, useMemo, useState } from "react"
 
 import Box from "@mui/material/Box"
 
@@ -13,7 +13,7 @@ import { ActivityCardItem, ItemCardButton, useTextVariablesReplacer } from "~/en
 import { appletModel } from "~/entities/applet"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
 import { Theme } from "~/shared/constants"
-import { NotificationCenter, useNotification } from "~/shared/ui"
+import { MuiModal, NotificationCenter, useNotification } from "~/shared/ui"
 import { useAppSelector, useCustomTranslation, useFlowType, usePrevious } from "~/shared/utils"
 
 type Props = {
@@ -25,6 +25,8 @@ type Props = {
 
 export const AssessmentPassingScreen = (props: Props) => {
   const { t } = useCustomTranslation()
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { showWarningNotification } = useNotification()
 
@@ -50,17 +52,20 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const { incrementStep, decrementStep } = appletModel.hooks.useActivityProgress()
 
-  const { saveUserEventByType, saveSetAnswerUserEvent } = appletModel.hooks.useUserEvents({
-    activityId,
-    eventId,
-  })
+  const { saveUserEventByType, saveSetAnswerUserEvent, saveSetAdditionalTextUserEvent } =
+    appletModel.hooks.useUserEvents({
+      activityId,
+      eventId,
+    })
 
-  const { saveItemAnswer } = appletModel.hooks.useSaveItemAnswer({
+  const { saveItemAnswer, saveItemAdditionalText } = appletModel.hooks.useSaveItemAnswer({
     activityId,
     eventId,
   })
 
   const { step, item, hasPrevStep, hasNextStep, progress } = useSurvey(activityProgress)
+
+  const canGoBack = !item?.config.removeBackButton && props.activityDetails.responseIsEditable
 
   const prevStep = usePrevious(step)
 
@@ -145,17 +150,25 @@ export const AssessmentPassingScreen = (props: Props) => {
     }
 
     if (!hasNextStep) {
-      return onSubmit()
+      return setIsModalOpen(true)
     }
 
     return onNext()
-  }, [hasNextStep, item, onNext, onSubmit, props.activityDetails, showWarningNotification, t])
+  }, [hasNextStep, item, onNext, props.activityDetails, showWarningNotification, t])
 
   const onItemValueChange = (value: string[]) => {
     saveItemAnswer(item.id, value)
     saveSetAnswerUserEvent({
       ...item,
       answer: value,
+    })
+  }
+
+  const onItemAdditionalTextChange = (value: string) => {
+    saveItemAdditionalText(item.id, value)
+    saveSetAdditionalTextUserEvent({
+      ...item,
+      additionalText: value,
     })
   }
 
@@ -166,52 +179,67 @@ export const AssessmentPassingScreen = (props: Props) => {
   })
 
   return (
-    <Box
-      id="assessment-screen-layout"
-      display="flex"
-      flex={1}
-      flexDirection="column"
-      bgcolor={Theme.colors.light.surface}>
-      <AssessmentLayoutHeader
-        title={props.activityDetails.name}
-        progress={progress}
-        appletId={applet.id}
-        activityId={activityId}
-        eventId={eventId}
-        isPublic={context.isPublic}
-        publicKey={context.isPublic ? context.publicAppletKey : null}
-      />
+    <>
+      <Box
+        id="assessment-screen-layout"
+        display="flex"
+        flex={1}
+        flexDirection="column"
+        bgcolor={Theme.colors.light.surface}>
+        <AssessmentLayoutHeader
+          title={props.activityDetails.name}
+          progress={progress}
+          appletId={applet.id}
+          activityId={activityId}
+          eventId={eventId}
+          isPublic={context.isPublic}
+          publicKey={context.isPublic ? context.publicAppletKey : null}
+        />
 
-      <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
-        <NotificationCenter />
-        <Box display="flex" flex={1} justifyContent="center">
-          <Box maxWidth="900px" display="flex" alignItems="center" flex={1}>
-            {item && (
-              <ActivityCardItem
-                key={item.id}
-                item={item}
-                replaceText={replaceTextVariables}
-                watermark={props.appletDetails.watermark}
-                allowToSkipAllItems={props.activityDetails.isSkippable}
-                step={step}
-                prevStep={prevStep}
-                onValueChange={onItemValueChange}
-              />
-            )}
+        <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
+          <NotificationCenter />
+          <Box display="flex" flex={1} justifyContent="center">
+            <Box maxWidth="900px" display="flex" alignItems="center" flex={1}>
+              {item && (
+                <ActivityCardItem
+                  key={item.id}
+                  item={item}
+                  replaceText={replaceTextVariables}
+                  watermark={props.appletDetails.watermark}
+                  allowToSkipAllItems={props.activityDetails.isSkippable}
+                  step={step}
+                  prevStep={prevStep}
+                  onValueChange={onItemValueChange}
+                  onItemAdditionalTextChange={onItemAdditionalTextChange}
+                />
+              )}
+            </Box>
           </Box>
         </Box>
+
+        <AssessmentLayoutFooter>
+          <ItemCardButton
+            isLoading={false}
+            isBackShown={hasPrevStep && canGoBack}
+            onBackButtonClick={onBack}
+            onNextButtonClick={onMoveForward}
+            backButtonText={t("Consent.back")}
+            nextButtonText={t("Consent.next")}
+          />
+        </AssessmentLayoutFooter>
       </Box>
 
-      <AssessmentLayoutFooter>
-        <ItemCardButton
-          isLoading={isLoading}
-          isBackShown={hasPrevStep && !item?.config.removeBackButton && props.activityDetails.responseIsEditable}
-          onBackButtonClick={onBack}
-          onNextButtonClick={onMoveForward}
-          backButtonText={t("Consent.back")}
-          nextButtonText={hasNextStep ? t("Consent.next") : t("submit")}
-        />
-      </AssessmentLayoutFooter>
-    </Box>
+      <MuiModal
+        isOpen={isModalOpen}
+        onHide={() => setIsModalOpen(false)}
+        title={t("submitAnswerModalTitle")}
+        label={t("submitAnswerModalDescription")}
+        footerPrimaryButton={t("submit")}
+        onPrimaryButtonClick={onSubmit}
+        isPrimaryButtonLoading={isLoading}
+        footerSecondaryButton={canGoBack ? t("goBack") : undefined}
+        onSecondaryButtonClick={canGoBack ? () => setIsModalOpen(false) : undefined}
+      />
+    </>
   )
 }

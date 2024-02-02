@@ -5,7 +5,7 @@ import { useTimer } from "~/shared/utils"
 
 export type InactivityTrackerProps = PropsWithChildren<unknown>
 
-const events = ["load", "click", "scroll", "keypress"]
+const events = ["load", "click", "scroll", "keypress", "mousemove"]
 
 const ONE_SEC = 1000
 const ONE_MIN = 60 * ONE_SEC
@@ -13,7 +13,6 @@ const LOGOUT_TIME_LIMIT = 15 * ONE_MIN // 15 min
 
 export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   const { logout } = useLogout()
-
   const { resetTimer, setTimer } = useTimer()
 
   const onLogoutTimerExpire = useCallback(() => {
