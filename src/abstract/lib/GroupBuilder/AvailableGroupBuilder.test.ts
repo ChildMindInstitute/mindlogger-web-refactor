@@ -120,7 +120,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -174,7 +173,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -227,7 +225,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -285,7 +282,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -341,7 +337,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -393,7 +388,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -445,7 +439,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -500,7 +493,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -546,7 +538,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -599,7 +590,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -658,7 +648,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -698,7 +687,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -756,7 +744,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -814,7 +801,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -870,7 +856,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -924,7 +909,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -979,7 +963,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1033,7 +1016,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1092,7 +1074,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1149,7 +1130,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1202,7 +1182,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1255,7 +1234,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1310,7 +1288,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1361,7 +1338,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1408,7 +1384,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1456,7 +1431,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1515,7 +1489,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1574,7 +1547,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -1633,7 +1605,6 @@ describe("AvailableGroupEvaluator cross-day tests when access before start time 
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({

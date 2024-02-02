@@ -11,20 +11,16 @@ const ManyYears = 100
 export type GroupsBuildContext = {
   allAppletActivities: Activity[]
   progress: GroupProgressState
-  appletId: string
 }
 
 export class GroupUtility {
   protected progress: GroupProgressState
-
-  protected appletId: string
 
   protected _activities: Activity[]
 
   constructor(inputParams: GroupsBuildContext) {
     this.progress = inputParams.progress
     this._activities = inputParams.allAppletActivities
-    this.appletId = inputParams.appletId
   }
 
   private getStartedAt(eventActivity: EventEntity): Date {

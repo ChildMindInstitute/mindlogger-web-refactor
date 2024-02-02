@@ -194,7 +194,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -226,7 +225,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -254,7 +252,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -282,7 +279,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -331,7 +327,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -380,7 +375,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -429,7 +423,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -480,7 +473,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -518,7 +510,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -556,7 +547,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -596,7 +586,6 @@ describe("ActivityGroupsBuilder", () => {
         const input: GroupsBuildContext = {
           allAppletActivities: [],
           progress,
-          appletId: "test-applet-id-1",
         }
 
         const builder = createActivityGroupsBuilder(input)
@@ -644,7 +633,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -692,7 +680,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -738,7 +725,6 @@ describe("ActivityGroupsBuilder", () => {
       const input = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -787,7 +773,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -826,7 +811,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -864,7 +848,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -905,7 +888,6 @@ describe("ActivityGroupsBuilder", () => {
       let input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       let builder = createActivityGroupsBuilder(input)
@@ -932,7 +914,6 @@ describe("ActivityGroupsBuilder", () => {
       input = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       builder = createActivityGroupsBuilder(input)
@@ -953,7 +934,6 @@ describe("ActivityGroupsBuilder", () => {
       let input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       let builder = createActivityGroupsBuilder(input)
@@ -980,7 +960,6 @@ describe("ActivityGroupsBuilder", () => {
       input = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       builder = createActivityGroupsBuilder(input)
@@ -1007,7 +986,6 @@ describe("ActivityGroupsBuilder", () => {
         const input: GroupsBuildContext = {
           allAppletActivities: [],
           progress,
-          appletId: "test-applet-id-1",
         }
 
         const builder = createActivityGroupsBuilder(input)
@@ -1055,7 +1033,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -1097,7 +1074,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -1144,7 +1120,6 @@ describe("ActivityGroupsBuilder", () => {
       const input = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -1195,7 +1170,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -1234,7 +1208,6 @@ describe("ActivityGroupsBuilder", () => {
       const input = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -1273,7 +1246,6 @@ describe("ActivityGroupsBuilder", () => {
       const input = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -1323,7 +1295,6 @@ describe("ActivityGroupsBuilder", () => {
         const input: GroupsBuildContext = {
           allAppletActivities: [],
           progress,
-          appletId: "test-applet-id-1",
         }
 
         const builder = createActivityGroupsBuilder(input)
@@ -1370,7 +1341,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -1420,7 +1390,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -1470,7 +1439,6 @@ describe("ActivityGroupsBuilder", () => {
       let input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       let builder = createActivityGroupsBuilder(input)
@@ -1510,7 +1478,6 @@ describe("ActivityGroupsBuilder", () => {
       input = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       builder = createActivityGroupsBuilder(input)
@@ -1532,7 +1499,6 @@ describe("ActivityGroupsBuilder", () => {
       const input: GroupsBuildContext = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -1571,7 +1537,6 @@ describe("ActivityGroupsBuilder", () => {
       const input = {
         allAppletActivities: [],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)
@@ -1643,7 +1608,6 @@ describe("ActivityGroupsBuilder", () => {
           },
         ],
         progress,
-        appletId: "test-applet-id-1",
       }
 
       const builder = createActivityGroupsBuilder(input)

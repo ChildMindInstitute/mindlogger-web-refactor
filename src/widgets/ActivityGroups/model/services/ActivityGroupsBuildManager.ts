@@ -49,7 +49,6 @@ const createActivityGroupsBuildManager = () => {
 
     const builder = createActivityGroupsBuilder({
       allAppletActivities: activities,
-      appletId: appletResponse.id,
       progress: params.entityProgress,
     })
 

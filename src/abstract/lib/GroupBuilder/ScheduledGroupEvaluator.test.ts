@@ -119,7 +119,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -181,7 +180,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const evaluator = new ScheduledGroupEvaluator(input)
@@ -228,7 +226,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -282,7 +279,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -336,7 +332,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -382,7 +377,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -423,7 +417,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
