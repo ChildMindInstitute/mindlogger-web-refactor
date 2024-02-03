@@ -1,6 +1,5 @@
-import { Activity, ActivityFlow, ActivityType } from "../lib"
-
 import { ActivityPipelineType } from "~/abstract/lib"
+import { Activity, ActivityFlow, ActivityType } from "~/abstract/lib/GroupBuilder"
 import { ActivityBaseInfoDTO, ActivityFlowDTO } from "~/shared/api"
 
 export const mapActivitiesFromDto = (dtos: ActivityBaseInfoDTO[]): Activity[] => {
