@@ -1,5 +1,4 @@
-import { ActivityListItem, ActivityStatus } from "../../lib"
-
+import { ActivityListItem, ActivityStatus } from "~/abstract/lib/GroupBuilder"
 import { isSupportedActivity } from "~/entities/activity"
 import { AppletDetailsBaseInfoDTO } from "~/shared/api"
 

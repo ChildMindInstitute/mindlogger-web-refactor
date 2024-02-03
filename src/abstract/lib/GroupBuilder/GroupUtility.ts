@@ -1,6 +1,6 @@
 import { addDays, addYears, isEqual, startOfDay, subDays, subSeconds, subYears } from "date-fns"
 
-import { EventEntity, Activity } from "../../lib"
+import { Activity, EventEntity } from "./activityGroups.types"
 
 import { GroupProgress, GroupProgressState, getProgressId } from "~/abstract/lib"
 import { AvailabilityLabelType, PeriodicityType, ScheduleEvent } from "~/entities/event"
@@ -12,20 +12,16 @@ const ManyYears = 100
 export type GroupsBuildContext = {
   allAppletActivities: Activity[]
   progress: GroupProgressState
-  appletId: string
 }
 
 export class GroupUtility {
   protected progress: GroupProgressState
-
-  protected appletId: string
 
   protected _activities: Activity[]
 
   constructor(inputParams: GroupsBuildContext) {
     this.progress = inputParams.progress
     this._activities = inputParams.allAppletActivities
-    this.appletId = inputParams.appletId
   }
 
   private getStartedAt(eventActivity: EventEntity): Date {

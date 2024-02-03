@@ -1,6 +1,5 @@
-import { ActivityType } from "./types"
-
 import { ActivityPipelineType } from "~/abstract/lib"
+import { ActivityType } from "~/abstract/lib/GroupBuilder"
 import { ScheduleEvent } from "~/entities/event"
 
 export type EntityBase = {

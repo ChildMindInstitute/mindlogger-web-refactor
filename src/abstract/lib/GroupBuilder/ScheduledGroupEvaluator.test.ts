@@ -1,13 +1,13 @@
 import { addDays, addMinutes, subDays, subMinutes } from "date-fns"
 
+import { Entity, EventEntity } from "./activityGroups.types"
 import { GroupsBuildContext } from "./GroupUtility"
 import { ScheduledGroupEvaluator } from "./ScheduledGroupEvaluator"
-import { EventEntity, Entity } from "../../lib"
+import { ActivityType } from "./types"
 
 import { ActivityPipelineType, GroupProgressState } from "~/abstract/lib"
 import { AvailabilityLabelType, EventAvailability, PeriodicityType } from "~/entities/event"
 import { HourMinute } from "~/shared/utils"
-import { ActivityType } from "~/widgets/ActivityGroups/lib"
 
 jest.mock("@app/shared/lib/constants", () => ({
   ...jest.requireActual("@app/shared/lib/constants"),
@@ -119,7 +119,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -181,7 +180,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const evaluator = new ScheduledGroupEvaluator(input)
@@ -228,7 +226,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -282,7 +279,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -336,7 +332,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -382,7 +377,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
@@ -423,7 +417,6 @@ describe("ScheduledGroupEvaluator cross-day tests", () => {
     const input: GroupsBuildContext = {
       allAppletActivities: [],
       progress,
-      appletId: "test-applet-id-1",
     }
 
     const eventEntity: EventEntity = getScheduledEventEntity({
