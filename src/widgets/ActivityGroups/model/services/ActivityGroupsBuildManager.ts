@@ -5,8 +5,8 @@ import {
   Activity,
   ActivityFlow,
   ActivityListGroup,
-  Entity,
   EventEntity,
+  buildIdToEntityMap,
   createActivityGroupsBuilder,
 } from "~/abstract/lib/GroupBuilder"
 import { EventModel, ScheduleEvent } from "~/entities/event"
@@ -24,13 +24,6 @@ type ProcessParams = {
 }
 
 const createActivityGroupsBuildManager = () => {
-  const buildIdToEntityMap = (activities: Activity[], activityFlows: ActivityFlow[]): Record<string, Entity> => {
-    return [...activities, ...activityFlows].reduce<Record<string, Entity>>((acc, current) => {
-      acc[current.id] = current
-      return acc
-    }, {})
-  }
-
   const sort = (eventEntities: EventEntity[]) => {
     let flows = eventEntities.filter(x => x.entity.pipelineType === ActivityPipelineType.Flow)
     let activities = eventEntities.filter(x => x.entity.pipelineType === ActivityPipelineType.Regular)
