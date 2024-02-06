@@ -33,7 +33,13 @@ export const AssessmentWelcomeScreen = (props: Props) => {
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState()
 
   const startAssessment = () => {
-    return setInitialProgress({ activity: props.activityDetails, eventId: context.eventId })
+    return setInitialProgress({
+      appletId: context.appletId,
+      isPublic: context.isPublic,
+      publicAppletKey: context.isPublic ? context.publicAppletKey : undefined,
+      activity: props.activityDetails,
+      eventId: context.eventId,
+    })
   }
 
   return (

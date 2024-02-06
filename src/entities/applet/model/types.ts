@@ -51,6 +51,8 @@ export type ActivityProgress = {
   items: ItemRecord[]
   step: number
   userEvents: Array<UserEvents>
+  appletId: string
+  isPublic: boolean
 }
 
 type ProgressId = string // Progress ID is a combination of activityId and eventId (activityId/eventId)

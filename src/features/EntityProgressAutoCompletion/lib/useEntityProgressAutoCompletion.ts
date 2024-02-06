@@ -3,20 +3,26 @@ import { useCallback, useEffect, useMemo } from "react"
 import { useLocation } from "react-router-dom"
 
 import { getDataFromProgressId } from "~/abstract/lib"
-import { EventEntity, buildIdToEntityMap } from "~/abstract/lib/GroupBuilder"
-import { AvailableGroupEvaluator } from "~/abstract/lib/GroupBuilder/AvailableGroupEvaluator"
-import { GroupsBuildContext } from "~/abstract/lib/GroupBuilder/GroupUtility"
-import { appletModel } from "~/entities/applet"
-import { useUserEventsMutation } from "~/entities/event"
+import { appletModel, useAppletByIdQuery } from "~/entities/applet"
+import { useEventsByAppletIdMutation, useUserEventsMutation } from "~/entities/event"
 import { ROUTES } from "~/shared/constants"
 import { matchPaths } from "~/shared/utils"
 import { useAppSelector } from "~/shared/utils"
-import { mapActivitiesFromDto } from "~/widgets/ActivityGroups/model/mappers"
+import { useActivityDetailsQuery, useAnswer } from "~/widgets/ActivityDetails/model/hooks"
+import { useBaseQuery } from "~/shared/api"
+import { useAppletByIdMutation } from "~/entities/applet/api/useAppletByIdMutation"
 
 const AVAILABLE_PATHS = [ROUTES.profile.path, ROUTES.settings.path, ROUTES.appletList.path]
 
 export const useEntityProgressAutoCompletion = () => {
   const location = useLocation()
+  const { processAnswers } = useAnswer()
+  const { mutateAsync: aaa } = useAppletByIdMutation()
+  const { mutateAsync: asfaf } = useEventsByAppletIdMutation()
+  // const { activityDetails, isLoading, isError, error, appletDetails, eventsRawData, respondentMeta } =
+  //   useActivityDetailsQuery({
+  //     appletId,
+  //   })
 
   const { mutateAsync: getUserEvents } = useUserEventsMutation()
 
@@ -40,49 +46,18 @@ export const useEntityProgressAutoCompletion = () => {
       return getDataFromProgressId(progressId)
     })
 
-    console.info(progressEntityEvents)
+    console.info({ progressEntityEvents })
 
-    // Step 3: Get all activities by progress entities ids from requrest
-
-    // Step 4: Map all activitiesDTOS into activities
-    const activities = mapActivitiesFromDto([]) // Provide ActivityDTO here
-
-    const idToEntity = buildIdToEntityMap(activities)
-    console.info(idToEntity)
-
-    // Step 5: Prepare input params for AvailableGroupEvaluator
-    const inputParams: GroupsBuildContext = {
-      progress: applets.groupProgress,
-      allAppletActivities: activities,
-    }
-
-    // Step 6: Create AvailableGroupEvaluator instance
-    const availableEvaluator = new AvailableGroupEvaluator(inputParams)
-
-    // Step 7: Prepate eventsEntities from userEvents and progressEntityEvents
-    // const events = userEvents?.reduce<Array<ScheduleEventDto>>((acc, ue) => acc.concat(ue.events), [])
-    // console.info(events)
-
-    // This example of how to map events to EventEntity taken from src/widgets/ActivityGroups/model/services/ActivityGroupsBuildManager.ts
-    const eventsEntities: Array<EventEntity> = []
-    // const eventsEntities: Array<EventEntity> = events
-    //   .map<EventEntity>(event => ({
-    //     entity: idToEntity[event.entityId],
-    //     event,
-    //   }))
-    //   // @todo - remove after fix on BE
-    //   .filter(entityEvent => !!entityEvent.entity)
-
-    // Step 8: Evaluate available events
-    const filtered = availableEvaluator.evaluate(eventsEntities)
-    console.info(filtered)
-
-    // Step 9: Take events which are already unavailable
-
-    // Step 10: Get actual activity progress from the redux "progress"
-
-    // Step 11: Process answers
-    // Step 12: Submit answers
+    // const answer = processAnswers({
+    //   applet,
+    //   activityId,
+    //   eventId,
+    //   eventsRawData: props.eventsRawData,
+    //   flowId: flowParams.isFlow ? flowParams.flowId : null,
+    //   items,
+    //   userEvents,
+    //   isPublic: context.isPublic,
+    // })
   }, [applets.groupProgress, getUserEvents, progressKeys])
 
   useEffect(() => {

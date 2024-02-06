@@ -10,6 +10,9 @@ import { useAppDispatch } from "~/shared/utils"
 type SaveProgressProps = {
   activity: ActivityDTO
   eventId: string
+  appletId: string
+  isPublic: boolean
+  publicAppletKey?: string
 }
 
 type UpdateStepProps = {
@@ -49,6 +52,9 @@ export const useActivityProgress = () => {
             items,
             step: initialStep,
             userEvents: [],
+            appletId: props.appletId,
+            isPublic: props.isPublic,
+            publicAppletKey: props.publicAppletKey,
           },
         }),
       )

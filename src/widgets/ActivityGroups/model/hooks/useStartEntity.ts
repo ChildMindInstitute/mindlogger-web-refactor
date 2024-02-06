@@ -66,7 +66,17 @@ export const useStartEntity = (props: Props) => {
     const isActivityInProgress = status === ActivityStatus.InProgress
 
     if (!isActivityInProgress && !isFlow && params.activity) {
-      setInitialProgress({ activity, eventId: params.eventId })
+      if (props.isPublic && props.publicAppletKey) {
+        setInitialProgress({
+          appletId,
+          activity,
+          eventId: params.eventId,
+          isPublic: true,
+          publicAppletKey: props.publicAppletKey,
+        })
+      } else {
+        setInitialProgress({ appletId, activity, eventId: params.eventId, isPublic: false })
+      }
     }
 
     if (flowId) {

@@ -91,18 +91,17 @@ export const AssessmentPassingScreen = (props: Props) => {
     isPublic: context.isPublic,
   })
 
-  const { processAnswers } = useAnswer({
-    applet,
-    activityId,
-    eventId,
-    eventsRawData: props.eventsRawData,
-    flowId: flowParams.isFlow ? flowParams.flowId : null,
-  })
+  const { processAnswers } = useAnswer()
 
   const onSubmit = useCallback(() => {
     saveUserEventByType("DONE", item)
 
     const answer = processAnswers({
+      applet,
+      activityId,
+      eventId,
+      eventsRawData: props.eventsRawData,
+      flowId: flowParams.isFlow ? flowParams.flowId : null,
       items,
       userEvents,
       isPublic: context.isPublic,

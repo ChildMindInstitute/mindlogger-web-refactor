@@ -15,7 +15,10 @@ import { userModel } from "~/entities/user"
 import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
 import { formatToDtoDate, formatToDtoTime, useEncryption } from "~/shared/utils"
 
-type Props = {
+type SubmitAnswersProps = {
+  items: appletModel.ItemRecord[]
+  userEvents: appletModel.UserEvents[]
+  isPublic: boolean
   applet: AppletDetailsDTO
 
   flowId: string | null
@@ -25,13 +28,7 @@ type Props = {
   eventsRawData: AppletEventsResponse
 }
 
-type SubmitAnswersProps = {
-  items: appletModel.ItemRecord[]
-  userEvents: appletModel.UserEvents[]
-  isPublic: boolean
-}
-
-export const useAnswer = (props: Props) => {
+export const useAnswer = () => {
   const { generateUserPrivateKey } = useEncryption()
   const { encryptPayload } = useEncryptPayload()
 
@@ -60,14 +57,14 @@ export const useAnswer = (props: Props) => {
         privateKey = userModel.secureUserPrivateKeyStorage.getUserPrivateKey()
       }
 
-      const userPublicKey = generateUserPublicKey(props.applet.encryption, privateKey)
+      const userPublicKey = generateUserPublicKey(params.applet.encryption, privateKey)
 
-      const encryptedAnswers = encryptPayload(props.applet.encryption, preparedItemAnswers.answer, privateKey)
-      const encryptedUserEvents = encryptPayload(props.applet.encryption, params.userEvents, privateKey)
+      const encryptedAnswers = encryptPayload(params.applet.encryption, preparedItemAnswers.answer, privateKey)
+      const encryptedUserEvents = encryptPayload(params.applet.encryption, params.userEvents, privateKey)
 
       const groupProgress = getGroupProgress({
-        entityId: props.flowId ? props.flowId : props.activityId,
-        eventId: props.eventId,
+        entityId: params.flowId ? params.flowId : params.activityId,
+        eventId: params.eventId,
       })
 
       if (!groupProgress) {
@@ -76,7 +73,7 @@ export const useAnswer = (props: Props) => {
 
       const firstTextItemAnserWithIdentifier = getFirstResponseDataIdentifierTextItem(params.items)
       const encryptedIdentifier = firstTextItemAnserWithIdentifier
-        ? encryptPayload(props.applet.encryption, firstTextItemAnserWithIdentifier, privateKey)
+        ? encryptPayload(params.applet.encryption, firstTextItemAnserWithIdentifier, privateKey)
         : null
 
       const now = new Date()
@@ -84,7 +81,7 @@ export const useAnswer = (props: Props) => {
       const isFlow = groupProgress.type === ActivityPipelineType.Flow
       const pipelineAcitivityOrder = isFlow ? groupProgress.pipelineActivityOrder : null
 
-      const currentFlow = props.applet.activityFlows?.find(({ id }) => id === props.flowId)
+      const currentFlow = params.applet.activityFlows?.find(({ id }) => id === params.flowId)
 
       const currentFlowLength = currentFlow?.activityIds.length
 
@@ -93,11 +90,11 @@ export const useAnswer = (props: Props) => {
 
       // Step 3 - Send answers to backend
       const answer: AnswerPayload = {
-        appletId: props.applet.id,
-        activityId: props.activityId,
-        flowId: props.flowId,
+        appletId: params.applet.id,
+        activityId: params.activityId,
+        flowId: params.flowId,
         submitId: getSubmitId(groupProgress),
-        version: props.applet.version,
+        version: params.applet.version,
         createdAt: new Date().getTime(),
         isFlowCompleted: isFlow ? isFlowCompleted : true,
         answer: {
@@ -108,7 +105,7 @@ export const useAnswer = (props: Props) => {
           startTime: new Date(groupProgress.startAt!).getTime(),
           endTime: new Date().getTime(),
           identifier: encryptedIdentifier,
-          scheduledEventId: props.eventId,
+          scheduledEventId: params.eventId,
           localEndDate: formatToDtoDate(now),
           localEndTime: formatToDtoTime(now),
         },
@@ -121,26 +118,14 @@ export const useAnswer = (props: Props) => {
         },
       }
 
-      const scheduledTime = getScheduledTimeFromEvents(props.eventsRawData, props.activityId)
+      const scheduledTime = getScheduledTimeFromEvents(params.eventsRawData, params.activityId)
       if (scheduledTime) {
         answer.answer.scheduledTime = scheduledTime
       }
 
       return answer
     },
-    [
-      encryptPayload,
-      generateUserPrivateKey,
-      getGroupProgress,
-      props.activityId,
-      props.applet.activityFlows,
-      props.applet.encryption,
-      props.applet.id,
-      props.applet.version,
-      props.eventId,
-      props.eventsRawData,
-      props.flowId,
-    ],
+    [encryptPayload, generateUserPrivateKey, getGroupProgress],
   )
 
   return { processAnswers }

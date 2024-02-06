@@ -1,3 +1,5 @@
 export { useAppletListQuery } from "./useAppletListQuery"
 export { useAppletByIdQuery } from "./useAppletByIdQuery"
 export { useAppletBaseInfoByIdQuery } from "./useAppletBaseInfoByIdQuery"
+export { useAppletByIdMutation } from "./useAppletByIdMutation"
+export { useAppletByPublicKeyMutation } from "./useAppletByPublicKeyMutation"
