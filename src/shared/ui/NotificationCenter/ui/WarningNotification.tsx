@@ -1,16 +1,16 @@
-import { forwardRef } from "react"
+import { forwardRef } from 'react';
 
-import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded"
-import Box from "@mui/material/Box"
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
+import Box from '@mui/material/Box';
 
-import { Theme } from "~/shared/constants"
-import { Markdown } from "~/shared/ui"
+import { Theme } from '~/shared/constants';
+import { Markdown } from '~/shared/ui';
 
 type Props = {
-  id: string
-  message: string
-  duration: number
-}
+  id: string;
+  message: string;
+  duration: number;
+};
 
 export const WarningNotification = forwardRef((props: Props, ref) => {
   return (
@@ -28,5 +28,5 @@ export const WarningNotification = forwardRef((props: Props, ref) => {
       <ErrorRoundedIcon sx={{ color: Theme.colors.light.accentYellow }} />
       <Markdown markdown={props.message} />
     </Box>
-  )
-})
+  );
+});

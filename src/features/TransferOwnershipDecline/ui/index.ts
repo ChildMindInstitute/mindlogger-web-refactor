@@ -1,1 +1,1 @@
-export * from "./TransfetOwnershipDecline"
+export * from './TransfetOwnershipDecline';

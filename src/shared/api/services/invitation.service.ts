@@ -1,38 +1,38 @@
-import axiosService from "./axios"
+import axiosService from './axios';
 import {
   AcceptInvitationByIdPayload,
   DeclineInvitationByIdPayload,
   GetInvitationByIdPayload,
   GetInvitationSuccessResponse,
   TransferOwnershipPayload,
-} from "../types/invitation"
+} from '../types/invitation';
 
 function invitationService() {
   return {
     getInvitationById(payload: GetInvitationByIdPayload) {
-      return axiosService.get<GetInvitationSuccessResponse>(`/invitations/${payload.invitationId}`)
+      return axiosService.get<GetInvitationSuccessResponse>(`/invitations/${payload.invitationId}`);
     },
     acceptInvitation(payload: AcceptInvitationByIdPayload) {
-      return axiosService.post(`/invitations/${payload.invitationId}/accept`)
+      return axiosService.post(`/invitations/${payload.invitationId}/accept`);
     },
     declineInvitation(payload: DeclineInvitationByIdPayload) {
-      return axiosService.delete(`/invitations/${payload.invitationId}/decline`)
+      return axiosService.delete(`/invitations/${payload.invitationId}/decline`);
     },
 
     getPrivateInvitationById(payload: GetInvitationByIdPayload) {
-      return axiosService.get<GetInvitationSuccessResponse>(`/invitations/private/${payload.invitationId}`)
+      return axiosService.get<GetInvitationSuccessResponse>(`/invitations/private/${payload.invitationId}`);
     },
     acceptPrivateInvitation(payload: AcceptInvitationByIdPayload) {
-      return axiosService.post(`/invitations/private/${payload.invitationId}/accept`)
+      return axiosService.post(`/invitations/private/${payload.invitationId}/accept`);
     },
 
     acceptTransferOwnership(payload: TransferOwnershipPayload) {
-      return axiosService.post(`/applets/${payload.appletId}/transferOwnership/${payload.key}`)
+      return axiosService.post(`/applets/${payload.appletId}/transferOwnership/${payload.key}`);
     },
     declineTransferOwnerShip(payload: TransferOwnershipPayload) {
-      return axiosService.delete(`/applets/${payload.appletId}/transferOwnership/${payload.key}`)
+      return axiosService.delete(`/applets/${payload.appletId}/transferOwnership/${payload.key}`);
     },
-  }
+  };
 }
 
-export default invitationService()
+export default invitationService();

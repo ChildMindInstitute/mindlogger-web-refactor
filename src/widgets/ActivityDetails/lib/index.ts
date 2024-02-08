@@ -1,1 +1,1 @@
-export * from "./ActivityDetailsContext"
+export * from './ActivityDetailsContext';

@@ -1,6 +1,6 @@
-import { z } from "zod"
+import { z } from 'zod';
 
-import { Dictionary, stringContainsSpaces } from "~/shared/utils"
+import { Dictionary, stringContainsSpaces } from '~/shared/utils';
 
 export const ChangePasswordSchema = z
   .object({
@@ -22,7 +22,7 @@ export const ChangePasswordSchema = z
   })
   .refine(data => data.new === data.confirm, {
     message: Dictionary.validation.password.notMatch,
-    path: ["confirm"],
-  })
+    path: ['confirm'],
+  });
 
-export type TChangePassword = z.infer<typeof ChangePasswordSchema>
+export type TChangePassword = z.infer<typeof ChangePasswordSchema>;

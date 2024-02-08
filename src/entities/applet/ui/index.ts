@@ -1,1 +1,1 @@
-export * from "./AppletList"
+export * from './AppletList';

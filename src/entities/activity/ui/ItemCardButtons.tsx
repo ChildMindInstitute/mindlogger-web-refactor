@@ -1,19 +1,19 @@
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
-import { Theme } from "~/shared/constants"
-import { BaseButton } from "~/shared/ui"
-import { useCustomMediaQuery } from "~/shared/utils"
+import { Theme } from '~/shared/constants';
+import { BaseButton } from '~/shared/ui';
+import { useCustomMediaQuery } from '~/shared/utils';
 
 type ItemCardButtonsProps = {
-  isLoading: boolean
-  isBackShown: boolean
+  isLoading: boolean;
+  isBackShown: boolean;
 
-  backButtonText: string
-  nextButtonText: string
+  backButtonText: string;
+  nextButtonText: string;
 
-  onBackButtonClick?: () => void
-  onNextButtonClick: () => void
-}
+  onBackButtonClick?: () => void;
+  onNextButtonClick: () => void;
+};
 
 export const ItemCardButton = ({
   isBackShown,
@@ -23,7 +23,7 @@ export const ItemCardButton = ({
   nextButtonText,
   backButtonText,
 }: ItemCardButtonsProps) => {
-  const { greaterThanSM } = useCustomMediaQuery()
+  const { greaterThanSM } = useCustomMediaQuery();
 
   return (
     <Box
@@ -32,10 +32,10 @@ export const ItemCardButton = ({
       justifyContent="space-between"
       alignItems="center"
       margin="0 auto"
-      padding={greaterThanSM ? "0px 24px" : "0px 16px"}
+      padding={greaterThanSM ? '0px 24px' : '0px 16px'}
       maxWidth="900px">
       {(isBackShown && (
-        <Box width={greaterThanSM ? "200px" : "120px"} data-testid="assessment-back-button">
+        <Box width={greaterThanSM ? '200px' : '120px'} data-testid="assessment-back-button">
           <BaseButton
             type="button"
             variant="outlined"
@@ -46,7 +46,7 @@ export const ItemCardButton = ({
         </Box>
       )) || <div></div>}
 
-      <Box width={greaterThanSM ? "200px" : "120px"} data-testid="assessment-next-button">
+      <Box width={greaterThanSM ? '200px' : '120px'} data-testid="assessment-next-button">
         <BaseButton
           type="button"
           variant="contained"
@@ -56,5 +56,5 @@ export const ItemCardButton = ({
         />
       </Box>
     </Box>
-  )
-}
+  );
+};

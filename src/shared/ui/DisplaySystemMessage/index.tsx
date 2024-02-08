@@ -1,11 +1,11 @@
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
-import { Theme } from "../../constants"
+import { Theme } from '../../constants';
 
 interface ErrorLabelProps {
-  errorMessage?: string | null
-  successMessage?: string | null
+  errorMessage?: string | null;
+  successMessage?: string | null;
 }
 
 export const DisplaySystemMessage = ({ errorMessage, successMessage }: ErrorLabelProps) => {
@@ -23,5 +23,5 @@ export const DisplaySystemMessage = ({ errorMessage, successMessage }: ErrorLabe
         </Typography>
       )}
     </Box>
-  )
-}
+  );
+};

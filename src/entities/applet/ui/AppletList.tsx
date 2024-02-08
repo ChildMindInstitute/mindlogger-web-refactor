@@ -1,11 +1,11 @@
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
-import { AppletCard } from "./AppletCard"
-import { AppletListItem } from "../lib"
+import { AppletCard } from './AppletCard';
+import { AppletListItem } from '../lib';
 
 type Props = {
-  applets: AppletListItem[]
-}
+  applets: AppletListItem[];
+};
 
 export const AppletList = (props: Props) => {
   return (
@@ -14,5 +14,5 @@ export const AppletList = (props: Props) => {
         <AppletCard key={applet.id} applet={applet} />
       ))}
     </Box>
-  )
-}
+  );
+};

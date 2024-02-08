@@ -1,9 +1,9 @@
 export const randomizeArray = <T>(array: Array<T>): Array<T> => {
   if (!array) {
-    return []
+    return [];
   }
 
-  const arrayCopy = [...array]
+  const arrayCopy = [...array];
 
-  return arrayCopy.sort(() => Math.random() - 0.5)
-}
+  return arrayCopy.sort(() => Math.random() - 0.5);
+};

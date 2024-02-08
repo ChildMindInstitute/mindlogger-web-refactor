@@ -1,19 +1,19 @@
-import Radio from "@mui/material/Radio"
+import Radio from '@mui/material/Radio';
 
-import { BaseRadioActiveIcon } from "./BaseRadioActiveIcon"
-import { BaseRadioIcon } from "./BaseRadioIcon"
+import { BaseRadioActiveIcon } from './BaseRadioActiveIcon';
+import { BaseRadioIcon } from './BaseRadioIcon';
 
 type RadioItemOptionProps = {
-  id: string
-  name: string
-  value: string | number
+  id: string;
+  name: string;
+  value: string | number;
 
-  disabled?: boolean
-  defaultChecked?: boolean
-}
+  disabled?: boolean;
+  defaultChecked?: boolean;
+};
 
 export const RadioOption = (props: RadioItemOptionProps) => {
-  const { id, name, value, disabled, defaultChecked } = props
+  const { id, name, value, disabled, defaultChecked } = props;
 
   return (
     <Radio
@@ -27,5 +27,5 @@ export const RadioOption = (props: RadioItemOptionProps) => {
       checkedIcon={<BaseRadioActiveIcon />}
       icon={<BaseRadioIcon />}
     />
-  )
-}
+  );
+};

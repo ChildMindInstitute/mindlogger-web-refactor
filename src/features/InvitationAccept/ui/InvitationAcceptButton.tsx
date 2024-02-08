@@ -1,31 +1,31 @@
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
-import { useAcceptInviteMutation, useInvitationTranslation } from "~/entities/invitation"
-import { ROUTES } from "~/shared/constants"
-import { BaseButton, useNotification } from "~/shared/ui"
-import { Mixpanel, useCustomNavigation } from "~/shared/utils"
+import { useAcceptInviteMutation, useInvitationTranslation } from '~/entities/invitation';
+import { ROUTES } from '~/shared/constants';
+import { BaseButton, useNotification } from '~/shared/ui';
+import { Mixpanel, useCustomNavigation } from '~/shared/utils';
 
 interface InvitationAcceptButtonProps {
-  invitationKey: string
+  invitationKey: string;
 }
 
 export const InvitationAcceptButton = ({ invitationKey }: InvitationAcceptButtonProps) => {
-  const { t } = useInvitationTranslation()
-  const { navigate } = useCustomNavigation()
+  const { t } = useInvitationTranslation();
+  const { navigate } = useCustomNavigation();
 
-  const { showSuccessNotification } = useNotification()
+  const { showSuccessNotification } = useNotification();
 
   const { mutate: acceptInvite, isLoading: isAcceptLoading } = useAcceptInviteMutation({
     onSuccess() {
-      showSuccessNotification(t("invitationAccepted"))
-      Mixpanel.track("Invitation Accepted")
-      return navigate(ROUTES.appletList.path)
+      showSuccessNotification(t('invitationAccepted'));
+      Mixpanel.track('Invitation Accepted');
+      return navigate(ROUTES.appletList.path);
     },
-  })
+  });
 
   const onInviteAccept = () => {
-    return acceptInvite({ invitationId: invitationKey })
-  }
+    return acceptInvite({ invitationId: invitationKey });
+  };
 
   return (
     <Box width="250px">
@@ -35,7 +35,7 @@ export const InvitationAcceptButton = ({ invitationKey }: InvitationAcceptButton
         color="success"
         onClick={onInviteAccept}
         isLoading={isAcceptLoading}
-        text={t("buttons.acceptInvitation")}></BaseButton>
+        text={t('buttons.acceptInvitation')}></BaseButton>
     </Box>
-  )
-}
+  );
+};

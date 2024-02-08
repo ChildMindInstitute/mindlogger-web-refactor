@@ -1,20 +1,20 @@
-import { useEffect } from "react"
+import { useEffect } from 'react';
 
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
-import { Link, useLocation } from "react-router-dom"
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { Link, useLocation } from 'react-router-dom';
 
-import { SignupForm, useSignupTranslation } from "~/features/Signup"
-import { ROUTES, Theme } from "~/shared/constants"
-import { Mixpanel } from "~/shared/utils"
+import { SignupForm, useSignupTranslation } from '~/features/Signup';
+import { ROUTES, Theme } from '~/shared/constants';
+import { Mixpanel } from '~/shared/utils';
 
 function SignupPage() {
-  const { t } = useSignupTranslation()
-  const location = useLocation()
+  const { t } = useSignupTranslation();
+  const location = useLocation();
 
   useEffect(() => {
-    Mixpanel.trackPageView("Create account")
-  }, [])
+    Mixpanel.trackPageView('Create account');
+  }, []);
 
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
@@ -28,7 +28,7 @@ function SignupPage() {
           fontWeight={700}
           lineHeight="28px"
           marginBottom="24px">
-          {t("title")}
+          {t('title')}
         </Typography>
 
         <Box className="signupForm" maxWidth="400px" margin="0 auto">
@@ -43,7 +43,7 @@ function SignupPage() {
             fontStyle="normal"
             lineHeight="20px"
             letterSpacing="0.1px">
-            {t("or")},
+            {t('or')},
           </Typography>
           &nbsp;
           <Typography
@@ -54,15 +54,15 @@ function SignupPage() {
             fontStyle="normal"
             lineHeight="20px"
             letterSpacing="0.1px"
-            sx={{ textDecoration: "underline" }}>
+            sx={{ textDecoration: 'underline' }}>
             <Link to={ROUTES.login.path} relative="path">
-              {t("logIn")}
+              {t('logIn')}
             </Link>
           </Typography>
         </Box>
       </Box>
     </Box>
-  )
+  );
 }
 
-export default SignupPage
+export default SignupPage;

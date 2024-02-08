@@ -1,22 +1,22 @@
 /// <reference types="redux-persist" />
 
-declare module "redux-persist/integration/react" {
+declare module 'redux-persist/integration/react' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  import { ReactNode, PureComponent } from "react"
+  import { ReactNode, PureComponent } from 'react';
 
-  import { Persistor } from "redux-persist/es/types"
+  import { Persistor } from 'redux-persist/es/types';
 
   /** @see PersistGate */
   interface PersistGateProps {
-    persistor: Persistor
-    onBeforeLift?(): void | Promise<void>
-    children?: ReactNode | ((bootstrapped: boolean) => ReactNode)
-    loading?: ReactNode
+    persistor: Persistor;
+    onBeforeLift?(): void | Promise<void>;
+    children?: ReactNode | ((bootstrapped: boolean) => ReactNode);
+    loading?: ReactNode;
   }
 
   /** @see PersistGate */
   interface PersistorGateState {
-    bootstrapped: boolean
+    bootstrapped: boolean;
   }
 
   /**

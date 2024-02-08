@@ -1,6 +1,6 @@
-import { z } from "zod"
+import { z } from 'zod';
 
-import { Dictionary } from "~/shared/utils"
+import { Dictionary } from '~/shared/utils';
 
 // User
 export const BaseUserSchema = z.object({
@@ -8,6 +8,6 @@ export const BaseUserSchema = z.object({
   id: z.string(),
   firstName: z.string(),
   lastName: z.string(),
-})
+});
 
-export type User = z.infer<typeof BaseUserSchema>
+export type User = z.infer<typeof BaseUserSchema>;

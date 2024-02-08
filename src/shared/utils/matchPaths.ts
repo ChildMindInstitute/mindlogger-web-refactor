@@ -1,9 +1,9 @@
-import { matchPath } from "react-router-dom"
+import { matchPath } from 'react-router-dom';
 
 type Params = {
-  end?: boolean
-  caseSensitive?: boolean
-}
+  end?: boolean;
+  caseSensitive?: boolean;
+};
 
 export const matchPaths = (
   patterns: string[],
@@ -18,5 +18,5 @@ export const matchPaths = (
       },
       pathname,
     ),
-  )
-}
+  );
+};

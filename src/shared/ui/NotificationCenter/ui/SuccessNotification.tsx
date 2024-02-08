@@ -1,16 +1,16 @@
-import { forwardRef } from "react"
+import { forwardRef } from 'react';
 
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded"
-import Box from "@mui/material/Box"
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import Box from '@mui/material/Box';
 
-import { Theme } from "~/shared/constants"
-import { Markdown } from "~/shared/ui"
+import { Theme } from '~/shared/constants';
+import { Markdown } from '~/shared/ui';
 
 type Props = {
-  id: string
-  message: string
-  duration: number
-}
+  id: string;
+  message: string;
+  duration: number;
+};
 
 export const SuccessNotification = forwardRef((props: Props, ref) => {
   return (
@@ -27,5 +27,5 @@ export const SuccessNotification = forwardRef((props: Props, ref) => {
       <CheckCircleRoundedIcon sx={{ color: Theme.colors.light.accentGreen }} />
       <Markdown markdown={props.message} />
     </Box>
-  )
-})
+  );
+});

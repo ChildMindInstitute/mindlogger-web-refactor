@@ -1,35 +1,35 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom';
 
-import { useLogout } from "~/features/Logout"
-import { ROUTES } from "~/shared/constants"
+import { useLogout } from '~/features/Logout';
+import { ROUTES } from '~/shared/constants';
 
 export const useAccountDropdown = () => {
-  const navigate = useNavigate()
-  const { logout, isLoading } = useLogout()
+  const navigate = useNavigate();
+  const { logout, isLoading } = useLogout();
 
   const accountDropdownOptions = [
     {
-      tag: "profile",
+      tag: 'profile',
       onSelect: () => {
-        navigate(ROUTES.profile.path)
+        navigate(ROUTES.profile.path);
       },
     },
     {
-      tag: "settings",
+      tag: 'settings',
       onSelect: () => {
-        navigate(ROUTES.settings.path)
+        navigate(ROUTES.settings.path);
       },
     },
     {
-      tag: "logOut",
+      tag: 'logOut',
       onSelect: () => {
-        logout()
+        logout();
       },
     },
-  ]
+  ];
 
   return {
     accountDropdownOptions,
     logoutIsLoading: isLoading,
-  }
-}
+  };
+};

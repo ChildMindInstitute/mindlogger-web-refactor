@@ -1,41 +1,41 @@
-import { useMemo } from "react"
+import { useMemo } from 'react';
 
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
-import { CheckboxItem, CustomTooltip, SelectBaseBox, SelectBaseImage, SelectBaseText } from "~/shared/ui"
+import { CheckboxItem, CustomTooltip, SelectBaseBox, SelectBaseImage, SelectBaseText } from '~/shared/ui';
 
 type Props = {
-  id: string
-  name: string
-  value: string | number
-  label: string
+  id: string;
+  name: string;
+  value: string | number;
+  label: string;
 
-  description: string | null
-  image: string | null
-  disabled?: boolean
-  defaultChecked?: boolean
-  color: string | null
+  description: string | null;
+  image: string | null;
+  disabled?: boolean;
+  defaultChecked?: boolean;
+  color: string | null;
 
-  onChange: (value: string) => void
-  replaceText: (value: string) => string
-}
+  onChange: (value: string) => void;
+  replaceText: (value: string) => string;
+};
 
 export const CheckboxItemOption = (props: Props) => {
   const onHandleChange = () => {
-    return props.onChange(String(props.value))
-  }
+    return props.onChange(String(props.value));
+  };
 
   const tooltipText = useMemo(() => {
     if (props.description) {
-      return props.replaceText(props.description)
+      return props.replaceText(props.description);
     }
 
-    return null
-  }, [props])
+    return null;
+  }, [props]);
 
   const labelText = useMemo(() => {
-    return props.replaceText(props.label)
-  }, [props])
+    return props.replaceText(props.label);
+  }, [props]);
 
   return (
     <SelectBaseBox color={props.color} onHandleChange={onHandleChange} checked={props.defaultChecked}>
@@ -55,5 +55,5 @@ export const CheckboxItemOption = (props: Props) => {
 
       {tooltipText ? <CustomTooltip markdown={tooltipText} /> : <div className="option-tooltip"></div>}
     </SelectBaseBox>
-  )
-}
+  );
+};

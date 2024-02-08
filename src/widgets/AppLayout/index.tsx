@@ -1,20 +1,20 @@
-import { PropsWithChildren } from "react"
+import { PropsWithChildren } from 'react';
 
-import Box from "@mui/material/Box"
-import { Outlet } from "react-router-dom"
+import Box from '@mui/material/Box';
+import { Outlet } from 'react-router-dom';
 
-import { Theme } from "~/shared/constants"
-import { NotificationCenter } from "~/shared/ui"
-import Footer from "~/widgets/Footer"
-import Header from "~/widgets/Header"
+import { Theme } from '~/shared/constants';
+import { NotificationCenter } from '~/shared/ui';
+import Footer from '~/widgets/Footer';
+import Header from '~/widgets/Header';
 
 type LayoutProps = PropsWithChildren<{
-  bgColor?: string
+  bgColor?: string;
 
-  header?: React.ReactNode | undefined
-  footer?: React.ReactNode | undefined
-  onKeyDownHandler?: (key: string) => void
-}>
+  header?: React.ReactNode | undefined;
+  footer?: React.ReactNode | undefined;
+  onKeyDownHandler?: (key: string) => void;
+}>;
 
 const Layout = ({
   bgColor = Theme.colors.light.surface1,
@@ -40,7 +40,7 @@ const Layout = ({
         {footer ? footer : <Footer />}
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

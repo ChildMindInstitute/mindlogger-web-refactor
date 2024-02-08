@@ -1,25 +1,25 @@
-import CloseIcon from "@mui/icons-material/Close"
-import Button from "@mui/material/Button"
-import Dialog from "@mui/material/Dialog"
-import DialogActions from "@mui/material/DialogActions"
-import DialogContent from "@mui/material/DialogContent"
-import DialogTitle from "@mui/material/DialogTitle"
-import IconButton from "@mui/material/IconButton"
+import CloseIcon from '@mui/icons-material/Close';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
 
-import { Markdown } from "~/shared/ui"
+import { Markdown } from '~/shared/ui';
 
 type Props = {
-  show: boolean
-  onHide: () => void
-  title?: string | null
-  label?: string | null
-  footerPrimaryButton?: string | null
-  primaryButtonDisabled?: boolean
-  onPrimaryButtonClick?: () => void
-  footerSecondaryButton?: string | null
-  secondaryButtonDisabled?: boolean
-  onSecondaryButtonClick?: () => void
-}
+  show: boolean;
+  onHide: () => void;
+  title?: string | null;
+  label?: string | null;
+  footerPrimaryButton?: string | null;
+  primaryButtonDisabled?: boolean;
+  onPrimaryButtonClick?: () => void;
+  footerSecondaryButton?: string | null;
+  secondaryButtonDisabled?: boolean;
+  onSecondaryButtonClick?: () => void;
+};
 
 export const BootstrapModal = (props: Props) => {
   const {
@@ -33,7 +33,7 @@ export const BootstrapModal = (props: Props) => {
     onHide,
     onPrimaryButtonClick,
     onSecondaryButtonClick,
-  } = props
+  } = props;
 
   return (
     <Dialog
@@ -43,10 +43,10 @@ export const BootstrapModal = (props: Props) => {
       fullWidth
       aria-labelledby="customized-dialog-title"
       sx={{
-        "& .MuiDialogContent-root": {
+        '& .MuiDialogContent-root': {
           padding: 2,
         },
-        "& .MuiDialogActions-root": {
+        '& .MuiDialogActions-root': {
           padding: 1,
         },
       }}>
@@ -59,7 +59,7 @@ export const BootstrapModal = (props: Props) => {
         aria-label="close"
         onClick={onHide}
         sx={{
-          position: "absolute",
+          position: 'absolute',
           right: 8,
           top: 8,
           color: theme => theme.palette.grey[500],
@@ -87,5 +87,5 @@ export const BootstrapModal = (props: Props) => {
         </DialogActions>
       )}
     </Dialog>
-  )
-}
+  );
+};
