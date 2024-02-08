@@ -1,86 +1,86 @@
-import { EventEntity } from "./activityGroups.types"
-import { GroupUtility, GroupsBuildContext } from "./GroupUtility"
+import { EventEntity } from './activityGroups.types';
+import { GroupUtility, GroupsBuildContext } from './GroupUtility';
 
-import { IEvaluator } from "~/abstract/lib"
-import { AvailabilityLabelType, PeriodicityType } from "~/entities/event"
-import { DatesFromTo } from "~/shared/utils"
+import { IEvaluator } from '~/abstract/lib';
+import { AvailabilityLabelType, PeriodicityType } from '~/entities/event';
+import { DatesFromTo } from '~/shared/utils';
 
 export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
-  private utility: GroupUtility
+  private utility: GroupUtility;
 
   constructor(inputParams: GroupsBuildContext) {
-    this.utility = new GroupUtility(inputParams)
+    this.utility = new GroupUtility(inputParams);
   }
 
   public evaluate(eventsEntities: Array<EventEntity>): Array<EventEntity> {
-    const notInProgress = eventsEntities.filter(x => !this.utility.isInProgress(x))
+    const notInProgress = eventsEntities.filter(x => !this.utility.isInProgress(x));
 
-    const result: Array<EventEntity> = []
+    const result: Array<EventEntity> = [];
 
-    const now = this.utility.getNow()
+    const now = this.utility.getNow();
 
     for (const eventEntity of notInProgress) {
-      const { event } = eventEntity
+      const { event } = eventEntity;
 
-      const isTypeScheduled = event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess
+      const isTypeScheduled = event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess;
 
-      const isAccessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime
+      const isAccessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime;
 
-      const isCompletedToday = this.utility.isCompletedToday(eventEntity)
+      const isCompletedToday = this.utility.isCompletedToday(eventEntity);
 
-      const isScheduledToday = this.utility.isToday(event.scheduledAt)
+      const isScheduledToday = this.utility.isToday(event.scheduledAt);
 
-      const isSpreadToNextDay = this.utility.isSpreadToNextDay(event)
+      const isSpreadToNextDay = this.utility.isSpreadToNextDay(event);
 
       const isCandidateForBeingScheduled: boolean =
-        isTypeScheduled && isScheduledToday && now < event.scheduledAt! && !isAccessBeforeTimeFrom
+        isTypeScheduled && isScheduledToday && now < event.scheduledAt! && !isAccessBeforeTimeFrom;
 
       if (!isCandidateForBeingScheduled) {
-        continue
+        continue;
       }
 
       if (!isSpreadToNextDay) {
-        !isCompletedToday && result.push(eventEntity)
-        continue
+        !isCompletedToday && result.push(eventEntity);
+        continue;
       }
 
-      const periodicity = event.availability.periodicityType
+      const periodicity = event.availability.periodicityType;
 
-      const isMonday = now.getDay() === 1
+      const isMonday = now.getDay() === 1;
 
       const doSimpleSpreadCheck: boolean =
         periodicity === PeriodicityType.Weekly ||
         periodicity === PeriodicityType.Monthly ||
         periodicity === PeriodicityType.Once ||
-        (periodicity === PeriodicityType.Weekdays && isMonday)
+        (periodicity === PeriodicityType.Weekdays && isMonday);
 
       if (doSimpleSpreadCheck) {
-        !isCompletedToday && result.push(eventEntity)
-        continue
+        !isCompletedToday && result.push(eventEntity);
+        continue;
       }
 
-      const isFromTueToFri = now.getDay() >= 2 && now.getDay() <= 5
+      const isFromTueToFri = now.getDay() >= 2 && now.getDay() <= 5;
 
       const doAdvancedSpreadCheck =
-        periodicity === PeriodicityType.Daily || (periodicity === PeriodicityType.Weekdays && isFromTueToFri)
+        periodicity === PeriodicityType.Daily || (periodicity === PeriodicityType.Weekdays && isFromTueToFri);
 
-      const considerSpread = doAdvancedSpreadCheck
+      const considerSpread = doAdvancedSpreadCheck;
 
-      const voidInterval: DatesFromTo = this.utility.getVoidInterval(eventEntity.event, considerSpread)
+      const voidInterval: DatesFromTo = this.utility.getVoidInterval(eventEntity.event, considerSpread);
 
-      const isInVoidInterval = this.utility.isInInterval(voidInterval, now, "from")
+      const isInVoidInterval = this.utility.isInInterval(voidInterval, now, 'from');
 
       const isCompletedInVoidInterval = this.utility.isInInterval(
         voidInterval,
         this.utility.getCompletedAt(eventEntity),
-        "from",
-      )
+        'from',
+      );
 
       if (doAdvancedSpreadCheck && isInVoidInterval && !isCompletedInVoidInterval) {
-        result.push(eventEntity)
+        result.push(eventEntity);
       }
     }
 
-    return result
+    return result;
   }
 }
