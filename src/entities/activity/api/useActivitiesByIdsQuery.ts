@@ -13,7 +13,7 @@ export const useActivitiesByIdsQuery = ({ ids, enabled }: Props) => {
       return {
         queryKey: ['activity', activityId],
         queryFn: () => activityService.getById({ activityId }),
-        enabled: enabled,
+        enabled,
       };
     }),
   });

@@ -14,7 +14,7 @@ export const usePrevious = <T>(value: T): T | null => {
   // and store the passed value as "current"
   if (value !== current) {
     ref.current = {
-      value: value,
+      value,
       prev: current,
     };
   }

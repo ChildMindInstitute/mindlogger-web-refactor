@@ -161,7 +161,7 @@ const getAlwaysAvailableEventEntity = (settings: { scheduledAt: Date }): EventEn
       notificationSettings: {
         notifications: [],
       },
-      scheduledAt: scheduledAt,
+      scheduledAt,
       selectedDate: null,
       timers: {
         idleTimer: null,

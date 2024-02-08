@@ -30,7 +30,7 @@ export class MarkdownVariableReplacer {
 
   private parseBasicSystemVariables = (markdown: string) => {
     return markdown
-      .replaceAll(/\[Now]/gi, format(this.now, 'h:mm aa') + ' today (now)')
+      .replaceAll(/\[Now]/gi, `${format(this.now, 'h:mm aa')} today (now)`)
       .replaceAll(/\[Nickname]/gi, this.nickName)
       .replaceAll(/\[sys.date]/gi, format(this.now, 'MM/dd/y'));
   };
@@ -72,13 +72,13 @@ export class MarkdownVariableReplacer {
       formattedString = `${interval.minutes} minutes`;
     }
     if (interval.hours) {
-      formattedString = `${interval.hours} hours and ` + formattedString;
+      formattedString = `${interval.hours} hours and ${formattedString}`;
     }
     if (interval.days) {
-      formattedString = `${interval.days} days and ` + formattedString;
+      formattedString = `${interval.days} days and ${formattedString}`;
     }
     if (interval.months) {
-      formattedString = `${interval.months} months and ` + formattedString;
+      formattedString = `${interval.months} months and ${formattedString}`;
     }
 
     if (interval.seconds && formattedString === '') {

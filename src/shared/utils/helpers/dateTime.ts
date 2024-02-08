@@ -119,7 +119,7 @@ export const isTimeInInterval = ({ timeToCheck, intervalFrom, intervalTo, includ
       isSourceLess({ timeSource: timeToCheck, timeTarget: intervalTo })
     );
   } else {
-    throw new Error('[isTimeInInterval]: Not supported, including = ' + including);
+    throw new Error(`[isTimeInInterval]: Not supported, including = ${including}`);
   }
 };
 

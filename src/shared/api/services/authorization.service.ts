@@ -43,7 +43,7 @@ function authorizationService() {
     },
     recoveryLinkHealthCheck(params: RecoveryPasswordLinkHealthcheckPayload) {
       return axiosService.get(`/users/me/password/recover/healthcheck`, {
-        params: params,
+        params,
       });
     },
 
