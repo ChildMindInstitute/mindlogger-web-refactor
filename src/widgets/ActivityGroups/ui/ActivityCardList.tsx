@@ -1,7 +1,8 @@
 import Box from "@mui/material/Box"
 
 import { ActivityCard } from "./ActivityCard"
-import { ActivityListItem } from "../lib"
+
+import { ActivityListItem } from "~/abstract/lib/GroupBuilder"
 
 type Props = {
   activities: ActivityListItem[]

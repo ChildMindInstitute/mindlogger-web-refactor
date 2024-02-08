@@ -18,7 +18,8 @@ export type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"
 export type UserEventResponse =
   | string
   | {
-      value: number[]
+      value: string | string[] | number[]
+      text?: string
     }
 
 export type UserEvents = {
@@ -40,6 +41,11 @@ export type ItemRecord =
   | TimeItem
   | TimeRangeItem
   | AudioPlayerItem
+
+export type ItemWithAdditionalResponse = Extract<
+  ItemRecord,
+  CheckboxItem | RadioItem | SliderItem | SelectorItem | DateItem | TimeItem | TimeRangeItem | AudioPlayerItem
+>
 
 export type ActivityProgress = {
   items: ItemRecord[]
@@ -75,6 +81,13 @@ export type SaveItemAnswerPayload = {
   eventId: string
   itemId: string
   answer: string[]
+}
+
+export type SaveItemAdditionalTextPayload = {
+  entityId: string
+  eventId: string
+  itemId: string
+  additionalText: string
 }
 
 export type UpdateStepPayload = {

@@ -125,6 +125,11 @@ export type AppletEventsResponse = {
   events: ScheduleEventDto[]
 }
 
+export type AllUserEventsDTO = {
+  appletId: string
+  events: ScheduleEventDto[]
+}
+
 export type AppletEncryptionDTO = {
   accountId: string
   base: string // Contains number[]

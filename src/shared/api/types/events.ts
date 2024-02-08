@@ -1,4 +1,4 @@
-import { AppletEventsResponse } from "./applet"
+import { AllUserEventsDTO, AppletEventsResponse } from "./applet"
 import { BaseSuccessResponse } from "./base"
 import { HourMinute } from "../../utils"
 
@@ -14,6 +14,7 @@ export type GetEventsByPublicAppletKey = {
 }
 
 export type SuccessEventsByAppletIdResponse = BaseSuccessResponse<AppletEventsResponse>
+export type SuccessAllUserEventsResponse = BaseSuccessResponse<AllUserEventsDTO[]>
 
 export type EventsByAppletIdResponseDTO = {
   appletId: string

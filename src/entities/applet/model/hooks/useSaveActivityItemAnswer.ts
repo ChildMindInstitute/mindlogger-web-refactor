@@ -26,7 +26,22 @@ export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
     [dispatch, activityId, eventId],
   )
 
+  const saveItemAdditionalText = useCallback(
+    (itemId: string, additionalText: string) => {
+      dispatch(
+        actions.saveAdditionalText({
+          entityId: activityId,
+          eventId,
+          itemId,
+          additionalText,
+        }),
+      )
+    },
+    [dispatch, activityId, eventId],
+  )
+
   return {
     saveItemAnswer,
+    saveItemAdditionalText,
   }
 }
