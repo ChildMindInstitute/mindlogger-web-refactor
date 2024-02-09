@@ -33,7 +33,8 @@ export const ItemCardButton = ({
       alignItems="center"
       margin="0 auto"
       padding={greaterThanSM ? '0px 24px' : '0px 16px'}
-      maxWidth="900px">
+      maxWidth="900px"
+    >
       {(isBackShown && (
         <Box width={greaterThanSM ? '200px' : '120px'} data-testid="assessment-back-button">
           <BaseButton

@@ -24,7 +24,8 @@ export const ErrorNotification = forwardRef((props: Props, ref) => {
       padding="12px 16px"
       gap="12px"
       minHeight="72px"
-      bgcolor={Theme.colors.light.errorVariant}>
+      bgcolor={Theme.colors.light.errorVariant}
+    >
       <ReportRoundedIcon sx={{ color: Theme.colors.light.error }} />
       <Markdown markdown={props.message} />
     </Box>

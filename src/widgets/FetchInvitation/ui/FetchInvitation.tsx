@@ -47,7 +47,8 @@ export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
           alignItems="center"
           flexDirection={lessThanSM ? 'column' : 'row'}
           gap="12px"
-          margin="16px 0px">
+          margin="16px 0px"
+        >
           <InvitationAcceptButton invitationKey={keyParams} />
           <InvitationDeclineButton invitationKey={keyParams} />
         </Box>

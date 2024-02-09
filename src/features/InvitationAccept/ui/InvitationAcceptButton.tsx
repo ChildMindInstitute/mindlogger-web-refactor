@@ -35,7 +35,8 @@ export const InvitationAcceptButton = ({ invitationKey }: InvitationAcceptButton
         color="success"
         onClick={onInviteAccept}
         isLoading={isAcceptLoading}
-        text={t('buttons.acceptInvitation')}></BaseButton>
+        text={t('buttons.acceptInvitation')}
+      ></BaseButton>
     </Box>
   );
 };

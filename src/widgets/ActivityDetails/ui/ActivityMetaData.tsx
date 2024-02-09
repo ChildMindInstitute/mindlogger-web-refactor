@@ -33,7 +33,8 @@ export const ActivityMetaData = ({ groupInProgress, activityLength }: Props) => 
       <Typography
         variant="body1"
         component="span"
-        data-testid="metadata-activity-length">{` ${activityLengthLabel}`}</Typography>
+        data-testid="metadata-activity-length"
+      >{` ${activityLengthLabel}`}</Typography>
     </Box>
   );
 };

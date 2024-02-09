@@ -19,6 +19,7 @@ export const BaseRadioIcon = () => {
           boxShadow: 'none',
           background: 'rgba(206,217,224,.5)',
         },
-      }}></Box>
+      }}
+    ></Box>
   );
 };

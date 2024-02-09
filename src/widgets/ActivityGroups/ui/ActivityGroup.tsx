@@ -27,7 +27,8 @@ export const ActivityGroup = ({ group }: Props) => {
           fontStyle: 'normal',
           fontWeight: 700,
           lineHeight: '28px',
-        }}>
+        }}
+      >
         {t(group.name)}
       </Typography>
 

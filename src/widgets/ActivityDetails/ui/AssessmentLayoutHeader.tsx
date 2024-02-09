@@ -45,18 +45,21 @@ export const AssessmentLayoutHeader = (props: Props) => {
       sx={{
         backgroundColor: Theme.colors.light.surface,
         borderBottom: `1px solid ${Theme.colors.light.surfaceVariant}`,
-      }}>
+      }}
+    >
       <Box sx={{ gridColumn: '2 / 3' }}>
         <Box
           display="flex"
           justifyContent={greaterThanSM ? 'center' : 'space-between'}
           alignItems="center"
-          marginBottom={greaterThanSM ? '8px' : '10px'}>
+          marginBottom={greaterThanSM ? '8px' : '10px'}
+        >
           <Text
             variant="body1"
             color={Theme.colors.light.onSurface}
             testid="assessment-activity-title"
-            sx={{ textAlign: greaterThanSM ? 'center' : 'left' }}>
+            sx={{ textAlign: greaterThanSM ? 'center' : 'left' }}
+          >
             {greaterThanSM ? props.title : cutStringToLength(props.title, 30)}
           </Text>
           {!greaterThanSM && <SaveAndExitButton onClick={onSaveAndExitClick} />}
@@ -71,7 +74,8 @@ export const AssessmentLayoutHeader = (props: Props) => {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          justifySelf="flex-end">
+          justifySelf="flex-end"
+        >
           <SaveAndExitButton onClick={onSaveAndExitClick} />
         </Box>
       )}

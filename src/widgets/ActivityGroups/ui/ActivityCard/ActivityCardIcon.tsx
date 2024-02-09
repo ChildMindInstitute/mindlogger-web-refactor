@@ -22,7 +22,8 @@ export const ActivityCardIcon = (props: Props) => {
       justifyContent="center"
       alignItems="center"
       width="64px"
-      data-testid={props.isFlow ? 'flow-card-image' : 'activity-card-image'}>
+      data-testid={props.isFlow ? 'flow-card-image' : 'activity-card-image'}
+    >
       <AvatarBase src={imageSrc!} name="" width="64px" height="64px" />
     </Box>
   );

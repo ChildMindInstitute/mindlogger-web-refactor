@@ -32,7 +32,8 @@ const Layout = ({
       onKeyDown={(event) => onKeyDownHandler && onKeyDownHandler(event.key)}
       sx={{
         backgroundColor: bgColor,
-      }}>
+      }}
+    >
       {header ? header : <Header />}
       <Box id="app-content-container" display="flex" flex={1} flexDirection="column" overflow="auto">
         <NotificationCenter />

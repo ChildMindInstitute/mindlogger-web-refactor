@@ -34,7 +34,8 @@ export const InvitationDeclineButton = ({ invitationKey }: InvitationDeclineButt
         color="error"
         onClick={onInviteDecline}
         isLoading={isDeclineLoading}
-        text={t('buttons.declineInvitation')}></BaseButton>
+        text={t('buttons.declineInvitation')}
+      ></BaseButton>
     </Box>
   );
 };

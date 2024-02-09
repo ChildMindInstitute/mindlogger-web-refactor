@@ -22,7 +22,8 @@ export const ActivityCardDescription = ({ description, isFlow }: Props) => {
           lineHeight: '24px',
           letterSpacing: '0.15px',
           textAlign: 'left',
-        }}>
+        }}
+      >
         {description}
       </Typography>
     </Box>

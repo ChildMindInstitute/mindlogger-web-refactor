@@ -49,7 +49,8 @@ export const BootstrapModal = (props: Props) => {
         '& .MuiDialogActions-root': {
           padding: 1,
         },
-      }}>
+      }}
+    >
       {title && (
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
           {title}
@@ -63,7 +64,8 @@ export const BootstrapModal = (props: Props) => {
           right: 8,
           top: 8,
           color: (theme) => theme.palette.grey[500],
-        }}>
+        }}
+      >
         <CloseIcon />
       </IconButton>
       {label && (

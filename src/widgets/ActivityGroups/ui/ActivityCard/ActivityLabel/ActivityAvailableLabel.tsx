@@ -25,7 +25,8 @@ export const ActivityAvailableLabel = (props: Props) => {
         padding: '4px 8px',
         borderRadius: '8px',
         backgroundColor: Theme.colors.light.primary95,
-      }}>
+      }}
+    >
       <ActivityLabelTypography text={activityLabel} color={Theme.colors.light.onPrimaryContainer} />
     </Box>
   );

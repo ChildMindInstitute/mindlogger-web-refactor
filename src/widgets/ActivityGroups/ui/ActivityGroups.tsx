@@ -43,7 +43,8 @@ export const ActivityGroups = (props: Props) => {
   if (isEventsError || isAppletError) {
     return (
       <Container
-        sx={{ display: 'flex', height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        sx={{ display: 'flex', height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}
+      >
         <span>{t('additional.invalid_public_url')}</span>
       </Container>
     );

@@ -50,7 +50,8 @@ export const FetchPrivateInvitation = ({ keyParams, redirectState }: FetchPrivat
               alignItems="center"
               gap="12px"
               margin="16px 0px"
-              flexDirection={lessThanSM ? 'column' : 'row'}>
+              flexDirection={lessThanSM ? 'column' : 'row'}
+            >
               <PrivateJoinAcceptButton invitationKey={keyParams} />
               <PrivateJoinDeclineButton />
             </Box>

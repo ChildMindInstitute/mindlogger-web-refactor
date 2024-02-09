@@ -30,6 +30,7 @@ export const BaseRadioActiveIcon = () => {
         'input:hover ~ &': {
           backgroundColor: Theme.colors.light.primary,
         },
-      }}></Box>
+      }}
+    ></Box>
   );
 };

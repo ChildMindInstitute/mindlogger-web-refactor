@@ -85,7 +85,8 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
               fontStyle="normal"
               lineHeight="20px"
               letterSpacing="0.1px"
-              sx={{ textDecoration: 'underline' }}>
+              sx={{ textDecoration: 'underline' }}
+            >
               {t('forgotPassword')}
             </Typography>
           </Link>

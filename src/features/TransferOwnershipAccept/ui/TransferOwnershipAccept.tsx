@@ -42,7 +42,8 @@ export const TransferOwnershipAccept = ({ appletId, keyParam }: TransferOwnershi
       justifyContent="center"
       alignItems="center"
       textAlign="center"
-      data-testid="transfer-ownership-accepted">
+      data-testid="transfer-ownership-accepted"
+    >
       <Typography variant="body1" fontSize="30px" margin="16px 0px" data-testid="transfer-ownership-accepted-title">
         {t('accepted.title')}
       </Typography>

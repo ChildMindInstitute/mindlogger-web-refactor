@@ -17,7 +17,8 @@ export const PasswordIcon = ({ isSecure, onClick }: PasswordIconProps) => {
       aria-label="toggle password visibility"
       onClick={onClick}
       onMouseDown={handleMouseDownPassword}
-      edge="end">
+      edge="end"
+    >
       {isSecure ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
     </IconButton>
   );

@@ -27,7 +27,8 @@ function SignupPage() {
           fontStyle="normal"
           fontWeight={700}
           lineHeight="28px"
-          marginBottom="24px">
+          marginBottom="24px"
+        >
           {t('title')}
         </Typography>
 
@@ -42,7 +43,8 @@ function SignupPage() {
             fontWeight={400}
             fontStyle="normal"
             lineHeight="20px"
-            letterSpacing="0.1px">
+            letterSpacing="0.1px"
+          >
             {t('or')},
           </Typography>
           &nbsp;
@@ -54,7 +56,8 @@ function SignupPage() {
             fontStyle="normal"
             lineHeight="20px"
             letterSpacing="0.1px"
-            sx={{ textDecoration: 'underline' }}>
+            sx={{ textDecoration: 'underline' }}
+          >
             <Link to={ROUTES.login.path} relative="path">
               {t('logIn')}
             </Link>

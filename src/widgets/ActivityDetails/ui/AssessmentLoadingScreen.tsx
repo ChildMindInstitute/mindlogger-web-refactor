@@ -36,7 +36,8 @@ export const AssessmentLoadingScreen = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          justifySelf="flex-end">
+          justifySelf="flex-end"
+        >
           <SaveAndExitButton onClick={onSaveAndExitClick} />
         </Box>
       </Box>

@@ -41,7 +41,8 @@ export const SelectBaseBox = (props: Props) => {
         '&:active': {
           background: activeBackgroundColor,
         },
-      }}>
+      }}
+    >
       {props.children}
     </Box>
   );

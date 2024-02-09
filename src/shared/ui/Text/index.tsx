@@ -40,7 +40,8 @@ export const Text = ({ children, fontSize, fontWeight, color, padding, margin, s
       fontSize={fontSize}
       fontWeight={fontWeight}
       data-testid={testid}
-      sx={{ color, padding, margin, ...sx }}>
+      sx={{ color, padding, margin, ...sx }}
+    >
       {children}
     </Typography>
   );

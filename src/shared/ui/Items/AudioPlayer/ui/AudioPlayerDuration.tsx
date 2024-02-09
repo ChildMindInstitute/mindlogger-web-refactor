@@ -21,7 +21,8 @@ export const AudioPlayerDuration = ({ currentDuration, totalDuration }: Props) =
       <Text
         variant="body1"
         fontSize={fontSize}
-        sx={{ cursor: 'default' }}>{`${currentDuration} / ${totalDuration}`}</Text>
+        sx={{ cursor: 'default' }}
+      >{`${currentDuration} / ${totalDuration}`}</Text>
     </Box>
   );
 };

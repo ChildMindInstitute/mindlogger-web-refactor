@@ -37,7 +37,8 @@ const BaseDropdown = ({ title, options, beforeIndexDivider }: BaseDropdownProps)
         disableElevation
         sx={{ textTransform: 'none', fontSize: '16px' }}
         onClick={handleClick}
-        endIcon={<KeyboardArrowDownIcon />}>
+        endIcon={<KeyboardArrowDownIcon />}
+      >
         {title}
       </Button>
 
@@ -64,7 +65,8 @@ const BaseDropdown = ({ title, options, beforeIndexDivider }: BaseDropdownProps)
             marginTop: 1,
             minWidth: 180,
           },
-        }}>
+        }}
+      >
         {options.map((option, index) => {
           const beforeThisElement = index === beforeIndexDivider;
 

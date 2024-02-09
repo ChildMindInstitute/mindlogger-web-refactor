@@ -34,6 +34,7 @@ export const BaseCheckboxActiveIcon = () => {
         'input:hover ~ &': {
           backgroundColor: Theme.colors.light.primary,
         },
-      }}></Box>
+      }}
+    ></Box>
   );
 };

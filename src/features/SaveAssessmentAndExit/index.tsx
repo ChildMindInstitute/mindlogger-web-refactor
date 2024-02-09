@@ -22,7 +22,8 @@ export const SaveAndExitButton = ({ onClick }: Props) => {
         '&:hover': { backgroundColor: Theme.colors.light.primary008 },
         '&:focus': { backgroundColor: Theme.colors.light.primary012 },
         '&:active': { backgroundColor: Theme.colors.light.primary012 },
-      }}>
+      }}
+    >
       <Text variant="body1" color={Theme.colors.light.primary} fontSize="16px">
         {t('save_and_exit')}
       </Text>

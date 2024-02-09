@@ -15,7 +15,8 @@ export default function Footer() {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      sx={{ backgroundColor: Theme.colors.light.surface, borderTop: `1px solid ${Theme.colors.light.surfaceVariant}` }}>
+      sx={{ backgroundColor: Theme.colors.light.surface, borderTop: `1px solid ${Theme.colors.light.surfaceVariant}` }}
+    >
       <Box display="flex" alignItems="center" textAlign="center" marginY={3} gap={2}>
         {greaterThanMD && (
           <span>

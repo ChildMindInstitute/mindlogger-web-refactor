@@ -45,7 +45,8 @@ export const ForgotPasswordForm = () => {
             type="submit"
             variant="contained"
             disabled={isLoading}
-            sx={{ borderRadius: '100px', maxWidth: '400px', width: '100%', padding: '10px 24px' }}>
+            sx={{ borderRadius: '100px', maxWidth: '400px', width: '100%', padding: '10px 24px' }}
+          >
             {isLoading ? (
               <CircularProgress size={25} sx={{ color: Theme.colors.light.onPrimary }} />
             ) : (
@@ -56,7 +57,8 @@ export const ForgotPasswordForm = () => {
                 fontStyle="normal"
                 lineHeight="20px"
                 letterSpacing="0.1px"
-                textTransform="none">
+                textTransform="none"
+              >
                 {t('button')}
               </Typography>
             )}

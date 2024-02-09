@@ -12,7 +12,8 @@ export const SplashScreenItem = ({ imageSrc }: SplashScreenItemProps) => {
       alignItems="center"
       width="90%"
       margin="auto"
-      data-testid="splash-screen-item">
+      data-testid="splash-screen-item"
+    >
       <img src={imageSrc} style={{ maxWidth: '100%' }} />
     </Box>
   );

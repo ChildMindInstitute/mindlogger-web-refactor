@@ -20,7 +20,8 @@ export const ActivityInProgressLabel = (props: Props) => {
         padding: '4px 8px',
         borderRadius: '8px',
         backgroundColor: Theme.colors.light.accentYellow30,
-      }}>
+      }}
+    >
       <ActivityLabelTypography
         text={t('countOfCompletedQuestions', {
           length: props.activityLength,

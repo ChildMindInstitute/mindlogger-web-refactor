@@ -24,7 +24,8 @@ export const SelectorItem = ({ value, onValueChange, valueLabelList, disabled }:
         labelId="select-with-label"
         value={value ?? ''}
         label={defaultValue}
-        onChange={(e) => onValueChange(e.target.value)}>
+        onChange={(e) => onValueChange(e.target.value)}
+      >
         {valueLabelList.map((item) => {
           return (
             <MenuItem key={item.value} value={item.value}>

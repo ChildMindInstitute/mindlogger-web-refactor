@@ -23,7 +23,8 @@ export const SuccessNotification = forwardRef((props: Props, ref) => {
       padding="12px 16px"
       gap="12px"
       minHeight="72px"
-      bgcolor={Theme.colors.light.accentGreen30}>
+      bgcolor={Theme.colors.light.accentGreen30}
+    >
       <CheckCircleRoundedIcon sx={{ color: Theme.colors.light.accentGreen }} />
       <Markdown markdown={props.message} />
     </Box>

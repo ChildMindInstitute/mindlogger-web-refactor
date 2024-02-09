@@ -40,7 +40,8 @@ export const TransferOwnershipDecline = ({ appletId, keyParam }: TransferOwnersh
       justifyContent="center"
       alignItems="center"
       textAlign="center"
-      data-testid="transfer-ownership-declined">
+      data-testid="transfer-ownership-declined"
+    >
       <Typography variant="body1" fontSize="30px" margin="16px 0px" data-testid="transfer-ownership-declined-title">
         {t('declined.title')}
       </Typography>

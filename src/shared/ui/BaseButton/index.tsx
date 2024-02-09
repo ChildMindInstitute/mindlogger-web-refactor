@@ -39,7 +39,8 @@ const ButtonTextComponent = (props: ButtonTextComponentProps): JSX.Element => {
       fontStyle="normal"
       lineHeight="20px"
       letterSpacing="0.1px"
-      textTransform="none">
+      textTransform="none"
+    >
       {props.text}
     </Typography>
   )
@@ -65,7 +66,8 @@ export const BaseButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
           border: `1px solid ${props.borderColor}`,
         },
         ...props.sx,
-      }}>
+      }}
+    >
       {props.isLoading ? (
         <CircularProgress size={25} sx={{ color: Theme.colors.light.primary }} />
       ) : (

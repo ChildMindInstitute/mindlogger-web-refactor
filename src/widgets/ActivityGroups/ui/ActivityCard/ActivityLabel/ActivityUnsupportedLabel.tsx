@@ -25,7 +25,8 @@ export const ActivityUnsupportedLabel = () => {
             padding: '4px 8px',
             borderRadius: '8px',
             backgroundColor: Theme.colors.light.accentOrange30,
-          }}>
+          }}
+        >
           <Avatar src={ExclamationIcon} sx={{ width: '18px', height: '18px' }} />
           <Typography
             color={Theme.colors.light.onSurface}
@@ -35,7 +36,8 @@ export const ActivityUnsupportedLabel = () => {
               fontFamily: 'Atkinson',
               lineHeight: '20px',
               letterSpacing: ' 0.1px',
-            }}>
+            }}
+          >
             {t('mustBeCompletedUsingMobileApp')}
           </Typography>
         </Box>
@@ -50,7 +52,8 @@ export const ActivityUnsupportedLabel = () => {
               lineHeight: '20px',
               letterSpacing: ' 0.1px',
               textDecoration: 'underline',
-            }}>
+            }}
+          >
             {` ${t('completeUsingAppNow')}.`}
           </Typography>
         </a>
@@ -68,11 +71,13 @@ export const ActivityUnsupportedLabel = () => {
         padding: '4px 8px',
         borderRadius: '8px',
         backgroundColor: Theme.colors.light.accentOrange30,
-      }}>
+      }}
+    >
       <Avatar src={ExclamationIcon} sx={{ width: '18px', height: '18px' }} />
       <Typography
         color={Theme.colors.light.onSurface}
-        sx={{ fontSize: '14px', fontWeight: 400, fontFamily: 'Atkinson', lineHeight: '20px', letterSpacing: ' 0.1px' }}>
+        sx={{ fontSize: '14px', fontWeight: 400, fontFamily: 'Atkinson', lineHeight: '20px', letterSpacing: ' 0.1px' }}
+      >
         {t('pleaseCompleteOnThe')}
       </Typography>
       <a href={storeLink} target="_blank" rel="noreferrer">
@@ -85,7 +90,8 @@ export const ActivityUnsupportedLabel = () => {
             lineHeight: '20px',
             letterSpacing: ' 0.1px',
             textDecoration: 'underline',
-          }}>
+          }}
+        >
           {` ${t('mindloggerMobileApp')}.`}
         </Typography>
       </a>
