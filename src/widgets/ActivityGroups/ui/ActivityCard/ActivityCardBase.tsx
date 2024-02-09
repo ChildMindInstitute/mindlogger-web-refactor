@@ -1,22 +1,19 @@
 import { PropsWithChildren } from "react"
 
-import Button from "@mui/material/Button"
+import Box from "@mui/material/Box"
 
 import { Theme } from "~/shared/constants"
 
 type Props = PropsWithChildren<{
   isFlow: boolean
   isLoading?: boolean
-  isDisabled?: boolean
-  onClick?: () => void
+  isDisabled: boolean
 }>
 
 export const ActivityCardBase = (props: Props) => {
   return (
-    <Button
+    <Box
       data-testid={props.isFlow ? "flow-card" : "activity-card"}
-      disabled={props.isDisabled}
-      onClick={props.onClick}
       sx={{
         backgroundColor: Theme.colors.light.surface,
         padding: "24px",
@@ -31,6 +28,6 @@ export const ActivityCardBase = (props: Props) => {
         opacity: props.isDisabled ? 0.65 : 1,
       }}>
       {props.children}
-    </Button>
+    </Box>
   )
 }

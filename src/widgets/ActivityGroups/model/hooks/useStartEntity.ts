@@ -58,35 +58,38 @@ export const useStartEntity = (props: Props) => {
   function startActivityOrFlow(params: OnActivityCardClickProps) {
     Mixpanel.track("Assessment Started")
 
-    const { flowId, eventId, activity, status } = params
-    const activityId = activity.id
+    const { flowId, eventId, activity, status, shouldRestart } = params
 
-    const isFlow = Boolean(flowId)
+    const activityId = activity.id
     const isActivityInProgress = status === ActivityStatus.InProgress
 
-    if (!isActivityInProgress && !isFlow && params.activity) {
-      setInitialProgress({ activity, eventId: params.eventId })
-    }
-
     if (flowId) {
-      startFlow(flowId, eventId, flows)
+      const flow = flows.find(x => x.id === flowId)!
+      const firstActivityId: string = flow.activityIds[0]
+      const activityIdToNavigate = shouldRestart ? firstActivityId : activityId
+
+      startFlow(flowId, eventId, flows, shouldRestart)
 
       return navigateToEntity({
-        activityId,
+        activityId: activityIdToNavigate,
         entityType: "flow",
         eventId,
         flowId,
       })
-    } else {
-      startActivity(activityId, eventId)
-
-      return navigateToEntity({
-        activityId,
-        entityType: "regular",
-        eventId,
-        flowId: null,
-      })
     }
+
+    if ((!isActivityInProgress || shouldRestart) && params.activity) {
+      setInitialProgress({ activity, eventId: params.eventId })
+    }
+
+    startActivity(activityId, eventId)
+
+    return navigateToEntity({
+      activityId,
+      entityType: "regular",
+      eventId,
+      flowId: null,
+    })
   }
 
   return {

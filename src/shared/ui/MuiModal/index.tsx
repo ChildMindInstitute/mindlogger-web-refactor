@@ -1,9 +1,12 @@
+import CloseIcon from "@mui/icons-material/Close"
+import { Breakpoint } from "@mui/material"
 import Box from "@mui/material/Box"
 import Dialog from "@mui/material/Dialog"
 import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import DialogTitle from "@mui/material/DialogTitle"
-import Typography from "@mui/material/Typography"
+import { SxProps } from "@mui/material/styles"
+import Typography, { TypographyProps } from "@mui/material/Typography"
 
 import { BaseButton } from "../BaseButton"
 
@@ -23,6 +26,11 @@ type Props = {
   onSecondaryButtonClick?: () => void
   isSecondaryButtonLoading?: boolean
   testId?: string
+  showCloseIcon?: boolean
+  titleProps?: TypographyProps
+  labelComponent?: JSX.Element
+  footerWrapperSXProps?: SxProps
+  maxWidth?: Breakpoint
 }
 
 export const MuiModal = (props: Props) => {
@@ -40,6 +48,11 @@ export const MuiModal = (props: Props) => {
     footerSecondaryButton,
     onSecondaryButtonClick,
     testId,
+    showCloseIcon,
+    titleProps,
+    labelComponent,
+    footerWrapperSXProps,
+    maxWidth = "xs",
   } = props
 
   return (
@@ -47,13 +60,14 @@ export const MuiModal = (props: Props) => {
       data-testid={testId}
       open={isOpen}
       onClose={onHide}
-      maxWidth="xs"
+      maxWidth={maxWidth}
       fullWidth
       aria-labelledby="customized-dialog-title"
       sx={{
         "& .MuiPaper-root": {
           borderRadius: "16px",
           padding: "24px",
+          backgroundColor: Theme.colors.light.surface2,
         },
         "& .MuiDialogTitle-root": {
           padding: "0",
@@ -66,6 +80,17 @@ export const MuiModal = (props: Props) => {
           paddingTop: "24px",
         },
       }}>
+      {showCloseIcon && (
+        <CloseIcon
+          onClick={onHide}
+          sx={{
+            color: Theme.colors.light.onSurfaceVariant,
+            marginLeft: "auto",
+            cursor: "pointer",
+          }}
+        />
+      )}
+
       {title && (
         <DialogTitle id="customized-dialog-title">
           <Typography
@@ -77,7 +102,8 @@ export const MuiModal = (props: Props) => {
             letterSpacing="0.1px"
             textTransform="none"
             paddingBottom="8px"
-            color={Theme.colors.light.onSurface}>
+            color={Theme.colors.light.onSurface}
+            {...titleProps}>
             {title}
           </Typography>
         </DialogTitle>
@@ -97,8 +123,10 @@ export const MuiModal = (props: Props) => {
           </Typography>
         </DialogContent>
       )}
+
+      {labelComponent && <DialogContent>{labelComponent}</DialogContent>}
       {(footerPrimaryButton || footerSecondaryButton) && (
-        <DialogActions>
+        <DialogActions sx={{ ...footerWrapperSXProps }}>
           {footerSecondaryButton && (
             <Box width="120px" data-testid="assessment-back-button">
               <BaseButton
@@ -128,7 +156,7 @@ export const MuiModal = (props: Props) => {
           )}
 
           {footerPrimaryButton && (
-            <Box width="120px" data-testid="popup-primary-button">
+            <Box minWidth="120px" data-testid="popup-primary-button">
               <BaseButton
                 type="button"
                 variant="contained"
