@@ -15,16 +15,17 @@ interface CardItemProps extends PropsWithChildren {
   isInvalid?: boolean
   isOptional?: boolean
   markdown: string
+  testId?: string
 }
 
-export const CardItem = ({ children, markdown, isOptional }: CardItemProps) => {
+export const CardItem = ({ children, markdown, isOptional, testId }: CardItemProps) => {
   const { greaterThanSM } = useCustomMediaQuery()
 
   const { t } = useCustomTranslation()
 
   return (
     <Box
-      data-testid={"active-item"}
+      data-testid={testId || "active-item"}
       display="flex"
       flex={1}
       padding={greaterThanSM ? "72px 48px" : "36px 16px"}

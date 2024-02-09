@@ -239,6 +239,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         isPrimaryButtonLoading={isLoading}
         footerSecondaryButton={canGoBack ? t("goBack") : undefined}
         onSecondaryButtonClick={canGoBack ? () => setIsModalOpen(false) : undefined}
+        testId="submit-response-modal"
       />
     </>
   )

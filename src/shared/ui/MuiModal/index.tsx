@@ -22,6 +22,7 @@ type Props = {
   secondaryButtonDisabled?: boolean
   onSecondaryButtonClick?: () => void
   isSecondaryButtonLoading?: boolean
+  testId?: string
 }
 
 export const MuiModal = (props: Props) => {
@@ -38,10 +39,12 @@ export const MuiModal = (props: Props) => {
 
     footerSecondaryButton,
     onSecondaryButtonClick,
+    testId,
   } = props
 
   return (
     <Dialog
+      data-testid={testId}
       open={isOpen}
       onClose={onHide}
       maxWidth="xs"
