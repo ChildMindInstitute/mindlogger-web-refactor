@@ -24,7 +24,7 @@ export const NotificationCenter = () => {
   const onNotificationRemoved = useCallback(
     (data: Record<string, unknown> | undefined) => {
       notificationCenterStore.notifications = notificationCenterStore.notifications.filter(
-        notif => notif.id !== data?.notificationId,
+        (notif) => notif.id !== data?.notificationId,
       );
       forceUpdate();
     },

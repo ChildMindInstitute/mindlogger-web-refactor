@@ -11,10 +11,10 @@ export const useActivitiesByIds = ({ ids, enabled }: Props) => {
   const queryResults = useActivitiesByIdsQuery({ ids, enabled });
   ids;
   const { isError, isLoading, data } = useMemo(() => {
-    const isLoading = queryResults.some(item => item.isLoading);
-    const isError = queryResults.some(item => item.isError);
+    const isLoading = queryResults.some((item) => item.isLoading);
+    const isError = queryResults.some((item) => item.isError);
 
-    const data = queryResults.map(item => item.data?.data?.result);
+    const data = queryResults.map((item) => item.data?.data?.result);
 
     return {
       isError,

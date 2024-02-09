@@ -28,7 +28,7 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
   }
 
   public buildInProgress(eventsActivities: Array<EventEntity>): ActivityListGroup {
-    const filtered = eventsActivities.filter(x => this.utility.isInProgress(x));
+    const filtered = eventsActivities.filter((x) => this.utility.isInProgress(x));
 
     const activityItems: Array<ActivityListItem> = [];
 

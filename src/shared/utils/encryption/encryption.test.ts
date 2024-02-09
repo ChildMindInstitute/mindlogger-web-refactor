@@ -45,7 +45,7 @@ describe('Encryption', () => {
       });
 
       expect(Array.isArray(generatedPrivateKey)).toBe(true);
-      expect(generatedPrivateKey.every(num => typeof num === 'number')).toBe(true);
+      expect(generatedPrivateKey.every((num) => typeof num === 'number')).toBe(true);
     });
   });
 
@@ -58,7 +58,7 @@ describe('Encryption', () => {
       });
 
       expect(Array.isArray(generatedPublicKey)).toBe(true);
-      expect(generatedPublicKey.every(num => typeof num === 'number')).toBe(true);
+      expect(generatedPublicKey.every((num) => typeof num === 'number')).toBe(true);
     });
   });
 
@@ -72,7 +72,7 @@ describe('Encryption', () => {
       });
 
       expect(Array.isArray(aesKey)).toBe(true);
-      expect(aesKey.every(num => typeof num === 'number')).toBe(true);
+      expect(aesKey.every((num) => typeof num === 'number')).toBe(true);
     });
   });
 

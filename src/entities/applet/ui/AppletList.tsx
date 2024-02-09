@@ -10,7 +10,7 @@ type Props = {
 export const AppletList = (props: Props) => {
   return (
     <Box display="flex" flex={1} flexWrap="wrap" justifyContent="center" data-testid="applet-list">
-      {props.applets.map(applet => (
+      {props.applets.map((applet) => (
         <AppletCard key={applet.id} applet={applet} />
       ))}
     </Box>

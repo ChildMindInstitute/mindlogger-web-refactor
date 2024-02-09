@@ -7,7 +7,7 @@ export function isSupportedActivity(itemResponseTypes?: Array<ItemResponseTypeDT
     return false;
   }
 
-  return itemResponseTypes.every(type => supportableResponseTypes.includes(type));
+  return itemResponseTypes.every((type) => supportableResponseTypes.includes(type));
 }
 
 /**

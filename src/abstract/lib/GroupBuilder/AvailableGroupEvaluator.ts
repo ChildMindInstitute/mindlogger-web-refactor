@@ -100,7 +100,7 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
   }
 
   public evaluate(eventsEntities: Array<EventEntity>): Array<EventEntity> {
-    const notInProgress = eventsEntities.filter(x => !this.utility.isInProgress(x));
+    const notInProgress = eventsEntities.filter((x) => !this.utility.isInProgress(x));
 
     const result: Array<EventEntity> = [];
 

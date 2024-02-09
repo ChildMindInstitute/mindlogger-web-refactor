@@ -25,7 +25,7 @@ type Return = {
 export const useEntityCardDetails = (props: Props): Return => {
   const isFlow = Boolean(props.activityListItem.flowId && props.activityListItem.activityFlowDetails);
 
-  const flow = props.applet.activityFlows.find(flow => flow.id === props.activityListItem.flowId);
+  const flow = props.applet.activityFlows.find((flow) => flow.id === props.activityListItem.flowId);
 
   const showActivityFlowBudget = Boolean(props.activityListItem.activityFlowDetails?.showActivityFlowBadge);
 
@@ -46,7 +46,8 @@ export const useEntityCardDetails = (props: Props): Return => {
   const isScheduled = props.activityListItem.status === ActivityStatus.Scheduled;
   const isInProgress = props.activityListItem.status === ActivityStatus.InProgress;
 
-  const activity = props.applet.activities.find(activity => activity.id === props.activityListItem.activityId) ?? null;
+  const activity =
+    props.applet.activities.find((activity) => activity.id === props.activityListItem.activityId) ?? null;
 
   const activitiesInFlow = props.applet.activities.filter(({ id }) => flow?.activityIds.includes(id));
 
@@ -55,7 +56,7 @@ export const useEntityCardDetails = (props: Props): Return => {
   const isFlowSupported =
     isFlow &&
     activitiesInFlow &&
-    activitiesInFlow.every(activity => isSupportedActivity(activity.containsResponseTypes));
+    activitiesInFlow.every((activity) => isSupportedActivity(activity.containsResponseTypes));
 
   const isEntitySupported = isFlow ? isFlowSupported : Boolean(isActivitySupported);
 

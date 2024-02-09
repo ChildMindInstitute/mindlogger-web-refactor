@@ -26,14 +26,14 @@ export const ActivityGroups = (props: Props) => {
     isError: isAppletError,
     isLoading: isAppletLoading,
     data: applet,
-  } = useAppletBaseInfoByIdQuery(props, { select: data => data.data.result });
+  } = useAppletBaseInfoByIdQuery(props, { select: (data) => data.data.result });
 
   const {
     isError: isEventsError,
     isLoading: isEventsLoading,
     data: events,
   } = useEventsbyAppletIdQuery(props, {
-    select: data => data.data.result,
+    select: (data) => data.data.result,
   });
 
   if (isAppletLoading || isEventsLoading) {

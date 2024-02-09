@@ -95,7 +95,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
         />
 
         <Box display="flex" justifyContent="center">
-          <CheckboxWithLabel id="terms" onChange={() => setTerms(prev => !prev)}>
+          <CheckboxWithLabel id="terms" onChange={() => setTerms((prev) => !prev)}>
             I agree to the{' '}
             <a href={TERMS_URL} target="_blank" rel="noreferrer">
               Terms of Service

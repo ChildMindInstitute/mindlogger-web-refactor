@@ -60,7 +60,7 @@ const getMockVideoId = () => 'DFYRQ_zQ-gk';
 
 describe('Youtube builder', () => {
   describe('Should return iframe with youtube video', () => {
-    mostPossibleUrls.forEach(url => {
+    mostPossibleUrls.forEach((url) => {
       it(`when url is ${url}`, () => {
         const builder = new YoutubeBuilder();
         const videoId = getMockVideoId();

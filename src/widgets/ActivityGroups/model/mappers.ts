@@ -3,7 +3,7 @@ import { Activity, ActivityFlow, ActivityType } from '~/abstract/lib/GroupBuilde
 import { ActivityBaseInfoDTO, ActivityFlowDTO } from '~/shared/api';
 
 export const mapActivitiesFromDto = (dtos: ActivityBaseInfoDTO[]): Activity[] => {
-  return dtos.map(dto => ({
+  return dtos.map((dto) => ({
     id: dto.id,
     description: dto.description,
     image: dto.image,
@@ -16,7 +16,7 @@ export const mapActivitiesFromDto = (dtos: ActivityBaseInfoDTO[]): Activity[] =>
 };
 
 export const mapActivityFlowsFromDto = (dtos: ActivityFlowDTO[]): ActivityFlow[] => {
-  return dtos.map(dto => ({
+  return dtos.map((dto) => ({
     activityIds: dto.activityIds,
     description: dto.description,
     hideBadge: dto.hideBadge,

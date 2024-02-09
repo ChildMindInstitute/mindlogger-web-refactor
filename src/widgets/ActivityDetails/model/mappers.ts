@@ -30,7 +30,7 @@ import {
 import { dateToDayMonthYear, dateToHourMinute } from '~/shared/utils';
 
 export function mapToAnswers(items: Array<appletModel.ItemRecord>): Array<ItemAnswer<AnswerTypesPayload>> {
-  const answers = items.map(item => {
+  const answers = items.map((item) => {
     switch (item.responseType) {
       case 'text':
         return convertToTextAnswer(item);
@@ -111,7 +111,7 @@ function convertToMultiSelectAnswer(item: CheckboxItem): ItemAnswer<MultiSelectA
 
   return {
     answer: {
-      value: item.answer.map(strValue => Number(strValue)),
+      value: item.answer.map((strValue) => Number(strValue)),
       text: item.additionalText || null,
     },
     itemId: item.id,
@@ -234,7 +234,7 @@ function convertToAudioPlayerAnswer(item: AudioPlayerItem): ItemAnswer<AudioPlay
 }
 
 export function mapAlerts(items: Array<appletModel.ItemRecord>): Array<AlertDTO> {
-  const alerts = items.map(item => {
+  const alerts = items.map((item) => {
     switch (item.responseType) {
       case 'singleSelect':
         return convertSingleSelectToAlert(item);
@@ -250,14 +250,14 @@ export function mapAlerts(items: Array<appletModel.ItemRecord>): Array<AlertDTO>
     }
   });
 
-  return alerts.filter(alert => alert !== null).flat() as Array<AlertDTO>;
+  return alerts.filter((alert) => alert !== null).flat() as Array<AlertDTO>;
 }
 
 function convertSingleSelectToAlert(item: RadioItem): Array<AlertDTO> {
   const alert: Array<AlertDTO> = [];
 
   if (item.config.setAlerts && item.answer.length > 0) {
-    const option = item.responseValues.options.find(option => option.value === Number(item.answer[0]));
+    const option = item.responseValues.options.find((option) => option.value === Number(item.answer[0]));
 
     if (option && option.alert) {
       alert.push({
@@ -274,7 +274,7 @@ function convertMultiSelectToAlert(item: CheckboxItem): Array<AlertDTO> {
   const alert: Array<AlertDTO> = [];
 
   if (item.config.setAlerts && item.answer.length > 0) {
-    item.responseValues.options.forEach(option => {
+    item.responseValues.options.forEach((option) => {
       const answeredOption = item.answer.includes(String(option.value));
 
       if (answeredOption && option.alert) {
@@ -293,7 +293,7 @@ function convertSliderToAlert(item: SliderItem): Array<AlertDTO> {
   const alert: Array<AlertDTO> = [];
 
   if (item.config.setAlerts && item.answer.length > 0) {
-    item.responseValues.alerts?.forEach(alertItem => {
+    item.responseValues.alerts?.forEach((alertItem) => {
       const answer = Number(item.answer[0]);
 
       if (alertItem.minValue < answer && alertItem.maxValue > answer) {

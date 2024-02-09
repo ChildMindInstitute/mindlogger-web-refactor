@@ -1,5 +1,5 @@
 export const validateImage = (url: string): Promise<boolean> => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const image = new Image();
 
     image.onload = () => {

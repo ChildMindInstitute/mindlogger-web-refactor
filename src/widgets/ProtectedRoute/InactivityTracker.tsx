@@ -17,7 +17,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
 
   const onLogoutTimerExpire = useCallback(() => {
     // Listener clean up. Removes the existing event listener from the window
-    Object.values(events).forEach(item => {
+    Object.values(events).forEach((item) => {
       window.removeEventListener(item, resetTimer);
     });
 
@@ -31,12 +31,12 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   }, [resetTimer, setTimer, onLogoutTimerExpire]);
 
   useEffect(() => {
-    Object.values(events).forEach(item => {
+    Object.values(events).forEach((item) => {
       window.addEventListener(item, onActivityEventHandler);
     });
 
     return () => {
-      Object.values(events).forEach(item => {
+      Object.values(events).forEach((item) => {
         window.removeEventListener(item, onActivityEventHandler);
       });
     };

@@ -577,7 +577,7 @@ describe('ActivityGroupsBuilder', () => {
       PeriodicityType.Weekly,
       PeriodicityType.Weekdays,
       PeriodicityType.Monthly,
-    ].forEach(periodicity => {
+    ].forEach((periodicity) => {
       it(`Should return group-item for scheduled event when periodicity is ${periodicity} and allowAccessBeforeFromTime is false and current time is is allowed time window`, () => {
         const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
@@ -977,7 +977,7 @@ describe('ActivityGroupsBuilder', () => {
       PeriodicityType.Weekly,
       PeriodicityType.Weekdays,
       PeriodicityType.Monthly,
-    ].forEach(periodicity => {
+    ].forEach((periodicity) => {
       it(`Should return group-item for scheduled event when periodicity is ${periodicity} and allowAccessBeforeFromTime is true and current time is less than startTime`, () => {
         const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
 
@@ -1286,7 +1286,7 @@ describe('ActivityGroupsBuilder', () => {
       PeriodicityType.Monthly,
     ];
 
-    allPeriodicities.forEach(periodicity => {
+    allPeriodicities.forEach((periodicity) => {
       it(`Should return group item when event is scheduled of ${periodicity} periodicity and now is less than scheduledAt and accessBeforeTimeFrom is false and not completed today`, () => {
         const scheduledAt = new Date(2023, 8, 1, 15, 30, 0);
 

@@ -32,8 +32,8 @@ const createActivityGroupsBuildManager = () => {
   };
 
   const sort = (eventEntities: EventEntity[]) => {
-    let flows = eventEntities.filter(x => x.entity.pipelineType === ActivityPipelineType.Flow);
-    let activities = eventEntities.filter(x => x.entity.pipelineType === ActivityPipelineType.Regular);
+    let flows = eventEntities.filter((x) => x.entity.pipelineType === ActivityPipelineType.Flow);
+    let activities = eventEntities.filter((x) => x.entity.pipelineType === ActivityPipelineType.Regular);
 
     flows = flows.sort((a, b) => a.entity.order - b.entity.order);
     activities = activities.sort((a, b) => a.entity.order - b.entity.order);
@@ -58,12 +58,12 @@ const createActivityGroupsBuildManager = () => {
     });
 
     let entityEvents = events
-      .map<EventEntity>(event => ({
+      .map<EventEntity>((event) => ({
         entity: idToEntity[event.entityId],
         event,
       }))
       // @todo - remove after fix on BE
-      .filter(entityEvent => !!entityEvent.entity);
+      .filter((entityEvent) => !!entityEvent.entity);
 
     const calculator = EventModel.ScheduledDateCalculator;
 
@@ -72,9 +72,9 @@ const createActivityGroupsBuildManager = () => {
       eventActivity.event.scheduledAt = date;
     }
 
-    entityEvents = entityEvents.filter(x => x.event.scheduledAt);
+    entityEvents = entityEvents.filter((x) => x.event.scheduledAt);
 
-    entityEvents = entityEvents.filter(x => !x.entity.isHidden);
+    entityEvents = entityEvents.filter((x) => !x.entity.isHidden);
 
     entityEvents = sort(entityEvents);
 

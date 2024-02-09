@@ -29,7 +29,7 @@ const Layout = ({
       display="flex"
       flex={1}
       flexDirection="column"
-      onKeyDown={event => onKeyDownHandler && onKeyDownHandler(event.key)}
+      onKeyDown={(event) => onKeyDownHandler && onKeyDownHandler(event.key)}
       sx={{
         backgroundColor: bgColor,
       }}>

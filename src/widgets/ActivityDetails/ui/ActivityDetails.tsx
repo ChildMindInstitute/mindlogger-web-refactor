@@ -19,7 +19,7 @@ export const ActivityDetailsWidget = () => {
 
   const activityEventId = getProgressId(context.activityId, context.eventId);
 
-  const activityProgress = useAppSelector(state =>
+  const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(state, activityEventId),
   );
 

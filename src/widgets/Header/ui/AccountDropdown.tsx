@@ -16,7 +16,7 @@ const AccountDropdown = ({ title, toggleMenuOpen }: IAccountDropdownProps) => {
 
   const onSelect = useCallback(
     (buttonTag: string | null) => {
-      const choosenOption = accountDropdownOptions.find(elementTag => elementTag.tag === buttonTag);
+      const choosenOption = accountDropdownOptions.find((elementTag) => elementTag.tag === buttonTag);
 
       toggleMenuOpen();
 
@@ -26,7 +26,7 @@ const AccountDropdown = ({ title, toggleMenuOpen }: IAccountDropdownProps) => {
   );
 
   const preparedAccountDropdownOptions: DropdownOptionList = useMemo(() => {
-    return accountDropdownOptions.map(option => ({
+    return accountDropdownOptions.map((option) => ({
       value: t(option.tag),
       key: option.tag,
       onSelect,

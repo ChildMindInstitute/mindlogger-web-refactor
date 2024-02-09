@@ -108,7 +108,7 @@ export class MarkdownVariableReplacer {
     const variableNames = this.extractVariables(updatedMarkdown);
 
     try {
-      variableNames.forEach(variableName => {
+      variableNames.forEach((variableName) => {
         const replaceValue = this.getReplaceValue(variableName);
         updatedMarkdown = this.updateMarkdown(variableName, replaceValue, markdown);
       });
@@ -135,7 +135,7 @@ export class MarkdownVariableReplacer {
   };
 
   private getReplaceValue = (variableName: string): string => {
-    const foundIndex = this.activityItems.findIndex(item => item.name === variableName);
+    const foundIndex = this.activityItems.findIndex((item) => item.name === variableName);
     const answerNotFound = foundIndex < 0 || !this.answers[foundIndex];
 
     if (answerNotFound) {

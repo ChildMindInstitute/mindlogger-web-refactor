@@ -9,7 +9,7 @@ type Props = {
 
 export const useActivitiesByIdsQuery = ({ ids, enabled }: Props) => {
   return useQueries({
-    queries: ids.map(activityId => {
+    queries: ids.map((activityId) => {
       return {
         queryKey: ['activity', activityId],
         queryFn: () => activityService.getById({ activityId }),

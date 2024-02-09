@@ -22,10 +22,10 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText 
 
   const options = useMemo(() => {
     if (item.config.randomizeOptions) {
-      return randomizeArray(item.responseValues.options).filter(x => !x.isHidden);
+      return randomizeArray(item.responseValues.options).filter((x) => !x.isHidden);
     }
 
-    return item.responseValues.options.filter(x => !x.isHidden);
+    return item.responseValues.options.filter((x) => !x.isHidden);
   }, [item?.config?.randomizeOptions, item?.responseValues?.options]);
 
   const [evenColumn, oddColumn] = useMemo(() => {
@@ -40,7 +40,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText 
     <RadioGroup name={`${item.id}-radio`}>
       <Box display="flex" flex={1} gap="16px" flexDirection={lessThanSM ? 'column' : 'row'}>
         <Box display="flex" flex={1} gap="16px" flexDirection="column">
-          {evenColumn.map(option => {
+          {evenColumn.map((option) => {
             return (
               <RadioItemOption
                 key={option.id}
@@ -61,7 +61,7 @@ export const RadioItem = ({ item, value, onValueChange, isDisabled, replaceText 
         </Box>
 
         <Box display="flex" flex={1} gap="16px" flexDirection="column">
-          {oddColumn.map(option => {
+          {oddColumn.map((option) => {
             return (
               <RadioItemOption
                 key={option.id}

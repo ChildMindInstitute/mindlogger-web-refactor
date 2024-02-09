@@ -10,7 +10,7 @@ export const getScheduledTimeFromEvents = (
     return null;
   }
 
-  const event = eventsRawData.events.find(event => event.entityId === entityId);
+  const event = eventsRawData.events.find((event) => event.entityId === entityId);
 
   if (!event) {
     return null;

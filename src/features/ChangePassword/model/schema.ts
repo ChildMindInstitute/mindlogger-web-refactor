@@ -9,18 +9,18 @@ export const ChangePasswordSchema = z
       .string()
       .trim()
       .min(6, { message: Dictionary.validation.password.minLength })
-      .refine(value => !stringContainsSpaces(value), {
+      .refine((value) => !stringContainsSpaces(value), {
         message: Dictionary.validation.password.shouldNotContainSpaces,
       }),
     confirm: z
       .string()
       .trim()
       .min(6, { message: Dictionary.validation.password.minLength })
-      .refine(value => !stringContainsSpaces(value), {
+      .refine((value) => !stringContainsSpaces(value), {
         message: Dictionary.validation.password.shouldNotContainSpaces,
       }),
   })
-  .refine(data => data.new === data.confirm, {
+  .refine((data) => data.new === data.confirm, {
     message: Dictionary.validation.password.notMatch,
     path: ['confirm'],
   });

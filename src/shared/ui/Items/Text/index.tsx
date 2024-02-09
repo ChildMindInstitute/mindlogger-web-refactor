@@ -8,6 +8,12 @@ type TextItemProps = {
 
 export const TextItem = ({ value = '', onValueChange, disabled }: TextItemProps) => {
   return (
-    <TextField fullWidth size="small" value={value} onChange={e => onValueChange(e.target.value)} disabled={disabled} />
+    <TextField
+      fullWidth
+      size="small"
+      value={value}
+      onChange={(e) => onValueChange(e.target.value)}
+      disabled={disabled}
+    />
   );
 };

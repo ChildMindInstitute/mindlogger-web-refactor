@@ -16,7 +16,7 @@ axiosService.defaults.headers.common['Content-Type'] = 'application/json';
 axiosService.defaults.headers.common['Mindlogger-Content-Source'] = 'web';
 
 axiosService.interceptors.request.use(
-  config => {
+  (config) => {
     const tokens = secureTokensStorage.getTokens();
 
     if (tokens?.accessToken && tokens?.tokenType) {
@@ -25,13 +25,13 @@ axiosService.interceptors.request.use(
 
     return config;
   },
-  error => {
+  (error) => {
     return Promise.reject(error);
   },
 );
 
 axiosService.interceptors.response.use(
-  response => response,
+  (response) => response,
   async (error: AxiosError) => {
     const config = error?.config as RequestConfig;
 

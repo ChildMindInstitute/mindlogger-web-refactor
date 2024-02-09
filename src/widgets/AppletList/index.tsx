@@ -16,7 +16,7 @@ export const AppletListWidget = () => {
   } = useAppletListQuery(
     { userId: user.id! },
     {
-      select: data => mapToAppletList(data?.data?.result),
+      select: (data) => mapToAppletList(data?.data?.result),
     },
   );
 

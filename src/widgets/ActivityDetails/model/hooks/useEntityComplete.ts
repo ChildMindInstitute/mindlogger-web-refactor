@@ -92,7 +92,7 @@ export const useEntityComplete = (props: Props) => {
 
     const currentPipelineActivityOrder = groupProgress.pipelineActivityOrder;
 
-    const currentFlow = activityFlows.find(flow => flow.id === flowId)!;
+    const currentFlow = activityFlows.find((flow) => flow.id === flowId)!;
 
     const nextActivityId = currentFlow.activityIds[currentPipelineActivityOrder + 1];
 

@@ -33,7 +33,7 @@ const LanguageDropdown = (props: Props) => {
   );
 
   const preparedLanguageOptions: DropdownOptionList = useMemo(() => {
-    return preparedLanguageList.map(lang => ({ value: t(lang.localizationPath), key: lang.eventKey, onSelect }));
+    return preparedLanguageList.map((lang) => ({ value: t(lang.localizationPath), key: lang.eventKey, onSelect }));
   }, [preparedLanguageList, t, onSelect]);
 
   return (

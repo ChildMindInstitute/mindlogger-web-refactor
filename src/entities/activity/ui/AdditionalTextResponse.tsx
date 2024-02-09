@@ -7,6 +7,6 @@ type AdditionalTextResponseProps = {
 
 export const AdditionalTextResponse = ({ value, onValueChange }: AdditionalTextResponseProps) => {
   return (
-    <TextField fullWidth size="small" value={value} onChange={e => onValueChange(e.target.value)} disabled={false} />
+    <TextField fullWidth size="small" value={value} onChange={(e) => onValueChange(e.target.value)} disabled={false} />
   );
 };

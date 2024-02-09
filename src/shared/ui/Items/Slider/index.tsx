@@ -77,7 +77,7 @@ export const SliderItemBase = (props: SliderItemProps) => {
 
       {(showStickLabel || showStickMarks) && (
         <div className="ticks">
-          {stickList.map(label => {
+          {stickList.map((label) => {
             return (
               <span key={label} className="tick" style={{ background: showStickMarks ? 'black' : 'white' }}>
                 {showStickLabel ? label : ''}

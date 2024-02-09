@@ -31,7 +31,7 @@ const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boo
     }
 
     if ('unionErrors' in error) {
-      error.unionErrors.forEach(unionError => unionError.errors.forEach(e => zodErrors.push(e)));
+      error.unionErrors.forEach((unionError) => unionError.errors.forEach((e) => zodErrors.push(e)));
     }
 
     if (validateAllFieldCriteria) {

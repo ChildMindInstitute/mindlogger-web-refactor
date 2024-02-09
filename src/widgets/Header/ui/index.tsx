@@ -25,7 +25,7 @@ const Header = (): JSX.Element | null => {
   const { isAuthorized, user } = userModel.hooks.useAuthorization();
 
   const toggleMenuOpen = () => {
-    return setIsMenuOpen(prev => !prev);
+    return setIsMenuOpen((prev) => !prev);
   };
 
   const closeMenu = () => {

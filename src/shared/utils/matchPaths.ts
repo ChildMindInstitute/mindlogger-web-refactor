@@ -10,7 +10,7 @@ export const matchPaths = (
   pathname: string,
   params: Params = { end: false, caseSensitive: false },
 ) => {
-  return patterns.map(path =>
+  return patterns.map((path) =>
     matchPath(
       {
         path,

@@ -31,10 +31,10 @@ export class ListItemsFactory {
     if (isInProgress) {
       const progressRecord = this.utility.getProgressRecord(activityEvent) as FlowProgress;
 
-      activity = this.utility.activities.find(x => x.id === progressRecord.currentActivityId)!;
+      activity = this.utility.activities.find((x) => x.id === progressRecord.currentActivityId)!;
       position = progressRecord.pipelineActivityOrder + 1;
     } else {
-      activity = this.utility.activities.find(x => x.id === activityFlow.activityIds[0])!;
+      activity = this.utility.activities.find((x) => x.id === activityFlow.activityIds[0])!;
       position = 1;
     }
 

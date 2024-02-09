@@ -22,7 +22,7 @@ class MarkdownBuilder {
       return markdown;
     }
 
-    matches.forEach(match => {
+    matches.forEach((match) => {
       markdown = markdown.replace(match[0], `<ins>${match[1].trim()}</ins>`);
     });
 
@@ -50,8 +50,8 @@ class MarkdownBuilder {
         continue;
       }
 
-      const url = urlMatchGroup.map(el => el.slice(1, -1))[0];
-      const name = nameMatchGroup.map(el => el.slice(1, -1))[0];
+      const url = urlMatchGroup.map((el) => el.slice(1, -1))[0];
+      const name = nameMatchGroup.map((el) => el.slice(1, -1))[0];
 
       const youtubeBuilder = new YoutubeBuilder();
 
@@ -95,7 +95,7 @@ class MarkdownBuilder {
     const centerAlignRule = 'hljs-center';
     const rightAlignRule = 'hljs-right';
 
-    matches.forEach(match => {
+    matches.forEach((match) => {
       const content = match[1];
 
       if (content.includes(leftAlignRule)) {
@@ -129,7 +129,7 @@ class MarkdownBuilder {
       return markdown;
     }
 
-    matches.forEach(match => {
+    matches.forEach((match) => {
       markdown = markdown.replace(match[0], `<sub>${match[1].trim()}</sub>`);
     });
 
@@ -145,7 +145,7 @@ class MarkdownBuilder {
       return markdown;
     }
 
-    matches.forEach(match => {
+    matches.forEach((match) => {
       markdown = markdown.replace(match[0], `<s>${match[1].trim()}</s>`);
     });
 
@@ -161,7 +161,7 @@ class MarkdownBuilder {
       return markdown;
     }
 
-    matches.forEach(match => {
+    matches.forEach((match) => {
       markdown = markdown.replace(match[0], `<mark>${match[1].trim()}</mark>`);
     });
 

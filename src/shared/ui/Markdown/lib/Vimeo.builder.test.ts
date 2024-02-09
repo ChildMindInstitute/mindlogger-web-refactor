@@ -26,7 +26,7 @@ const getMockVideoId = () => '187038213';
 
 describe('Vimeo builder', () => {
   describe('Should return iframe with vimeo video', () => {
-    mostPossibleUrls.forEach(url => {
+    mostPossibleUrls.forEach((url) => {
       it(`when url is ${url}`, () => {
         const builder = new VimeoBuilder();
         const videoId = getMockVideoId();
@@ -39,7 +39,7 @@ describe('Vimeo builder', () => {
   });
 
   describe('Should return null', () => {
-    wrongUrls.forEach(url => {
+    wrongUrls.forEach((url) => {
       it(`when url is ${url}`, () => {
         const builder = new VimeoBuilder();
         const iframe = builder.process(url, 'name');
