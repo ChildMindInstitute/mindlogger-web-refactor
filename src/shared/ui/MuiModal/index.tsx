@@ -83,6 +83,7 @@ export const MuiModal = (props: Props) => {
       {showCloseIcon && (
         <CloseIcon
           onClick={onHide}
+          data-testid="customized-dialog-close-icon"
           sx={{
             color: Theme.colors.light.onSurfaceVariant,
             marginLeft: "auto",

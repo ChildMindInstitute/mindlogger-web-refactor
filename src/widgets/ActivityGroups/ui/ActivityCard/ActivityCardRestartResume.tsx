@@ -37,7 +37,7 @@ export const ActivityCardRestartResume = ({
         <Box
           marginTop={lessThanSM ? 3 : 0}
           alignSelf="center"
-          data-testid="assessment-next-button"
+          data-testid="assessment-buttons"
           flexDirection={lessThanSM ? "row" : "column"}
           flexWrap="nowrap"
           display="flex"
@@ -46,6 +46,7 @@ export const ActivityCardRestartResume = ({
           alignItems="flex-end"
           gap="8px">
           <BaseButton
+            data-testid="assessment-resume-button"
             disabled={isDisabled}
             sx={{
               width: "120px",
@@ -58,7 +59,7 @@ export const ActivityCardRestartResume = ({
           <ButtonBase
             disabled={isDisabled}
             onClick={openModal}
-            data-testid="assessment-save-and-exit-button"
+            data-testid="assessment-restart-button"
             sx={{
               borderRadius: "100px",
               padding: "10px 10px",
@@ -75,18 +76,20 @@ export const ActivityCardRestartResume = ({
           </ButtonBase>
         </Box>
       ) : (
-        <Box alignSelf="center" width={"120px"} data-testid="assessment-next-button">
+        <Box data-testid="assessment-buttons" alignSelf="center" width="120px">
           <BaseButton
             disabled={isDisabled}
             type="button"
             variant="contained"
             onClick={onResumeClick}
             text={t("start")}
+            data-testid="assessment-start-button"
           />
         </Box>
       )}
 
       <MuiModal
+        testId="assessment-restart-modal"
         isOpen={isRestartConfirmationModalOpen}
         onHide={closeModal}
         title={t("additional.restart_activity")}
