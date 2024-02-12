@@ -44,7 +44,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
     }
 
     if (noneAboveOptionChecked) {
-      return onValueChange(preparedValues)
+      return onValueChange([...value])
     }
 
     if (!isChangedIndexExist && !isNoneAbove) {
@@ -66,8 +66,6 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
           const isChecked = values.includes(String(option.value))
           const isNoneAbove = option.isNoneAbove
 
-          const disabledDueNoneAbove = !isNoneAbove && noneAboveOptionChecked
-
           return (
             <CheckboxItemOption
               key={option.id}
@@ -78,7 +76,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
               onChange={(value: string) => onHandleValueChange(value, isNoneAbove)}
               description={option.tooltip}
               image={option.image}
-              disabled={isDisabled || disabledDueNoneAbove}
+              disabled={isDisabled}
               defaultChecked={isChecked}
               color={option.color}
               replaceText={replaceText}
@@ -92,8 +90,6 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
           const isChecked = values.includes(String(option.value))
           const isNoneAbove = option.isNoneAbove
 
-          const disabledDueNoneAbove = !isNoneAbove && noneAboveOptionChecked
-
           return (
             <CheckboxItemOption
               key={option.id}
@@ -104,7 +100,7 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
               onChange={(value: string) => onHandleValueChange(value, isNoneAbove)}
               description={option.tooltip}
               image={option.image}
-              disabled={isDisabled || disabledDueNoneAbove}
+              disabled={isDisabled}
               defaultChecked={isChecked}
               color={option.color}
               replaceText={replaceText}
