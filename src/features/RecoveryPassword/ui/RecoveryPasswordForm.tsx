@@ -31,7 +31,6 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
 
   const {
     mutate: approveRecoveryPassword,
-    isSuccess,
     isLoading,
     error,
     status,
