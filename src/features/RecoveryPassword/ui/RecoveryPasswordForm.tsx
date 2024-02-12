@@ -50,7 +50,8 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
 
   if (status === 'success') {
     // Auto-navigate to the login page
-    return navigate(ROUTES.login.path);
+    navigate(ROUTES.login.path);
+    return <></>;
   }
 
   return (
