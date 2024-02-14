@@ -24,6 +24,8 @@ export const useNotification = () => {
     };
 
     notificationCenter.addNotification(notification);
+
+    return notification;
   };
 
   const showSuccessNotification = (msg: string, duration?: number) => {
