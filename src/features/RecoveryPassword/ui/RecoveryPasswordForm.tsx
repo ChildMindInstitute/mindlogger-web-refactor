@@ -50,7 +50,9 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
 
   if (status === 'success') {
     // Auto-navigate to the login page
-    navigate(ROUTES.login.path);
+    navigate(ROUTES.login.path, {
+      state: { isPasswordReset: true },
+    });
     return <></>;
   }
 
@@ -90,10 +92,7 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
           />
         </Box>
 
-        <DisplaySystemMessage
-          errorMessage={error?.evaluatedMessage}
-          successMessage={isSuccess ? t('success') : null}
-        />
+        <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
         <Box marginY={3}>
           <BaseButton type="submit" variant="contained" isLoading={isLoading} text={t('submit')} />
