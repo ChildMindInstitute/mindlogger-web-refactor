@@ -58,12 +58,12 @@ export const AssessmentPassingScreen = (props: Props) => {
       eventId,
     })
 
-  const { saveItemAnswer, saveItemAdditionalText } = appletModel.hooks.useSaveItemAnswer({
+  const { saveItemAnswer, saveItemAdditionalText, removeItemAnswer } = appletModel.hooks.useSaveItemAnswer({
     activityId,
     eventId,
   })
 
-  const { step, item, hasPrevStep, hasNextStep, progress } = useSurvey(activityProgress)
+  const { step, item, hasPrevStep, hasNextStep, progress, conditionallyHiddenItemIds } = useSurvey(activityProgress)
 
   const canGoBack = !item?.config.removeBackButton && props.activityDetails.responseIsEditable
 
@@ -149,12 +149,23 @@ export const AssessmentPassingScreen = (props: Props) => {
       return
     }
 
+    conditionallyHiddenItemIds?.forEach(id => removeItemAnswer(id))
+
     if (!hasNextStep) {
       return setIsModalOpen(true)
     }
 
     return onNext()
-  }, [hasNextStep, item, onNext, props.activityDetails, showWarningNotification, t])
+  }, [
+    conditionallyHiddenItemIds,
+    removeItemAnswer,
+    hasNextStep,
+    item,
+    onNext,
+    props.activityDetails,
+    showWarningNotification,
+    t,
+  ])
 
   const onItemValueChange = (value: string[]) => {
     saveItemAnswer(item.id, value)

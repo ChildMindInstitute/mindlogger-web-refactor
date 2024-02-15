@@ -5,7 +5,14 @@ import { appletModel } from "~/entities/applet"
 export const useSurvey = (activityProgress: appletModel.ActivityProgress) => {
   const items = useMemo(() => activityProgress?.items ?? [], [activityProgress.items])
 
-  const processedItems = appletModel.conditionalLogicBuilder.process(items)
+  const visibleItems = items.filter(x => !x.isHidden)
+
+  const processedItems = appletModel.conditionalLogicBuilder.process(visibleItems)
+
+  const visibleItemIds = visibleItems.map(x => x.id)
+  const processedItemIds = processedItems.map(x => x.id)
+
+  const conditionallyHiddenItemIds = visibleItemIds.filter(id => !processedItemIds.includes(id))
 
   const step = activityProgress?.step ?? 0
 
@@ -18,15 +25,16 @@ export const useSurvey = (activityProgress: appletModel.ActivityProgress) => {
   const progress = useMemo(() => {
     const defaultProgressPercentage = 0
 
-    if (!items) {
+    if (!visibleItems) {
       return defaultProgressPercentage
     }
 
-    return ((step + 1) / items.length) * 100
-  }, [items, step])
+    return ((step + 1) / visibleItems.length) * 100
+  }, [visibleItems, step])
 
   return {
     item,
+    conditionallyHiddenItemIds,
 
     hasNextStep,
     hasPrevStep,
