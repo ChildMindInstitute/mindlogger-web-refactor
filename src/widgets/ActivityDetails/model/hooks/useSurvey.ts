@@ -9,10 +9,7 @@ export const useSurvey = (activityProgress: appletModel.ActivityProgress) => {
 
   const processedItems = appletModel.conditionalLogicBuilder.process(visibleItems)
 
-  const visibleItemIds = visibleItems.map(x => x.id)
-  const processedItemIds = processedItems.map(x => x.id)
-
-  const conditionallyHiddenItemIds = visibleItemIds.filter(id => !processedItemIds.includes(id))
+  const conditionallyHiddenItemIds = appletModel.conditionalLogicBuilder.getConditionallyHiddenItemIds()
 
   const step = activityProgress?.step ?? 0
 
