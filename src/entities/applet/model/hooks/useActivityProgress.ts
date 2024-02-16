@@ -31,11 +31,9 @@ export const useActivityProgress = () => {
         splashScreenItem = mapSplashScreenToRecord(props.activity.splashScreen)
       }
 
-      const preparedActivityItemProgressRecords = props.activity.items
-        .filter(x => !x.isHidden)
-        .map(item => {
-          return mapItemToRecord(item)
-        })
+      const preparedActivityItemProgressRecords = props.activity.items.map(item => {
+        return mapItemToRecord(item)
+      })
 
       const items = splashScreenItem
         ? [splashScreenItem, ...preparedActivityItemProgressRecords]
