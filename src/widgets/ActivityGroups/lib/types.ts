@@ -71,4 +71,5 @@ export type OnActivityCardClickProps = {
   flowId: string | null
   eventId: string
   activity: ActivityDTO
+  shouldRestart: boolean
 }

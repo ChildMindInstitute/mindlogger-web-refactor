@@ -10,6 +10,7 @@ import { Theme } from "../../constants"
 type Props = PropsWithChildren<{
   type: "button" | "submit"
   isLoading?: boolean
+  disabled?: boolean
   variant: "text" | "contained" | "outlined"
   borderColor?: string
 
@@ -50,7 +51,7 @@ export const BaseButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
       ref={ref}
       type={props.type}
       variant={props.variant}
-      disabled={props.isLoading}
+      disabled={props.isLoading || props.disabled}
       onClick={props.onClick}
       color={props.color ?? undefined}
       sx={{
