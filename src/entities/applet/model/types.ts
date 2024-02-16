@@ -12,13 +12,26 @@ import {
   TimeItem,
   TimeRangeItem,
 } from "~/entities/activity/lib"
+import { DayMonthYearDTO, HourMinuteDTO } from "~/shared/utils"
 
 export type UserEventTypes = "SET_ANSWER" | "PREV" | "NEXT" | "SKIP" | "DONE"
+
+export type TimeRangeUserEventDto = {
+  from: {
+    hour: number
+    minute: number
+  }
+
+  to: {
+    hour: number
+    minute: number
+  }
+}
 
 export type UserEventResponse =
   | string
   | {
-      value: string | string[] | number[]
+      value: string | string[] | number[] | DayMonthYearDTO | HourMinuteDTO | TimeRangeUserEventDto
       text?: string
     }
 
