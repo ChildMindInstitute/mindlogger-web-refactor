@@ -40,8 +40,16 @@ export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
     [dispatch, activityId, eventId],
   )
 
+  const removeItemAnswer = useCallback(
+    (itemId: string) => {
+      saveItemAnswer(itemId, [])
+    },
+    [saveItemAdditionalText, saveItemAnswer],
+  )
+
   return {
     saveItemAnswer,
     saveItemAdditionalText,
+    removeItemAnswer,
   }
 }

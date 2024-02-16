@@ -59,5 +59,6 @@ export function mapSplashScreenToRecord(splashScreen: string): ItemRecord {
     responseValues: null,
     answer: [],
     conditionalLogic: null,
+    isHidden: false,
   }
 }
