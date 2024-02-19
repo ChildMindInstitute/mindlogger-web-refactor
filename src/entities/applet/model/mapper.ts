@@ -36,7 +36,7 @@ export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventRes
   }
 
   if (responseType === "timeRange") {
-    const fromDate = new Date(itemAnswer[0])
+    const fromDate = itemAnswer[0] ? new Date(itemAnswer[0]) : new Date()
     const toDate = itemAnswer[1] ? new Date(itemAnswer[1]) : new Date()
 
     return {
