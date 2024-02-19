@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import Box from "@mui/material/Box"
 
@@ -13,13 +13,15 @@ import { useCustomMediaQuery } from "~/shared/utils"
 type Props = {
   src: string
   playOnce?: boolean
+  onFinish: () => void
 
   onHandlePlay?: () => void
   onHandlePause?: () => void
   onHandleEnded?: () => void
 }
 
-export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
+export const AudioPlayerItemBase = ({ src, playOnce, onFinish }: Props) => {
+  const [hasFinishedAtLeastOnce, setHasFinishedAtLeastOnce] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
 
   const mediaQuery = useCustomMediaQuery()
@@ -48,6 +50,14 @@ export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
     return setCurrentDuration(progress)
   }
 
+  useEffect(() => {
+    if (progress === 100) {
+      pause()
+      setHasFinishedAtLeastOnce(true)
+      onFinish()
+    }
+  }, [pause, progress, onFinish])
+
   return (
     <Box data-testid="audio-player-wrap">
       <audio
@@ -72,7 +82,7 @@ export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
         <AudioPlayerProgressBar
           progress={progress}
           onProgressBarClick={onHandleDurationChange}
-          isDisabled={playOnce && isPlaying}
+          isDisabled={(playOnce && isPlaying) || !hasFinishedAtLeastOnce}
         />
         <AudioPlayerVolume
           isMuted={isMuted}

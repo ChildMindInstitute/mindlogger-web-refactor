@@ -1,6 +1,7 @@
 import { hasAdditionalResponse, requiresAdditionalResponse } from "~/entities/activity/lib/helpers"
 import { appletModel } from "~/entities/applet"
 import { ActivityDTO } from "~/shared/api"
+import { AudioPlayerFinished } from "~/shared/ui/Items/AudioPlayer/lib"
 import { stringContainsOnlyNumbers, validateDate, validateTime } from "~/shared/utils"
 
 function isAnswerShouldBeEmpty(item: appletModel.ItemRecord) {
@@ -37,6 +38,14 @@ function isAnswerEmpty(item: appletModel.ItemRecord): boolean {
   }
 
   return item.answer.length > 0
+}
+
+function checkAudioPlayer(item: appletModel.ItemRecord): boolean {
+  if (item.responseType === "audioPlayer") {
+    return item.answer[0] === AudioPlayerFinished
+  }
+
+  return true
 }
 
 function validateResponseCorrectness(item: appletModel.ItemRecord): boolean {
@@ -108,5 +117,11 @@ export function validateBeforeMoveForward({ item, activity, showWarning }: Valid
     return false
   }
 
+  const audioIsNotFinished = !checkAudioPlayer(item)
+
+  if (audioIsNotFinished) {
+    showWarning("pleaseListenToAudio")
+    return false
+  }
   return true
 }

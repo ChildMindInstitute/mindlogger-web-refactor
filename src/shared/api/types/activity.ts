@@ -103,6 +103,7 @@ export type AnswerTypesPayload =
   | DateAnswerPayload
   | TimeAnswerPayload
   | TimeRangeAnswerPayload
+  | AudioPlayerAnswerPayload
 
 export type EmptyAnswerPayload = null
 
@@ -158,7 +159,10 @@ export type TimeRangeAnswerPayload = {
   text: string | null
 }
 
-export type AudioPlayerAnswerPayload = null
+export type AudioPlayerAnswerPayload = {
+  value: boolean
+  text: string | null
+}
 
 export type CompletedEntityDTO = {
   id: string

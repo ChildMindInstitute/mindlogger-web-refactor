@@ -48,6 +48,13 @@ export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventRes
     }
   }
 
+  if (responseType === "audioPlayer") {
+    return {
+      value: true,
+      text: item.additionalText ?? undefined,
+    }
+  }
+
   return {
     value: itemAnswer[0],
     text: item.additionalText ?? undefined,

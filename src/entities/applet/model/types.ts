@@ -31,7 +31,7 @@ export type TimeRangeUserEventDto = {
 export type UserEventResponse =
   | string
   | {
-      value: string | string[] | number[] | DayMonthYearDTO | HourMinuteDTO | TimeRangeUserEventDto
+      value: boolean | string | string[] | number[] | DayMonthYearDTO | HourMinuteDTO | TimeRangeUserEventDto
       text?: string
     }
 
