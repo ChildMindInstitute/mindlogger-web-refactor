@@ -23,7 +23,7 @@ export default function Footer() {
             <a href="https://childmind.org" target="_blank" rel="noreferrer">
               Child Mind Institute
             </a>{" "}
-            &#169; 2023
+            &#169; 2024
           </span>
         )}
         <a href="https://mindlogger.org/terms" target="_blank" rel="noreferrer">

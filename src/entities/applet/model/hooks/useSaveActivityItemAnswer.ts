@@ -44,7 +44,7 @@ export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
     (itemId: string) => {
       saveItemAnswer(itemId, [])
     },
-    [saveItemAdditionalText, saveItemAnswer],
+    [saveItemAnswer],
   )
 
   return {
