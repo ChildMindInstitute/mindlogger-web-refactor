@@ -70,7 +70,7 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
       return <TimeRangeItem values={values} onValueChange={onValueChange} />
 
     case "audioPlayer":
-      return <AudioPlayerItem item={item} />
+      return <AudioPlayerItem item={item} value={values[0]} onValueChange={onValueChange} />
 
     default:
       return <></>

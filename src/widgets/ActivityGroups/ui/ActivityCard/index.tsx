@@ -6,6 +6,7 @@ import { ActivityCardBase } from "./ActivityCardBase"
 import { ActivityCardDescription } from "./ActivityCardDescription"
 import { ActivityCardIcon } from "./ActivityCardIcon"
 import { ActivityCardProgressBar } from "./ActivityCardProgressBar"
+import { ActivityCardRestartResume } from "./ActivityCardRestartResume"
 import { ActivityCardTitle } from "./ActivityCardTitle"
 import { ActivityLabel } from "./ActivityLabel"
 import TimeStatusLabel from "./TimeStatusLabel"
@@ -55,25 +56,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     publicAppletKey: context.isPublic ? context.publicAppletKey : null,
   })
 
-  const { mutate: getActivityById, isLoading } = useActivityByIdMutation(
-    { isPublic: context.isPublic },
-    {
-      onSuccess(data) {
-        const activity = data.data.result
-
-        if (!activity) {
-          throw new Error("[useActivityByIdMutation]: Activity not found")
-        }
-
-        return startActivityOrFlow({
-          activity,
-          eventId: activityListItem.eventId,
-          status: activityListItem.status,
-          flowId: activityListItem.flowId,
-        })
-      },
-    },
-  )
+  const { mutate: getActivityById, isLoading } = useActivityByIdMutation({ isPublic: context.isPublic })
 
   const getCompletedActivitiesFromPosition = (position: number) => position - 1
 
@@ -85,26 +68,48 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
   const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100
 
-  function onActivityCardClickHandler() {
+  function onStartActivity(shouldRestart: boolean) {
     if (isDisabled || !activityListItem) return
 
     if (!isEntitySupported) {
       return openStoreLink()
     }
 
-    return getActivityById({ activityId: activityListItem.activityId })
+    return getActivityById(
+      { activityId: activityListItem.activityId },
+      {
+        onSuccess(data) {
+          const activity = data.data.result
+
+          if (!activity) {
+            throw new Error("[useActivityByIdMutation]: Activity not found")
+          }
+
+          return startActivityOrFlow({
+            activity,
+            eventId: activityListItem.eventId,
+            status: activityListItem.status,
+            flowId: activityListItem.flowId,
+            shouldRestart,
+          })
+        },
+      },
+    )
   }
+
+  const restartActivity = () => onStartActivity(true)
+  const resumeActivity = () => onStartActivity(false)
 
   if (isLoading) {
     return (
-      <ActivityCardBase isFlow={isFlow}>
+      <ActivityCardBase isDisabled={isDisabled} isFlow={isFlow}>
         <Loader />
       </ActivityCardBase>
     )
   }
 
   return (
-    <ActivityCardBase onClick={onActivityCardClickHandler} isDisabled={isDisabled} isFlow={isFlow}>
+    <ActivityCardBase isDisabled={isDisabled} isFlow={isFlow}>
       <Box
         display="flex"
         flex={1}
@@ -138,6 +143,13 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
           {isEntitySupported && <TimeStatusLabel activity={activityListItem} />}
         </Box>
+        <ActivityCardRestartResume
+          activityStatus={activityListItem.status}
+          onRestartClick={restartActivity}
+          onResumeClick={resumeActivity}
+          activityName={title}
+          isDisabled={isDisabled}
+        />
       </Box>
     </ActivityCardBase>
   )

@@ -16,6 +16,7 @@ export const Theme = {
       surface: "#FCFCFF",
       surfaceVariant: "#DEE3EB",
       surface1: "#EFF4FA",
+      surface2: "#E0EBF4",
       accentGreen: "#0F7B6C",
       accentGreen30: "rgba(15, 123, 108, 0.30)",
       accentYellow: "#DFAC03",

@@ -50,6 +50,7 @@ export interface ActivityItemBase {
   answer: Answer
   additionalText?: string | null
   conditionalLogic: ConditionalLogic | null
+  isHidden: boolean
 }
 
 export type Config =

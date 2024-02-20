@@ -55,7 +55,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   if (hasAvailableFromTo) {
     return (
-      <Box display="flex" alignItems="center" gap="8px">
+      <Box display="flex" alignItems="center" gap="8px" data-testid="time-status-label">
         <Avatar src={ClockIcon} sx={{ width: "24px", height: "24px" }} />
         <Typography variant="body1" sx={timeStatusLabelSx}>
           {`${t("activity_due_date.available")} ${formatDate(activity.availableFrom!)} ${t(
@@ -68,7 +68,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   if (hasTimeToComplete) {
     return (
-      <Box display="flex" alignItems="center" gap="8px">
+      <Box display="flex" alignItems="center" gap="8px" data-testid="time-status-label">
         <Avatar src={ClockIcon} sx={{ width: "24px", height: "24px" }} />
 
         <Typography variant="body1" sx={timeStatusLabelSx}>{`${t(
@@ -80,7 +80,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
   }
 
   return (
-    <Box display="flex" alignItems="center" gap="8px">
+    <Box display="flex" alignItems="center" gap="8px" data-testid="time-status-label">
       <Avatar src={ClockIcon} sx={{ width: "24px", height: "24px" }} />
       <Typography variant="body1" sx={timeStatusLabelSx}>{`${t("activity_due_date.to")} ${formatDate(
         activity.availableTo!,

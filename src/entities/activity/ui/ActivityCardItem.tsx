@@ -47,14 +47,16 @@ export const ActivityCardItem = ({
       <CardItem
         markdown={questionText}
         watermark={watermark}
-        isOptional={!isOptionalFlagHidden && (item.config.skippableItem || allowToSkipAllItems)}>
+        isOptional={!isOptionalFlagHidden && (item.config.skippableItem || allowToSkipAllItems)}
+        testId="active-item">
         <ItemPicker item={item} onValueChange={onValueChange} isDisabled={false} replaceText={replaceText} />
       </CardItem>
       {hasAdditionalResponse(item) && (
         <CardItem
           markdown={t("additional.additional_text")}
           watermark={watermark}
-          isOptional={!requiresAdditionalResponse(item)}>
+          isOptional={!requiresAdditionalResponse(item)}
+          testId="additional-text">
           <AdditionalTextResponse value={item.additionalText || ""} onValueChange={onItemAdditionalTextChange} />
         </CardItem>
       )}

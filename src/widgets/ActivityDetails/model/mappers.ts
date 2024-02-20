@@ -217,8 +217,18 @@ function convertToTimeRangeAnswer(item: TimeRangeItem): ItemAnswer<TimeRangeAnsw
 }
 
 function convertToAudioPlayerAnswer(item: AudioPlayerItem): ItemAnswer<AudioPlayerAnswerPayload> {
+  if (!item.answer[0]) {
+    return {
+      answer: null,
+      itemId: item.id,
+    }
+  }
+
   return {
-    answer: null,
+    answer: {
+      value: true,
+      text: item.additionalText || null,
+    },
     itemId: item.id,
   }
 }

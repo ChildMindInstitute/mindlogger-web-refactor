@@ -6,8 +6,31 @@ import { Condition } from "~/shared/api"
 export type ItemMapByName = Record<string, ItemRecord>
 
 class ConditionalLogicBuilder {
+  private hiddenOrSkippedItemNames: Set<string> = new Set()
+  private hiddenOrSkippedItemIds: Set<string> = new Set()
+
   public process(items: ItemRecord[]): ItemRecord[] {
-    return items.filter((item, index, array) => this.conditionalLogicFilter(item, index, array))
+    return items.filter((item, index, array) => {
+      const isItemVisible = this.conditionalLogicFilter(item, index, array)
+
+      this.handleItemVisibility(item, isItemVisible)
+
+      return isItemVisible
+    })
+  }
+
+  public getConditionallyHiddenItemIds() {
+    return this.hiddenOrSkippedItemIds
+  }
+
+  private handleItemVisibility(item: ItemRecord, isVisible: boolean) {
+    if (isVisible) {
+      this.hiddenOrSkippedItemNames.delete(item.name)
+      this.hiddenOrSkippedItemIds.delete(item.id)
+    } else {
+      this.hiddenOrSkippedItemNames.add(item.name)
+      this.hiddenOrSkippedItemIds.add(item.id)
+    }
   }
 
   private conditionalLogicFilter(item: ItemRecord, index: number, array: ItemRecord[]): boolean {
@@ -41,7 +64,7 @@ class ConditionalLogicBuilder {
     const checkResult = rules.every(rule => {
       const answer = itemsMap[rule.itemName].answer
 
-      if (!answer.length) {
+      if (!answer.length || this.hiddenOrSkippedItemNames.has(rule.itemName)) {
         return false
       }
 
@@ -55,7 +78,7 @@ class ConditionalLogicBuilder {
     const checkResult = rules.some(rule => {
       const answer = itemsMap[rule.itemName].answer
 
-      if (!answer.length) {
+      if (!answer.length || this.hiddenOrSkippedItemNames.has(rule.itemName)) {
         return false
       }
 
