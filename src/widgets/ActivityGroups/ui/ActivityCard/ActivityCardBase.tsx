@@ -26,6 +26,7 @@ export const ActivityCardBase = (props: Props) => {
         minHeight: "122px",
         flex: 1,
         opacity: props.isDisabled ? 0.65 : 1,
+        alignItems: "center",
       }}>
       {props.children}
     </Box>
