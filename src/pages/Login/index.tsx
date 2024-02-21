@@ -1,4 +1,4 @@
-import { lazy, useEffect, useRef } from 'react';
+import { lazy, useRef } from 'react';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -8,7 +8,7 @@ import { LoginForm, useLoginTranslation } from '~/features/Login';
 import { ROUTES, Theme } from '~/shared/constants';
 import { useNotification } from '~/shared/ui';
 import { Notification } from '~/shared/ui/NotificationCenter/lib/types';
-import { Mixpanel } from '~/shared/utils';
+import { Mixpanel, useOnceEffect } from '~/shared/utils';
 
 const DownloadMobileLinks = lazy(() => import('~/widgets/DownloadMobileLinks'));
 
@@ -23,8 +23,7 @@ function LoginPage() {
     Mixpanel.track('Create account button on login screen click');
   };
 
-  // This hook only needs to run once, so we can ignore the dependency array
-  useEffect(() => {
+  useOnceEffect(() => {
     Mixpanel.trackPageView('Login');
 
     if (location.state?.isPasswordReset && !notificationRef.current) {
@@ -40,8 +39,7 @@ function LoginPage() {
         replace: true,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
