@@ -244,7 +244,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         isOpen={isModalOpen}
         onHide={() => setIsModalOpen(false)}
         title={t("submitAnswerModalTitle")}
-        label={t("submitAnswerModalDescription")}
+        label={canGoBack ? t("submitAnswerModalDescription") : undefined}
         footerPrimaryButton={t("submit")}
         onPrimaryButtonClick={onSubmit}
         isPrimaryButtonLoading={isLoading}
