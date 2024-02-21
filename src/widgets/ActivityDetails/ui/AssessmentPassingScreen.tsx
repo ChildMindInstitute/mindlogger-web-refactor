@@ -100,11 +100,11 @@ export const AssessmentPassingScreen = (props: Props) => {
   })
 
   const onSubmit = useCallback(() => {
-    saveUserEventByType("DONE", item)
+    const doneUserEvent = saveUserEventByType("DONE", item)
 
     const answer = processAnswers({
       items,
-      userEvents,
+      userEvents: [...userEvents, doneUserEvent],
       isPublic: context.isPublic,
     })
 
