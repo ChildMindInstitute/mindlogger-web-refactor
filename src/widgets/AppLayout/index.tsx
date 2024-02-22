@@ -34,7 +34,7 @@ const Layout = ({
         backgroundColor: bgColor,
       }}>
       {header ? header : <Header />}
-      <Box id="app-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
+      <Box id="app-content-container" display="flex" flex={1} flexDirection="column" overflow="auto">
         <NotificationCenter />
         {children ? children : <Outlet />}
         {footer ? footer : <Footer />}
