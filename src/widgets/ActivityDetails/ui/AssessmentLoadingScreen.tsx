@@ -41,7 +41,7 @@ export const AssessmentLoadingScreen = () => {
         </Box>
       </Box>
 
-      <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
+      <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="auto">
         <NotificationCenter />
         <Loader />
       </Box>
