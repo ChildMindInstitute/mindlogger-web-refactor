@@ -57,7 +57,7 @@ export const CustomCard = ({ id, title, description, imageSrc, onClick }: CardPr
           gutterBottom
           component="div"
           fontSize="20px"
-          sx={{ "&:hover": { textDecoration: "underline" } }}
+          sx={{ wordBreak: "break-word", "&:hover": { textDecoration: "underline" } }}
           data-testid="custom-card-title">
           {title}
         </Typography>
