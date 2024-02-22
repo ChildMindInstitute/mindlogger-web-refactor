@@ -207,7 +207,7 @@ export const AssessmentPassingScreen = (props: Props) => {
           publicKey={context.isPublic ? context.publicAppletKey : null}
         />
 
-        <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
+        <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="auto">
           <NotificationCenter />
           <Box display="flex" flex={1} justifyContent="center">
             <Box maxWidth="900px" display="flex" alignItems="center" flex={1}>
