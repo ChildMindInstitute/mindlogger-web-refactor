@@ -6,7 +6,6 @@ import { ActivityDetailsContext } from "../lib"
 
 import { SaveAndExitButton } from "~/features/SaveAssessmentAndExit"
 import { ROUTES } from "~/shared/constants"
-import { NotificationCenter } from "~/shared/ui"
 import Loader from "~/shared/ui/Loader"
 import { useCustomMediaQuery, useCustomNavigation } from "~/shared/utils"
 
@@ -42,7 +41,6 @@ export const AssessmentLoadingScreen = () => {
       </Box>
 
       <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
-        <NotificationCenter />
         <Loader />
       </Box>
     </Box>
