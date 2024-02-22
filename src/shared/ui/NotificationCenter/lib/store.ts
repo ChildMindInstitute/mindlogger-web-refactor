@@ -1,9 +1,9 @@
-import { Notification } from './types';
+import { Notification } from "./types"
 
 type Store = {
-  notifications: Notification[];
-};
+  notifications: Notification[]
+}
 
 export const notificationCenterStore: Store = {
   notifications: [],
-};
+}

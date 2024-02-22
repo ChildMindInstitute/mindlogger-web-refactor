@@ -1,3 +1,3 @@
 export interface IEvaluator<TValue> {
-  evaluate: (valuesToEvaluate: TValue[]) => TValue[];
+  evaluate: (valuesToEvaluate: TValue[]) => TValue[]
 }

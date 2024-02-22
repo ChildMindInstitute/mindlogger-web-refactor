@@ -1,27 +1,27 @@
-import { lazy } from 'react';
+import { lazy } from "react"
 
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from "react-router-dom"
 
-import ActivityDetailsPage from './ActivityDetails';
-import AppletDetailsPage from './AppletDetailsPage';
-import AppletListPage from './AppletListPage';
-import ProfilePage from './Profile';
-import SettingsPage from './Settings';
+import ActivityDetailsPage from "./ActivityDetails"
+import AppletDetailsPage from "./AppletDetailsPage"
+import AppletListPage from "./AppletListPage"
+import ProfilePage from "./Profile"
+import SettingsPage from "./Settings"
 
-import { ROUTES } from '~/shared/constants';
-import Layout from '~/widgets/AppLayout';
-import LogoutTracker from '~/widgets/LogoutTracker';
-import ProtectedRoute from '~/widgets/ProtectedRoute';
+import { ROUTES } from "~/shared/constants"
+import Layout from "~/widgets/AppLayout"
+import LogoutTracker from "~/widgets/LogoutTracker"
+import ProtectedRoute from "~/widgets/ProtectedRoute"
 
-const PublicActivityDetailsPage = lazy(() => import('./PublicActivityDetails'));
-const PublicAppletDetailsPage = lazy(() => import('./PublicJoin'));
-const InvitationPage = lazy(() => import('./Invitation'));
-const PrivateJoinPage = lazy(() => import('./PrivateJoin'));
-const TransferOwnershipPage = lazy(() => import('./TransferOwnership'));
+const PublicActivityDetailsPage = lazy(() => import("./PublicActivityDetails"))
+const PublicAppletDetailsPage = lazy(() => import("./PublicJoin"))
+const InvitationPage = lazy(() => import("./Invitation"))
+const PrivateJoinPage = lazy(() => import("./PrivateJoin"))
+const TransferOwnershipPage = lazy(() => import("./TransferOwnership"))
 
 type Props = {
-  refreshToken: string;
-};
+  refreshToken: string
+}
 
 function AuthorizedRoutes({ refreshToken }: Props) {
   return (
@@ -47,7 +47,7 @@ function AuthorizedRoutes({ refreshToken }: Props) {
         </Route>
       </Routes>
     </LogoutTracker>
-  );
+  )
 }
 
-export default AuthorizedRoutes;
+export default AuthorizedRoutes

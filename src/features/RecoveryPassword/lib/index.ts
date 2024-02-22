@@ -1,1 +1,1 @@
-export * from './useRecoveryPasswordTranslation';
+export * from "./useRecoveryPasswordTranslation"

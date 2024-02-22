@@ -1,35 +1,35 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
 
-import { useDeclineTransferOwnershipQuery } from '../api';
+import { useDeclineTransferOwnershipQuery } from "../api"
 
-import { PageMessage } from '~/shared/ui';
-import Loader from '~/shared/ui/Loader';
-import { Mixpanel, useCustomTranslation } from '~/shared/utils';
+import { PageMessage } from "~/shared/ui"
+import Loader from "~/shared/ui/Loader"
+import { Mixpanel, useCustomTranslation } from "~/shared/utils"
 
 type TransferOwnershipProps = {
-  appletId: string;
-  keyParam: string;
-};
+  appletId: string
+  keyParam: string
+}
 
 export const TransferOwnershipDecline = ({ appletId, keyParam }: TransferOwnershipProps) => {
-  const { t } = useCustomTranslation({ keyPrefix: 'transferOwnership' });
+  const { t } = useCustomTranslation({ keyPrefix: "transferOwnership" })
 
   const { isLoading, isError } = useDeclineTransferOwnershipQuery(
     { appletId, key: keyParam },
     {
       onSuccess() {
-        Mixpanel.track('Transfer Ownership Declined');
+        Mixpanel.track("Transfer Ownership Declined")
       },
     },
-  );
+  )
 
   if (isLoading) {
-    return <Loader />;
+    return <Loader />
   }
 
   if (isError) {
-    return <PageMessage message={t('notFound')} />;
+    return <PageMessage message={t("notFound")} />
   }
 
   return (
@@ -40,19 +40,18 @@ export const TransferOwnershipDecline = ({ appletId, keyParam }: TransferOwnersh
       justifyContent="center"
       alignItems="center"
       textAlign="center"
-      data-testid="transfer-ownership-declined"
-    >
+      data-testid="transfer-ownership-declined">
       <Typography variant="body1" fontSize="30px" margin="16px 0px" data-testid="transfer-ownership-declined-title">
-        {t('declined.title')}
+        {t("declined.title")}
       </Typography>
       <Box data-testid="transfer-ownership-declined-content">
         <Typography variant="body2" fontSize="18px">
-          {t('declined.message1')}
+          {t("declined.message1")}
         </Typography>
         <Typography variant="body2" fontSize="18px">
-          {t('declined.message2')}
+          {t("declined.message2")}
         </Typography>
       </Box>
     </Box>
-  );
-};
+  )
+}

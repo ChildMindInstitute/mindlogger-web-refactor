@@ -1,2 +1,2 @@
-export * from './types';
-export * from './useInvitationTranslation';
+export * from "./types"
+export * from "./useInvitationTranslation"

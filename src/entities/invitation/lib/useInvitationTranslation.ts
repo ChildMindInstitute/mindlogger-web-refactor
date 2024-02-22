@@ -1,5 +1,5 @@
-import { useCustomTranslation } from '~/shared/utils';
+import { useCustomTranslation } from "~/shared/utils"
 
 export const useInvitationTranslation = () => {
-  return useCustomTranslation({ keyPrefix: 'invitation' });
-};
+  return useCustomTranslation({ keyPrefix: "invitation" })
+}

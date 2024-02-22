@@ -1,33 +1,33 @@
-import { BaseSuccessResponse } from './base';
+import { BaseSuccessResponse } from "./base"
 
-type Status = 'approved' | 'pending' | 'declined';
+type Status = "approved" | "pending" | "declined"
 
 export interface GetInvitationByIdPayload {
-  invitationId: string;
+  invitationId: string
 }
 
 export interface AcceptInvitationByIdPayload {
-  invitationId: string;
+  invitationId: string
 }
 
 export interface DeclineInvitationByIdPayload {
-  invitationId: string;
+  invitationId: string
 }
 
 export interface TransferOwnershipPayload {
-  appletId: string;
-  key: string;
+  appletId: string
+  key: string
 }
 
 export type GetInvitationSuccessResponse = BaseSuccessResponse<{
-  key: string;
-  email: string;
-  status: Status;
-  role: string;
+  key: string
+  email: string
+  status: Status
+  role: string
 
-  title: string | null;
-  body: string | null;
+  title: string | null
+  body: string | null
 
-  appletName: string;
-  appletId: string | number;
-}>;
+  appletName: string
+  appletId: string | number
+}>

@@ -1,69 +1,69 @@
-import { BaseSuccessResponse } from './base';
+import { BaseSuccessResponse } from "./base"
 
 export interface LoginPayload {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 export type LoginSuccessResponse = BaseSuccessResponse<{
-  token: AuthorizationDTO;
-  user: UserDTO;
-}>;
+  token: AuthorizationDTO
+  user: UserDTO
+}>
 
 export interface LogoutPayload {
-  accessToken: string;
+  accessToken: string
 }
 
 export interface SignupPayload {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
+  email: string
+  firstName: string
+  lastName: string
+  password: string
 }
 
-export type SignupSuccessResponse = BaseSuccessResponse<UserDTO>;
+export type SignupSuccessResponse = BaseSuccessResponse<UserDTO>
 
 export interface RecoveryPasswordPayload {
-  email: string;
+  email: string
 }
 
 export type RecoveryPasswordLinkHealthcheckPayload = {
-  email: string;
-  key: string;
-};
+  email: string
+  key: string
+}
 
-export type PasswordRecoverySuccessResponse = BaseSuccessResponse<UserDTO>;
+export type PasswordRecoverySuccessResponse = BaseSuccessResponse<UserDTO>
 
 export interface RecoveryPasswordApprovalPayload {
-  email: string;
-  key: string;
-  password: string;
+  email: string
+  key: string
+  password: string
 }
 
-export type PasswordRecoveryApprovalSuccessResponse = BaseSuccessResponse<UserDTO>;
+export type PasswordRecoveryApprovalSuccessResponse = BaseSuccessResponse<UserDTO>
 
 export interface UpdatePasswordPayload {
-  prev_password: string;
-  password: string;
+  prev_password: string
+  password: string
 }
 
-export type UpdatePasswordSuccessResponse = BaseSuccessResponse<UserDTO>;
+export type UpdatePasswordSuccessResponse = BaseSuccessResponse<UserDTO>
 
 export interface RefreshTokenPayload {
-  refreshToken: string;
+  refreshToken: string
 }
 
-export type RefreshTokenSuccessResponse = BaseSuccessResponse<AuthorizationDTO>;
+export type RefreshTokenSuccessResponse = BaseSuccessResponse<AuthorizationDTO>
 
 interface AuthorizationDTO {
-  accessToken: string;
-  refreshToken: string;
-  tokenType: string;
+  accessToken: string
+  refreshToken: string
+  tokenType: string
 }
 
 interface UserDTO {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
+  id: string
+  firstName: string
+  lastName: string
+  email: string
 }

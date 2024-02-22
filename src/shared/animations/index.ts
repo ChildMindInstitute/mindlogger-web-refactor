@@ -1,1 +1,1 @@
-export * from './slider-animation';
+export * from "./slider-animation"

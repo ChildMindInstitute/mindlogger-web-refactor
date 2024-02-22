@@ -1,2 +1,2 @@
-export * from './FetchInvitation';
-export * from './FetchPrivateInvitation';
+export * from "./FetchInvitation"
+export * from "./FetchPrivateInvitation"

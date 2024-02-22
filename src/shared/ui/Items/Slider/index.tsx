@@ -1,29 +1,29 @@
-import { useMemo } from 'react';
+import { useMemo } from "react"
 
-import Slider from '@mui/material/Slider';
+import Slider from "@mui/material/Slider"
 
-import { Theme } from '../../../constants';
+import { Theme } from "../../../constants"
 
-import './style.css';
+import "./style.css"
 
 type SliderItemProps = {
-  minImage: string | null;
-  minLabel: string | null;
-  minValue: number;
+  minImage: string | null
+  minLabel: string | null
+  minValue: number
 
-  maxImage: string | null;
-  maxLabel: string | null;
-  maxValue: number;
+  maxImage: string | null
+  maxLabel: string | null
+  maxValue: number
 
-  value?: string;
+  value?: string
 
-  disabled?: boolean;
-  continiusSlider?: boolean;
-  showStickLabel?: boolean;
-  showStickMarks?: boolean;
+  disabled?: boolean
+  continiusSlider?: boolean
+  showStickLabel?: boolean
+  showStickMarks?: boolean
 
-  onChange: (value: string) => void;
-};
+  onChange: (value: string) => void
+}
 
 export const SliderItemBase = (props: SliderItemProps) => {
   const {
@@ -39,22 +39,22 @@ export const SliderItemBase = (props: SliderItemProps) => {
     continiusSlider,
     showStickLabel,
     showStickMarks,
-  } = props;
+  } = props
 
-  const defaultStep = 1;
+  const defaultStep = 1
 
   const stickList = useMemo(() => {
-    const stickLabels = [];
+    const stickLabels = []
 
     for (let i = minValue; i <= maxValue; i++) {
-      stickLabels.push(i);
+      stickLabels.push(i)
     }
 
-    return stickLabels;
-  }, [maxValue, minValue]);
+    return stickLabels
+  }, [maxValue, minValue])
 
   return (
-    <div className={`slider-widget ${value ? 'no-value' : ''}`}>
+    <div className={`slider-widget ${value ? "no-value" : ""}`}>
       <Slider
         size="medium"
         min={minValue}
@@ -64,12 +64,12 @@ export const SliderItemBase = (props: SliderItemProps) => {
         step={continiusSlider ? 0.1 : defaultStep}
         onChange={(e, value) => onChange(String(value))}
         sx={{
-          height: '8px',
+          height: "8px",
           color: Theme.colors.light.neutural90,
-          '& .MuiSlider-thumb': {
+          "& .MuiSlider-thumb": {
             backgroundColor: Theme.colors.light.primary,
           },
-          '& .MuiSlider-track': {
+          "& .MuiSlider-track": {
             opacity: 0,
           },
         }}
@@ -77,12 +77,12 @@ export const SliderItemBase = (props: SliderItemProps) => {
 
       {(showStickLabel || showStickMarks) && (
         <div className="ticks">
-          {stickList.map((label) => {
+          {stickList.map(label => {
             return (
-              <span key={label} className="tick" style={{ background: showStickMarks ? 'black' : 'white' }}>
-                {showStickLabel ? label : ''}
+              <span key={label} className="tick" style={{ background: showStickMarks ? "black" : "white" }}>
+                {showStickLabel ? label : ""}
               </span>
-            );
+            )
           })}
         </div>
       )}
@@ -100,5 +100,5 @@ export const SliderItemBase = (props: SliderItemProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

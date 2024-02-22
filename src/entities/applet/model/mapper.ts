@@ -16,7 +16,7 @@ export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventRes
 
   if (responseType === "multiSelect") {
     return {
-      value: itemAnswer.map((answer) => Number(answer)),
+      value: itemAnswer.map(answer => Number(answer)),
       text: item.additionalText ?? undefined,
     }
   }

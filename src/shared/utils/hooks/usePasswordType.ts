@@ -1,17 +1,17 @@
-import { useState } from 'react';
+import { useState } from "react"
 
-type PasswordInputType = 'text' | 'password';
+type PasswordInputType = "text" | "password"
 
 export const usePasswordType = (): [PasswordInputType, () => void] => {
-  const [isPasswordType, setIsPasswordType] = useState<PasswordInputType>('password');
+  const [isPasswordType, setIsPasswordType] = useState<PasswordInputType>("password")
 
   const onPasswordIconClick = () => {
-    if (isPasswordType === 'password') {
-      setIsPasswordType('text');
+    if (isPasswordType === "password") {
+      setIsPasswordType("text")
     } else {
-      setIsPasswordType('password');
+      setIsPasswordType("password")
     }
-  };
+  }
 
-  return [isPasswordType, onPasswordIconClick];
-};
+  return [isPasswordType, onPasswordIconClick]
+}

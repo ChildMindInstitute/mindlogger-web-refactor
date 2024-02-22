@@ -1,10 +1,10 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren } from "react"
 
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from "@mui/material/styles"
 
-import { Theme } from '~/shared/constants';
+import { Theme } from "~/shared/constants"
 
-type Props = PropsWithChildren<unknown>;
+type Props = PropsWithChildren<unknown>
 
 const theme = createTheme({
   palette: {
@@ -15,10 +15,10 @@ const theme = createTheme({
       main: Theme.colors.light.secondary,
     },
   },
-});
+})
 
 function MUIThemeProvider({ children }: Props) {
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>
 }
 
-export default MUIThemeProvider;
+export default MUIThemeProvider

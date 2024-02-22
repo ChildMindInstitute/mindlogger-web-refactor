@@ -1,20 +1,20 @@
-import { SliderItem as SliderItemType } from '../../lib';
+import { SliderItem as SliderItemType } from "../../lib"
 
-import { SliderItemBase } from '~/shared/ui';
+import { SliderItemBase } from "~/shared/ui"
 
 type SliderItemProps = {
-  item: SliderItemType;
-  value: string;
-  onValueChange: (value: string[]) => void;
-  isDisabled: boolean;
-};
+  item: SliderItemType
+  value: string
+  onValueChange: (value: string[]) => void
+  isDisabled: boolean
+}
 
 export const SliderItem = ({ value, item, onValueChange, isDisabled }: SliderItemProps) => {
-  const { responseValues, config } = item;
+  const { responseValues, config } = item
 
   const onHandleValueChange = (value: string) => {
-    onValueChange([value]);
-  };
+    onValueChange([value])
+  }
 
   return (
     <SliderItemBase
@@ -31,5 +31,5 @@ export const SliderItem = ({ value, item, onValueChange, isDisabled }: SliderIte
       showStickLabel={config.showTickLabels}
       showStickMarks={config.showTickMarks}
     />
-  );
-};
+  )
+}

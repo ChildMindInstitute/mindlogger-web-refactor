@@ -1,27 +1,27 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
 
-import { ActivityPipelineType, GroupProgress } from '~/abstract/lib';
-import { useCustomTranslation } from '~/shared/utils';
+import { ActivityPipelineType, GroupProgress } from "~/abstract/lib"
+import { useCustomTranslation } from "~/shared/utils"
 
 type Props = {
-  activityLength: number;
-  groupInProgress: GroupProgress | null;
-};
+  activityLength: number
+  groupInProgress: GroupProgress | null
+}
 
 export const ActivityMetaData = ({ groupInProgress, activityLength }: Props) => {
-  const { t } = useCustomTranslation();
+  const { t } = useCustomTranslation()
 
-  const isFlow = groupInProgress?.type === ActivityPipelineType.Flow;
+  const isFlow = groupInProgress?.type === ActivityPipelineType.Flow
 
-  const isActivitiesMoreThanOne = activityLength > 1;
+  const isActivitiesMoreThanOne = activityLength > 1
 
   const activityLengthLabel = isActivitiesMoreThanOne
-    ? t('question_count_plural', { length: activityLength })
-    : t('question_count_singular', { length: activityLength });
+    ? t("question_count_plural", { length: activityLength })
+    : t("question_count_singular", { length: activityLength })
 
   if (!isFlow) {
-    return <>{activityLengthLabel}</>;
+    return <>{activityLengthLabel}</>
   }
 
   return (
@@ -33,8 +33,7 @@ export const ActivityMetaData = ({ groupInProgress, activityLength }: Props) => 
       <Typography
         variant="body1"
         component="span"
-        data-testid="metadata-activity-length"
-      >{` ${activityLengthLabel}`}</Typography>
+        data-testid="metadata-activity-length">{` ${activityLengthLabel}`}</Typography>
     </Box>
-  );
-};
+  )
+}

@@ -1,31 +1,31 @@
-import { RefObject, useState } from 'react';
+import { RefObject, useState } from "react"
 
 type Props = {
-  audioRef: RefObject<HTMLAudioElement>;
-};
+  audioRef: RefObject<HTMLAudioElement>
+}
 
 type Return = {
-  isPlaying: boolean;
-  play: () => void;
-  pause: () => void;
-};
+  isPlaying: boolean
+  play: () => void
+  pause: () => void
+}
 
 export const useAudioControls = ({ audioRef }: Props): Return => {
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false)
 
   const play = () => {
-    audioRef.current?.play();
-    return setIsPlaying(true);
-  };
+    audioRef.current?.play()
+    return setIsPlaying(true)
+  }
 
   const pause = () => {
-    setIsPlaying(false);
-    return audioRef.current?.pause();
-  };
+    setIsPlaying(false)
+    return audioRef.current?.pause()
+  }
 
   return {
     isPlaying,
     play,
     pause,
-  };
-};
+  }
+}

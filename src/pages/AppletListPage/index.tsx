@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect } from "react"
 
-import { Mixpanel } from '~/shared/utils';
-import { AppletListWidget } from '~/widgets/AppletList';
+import { Mixpanel } from "~/shared/utils"
+import { AppletListWidget } from "~/widgets/AppletList"
 
 function AppletListPage() {
   useEffect(() => {
-    Mixpanel.trackPageView('Dashboard');
-  }, []);
+    Mixpanel.trackPageView("Dashboard")
+  }, [])
 
-  return <AppletListWidget />;
+  return <AppletListWidget />
 }
 
-export default AppletListPage;
+export default AppletListPage

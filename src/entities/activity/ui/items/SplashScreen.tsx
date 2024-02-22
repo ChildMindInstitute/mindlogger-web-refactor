@@ -1,9 +1,9 @@
-import { SplashScreenItem } from '~/shared/ui';
+import { SplashScreenItem } from "~/shared/ui"
 
 type SplashScreenProps = {
-  imageSrc: string;
-};
+  imageSrc: string
+}
 
 export const SplashScreen = ({ imageSrc }: SplashScreenProps) => {
-  return <SplashScreenItem imageSrc={imageSrc} />;
-};
+  return <SplashScreenItem imageSrc={imageSrc} />
+}

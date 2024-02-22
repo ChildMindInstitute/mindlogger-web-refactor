@@ -1,1 +1,1 @@
-export * from './TransferOwnershipAccept';
+export * from "./TransferOwnershipAccept"

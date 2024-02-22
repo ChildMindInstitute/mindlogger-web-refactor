@@ -1,9 +1,9 @@
-import { z } from 'zod';
+import { z } from "zod"
 
-import { BaseUserSchema } from '~/entities/user';
-import { Dictionary } from '~/shared/utils';
+import { BaseUserSchema } from "~/entities/user"
+import { Dictionary } from "~/shared/utils"
 
-export type TSignupForm = z.infer<typeof SignupFormSchema>;
+export type TSignupForm = z.infer<typeof SignupFormSchema>
 
 export const SignupFormSchema = BaseUserSchema.pick({ email: true, lastName: true, firstName: true })
   .extend({
@@ -12,7 +12,7 @@ export const SignupFormSchema = BaseUserSchema.pick({ email: true, lastName: tru
     password: z.string().trim().min(6, Dictionary.validation.password.minLength),
     confirmPassword: z.string().trim().min(6, Dictionary.validation.password.minLength),
   })
-  .refine((data) => data.confirmPassword === data.password, {
+  .refine(data => data.confirmPassword === data.password, {
     message: Dictionary.validation.password.notMatch,
-    path: ['confirmPassword'],
-  });
+    path: ["confirmPassword"],
+  })

@@ -196,8 +196,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         display="flex"
         flex={1}
         flexDirection="column"
-        bgcolor={Theme.colors.light.surface}
-      >
+        bgcolor={Theme.colors.light.surface}>
         <AssessmentLayoutHeader
           title={props.activityDetails.name}
           progress={progress}

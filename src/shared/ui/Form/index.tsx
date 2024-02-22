@@ -1,9 +1,9 @@
-import { BaseSyntheticEvent } from 'react';
+import { BaseSyntheticEvent } from "react"
 
-import { FieldValues, FormProvider, FormProviderProps } from 'react-hook-form';
+import { FieldValues, FormProvider, FormProviderProps } from "react-hook-form"
 
 interface BasicFormProviderProps {
-  onSubmit: (e: BaseSyntheticEvent<object, any, any> | undefined) => void;
+  onSubmit: (e: BaseSyntheticEvent<object, any, any> | undefined) => void
 }
 
 const BasicFormProvider = <TFieldValues extends FieldValues>({
@@ -15,7 +15,7 @@ const BasicFormProvider = <TFieldValues extends FieldValues>({
     <FormProvider {...rest}>
       <form onSubmit={onSubmit}>{children}</form>
     </FormProvider>
-  );
-};
+  )
+}
 
-export default BasicFormProvider;
+export default BasicFormProvider

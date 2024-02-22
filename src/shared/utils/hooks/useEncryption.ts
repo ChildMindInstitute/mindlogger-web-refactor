@@ -1,18 +1,18 @@
-import { AppletEncryptionDTO } from '../../api';
-import { encryption } from '../encryption';
+import { AppletEncryptionDTO } from "../../api"
+import { encryption } from "../encryption"
 
 type InputProps = AppletEncryptionDTO & {
-  privateKey: number[];
-};
+  privateKey: number[]
+}
 
 type GenerateUserPrivateKeyParams = {
-  userId: string;
-  email: string;
-  password: string;
-};
+  userId: string
+  email: string
+  password: string
+}
 
 export const useEncryption = () => {
-  const generateUserPrivateKey = (params: GenerateUserPrivateKeyParams) => encryption.getPrivateKey(params);
+  const generateUserPrivateKey = (params: GenerateUserPrivateKeyParams) => encryption.getPrivateKey(params)
 
   const createEncryptionService = (params: InputProps) => {
     const aesKey = encryption.getAESKey({
@@ -20,17 +20,17 @@ export const useEncryption = () => {
       appletBase: JSON.parse(params.base),
       appletPublicKey: JSON.parse(params.publicKey),
       userPrivateKey: params.privateKey,
-    });
+    })
 
     const encrypt = (json: string) => {
       return encryption.encryptData({
         text: json,
         key: aesKey,
-      });
-    };
+      })
+    }
 
-    return { encrypt };
-  };
+    return { encrypt }
+  }
 
   const createDecryptionService = (params: InputProps) => {
     const aesKey = encryption.getAESKey({
@@ -38,21 +38,21 @@ export const useEncryption = () => {
       appletBase: JSON.parse(params.base),
       appletPublicKey: JSON.parse(params.publicKey),
       userPrivateKey: params.privateKey,
-    });
+    })
 
     const decrypt = (json: string) => {
       return encryption.decryptData({
         text: json,
         key: aesKey,
-      });
-    };
+      })
+    }
 
-    return { decrypt };
-  };
+    return { decrypt }
+  }
 
   return {
     createEncryptionService,
     createDecryptionService,
     generateUserPrivateKey,
-  };
-};
+  }
+}

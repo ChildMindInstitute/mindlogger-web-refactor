@@ -1,1 +1,1 @@
-export * from './InvitationAcceptButton';
+export * from "./InvitationAcceptButton"

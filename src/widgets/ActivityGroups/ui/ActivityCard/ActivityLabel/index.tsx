@@ -1,24 +1,24 @@
-import { ActivityAvailableLabel } from './ActivityAvailableLabel';
-import { ActivityFlowAvailableLabel } from './ActivityFlowAvailableLabel';
-import { ActivityFlowInProgressLabel } from './ActivityFlowInProgressLabel';
-import { ActivityInProgressLabel } from './ActivityInProgressLabel';
-import { ActivityUnsupportedLabel } from './ActivityUnsupportedLabel';
+import { ActivityAvailableLabel } from "./ActivityAvailableLabel"
+import { ActivityFlowAvailableLabel } from "./ActivityFlowAvailableLabel"
+import { ActivityFlowInProgressLabel } from "./ActivityFlowInProgressLabel"
+import { ActivityInProgressLabel } from "./ActivityInProgressLabel"
+import { ActivityUnsupportedLabel } from "./ActivityUnsupportedLabel"
 
 type Props = {
-  isFlow: boolean;
+  isFlow: boolean
 
-  isSupportedActivity: boolean;
-  isActivityInProgress: boolean;
-  countOfCompletedQuestions: number;
-  activityLength: number;
+  isSupportedActivity: boolean
+  isActivityInProgress: boolean
+  countOfCompletedQuestions: number
+  activityLength: number
 
-  numberOfActivitiesInFlow: number;
-  countOfCompletedActivities: number;
-};
+  numberOfActivitiesInFlow: number
+  countOfCompletedActivities: number
+}
 
 export const ActivityLabel = (props: Props) => {
   if (!props.isSupportedActivity) {
-    return <ActivityUnsupportedLabel />;
+    return <ActivityUnsupportedLabel />
   }
 
   if (props.isFlow && props.isActivityInProgress) {
@@ -27,11 +27,11 @@ export const ActivityLabel = (props: Props) => {
         activityFlowLength={props.numberOfActivitiesInFlow}
         countOfCompletedActivities={props.countOfCompletedActivities}
       />
-    );
+    )
   }
 
   if (props.isFlow) {
-    return <ActivityFlowAvailableLabel activityFlowLength={props.numberOfActivitiesInFlow} />;
+    return <ActivityFlowAvailableLabel activityFlowLength={props.numberOfActivitiesInFlow} />
   }
 
   if (!props.isFlow && props.isActivityInProgress) {
@@ -40,8 +40,8 @@ export const ActivityLabel = (props: Props) => {
         activityLength={props.activityLength}
         countOfCompletedQuestions={props.countOfCompletedQuestions}
       />
-    );
+    )
   }
 
-  return <ActivityAvailableLabel activityLength={props.activityLength} />;
-};
+  return <ActivityAvailableLabel activityLength={props.activityLength} />
+}

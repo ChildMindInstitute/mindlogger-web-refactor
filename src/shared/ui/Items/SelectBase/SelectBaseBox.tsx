@@ -1,23 +1,23 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren } from "react"
 
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box"
 
-import { Theme } from '../../../constants';
+import { Theme } from "../../../constants"
 
 type Props = PropsWithChildren<{
-  color: string | null;
-  checked?: boolean | undefined;
-  onHandleChange: () => void;
-}>;
+  color: string | null
+  checked?: boolean | undefined
+  onHandleChange: () => void
+}>
 
 export const SelectBaseBox = (props: Props) => {
-  const borderColor = props.checked ? Theme.colors.light.primary : Theme.colors.light.surfaceVariant;
-  const backgroundColor = props.checked ? Theme.colors.light.secondaryContainer : Theme.colors.light.surface;
+  const borderColor = props.checked ? Theme.colors.light.primary : Theme.colors.light.surfaceVariant
+  const backgroundColor = props.checked ? Theme.colors.light.secondaryContainer : Theme.colors.light.surface
   const hoverBackgroundColor = props.checked
     ? Theme.colors.light.secondaryContainerHover
-    : Theme.colors.light.onSurfaceOpacity008;
+    : Theme.colors.light.onSurfaceOpacity008
 
-  const activeBackgroundColor = props.checked ? hoverBackgroundColor : Theme.colors.light.neutural90;
+  const activeBackgroundColor = props.checked ? hoverBackgroundColor : Theme.colors.light.neutural90
 
   return (
     <Box
@@ -31,19 +31,18 @@ export const SelectBaseBox = (props: Props) => {
       border={`2px solid ${borderColor}`}
       bgcolor={props.color ? props.color : backgroundColor}
       onClick={props.onHandleChange}
-      data-testid={`select-box ${props.color ? `bgcolor-${props.color}` : ''}`}
+      data-testid={`select-box ${props.color ? `bgcolor-${props.color}` : ""}`}
       sx={{
-        transition: 'background-color 0.2s ease-in-out',
-        cursor: 'pointer',
-        '&:hover': {
+        transition: "background-color 0.2s ease-in-out",
+        cursor: "pointer",
+        "&:hover": {
           background: hoverBackgroundColor,
         },
-        '&:active': {
+        "&:active": {
           background: activeBackgroundColor,
         },
-      }}
-    >
+      }}>
       {props.children}
     </Box>
-  );
-};
+  )
+}

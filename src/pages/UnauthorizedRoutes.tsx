@@ -1,20 +1,20 @@
-import { lazy } from 'react';
+import { lazy } from "react"
 
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from "react-router-dom"
 
-import ForgotPasswordPage from './ForgotPassword';
-import LoginPage from './Login';
-import SignupPage from './Signup';
+import ForgotPasswordPage from "./ForgotPassword"
+import LoginPage from "./Login"
+import SignupPage from "./Signup"
 
-import { ROUTES } from '~/shared/constants';
-import Layout from '~/widgets/AppLayout';
+import { ROUTES } from "~/shared/constants"
+import Layout from "~/widgets/AppLayout"
 
-const PublicAppletDetailsPage = lazy(() => import('./PublicJoin'));
-const PublicActivityDetailsPage = lazy(() => import('./PublicActivityDetails'));
-const RecoveryPasswordPage = lazy(() => import('./RecoveryPassword'));
-const InvitationPage = lazy(() => import('./Invitation'));
-const PrivateJoinPage = lazy(() => import('./PrivateJoin'));
-const TransferOwnershipPage = lazy(() => import('./TransferOwnership'));
+const PublicAppletDetailsPage = lazy(() => import("./PublicJoin"))
+const PublicActivityDetailsPage = lazy(() => import("./PublicActivityDetails"))
+const RecoveryPasswordPage = lazy(() => import("./RecoveryPassword"))
+const InvitationPage = lazy(() => import("./Invitation"))
+const PrivateJoinPage = lazy(() => import("./PrivateJoin"))
+const TransferOwnershipPage = lazy(() => import("./TransferOwnership"))
 
 function UnauthorizedRoutes() {
   return (
@@ -35,7 +35,7 @@ function UnauthorizedRoutes() {
         <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
       </Route>
     </Routes>
-  );
+  )
 }
 
-export default UnauthorizedRoutes;
+export default UnauthorizedRoutes

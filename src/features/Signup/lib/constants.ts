@@ -1,1 +1,1 @@
-export const TERMS_URL = 'https://mindlogger.org/terms';
+export const TERMS_URL = "https://mindlogger.org/terms"

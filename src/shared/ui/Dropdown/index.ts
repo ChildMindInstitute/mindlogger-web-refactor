@@ -1,2 +1,2 @@
-export { default } from './ui';
-export type { DropdownOption, DropdownOptionList } from './lib/interfaces';
+export { default } from "./ui"
+export type { DropdownOption, DropdownOptionList } from "./lib/interfaces"

@@ -1,17 +1,17 @@
-import { useCallback } from 'react';
+import { useCallback } from "react"
 
-import { actions } from '../slice';
+import { actions } from "../slice"
 
-import { useAppDispatch } from '~/shared/utils';
+import { useAppDispatch } from "~/shared/utils"
 
 export const useResetAppletsStore = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   const resetAppletsStore = useCallback(() => {
-    dispatch(actions.resetAppletsStore());
-  }, [dispatch]);
+    dispatch(actions.resetAppletsStore())
+  }, [dispatch])
 
   return {
     resetAppletsStore,
-  };
-};
+  }
+}

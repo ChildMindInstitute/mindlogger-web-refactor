@@ -1,37 +1,37 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
+import { Link } from "react-router-dom"
 
-import { useLoginTranslation } from '../lib/useLoginTranslation';
-import { LoginSchema, TLoginForm } from '../model/login.schema';
+import { useLoginTranslation } from "../lib/useLoginTranslation"
+import { LoginSchema, TLoginForm } from "../model/login.schema"
 
-import { ILoginPayload, useLoginMutation, userModel } from '~/entities/user';
-import { ROUTES, Theme } from '~/shared/constants';
-import { BaseButton, BasicFormProvider, Input, PasswordIcon, useNotification } from '~/shared/ui';
-import { Mixpanel, useCustomForm, usePasswordType } from '~/shared/utils';
+import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
+import { ROUTES, Theme } from "~/shared/constants"
+import { BaseButton, BasicFormProvider, Input, PasswordIcon, useNotification } from "~/shared/ui"
+import { Mixpanel, useCustomForm, usePasswordType } from "~/shared/utils"
 
 interface LoginFormProps {
-  locationState?: Record<string, unknown>;
+  locationState?: Record<string, unknown>
 }
 
 export const LoginForm = ({ locationState }: LoginFormProps) => {
-  const { t } = useLoginTranslation();
+  const { t } = useLoginTranslation()
 
-  const { showErrorNotification } = useNotification();
+  const { showErrorNotification } = useNotification()
 
-  const [passwordType, onPasswordIconClick] = usePasswordType();
+  const [passwordType, onPasswordIconClick] = usePasswordType()
 
-  const form = useCustomForm({ defaultValues: { email: '', password: '' } }, LoginSchema);
-  const { handleSubmit } = form;
+  const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
+  const { handleSubmit } = form
 
   const { onLoginSuccess } = userModel.hooks.useOnLogin({
     isInvitationFlow: locationState?.isInvitationFlow as boolean,
     backRedirectPath: locationState?.backRedirectPath as string,
-  });
+  })
 
   const { mutate: login, isLoading } = useLoginMutation({
     onSuccess(data, variables) {
-      const { user, token } = data.data.result;
+      const { user, token } = data.data.result
 
       return onLoginSuccess({
         user: {
@@ -39,22 +39,22 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
           password: variables.password,
         },
         tokens: token,
-      });
+      })
     },
     onError(error) {
       if (error.evaluatedMessage) {
-        showErrorNotification(error.evaluatedMessage);
+        showErrorNotification(error.evaluatedMessage)
       }
     },
-  });
+  })
 
   const onLoginSubmit = (data: TLoginForm) => {
-    login(data as ILoginPayload);
-  };
+    login(data as ILoginPayload)
+  }
 
   const onLoginButtonClick = () => {
-    Mixpanel.track('Login Button click');
-  };
+    Mixpanel.track("Login Button click")
+  }
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
@@ -63,16 +63,16 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
           id="login-form-email-input"
           type="text"
           name="email"
-          placeholder={t('email') || ''}
+          placeholder={t("email") || ""}
           autoComplete="username"
         />
         <Input
           id="login-form-password-input"
           type={passwordType}
           name="password"
-          placeholder={t('password') || ''}
+          placeholder={t("password") || ""}
           autoComplete="current-password"
-          Icon={<PasswordIcon isSecure={passwordType === 'password'} onClick={onPasswordIconClick} />}
+          Icon={<PasswordIcon isSecure={passwordType === "password"} onClick={onPasswordIconClick} />}
         />
 
         <Box display="flex" justifyContent="center">
@@ -85,9 +85,8 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
               fontStyle="normal"
               lineHeight="20px"
               letterSpacing="0.1px"
-              sx={{ textDecoration: 'underline' }}
-            >
-              {t('forgotPassword')}
+              sx={{ textDecoration: "underline" }}>
+              {t("forgotPassword")}
             </Typography>
           </Link>
         </Box>
@@ -97,9 +96,9 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
           variant="contained"
           isLoading={isLoading}
           onClick={onLoginButtonClick}
-          text={t('button')}
+          text={t("button")}
         />
       </Box>
     </BasicFormProvider>
-  );
-};
+  )
+}

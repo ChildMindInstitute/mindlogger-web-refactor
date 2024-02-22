@@ -1,10 +1,10 @@
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box"
 
-import { Text } from '../Text';
+import { Text } from "../Text"
 
 interface PageMessageProps {
-  message: string;
-  testid?: string;
+  message: string
+  testid?: string
 }
 
 export const PageMessage = ({ message, testid }: PageMessageProps) => {
@@ -14,5 +14,5 @@ export const PageMessage = ({ message, testid }: PageMessageProps) => {
         {message}
       </Text>
     </Box>
-  );
-};
+  )
+}

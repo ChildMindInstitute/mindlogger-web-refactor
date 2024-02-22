@@ -1,1 +1,1 @@
-export * from './useAcceptTransferOwnershipQuery';
+export * from "./useAcceptTransferOwnershipQuery"

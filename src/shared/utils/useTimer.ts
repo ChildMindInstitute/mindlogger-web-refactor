@@ -1,29 +1,29 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef } from "react"
 
 type SetTimerProps = {
-  callback: () => void;
-  delay: number;
-};
+  callback: () => void
+  delay: number
+}
 
 export const useTimer = () => {
-  const timerRef = useRef<number | undefined>(undefined);
+  const timerRef = useRef<number | undefined>(undefined)
 
   // this resets the timer if it exists.
   const resetTimer = useCallback(() => {
-    if (timerRef) window.clearTimeout(timerRef.current);
-  }, [timerRef]);
+    if (timerRef) window.clearTimeout(timerRef.current)
+  }, [timerRef])
 
   const setTimer = useCallback(
     (props: SetTimerProps) => {
       timerRef.current = window.setTimeout(() => {
         // clears any pending timer.
-        resetTimer();
+        resetTimer()
 
-        props.callback();
-      }, props.delay);
+        props.callback()
+      }, props.delay)
     },
     [resetTimer],
-  );
+  )
 
-  return { setTimer, resetTimer };
-};
+  return { setTimer, resetTimer }
+}

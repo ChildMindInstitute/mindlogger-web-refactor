@@ -1,8 +1,8 @@
-import { Language } from '../utils/types';
+import { Language } from "../utils/types"
 
-export const DEFAULT_LANGUAGE: Language = 'en';
+export const DEFAULT_LANGUAGE: Language = "en"
 
-export * from './dateTime';
-export * from './theme';
-export * from './routes';
-export * from './environment.variables';
+export * from "./dateTime"
+export * from "./theme"
+export * from "./routes"
+export * from "./environment.variables"

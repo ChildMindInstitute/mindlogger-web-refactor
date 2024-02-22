@@ -1,32 +1,32 @@
 export const ROUTES = {
   // Public routes
   login: {
-    path: '/login',
+    path: "/login",
   },
   signup: {
-    path: '/signup',
+    path: "/signup",
   },
   forgotPassword: {
-    path: '/forgotpassword',
+    path: "/forgotpassword",
   },
   changePassword: {
-    path: '/password-recovery',
+    path: "/password-recovery",
   },
   invitation: {
-    path: '/invitation/:inviteId',
+    path: "/invitation/:inviteId",
   },
   publicJoin: {
-    path: '/public/:joinLinkKey',
+    path: "/public/:joinLinkKey",
     navigateTo: (joinLinkKey: string) => `/public/${joinLinkKey}`,
   },
   privateJoin: {
-    path: '/join/:joinLinkKey',
+    path: "/join/:joinLinkKey",
   },
   transferOwnership: {
-    path: '/transferOwnership/:appletId',
+    path: "/transferOwnership/:appletId",
   },
   publicActivityDetails: {
-    path: '/public/applets/:appletId/activityId/:activityId/event/:eventId/entityType/:entityType/publicAppletKey/:publicAppletKey',
+    path: "/public/applets/:appletId/activityId/:activityId/event/:eventId/entityType/:entityType/publicAppletKey/:publicAppletKey",
     navigateTo: ({
       appletId,
       activityId,
@@ -35,34 +35,34 @@ export const ROUTES = {
       flowId,
       publicAppletKey,
     }: {
-      appletId: string;
-      activityId: string;
-      eventId: string;
-      entityType: 'regular' | 'flow';
-      flowId: string | null;
-      publicAppletKey: string;
+      appletId: string
+      activityId: string
+      eventId: string
+      entityType: "regular" | "flow"
+      flowId: string | null
+      publicAppletKey: string
     }) =>
       `/public/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}/publicAppletKey/${publicAppletKey}?${
-        flowId ? `flowId=${flowId}` : ''
+        flowId ? `flowId=${flowId}` : ""
       }}`,
   },
 
   // Protected routes
   profile: {
-    path: '/protected/profile',
+    path: "/protected/profile",
   },
   settings: {
-    path: '/protected/settings',
+    path: "/protected/settings",
   },
   appletList: {
-    path: '/protected/applets',
+    path: "/protected/applets",
   },
   appletDetails: {
-    path: '/protected/applets/:appletId',
+    path: "/protected/applets/:appletId",
     navigateTo: (appletId: string | number) => `/protected/applets/${appletId}`,
   },
   activityDetails: {
-    path: '/protected/applets/:appletId/activityId/:activityId/event/:eventId/entityType/:entityType',
+    path: "/protected/applets/:appletId/activityId/:activityId/event/:eventId/entityType/:entityType",
     navigateTo: ({
       appletId,
       activityId,
@@ -70,24 +70,24 @@ export const ROUTES = {
       eventId,
       flowId,
     }: {
-      appletId: string;
-      activityId: string;
-      eventId: string;
-      entityType: 'regular' | 'flow';
-      flowId: string | null;
+      appletId: string
+      activityId: string
+      eventId: string
+      entityType: "regular" | "flow"
+      flowId: string | null
     }) =>
       `/protected/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}?${
-        flowId ? `flowId=${flowId}` : ''
+        flowId ? `flowId=${flowId}` : ""
       }`,
   },
   invitationAccept: {
-    path: '/protected/invite/accepted',
+    path: "/protected/invite/accepted",
   },
   invitationDecline: {
-    path: '/protected/invite/declined',
+    path: "/protected/invite/declined",
   },
   thanks: {
-    path: '/protected/thanks/:appletId/isPublic/:isPublic',
+    path: "/protected/thanks/:appletId/isPublic/:isPublic",
     navigateTo: (appletId: string, isPublic: boolean) => `/protected/thanks/${appletId}/isPublic/${isPublic}`,
   },
-};
+}

@@ -1,29 +1,29 @@
-import { getUnixTime } from 'date-fns';
+import { getUnixTime } from "date-fns"
 
-import { AppletEventsResponse } from '~/shared/api';
+import { AppletEventsResponse } from "~/shared/api"
 
 export const getScheduledTimeFromEvents = (
   eventsRawData: AppletEventsResponse | null,
   entityId: string,
 ): number | null => {
   if (!eventsRawData) {
-    return null;
+    return null
   }
 
-  const event = eventsRawData.events.find((event) => event.entityId === entityId);
+  const event = eventsRawData.events.find(event => event.entityId === entityId)
 
   if (!event) {
-    return null;
+    return null
   }
 
-  const startFromDate = event.availability.startDate;
-  const startFromHour = event.availability.timeFrom?.hours;
-  const startFromMinute = event.availability.timeFrom?.minutes;
+  const startFromDate = event.availability.startDate
+  const startFromHour = event.availability.timeFrom?.hours
+  const startFromMinute = event.availability.timeFrom?.minutes
   if (!startFromDate || !startFromHour || !startFromMinute) {
-    return null;
+    return null
   }
 
-  const startFrom = new Date(startFromDate).setHours(startFromHour, startFromMinute, 0, 0);
+  const startFrom = new Date(startFromDate).setHours(startFromHour, startFromMinute, 0, 0)
 
-  return startFromHour && startFromMinute ? getUnixTime(startFrom) : null;
-};
+  return startFromHour && startFromMinute ? getUnixTime(startFrom) : null
+}

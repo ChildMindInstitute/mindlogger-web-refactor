@@ -1,93 +1,93 @@
-import { EventEntity } from './activityGroups.types';
-import { AvailableGroupEvaluator } from './AvailableGroupEvaluator';
-import { GroupsBuildContext, GroupUtility } from './GroupUtility';
-import { ListItemsFactory } from './ListItemsFactory';
-import { ScheduledGroupEvaluator } from './ScheduledGroupEvaluator';
-import { ActivityGroupType, ActivityGroupTypeNames, ActivityListGroup, ActivityListItem } from './types';
+import { EventEntity } from "./activityGroups.types"
+import { AvailableGroupEvaluator } from "./AvailableGroupEvaluator"
+import { GroupsBuildContext, GroupUtility } from "./GroupUtility"
+import { ListItemsFactory } from "./ListItemsFactory"
+import { ScheduledGroupEvaluator } from "./ScheduledGroupEvaluator"
+import { ActivityGroupType, ActivityGroupTypeNames, ActivityListGroup, ActivityListItem } from "./types"
 
 export interface IActivityGroupsBuilder {
-  buildInProgress: (eventsActivities: Array<EventEntity>) => ActivityListGroup;
-  buildAvailable: (eventsActivities: Array<EventEntity>) => ActivityListGroup;
-  buildScheduled: (eventsActivities: Array<EventEntity>) => ActivityListGroup;
+  buildInProgress: (eventsActivities: Array<EventEntity>) => ActivityListGroup
+  buildAvailable: (eventsActivities: Array<EventEntity>) => ActivityListGroup
+  buildScheduled: (eventsActivities: Array<EventEntity>) => ActivityListGroup
 }
 
 export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
-  private itemsFactory: ListItemsFactory;
+  private itemsFactory: ListItemsFactory
 
-  private scheduledEvaluator: ScheduledGroupEvaluator;
+  private scheduledEvaluator: ScheduledGroupEvaluator
 
-  private availableEvaluator: AvailableGroupEvaluator;
+  private availableEvaluator: AvailableGroupEvaluator
 
-  private utility: GroupUtility;
+  private utility: GroupUtility
 
   constructor(inputParams: GroupsBuildContext) {
-    this.itemsFactory = new ListItemsFactory(inputParams);
-    this.scheduledEvaluator = new ScheduledGroupEvaluator(inputParams);
-    this.availableEvaluator = new AvailableGroupEvaluator(inputParams);
-    this.utility = new GroupUtility(inputParams);
+    this.itemsFactory = new ListItemsFactory(inputParams)
+    this.scheduledEvaluator = new ScheduledGroupEvaluator(inputParams)
+    this.availableEvaluator = new AvailableGroupEvaluator(inputParams)
+    this.utility = new GroupUtility(inputParams)
   }
 
   public buildInProgress(eventsActivities: Array<EventEntity>): ActivityListGroup {
-    const filtered = eventsActivities.filter((x) => this.utility.isInProgress(x));
+    const filtered = eventsActivities.filter(x => this.utility.isInProgress(x))
 
-    const activityItems: Array<ActivityListItem> = [];
+    const activityItems: Array<ActivityListItem> = []
 
     for (const eventActivity of filtered) {
-      const item = this.itemsFactory.createProgressItem(eventActivity);
+      const item = this.itemsFactory.createProgressItem(eventActivity)
 
-      activityItems.push(item);
+      activityItems.push(item)
     }
 
     const result: ActivityListGroup = {
       activities: activityItems,
       name: ActivityGroupTypeNames[ActivityGroupType.InProgress],
       type: ActivityGroupType.InProgress,
-    };
+    }
 
-    return result;
+    return result
   }
 
   public buildAvailable(eventsEntities: Array<EventEntity>): ActivityListGroup {
-    const filtered = this.availableEvaluator.evaluate(eventsEntities);
+    const filtered = this.availableEvaluator.evaluate(eventsEntities)
 
-    const activityItems: Array<ActivityListItem> = [];
+    const activityItems: Array<ActivityListItem> = []
 
     for (const eventActivity of filtered) {
-      const item = this.itemsFactory.createAvailableItem(eventActivity);
+      const item = this.itemsFactory.createAvailableItem(eventActivity)
 
-      activityItems.push(item);
+      activityItems.push(item)
     }
 
     const result: ActivityListGroup = {
       activities: activityItems,
       name: ActivityGroupTypeNames[ActivityGroupType.Available],
       type: ActivityGroupType.Available,
-    };
+    }
 
-    return result;
+    return result
   }
 
   public buildScheduled(eventsEntities: Array<EventEntity>): ActivityListGroup {
-    const filtered = this.scheduledEvaluator.evaluate(eventsEntities);
+    const filtered = this.scheduledEvaluator.evaluate(eventsEntities)
 
-    const activityItems: Array<ActivityListItem> = [];
+    const activityItems: Array<ActivityListItem> = []
 
     for (const eventActivity of filtered) {
-      const item = this.itemsFactory.createScheduledItem(eventActivity);
+      const item = this.itemsFactory.createScheduledItem(eventActivity)
 
-      activityItems.push(item);
+      activityItems.push(item)
     }
 
     const result: ActivityListGroup = {
       activities: activityItems,
       name: ActivityGroupTypeNames[ActivityGroupType.Scheduled],
       type: ActivityGroupType.Scheduled,
-    };
+    }
 
-    return result;
+    return result
   }
 }
 
 export const createActivityGroupsBuilder = (inputData: GroupsBuildContext): ActivityGroupsBuilder => {
-  return new ActivityGroupsBuilder(inputData);
-};
+  return new ActivityGroupsBuilder(inputData)
+}

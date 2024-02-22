@@ -1,14 +1,14 @@
-import { LOGO_URL } from './lib/constants';
+import { LOGO_URL } from "./lib/constants"
 
-import { Dimension } from '~/shared/utils';
+import { Dimension } from "~/shared/utils"
 
 export interface LogoProps {
-  size?: Dimension;
-  className?: string;
+  size?: Dimension
+  className?: string
 }
 
-const Logo = ({ size = { height: 50, width: 120 }, className = '' }: LogoProps) => {
-  const defaultClassName = 'mr-1 p-1';
+const Logo = ({ size = { height: 50, width: 120 }, className = "" }: LogoProps) => {
+  const defaultClassName = "mr-1 p-1"
 
   return (
     <img
@@ -18,7 +18,7 @@ const Logo = ({ size = { height: 50, width: 120 }, className = '' }: LogoProps) 
       src={LOGO_URL}
       loading="lazy"
     />
-  );
-};
+  )
+}
 
-export default Logo;
+export default Logo

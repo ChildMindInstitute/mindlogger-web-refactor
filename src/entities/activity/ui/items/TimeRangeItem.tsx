@@ -1,40 +1,40 @@
-import Box from '@mui/material/Box';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import Box from "@mui/material/Box"
+import { useTheme } from "@mui/material/styles"
+import useMediaQuery from "@mui/material/useMediaQuery"
 
-import { TimeItemBase } from '~/shared/ui';
+import { TimeItemBase } from "~/shared/ui"
 
 type Props = {
-  values: string[];
+  values: string[]
 
-  onValueChange: (value: string[]) => void;
-};
+  onValueChange: (value: string[]) => void
+}
 
 export const TimeRangeItem = ({ values, onValueChange }: Props) => {
-  const theme = useTheme();
-  const smMatch = useMediaQuery(theme.breakpoints.down('sm'));
+  const theme = useTheme()
+  const smMatch = useMediaQuery(theme.breakpoints.down("sm"))
 
   const onFromTimeHandleChange = (value: Date | null) => {
     if (!value) {
-      return;
+      return
     }
 
-    const valuesBuffer = [...values];
-    valuesBuffer[0] = new Date(value).toString();
+    const valuesBuffer = [...values]
+    valuesBuffer[0] = new Date(value).toString()
 
-    return onValueChange(valuesBuffer);
-  };
+    return onValueChange(valuesBuffer)
+  }
 
   const onToTimeHandleChange = (value: Date | null) => {
     if (!value) {
-      return;
+      return
     }
 
-    const valuesBuffer = [...values];
-    valuesBuffer[1] = new Date(value).toString();
+    const valuesBuffer = [...values]
+    valuesBuffer[1] = new Date(value).toString()
 
-    return onValueChange(valuesBuffer);
-  };
+    return onValueChange(valuesBuffer)
+  }
 
   return (
     <Box display="flex" justifyContent="center" data-testid="time-range-item">
@@ -48,5 +48,5 @@ export const TimeRangeItem = ({ values, onValueChange }: Props) => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}

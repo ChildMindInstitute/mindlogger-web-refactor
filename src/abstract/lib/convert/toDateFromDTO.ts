@@ -1,14 +1,14 @@
-import { stringToDateMidnightTime } from '~/shared/utils';
+import { stringToDateMidnightTime } from "~/shared/utils"
 
 export const buildDateFromDto = (dto: string | null | undefined): Date | null => {
   if (!dto) {
-    return null;
+    return null
   }
-  const result = stringToDateMidnightTime(dto);
+  const result = stringToDateMidnightTime(dto)
 
   if (result.getFullYear() === 1 || result.getFullYear() === 9999) {
-    return null;
+    return null
   }
 
-  return result;
-};
+  return result
+}

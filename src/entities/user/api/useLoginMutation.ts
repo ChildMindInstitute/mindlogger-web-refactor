@@ -1,7 +1,7 @@
-import { authorizationService, MutationOptions, useBaseMutation } from '~/shared/api';
+import { authorizationService, MutationOptions, useBaseMutation } from "~/shared/api"
 
-type Options = MutationOptions<typeof authorizationService.login>;
+type Options = MutationOptions<typeof authorizationService.login>
 
 export const useLoginMutation = (options?: Options) => {
-  return useBaseMutation(['login'], authorizationService.login, { ...options });
-};
+  return useBaseMutation(["login"], authorizationService.login, { ...options })
+}

@@ -1,138 +1,138 @@
-import { EventEntity } from './activityGroups.types';
-import { GroupUtility, GroupsBuildContext } from './GroupUtility';
+import { EventEntity } from "./activityGroups.types"
+import { GroupUtility, GroupsBuildContext } from "./GroupUtility"
 
-import { IEvaluator } from '~/abstract/lib';
-import { AvailabilityLabelType } from '~/entities/event';
-import { getHourMinute, isTimeInInterval } from '~/shared/utils';
+import { IEvaluator } from "~/abstract/lib"
+import { AvailabilityLabelType } from "~/entities/event"
+import { getHourMinute, isTimeInInterval } from "~/shared/utils"
 
 export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
-  private utility: GroupUtility;
+  private utility: GroupUtility
 
   constructor(inputParams: GroupsBuildContext) {
-    this.utility = new GroupUtility(inputParams);
+    this.utility = new GroupUtility(inputParams)
   }
 
   private isValidForAlwaysAvailable(eventEntity: EventEntity): boolean {
-    const { event } = eventEntity;
+    const { event } = eventEntity
 
-    const isOneTimeCompletion = event.availability.oneTimeCompletion;
+    const isOneTimeCompletion = event.availability.oneTimeCompletion
 
-    const progressRecord = this.utility.getProgressRecord(eventEntity);
+    const progressRecord = this.utility.getProgressRecord(eventEntity)
 
-    const isNeverCompleted = !progressRecord;
+    const isNeverCompleted = !progressRecord
 
-    return (isOneTimeCompletion && isNeverCompleted) || !isOneTimeCompletion;
+    return (isOneTimeCompletion && isNeverCompleted) || !isOneTimeCompletion
   }
 
   private isValidWhenNoSpreadAndNoAccessBeforeStartTime(eventEntity: EventEntity): boolean {
-    const { event } = eventEntity;
+    const { event } = eventEntity
 
-    const isScheduledToday = this.utility.isToday(event.scheduledAt);
+    const isScheduledToday = this.utility.isToday(event.scheduledAt)
 
-    const now = this.utility.getNow();
+    const now = this.utility.getNow()
 
     const isCurrentTimeInTimeWindow = isTimeInInterval({
       timeToCheck: getHourMinute(now),
       intervalFrom: event.availability.timeFrom!,
       intervalTo: event.availability.timeTo!,
-      including: 'from',
-    });
+      including: "from",
+    })
 
-    const progressRecord = this.utility.getProgressRecord(eventEntity);
+    const progressRecord = this.utility.getProgressRecord(eventEntity)
 
-    const endAt = progressRecord?.endAt;
+    const endAt = progressRecord?.endAt
 
-    const isCompletedToday = !!endAt && this.utility.isToday(new Date(endAt));
+    const isCompletedToday = !!endAt && this.utility.isToday(new Date(endAt))
 
-    return isScheduledToday && now > event.scheduledAt! && isCurrentTimeInTimeWindow && !isCompletedToday;
+    return isScheduledToday && now > event.scheduledAt! && isCurrentTimeInTimeWindow && !isCompletedToday
   }
 
   private isValidWhenIsAccessBeforeStartTime(eventEntity: EventEntity): boolean {
-    const { event } = eventEntity;
+    const { event } = eventEntity
 
-    const isScheduledToday = this.utility.isToday(event.scheduledAt);
+    const isScheduledToday = this.utility.isToday(event.scheduledAt)
 
-    const isScheduledYesterday = this.utility.isScheduledYesterday(event);
+    const isScheduledYesterday = this.utility.isScheduledYesterday(event)
 
     if (isScheduledToday) {
-      const valid = !this.utility.isCompletedToday(eventEntity);
+      const valid = !this.utility.isCompletedToday(eventEntity)
 
       if (valid) {
-        return true;
+        return true
       }
     }
 
     if (isScheduledYesterday) {
       return (
-        this.utility.isInAllowedTimeInterval(eventEntity, 'yesterday', true) &&
-        !this.utility.isCompletedInAllowedTimeInterval(eventEntity, 'yesterday', true)
-      );
+        this.utility.isInAllowedTimeInterval(eventEntity, "yesterday", true) &&
+        !this.utility.isCompletedInAllowedTimeInterval(eventEntity, "yesterday", true)
+      )
     }
 
-    return false;
+    return false
   }
 
   private isValidWhenIsSpreadAndNoAccessBeforeStartTime(eventEntity: EventEntity): boolean {
-    const { event } = eventEntity;
+    const { event } = eventEntity
 
-    const isScheduledToday = this.utility.isToday(event.scheduledAt);
+    const isScheduledToday = this.utility.isToday(event.scheduledAt)
 
-    const isScheduledYesterday = this.utility.isScheduledYesterday(event);
+    const isScheduledYesterday = this.utility.isScheduledYesterday(event)
 
     if (isScheduledToday) {
       const isValid =
-        this.utility.isInAllowedTimeInterval(eventEntity, 'today') &&
-        !this.utility.isCompletedInAllowedTimeInterval(eventEntity, 'today');
+        this.utility.isInAllowedTimeInterval(eventEntity, "today") &&
+        !this.utility.isCompletedInAllowedTimeInterval(eventEntity, "today")
 
       if (isValid) {
-        return true;
+        return true
       }
     }
 
     if (isScheduledYesterday) {
       return (
-        this.utility.isInAllowedTimeInterval(eventEntity, 'yesterday') &&
-        !this.utility.isCompletedInAllowedTimeInterval(eventEntity, 'yesterday')
-      );
+        this.utility.isInAllowedTimeInterval(eventEntity, "yesterday") &&
+        !this.utility.isCompletedInAllowedTimeInterval(eventEntity, "yesterday")
+      )
     }
 
-    return false;
+    return false
   }
 
   public evaluate(eventsEntities: Array<EventEntity>): Array<EventEntity> {
-    const notInProgress = eventsEntities.filter((x) => !this.utility.isInProgress(x));
+    const notInProgress = eventsEntities.filter(x => !this.utility.isInProgress(x))
 
-    const result: Array<EventEntity> = [];
+    const result: Array<EventEntity> = []
 
     for (const eventEntity of notInProgress) {
-      const { event } = eventEntity;
+      const { event } = eventEntity
 
       if (!this.utility.isInsideValidDatesInterval(event)) {
-        continue;
+        continue
       }
 
-      const isAlwaysAvailable = event.availability.availabilityType === AvailabilityLabelType.AlwaysAvailable;
+      const isAlwaysAvailable = event.availability.availabilityType === AvailabilityLabelType.AlwaysAvailable
 
-      const isScheduled = event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess;
+      const isScheduled = event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess
 
       if (isAlwaysAvailable && this.isValidForAlwaysAvailable(eventEntity)) {
-        result.push(eventEntity);
+        result.push(eventEntity)
       }
 
       if (!isScheduled) {
-        continue;
+        continue
       }
 
-      const isSpreadToNextDay = this.utility.isSpreadToNextDay(event);
+      const isSpreadToNextDay = this.utility.isSpreadToNextDay(event)
 
-      const isAccessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime;
+      const isAccessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime
 
       if (
         !isSpreadToNextDay &&
         !isAccessBeforeTimeFrom &&
         this.isValidWhenNoSpreadAndNoAccessBeforeStartTime(eventEntity)
       ) {
-        result.push(eventEntity);
+        result.push(eventEntity)
       }
 
       if (
@@ -140,14 +140,14 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
         !isAccessBeforeTimeFrom &&
         this.isValidWhenIsSpreadAndNoAccessBeforeStartTime(eventEntity)
       ) {
-        result.push(eventEntity);
+        result.push(eventEntity)
       }
 
       if (isAccessBeforeTimeFrom && this.isValidWhenIsAccessBeforeStartTime(eventEntity)) {
-        result.push(eventEntity);
+        result.push(eventEntity)
       }
     }
 
-    return result;
+    return result
   }
 }

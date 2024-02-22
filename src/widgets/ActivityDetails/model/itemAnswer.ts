@@ -1,6 +1,6 @@
-import { AnswerTypesPayload } from '~/shared/api';
+import { AnswerTypesPayload } from "~/shared/api"
 
 export interface ItemAnswer<T extends AnswerTypesPayload> {
-  answer: T | null;
-  itemId: string;
+  answer: T | null
+  itemId: string
 }

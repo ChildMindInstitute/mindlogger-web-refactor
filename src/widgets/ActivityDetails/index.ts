@@ -1,2 +1,2 @@
-export * from './ui';
-export { ActivityDetailsContext } from './lib';
+export * from "./ui"
+export { ActivityDetailsContext } from "./lib"

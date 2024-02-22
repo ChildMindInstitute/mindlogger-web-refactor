@@ -1,114 +1,114 @@
-import { addDays, differenceInMonths, isEqual, startOfDay, subDays, subMinutes, subMonths } from 'date-fns';
-import { Parse, Day } from 'dayspan';
+import { addDays, differenceInMonths, isEqual, startOfDay, subDays, subMinutes, subMonths } from "date-fns"
+import { Parse, Day } from "dayspan"
 
-import { AvailabilityLabelType, EventAvailability, PeriodicityType, ScheduleEvent } from '../../lib';
+import { AvailabilityLabelType, EventAvailability, PeriodicityType, ScheduleEvent } from "../../lib"
 
-type EventParseInput = Parameters<typeof Parse.schedule>[0];
+type EventParseInput = Parameters<typeof Parse.schedule>[0]
 
-const cache = new Map();
+const cache = new Map()
 
 class ScheduledDateCalculator {
   constructor() {}
   private setTime(target: Date, availability: EventAvailability) {
     if (availability.timeFrom) {
-      target.setHours(availability.timeFrom.hours);
-      target.setMinutes(availability.timeFrom.minutes);
+      target.setHours(availability.timeFrom.hours)
+      target.setMinutes(availability.timeFrom.minutes)
     }
   }
   private getNow() {
-    return new Date();
+    return new Date()
   }
   private calculateForMonthly(selectedDate: Date, availability: EventAvailability): Date | null {
-    const today = startOfDay(this.getNow());
-    let date = new Date(selectedDate);
-    const diff = differenceInMonths(date, today);
-    const check = subMonths(date, diff);
+    const today = startOfDay(this.getNow())
+    let date = new Date(selectedDate)
+    const diff = differenceInMonths(date, today)
+    const check = subMonths(date, diff)
     if (check > today) {
-      date = subMonths(date, diff + 1);
+      date = subMonths(date, diff + 1)
     } else {
-      date = check;
+      date = check
     }
-    const aMonthAgo = subMonths(today, 1);
-    const isBeyondOfDateBorders = date < aMonthAgo || (!!availability.endDate && date > availability.endDate);
+    const aMonthAgo = subMonths(today, 1)
+    const isBeyondOfDateBorders = date < aMonthAgo || (!!availability.endDate && date > availability.endDate)
     if (isBeyondOfDateBorders) {
-      return null;
+      return null
     }
-    this.setTime(date, availability);
-    return date;
+    this.setTime(date, availability)
+    return date
   }
   private calculateForSpecificDay(specificDay: Date, availability: EventAvailability): Date | null {
-    const yesterday = subDays(startOfDay(this.getNow()), 1);
+    const yesterday = subDays(startOfDay(this.getNow()), 1)
 
     if (specificDay < yesterday) {
-      return null;
+      return null
     }
 
-    const selectedYear = specificDay.getFullYear();
-    const selectedMonth = specificDay.getMonth();
-    const selectedDay = specificDay.getDate();
-    const result = new Date(selectedYear, selectedMonth, selectedDay);
-    this.setTime(result, availability);
-    return result;
+    const selectedYear = specificDay.getFullYear()
+    const selectedMonth = specificDay.getMonth()
+    const selectedDay = specificDay.getDate()
+    const result = new Date(selectedYear, selectedMonth, selectedDay)
+    this.setTime(result, availability)
+    return result
   }
   private calculateScheduledAt(event: ScheduleEvent): Date | null {
-    const { availability, selectedDate } = event;
-    const now = this.getNow();
+    const { availability, selectedDate } = event
+    const now = this.getNow()
     if (selectedDate && !isEqual(selectedDate, startOfDay(selectedDate))) {
-      throw new Error('[ScheduledDateCalculator]: selectedDate contains time set');
+      throw new Error("[ScheduledDateCalculator]: selectedDate contains time set")
     }
-    const alwaysAvailable = availability.availabilityType === AvailabilityLabelType.AlwaysAvailable;
-    const scheduled = availability.availabilityType === AvailabilityLabelType.ScheduledAccess;
+    const alwaysAvailable = availability.availabilityType === AvailabilityLabelType.AlwaysAvailable
+    const scheduled = availability.availabilityType === AvailabilityLabelType.ScheduledAccess
 
     if (alwaysAvailable) {
-      return this.calculateForSpecificDay(startOfDay(now), availability);
+      return this.calculateForSpecificDay(startOfDay(now), availability)
     }
 
     if (scheduled && availability.periodicityType === PeriodicityType.Once) {
-      return this.calculateForSpecificDay(selectedDate!, availability);
+      return this.calculateForSpecificDay(selectedDate!, availability)
     }
 
     if (availability.periodicityType === PeriodicityType.Monthly) {
-      return this.calculateForMonthly(selectedDate!, availability);
+      return this.calculateForMonthly(selectedDate!, availability)
     }
 
-    const parseInput: EventParseInput = {};
+    const parseInput: EventParseInput = {}
     if (availability.periodicityType === PeriodicityType.Weekly) {
-      const dayOfWeek = selectedDate!.getDay();
-      parseInput.dayOfWeek = [dayOfWeek];
+      const dayOfWeek = selectedDate!.getDay()
+      parseInput.dayOfWeek = [dayOfWeek]
     } else if (availability.periodicityType === PeriodicityType.Weekdays) {
-      parseInput.dayOfWeek = [1, 2, 3, 4, 5];
+      parseInput.dayOfWeek = [1, 2, 3, 4, 5]
     }
     if (availability.startDate) {
-      parseInput.start = availability.startDate.getTime();
+      parseInput.start = availability.startDate.getTime()
     }
     if (availability.endDate) {
-      let endOfDay = addDays(availability.endDate, 1);
-      endOfDay = subMinutes(endOfDay, 1);
-      parseInput.end = endOfDay.getTime();
+      let endOfDay = addDays(availability.endDate, 1)
+      endOfDay = subMinutes(endOfDay, 1)
+      parseInput.end = endOfDay.getTime()
     }
-    const parsedSchedule = Parse.schedule(parseInput);
-    const fromDate = Day.fromDate(now);
-    const futureSchedule = parsedSchedule.forecast(fromDate!, true, 1, 0, true);
-    const calculated = futureSchedule.first();
+    const parsedSchedule = Parse.schedule(parseInput)
+    const fromDate = Day.fromDate(now)
+    const futureSchedule = parsedSchedule.forecast(fromDate!, true, 1, 0, true)
+    const calculated = futureSchedule.first()
     if (!calculated) {
-      return null;
+      return null
     }
-    const result = calculated[0].start.date;
-    this.setTime(result, availability);
-    return result;
+    const result = calculated[0].start.date
+    this.setTime(result, availability)
+    return result
   }
   public calculate(event: ScheduleEvent, useCache = true): Date | null {
     if (!useCache) {
-      return this.calculateScheduledAt(event);
+      return this.calculateScheduledAt(event)
     }
-    const today = this.getNow().toDateString();
-    const key = JSON.stringify(event.availability) + (event.selectedDate?.getTime() ?? '') + today;
+    const today = this.getNow().toDateString()
+    const key = JSON.stringify(event.availability) + (event.selectedDate?.getTime() ?? "") + today
     if (cache.has(key)) {
-      return cache.get(key);
+      return cache.get(key)
     }
-    const result = this.calculateScheduledAt(event);
-    cache.set(key, result);
-    return result;
+    const result = this.calculateScheduledAt(event)
+    cache.set(key, result)
+    return result
   }
 }
-export default new ScheduledDateCalculator();
+export default new ScheduledDateCalculator()

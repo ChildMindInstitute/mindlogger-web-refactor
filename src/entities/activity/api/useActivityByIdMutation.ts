@@ -1,10 +1,10 @@
-import { MutationOptions, activityService, useBaseMutation } from '~/shared/api';
+import { MutationOptions, activityService, useBaseMutation } from "~/shared/api"
 
 type Params = {
-  isPublic: boolean;
-};
+  isPublic: boolean
+}
 
-type Options = MutationOptions<typeof activityService.getById>;
+type Options = MutationOptions<typeof activityService.getById>
 
 export const useActivityByIdMutation = (params: Params, options?: Options) => {
   return useBaseMutation(
@@ -13,5 +13,5 @@ export const useActivityByIdMutation = (params: Params, options?: Options) => {
     {
       ...options,
     },
-  );
-};
+  )
+}
