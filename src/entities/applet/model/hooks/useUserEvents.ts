@@ -25,18 +25,22 @@ export const useUserEvents = (props: Props) => {
     (type: UserEventTypes, item: ItemRecord) => {
       const activityItemScreenId = getActivityItemScreenId(props.activityId, item.id)
 
+      const newUserEvent = {
+        type,
+        screen: activityItemScreenId,
+        time: Date.now(),
+      }
+
       dispatch(
         actions.saveUserEvent({
           entityId: props.activityId,
           eventId: props.eventId,
           itemId: item.id,
-          userEvent: {
-            type,
-            screen: activityItemScreenId,
-            time: Date.now(),
-          },
+          userEvent: newUserEvent,
         }),
       )
+
+      return newUserEvent
     },
     [dispatch, props.activityId, props.eventId],
   )
