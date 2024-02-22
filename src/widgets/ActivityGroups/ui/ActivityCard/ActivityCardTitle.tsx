@@ -14,7 +14,13 @@ export const ActivityCardTitle = ({ title, isFlow }: Props) => {
       <Typography
         variant="h3"
         color={Theme.colors.light.primary}
-        sx={{ fontSize: "20px", fontFamily: "Atkinson", fontWeight: 700, fontStyle: "normal", lineHeight: "28px" }}>
+        sx={{
+          fontSize: "20px",
+          fontFamily: "Atkinson",
+          fontWeight: 700,
+          fontStyle: "normal",
+          lineHeight: "28px",
+        }}>
         {title}
       </Typography>
     </Box>

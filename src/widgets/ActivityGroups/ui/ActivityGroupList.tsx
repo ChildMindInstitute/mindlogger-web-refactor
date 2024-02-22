@@ -71,6 +71,7 @@ export const ActivityGroupList = () => {
             lineHeight: "28px",
             fontStyle: "normal",
             cursor: isAppletAboutExist ? "pointer" : "default",
+            wordBreak: "break-word",
           }}>
           {applet.displayName}
         </Typography>
