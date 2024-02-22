@@ -1,8 +1,8 @@
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
-import { APPSTORE_LINK, GOOGLEPLAY_LINK } from "~/abstract/lib/constants"
-import AppStore from "~/assets/d-app-store-button.svg"
-import GooglePlay from "~/assets/d-google-play-button.svg"
+import { APPSTORE_LINK, GOOGLEPLAY_LINK } from '~/abstract/lib/constants';
+import AppStore from '~/assets/d-app-store-button.svg';
+import GooglePlay from '~/assets/d-google-play-button.svg';
 
 const DownloadMobileLinks = () => (
   <Box display="flex" justifyContent="center" gap="16px">
@@ -13,6 +13,6 @@ const DownloadMobileLinks = () => (
       <img src={GooglePlay} alt="Google Play Icon" />
     </a>
   </Box>
-)
+);
 
-export default DownloadMobileLinks
+export default DownloadMobileLinks;

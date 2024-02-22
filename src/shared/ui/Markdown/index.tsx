@@ -1,25 +1,25 @@
-import ReactMarkdown from "react-markdown"
-import rehypeRaw from "rehype-raw"
-import remarkGfm from "remark-gfm"
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
 
-import { useMarkdownExtender } from "./lib/useMarkdownExtender"
+import { useMarkdownExtender } from './lib/useMarkdownExtender';
 
-import "./style.css"
+import './style.css';
 
 interface MarkdownProps {
-  markdown: string
+  markdown: string;
 }
 
 export const Markdown = (props: MarkdownProps) => {
-  const { isLoading, markdown } = useMarkdownExtender(props.markdown)
+  const { isLoading, markdown } = useMarkdownExtender(props.markdown);
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   return (
     <div id="markdown-wrapper" data-testid="markdown">
       <ReactMarkdown rehypePlugins={[rehypeRaw, remarkGfm]}>{markdown}</ReactMarkdown>
     </div>
-  )
-}
+  );
+};

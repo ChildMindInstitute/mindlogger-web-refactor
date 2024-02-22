@@ -6,7 +6,14 @@ module.exports = {
     jest: true,
   },
   parser: '@typescript-eslint/parser',
-  plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier', 'eslint-plugin-import', 'unused-imports'],
+  plugins: [
+    'react',
+    'react-hooks',
+    '@typescript-eslint',
+    'prettier',
+    'eslint-plugin-import',
+    'unused-imports',
+  ],
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
@@ -97,7 +104,12 @@ module.exports = {
         '@typescript-eslint/no-non-null-assertion': 'warn',
         'unused-imports/no-unused-vars': [
           'warn',
-          { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
+          {
+            vars: 'all',
+            varsIgnorePattern: '^_',
+            args: 'after-used',
+            argsIgnorePattern: '^_',
+          },
         ],
 
         // Off

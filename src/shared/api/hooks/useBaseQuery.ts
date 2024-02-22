@@ -1,32 +1,32 @@
-import { QueryFunction, UseQueryOptions, useQuery } from "@tanstack/react-query"
+import { QueryFunction, UseQueryOptions, useQuery } from '@tanstack/react-query';
 
-import { BaseError } from "../types"
+import { BaseError } from '../types';
 
-type QueryKey = [string, Record<string, unknown>?]
+type QueryKey = [string, Record<string, unknown>?];
 
 const useBaseQuery = <TQueryFnData, TError = BaseError, TData = TQueryFnData>(
   key: QueryKey,
   queryFn: QueryFunction<TQueryFnData, QueryKey>,
-  options?: Omit<UseQueryOptions<TQueryFnData, TError, TData, QueryKey>, "queryKey" | "queryFn">,
+  options?: Omit<UseQueryOptions<TQueryFnData, TError, TData, QueryKey>, 'queryKey' | 'queryFn'>,
 ) => {
   return useQuery(key, queryFn, {
     ...options,
     onError: (error: BaseError) => {
-      const errorRecords = error.response?.data?.result
+      const errorRecords = error.response?.data?.result;
 
       if (errorRecords?.length) {
-        const firstRecord = errorRecords[0]
+        const firstRecord = errorRecords[0];
 
-        error.evaluatedMessage = firstRecord.message
+        error.evaluatedMessage = firstRecord.message;
       } else {
-        error.evaluatedMessage = error.message
+        error.evaluatedMessage = error.message;
       }
 
       if (options?.onError) {
-        options?.onError(error as TError)
+        options?.onError(error as TError);
       }
     },
-  } as typeof options)
-}
+  } as typeof options);
+};
 
-export default useBaseQuery
+export default useBaseQuery;

@@ -1,2 +1,2 @@
-export * from "./ui/NotificationCenter"
-export * from "./lib/useNotification"
+export * from './ui/NotificationCenter';
+export * from './lib/useNotification';

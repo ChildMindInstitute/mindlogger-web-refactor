@@ -1,3 +1,3 @@
-const { VITE_IV_LENGTH } = import.meta.env
+const { VITE_IV_LENGTH } = import.meta.env;
 
-export { VITE_IV_LENGTH }
+export { VITE_IV_LENGTH };

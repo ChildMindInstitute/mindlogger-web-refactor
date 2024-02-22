@@ -1,30 +1,30 @@
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
-import { useDeclineInviteMutation, useInvitationTranslation } from "~/entities/invitation"
-import { ROUTES } from "~/shared/constants"
-import { BaseButton, useNotification } from "~/shared/ui"
-import { useCustomNavigation } from "~/shared/utils"
+import { useDeclineInviteMutation, useInvitationTranslation } from '~/entities/invitation';
+import { ROUTES } from '~/shared/constants';
+import { BaseButton, useNotification } from '~/shared/ui';
+import { useCustomNavigation } from '~/shared/utils';
 
 interface InvitationDeclineButtonProps {
-  invitationKey: string
+  invitationKey: string;
 }
 
 export const InvitationDeclineButton = ({ invitationKey }: InvitationDeclineButtonProps) => {
-  const { t } = useInvitationTranslation()
-  const { navigate } = useCustomNavigation()
+  const { t } = useInvitationTranslation();
+  const { navigate } = useCustomNavigation();
 
-  const { showErrorNotification } = useNotification()
+  const { showErrorNotification } = useNotification();
 
   const { mutate: declineInvite, isLoading: isDeclineLoading } = useDeclineInviteMutation({
     onSuccess() {
-      showErrorNotification(t("invitationDeclined"))
-      navigate(ROUTES.appletList.path)
+      showErrorNotification(t('invitationDeclined'));
+      navigate(ROUTES.appletList.path);
     },
-  })
+  });
 
   const onInviteDecline = () => {
-    declineInvite({ invitationId: invitationKey })
-  }
+    declineInvite({ invitationId: invitationKey });
+  };
 
   return (
     <Box width="250px">
@@ -34,7 +34,8 @@ export const InvitationDeclineButton = ({ invitationKey }: InvitationDeclineButt
         color="error"
         onClick={onInviteDecline}
         isLoading={isDeclineLoading}
-        text={t("buttons.declineInvitation")}></BaseButton>
+        text={t('buttons.declineInvitation')}
+      ></BaseButton>
     </Box>
-  )
-}
+  );
+};

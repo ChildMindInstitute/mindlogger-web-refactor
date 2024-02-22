@@ -1,43 +1,43 @@
-import { ItemRecord, UserEventResponse } from "./types"
+import { ItemRecord, UserEventResponse } from './types';
 
-import { ActivityItemDetailsDTO } from "~/shared/api"
-import { dateToDayMonthYear, dateToHourMinute } from "~/shared/utils"
+import { ActivityItemDetailsDTO } from '~/shared/api';
+import { dateToDayMonthYear, dateToHourMinute } from '~/shared/utils';
 
 export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventResponse => {
-  const responseType = item.responseType
-  const itemAnswer = item.answer
+  const responseType = item.responseType;
+  const itemAnswer = item.answer;
 
-  if (responseType === "singleSelect") {
+  if (responseType === 'singleSelect') {
     return {
       value: [Number(itemAnswer[0])],
       text: item.additionalText ?? undefined,
-    }
+    };
   }
 
-  if (responseType === "multiSelect") {
+  if (responseType === 'multiSelect') {
     return {
-      value: itemAnswer.map(answer => Number(answer)),
+      value: itemAnswer.map((answer) => Number(answer)),
       text: item.additionalText ?? undefined,
-    }
+    };
   }
 
-  if (responseType === "date") {
+  if (responseType === 'date') {
     return {
       value: dateToDayMonthYear(new Date(itemAnswer[0])),
       text: item.additionalText ?? undefined,
-    }
+    };
   }
 
-  if (responseType === "time") {
+  if (responseType === 'time') {
     return {
       value: dateToHourMinute(new Date(itemAnswer[0])),
       text: item.additionalText ?? undefined,
-    }
+    };
   }
 
-  if (responseType === "timeRange") {
-    const fromDate = itemAnswer[0] ? new Date(itemAnswer[0]) : new Date()
-    const toDate = itemAnswer[1] ? new Date(itemAnswer[1]) : new Date()
+  if (responseType === 'timeRange') {
+    const fromDate = itemAnswer[0] ? new Date(itemAnswer[0]) : new Date();
+    const toDate = itemAnswer[1] ? new Date(itemAnswer[1]) : new Date();
 
     return {
       value: {
@@ -45,24 +45,24 @@ export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventRes
         to: { hour: toDate.getHours(), minute: toDate.getMinutes() },
       },
       text: item.additionalText ?? undefined,
-    }
+    };
   }
 
-  if (responseType === "audioPlayer") {
+  if (responseType === 'audioPlayer') {
     return {
       value: true,
       text: item.additionalText ?? undefined,
-    }
+    };
   }
 
   return {
     value: itemAnswer[0],
     text: item.additionalText ?? undefined,
-  }
-}
+  };
+};
 
 export function mapItemToRecord(item: ActivityItemDetailsDTO): ItemRecord {
-  if (item.responseType === "message") {
+  if (item.responseType === 'message') {
     return {
       ...item,
       config: {
@@ -70,22 +70,22 @@ export function mapItemToRecord(item: ActivityItemDetailsDTO): ItemRecord {
         skippableItem: false,
       },
       answer: [],
-    }
+    };
   }
 
   return {
     ...item,
     answer: [],
-  }
+  };
 }
 
 export function mapSplashScreenToRecord(splashScreen: string): ItemRecord {
   return {
     id: splashScreen,
-    name: "",
-    question: "",
+    name: '',
+    question: '',
     order: 0,
-    responseType: "splashScreen",
+    responseType: 'splashScreen',
     config: {
       removeBackButton: true,
       skippableItem: true,
@@ -95,5 +95,5 @@ export function mapSplashScreenToRecord(splashScreen: string): ItemRecord {
     answer: [],
     conditionalLogic: null,
     isHidden: false,
-  }
+  };
 }

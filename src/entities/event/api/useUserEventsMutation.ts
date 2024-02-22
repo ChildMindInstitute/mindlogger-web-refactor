@@ -1,7 +1,7 @@
-import { MutationOptions, eventsService, useBaseMutation } from "~/shared/api"
+import { MutationOptions, eventsService, useBaseMutation } from '~/shared/api';
 
-type Options = MutationOptions<typeof eventsService.getUserEvents>
+type Options = MutationOptions<typeof eventsService.getUserEvents>;
 
 export const useUserEventsMutation = (options?: Options) => {
-  return useBaseMutation(["getUserEvents"], eventsService.getUserEvents, { ...options })
-}
+  return useBaseMutation(['getUserEvents'], eventsService.getUserEvents, { ...options });
+};

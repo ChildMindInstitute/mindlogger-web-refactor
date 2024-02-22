@@ -1,26 +1,26 @@
-import { lazy, useEffect } from "react"
+import { lazy, useEffect } from 'react';
 
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
-import { Link, useLocation } from "react-router-dom"
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { Link, useLocation } from 'react-router-dom';
 
-import { LoginForm, useLoginTranslation } from "~/features/Login"
-import { ROUTES, Theme } from "~/shared/constants"
-import { Mixpanel } from "~/shared/utils"
+import { LoginForm, useLoginTranslation } from '~/features/Login';
+import { ROUTES, Theme } from '~/shared/constants';
+import { Mixpanel } from '~/shared/utils';
 
-const DownloadMobileLinks = lazy(() => import("~/widgets/DownloadMobileLinks"))
+const DownloadMobileLinks = lazy(() => import('~/widgets/DownloadMobileLinks'));
 
 function LoginPage() {
-  const { t } = useLoginTranslation()
-  const location = useLocation()
+  const { t } = useLoginTranslation();
+  const location = useLocation();
 
   const onCreateAccountClick = () => {
-    Mixpanel.track("Create account button on login screen click")
-  }
+    Mixpanel.track('Create account button on login screen click');
+  };
 
   useEffect(() => {
-    Mixpanel.trackPageView("Login")
-  }, [])
+    Mixpanel.trackPageView('Login');
+  }, []);
 
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
@@ -33,8 +33,9 @@ function LoginPage() {
           fontStyle="normal"
           fontWeight={700}
           lineHeight="28px"
-          marginBottom="24px">
-          {t("title")}
+          marginBottom="24px"
+        >
+          {t('title')}
         </Typography>
 
         <Box className="loginForm" maxWidth="400px" margin="0 auto">
@@ -48,8 +49,9 @@ function LoginPage() {
             fontWeight={400}
             fontStyle="normal"
             lineHeight="20px"
-            letterSpacing="0.1px">
-            {t("or")},
+            letterSpacing="0.1px"
+          >
+            {t('or')},
           </Typography>
           &nbsp;
           <Typography
@@ -60,9 +62,10 @@ function LoginPage() {
             fontStyle="normal"
             lineHeight="20px"
             letterSpacing="0.1px"
-            sx={{ textDecoration: "underline" }}>
+            sx={{ textDecoration: 'underline' }}
+          >
             <Link to={ROUTES.signup.path} relative="path" onClick={onCreateAccountClick}>
-              {t("create")}
+              {t('create')}
             </Link>
           </Typography>
         </Box>
@@ -70,7 +73,7 @@ function LoginPage() {
         <DownloadMobileLinks />
       </Box>
     </Box>
-  )
+  );
 }
 
-export default LoginPage
+export default LoginPage;

@@ -1,1 +1,1 @@
-export * from "./toArray"
+export * from './toArray';

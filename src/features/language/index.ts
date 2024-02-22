@@ -1,3 +1,3 @@
-export { default as LanguageDropdown } from "./ui/LanguageDropdown"
+export { default as LanguageDropdown } from './ui/LanguageDropdown';
 
-export * from "./lib"
+export * from './lib';

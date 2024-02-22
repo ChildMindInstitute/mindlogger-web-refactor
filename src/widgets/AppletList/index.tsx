@@ -1,12 +1,12 @@
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
-import { AppletList, mapToAppletList, useAppletListQuery } from "~/entities/applet"
-import { userModel } from "~/entities/user"
-import { Text } from "~/shared/ui"
-import Loader from "~/shared/ui/Loader"
+import { AppletList, mapToAppletList, useAppletListQuery } from '~/entities/applet';
+import { userModel } from '~/entities/user';
+import { Text } from '~/shared/ui';
+import Loader from '~/shared/ui/Loader';
 
 export const AppletListWidget = () => {
-  const { user } = userModel.hooks.useUserState()
+  const { user } = userModel.hooks.useUserState();
 
   const {
     data: applets,
@@ -16,14 +16,14 @@ export const AppletListWidget = () => {
   } = useAppletListQuery(
     { userId: user.id! },
     {
-      select: data => mapToAppletList(data?.data?.result),
+      select: (data) => mapToAppletList(data?.data?.result),
     },
-  )
+  );
 
-  const isAppletsEmpty = !applets?.length
+  const isAppletsEmpty = !applets?.length;
 
   if (isLoading) {
-    return <Loader />
+    return <Loader />;
   }
 
   if (isError) {
@@ -31,7 +31,7 @@ export const AppletListWidget = () => {
       <Box display="flex" flex={1} alignItems="center" justifyContent="center">
         <span>{error.evaluatedMessage}</span>
       </Box>
-    )
+    );
   }
 
   if (isAppletsEmpty) {
@@ -39,8 +39,8 @@ export const AppletListWidget = () => {
       <Box display="flex" flex={1} alignItems="center" justifyContent="center">
         <Text variant="body1">No applets</Text>
       </Box>
-    )
+    );
   }
 
-  return <AppletList applets={applets} />
-}
+  return <AppletList applets={applets} />;
+};

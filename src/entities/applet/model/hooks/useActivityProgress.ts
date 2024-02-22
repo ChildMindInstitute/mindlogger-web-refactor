@@ -1,43 +1,43 @@
-import { useCallback } from "react"
+import { useCallback } from 'react';
 
-import { mapItemToRecord, mapSplashScreenToRecord } from "../mapper"
-import { actions } from "../slice"
-import { ItemRecord } from "../types"
+import { mapItemToRecord, mapSplashScreenToRecord } from '../mapper';
+import { actions } from '../slice';
+import { ItemRecord } from '../types';
 
-import { ActivityDTO } from "~/shared/api"
-import { useAppDispatch } from "~/shared/utils"
+import { ActivityDTO } from '~/shared/api';
+import { useAppDispatch } from '~/shared/utils';
 
 type SaveProgressProps = {
-  activity: ActivityDTO
-  eventId: string
-}
+  activity: ActivityDTO;
+  eventId: string;
+};
 
 type UpdateStepProps = {
-  activityId: string
-  eventId: string
-}
+  activityId: string;
+  eventId: string;
+};
 
 export const useActivityProgress = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const setInitialProgress = useCallback(
     (props: SaveProgressProps) => {
-      const initialStep = 0
+      const initialStep = 0;
 
-      const isSplashScreenExist = !!props.activity.splashScreen
-      let splashScreenItem: ItemRecord | undefined
+      const isSplashScreenExist = !!props.activity.splashScreen;
+      let splashScreenItem: ItemRecord | undefined;
 
       if (isSplashScreenExist) {
-        splashScreenItem = mapSplashScreenToRecord(props.activity.splashScreen)
+        splashScreenItem = mapSplashScreenToRecord(props.activity.splashScreen);
       }
 
-      const preparedActivityItemProgressRecords = props.activity.items.map(item => {
-        return mapItemToRecord(item)
-      })
+      const preparedActivityItemProgressRecords = props.activity.items.map((item) => {
+        return mapItemToRecord(item);
+      });
 
       const items = splashScreenItem
         ? [splashScreenItem, ...preparedActivityItemProgressRecords]
-        : preparedActivityItemProgressRecords
+        : preparedActivityItemProgressRecords;
 
       return dispatch(
         actions.saveActivityProgress({
@@ -49,28 +49,28 @@ export const useActivityProgress = () => {
             userEvents: [],
           },
         }),
-      )
+      );
     },
     [dispatch],
-  )
+  );
 
   const incrementStep = useCallback(
     (props: UpdateStepProps) => {
-      dispatch(actions.incrementStep(props))
+      dispatch(actions.incrementStep(props));
     },
     [dispatch],
-  )
+  );
 
   const decrementStep = useCallback(
     (props: UpdateStepProps) => {
-      dispatch(actions.decrementStep(props))
+      dispatch(actions.decrementStep(props));
     },
     [dispatch],
-  )
+  );
 
   return {
     setInitialProgress,
     incrementStep,
     decrementStep,
-  }
-}
+  };
+};

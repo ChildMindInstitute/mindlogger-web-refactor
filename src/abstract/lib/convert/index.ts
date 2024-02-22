@@ -1,1 +1,1 @@
-export * from "./toDateFromDTO"
+export * from './toDateFromDTO';

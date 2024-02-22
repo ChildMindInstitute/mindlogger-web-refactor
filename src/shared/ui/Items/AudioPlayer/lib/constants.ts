@@ -1,1 +1,1 @@
-export const AudioPlayerFinished = "finished"
+export const AudioPlayerFinished = 'finished';
