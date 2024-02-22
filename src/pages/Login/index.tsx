@@ -1,26 +1,45 @@
-import { lazy, useEffect } from 'react';
+import { lazy, useRef } from 'react';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { LoginForm, useLoginTranslation } from '~/features/Login';
 import { ROUTES, Theme } from '~/shared/constants';
-import { Mixpanel } from '~/shared/utils';
+import { useNotification } from '~/shared/ui';
+import { Notification } from '~/shared/ui/NotificationCenter/lib/types';
+import { Mixpanel, useOnceEffect } from '~/shared/utils';
 
 const DownloadMobileLinks = lazy(() => import('~/widgets/DownloadMobileLinks'));
 
 function LoginPage() {
   const { t } = useLoginTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { showSuccessNotification } = useNotification();
+  const notificationRef = useRef<Notification | null>(null);
 
   const onCreateAccountClick = () => {
     Mixpanel.track('Create account button on login screen click');
   };
 
-  useEffect(() => {
+  useOnceEffect(() => {
     Mixpanel.trackPageView('Login');
-  }, []);
+
+    if (location.state?.isPasswordReset && !notificationRef.current) {
+      // Shown for 5 seconds
+      notificationRef.current = showSuccessNotification(t('passwordResetSuccessful'), 5000);
+
+      // Unset the state after showing the notification, so that it doesn't show again if the user navigates back to this page
+      navigate(window.location.pathname, {
+        state: {
+          ...location.state,
+          isPasswordReset: undefined,
+        },
+        replace: true,
+      });
+    }
+  });
 
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">

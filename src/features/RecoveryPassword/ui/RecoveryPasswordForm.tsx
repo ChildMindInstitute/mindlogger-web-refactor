@@ -31,7 +31,6 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
 
   const {
     mutate: approveRecoveryPassword,
-    isSuccess,
     isLoading,
     error,
     status,
@@ -49,9 +48,13 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
   const [newPasswordType, onNewPasswordIconClick] = usePasswordType();
   const [confirmNewPasswordType, onConfirmNewPasswordIconClick] = usePasswordType();
 
-  const backToLogin = () => {
-    return navigate(ROUTES.login.path);
-  };
+  if (status === 'success') {
+    // Auto-navigate to the login page
+    navigate(ROUTES.login.path, {
+      state: { isPasswordReset: true },
+    });
+    return <></>;
+  }
 
   return (
     <Container className="change-password-form-container">
@@ -89,33 +92,11 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
           />
         </Box>
 
-        <DisplaySystemMessage
-          errorMessage={error?.evaluatedMessage}
-          successMessage={isSuccess ? t('success') : null}
-        />
+        <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
 
-        {status === 'success' && (
-          <Box marginY={3}>
-            <BaseButton
-              type="button"
-              onClick={backToLogin}
-              variant="contained"
-              isLoading={isLoading}
-              text={t('backToLogin')}
-            />
-          </Box>
-        )}
-
-        {status !== 'success' && (
-          <Box marginY={3}>
-            <BaseButton
-              type="submit"
-              variant="contained"
-              isLoading={isLoading}
-              text={t('submit')}
-            />
-          </Box>
-        )}
+        <Box marginY={3}>
+          <BaseButton type="submit" variant="contained" isLoading={isLoading} text={t('submit')} />
+        </Box>
       </BasicFormProvider>
     </Container>
   );
