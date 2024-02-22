@@ -1,5 +1,10 @@
 import axiosService from "./axios"
-import { GetEventsByAppletIdPayload, GetEventsByPublicAppletKey, SuccessEventsByAppletIdResponse } from "../types"
+import {
+  GetEventsByAppletIdPayload,
+  GetEventsByPublicAppletKey,
+  SuccessAllUserEventsResponse,
+  SuccessEventsByAppletIdResponse,
+} from "../types"
 
 function eventService() {
   return {
@@ -7,7 +12,7 @@ function eventService() {
       return axiosService.get<SuccessEventsByAppletIdResponse>(`/users/me/events/${payload.appletId}`)
     },
     getUserEvents() {
-      return axiosService.get<SuccessEventsByAppletIdResponse>("/users/me/events")
+      return axiosService.get<SuccessAllUserEventsResponse>("/users/me/events")
     },
     getEventsByPublicAppletKey(payload: GetEventsByPublicAppletKey) {
       return axiosService.get<SuccessEventsByAppletIdResponse>(`/public/applets/${payload.publicAppletKey}/events`)

@@ -106,6 +106,7 @@ export type CheckboxItemResponseValuesDTO = {
     isHidden: boolean
     alert: string | null
     value: number
+    isNoneAbove: boolean
   }>
 }
 
