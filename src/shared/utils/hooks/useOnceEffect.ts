@@ -1,5 +1,5 @@
-import { useEffect } from "react"
-import type { EffectCallback } from "react"
+import { useEffect } from 'react';
+import type { EffectCallback } from 'react';
 
 /**
  * A convenience hook that runs the effect only once, when the component mounts.
@@ -7,5 +7,5 @@ import type { EffectCallback } from "react"
  */
 export const useOnceEffect = (effect: EffectCallback) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(effect, [])
-}
+  useEffect(effect, []);
+};
