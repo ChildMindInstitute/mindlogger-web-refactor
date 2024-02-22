@@ -2,8 +2,7 @@ import { useCallback, useContext, useMemo, useState } from "react"
 
 import Box from "@mui/material/Box"
 
-import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
-import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
+import { AssessmentLayout } from "./AssessmentLayout"
 import { ActivityDetailsContext } from "../lib"
 import { validateBeforeMoveForward } from "../model"
 import { useAnswer, useAutoForward, useEntityComplete, useSubmitAnswersMutations, useSurvey } from "../model/hooks"
@@ -12,8 +11,7 @@ import { getProgressId } from "~/abstract/lib"
 import { ActivityCardItem, ItemCardButton, useTextVariablesReplacer } from "~/entities/activity"
 import { appletModel } from "~/entities/applet"
 import { ActivityDTO, AppletDetailsDTO, AppletEventsResponse, RespondentMetaDTO } from "~/shared/api"
-import { Theme } from "~/shared/constants"
-import { MuiModal, NotificationCenter, useNotification } from "~/shared/ui"
+import { MuiModal, useNotification } from "~/shared/ui"
 import { useAppSelector, useCustomTranslation, useFlowType, usePrevious } from "~/shared/utils"
 
 type Props = {
@@ -191,44 +189,15 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   return (
     <>
-      <Box
-        id="assessment-screen-layout"
-        display="flex"
-        flex={1}
-        flexDirection="column"
-        bgcolor={Theme.colors.light.surface}>
-        <AssessmentLayoutHeader
-          title={props.activityDetails.name}
-          progress={progress}
-          appletId={applet.id}
-          activityId={activityId}
-          eventId={eventId}
-          isPublic={context.isPublic}
-          publicKey={context.isPublic ? context.publicAppletKey : null}
-        />
-
-        <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
-          <NotificationCenter />
-          <Box display="flex" flex={1} justifyContent="center">
-            <Box maxWidth="900px" display="flex" alignItems="center" flex={1}>
-              {item && (
-                <ActivityCardItem
-                  key={item.id}
-                  item={item}
-                  replaceText={replaceTextVariables}
-                  watermark={props.appletDetails.watermark}
-                  allowToSkipAllItems={props.activityDetails.isSkippable}
-                  step={step}
-                  prevStep={prevStep}
-                  onValueChange={onItemValueChange}
-                  onItemAdditionalTextChange={onItemAdditionalTextChange}
-                />
-              )}
-            </Box>
-          </Box>
-        </Box>
-
-        <AssessmentLayoutFooter>
+      <AssessmentLayout
+        activityName={props.activityDetails.name}
+        progress={progress}
+        appletId={applet.id}
+        activityId={activityId}
+        eventId={eventId}
+        isPublic={context.isPublic}
+        publicAppletKey={context.isPublic ? context.publicAppletKey : null}
+        footerActions={
           <ItemCardButton
             isLoading={false}
             isBackShown={hasPrevStep && canGoBack}
@@ -237,8 +206,23 @@ export const AssessmentPassingScreen = (props: Props) => {
             backButtonText={t("Consent.back")}
             nextButtonText={t("Consent.next")}
           />
-        </AssessmentLayoutFooter>
-      </Box>
+        }>
+        <Box maxWidth="900px" display="flex" alignItems="center" flex={1}>
+          {item && (
+            <ActivityCardItem
+              key={item.id}
+              item={item}
+              replaceText={replaceTextVariables}
+              watermark={props.appletDetails.watermark}
+              allowToSkipAllItems={props.activityDetails.isSkippable}
+              step={step}
+              prevStep={prevStep}
+              onValueChange={onItemValueChange}
+              onItemAdditionalTextChange={onItemAdditionalTextChange}
+            />
+          )}
+        </Box>
+      </AssessmentLayout>
 
       <MuiModal
         isOpen={isModalOpen}
