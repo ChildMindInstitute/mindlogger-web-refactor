@@ -1,15 +1,15 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
-import { UserConfig, defineConfig, loadEnv } from 'vite'
-import react from '@vitejs/plugin-react'
-import eslint from 'vite-plugin-eslint'
-import { resolve } from 'path'
-import nodePolyfills from 'vite-plugin-node-stdlib-browser'
+import { UserConfig, defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
+import eslint from 'vite-plugin-eslint';
+import { resolve } from 'path';
+import nodePolyfills from 'vite-plugin-node-stdlib-browser';
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
-  const env = loadEnv(mode, process.cwd(), '')
+  const env = loadEnv(mode, process.cwd(), '');
 
   const baseConfig: UserConfig = {
     define: {
@@ -22,7 +22,7 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
     resolve: {
       alias: {
         '~': resolve(__dirname, 'src'),
-        Buffer: 'buffer'
+        Buffer: 'buffer',
       },
     },
     test: {
@@ -31,7 +31,7 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
       server: {
         deps: {
           inline: ['vitest-canvas-mock'],
-        }
+        },
       },
       globals: true,
       css: true,
@@ -42,20 +42,20 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
       },
       alias: {
         '~': resolve(__dirname, 'src'),
-        Buffer: 'buffer'
+        Buffer: 'buffer',
       },
-    }
-  }
+    },
+  };
 
-  if(command === 'serve') {
-    baseConfig.plugins = [react(), eslint(), nodePolyfills()]
+  if (command === 'serve') {
+    baseConfig.plugins = [react(), eslint(), nodePolyfills()];
 
-    return baseConfig
-  } else if(command === 'build') {
-    baseConfig.plugins = [react(), nodePolyfills()]
+    return baseConfig;
+  } else if (command === 'build') {
+    baseConfig.plugins = [react(), nodePolyfills()];
 
-    return baseConfig
+    return baseConfig;
   } else {
-    return baseConfig
+    return baseConfig;
   }
-})
+});

@@ -1,2 +1,2 @@
-export { useLoginTranslation } from "./lib/useLoginTranslation"
-export * from "./ui"
+export { useLoginTranslation } from './lib/useLoginTranslation';
+export * from './ui';

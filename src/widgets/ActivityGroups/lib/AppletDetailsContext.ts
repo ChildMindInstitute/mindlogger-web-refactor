@@ -1,22 +1,22 @@
-import { createContext } from "react"
+import { createContext } from 'react';
 
-import { AppletDetailsBaseInfoDTO, AppletEventsResponse } from "~/shared/api"
+import { AppletDetailsBaseInfoDTO, AppletEventsResponse } from '~/shared/api';
 
 type AppletDetailsContextProps = {
-  applet: AppletDetailsBaseInfoDTO
-  events: AppletEventsResponse
-}
+  applet: AppletDetailsBaseInfoDTO;
+  events: AppletEventsResponse;
+};
 
 type PublicAppletDetails = {
-  isPublic: true
-  publicAppletKey: string
-}
+  isPublic: true;
+  publicAppletKey: string;
+};
 
 type PrivateAppletDetails = {
-  isPublic: false
-  appletId: string
-}
+  isPublic: false;
+  appletId: string;
+};
 
-type Context = AppletDetailsContextProps & (PublicAppletDetails | PrivateAppletDetails)
+type Context = AppletDetailsContextProps & (PublicAppletDetails | PrivateAppletDetails);
 
-export const AppletDetailsContext = createContext<Context>({} as Context)
+export const AppletDetailsContext = createContext<Context>({} as Context);

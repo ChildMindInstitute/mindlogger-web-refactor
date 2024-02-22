@@ -5,26 +5,26 @@ export const enum ActivityPipelineType {
 }
 
 export type FlowProgress = {
-  type: ActivityPipelineType.Flow
-  currentActivityId: string
-  pipelineActivityOrder: number
-  currentActivityStartAt: number | null
-  executionGroupKey: string
-}
+  type: ActivityPipelineType.Flow;
+  currentActivityId: string;
+  pipelineActivityOrder: number;
+  currentActivityStartAt: number | null;
+  executionGroupKey: string;
+};
 
 export type ActivityProgress = {
-  type: ActivityPipelineType.Regular
-}
+  type: ActivityPipelineType.Regular;
+};
 
-export type ActivityOrFlowProgress = FlowProgress | ActivityProgress
+export type ActivityOrFlowProgress = FlowProgress | ActivityProgress;
 
 type EventProgressTimestampState = {
-  startAt: number | null
-  endAt: number | null
-}
+  startAt: number | null;
+  endAt: number | null;
+};
 
-export type GroupProgress = ActivityOrFlowProgress & EventProgressTimestampState
+export type GroupProgress = ActivityOrFlowProgress & EventProgressTimestampState;
 
-type GroupProgressId = string // Group progress id is a combination of activityId and eventId (activityId/eventId)
+type GroupProgressId = string; // Group progress id is a combination of activityId and eventId (activityId/eventId)
 
-export type GroupProgressState = Record<GroupProgressId, GroupProgress>
+export type GroupProgressState = Record<GroupProgressId, GroupProgress>;

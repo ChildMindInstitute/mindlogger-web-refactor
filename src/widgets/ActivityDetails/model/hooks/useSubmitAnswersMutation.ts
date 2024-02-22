@@ -1,31 +1,32 @@
-import { usePublicSaveAnswerMutation, useSaveAnswerMutation } from "~/entities/activity"
-import { Mixpanel } from "~/shared/utils"
+import { usePublicSaveAnswerMutation, useSaveAnswerMutation } from '~/entities/activity';
+import { Mixpanel } from '~/shared/utils';
 
 type Props = {
-  isPublic: boolean
+  isPublic: boolean;
 
-  onSubmitSuccess: () => void
-}
+  onSubmitSuccess: () => void;
+};
 
 export const useSubmitAnswersMutations = (props: Props) => {
   const { mutate: submitAnswers, isLoading: submitLoading } = useSaveAnswerMutation({
     onSuccess() {
-      Mixpanel.track("Assessment completed")
+      Mixpanel.track('Assessment completed');
 
-      return props.onSubmitSuccess()
+      return props.onSubmitSuccess();
     },
-  })
+  });
 
-  const { mutate: submitPublicAnswers, isLoading: publicSubmitLoading } = usePublicSaveAnswerMutation({
-    onSuccess() {
-      Mixpanel.track("Assessment completed")
+  const { mutate: submitPublicAnswers, isLoading: publicSubmitLoading } =
+    usePublicSaveAnswerMutation({
+      onSuccess() {
+        Mixpanel.track('Assessment completed');
 
-      return props.onSubmitSuccess()
-    },
-  })
+        return props.onSubmitSuccess();
+      },
+    });
 
   return {
     submitAnswers: props.isPublic ? submitPublicAnswers : submitAnswers,
     isLoading: submitLoading || publicSubmitLoading,
-  }
-}
+  };
+};

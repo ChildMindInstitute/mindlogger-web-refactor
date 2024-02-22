@@ -1,7 +1,7 @@
-import { invitationService, MutationOptions, useBaseMutation } from "~/shared/api"
+import { invitationService, MutationOptions, useBaseMutation } from '~/shared/api';
 
-type Options = MutationOptions<typeof invitationService.acceptInvitation>
+type Options = MutationOptions<typeof invitationService.acceptInvitation>;
 
 export const useAcceptInviteMutation = (options?: Options) => {
-  return useBaseMutation(["acceptInvitation"], invitationService.acceptInvitation, { ...options })
-}
+  return useBaseMutation(['acceptInvitation'], invitationService.acceptInvitation, { ...options });
+};

@@ -1,29 +1,29 @@
 export interface ILoginPayload {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 export interface ILogoutPayload {
-  token: string
+  token: string;
 }
 
 export interface ISignupPayload {
-  email: string
-  fullName: string
-  password: string
+  email: string;
+  fullName: string;
+  password: string;
 }
 
 export interface IRecoveryPasswordPayload {
-  email: string
+  email: string;
 }
 
 export interface IRecoveryPasswordApprovePayload {
-  email: string
-  key: string
-  password: string
+  email: string;
+  key: string;
+  password: string;
 }
 
 export interface IUpdatePasswordPayload {
-  oldPassword: string
-  password: string
+  oldPassword: string;
+  password: string;
 }
