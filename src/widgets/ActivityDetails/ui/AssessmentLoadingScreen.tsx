@@ -4,10 +4,10 @@ import Box from '@mui/material/Box';
 
 import { ActivityDetailsContext } from '../lib';
 
-import { SaveAndExitButton } from "~/features/SaveAssessmentAndExit"
-import { ROUTES } from "~/shared/constants"
-import Loader from "~/shared/ui/Loader"
-import { useCustomMediaQuery, useCustomNavigation } from "~/shared/utils"
+import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
+import { ROUTES } from '~/shared/constants';
+import Loader from '~/shared/ui/Loader';
+import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
 
 export const AssessmentLoadingScreen = () => {
   const navigator = useCustomNavigation();
@@ -45,7 +45,13 @@ export const AssessmentLoadingScreen = () => {
         </Box>
       </Box>
 
-      <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="auto">
+      <Box
+        id="assessment-content-container"
+        display="flex"
+        flex={1}
+        flexDirection="column"
+        overflow="auto"
+      >
         <Loader />
       </Box>
     </Box>

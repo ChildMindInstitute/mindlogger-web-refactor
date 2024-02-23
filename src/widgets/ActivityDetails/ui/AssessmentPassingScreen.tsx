@@ -2,6 +2,7 @@ import { useCallback, useContext, useMemo, useState } from 'react';
 
 import Box from '@mui/material/Box';
 
+import { AssessmentLayout } from './AssessmentLayout';
 import { ActivityDetailsContext } from '../lib';
 import { validateBeforeMoveForward } from '../model';
 import {
@@ -23,7 +24,6 @@ import {
 } from '~/shared/api';
 import { MuiModal, useNotification } from '~/shared/ui';
 import { useAppSelector, useCustomTranslation, useFlowType, usePrevious } from '~/shared/utils';
-import { AssessmentLayout } from './AssessmentLayout';
 
 type Props = {
   activityDetails: ActivityDTO;
@@ -240,7 +240,8 @@ export const AssessmentPassingScreen = (props: Props) => {
             backButtonText={t('Consent.back')}
             nextButtonText={t('Consent.next')}
           />
-        }>
+        }
+      >
         <Box maxWidth="900px" display="flex" alignItems="center" flex={1}>
           {item && (
             <ActivityCardItem

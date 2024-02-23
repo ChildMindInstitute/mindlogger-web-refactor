@@ -1,26 +1,26 @@
-import { PropsWithChildren } from "react"
+import { PropsWithChildren } from 'react';
 
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
-import { AssessmentLayoutFooter } from "./AssessmentLayoutFooter"
-import { AssessmentLayoutHeader } from "./AssessmentLayoutHeader"
+import { AssessmentLayoutFooter } from './AssessmentLayoutFooter';
+import { AssessmentLayoutHeader } from './AssessmentLayoutHeader';
 
-import { Theme } from "~/shared/constants"
-import { NotificationCenter } from "~/shared/ui"
+import { Theme } from '~/shared/constants';
+import { NotificationCenter } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
-  activityName: string
-  progress: number
+  activityName: string;
+  progress: number;
 
-  isPublic: boolean
-  publicAppletKey: string | null
+  isPublic: boolean;
+  publicAppletKey: string | null;
 
-  appletId: string
-  activityId: string
-  eventId: string
+  appletId: string;
+  activityId: string;
+  eventId: string;
 
-  footerActions?: React.ReactNode
-}>
+  footerActions?: React.ReactNode;
+}>;
 
 export const AssessmentLayout = (props: Props) => {
   return (
@@ -29,7 +29,8 @@ export const AssessmentLayout = (props: Props) => {
       display="flex"
       flex={1}
       flexDirection="column"
-      bgcolor={Theme.colors.light.surface}>
+      bgcolor={Theme.colors.light.surface}
+    >
       <AssessmentLayoutHeader
         title={props.activityName}
         progress={props.progress}
@@ -40,7 +41,13 @@ export const AssessmentLayout = (props: Props) => {
         publicKey={props.isPublic ? props.publicAppletKey : null}
       />
 
-      <Box id="assessment-content-container" display="flex" flex={1} flexDirection="column" overflow="scroll">
+      <Box
+        id="assessment-content-container"
+        display="flex"
+        flex={1}
+        flexDirection="column"
+        overflow="scroll"
+      >
         <NotificationCenter />
         <Box display="flex" flex={1} justifyContent="center">
           {props.children}
@@ -49,5 +56,5 @@ export const AssessmentLayout = (props: Props) => {
 
       <AssessmentLayoutFooter>{props.footerActions}</AssessmentLayoutFooter>
     </Box>
-  )
-}
+  );
+};

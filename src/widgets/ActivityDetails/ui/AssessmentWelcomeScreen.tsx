@@ -2,9 +2,9 @@ import { useContext } from 'react';
 
 import Box from '@mui/material/Box';
 
-import { ActivityMetaData } from "./ActivityMetaData"
-import { AssessmentLayout } from "./AssessmentLayout"
-import { ActivityDetailsContext } from "../lib"
+import { ActivityMetaData } from './ActivityMetaData';
+import { AssessmentLayout } from './AssessmentLayout';
+import { ActivityDetailsContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
 import { StartAssessmentButton } from '~/features/StartAssessment';
@@ -43,14 +43,21 @@ export const AssessmentWelcomeScreen = (props: Props) => {
       eventId={context.eventId}
       isPublic={context.isPublic}
       publicAppletKey={context.isPublic ? context.publicAppletKey : null}
-      footerActions={<StartAssessmentButton width={greaterThanSM ? "375px" : "335px"} onClick={startAssessment} />}>
+      footerActions={
+        <StartAssessmentButton
+          width={greaterThanSM ? '375px' : '335px'}
+          onClick={startAssessment}
+        />
+      }
+    >
       <Box
         id="welcome-screen-activity-details"
         display="flex"
         flexDirection="column"
         alignItems="center"
         marginTop="80px"
-        maxWidth="570px">
+        maxWidth="570px"
+      >
         <AvatarBase
           src={props.activityDetails.image}
           name={props.activityDetails?.name}
@@ -64,7 +71,8 @@ export const AssessmentWelcomeScreen = (props: Props) => {
           fontSize="18px"
           fontWeight="400"
           color={Theme.colors.light.secondary}
-          sx={{ marginTop: "24px" }}>
+          sx={{ marginTop: '24px' }}
+        >
           <ActivityMetaData
             activityLength={props.activityDetails.items.length}
             groupInProgress={getGroupProgress({ entityId, eventId: context.eventId })}
@@ -76,7 +84,8 @@ export const AssessmentWelcomeScreen = (props: Props) => {
           fontWeight="700"
           color={Theme.colors.light.onSurface}
           margin="16px 0px"
-          testid="flow-welcome-screen-title">
+          testid="flow-welcome-screen-title"
+        >
           {props.activityDetails.name}
         </Text>
 
@@ -86,10 +95,11 @@ export const AssessmentWelcomeScreen = (props: Props) => {
           fontWeight="400"
           color={Theme.colors.light.onSurface}
           testid="flow-welcome-screen-decription"
-          sx={{ textAlign: "center" }}>
+          sx={{ textAlign: 'center' }}
+        >
           {props.activityDetails.description}
         </Text>
       </Box>
     </AssessmentLayout>
-  )
-}
+  );
+};
