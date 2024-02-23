@@ -1,1 +1,1 @@
-export * from "./useAuthorizationGuard"
+export * from './useAuthorizationGuard';

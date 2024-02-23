@@ -1,1 +1,1 @@
-export * from "./PrivateJoinDeclineButton"
+export * from './PrivateJoinDeclineButton';

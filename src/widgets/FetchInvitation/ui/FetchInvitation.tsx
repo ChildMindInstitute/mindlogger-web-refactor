@@ -1,39 +1,45 @@
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
-import { FetchInvitationErrorMapper } from "./FetchInvitationErrorMapper"
-import { useAuthorizationGuard } from "../../AuthorizationGuard"
+import { FetchInvitationErrorMapper } from './FetchInvitationErrorMapper';
+import { useAuthorizationGuard } from '../../AuthorizationGuard';
 
-import { Invitation, useInvitationQuery, useInvitationTranslation } from "~/entities/invitation"
-import { InvitationAcceptButton } from "~/features/InvitationAccept"
-import { InvitationDeclineButton } from "~/features/InvitationDecline"
-import { Text } from "~/shared/ui"
-import Loader from "~/shared/ui/Loader"
-import { useCustomMediaQuery } from "~/shared/utils"
+import { Invitation, useInvitationQuery, useInvitationTranslation } from '~/entities/invitation';
+import { InvitationAcceptButton } from '~/features/InvitationAccept';
+import { InvitationDeclineButton } from '~/features/InvitationDecline';
+import { Text } from '~/shared/ui';
+import Loader from '~/shared/ui/Loader';
+import { useCustomMediaQuery } from '~/shared/utils';
 
 interface FetchInvitationProps {
-  keyParams: string
+  keyParams: string;
 }
 
 export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
-  const { t } = useInvitationTranslation()
-  const { isAuthenticated } = useAuthorizationGuard()
-  const { lessThanSM } = useCustomMediaQuery()
+  const { t } = useInvitationTranslation();
+  const { isAuthenticated } = useAuthorizationGuard();
+  const { lessThanSM } = useCustomMediaQuery();
 
-  const { isError, data, error, isLoading } = useInvitationQuery(keyParams)
+  const { isError, data, error, isLoading } = useInvitationQuery(keyParams);
 
   if (isError) {
-    return <FetchInvitationErrorMapper error={error} />
+    return <FetchInvitationErrorMapper error={error} />;
   }
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" textAlign="center">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+        textAlign="center"
+      >
         <Text variant="body1" margin="12px">
-          {t("loadingInvitation")}
+          {t('loadingInvitation')}
         </Text>
         <Loader />
       </Box>
-    )
+    );
   }
 
   return (
@@ -45,13 +51,14 @@ export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          flexDirection={lessThanSM ? "column" : "row"}
+          flexDirection={lessThanSM ? 'column' : 'row'}
           gap="12px"
-          margin="16px 0px">
+          margin="16px 0px"
+        >
           <InvitationAcceptButton invitationKey={keyParams} />
           <InvitationDeclineButton invitationKey={keyParams} />
         </Box>
       }
     />
-  )
-}
+  );
+};

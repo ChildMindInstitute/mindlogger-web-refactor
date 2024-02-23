@@ -1,1 +1,1 @@
-export * from "./getFirstLetter"
+export * from './getFirstLetter';

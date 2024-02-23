@@ -1,22 +1,22 @@
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
-import { AppletListItem } from "../lib"
+import { AppletListItem } from '../lib';
 
-import { ROUTES } from "~/shared/constants"
-import { CustomCard } from "~/shared/ui"
-import { Mixpanel, useCustomNavigation } from "~/shared/utils"
+import { ROUTES } from '~/shared/constants';
+import { CustomCard } from '~/shared/ui';
+import { Mixpanel, useCustomNavigation } from '~/shared/utils';
 
 type Props = {
-  applet: AppletListItem
-}
+  applet: AppletListItem;
+};
 
 export const AppletCard = ({ applet }: Props) => {
-  const navigator = useCustomNavigation()
+  const navigator = useCustomNavigation();
 
   const onAppletCardClick = () => {
-    Mixpanel.track("Applet click")
-    return navigator.navigate(ROUTES.appletDetails.navigateTo(applet.id))
-  }
+    Mixpanel.track('Applet click');
+    return navigator.navigate(ROUTES.appletDetails.navigateTo(applet.id));
+  };
 
   return (
     <Box data-testid="applet-card">
@@ -28,5 +28,5 @@ export const AppletCard = ({ applet }: Props) => {
         onClick={onAppletCardClick}
       />
     </Box>
-  )
-}
+  );
+};

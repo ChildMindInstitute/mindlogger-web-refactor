@@ -1,9 +1,9 @@
-import { ActivityPipelineType } from "~/abstract/lib"
-import { Activity, ActivityFlow, ActivityType } from "~/abstract/lib/GroupBuilder"
-import { ActivityBaseInfoDTO, ActivityFlowDTO } from "~/shared/api"
+import { ActivityPipelineType } from '~/abstract/lib';
+import { Activity, ActivityFlow, ActivityType } from '~/abstract/lib/GroupBuilder';
+import { ActivityBaseInfoDTO, ActivityFlowDTO } from '~/shared/api';
 
 export const mapActivitiesFromDto = (dtos: ActivityBaseInfoDTO[]): Activity[] => {
-  return dtos.map(dto => ({
+  return dtos.map((dto) => ({
     id: dto.id,
     description: dto.description,
     image: dto.image,
@@ -12,11 +12,11 @@ export const mapActivitiesFromDto = (dtos: ActivityBaseInfoDTO[]): Activity[] =>
     order: dto.order,
     pipelineType: ActivityPipelineType.Regular,
     type: ActivityType.NotDefined,
-  }))
-}
+  }));
+};
 
 export const mapActivityFlowsFromDto = (dtos: ActivityFlowDTO[]): ActivityFlow[] => {
-  return dtos.map(dto => ({
+  return dtos.map((dto) => ({
     activityIds: dto.activityIds,
     description: dto.description,
     hideBadge: dto.hideBadge,
@@ -26,5 +26,5 @@ export const mapActivityFlowsFromDto = (dtos: ActivityFlowDTO[]): ActivityFlow[]
     isHidden: dto.isHidden,
     pipelineType: ActivityPipelineType.Flow,
     image: null,
-  }))
-}
+  }));
+};

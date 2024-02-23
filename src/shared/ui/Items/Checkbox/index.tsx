@@ -1,19 +1,19 @@
-import Checkbox from "@mui/material/Checkbox"
+import Checkbox from '@mui/material/Checkbox';
 
-import { BaseCheckboxActiveIcon } from "./BaseCheckboxActiveIcon"
-import { BaseCheckboxIcon } from "./BaseCheckboxIcon"
+import { BaseCheckboxActiveIcon } from './BaseCheckboxActiveIcon';
+import { BaseCheckboxIcon } from './BaseCheckboxIcon';
 
 type CheckboxItemOptionProps = {
-  id: string
-  name: string
-  value: string | number
+  id: string;
+  name: string;
+  value: string | number;
 
-  disabled?: boolean
-  defaultChecked?: boolean
-}
+  disabled?: boolean;
+  defaultChecked?: boolean;
+};
 
 export const CheckboxItem = (props: CheckboxItemOptionProps) => {
-  const { id, name, value, disabled, defaultChecked } = props
+  const { id, name, value, disabled, defaultChecked } = props;
 
   return (
     <Checkbox
@@ -27,5 +27,5 @@ export const CheckboxItem = (props: CheckboxItemOptionProps) => {
       checkedIcon={<BaseCheckboxActiveIcon />}
       icon={<BaseCheckboxIcon />}
     />
-  )
-}
+  );
+};

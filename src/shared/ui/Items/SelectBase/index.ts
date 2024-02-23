@@ -1,3 +1,3 @@
-export * from "./SelectBaseBox"
-export * from "./SelectBaseImage"
-export * from "./SelectBaseText"
+export * from './SelectBaseBox';
+export * from './SelectBaseImage';
+export * from './SelectBaseText';

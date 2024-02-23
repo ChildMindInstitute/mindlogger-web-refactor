@@ -1,66 +1,66 @@
-import { RefObject, useEffect, useState } from "react"
+import { RefObject, useEffect, useState } from 'react';
 
 type Props = {
-  audioRef: RefObject<HTMLAudioElement>
-}
+  audioRef: RefObject<HTMLAudioElement>;
+};
 
 type Return = {
-  isMuted: boolean
-  volume: number
+  isMuted: boolean;
+  volume: number;
 
-  mute: () => void
-  unmute: () => void
+  mute: () => void;
+  unmute: () => void;
 
-  volumeChange: (volume: number) => void
-}
+  volumeChange: (volume: number) => void;
+};
 
 export const useAudioVolume = ({ audioRef }: Props): Return => {
-  const [isMuted, setIsMuted] = useState<boolean>(false)
+  const [isMuted, setIsMuted] = useState<boolean>(false);
 
-  const [volume, setVolume] = useState<number>(0.5)
+  const [volume, setVolume] = useState<number>(0.5);
 
   useEffect(() => {
     if (audioRef.current?.volume === undefined) {
-      return
+      return;
     }
 
-    audioRef.current.volume = volume
-  }, [audioRef, volume])
+    audioRef.current.volume = volume;
+  }, [audioRef, volume]);
 
   const mute = () => {
     if (audioRef.current?.volume === undefined) {
-      return
+      return;
     }
 
-    setIsMuted(true)
-    setVolume(audioRef.current.volume)
-    audioRef.current.volume = 0
-  }
+    setIsMuted(true);
+    setVolume(audioRef.current.volume);
+    audioRef.current.volume = 0;
+  };
 
   const unmute = () => {
     if (audioRef.current?.volume === undefined) {
-      return
+      return;
     }
 
-    setIsMuted(false)
-    audioRef.current.volume = volume
-  }
+    setIsMuted(false);
+    audioRef.current.volume = volume;
+  };
 
   const volumeChange = (volume: number) => {
     if (audioRef.current?.volume === undefined) {
-      return
+      return;
     }
 
     if (volume === 0) {
-      setIsMuted(true)
+      setIsMuted(true);
     }
 
     if (volume > 0) {
-      setIsMuted(false)
+      setIsMuted(false);
     }
 
-    setVolume(volume / 100)
-  }
+    setVolume(volume / 100);
+  };
 
   return {
     isMuted,
@@ -68,5 +68,5 @@ export const useAudioVolume = ({ audioRef }: Props): Return => {
     mute,
     unmute,
     volumeChange,
-  }
-}
+  };
+};

@@ -1,7 +1,9 @@
-import { authorizationService, MutationOptions, useBaseMutation } from "~/shared/api"
+import { authorizationService, MutationOptions, useBaseMutation } from '~/shared/api';
 
-type Options = MutationOptions<typeof authorizationService.recoveryPassword>
+type Options = MutationOptions<typeof authorizationService.recoveryPassword>;
 
 export const useRecoveryPasswordMutation = (options?: Options) => {
-  return useBaseMutation(["recoveryPassword"], authorizationService.recoveryPassword, { ...options })
-}
+  return useBaseMutation(['recoveryPassword'], authorizationService.recoveryPassword, {
+    ...options,
+  });
+};

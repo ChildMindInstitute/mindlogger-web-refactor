@@ -1,10 +1,10 @@
-import Typography from "@mui/material/Typography"
+import Typography from '@mui/material/Typography';
 
-import { Theme } from "../../../constants"
+import { Theme } from '../../../constants';
 
 type Props = {
-  text: string
-}
+  text: string;
+};
 
 export const SelectBaseText = (props: Props) => {
   return (
@@ -17,8 +17,9 @@ export const SelectBaseText = (props: Props) => {
       fontWeight={400}
       lineHeight="28px"
       data-testid="select-text"
-      sx={{ cursor: "pointer" }}>
+      sx={{ cursor: 'pointer' }}
+    >
       {props.text}
     </Typography>
-  )
-}
+  );
+};

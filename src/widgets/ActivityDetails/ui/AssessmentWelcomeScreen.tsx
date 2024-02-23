@@ -1,38 +1,38 @@
-import { useContext } from "react"
+import { useContext } from 'react';
 
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
 import { ActivityMetaData } from "./ActivityMetaData"
 import { AssessmentLayout } from "./AssessmentLayout"
 import { ActivityDetailsContext } from "../lib"
 
-import { appletModel } from "~/entities/applet"
-import { StartAssessmentButton } from "~/features/StartAssessment"
-import { ActivityDTO } from "~/shared/api"
-import { Theme } from "~/shared/constants"
-import { AvatarBase, Text } from "~/shared/ui"
-import { useCustomMediaQuery, useFlowType } from "~/shared/utils"
+import { appletModel } from '~/entities/applet';
+import { StartAssessmentButton } from '~/features/StartAssessment';
+import { ActivityDTO } from '~/shared/api';
+import { Theme } from '~/shared/constants';
+import { AvatarBase, Text } from '~/shared/ui';
+import { useCustomMediaQuery, useFlowType } from '~/shared/utils';
 
 type Props = {
-  activityDetails: ActivityDTO
-}
+  activityDetails: ActivityDTO;
+};
 
 export const AssessmentWelcomeScreen = (props: Props) => {
-  const { greaterThanSM } = useCustomMediaQuery()
+  const { greaterThanSM } = useCustomMediaQuery();
 
-  const context = useContext(ActivityDetailsContext)
+  const context = useContext(ActivityDetailsContext);
 
-  const flowParams = useFlowType()
+  const flowParams = useFlowType();
 
-  const { setInitialProgress } = appletModel.hooks.useActivityProgress()
+  const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
-  const entityId = flowParams.isFlow ? flowParams.flowId : props.activityDetails.id
+  const entityId = flowParams.isFlow ? flowParams.flowId : props.activityDetails.id;
 
-  const { getGroupProgress } = appletModel.hooks.useGroupProgressState()
+  const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
 
   const startAssessment = () => {
-    return setInitialProgress({ activity: props.activityDetails, eventId: context.eventId })
-  }
+    return setInitialProgress({ activity: props.activityDetails, eventId: context.eventId });
+  };
 
   return (
     <AssessmentLayout
