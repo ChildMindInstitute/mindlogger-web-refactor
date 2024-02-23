@@ -101,4 +101,6 @@ See the documentation on [Vitest](https://vitest.dev/guide/) for more informatio
 
 ## License
 
+Common Public Attribution License Version 1.0 (CPAL-1.0)
+
 Refer to [LICENSE.md](./LICENSE.md)
