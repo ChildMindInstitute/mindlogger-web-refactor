@@ -1,8 +1,8 @@
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
 type SplashScreenItemProps = {
-  imageSrc: string
-}
+  imageSrc: string;
+};
 
 export const SplashScreenItem = ({ imageSrc }: SplashScreenItemProps) => {
   return (
@@ -12,8 +12,9 @@ export const SplashScreenItem = ({ imageSrc }: SplashScreenItemProps) => {
       alignItems="center"
       width="90%"
       margin="auto"
-      data-testid="splash-screen-item">
-      <img src={imageSrc} style={{ maxWidth: "100%" }} />
+      data-testid="splash-screen-item"
+    >
+      <img src={imageSrc} style={{ maxWidth: '100%' }} />
     </Box>
-  )
-}
+  );
+};

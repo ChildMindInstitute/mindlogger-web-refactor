@@ -1,50 +1,50 @@
-import React, { HTMLInputTypeAttribute } from "react"
+import React, { HTMLInputTypeAttribute } from 'react';
 
-import FormControl from "@mui/material/FormControl"
-import FormHelperText from "@mui/material/FormHelperText"
-import InputAdornment from "@mui/material/InputAdornment"
-import InputLabel from "@mui/material/InputLabel"
-import OutlinedInput from "@mui/material/OutlinedInput"
-import { useController, useFormContext } from "react-hook-form"
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import { useController, useFormContext } from 'react-hook-form';
 
-import { Theme } from "../../constants"
-import { useCustomTranslation } from "../../utils"
+import { Theme } from '../../constants';
+import { useCustomTranslation } from '../../utils';
 
 interface IInputCommonProps {
-  id: string
-  type: HTMLInputTypeAttribute
-  autoComplete?: string
+  id: string;
+  type: HTMLInputTypeAttribute;
+  autoComplete?: string;
 
-  name: string
-  placeholder?: string
-  onChange?: (e: string | number) => void
-  className?: string
+  name: string;
+  placeholder?: string;
+  onChange?: (e: string | number) => void;
+  className?: string;
 
-  Icon?: JSX.Element
+  Icon?: JSX.Element;
 }
 
 const Input = (props: IInputCommonProps) => {
-  const { type, name, placeholder, onChange, className, Icon, id } = props
-  const { t } = useCustomTranslation()
+  const { type, name, placeholder, onChange, className, Icon, id } = props;
+  const { t } = useCustomTranslation();
 
-  const { control } = useFormContext()
+  const { control } = useFormContext();
   const {
     field: { onChange: onFormChange, value },
     fieldState: { error },
-  } = useController({ name, control })
+  } = useController({ name, control });
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
+    const { value } = event.target;
 
     if (onChange) {
-      onChange(value)
+      onChange(value);
     }
 
-    onFormChange(value)
-  }
+    onFormChange(value);
+  };
 
   return (
-    <FormControl error={!!error} sx={{ width: "100%", fontFamily: "Atkinson" }} variant="outlined">
+    <FormControl error={!!error} sx={{ width: '100%', fontFamily: 'Atkinson' }} variant="outlined">
       <InputLabel htmlFor={id}>{placeholder}</InputLabel>
       <OutlinedInput
         id={id}
@@ -61,7 +61,7 @@ const Input = (props: IInputCommonProps) => {
       />
       {error?.message && <FormHelperText id={id}>{t(error.message)}</FormHelperText>}
     </FormControl>
-  )
-}
+  );
+};
 
-export default Input
+export default Input;

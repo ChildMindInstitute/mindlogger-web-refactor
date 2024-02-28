@@ -1,3 +1,3 @@
-export const decryptBASE64 = (value = "") => {
-  return window.atob(value)
-}
+export const decryptBASE64 = (value = '') => {
+  return window.atob(value);
+};

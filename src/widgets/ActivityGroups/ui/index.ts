@@ -1,1 +1,1 @@
-export * from "./ActivityGroups"
+export * from './ActivityGroups';

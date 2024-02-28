@@ -1,159 +1,160 @@
-import { Activity, ActivityFlow, EventEntity } from "./activityGroups.types"
-import { GroupUtility, GroupsBuildContext } from "./GroupUtility"
-import { ActivityListItem, ActivityStatus, ActivityType } from "./types"
+import { Activity, ActivityFlow, EventEntity } from './activityGroups.types';
+import { GroupUtility, GroupsBuildContext } from './GroupUtility';
+import { ActivityListItem, ActivityStatus, ActivityType } from './types';
 
-import { ActivityPipelineType, FlowProgress } from "~/abstract/lib"
-import { AvailabilityLabelType } from "~/entities/event"
-import { MIDNIGHT_DATE } from "~/shared/constants"
+import { ActivityPipelineType, FlowProgress } from '~/abstract/lib';
+import { AvailabilityLabelType } from '~/entities/event';
+import { MIDNIGHT_DATE } from '~/shared/constants';
 
 export class ListItemsFactory {
-  private utility: GroupUtility
+  private utility: GroupUtility;
 
   constructor(inputParams: GroupsBuildContext) {
-    this.utility = new GroupUtility(inputParams)
+    this.utility = new GroupUtility(inputParams);
   }
 
   private populateActivityFlowFields(item: ActivityListItem, activityEvent: EventEntity) {
-    const activityFlow = activityEvent.entity as ActivityFlow
+    const activityFlow = activityEvent.entity as ActivityFlow;
 
-    item.isInActivityFlow = true
+    item.isInActivityFlow = true;
     item.activityFlowDetails = {
       showActivityFlowBadge: !activityFlow.hideBadge,
       activityFlowName: activityFlow.name,
       numberOfActivitiesInFlow: activityFlow.activityIds.length,
       activityPositionInFlow: 0,
-    }
+    };
 
-    const isInProgress = this.utility.isInProgress(activityEvent)
+    const isInProgress = this.utility.isInProgress(activityEvent);
 
-    let activity: Activity, position: number
+    let activity: Activity, position: number;
 
     if (isInProgress) {
-      const progressRecord = this.utility.getProgressRecord(activityEvent) as FlowProgress
+      const progressRecord = this.utility.getProgressRecord(activityEvent) as FlowProgress;
 
-      activity = this.utility.activities.find(x => x.id === progressRecord.currentActivityId)!
-      position = progressRecord.pipelineActivityOrder + 1
+      activity = this.utility.activities.find((x) => x.id === progressRecord.currentActivityId)!;
+      position = progressRecord.pipelineActivityOrder + 1;
     } else {
-      activity = this.utility.activities.find(x => x.id === activityFlow.activityIds[0])!
-      position = 1
+      activity = this.utility.activities.find((x) => x.id === activityFlow.activityIds[0])!;
+      position = 1;
     }
 
-    item.activityId = activity.id
-    item.activityFlowDetails.activityPositionInFlow = position
-    item.name = activity.name
-    item.description = activity.description
-    item.type = activity.type
-    item.image = activity.image
+    item.activityId = activity.id;
+    item.activityFlowDetails.activityPositionInFlow = position;
+    item.name = activity.name;
+    item.description = activity.description;
+    item.type = activity.type;
+    item.image = activity.image;
   }
 
   private createListItem(eventActivity: EventEntity) {
-    const { entity, event } = eventActivity
-    const { pipelineType } = eventActivity.entity
-    const isFlow = pipelineType === ActivityPipelineType.Flow
+    const { entity, event } = eventActivity;
+    const { pipelineType } = eventActivity.entity;
+    const isFlow = pipelineType === ActivityPipelineType.Flow;
 
     const item: ActivityListItem = {
-      activityId: isFlow ? "" : entity.id,
+      activityId: isFlow ? '' : entity.id,
       flowId: isFlow ? entity.id : null,
       eventId: event.id,
-      name: isFlow ? "" : entity.name,
-      description: isFlow ? "" : entity.description,
+      name: isFlow ? '' : entity.name,
+      description: isFlow ? '' : entity.description,
       type: isFlow ? ActivityType.NotDefined : (entity as Activity).type,
       entityAvailabilityType: event.availability.availabilityType,
-      isAlwaysAvailable: event.availability.availabilityType === AvailabilityLabelType.AlwaysAvailable,
+      isAlwaysAvailable:
+        event.availability.availabilityType === AvailabilityLabelType.AlwaysAvailable,
       image: isFlow ? null : entity.image,
       status: ActivityStatus.NotDefined,
       isTimerSet: false,
       isTimerElapsed: false,
       timeLeftToComplete: null,
       isInActivityFlow: false,
-    }
+    };
 
     if (isFlow) {
-      this.populateActivityFlowFields(item, eventActivity)
+      this.populateActivityFlowFields(item, eventActivity);
     }
-    return item
+    return item;
   }
 
   public createAvailableItem(eventActivity: EventEntity): ActivityListItem {
-    const item = this.createListItem(eventActivity)
+    const item = this.createListItem(eventActivity);
 
-    item.status = ActivityStatus.Available
+    item.status = ActivityStatus.Available;
 
-    const { event } = eventActivity
+    const { event } = eventActivity;
 
     if (event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess) {
-      const isSpread = this.utility.isSpreadToNextDay(event)
+      const isSpread = this.utility.isSpreadToNextDay(event);
 
-      const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday()
-      to.setHours(event.availability.timeTo!.hours)
-      to.setMinutes(event.availability.timeTo!.minutes)
-      item.availableTo = to
+      const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday();
+      to.setHours(event.availability.timeTo!.hours);
+      to.setMinutes(event.availability.timeTo!.minutes);
+      item.availableTo = to;
     } else {
-      item.availableTo = MIDNIGHT_DATE
+      item.availableTo = MIDNIGHT_DATE;
     }
 
-    const timeLeftToComplete = event.timers?.timer
-    item.isTimerSet = !!timeLeftToComplete
+    const timeLeftToComplete = event.timers?.timer;
+    item.isTimerSet = !!timeLeftToComplete;
 
     if (item.isTimerSet) {
-      item.timeLeftToComplete = timeLeftToComplete
+      item.timeLeftToComplete = timeLeftToComplete;
     }
 
-    return item
+    return item;
   }
 
   public createScheduledItem(eventActivity: EventEntity): ActivityListItem {
-    const item = this.createListItem(eventActivity)
+    const item = this.createListItem(eventActivity);
 
-    item.status = ActivityStatus.Scheduled
+    item.status = ActivityStatus.Scheduled;
 
-    const { event } = eventActivity
+    const { event } = eventActivity;
 
-    const from = this.utility.getNow()
-    from.setHours(event.availability.timeFrom!.hours)
-    from.setMinutes(event.availability.timeFrom!.minutes)
+    const from = this.utility.getNow();
+    from.setHours(event.availability.timeFrom!.hours);
+    from.setMinutes(event.availability.timeFrom!.minutes);
 
-    const isSpread = this.utility.isSpreadToNextDay(event)
+    const isSpread = this.utility.isSpreadToNextDay(event);
 
-    const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday()
-    to.setHours(event.availability.timeTo!.hours)
-    to.setMinutes(event.availability.timeTo!.minutes)
+    const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday();
+    to.setHours(event.availability.timeTo!.hours);
+    to.setMinutes(event.availability.timeTo!.minutes);
 
-    item.availableFrom = from
-    item.availableTo = to
+    item.availableFrom = from;
+    item.availableTo = to;
 
-    return item
+    return item;
   }
 
   public createProgressItem(eventActivity: EventEntity): ActivityListItem {
-    const item = this.createListItem(eventActivity)
+    const item = this.createListItem(eventActivity);
 
-    item.status = ActivityStatus.InProgress
+    item.status = ActivityStatus.InProgress;
 
-    const { event } = eventActivity
+    const { event } = eventActivity;
 
     if (event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess) {
-      const isSpread = this.utility.isSpreadToNextDay(event)
+      const isSpread = this.utility.isSpreadToNextDay(event);
 
-      const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday()
-      to.setHours(event.availability.timeTo!.hours)
-      to.setMinutes(event.availability.timeTo!.minutes)
-      item.availableTo = to
+      const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday();
+      to.setHours(event.availability.timeTo!.hours);
+      to.setMinutes(event.availability.timeTo!.minutes);
+      item.availableTo = to;
     } else {
-      item.availableTo = MIDNIGHT_DATE
+      item.availableTo = MIDNIGHT_DATE;
     }
 
-    item.isTimerSet = !!event.timers?.timer
+    item.isTimerSet = !!event.timers?.timer;
 
     if (item.isTimerSet) {
-      const timeLeft = this.utility.getTimeToComplete(eventActivity)
-      item.timeLeftToComplete = timeLeft
+      const timeLeft = this.utility.getTimeToComplete(eventActivity);
+      item.timeLeftToComplete = timeLeft;
 
       if (timeLeft === null) {
-        item.isTimerElapsed = true
+        item.isTimerElapsed = true;
       }
     }
 
-    return item
+    return item;
   }
 }

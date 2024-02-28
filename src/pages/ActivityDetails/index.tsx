@@ -1,15 +1,15 @@
-import Box from "@mui/material/Box"
-import { useParams } from "react-router-dom"
+import Box from '@mui/material/Box';
+import { useParams } from 'react-router-dom';
 
-import { useCustomTranslation } from "~/shared/utils"
-import { ActivityDetailsContext, ActivityDetailsWidget } from "~/widgets/ActivityDetails"
+import { useCustomTranslation } from '~/shared/utils';
+import { ActivityDetailsContext, ActivityDetailsWidget } from '~/widgets/ActivityDetails';
 
 function ActivityDetailsPage() {
-  const { appletId, activityId, eventId } = useParams()
-  const { t } = useCustomTranslation()
+  const { appletId, activityId, eventId } = useParams();
+  const { t } = useCustomTranslation();
 
   if (!appletId || !activityId || !eventId) {
-    return <div>{t("wrondLinkParametrError")}</div>
+    return <div>{t('wrondLinkParametrError')}</div>;
   }
 
   return (
@@ -18,7 +18,7 @@ function ActivityDetailsPage() {
         <ActivityDetailsWidget />
       </ActivityDetailsContext.Provider>
     </Box>
-  )
+  );
 }
 
-export default ActivityDetailsPage
+export default ActivityDetailsPage;

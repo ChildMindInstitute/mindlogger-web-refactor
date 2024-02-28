@@ -1,28 +1,37 @@
-import Box from "@mui/material/Box"
-import Dialog from "@mui/material/Dialog"
-import DialogActions from "@mui/material/DialogActions"
-import DialogContent from "@mui/material/DialogContent"
-import DialogTitle from "@mui/material/DialogTitle"
-import Typography from "@mui/material/Typography"
+import CloseIcon from '@mui/icons-material/Close';
+import { Breakpoint } from '@mui/material';
+import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { SxProps } from '@mui/material/styles';
+import Typography, { TypographyProps } from '@mui/material/Typography';
 
-import { BaseButton } from "../BaseButton"
+import { BaseButton } from '../BaseButton';
 
-import { Theme } from "~/shared/constants"
+import { Theme } from '~/shared/constants';
 
 type Props = {
-  isOpen: boolean
-  onHide: () => void
-  title?: string | null
-  label?: string | null
-  footerPrimaryButton?: string | null
-  primaryButtonDisabled?: boolean
-  isPrimaryButtonLoading?: boolean
-  onPrimaryButtonClick?: () => void
-  footerSecondaryButton?: string | null
-  secondaryButtonDisabled?: boolean
-  onSecondaryButtonClick?: () => void
-  isSecondaryButtonLoading?: boolean
-}
+  isOpen: boolean;
+  onHide: () => void;
+  title?: string | null;
+  label?: string | null;
+  footerPrimaryButton?: string | null;
+  primaryButtonDisabled?: boolean;
+  isPrimaryButtonLoading?: boolean;
+  onPrimaryButtonClick?: () => void;
+  footerSecondaryButton?: string | null;
+  secondaryButtonDisabled?: boolean;
+  onSecondaryButtonClick?: () => void;
+  isSecondaryButtonLoading?: boolean;
+  testId?: string;
+  showCloseIcon?: boolean;
+  titleProps?: TypographyProps;
+  labelComponent?: JSX.Element;
+  footerWrapperSXProps?: SxProps;
+  maxWidth?: Breakpoint;
+};
 
 export const MuiModal = (props: Props) => {
   const {
@@ -38,31 +47,52 @@ export const MuiModal = (props: Props) => {
 
     footerSecondaryButton,
     onSecondaryButtonClick,
-  } = props
+    testId,
+    showCloseIcon,
+    titleProps,
+    labelComponent,
+    footerWrapperSXProps,
+    maxWidth = 'xs',
+  } = props;
 
   return (
     <Dialog
+      data-testid={testId}
       open={isOpen}
       onClose={onHide}
-      maxWidth="xs"
+      maxWidth={maxWidth}
       fullWidth
       aria-labelledby="customized-dialog-title"
       sx={{
-        "& .MuiPaper-root": {
-          borderRadius: "16px",
-          padding: "24px",
+        '& .MuiPaper-root': {
+          borderRadius: '16px',
+          padding: '24px',
+          backgroundColor: Theme.colors.light.surface2,
         },
-        "& .MuiDialogTitle-root": {
-          padding: "0",
+        '& .MuiDialogTitle-root': {
+          padding: '0',
         },
-        "& .MuiDialogContent-root": {
-          padding: "0",
+        '& .MuiDialogContent-root': {
+          padding: '0',
         },
-        "& .MuiDialogActions-root": {
-          justifyContent: "center",
-          paddingTop: "24px",
+        '& .MuiDialogActions-root': {
+          justifyContent: 'center',
+          paddingTop: '24px',
         },
-      }}>
+      }}
+    >
+      {showCloseIcon && (
+        <CloseIcon
+          onClick={onHide}
+          data-testid="customized-dialog-close-icon"
+          sx={{
+            color: Theme.colors.light.onSurfaceVariant,
+            marginLeft: 'auto',
+            cursor: 'pointer',
+          }}
+        />
+      )}
+
       {title && (
         <DialogTitle id="customized-dialog-title">
           <Typography
@@ -74,7 +104,9 @@ export const MuiModal = (props: Props) => {
             letterSpacing="0.1px"
             textTransform="none"
             paddingBottom="8px"
-            color={Theme.colors.light.onSurface}>
+            color={Theme.colors.light.onSurface}
+            {...titleProps}
+          >
             {title}
           </Typography>
         </DialogTitle>
@@ -89,13 +121,16 @@ export const MuiModal = (props: Props) => {
             lineHeight="24px"
             letterSpacing="0.15px"
             textTransform="none"
-            color={Theme.colors.light.onSurface}>
+            color={Theme.colors.light.onSurface}
+          >
             {label}
           </Typography>
         </DialogContent>
       )}
+
+      {labelComponent && <DialogContent>{labelComponent}</DialogContent>}
       {(footerPrimaryButton || footerSecondaryButton) && (
-        <DialogActions>
+        <DialogActions sx={{ ...footerWrapperSXProps }}>
           {footerSecondaryButton && (
             <Box width="120px" data-testid="assessment-back-button">
               <BaseButton
@@ -105,10 +140,11 @@ export const MuiModal = (props: Props) => {
                 text={footerSecondaryButton}
                 borderColor={Theme.colors.light.outline}
                 sx={{
-                  "&:hover": {
-                    border: "none",
+                  '&:hover': {
+                    border: 'none',
                   },
-                }}>
+                }}
+              >
                 <Typography
                   fontFamily="Atkinson"
                   fontSize="14px"
@@ -117,7 +153,8 @@ export const MuiModal = (props: Props) => {
                   lineHeight="20px"
                   letterSpacing="0.1px"
                   textTransform="none"
-                  color={Theme.colors.light.primary}>
+                  color={Theme.colors.light.primary}
+                >
                   {footerSecondaryButton}
                 </Typography>
               </BaseButton>
@@ -125,7 +162,7 @@ export const MuiModal = (props: Props) => {
           )}
 
           {footerPrimaryButton && (
-            <Box width="120px" data-testid="popup-primary-button">
+            <Box minWidth="120px" data-testid="popup-primary-button">
               <BaseButton
                 type="button"
                 variant="contained"
@@ -138,5 +175,5 @@ export const MuiModal = (props: Props) => {
         </DialogActions>
       )}
     </Dialog>
-  )
-}
+  );
+};

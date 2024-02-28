@@ -1,33 +1,34 @@
-import { PropsWithChildren, forwardRef } from "react"
+import { PropsWithChildren, forwardRef } from 'react';
 
-import { SxProps } from "@mui/material"
-import Button from "@mui/material/Button"
-import CircularProgress from "@mui/material/CircularProgress"
-import Typography from "@mui/material/Typography"
+import { SxProps } from '@mui/material';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
 
-import { Theme } from "../../constants"
+import { Theme } from '../../constants';
 
 type Props = PropsWithChildren<{
-  type: "button" | "submit"
-  isLoading?: boolean
-  variant: "text" | "contained" | "outlined"
-  borderColor?: string
+  type: 'button' | 'submit';
+  isLoading?: boolean;
+  disabled?: boolean;
+  variant: 'text' | 'contained' | 'outlined';
+  borderColor?: string;
 
-  text?: string | null
-  onClick?: () => void
-  color?: "primary" | "secondary" | "error" | "info" | "success" | "warning"
+  text?: string | null;
+  onClick?: () => void;
+  color?: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning';
 
-  sx?: SxProps
-}>
+  sx?: SxProps;
+}>;
 
 type ButtonTextComponentProps = {
-  text?: string | null
-  textComponent?: React.ReactNode
-}
+  text?: string | null;
+  textComponent?: React.ReactNode;
+};
 
 const ButtonTextComponent = (props: ButtonTextComponentProps): JSX.Element => {
   if (props.textComponent) {
-    return <>{props.textComponent}</>
+    return <>{props.textComponent}</>;
   }
 
   return (
@@ -38,11 +39,12 @@ const ButtonTextComponent = (props: ButtonTextComponentProps): JSX.Element => {
       fontStyle="normal"
       lineHeight="20px"
       letterSpacing="0.1px"
-      textTransform="none">
+      textTransform="none"
+    >
       {props.text}
     </Typography>
-  )
-}
+  );
+};
 
 export const BaseButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
   return (
@@ -50,26 +52,27 @@ export const BaseButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
       ref={ref}
       type={props.type}
       variant={props.variant}
-      disabled={props.isLoading}
+      disabled={props.isLoading || props.disabled}
       onClick={props.onClick}
       color={props.color ?? undefined}
       sx={{
-        borderRadius: "100px",
-        maxWidth: "400px",
-        width: "100%",
-        padding: "10px 24px",
-        height: "48px",
+        borderRadius: '100px',
+        maxWidth: '400px',
+        width: '100%',
+        padding: '10px 24px',
+        height: '48px',
         borderColor: props.borderColor ?? undefined,
-        "&:hover": {
+        '&:hover': {
           border: `1px solid ${props.borderColor}`,
         },
         ...props.sx,
-      }}>
+      }}
+    >
       {props.isLoading ? (
         <CircularProgress size={25} sx={{ color: Theme.colors.light.primary }} />
       ) : (
         <ButtonTextComponent text={props.text} textComponent={props.children} />
       )}
     </Button>
-  )
-})
+  );
+});

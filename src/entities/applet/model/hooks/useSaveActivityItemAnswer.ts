@@ -1,16 +1,16 @@
-import { useCallback } from "react"
+import { useCallback } from 'react';
 
-import { actions } from "../slice"
+import { actions } from '../slice';
 
-import { useAppDispatch } from "~/shared/utils"
+import { useAppDispatch } from '~/shared/utils';
 
 type Props = {
-  activityId: string
-  eventId: string
-}
+  activityId: string;
+  eventId: string;
+};
 
 export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const saveItemAnswer = useCallback(
     (itemId: string, answer: string[]) => {
@@ -21,10 +21,10 @@ export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
           itemId,
           answer,
         }),
-      )
+      );
     },
     [dispatch, activityId, eventId],
-  )
+  );
 
   const saveItemAdditionalText = useCallback(
     (itemId: string, additionalText: string) => {
@@ -35,13 +35,21 @@ export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
           itemId,
           additionalText,
         }),
-      )
+      );
     },
     [dispatch, activityId, eventId],
-  )
+  );
+
+  const removeItemAnswer = useCallback(
+    (itemId: string) => {
+      saveItemAnswer(itemId, []);
+    },
+    [saveItemAnswer],
+  );
 
   return {
     saveItemAnswer,
     saveItemAdditionalText,
-  }
-}
+    removeItemAnswer,
+  };
+};

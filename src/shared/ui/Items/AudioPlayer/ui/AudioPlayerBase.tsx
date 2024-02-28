@@ -1,52 +1,63 @@
-import { useRef } from "react"
+import { useEffect, useRef, useState } from 'react';
 
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
-import { AudioPlayerControls } from "./AudioPlayerControls"
-import { AudioPlayerDuration } from "./AudioPlayerDuration"
-import { AudioPlayerVolume } from "./AudioPlayerVolume"
-import { AudioPlayerProgressBar } from "./AudipPlayerProgressBar"
-import { useAudioControls, useAudioDuration, useAudioVolume } from "../lib"
+import { AudioPlayerControls } from './AudioPlayerControls';
+import { AudioPlayerDuration } from './AudioPlayerDuration';
+import { AudioPlayerVolume } from './AudioPlayerVolume';
+import { AudioPlayerProgressBar } from './AudipPlayerProgressBar';
+import { useAudioControls, useAudioDuration, useAudioVolume } from '../lib';
 
-import { useCustomMediaQuery } from "~/shared/utils"
+import { useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {
-  src: string
-  playOnce?: boolean
+  src: string;
+  playOnce?: boolean;
+  onFinish: () => void;
 
-  onHandlePlay?: () => void
-  onHandlePause?: () => void
-  onHandleEnded?: () => void
-}
+  onHandlePlay?: () => void;
+  onHandlePause?: () => void;
+  onHandleEnded?: () => void;
+};
 
-export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
-  const audioRef = useRef<HTMLAudioElement>(null)
+export const AudioPlayerItemBase = ({ src, playOnce, onFinish }: Props) => {
+  const [hasFinishedAtLeastOnce, setHasFinishedAtLeastOnce] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
-  const mediaQuery = useCustomMediaQuery()
+  const mediaQuery = useCustomMediaQuery();
 
-  const { isPlaying, play, pause } = useAudioControls({ audioRef })
+  const { isPlaying, play, pause } = useAudioControls({ audioRef });
 
-  const { totalDuration, currentDuration, updateCurrentDuration, setCurrentDuration, progress } = useAudioDuration({
-    audioRef,
-  })
+  const { totalDuration, currentDuration, updateCurrentDuration, setCurrentDuration, progress } =
+    useAudioDuration({
+      audioRef,
+    });
 
-  const { isMuted, mute, unmute, volume, volumeChange } = useAudioVolume({ audioRef })
+  const { isMuted, mute, unmute, volume, volumeChange } = useAudioVolume({ audioRef });
 
   const onHandlePause = () => {
     if (playOnce && isPlaying) {
-      return
+      return;
     }
 
-    return pause()
-  }
+    return pause();
+  };
 
   const onHandleDurationChange = (progress: number) => {
     if (playOnce) {
-      return
+      return;
     }
 
-    return setCurrentDuration(progress)
-  }
+    return setCurrentDuration(progress);
+  };
+
+  useEffect(() => {
+    if (progress === 100) {
+      pause();
+      setHasFinishedAtLeastOnce(true);
+      onFinish();
+    }
+  }, [pause, progress, onFinish]);
 
   return (
     <Box data-testid="audio-player-wrap">
@@ -62,7 +73,12 @@ export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
         display="flex"
         alignItems="center"
         gap={mediaQuery.lessThanSM ? 0.5 : 1}
-        sx={{ padding: mediaQuery.lessThanSM ? "6px 12px" : "12px", borderRadius: "50px", backgroundColor: "#F0F3F4" }}>
+        sx={{
+          padding: mediaQuery.lessThanSM ? '6px 12px' : '12px',
+          borderRadius: '50px',
+          backgroundColor: '#F0F3F4',
+        }}
+      >
         <AudioPlayerControls
           isPlaying={isPlaying}
           onClick={isPlaying ? onHandlePause : play}
@@ -72,7 +88,7 @@ export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
         <AudioPlayerProgressBar
           progress={progress}
           onProgressBarClick={onHandleDurationChange}
-          isDisabled={playOnce && isPlaying}
+          isDisabled={(playOnce && isPlaying) || !hasFinishedAtLeastOnce}
         />
         <AudioPlayerVolume
           isMuted={isMuted}
@@ -83,5 +99,5 @@ export const AudioPlayerItemBase = ({ src, playOnce }: Props) => {
         />
       </Box>
     </Box>
-  )
-}
+  );
+};

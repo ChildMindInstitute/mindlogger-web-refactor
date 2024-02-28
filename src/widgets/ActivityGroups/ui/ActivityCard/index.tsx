@@ -1,120 +1,160 @@
-import { useContext } from "react"
+import { useContext } from 'react';
 
-import Box from "@mui/material/Box"
+import Box from '@mui/material/Box';
 
-import { ActivityCardBase } from "./ActivityCardBase"
-import { ActivityCardDescription } from "./ActivityCardDescription"
-import { ActivityCardIcon } from "./ActivityCardIcon"
-import { ActivityCardProgressBar } from "./ActivityCardProgressBar"
-import { ActivityCardTitle } from "./ActivityCardTitle"
-import { ActivityLabel } from "./ActivityLabel"
-import TimeStatusLabel from "./TimeStatusLabel"
-import { AppletDetailsContext } from "../../lib"
-import { useEntityCardDetails } from "../../model/hooks"
-import { useStartEntity } from "../../model/hooks/useStartEntity"
+import { ActivityCardBase } from './ActivityCardBase';
+import { ActivityCardDescription } from './ActivityCardDescription';
+import { ActivityCardIcon } from './ActivityCardIcon';
+import { ActivityCardProgressBar } from './ActivityCardProgressBar';
+import { ActivityCardRestartResume } from './ActivityCardRestartResume';
+import { ActivityCardTitle } from './ActivityCardTitle';
+import { ActivityLabel } from './ActivityLabel';
+import TimeStatusLabel from './TimeStatusLabel';
+import { AppletDetailsContext } from '../../lib';
+import { useEntityCardDetails } from '../../model/hooks';
+import { useStartEntity } from '../../model/hooks/useStartEntity';
 
-import { getProgressId, openStoreLink } from "~/abstract/lib"
-import { ActivityListItem } from "~/abstract/lib/GroupBuilder"
-import { useActivityByIdMutation } from "~/entities/activity"
-import { appletModel } from "~/entities/applet"
-import Loader from "~/shared/ui/Loader"
-import { useAppSelector, useCustomMediaQuery } from "~/shared/utils"
+import { getProgressId, openStoreLink } from '~/abstract/lib';
+import { ActivityListItem } from '~/abstract/lib/GroupBuilder';
+import { useActivityByIdMutation } from '~/entities/activity';
+import { appletModel } from '~/entities/applet';
+import Loader from '~/shared/ui/Loader';
+import {
+  MixEvents,
+  MixProperties,
+  Mixpanel,
+  useAppSelector,
+  useCustomMediaQuery,
+} from '~/shared/utils';
 
 type Props = {
-  activityListItem: ActivityListItem
-}
+  activityListItem: ActivityListItem;
+};
 
 export const ActivityCard = ({ activityListItem }: Props) => {
-  const { lessThanSM } = useCustomMediaQuery()
+  const { lessThanSM } = useCustomMediaQuery();
 
-  const context = useContext(AppletDetailsContext)
+  const context = useContext(AppletDetailsContext);
 
-  const { title, image, description, isFlow, showActivityFlowBudget, isDisabled, isInProgress, isEntitySupported } =
-    useEntityCardDetails({
-      activityListItem,
-      applet: context.applet,
-    })
+  const {
+    title,
+    image,
+    description,
+    isFlow,
+    showActivityFlowBudget,
+    isDisabled,
+    isInProgress,
+    isEntitySupported,
+  } = useEntityCardDetails({
+    activityListItem,
+    applet: context.applet,
+  });
 
-  const activityEventId = getProgressId(activityListItem.activityId, activityListItem.eventId)
+  const activityEventId = getProgressId(activityListItem.activityId, activityListItem.eventId);
 
-  const activityProgress = useAppSelector(state => appletModel.selectors.selectActivityProgress(state, activityEventId))
+  const activityProgress = useAppSelector((state) =>
+    appletModel.selectors.selectActivityProgress(state, activityEventId),
+  );
 
-  const step = activityProgress?.step || 0
+  const step = activityProgress?.step || 0;
 
-  const items = activityProgress?.items || []
+  const items = activityProgress?.items || [];
 
-  const progress = ((step + 1) / items.length) * 100
+  const progress = ((step + 1) / items.length) * 100;
 
-  const countOfCompletedQuestions = items.filter(item => item.answer.length).length || 0
+  const countOfCompletedQuestions = items.filter((item) => item.answer.length).length || 0;
 
-  const numberOfActivitiesInFlow = activityListItem.activityFlowDetails?.numberOfActivitiesInFlow || 0
+  const numberOfActivitiesInFlow =
+    activityListItem.activityFlowDetails?.numberOfActivitiesInFlow || 0;
 
   const { startActivityOrFlow } = useStartEntity({
     applet: context.applet,
     isPublic: context.isPublic,
     publicAppletKey: context.isPublic ? context.publicAppletKey : null,
-  })
+  });
 
-  const { mutate: getActivityById, isLoading } = useActivityByIdMutation(
-    { isPublic: context.isPublic },
-    {
-      onSuccess(data) {
-        const activity = data.data.result
+  const { mutate: getActivityById, isLoading } = useActivityByIdMutation({
+    isPublic: context.isPublic,
+  });
 
-        if (!activity) {
-          throw new Error("[useActivityByIdMutation]: Activity not found")
-        }
-
-        return startActivityOrFlow({
-          activity,
-          eventId: activityListItem.eventId,
-          status: activityListItem.status,
-          flowId: activityListItem.flowId,
-        })
-      },
-    },
-  )
-
-  const getCompletedActivitiesFromPosition = (position: number) => position - 1
+  const getCompletedActivitiesFromPosition = (position: number) => position - 1;
 
   const countOfCompletedActivities = getCompletedActivitiesFromPosition(
     activityListItem.activityFlowDetails?.activityPositionInFlow || 0,
-  )
+  );
 
-  const activityLength = context.applet?.activities.find(act => act.id === activityListItem.activityId)?.itemCount
+  const activityLength = context.applet?.activities.find(
+    (act) => act.id === activityListItem.activityId,
+  )?.itemCount;
 
-  const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100
+  const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100;
 
-  function onActivityCardClickHandler() {
-    if (isDisabled || !activityListItem) return
+  function onStartActivity(shouldRestart: boolean) {
+    if (isDisabled || !activityListItem) return;
 
     if (!isEntitySupported) {
-      return openStoreLink()
+      return openStoreLink();
     }
 
-    return getActivityById({ activityId: activityListItem.activityId })
+    return getActivityById(
+      { activityId: activityListItem.activityId },
+      {
+        onSuccess(data) {
+          const activity = data.data.result;
+
+          if (!activity) {
+            throw new Error('[useActivityByIdMutation]: Activity not found');
+          }
+
+          return startActivityOrFlow({
+            activity,
+            eventId: activityListItem.eventId,
+            status: activityListItem.status,
+            flowId: activityListItem.flowId,
+            shouldRestart,
+          });
+        },
+      },
+    );
   }
+
+  const restartActivity = () => {
+    onStartActivity(true);
+    Mixpanel.track(MixEvents.ActivityRestarted, { [MixProperties.AppletId]: context.applet.id });
+  };
+  const resumeActivity = () => {
+    onStartActivity(false);
+    Mixpanel.track(MixEvents.ActivityResumed, { [MixProperties.AppletId]: context.applet.id });
+  };
 
   if (isLoading) {
     return (
-      <ActivityCardBase isFlow={isFlow}>
+      <ActivityCardBase isDisabled={isDisabled} isFlow={isFlow}>
         <Loader />
       </ActivityCardBase>
-    )
+    );
   }
 
   return (
-    <ActivityCardBase onClick={onActivityCardClickHandler} isDisabled={isDisabled} isFlow={isFlow}>
+    <ActivityCardBase isDisabled={isDisabled} isFlow={isFlow}>
       <Box
         display="flex"
         flex={1}
-        gap={lessThanSM ? "8px" : "24px"}
-        flexDirection={lessThanSM ? "column" : "row"}
+        gap={lessThanSM ? '8px' : '24px'}
+        flexDirection={lessThanSM ? 'column' : 'row'}
         data-testid="activity-card-content-wrapper"
-        sx={{ textTransform: "none" }}>
+        sx={{ textTransform: 'none' }}
+      >
         <ActivityCardIcon src={image} isFlow={isFlow} />
 
-        <Box display="flex" flex={1} justifyContent="center" alignItems="flex-start" flexDirection="column" gap="8px">
+        <Box
+          display="flex"
+          flex={1}
+          justifyContent="center"
+          alignItems="flex-start"
+          flexDirection="column"
+          gap="8px"
+        >
           <ActivityCardTitle title={title} isFlow={isFlow} />
 
           {isInProgress && (
@@ -138,7 +178,14 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
           {isEntitySupported && <TimeStatusLabel activity={activityListItem} />}
         </Box>
+        <ActivityCardRestartResume
+          activityStatus={activityListItem.status}
+          onRestartClick={restartActivity}
+          onResumeClick={resumeActivity}
+          activityName={title}
+          isDisabled={isDisabled}
+        />
       </Box>
     </ActivityCardBase>
-  )
-}
+  );
+};

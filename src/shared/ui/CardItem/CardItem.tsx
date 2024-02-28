@@ -1,49 +1,52 @@
-import { PropsWithChildren } from "react"
+import { PropsWithChildren } from 'react';
 
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
-import { Theme } from "../../constants"
-import { useCustomMediaQuery, useCustomTranslation } from "../../utils"
+import { Theme } from '../../constants';
+import { useCustomMediaQuery, useCustomTranslation } from '../../utils';
 
-import { Markdown } from "~/shared/ui"
+import { Markdown } from '~/shared/ui';
 
-import "./style.css"
+import './style.css';
 
 interface CardItemProps extends PropsWithChildren {
-  watermark?: string
-  isInvalid?: boolean
-  isOptional?: boolean
-  markdown: string
+  watermark?: string;
+  isInvalid?: boolean;
+  isOptional?: boolean;
+  markdown: string;
+  testId?: string;
 }
 
-export const CardItem = ({ children, markdown, isOptional }: CardItemProps) => {
-  const { greaterThanSM } = useCustomMediaQuery()
+export const CardItem = ({ children, markdown, isOptional, testId }: CardItemProps) => {
+  const { greaterThanSM } = useCustomMediaQuery();
 
-  const { t } = useCustomTranslation()
+  const { t } = useCustomTranslation();
 
   return (
     <Box
-      data-testid={"active-item"}
+      data-testid={testId || 'active-item'}
       display="flex"
       flex={1}
-      padding={greaterThanSM ? "72px 48px" : "36px 16px"}
+      padding={greaterThanSM ? '72px 48px' : '36px 16px'}
       flexDirection="column"
       gap="48px"
-      sx={{ fontFamily: "Atkinson", fontWeight: "400", fontSize: "18px", lineHeight: "28px" }}>
+      sx={{ fontFamily: 'Atkinson', fontWeight: '400', fontSize: '18px', lineHeight: '28px' }}
+    >
       <Box>
         <Markdown markdown={markdown} />
         {isOptional && (
           <Typography
             variant="body1"
             color={Theme.colors.light.outline}
-            data-testid={"optional-item-label"}
-            sx={{ fontFamily: "Atkinson", fontWeight: "400", fontSize: "18px", lineHeight: "28px" }}>
-            {`(${t("optional")})`}
+            data-testid={'optional-item-label'}
+            sx={{ fontFamily: 'Atkinson', fontWeight: '400', fontSize: '18px', lineHeight: '28px' }}
+          >
+            {`(${t('optional')})`}
           </Typography>
         )}
       </Box>
       <Box>{children}</Box>
     </Box>
-  )
-}
+  );
+};

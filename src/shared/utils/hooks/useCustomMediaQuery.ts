@@ -1,21 +1,21 @@
-import { useTheme } from "@mui/material/styles"
-import useMediaQuery from "@mui/material/useMediaQuery"
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export type MediaQueryReturn = {
-  greaterThanXS: boolean
+  greaterThanXS: boolean;
 
-  lessThanSM: boolean
-  greaterThanSM: boolean
+  lessThanSM: boolean;
+  greaterThanSM: boolean;
 
-  lessThanMD: boolean
-  greaterThanMD: boolean
+  lessThanMD: boolean;
+  greaterThanMD: boolean;
 
-  lessThanLG: boolean
-  greaterThanLG: boolean
+  lessThanLG: boolean;
+  greaterThanLG: boolean;
 
-  lessThanXL: boolean
-  greaterThanXL: boolean
-}
+  lessThanXL: boolean;
+  greaterThanXL: boolean;
+};
 
 // Default breakpoints:
 // xs, extra-small: 0px
@@ -25,21 +25,21 @@ export type MediaQueryReturn = {
 // xl, extra-large: 1536px
 
 export const useCustomMediaQuery = (): MediaQueryReturn => {
-  const theme = useTheme()
+  const theme = useTheme();
 
-  const greaterThanXS = useMediaQuery(theme.breakpoints.up("xs"))
+  const greaterThanXS = useMediaQuery(theme.breakpoints.up('xs'));
 
-  const lessThanSM = useMediaQuery(theme.breakpoints.down("sm"))
-  const greaterThanSM = useMediaQuery(theme.breakpoints.up("sm"))
+  const lessThanSM = useMediaQuery(theme.breakpoints.down('sm'));
+  const greaterThanSM = useMediaQuery(theme.breakpoints.up('sm'));
 
-  const lessThanMD = useMediaQuery(theme.breakpoints.down("md"))
-  const greaterThanMD = useMediaQuery(theme.breakpoints.up("md"))
+  const lessThanMD = useMediaQuery(theme.breakpoints.down('md'));
+  const greaterThanMD = useMediaQuery(theme.breakpoints.up('md'));
 
-  const lessThanLG = useMediaQuery(theme.breakpoints.down("lg"))
-  const greaterThanLG = useMediaQuery(theme.breakpoints.up("lg"))
+  const lessThanLG = useMediaQuery(theme.breakpoints.down('lg'));
+  const greaterThanLG = useMediaQuery(theme.breakpoints.up('lg'));
 
-  const lessThanXL = useMediaQuery(theme.breakpoints.down("xl"))
-  const greaterThanXL = useMediaQuery(theme.breakpoints.up("xl"))
+  const lessThanXL = useMediaQuery(theme.breakpoints.down('xl'));
+  const greaterThanXL = useMediaQuery(theme.breakpoints.up('xl'));
 
   return {
     greaterThanXS,
@@ -51,5 +51,5 @@ export const useCustomMediaQuery = (): MediaQueryReturn => {
     greaterThanLG,
     lessThanXL,
     greaterThanXL,
-  }
-}
+  };
+};

@@ -1,22 +1,29 @@
-import Box from "@mui/material/Box"
-import Typography from "@mui/material/Typography"
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
-import { Theme } from "~/shared/constants"
+import { Theme } from '~/shared/constants';
 
 type Props = {
-  title: string
-  isFlow: boolean
-}
+  title: string;
+  isFlow: boolean;
+};
 
 export const ActivityCardTitle = ({ title, isFlow }: Props) => {
   return (
-    <Box data-testid={isFlow ? "flow-card-title" : "activity-card-title"}>
+    <Box data-testid={isFlow ? 'flow-card-title' : 'activity-card-title'}>
       <Typography
         variant="h3"
         color={Theme.colors.light.primary}
-        sx={{ fontSize: "20px", fontFamily: "Atkinson", fontWeight: 700, fontStyle: "normal", lineHeight: "28px" }}>
+        sx={{
+          fontSize: '20px',
+          fontFamily: 'Atkinson',
+          fontWeight: 700,
+          fontStyle: 'normal',
+          lineHeight: '28px',
+        }}
+      >
         {title}
       </Typography>
     </Box>
-  )
-}
+  );
+};
