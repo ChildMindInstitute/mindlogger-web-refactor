@@ -5,4 +5,5 @@ export const MixProperties = {
 export const MixEvents = {
   AppletClick: 'Applet click',
   TransferOwnershipAccepted: 'Transfer Ownership Accepted',
+  AssessmentCompleted: 'Assessment completed',
 };

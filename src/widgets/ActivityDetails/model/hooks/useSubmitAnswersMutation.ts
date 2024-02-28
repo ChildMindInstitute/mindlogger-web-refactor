@@ -1,5 +1,5 @@
 import { usePublicSaveAnswerMutation, useSaveAnswerMutation } from '~/entities/activity';
-import { Mixpanel } from '~/shared/utils';
+import { MixEvents, MixProperties, Mixpanel } from '~/shared/utils';
 
 type Props = {
   isPublic: boolean;
@@ -9,8 +9,10 @@ type Props = {
 
 export const useSubmitAnswersMutations = (props: Props) => {
   const { mutate: submitAnswers, isLoading: submitLoading } = useSaveAnswerMutation({
-    onSuccess() {
-      Mixpanel.track('Assessment completed');
+    onSuccess(_, variables) {
+      Mixpanel.track(MixEvents.AssessmentCompleted, {
+        [MixProperties.AppletId]: variables.appletId,
+      });
 
       return props.onSubmitSuccess();
     },
@@ -18,8 +20,10 @@ export const useSubmitAnswersMutations = (props: Props) => {
 
   const { mutate: submitPublicAnswers, isLoading: publicSubmitLoading } =
     usePublicSaveAnswerMutation({
-      onSuccess() {
-        Mixpanel.track('Assessment completed');
+      onSuccess(_, variables) {
+        Mixpanel.track(MixEvents.AssessmentCompleted, {
+          [MixProperties.AppletId]: variables.appletId,
+        });
 
         return props.onSubmitSuccess();
       },
