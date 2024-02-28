@@ -6,4 +6,5 @@ export const MixEvents = {
   AppletClick: 'Applet click',
   TransferOwnershipAccepted: 'Transfer Ownership Accepted',
   AssessmentCompleted: 'Assessment completed',
+  AssessmentStarted: 'Assessment Started',
 };
