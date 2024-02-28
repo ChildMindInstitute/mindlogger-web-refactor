@@ -12,6 +12,7 @@ export const useSubmitAnswersMutations = (props: Props) => {
     onSuccess(_, variables) {
       Mixpanel.track(MixEvents.AssessmentCompleted, {
         [MixProperties.AppletId]: variables.appletId,
+        [MixProperties.SubmitId]: variables.submitId,
       });
 
       return props.onSubmitSuccess();
@@ -23,6 +24,7 @@ export const useSubmitAnswersMutations = (props: Props) => {
       onSuccess(_, variables) {
         Mixpanel.track(MixEvents.AssessmentCompleted, {
           [MixProperties.AppletId]: variables.appletId,
+          [MixProperties.SubmitId]: variables.submitId,
         });
 
         return props.onSubmitSuccess();
