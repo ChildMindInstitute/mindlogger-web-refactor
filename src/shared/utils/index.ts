@@ -12,6 +12,6 @@ export * from './helpers';
 // Common
 export * from './eventEmitter';
 export * from './dictionary.map';
-export * from './mixpanel';
+export * from './analytics';
 export * from './useTimer';
 export * from './matchPaths';
