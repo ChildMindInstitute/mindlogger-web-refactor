@@ -19,7 +19,13 @@ import { ActivityListItem } from '~/abstract/lib/GroupBuilder';
 import { useActivityByIdMutation } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import Loader from '~/shared/ui/Loader';
-import { Mixpanel, useAppSelector, useCustomMediaQuery } from '~/shared/utils';
+import {
+  MixEvents,
+  MixProperties,
+  Mixpanel,
+  useAppSelector,
+  useCustomMediaQuery,
+} from '~/shared/utils';
 
 type Props = {
   activityListItem: ActivityListItem;
@@ -114,11 +120,11 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
   const restartActivity = () => {
     onStartActivity(true);
-    Mixpanel.track('[Web] Activity Restart Button Pressed');
+    Mixpanel.track(MixEvents.ActivityRestarted, { [MixProperties.AppletId]: context.applet.id });
   };
   const resumeActivity = () => {
     onStartActivity(false);
-    Mixpanel.track('[Web] Activity Resume Button Pressed');
+    Mixpanel.track(MixEvents.ActivityResumed, { [MixProperties.AppletId]: context.applet.id });
   };
 
   if (isLoading) {

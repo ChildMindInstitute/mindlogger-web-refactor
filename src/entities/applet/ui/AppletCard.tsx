@@ -4,7 +4,7 @@ import { AppletListItem } from '../lib';
 
 import { ROUTES } from '~/shared/constants';
 import { CustomCard } from '~/shared/ui';
-import { Mixpanel, useCustomNavigation } from '~/shared/utils';
+import { MixEvents, MixProperties, Mixpanel, useCustomNavigation } from '~/shared/utils';
 
 type Props = {
   applet: AppletListItem;
@@ -14,7 +14,7 @@ export const AppletCard = ({ applet }: Props) => {
   const navigator = useCustomNavigation();
 
   const onAppletCardClick = () => {
-    Mixpanel.track('Applet click');
+    Mixpanel.track(MixEvents.AppletClick, { [MixProperties.AppletId]: applet.id });
     return navigator.navigate(ROUTES.appletDetails.navigateTo(applet.id));
   };
 

@@ -4,13 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { useAcceptPrivateInviteMutation, useInvitationTranslation } from '~/entities/invitation';
 import { ROUTES } from '~/shared/constants';
 import { BaseButton, useNotification } from '~/shared/ui';
-import { Mixpanel } from '~/shared/utils';
+import { MixEvents, MixProperties, Mixpanel } from '~/shared/utils';
 
 interface PrivateJoinAcceptButtonProps {
   invitationKey: string;
+  appletId: string;
 }
 
-export const PrivateJoinAcceptButton = ({ invitationKey }: PrivateJoinAcceptButtonProps) => {
+export const PrivateJoinAcceptButton = ({
+  invitationKey,
+  appletId,
+}: PrivateJoinAcceptButtonProps) => {
   const { t } = useInvitationTranslation();
   const navigate = useNavigate();
   const { showSuccessNotification } = useNotification();
@@ -18,7 +22,7 @@ export const PrivateJoinAcceptButton = ({ invitationKey }: PrivateJoinAcceptButt
   const { mutate: acceptPrivateInvite, isLoading } = useAcceptPrivateInviteMutation({
     onSuccess() {
       showSuccessNotification(t('invitationAccepted'));
-      Mixpanel.track('Invitation Accepted');
+      Mixpanel.track(MixEvents.InvitationAccepted, { [MixProperties.AppletId]: appletId });
       return navigate(ROUTES.appletList.path);
     },
   });
