@@ -1,5 +1,6 @@
 export const MixProperties = {
   AppletId: 'Applet ID',
+  SubmitId: 'Submit ID',
 };
 
 export const MixEvents = {
