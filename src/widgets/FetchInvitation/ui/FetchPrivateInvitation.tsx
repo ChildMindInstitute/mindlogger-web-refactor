@@ -50,9 +50,11 @@ export const FetchPrivateInvitation = ({
     );
   }
 
+  const invitation = data?.data?.result;
+
   return (
     <Invitation
-      invite={data?.data?.result}
+      invite={invitation}
       isUserAuthenticated={isAuthenticated}
       actionComponent={
         <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row">
@@ -65,7 +67,7 @@ export const FetchPrivateInvitation = ({
               margin="16px 0px"
               flexDirection={lessThanSM ? 'column' : 'row'}
             >
-              <PrivateJoinAcceptButton invitationKey={keyParams} />
+              <PrivateJoinAcceptButton invitationKey={keyParams} appletId={invitation.appletId} />
               <PrivateJoinDeclineButton />
             </Box>
           ) : (

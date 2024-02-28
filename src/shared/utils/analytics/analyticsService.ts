@@ -7,4 +7,5 @@ export const MixEvents = {
   TransferOwnershipAccepted: 'Transfer Ownership Accepted',
   AssessmentCompleted: 'Assessment completed',
   AssessmentStarted: 'Assessment Started',
+  InvitationAccepted: 'Invitation Accepted',
 };
