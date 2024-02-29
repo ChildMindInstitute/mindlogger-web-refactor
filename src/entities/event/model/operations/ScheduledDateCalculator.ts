@@ -1,12 +1,4 @@
-import {
-  addDays,
-  differenceInMonths,
-  isEqual,
-  startOfDay,
-  subDays,
-  subMinutes,
-  subMonths,
-} from 'date-fns';
+import { addDays, addMonths, isEqual, startOfDay, subDays, subMinutes, subMonths } from 'date-fns';
 import { Parse, Day } from 'dayspan';
 
 import {
@@ -21,35 +13,48 @@ type EventParseInput = Parameters<typeof Parse.schedule>[0];
 const cache = new Map();
 
 class ScheduledDateCalculator {
-  constructor() {}
   private setTime(target: Date, availability: EventAvailability) {
     if (availability.timeFrom) {
       target.setHours(availability.timeFrom.hours);
       target.setMinutes(availability.timeFrom.minutes);
     }
   }
+
   private getNow() {
     return new Date();
   }
+
   private calculateForMonthly(selectedDate: Date, availability: EventAvailability): Date | null {
     const today = startOfDay(this.getNow());
+
     let date = new Date(selectedDate);
-    const diff = differenceInMonths(date, today);
-    const check = subMonths(date, diff);
-    if (check > today) {
-      date = subMonths(date, diff + 1);
-    } else {
-      date = check;
+
+    if (selectedDate > today) {
+      let months = 0;
+
+      while (date > today) {
+        months++;
+        date = subMonths(selectedDate, months);
+      }
     }
-    const aMonthAgo = subMonths(today, 1);
-    const isBeyondOfDateBorders =
-      date < aMonthAgo || (!!availability.endDate && date > availability.endDate);
-    if (isBeyondOfDateBorders) {
-      return null;
+
+    if (selectedDate < today) {
+      let months = 0;
+
+      while (date < today) {
+        months++;
+        date = addMonths(selectedDate, months);
+      }
+      if (date > today) {
+        date = subMonths(date, 1);
+      }
     }
+
     this.setTime(date, availability);
+
     return date;
   }
+
   private calculateForSpecificDay(specificDay: Date, availability: EventAvailability): Date | null {
     const yesterday = subDays(startOfDay(this.getNow()), 1);
 
@@ -64,6 +69,7 @@ class ScheduledDateCalculator {
     this.setTime(result, availability);
     return result;
   }
+
   private calculateScheduledAt(event: ScheduleEvent): Date | null {
     const { availability, selectedDate } = event;
     const now = this.getNow();
@@ -111,6 +117,7 @@ class ScheduledDateCalculator {
     this.setTime(result, availability);
     return result;
   }
+
   public calculate(event: ScheduleEvent, useCache = true): Date | null {
     if (!useCache) {
       return this.calculateScheduledAt(event);
