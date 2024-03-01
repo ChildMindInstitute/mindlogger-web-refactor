@@ -1,13 +1,8 @@
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
-
 import { useForgotPasswordTranslation } from '../lib/useForgotPasswordTranslation';
 import { ForgotPasswordSchema, TForgotPasswordForm } from '../model/schemas';
 
 import { useRecoveryPasswordMutation } from '~/entities/user';
-import { Theme } from '~/shared/constants';
-import { BasicFormProvider, Container, DisplaySystemMessage, Input } from '~/shared/ui';
+import { BaseButton, BasicFormProvider, Container, DisplaySystemMessage, Input } from '~/shared/ui';
 import { useCustomForm } from '~/shared/utils';
 
 export const ForgotPasswordForm = () => {
@@ -41,28 +36,7 @@ export const ForgotPasswordForm = () => {
 
       <Container sx={{ marginTop: '12px' }}>
         {!isSuccess && (
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={isLoading}
-            sx={{ borderRadius: '100px', maxWidth: '400px', width: '100%', padding: '10px 24px' }}
-          >
-            {isLoading ? (
-              <CircularProgress size={25} sx={{ color: Theme.colors.light.onPrimary }} />
-            ) : (
-              <Typography
-                fontFamily="Atkinson"
-                fontSize="16px"
-                fontWeight={700}
-                fontStyle="normal"
-                lineHeight="20px"
-                letterSpacing="0.1px"
-                textTransform="none"
-              >
-                {t('button')}
-              </Typography>
-            )}
-          </Button>
+          <BaseButton type="submit" variant="contained" text={t('button')} isLoading={isLoading} />
         )}
 
         {isSuccess && (
