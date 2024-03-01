@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 
 import { Theme } from '~/shared/constants';
+import { Text } from '~/shared/ui';
 import { useCustomMediaQuery } from '~/shared/utils';
 
 export default function Footer() {
@@ -37,7 +37,9 @@ export default function Footer() {
           Support
         </a>
         {buildVersion && (
-          <Typography color={Theme.colors.light.outlineVariant}>{buildVersion}</Typography>
+          <Text variant="body1" color={Theme.colors.light.outlineVariant}>
+            {buildVersion}
+          </Text>
         )}
       </Box>
     </Box>
