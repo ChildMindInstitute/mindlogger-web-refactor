@@ -83,36 +83,48 @@ export class ScheduledDateCalculator {
       return this.calculateForSpecificDay(startOfDay(now), availability);
     }
 
-    if (scheduled && availability.periodicityType === PeriodicityType.Once) {
-      return this.calculateForSpecificDay(selectedDate!, availability);
+    if (scheduled && availability.periodicityType === PeriodicityType.Once && selectedDate) {
+      return this.calculateForSpecificDay(selectedDate, availability);
     }
 
-    if (availability.periodicityType === PeriodicityType.Monthly) {
-      return this.calculateForMonthly(selectedDate!, availability);
+    if (availability.periodicityType === PeriodicityType.Monthly && selectedDate) {
+      return this.calculateForMonthly(selectedDate, availability);
     }
 
     const parseInput: EventParseInput = {};
-    if (availability.periodicityType === PeriodicityType.Weekly) {
-      const dayOfWeek = selectedDate!.getDay();
+    if (availability.periodicityType === PeriodicityType.Weekly && selectedDate) {
+      const dayOfWeek = selectedDate.getDay();
       parseInput.dayOfWeek = [dayOfWeek];
     } else if (availability.periodicityType === PeriodicityType.Weekdays) {
       parseInput.dayOfWeek = [1, 2, 3, 4, 5];
     }
+
     if (availability.startDate) {
       parseInput.start = availability.startDate.getTime();
     }
+
     if (availability.endDate) {
       let endOfDay = addDays(availability.endDate, 1);
       endOfDay = subMinutes(endOfDay, 1);
       parseInput.end = endOfDay.getTime();
     }
+
     const parsedSchedule = Parse.schedule(parseInput);
+
     const fromDate = Day.fromDate(now);
-    const futureSchedule = parsedSchedule.forecast(fromDate!, true, 1, 0, true);
+
+    if (fromDate === null) {
+      throw new Error('[ScheduledDateCalculator]: fromDate is null');
+    }
+
+    const futureSchedule = parsedSchedule.forecast(fromDate, true, 1, 0, true);
+
     const calculated = futureSchedule.first();
+
     if (!calculated) {
       return null;
     }
+
     const result = calculated[0].start.date;
     this.setTime(result, availability);
     return result;
