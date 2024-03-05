@@ -73,8 +73,13 @@ const getScheduledEventEntity = (settings: {
   const section = getScheduledSection();
 
   const scheduledAt = new Date(scheduledAtDay);
-  scheduledAt.setHours(section.timeFrom!.hours);
-  scheduledAt.setMinutes(section.timeFrom!.minutes);
+
+  if (section.timeFrom === null) {
+    throw new Error('[getScheduledEventEntity]: timeFrom is null');
+  }
+
+  scheduledAt.setHours(section.timeFrom.hours);
+  scheduledAt.setMinutes(section.timeFrom.minutes);
 
   const result: EventEntity = {
     entity: getActivity(),
