@@ -66,8 +66,15 @@ describe('ScheduledDateCalculator: test monthly events', () => {
       const resultDate = scheduledDateCalculator.calculate(event, false);
 
       const expectedDate = startOfDay(now);
-      expectedDate.setHours(event.availability.timeFrom!.hours);
-      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
+
+      if (event.availability.timeFrom === null) {
+        throw new Error(
+          '[timeFrom is null] Should return today with timeFrom when selected day is today and covered by start-end dates and timeFrom is set',
+        );
+      }
+
+      expectedDate.setHours(event.availability.timeFrom.hours);
+      expectedDate.setMinutes(event.availability.timeFrom.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -81,8 +88,15 @@ describe('ScheduledDateCalculator: test monthly events', () => {
       let resultDate = scheduledDateCalculator.calculate(event, false);
 
       const expectedDate = startOfDay(now);
-      expectedDate.setHours(event.availability.timeFrom!.hours);
-      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
+
+      if (event.availability.timeFrom === null) {
+        throw new Error(
+          '[timeFrom is null] Should return date today with timeFrom when selected day is (today + or - 1 month) and timeFrom is set and date start/end are (today -/+ 2 months)',
+        );
+      }
+
+      expectedDate.setHours(event.availability.timeFrom.hours);
+      expectedDate.setMinutes(event.availability.timeFrom.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
@@ -102,8 +116,15 @@ describe('ScheduledDateCalculator: test monthly events', () => {
       let resultDate = scheduledDateCalculator.calculate(event, false);
 
       let expectedDate = subMonths(addDays(startOfDay(now), 1), 1);
-      expectedDate.setHours(event.availability.timeFrom!.hours);
-      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
+
+      if (event.availability.timeFrom === null) {
+        throw new Error(
+          '[timeFrom is null] Should return a date equal to (tomorrow - 1 month) with set/not set timeFrom when selected date is tomorrow and start/end dates are (today +1/+25 days)',
+        );
+      }
+
+      expectedDate.setHours(event.availability.timeFrom.hours);
+      expectedDate.setMinutes(event.availability.timeFrom.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
@@ -125,8 +146,15 @@ describe('ScheduledDateCalculator: test monthly events', () => {
       let resultDate = scheduledDateCalculator.calculate(event, false);
 
       let expectedDate = subDays(startOfDay(now), 1);
-      expectedDate.setHours(event.availability.timeFrom!.hours);
-      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
+
+      if (event.availability.timeFrom === null) {
+        throw new Error(
+          '[timeFrom is null] Should return a date equal to endDate with set/not set timeFrom when selected date is yesterday and start/end dates are (today -25/-1 days)',
+        );
+      }
+
+      expectedDate.setHours(event.availability.timeFrom.hours);
+      expectedDate.setMinutes(event.availability.timeFrom.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
@@ -149,8 +177,15 @@ describe('ScheduledDateCalculator: test monthly events', () => {
       let resultDate = scheduledDateCalculator.calculate(event, false);
 
       let expectedDate = subDays(startOfDay(now), 1);
-      expectedDate.setHours(event.availability.timeFrom!.hours);
-      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
+
+      if (event.availability.timeFrom === null) {
+        throw new Error(
+          '[timeFrom is null] Should return a date equal to endDate with set/not set timeFrom when selected date is yesterday and start/end dates are (today -55/-1 days)',
+        );
+      }
+
+      expectedDate.setHours(event.availability.timeFrom.hours);
+      expectedDate.setMinutes(event.availability.timeFrom.minutes);
 
       expect(resultDate).toEqual(expectedDate);
 
@@ -172,8 +207,15 @@ describe('ScheduledDateCalculator: test monthly events', () => {
       const resultDate = scheduledDateCalculator.calculate(event, false);
 
       const expectedDate = subMonths(addDays(startOfDay(now), 10), 1);
-      expectedDate.setHours(event.availability.timeFrom!.hours);
-      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
+
+      if (event.availability.timeFrom === null) {
+        throw new Error(
+          '[timeFrom is null] Should return (today + 10 days - 1 month days with timeFrom) when timeFrom is set and selected date is (today + 10 days) and start/end dates -/+ 50 days',
+        );
+      }
+
+      expectedDate.setHours(event.availability.timeFrom.hours);
+      expectedDate.setMinutes(event.availability.timeFrom.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -187,8 +229,15 @@ describe('ScheduledDateCalculator: test monthly events', () => {
       const resultDate = scheduledDateCalculator.calculate(event, false);
 
       const expectedDate = subDays(startOfDay(now), 4);
-      expectedDate.setHours(event.availability.timeFrom!.hours);
-      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
+
+      if (event.availability.timeFrom === null) {
+        throw new Error(
+          '[timeFrom is null] Should return (today - 4 days with timeFrom) when timeFrom is set and selected date is (today - 4 days) and start/end dates -/+ 50 days',
+        );
+      }
+
+      expectedDate.setHours(event.availability.timeFrom.hours);
+      expectedDate.setMinutes(event.availability.timeFrom.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -202,8 +251,15 @@ describe('ScheduledDateCalculator: test monthly events', () => {
       const resultDate = scheduledDateCalculator.calculate(event, false);
 
       const expectedDate = new Date(event.selectedDate);
-      expectedDate.setHours(event.availability.timeFrom!.hours);
-      expectedDate.setMinutes(event.availability.timeFrom!.minutes);
+
+      if (event.availability.timeFrom === null) {
+        throw new Error(
+          '[timeFrom is null] Should return selected date with set time when selected date is (today - 1 days) and start/end date earlier than (today -1 day)',
+        );
+      }
+
+      expectedDate.setHours(event.availability.timeFrom.hours);
+      expectedDate.setMinutes(event.availability.timeFrom.minutes);
 
       expect(resultDate).toEqual(expectedDate);
     });
@@ -278,8 +334,15 @@ describe('ScheduledDateCalculator: test monthly events', () => {
         const resultDate = calculator.calculate(event, false);
 
         const expectedDate = new Date(expected);
-        expectedDate.setHours(event.availability.timeFrom!.hours);
-        expectedDate.setMinutes(event.availability.timeFrom!.minutes);
+
+        if (event.availability.timeFrom === null) {
+          throw new Error(
+            `[timeFrom is null] Should return ${expected.toDateString()} when now is ${now.toDateString()} and selected date is ${selectedDate.toDateString()}`,
+          );
+        }
+
+        expectedDate.setHours(event.availability.timeFrom.hours);
+        expectedDate.setMinutes(event.availability.timeFrom.minutes);
 
         expect(resultDate).toEqual(expectedDate);
       });
