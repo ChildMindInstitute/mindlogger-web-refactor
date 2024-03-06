@@ -4,7 +4,7 @@ import { ActivityStatus, EntityType } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
 import { AppletDetailsBaseInfoDTO } from '~/shared/api';
 import { ROUTES } from '~/shared/constants';
-import { Mixpanel, useCustomNavigation } from '~/shared/utils';
+import { MixEvents, MixProperties, Mixpanel, useCustomNavigation } from '~/shared/utils';
 
 type NavigateToEntityProps = {
   flowId: string | null;
@@ -57,7 +57,7 @@ export const useStartEntity = (props: Props) => {
   }
 
   function startActivityOrFlow(params: OnActivityCardClickProps) {
-    Mixpanel.track('Assessment Started');
+    Mixpanel.track(MixEvents.AssessmentStarted, { [MixProperties.AppletId]: props.applet.id });
 
     const { flowId, eventId, activity, status, shouldRestart } = params;
 

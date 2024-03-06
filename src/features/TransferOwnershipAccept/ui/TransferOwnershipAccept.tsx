@@ -5,7 +5,7 @@ import { useAcceptTransferOwnershipQuery } from '../api';
 
 import { PageMessage } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
-import { Mixpanel, useCustomTranslation } from '~/shared/utils';
+import { MixEvents, MixProperties, Mixpanel, useCustomTranslation } from '~/shared/utils';
 
 type TransferOwnershipProps = {
   appletId: string;
@@ -21,7 +21,7 @@ export const TransferOwnershipAccept = ({ appletId, keyParam }: TransferOwnershi
     { appletId, key: keyParam },
     {
       onSuccess() {
-        Mixpanel.track('Transfer Ownership Accepted');
+        Mixpanel.track(MixEvents.TransferOwnershipAccepted, { [MixProperties.AppletId]: appletId });
       },
     },
   );

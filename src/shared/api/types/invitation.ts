@@ -29,5 +29,5 @@ export type GetInvitationSuccessResponse = BaseSuccessResponse<{
   body: string | null;
 
   appletName: string;
-  appletId: string | number;
+  appletId: string;
 }>;
