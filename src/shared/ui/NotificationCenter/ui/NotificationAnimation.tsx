@@ -11,7 +11,9 @@ type Props = PropsWithChildren<{
 }>;
 
 export const NotificationAnimation = ({ notifications, refMap }: Props) => {
-  const transitions = useTransition(notifications, {
+  const lastNotification = notifications[notifications.length - 1];
+
+  const transitions = useTransition(lastNotification, {
     from: { height: '0px' },
     enter: (item) => async (next) => {
       await next({ height: `${refMap.get(item)?.offsetHeight ?? 72}px` });
