@@ -31,3 +31,5 @@ export const WarningNotification = forwardRef((props: Props, ref) => {
     </Box>
   );
 });
+
+WarningNotification.displayName = 'WarningNotification';

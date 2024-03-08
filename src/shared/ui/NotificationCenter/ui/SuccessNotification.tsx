@@ -30,3 +30,5 @@ export const SuccessNotification = forwardRef((props: Props, ref) => {
     </Box>
   );
 });
+
+SuccessNotification.displayName = 'SuccessNotification';
