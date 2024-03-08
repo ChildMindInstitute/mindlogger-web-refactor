@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 type Return = {
   containerRef: React.RefObject<HTMLDivElement>;
@@ -12,16 +12,18 @@ export const useIntersectionObserver = (): Return => {
 
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
 
-  const observer = new IntersectionObserver(
-    ([notificationCenter]) => {
-      setIsIntersecting(notificationCenter.isIntersecting);
-    },
-    {
-      root: containerRef.current,
-      rootMargin: '0px',
-      threshold: 1,
-    },
-  );
+  const observer = useMemo(() => {
+    return new IntersectionObserver(
+      ([notificationCenter]) => {
+        setIsIntersecting(notificationCenter.isIntersecting);
+      },
+      {
+        root: containerRef.current,
+        rootMargin: '0px',
+        threshold: 1,
+      },
+    );
+  }, []);
 
   useEffect(() => {
     observer.observe(targetRef.current as Element);
@@ -29,7 +31,7 @@ export const useIntersectionObserver = (): Return => {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [observer]);
 
   return { containerRef, targetRef, isIntersecting };
 };
