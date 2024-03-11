@@ -49,7 +49,14 @@ export const NotificationCenter = forwardRef<HTMLDivElement, Props>((props, ref)
   }, [onNotificationAdded, onNotificationRemoved]);
 
   return (
-    <Box ref={ref} id="app-notification-container" width="100%" position="sticky" top={0}>
+    <Box
+      ref={ref}
+      id="app-notification-container"
+      width="100%"
+      position="sticky"
+      top={0}
+      zIndex={10}
+    >
       <NotificationAnimation
         notifications={notificationCenterStore.notifications}
         refMap={refMap}
