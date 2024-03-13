@@ -1,4 +1,5 @@
 import { validateImage } from './validate-image';
+import { validateAudio } from './validateAudio';
 import { VimeoBuilder } from './Vimeo.builder';
 import { YoutubeBuilder } from './YouTube.builder';
 
@@ -68,6 +69,16 @@ class MarkdownBuilder {
 
       if (vimeoIframe) {
         markdown = markdown.replace(item, vimeoIframe);
+        continue;
+      }
+
+      const isAudio = validateAudio(url);
+
+      if (isAudio) {
+        markdown = markdown.replace(
+          item,
+          `<audio controls><source src="${url}" type="audio/mp3">${name}</audio>`,
+        );
         continue;
       }
 

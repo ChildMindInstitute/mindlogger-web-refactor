@@ -44,7 +44,7 @@ export const ROUTES = {
     }) =>
       `/public/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}/publicAppletKey/${publicAppletKey}?${
         flowId ? `flowId=${flowId}` : ''
-      }}`,
+      }`,
   },
 
   // Protected routes

@@ -31,9 +31,17 @@ export class GroupUtility {
   }
 
   private getStartedAt(eventActivity: EventEntity): Date {
-    const record = this.getProgressRecord(eventActivity)!;
+    const record = this.getProgressRecord(eventActivity);
 
-    return new Date(record.startAt!);
+    if (record === null) {
+      throw new Error('[getStartedAt] Progress record is null');
+    }
+
+    if (record.startAt === null) {
+      throw new Error('[getStartedAt] Progress record startAt is null');
+    }
+
+    return new Date(record.startAt);
   }
 
   private getAllowedTimeInterval(
@@ -43,8 +51,16 @@ export class GroupUtility {
   ): DatesFromTo {
     const { event } = eventActivity;
 
-    const { hours: hoursFrom, minutes: minutesFrom } = event.availability.timeFrom!;
-    const { hours: hoursTo, minutes: minutesTo } = event.availability.timeTo!;
+    if (event.availability.timeFrom === null) {
+      throw new Error('[getAllowedTimeInterval] timeFrom is null');
+    }
+
+    if (event.availability.timeTo === null) {
+      throw new Error('[getAllowedTimeInterval] timeTo is null');
+    }
+
+    const { hours: hoursFrom, minutes: minutesFrom } = event.availability.timeFrom;
+    const { hours: hoursTo, minutes: minutesTo } = event.availability.timeTo;
 
     if (scheduledWhen === 'today') {
       const allowedFrom = this.getToday();
@@ -154,25 +170,41 @@ export class GroupUtility {
 
     let from = this.getToday();
 
+    if (timeFrom === null) {
+      throw new Error('[getVoidInterval] timeFrom is null');
+    }
+
+    if (timeTo === null) {
+      throw new Error('[getVoidInterval] timeTo is null');
+    }
+
     if (buildFrom) {
       from = this.getToday();
-      from.setHours(timeTo!.hours);
-      from.setMinutes(timeTo!.minutes);
+      from.setHours(timeTo.hours);
+      from.setMinutes(timeTo.minutes);
     }
 
     const to = this.getToday();
-    to.setHours(timeFrom!.hours);
-    to.setMinutes(timeFrom!.minutes);
+    to.setHours(timeFrom.hours);
+    to.setMinutes(timeFrom.minutes);
 
     return { from, to };
   }
 
   public isSpreadToNextDay(event: ScheduleEvent): boolean {
+    if (event.availability.timeFrom === null) {
+      throw new Error('[isSpreadToNextDay] timeFrom is null');
+    }
+
+    if (event.availability.timeTo === null) {
+      throw new Error('[isSpreadToNextDay] timeTo is null');
+    }
+
     return (
       event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess &&
       isSourceLess({
-        timeSource: event.availability.timeTo!,
-        timeTarget: event.availability.timeFrom!,
+        timeSource: event.availability.timeTo,
+        timeTarget: event.availability.timeFrom,
       })
     );
   }
@@ -188,7 +220,7 @@ export class GroupUtility {
       isAccessBeforeStartTime,
     );
 
-    const completedAt = this.getCompletedAt(eventActivity)!;
+    const completedAt = this.getCompletedAt(eventActivity);
 
     if (!completedAt) {
       return false;
@@ -272,7 +304,11 @@ export class GroupUtility {
 
   public getTimeToComplete(eventActivity: EventEntity): HourMinute | null {
     const { event } = eventActivity;
-    const timer = event.timers.timer!;
+    const timer = event.timers.timer;
+
+    if (timer === null) {
+      throw new Error('[getTimeToComplete] Timer is null');
+    }
 
     const startedTime = this.getStartedAt(eventActivity);
 
