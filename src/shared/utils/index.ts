@@ -15,3 +15,4 @@ export * from './dictionary.map';
 export * from './analytics';
 export * from './useTimer';
 export * from './matchPaths';
+export * from './getLanguage';
