@@ -61,6 +61,11 @@ export const BaseButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
         width: '100%',
         padding: '10px 24px',
         height: '48px',
+        fontFamily: 'Atkinson',
+        fontSize: '16px',
+        fontWeight: 700,
+        fontStyle: 'normal',
+        lineHeight: '20px',
         borderColor: props.borderColor ?? undefined,
         '&:hover': {
           border: `1px solid ${props.borderColor}`,
@@ -76,3 +81,5 @@ export const BaseButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
     </Button>
   );
 });
+
+BaseButton.displayName = 'BaseButton';
