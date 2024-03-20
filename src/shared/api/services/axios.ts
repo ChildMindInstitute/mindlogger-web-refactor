@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 import authorizationService from './authorization.service';
-import { eventEmitter, secureTokensStorage } from '../../utils';
+import { eventEmitter, getLanguage, secureTokensStorage } from '../../utils';
 
 type RequestConfig = AxiosRequestConfig<any> & {
   retry?: boolean;
@@ -22,6 +22,12 @@ axiosService.interceptors.request.use(
     if (tokens?.accessToken && tokens?.tokenType) {
       config.headers.Authorization = `${tokens.tokenType} ${tokens.accessToken}`;
     }
+
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    config.headers['X-Timezone'] = timezone ?? 'Timezone not found';
+
+    const language = getLanguage();
+    config.headers['Content-Language'] = language ?? 'en';
 
     return config;
   },
