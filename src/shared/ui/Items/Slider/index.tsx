@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
+import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 
 import { Theme } from '~/shared/constants';
-
-import './style.css';
+import { useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {
   minImage: string | null;
@@ -41,6 +41,8 @@ export const SliderItemBase = (props: Props) => {
     showStickMarks,
   } = props;
 
+  const { lessThanSM } = useCustomMediaQuery();
+
   const defaultStep = 1;
 
   const marksAndLabelsList = useMemo(() => {
@@ -54,7 +56,7 @@ export const SliderItemBase = (props: Props) => {
   }, [maxValue, minValue]);
 
   return (
-    <div className={`slider-widget ${value ? 'no-value' : ''}`}>
+    <Box width="100%" margin="auto" className={`slider-widget ${value ? 'no-value' : ''}`}>
       <Slider
         size="medium"
         min={minValue}
@@ -63,7 +65,7 @@ export const SliderItemBase = (props: Props) => {
         disabled={disabled}
         marks={showStickLabel ? marksAndLabelsList : true} // The settings behavior: If boolean, marks will be evenly spaced based on the value of step. If an array, it should contain objects with value and an optional label keys.
         step={continiusSlider ? 0.1 : defaultStep}
-        valueLabelDisplay="auto"
+        valueLabelDisplay={continiusSlider ? 'off' : 'auto'}
         onChange={(e, value) => onChange(String(value))}
         sx={{
           height: '8px',
@@ -115,18 +117,40 @@ export const SliderItemBase = (props: Props) => {
         }}
       />
 
-      <div className="slider-description">
-        <div className="first" style={{ maxWidth: `100px` }}>
+      <Box display="flex" justifyContent="space-between">
+        <Box
+          position="relative"
+          sx={{
+            maxWidth: lessThanSM ? '44px' : '64px',
+            transform: 'translateX(-50%)',
+            '& > img': { borderRadius: '8px', overflow: 'hidden' },
+          }}
+        >
           {minImage && <img src={minImage} width="100%"></img>}
 
-          {minLabel && <div className="label">{minLabel}</div>}
-        </div>
-        <div className="last" style={{ maxWidth: `100px` }}>
+          {minLabel && (
+            <Box textAlign="center" fontSize={lessThanSM ? '14px' : '18px'}>
+              {minLabel}
+            </Box>
+          )}
+        </Box>
+        <Box
+          position="relative"
+          sx={{
+            maxWidth: lessThanSM ? '44px' : '64px',
+            transform: 'translateX(50%)',
+            '& > img': { borderRadius: '8px', overflow: 'hidden' },
+          }}
+        >
           {maxImage && <img src={maxImage} width="100%"></img>}
 
-          {maxLabel && <div className="label">{maxLabel}</div>}
-        </div>
-      </div>
-    </div>
+          {maxLabel && (
+            <Box textAlign="center" fontSize={lessThanSM ? '14px' : '18px'}>
+              {maxLabel}
+            </Box>
+          )}
+        </Box>
+      </Box>
+    </Box>
   );
 };
