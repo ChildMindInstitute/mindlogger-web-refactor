@@ -63,6 +63,7 @@ export const SliderItemBase = (props: Props) => {
         disabled={disabled}
         marks={showStickLabel ? marksAndLabelsList : true} // The settings behavior: If boolean, marks will be evenly spaced based on the value of step. If an array, it should contain objects with value and an optional label keys.
         step={continiusSlider ? 0.1 : defaultStep}
+        valueLabelDisplay="auto"
         onChange={(e, value) => onChange(String(value))}
         sx={{
           height: '8px',
@@ -92,6 +93,24 @@ export const SliderItemBase = (props: Props) => {
           },
           '& .MuiSlider-markLabel': {
             opacity: showStickLabel ? 1 : 0,
+            fontFamily: 'Atkinson',
+          },
+          '& .MuiSlider-valueLabel': {
+            color: Theme.colors.light.onPrimary,
+            fontFamily: 'Atkinson',
+            fontSize: '22px',
+            fontWeight: 700,
+            lineHeight: '28px',
+            backgroundColor: Theme.colors.light.primary,
+            borderRadius: '8px',
+            padding: '8px',
+            '&::before': {
+              backgroundColor: Theme.colors.light.primary,
+            },
+          },
+          [`& .MuiSlider-markLabel[data-index="${value}"]`]: {
+            color: Theme.colors.light.primary,
+            fontWeight: 700,
           },
         }}
       />
