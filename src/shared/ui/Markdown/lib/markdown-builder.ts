@@ -1,3 +1,4 @@
+import { extractDataFromMediaLink } from './extractDataFromMediaLink';
 import { validateImage } from './validate-image';
 import { validateAudio } from './validateAudio';
 import { VimeoBuilder } from './Vimeo.builder';
@@ -41,18 +42,13 @@ class MarkdownBuilder {
 
     // Take first element of the match group - it's the whole match
     for (const [item] of mediaItems) {
-      const urlRule = new RegExp(/\((.*?)\)/g);
-      const nameRule = new RegExp(/\[(.*?)\]/g);
+      const data = extractDataFromMediaLink(item);
 
-      const urlMatchGroup = item.match(urlRule);
-      const nameMatchGroup = item.match(nameRule);
-
-      if (!urlMatchGroup || !nameMatchGroup) {
+      if (!data) {
         continue;
       }
 
-      const url = urlMatchGroup.map((el) => el.slice(1, -1))[0];
-      const name = nameMatchGroup.map((el) => el.slice(1, -1))[0];
+      const { url, name } = data;
 
       const youtubeBuilder = new YoutubeBuilder();
 
