@@ -39,6 +39,15 @@ export type AdditionalResponseConfig = {
   };
 };
 
+export type DataMatrix = Array<{
+  rowId: string;
+  options: Array<{
+    optionId: string;
+    score: number;
+    alert: string | null;
+  }>;
+}>;
+
 export interface ActivityItemBase {
   id: string;
   name: string;
@@ -64,7 +73,8 @@ export type Config =
   | DateItemConfig
   | TimeItemItemConfig
   | TimeRangeItemConfig
-  | AudioPlayerItemConfig;
+  | AudioPlayerItemConfig
+  | MultiSelectionRowsItemConfig;
 
 export type ResponseValues =
   | EmptyResponseValues
@@ -72,7 +82,8 @@ export type ResponseValues =
   | RadioValues
   | SliderValues
   | SelectorValues
-  | AudioPlayerItemValues;
+  | AudioPlayerItemValues
+  | MultiSelectionRowsItemResponseValues;
 
 export type EmptyResponseValues = null;
 
@@ -252,4 +263,34 @@ export type AudioPlayerItemConfig = ButtonsConfig &
 
 export type AudioPlayerItemValues = {
   file: string;
+};
+
+export interface MultiSelectionRowsItem extends ActivityItemBase {
+  responseType: 'multiSelectRows';
+  config: MultiSelectionRowsItemConfig;
+  responseValues: MultiSelectionRowsItemResponseValues;
+}
+
+export type MultiSelectionRowsItemConfig = ButtonsConfig &
+  TimerConfig & {
+    addScores: boolean;
+    setAlerts: boolean;
+    addTooltip: boolean;
+    randomizeOptions: boolean;
+  };
+
+export type MultiSelectionRowsItemResponseValues = {
+  rows: Array<{
+    id: string;
+    rowName: string;
+    rowImage: string | null;
+    tooltip: string | null;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: DataMatrix;
 };

@@ -4,6 +4,7 @@ import {
   CheckboxItem,
   DateItem,
   MessageItem,
+  MultiSelectionRowsItem,
   RadioItem,
   SelectorItem,
   SliderItem,
@@ -60,7 +61,8 @@ export type ItemRecord =
   | DateItem
   | TimeItem
   | TimeRangeItem
-  | AudioPlayerItem;
+  | AudioPlayerItem
+  | MultiSelectionRowsItem;
 
 export type ItemWithAdditionalResponse = Extract<
   ItemRecord,

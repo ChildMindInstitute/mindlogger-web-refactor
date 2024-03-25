@@ -42,7 +42,8 @@ export type ConfigDTO =
   | DateItemConfigDTO
   | TimeItemConfigDTO
   | TimeRangeItemConfigDTO
-  | AudioPlayerItemConfigDTO;
+  | AudioPlayerItemConfigDTO
+  | MultiSelectionRowsItemConfigDTO;
 
 export type ResponseValuesDTO =
   | EmptyResponseValuesDTO
@@ -50,9 +51,28 @@ export type ResponseValuesDTO =
   | RadioItemResponseValuesDTO
   | SliderItemResponseValuesDTO
   | SelectorItemResponseValues
-  | AudioPlayerItemResponseValuesDTO;
+  | AudioPlayerItemResponseValuesDTO
+  | MultiSelectionRowsItemResponseValuesDTO;
 
 export type EmptyResponseValuesDTO = null;
+
+export type DataMatrixDto = Array<{
+  rowId: string;
+  options: Array<{
+    optionId: string;
+    score: number;
+    alert: string | null;
+  }>;
+}>;
+
+export type ButtonsConfig = {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+};
+
+export type TimerConfig = {
+  timer: number | null;
+};
 
 export type AdditionalResponseOptionConfigDTO = {
   additionalResponseOption: {
@@ -252,4 +272,34 @@ export type AudioPlayerItemConfigDTO = AdditionalResponseOptionConfigDTO & {
 
 export type AudioPlayerItemResponseValuesDTO = {
   file: string;
+};
+
+export interface MultiSelectionRowsItemDTO extends ItemDetailsBaseDTO {
+  responseType: 'multiSelectRows';
+  config: MultiSelectionRowsItemConfigDTO;
+  responseValues: MultiSelectionRowsItemResponseValuesDTO;
+}
+
+export type MultiSelectionRowsItemConfigDTO = ButtonsConfig &
+  TimerConfig & {
+    addScores: boolean;
+    setAlerts: boolean;
+    addTooltip: boolean;
+    randomizeOptions: boolean;
+  };
+
+type MultiSelectionRowsItemResponseValuesDTO = {
+  rows: Array<{
+    id: string;
+    rowName: string;
+    rowImage: string | null;
+    tooltip: string | null;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: DataMatrixDto;
 };
