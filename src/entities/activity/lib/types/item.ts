@@ -276,7 +276,6 @@ export type MultiSelectionRowsItemConfig = ButtonsConfig &
     addScores: boolean;
     setAlerts: boolean;
     addTooltip: boolean;
-    randomizeOptions: boolean;
   };
 
 export type MultiSelectionRowsItemResponseValues = {

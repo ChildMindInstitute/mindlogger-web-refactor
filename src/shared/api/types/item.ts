@@ -54,9 +54,9 @@ export type ResponseValuesDTO =
   | AudioPlayerItemResponseValuesDTO
   | MultiSelectionRowsItemResponseValuesDTO;
 
-export type EmptyResponseValuesDTO = null;
+type EmptyResponseValuesDTO = null;
 
-export type DataMatrixDto = Array<{
+type DataMatrixDto = Array<{
   rowId: string;
   options: Array<{
     optionId: string;
@@ -65,12 +65,12 @@ export type DataMatrixDto = Array<{
   }>;
 }>;
 
-export type ButtonsConfig = {
+type ButtonsConfigDTO = {
   removeBackButton: boolean;
   skippableItem: boolean;
 };
 
-export type TimerConfig = {
+type TimerConfigDTO = {
   timer: number | null;
 };
 
@@ -168,7 +168,7 @@ export interface SliderItemDTO extends ItemDetailsBaseDTO {
   responseValues: SliderItemResponseValuesDTO;
 }
 
-export type SliderItemConfigDTO = AdditionalResponseOptionConfigDTO & {
+type SliderItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   addScores: boolean;
   setAlerts: boolean;
   showTickMarks: boolean;
@@ -179,7 +179,7 @@ export type SliderItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   timer: number | null;
 };
 
-export type SliderItemResponseValuesDTO = {
+type SliderItemResponseValuesDTO = {
   minLabel: string | null;
   maxLabel: string | null;
   minValue: number;
@@ -201,12 +201,12 @@ export interface SelectorItemDTO extends ItemDetailsBaseDTO {
   responseValues: SelectorItemResponseValues;
 }
 
-export type SelectorItemConfigDTO = AdditionalResponseOptionConfigDTO & {
+type SelectorItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   removeBackButton: boolean;
   skippableItem: boolean;
 };
 
-export type SelectorItemResponseValues = {
+type SelectorItemResponseValues = {
   minValue: number;
   maxValue: number;
 };
@@ -217,7 +217,7 @@ export interface MessageItemDTO extends ItemDetailsBaseDTO {
   responseValues: EmptyResponseValuesDTO;
 }
 
-export type MessageItemConfigDTO = {
+type MessageItemConfigDTO = {
   removeBackButton: boolean;
   timer: number | null;
 };
@@ -228,7 +228,7 @@ export interface DateItemDTO extends ItemDetailsBaseDTO {
   responseValues: EmptyResponseValuesDTO;
 }
 
-export type DateItemConfigDTO = AdditionalResponseOptionConfigDTO & {
+type DateItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   removeBackButton: boolean;
   skippableItem: boolean;
   timer: number | null;
@@ -240,7 +240,7 @@ export interface TimeItemDTO extends ItemDetailsBaseDTO {
   responseValues: EmptyResponseValuesDTO;
 }
 
-export type TimeItemConfigDTO = AdditionalResponseOptionConfigDTO & {
+type TimeItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   removeBackButton: boolean;
   skippableItem: boolean;
   timer: number | null;
@@ -252,7 +252,7 @@ export interface TimeRangeItemDTO extends ItemDetailsBaseDTO {
   responseValues: EmptyResponseValuesDTO;
 }
 
-export type TimeRangeItemConfigDTO = AdditionalResponseOptionConfigDTO & {
+type TimeRangeItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   removeBackButton: boolean;
   skippableItem: boolean;
   timer: number | null;
@@ -264,13 +264,13 @@ export interface AudioPlayerItemDTO extends ItemDetailsBaseDTO {
   responseValues: AudioPlayerItemResponseValuesDTO;
 }
 
-export type AudioPlayerItemConfigDTO = AdditionalResponseOptionConfigDTO & {
+type AudioPlayerItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   playOnce: boolean;
   removeBackButton: boolean;
   skippableItem: boolean;
 };
 
-export type AudioPlayerItemResponseValuesDTO = {
+type AudioPlayerItemResponseValuesDTO = {
   file: string;
 };
 
@@ -280,12 +280,11 @@ export interface MultiSelectionRowsItemDTO extends ItemDetailsBaseDTO {
   responseValues: MultiSelectionRowsItemResponseValuesDTO;
 }
 
-export type MultiSelectionRowsItemConfigDTO = ButtonsConfig &
-  TimerConfig & {
+type MultiSelectionRowsItemConfigDTO = ButtonsConfigDTO &
+  TimerConfigDTO & {
     addScores: boolean;
     setAlerts: boolean;
     addTooltip: boolean;
-    randomizeOptions: boolean;
   };
 
 type MultiSelectionRowsItemResponseValuesDTO = {
