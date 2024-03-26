@@ -1,6 +1,7 @@
 import { AudioPlayerItem } from './AudioPlayerItem';
 import { CheckboxItem } from './CheckboxItem';
 import { DateItem } from './DateItem';
+import { MatrixCheckboxItem } from './MatrixCheckboxItem';
 import { RadioItem } from './RadioItem';
 import { SelectorItem } from './SelectorItem';
 import { SliderItem } from './SliderItem';
@@ -92,6 +93,17 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
 
     case 'audioPlayer':
       return <AudioPlayerItem item={item} value={values[0]} onValueChange={onValueChange} />;
+
+    case 'multiSelectRows':
+      return (
+        <MatrixCheckboxItem
+          item={item}
+          values={values}
+          onValueChange={onValueChange}
+          isDisabled={isDisabled}
+          replaceText={replaceText}
+        />
+      );
 
     default:
       return <></>;
