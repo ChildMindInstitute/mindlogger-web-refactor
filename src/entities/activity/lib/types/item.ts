@@ -279,17 +279,21 @@ export type MultiSelectionRowsItemConfig = ButtonsConfig &
   };
 
 export type MultiSelectionRowsItemResponseValues = {
-  rows: Array<{
-    id: string;
-    rowName: string;
-    rowImage: string | null;
-    tooltip: string | null;
-  }>;
-  options: Array<{
-    id: string;
-    text: string;
-    image: string | null;
-    tooltip: string | null;
-  }>;
+  rows: Array<MatrixSelectRow>;
+  options: Array<MatrixSelectOption>;
   dataMatrix: DataMatrix;
+};
+
+export type MatrixSelectOption = {
+  id: string;
+  text: string;
+  image: string | null;
+  tooltip: string | null;
+};
+
+export type MatrixSelectRow = {
+  id: string;
+  rowName: string;
+  rowImage: string | null;
+  tooltip: string | null;
 };
