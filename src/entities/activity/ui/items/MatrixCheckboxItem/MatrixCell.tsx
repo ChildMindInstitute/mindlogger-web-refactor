@@ -9,7 +9,7 @@ type Props = PropsWithChildren<{
 }>;
 
 export const MatrixCell = ({ children, isRowLabel }: Props) => {
-  const { lessThanTarget } = useCustomMediaQuery(700);
+  const { lessThanTarget } = useCustomMediaQuery(800);
 
   const rowLabelWidth = lessThanTarget ? '100px' : '254px';
 
