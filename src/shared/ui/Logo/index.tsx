@@ -2,12 +2,12 @@ import { LOGO_URL } from './lib/constants';
 
 import { Dimension } from '~/shared/utils';
 
-export interface LogoProps {
+export type Props = {
   size?: Dimension;
   className?: string;
-}
+};
 
-const Logo = ({ size = { height: 50, width: 120 }, className = '' }: LogoProps) => {
+const Logo = ({ size = { height: 50, width: 120 }, className = '' }: Props) => {
   const defaultClassName = 'mr-1 p-1';
 
   return (
