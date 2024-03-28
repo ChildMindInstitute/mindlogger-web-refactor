@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { AdditionalTextResponse } from './AdditionalTextResponse';
 import { ItemPicker } from './items/ItemPicker';
-import { hasAdditionalResponse, requiresAdditionalResponse } from '../lib';
+import { Answer, hasAdditionalResponse, requiresAdditionalResponse } from '../lib';
 
 import { appletModel } from '~/entities/applet';
 import { SliderAnimation } from '~/shared/animations';
@@ -14,7 +14,7 @@ type ActivityCardItemProps = {
   watermark?: string;
   allowToSkipAllItems?: boolean | undefined;
 
-  onValueChange: (value: string[]) => void;
+  onValueChange: (value: Answer) => void;
 
   onItemAdditionalTextChange: (value: string) => void;
 

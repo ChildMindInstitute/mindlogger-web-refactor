@@ -1,8 +1,10 @@
 import { GroupProgress } from '~/abstract/lib';
 import {
+  Answer,
   AudioPlayerItem,
   CheckboxItem,
   DateItem,
+  MatrixMultiSelectAnswer,
   MessageItem,
   MultiSelectionRowsItem,
   RadioItem,
@@ -39,7 +41,8 @@ export type UserEventResponse =
         | number[]
         | DayMonthYearDTO
         | HourMinuteDTO
-        | TimeRangeUserEventDto;
+        | TimeRangeUserEventDto
+        | MatrixMultiSelectAnswer;
       text?: string;
     };
 
@@ -109,7 +112,7 @@ export type SaveItemAnswerPayload = {
   entityId: string;
   eventId: string;
   itemId: string;
-  answer: string[];
+  answer: Answer;
 };
 
 export type SaveItemAdditionalTextPayload = {

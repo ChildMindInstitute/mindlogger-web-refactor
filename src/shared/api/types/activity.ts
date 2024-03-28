@@ -166,6 +166,16 @@ export type AudioPlayerAnswerPayload = {
   text: string | null;
 };
 
+export type MultiSelectMatrixAnswerPayload = {
+  value: Array<Array<string>>;
+  text: string | null;
+};
+
+export type SingleSelectMatrixAnswerPayload = {
+  value: Array<string>;
+  text: string | null;
+};
+
 export type CompletedEntityDTO = {
   id: string;
   answerId: string;
