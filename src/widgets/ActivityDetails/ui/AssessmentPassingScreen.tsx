@@ -3,6 +3,7 @@ import { useCallback, useContext, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 
 import { AssessmentLayout } from './AssessmentLayout';
+import { ItemRecord } from '../../../entities/applet/model';
 import { ActivityDetailsContext } from '../lib';
 import { validateBeforeMoveForward } from '../model';
 import {
@@ -14,7 +15,12 @@ import {
 } from '../model/hooks';
 
 import { getProgressId } from '~/abstract/lib';
-import { ActivityCardItem, ItemCardButton, useTextVariablesReplacer } from '~/entities/activity';
+import {
+  ActivityCardItem,
+  Answer,
+  ItemCardButton,
+  useTextVariablesReplacer,
+} from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import {
   ActivityDTO,
@@ -199,12 +205,13 @@ export const AssessmentPassingScreen = (props: Props) => {
     t,
   ]);
 
-  const onItemValueChange = (value: string[]) => {
+  const onItemValueChange = (value: Answer) => {
     saveItemAnswer(item.id, value);
+
     saveSetAnswerUserEvent({
       ...item,
       answer: value,
-    });
+    } as ItemRecord);
   };
 
   const onItemAdditionalTextChange = (value: string) => {

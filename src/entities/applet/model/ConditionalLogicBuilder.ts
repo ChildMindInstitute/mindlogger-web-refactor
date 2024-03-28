@@ -1,6 +1,6 @@
 import { ItemRecord } from './types';
+import { Answer, DefaultAnswer } from '../../activity';
 
-import { Answer } from '~/abstract/lib';
 import { Condition } from '~/shared/api';
 
 export type ItemMapByName = Record<string, ItemRecord>;
@@ -97,10 +97,10 @@ class ConditionalLogicBuilder {
         return rule.payload.optionValue !== answer[0];
 
       case 'INCLUDES_OPTION':
-        return answer.includes(rule.payload.optionValue);
+        return (answer as DefaultAnswer).includes(rule.payload.optionValue);
 
       case 'NOT_INCLUDES_OPTION':
-        return !answer.includes(rule.payload.optionValue);
+        return !(answer as DefaultAnswer).includes(rule.payload.optionValue);
 
       case 'EQUAL':
         return rule.payload.value === Number(answer[0]);
@@ -127,22 +127,6 @@ class ConditionalLogicBuilder {
       default:
         return true;
     }
-  }
-
-  private getOptionIdByValue(item: ItemRecord): string[] {
-    if (item.responseType === 'multiSelect' || item.responseType === 'singleSelect') {
-      const { answer, responseValues } = item;
-      const optionIds = answer
-        .map((value: string) => {
-          const option = responseValues.options.find((option) => option.value === Number(value));
-          return option?.id;
-        })
-        .filter((element) => element !== undefined) as Array<string>;
-
-      return optionIds;
-    }
-
-    return item.answer;
   }
 }
 

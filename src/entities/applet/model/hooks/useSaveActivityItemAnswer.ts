@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { Answer } from '../../../activity';
 import { actions } from '../slice';
 
 import { useAppDispatch } from '~/shared/utils';
@@ -13,7 +14,7 @@ export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
   const dispatch = useAppDispatch();
 
   const saveItemAnswer = useCallback(
-    (itemId: string, answer: string[]) => {
+    (itemId: string, answer: Answer) => {
       dispatch(
         actions.saveItemAnswer({
           entityId: activityId,
