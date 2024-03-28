@@ -3,7 +3,6 @@ import { useCallback, useContext, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 
 import { AssessmentLayout } from './AssessmentLayout';
-import { ItemRecord } from '../../../entities/applet/model';
 import { ActivityDetailsContext } from '../lib';
 import { validateBeforeMoveForward } from '../model';
 import {
@@ -211,7 +210,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     saveSetAnswerUserEvent({
       ...item,
       answer: value,
-    } as ItemRecord);
+    } as appletModel.ItemRecord);
   };
 
   const onItemAdditionalTextChange = (value: string) => {

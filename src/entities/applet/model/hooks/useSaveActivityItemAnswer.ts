@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
-import { Answer } from '../../../activity';
 import { actions } from '../slice';
 
+import { Answer } from '~/entities/activity';
 import { useAppDispatch } from '~/shared/utils';
 
 type Props = {
