@@ -21,10 +21,12 @@ export const StackedItemsGrid = ({ rows, options, onChange, values }: Props) => 
       <MatrixHeader options={options} />
 
       {rows.map((row, rowI) => {
+        const isEven = rowI % 2 === 0;
+
         return (
           <MatrixRow
             key={row.id}
-            isEven={false}
+            isEven={isEven}
             item={{ id: row.id, imageUrl: row.rowImage, text: row.rowName, tooltip: row.tooltip }}
           >
             {options.map((option, optionI) => {
@@ -40,9 +42,9 @@ export const StackedItemsGrid = ({ rows, options, onChange, values }: Props) => 
                       justifyContent="center"
                     >
                       <CheckboxItem
-                        id={'id1'}
-                        name={'id1-name'}
-                        value={'daw'}
+                        id={option.id}
+                        name={option.text}
+                        value={option.text}
                         disabled={false}
                         defaultChecked={isChecked}
                       />
