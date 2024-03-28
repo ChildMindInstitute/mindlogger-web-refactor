@@ -1,27 +1,18 @@
 import { useMemo } from 'react';
 
 import { StackedItemsGrid } from './StackedItemsGrid';
-import { MultiSelectionRowsItem } from '../../../lib';
+import { MatrixMultiSelectAnswer, MultiSelectionRowsItem } from '../../../lib';
 
 type Props = {
   item: MultiSelectionRowsItem;
-  values: string[];
+  values: MatrixMultiSelectAnswer;
 
-  onValueChange: (value: string[]) => void;
+  onValueChange: (value: MatrixMultiSelectAnswer) => void;
   replaceText: (value: string) => string;
-  isDisabled: boolean;
 };
 
-export const MatrixCheckboxItem = ({
-  item,
-  values,
-  onValueChange,
-  replaceText,
-  isDisabled,
-}: Props) => {
+export const MatrixCheckboxItem = ({ item, values, onValueChange, replaceText }: Props) => {
   const { options, rows } = item.responseValues;
-
-  const optionLength = options.length;
 
   const memoizedOptions = useMemo(() => {
     return options.map((el) => ({
@@ -37,7 +28,40 @@ export const MatrixCheckboxItem = ({
     }));
   }, [replaceText, rows]);
 
-  console.log(optionLength);
+  const memoizedValues = useMemo(() => {
+    const initialAnswer = memoizedRows.map(() => memoizedOptions.map(() => null));
 
-  return <StackedItemsGrid options={memoizedOptions} rows={memoizedRows} />;
+    return values.length ? values : initialAnswer;
+  }, [memoizedOptions, memoizedRows, values]);
+
+  const handleValueChange = (rowIndex: number, optionIndex: number, value: string) => {
+    const newValues = memoizedValues.map((row, i) => {
+      if (i === rowIndex) {
+        return row.map((option, j) => {
+          if (j === optionIndex) {
+            if (typeof option === 'string') {
+              return null;
+            } else {
+              return value;
+            }
+          }
+
+          return option;
+        });
+      }
+
+      return row;
+    });
+
+    onValueChange(newValues);
+  };
+
+  return (
+    <StackedItemsGrid
+      options={memoizedOptions}
+      rows={memoizedRows}
+      onChange={handleValueChange}
+      values={memoizedValues}
+    />
+  );
 };
