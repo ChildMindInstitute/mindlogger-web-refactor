@@ -4,7 +4,9 @@ const PROJECT_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN;
 
 const isProduction = import.meta.env.VITE_ENV === 'prod';
 const isStaging = import.meta.env.VITE_ENV === 'stage';
-const shouldEnableMixpanel = PROJECT_TOKEN && (isProduction || isStaging);
+const isUat = import.meta.env.VITE_ENV === 'uat';
+
+const shouldEnableMixpanel = PROJECT_TOKEN && (isProduction || isStaging || isUat);
 
 export const Mixpanel = {
   init() {
