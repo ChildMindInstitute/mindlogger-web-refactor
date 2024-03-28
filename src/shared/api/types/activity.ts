@@ -105,7 +105,8 @@ export type AnswerTypesPayload =
   | DateAnswerPayload
   | TimeAnswerPayload
   | TimeRangeAnswerPayload
-  | AudioPlayerAnswerPayload;
+  | AudioPlayerAnswerPayload
+  | MatrixMultiSelectAnswerPayload;
 
 export type EmptyAnswerPayload = null;
 
@@ -173,6 +174,11 @@ export type MultiSelectMatrixAnswerPayload = {
 
 export type SingleSelectMatrixAnswerPayload = {
   value: Array<string>;
+  text: string | null;
+};
+
+export type MatrixMultiSelectAnswerPayload = {
+  value: Array<Array<string | null>>;
   text: string | null;
 };
 
