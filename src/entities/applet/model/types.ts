@@ -9,6 +9,7 @@ import {
   MultiSelectionRowsItem,
   RadioItem,
   SelectorItem,
+  SingleSelectionRowsItem,
   SliderItem,
   SplashScreenItem,
   TextItem,
@@ -65,7 +66,8 @@ export type ItemRecord =
   | TimeItem
   | TimeRangeItem
   | AudioPlayerItem
-  | MultiSelectionRowsItem;
+  | MultiSelectionRowsItem
+  | SingleSelectionRowsItem;
 
 export type ItemWithAdditionalResponse = Extract<
   ItemRecord,
@@ -140,8 +142,6 @@ export type UpdateUserEventByIndexPayload = {
   userEventIndex: number;
   userEvent: UserEvents;
 };
-
-export type SupportableActivities = Record<string, boolean>;
 
 export type CompletedEntitiesState = Record<string, number>;
 

@@ -78,7 +78,8 @@ export type Config =
   | TimeItemItemConfig
   | TimeRangeItemConfig
   | AudioPlayerItemConfig
-  | MultiSelectionRowsItemConfig;
+  | MultiSelectionRowsItemConfig
+  | SingleSelectionRowsItemConfig;
 
 export type ResponseValues =
   | EmptyResponseValues
@@ -87,7 +88,8 @@ export type ResponseValues =
   | SliderValues
   | SelectorValues
   | AudioPlayerItemValues
-  | MultiSelectionRowsItemResponseValues;
+  | MultiSelectionRowsItemResponseValues
+  | SingleSelectionRowsItemResponseValues;
 
 export type EmptyResponseValues = null;
 
@@ -312,4 +314,24 @@ export type MatrixSelectRow = {
   rowName: string;
   rowImage: string | null;
   tooltip: string | null;
+};
+
+export interface SingleSelectionRowsItem extends ActivityItemBase {
+  responseType: 'singleSelectRows';
+  config: SingleSelectionRowsItemConfig;
+  responseValues: SingleSelectionRowsItemResponseValues;
+  answer: MatrixMultiSelectAnswer;
+}
+
+export type SingleSelectionRowsItemConfig = ButtonsConfig &
+  TimerConfig & {
+    addScores: boolean;
+    setAlerts: boolean;
+    addTooltip: boolean;
+  };
+
+export type SingleSelectionRowsItemResponseValues = {
+  rows: Array<MatrixSelectRow>;
+  options: Array<MatrixSelectOption>;
+  dataMatrix: DataMatrix;
 };

@@ -43,7 +43,8 @@ export type ConfigDTO =
   | TimeItemConfigDTO
   | TimeRangeItemConfigDTO
   | AudioPlayerItemConfigDTO
-  | MultiSelectionRowsItemConfigDTO;
+  | MultiSelectionRowsItemConfigDTO
+  | SingleSelectionRowsItemConfigDTO;
 
 export type ResponseValuesDTO =
   | EmptyResponseValuesDTO
@@ -52,7 +53,8 @@ export type ResponseValuesDTO =
   | SliderItemResponseValuesDTO
   | SelectorItemResponseValues
   | AudioPlayerItemResponseValuesDTO
-  | MultiSelectionRowsItemResponseValuesDTO;
+  | MultiSelectionRowsItemResponseValuesDTO
+  | SingleSelectionRowsItemResponseValuesDTO;
 
 type EmptyResponseValuesDTO = null;
 
@@ -288,6 +290,35 @@ type MultiSelectionRowsItemConfigDTO = ButtonsConfigDTO &
   };
 
 type MultiSelectionRowsItemResponseValuesDTO = {
+  rows: Array<{
+    id: string;
+    rowName: string;
+    rowImage: string | null;
+    tooltip: string | null;
+  }>;
+  options: Array<{
+    id: string;
+    text: string;
+    image: string | null;
+    tooltip: string | null;
+  }>;
+  dataMatrix: DataMatrixDto;
+};
+
+export interface SingleSelectionRowsItemDTO extends ItemDetailsBaseDTO {
+  responseType: 'singleSelectRows';
+  config: SingleSelectionRowsItemConfigDTO;
+  responseValues: SingleSelectionRowsItemResponseValuesDTO;
+}
+
+type SingleSelectionRowsItemConfigDTO = ButtonsConfigDTO &
+  TimerConfigDTO & {
+    addScores: boolean;
+    setAlerts: boolean;
+    addTooltip: boolean;
+  };
+
+type SingleSelectionRowsItemResponseValuesDTO = {
   rows: Array<{
     id: string;
     rowName: string;

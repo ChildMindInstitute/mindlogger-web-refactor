@@ -103,6 +103,9 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
         />
       );
 
+    case 'singleSelectRows':
+      return <div>boom</div>;
+
     default:
       return <></>;
   }
