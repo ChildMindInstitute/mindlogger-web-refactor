@@ -1,6 +1,7 @@
 import { AudioPlayerItem } from './AudioPlayerItem';
 import { CheckboxItem } from './CheckboxItem';
 import { DateItem } from './DateItem';
+import { MatrixCheckboxItem } from './MatrixCheckboxItem';
 import { RadioItem } from './RadioItem';
 import { SelectorItem } from './SelectorItem';
 import { SliderItem } from './SliderItem';
@@ -8,20 +9,19 @@ import { SplashScreen } from './SplashScreen';
 import { TextItem } from './TextItem';
 import { TimeItem } from './TimeItem';
 import { TimeRangeItem } from './TimeRangeItem';
+import { Answer } from '../../lib';
 
 import { ItemRecord } from '~/entities/applet/model/types';
 
 type ItemPickerProps = {
   item: ItemRecord;
 
-  onValueChange: (value: string[]) => void;
+  onValueChange: (value: Answer) => void;
   isDisabled: boolean;
   replaceText: (value: string) => string;
 };
 
 export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: ItemPickerProps) => {
-  const values = item.answer;
-
   switch (item.responseType) {
     case 'splashScreen':
       return <SplashScreen imageSrc={item.config.imageSrc} />;
@@ -30,7 +30,7 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
       return (
         <TextItem
           item={item}
-          value={values[0]}
+          value={item.answer[0]}
           onValueChange={onValueChange}
           isDisabled={isDisabled}
         />
@@ -40,7 +40,7 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
       return (
         <CheckboxItem
           item={item}
-          values={values}
+          values={item.answer}
           onValueChange={onValueChange}
           isDisabled={isDisabled}
           replaceText={replaceText}
@@ -51,7 +51,7 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
       return (
         <RadioItem
           item={item}
-          value={values[0]}
+          value={item.answer[0]}
           onValueChange={onValueChange}
           isDisabled={isDisabled}
           replaceText={replaceText}
@@ -62,7 +62,7 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
       return (
         <SliderItem
           item={item}
-          value={values[0]}
+          value={item.answer[0]}
           onValueChange={onValueChange}
           isDisabled={isDisabled}
         />
@@ -72,7 +72,7 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
       return (
         <SelectorItem
           item={item}
-          value={values[0]}
+          value={item.answer[0]}
           onValueChange={onValueChange}
           isDisabled={isDisabled}
         />
@@ -82,16 +82,26 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
       return <></>;
 
     case 'date':
-      return <DateItem value={values[0]} onValueChange={onValueChange} />;
+      return <DateItem value={item.answer[0]} onValueChange={onValueChange} />;
 
     case 'time':
-      return <TimeItem value={values[0]} onValueChange={onValueChange} />;
+      return <TimeItem value={item.answer[0]} onValueChange={onValueChange} />;
 
     case 'timeRange':
-      return <TimeRangeItem values={values} onValueChange={onValueChange} />;
+      return <TimeRangeItem values={item.answer} onValueChange={onValueChange} />;
 
     case 'audioPlayer':
-      return <AudioPlayerItem item={item} value={values[0]} onValueChange={onValueChange} />;
+      return <AudioPlayerItem item={item} value={item.answer[0]} onValueChange={onValueChange} />;
+
+    case 'multiSelectRows':
+      return (
+        <MatrixCheckboxItem
+          item={item}
+          values={item.answer}
+          onValueChange={onValueChange}
+          replaceText={replaceText}
+        />
+      );
 
     default:
       return <></>;

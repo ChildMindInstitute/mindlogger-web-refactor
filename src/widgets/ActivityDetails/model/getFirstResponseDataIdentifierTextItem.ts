@@ -1,3 +1,4 @@
+import { DefaultAnswer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 
 export const getFirstResponseDataIdentifierTextItem = (
@@ -14,5 +15,5 @@ export const getFirstResponseDataIdentifierTextItem = (
     return null;
   }
 
-  return firstResponseDataIdentifier.answer[0];
+  return (firstResponseDataIdentifier.answer as DefaultAnswer)[0];
 };

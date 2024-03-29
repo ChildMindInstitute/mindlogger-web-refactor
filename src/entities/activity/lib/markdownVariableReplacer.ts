@@ -1,18 +1,19 @@
 import { format, intervalToDuration, isSameDay, addDays } from 'date-fns';
 
-import { Answer, Answers } from '~/abstract/lib';
+import { Answer, DefaultAnswer } from './types';
+
 import { ItemRecord } from '~/entities/applet/model/types';
 
 export class MarkdownVariableReplacer {
   private readonly activityItems: ItemRecord[];
-  private readonly answers: Answers;
+  private readonly answers: Array<Answer>;
   private readonly nickName: string;
   private readonly lastResponseTime: Date | number | null;
   private readonly now: number;
 
   constructor(
     activityItems: ItemRecord[],
-    answers: Answers,
+    answers: Array<Answer>,
     lastResponseTime: Date | number | null,
     nickName = '',
   ) {
@@ -159,7 +160,7 @@ export class MarkdownVariableReplacer {
         break;
       case 'singleSelect':
         const filteredItem = activityItem.responseValues.options.find(({ value }) =>
-          answer.includes(String(value)),
+          (answer as DefaultAnswer).includes(String(value)),
         );
         if (filteredItem) {
           updated = filteredItem.text;
@@ -167,7 +168,7 @@ export class MarkdownVariableReplacer {
         break;
       case 'multiSelect':
         const filteredItems = activityItem.responseValues.options
-          .filter(({ value }) => answer.includes(String(value)))
+          .filter(({ value }) => (answer as DefaultAnswer).includes(String(value)))
           .map(({ text }) => text);
 
         if (filteredItems) {

@@ -24,7 +24,7 @@ export const ActivityCardIcon = (props: Props) => {
       width="64px"
       data-testid={props.isFlow ? 'flow-card-image' : 'activity-card-image'}
     >
-      <AvatarBase src={imageSrc!} name="" width="64px" height="64px" />
+      <AvatarBase src={imageSrc} name="" width="64px" height="64px" />
     </Box>
   );
 };

@@ -2,9 +2,16 @@ import { PropsWithChildren } from 'react';
 
 import Box from '@mui/material/Box';
 
-import { Theme } from '../../../constants';
+import { Theme } from '~/shared/constants';
 
 type Props = PropsWithChildren<{
+  justifyContent?:
+    | 'flex-start'
+    | 'center'
+    | 'flex-end'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly';
   color: string | null;
   checked?: boolean | undefined;
   onHandleChange: () => void;
@@ -29,7 +36,7 @@ export const SelectBaseBox = (props: Props) => {
     <Box
       display="flex"
       alignItems="center"
-      justifyContent="space-between"
+      justifyContent={props.justifyContent ? props.justifyContent : 'space-between'}
       gap="12px"
       className="response-option"
       borderRadius="12px"

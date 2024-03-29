@@ -5,39 +5,38 @@ import { dateToDayMonthYear, dateToHourMinute } from '~/shared/utils';
 
 export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventResponse => {
   const responseType = item.responseType;
-  const itemAnswer = item.answer;
 
   if (responseType === 'singleSelect') {
     return {
-      value: [Number(itemAnswer[0])],
+      value: [Number(item.answer[0])],
       text: item.additionalText ?? undefined,
     };
   }
 
   if (responseType === 'multiSelect') {
     return {
-      value: itemAnswer.map((answer) => Number(answer)),
+      value: item.answer.map((answer) => Number(answer)),
       text: item.additionalText ?? undefined,
     };
   }
 
   if (responseType === 'date') {
     return {
-      value: dateToDayMonthYear(new Date(itemAnswer[0])),
+      value: dateToDayMonthYear(new Date(item.answer[0])),
       text: item.additionalText ?? undefined,
     };
   }
 
   if (responseType === 'time') {
     return {
-      value: dateToHourMinute(new Date(itemAnswer[0])),
+      value: dateToHourMinute(new Date(item.answer[0])),
       text: item.additionalText ?? undefined,
     };
   }
 
   if (responseType === 'timeRange') {
-    const fromDate = itemAnswer[0] ? new Date(itemAnswer[0]) : new Date();
-    const toDate = itemAnswer[1] ? new Date(itemAnswer[1]) : new Date();
+    const fromDate = item.answer[0] ? new Date(item.answer[0]) : new Date();
+    const toDate = item.answer[1] ? new Date(item.answer[1]) : new Date();
 
     return {
       value: {
@@ -56,7 +55,7 @@ export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventRes
   }
 
   return {
-    value: itemAnswer[0],
+    value: item.answer,
     text: item.additionalText ?? undefined,
   };
 };

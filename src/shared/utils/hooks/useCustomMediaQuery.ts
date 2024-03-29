@@ -1,7 +1,7 @@
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-export type MediaQueryReturn = {
+type Return = {
   greaterThanXS: boolean;
 
   lessThanSM: boolean;
@@ -15,6 +15,9 @@ export type MediaQueryReturn = {
 
   lessThanXL: boolean;
   greaterThanXL: boolean;
+
+  lessThanTarget: boolean;
+  greaterThanTarget: boolean;
 };
 
 // Default breakpoints:
@@ -24,7 +27,7 @@ export type MediaQueryReturn = {
 // lg, large: 1200px
 // xl, extra-large: 1536px
 
-export const useCustomMediaQuery = (): MediaQueryReturn => {
+export const useCustomMediaQuery = (targetScreenWidth?: number): Return => {
   const theme = useTheme();
 
   const greaterThanXS = useMediaQuery(theme.breakpoints.up('xs'));
@@ -41,6 +44,9 @@ export const useCustomMediaQuery = (): MediaQueryReturn => {
   const lessThanXL = useMediaQuery(theme.breakpoints.down('xl'));
   const greaterThanXL = useMediaQuery(theme.breakpoints.up('xl'));
 
+  const lessThanTarget = useMediaQuery(theme.breakpoints.down(targetScreenWidth ?? 1000));
+  const greaterThanTarget = useMediaQuery(theme.breakpoints.up(targetScreenWidth ?? 1000));
+
   return {
     greaterThanXS,
     lessThanSM,
@@ -51,5 +57,7 @@ export const useCustomMediaQuery = (): MediaQueryReturn => {
     greaterThanLG,
     lessThanXL,
     greaterThanXL,
+    lessThanTarget,
+    greaterThanTarget,
   };
 };

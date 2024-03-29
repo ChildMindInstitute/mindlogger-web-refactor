@@ -5,6 +5,7 @@ import {
   CheckboxItem,
   DateItem,
   MessageItem,
+  MultiSelectionRowsItem,
   RadioItem,
   SelectorItem,
   SliderItem,
@@ -18,6 +19,7 @@ import {
   AnswerTypesPayload,
   AudioPlayerAnswerPayload,
   DateAnswerPayload,
+  MatrixMultiSelectAnswerPayload,
   MessageAnswerPayload,
   MultiSelectAnswerPayload,
   NumberSelectAnswerPayload,
@@ -63,6 +65,9 @@ export function mapToAnswers(
 
       case 'audioPlayer':
         return convertToAudioPlayerAnswer(item);
+
+      case 'multiSelectRows':
+        return convertToMatrixMultiSelectAnswer(item);
 
       default:
         return null;
@@ -229,6 +234,18 @@ function convertToAudioPlayerAnswer(item: AudioPlayerItem): ItemAnswer<AudioPlay
   return {
     answer: {
       value: true,
+      text: item.additionalText || null,
+    },
+    itemId: item.id,
+  };
+}
+
+function convertToMatrixMultiSelectAnswer(
+  item: MultiSelectionRowsItem,
+): ItemAnswer<MatrixMultiSelectAnswerPayload> {
+  return {
+    answer: {
+      value: item.answer,
       text: item.additionalText || null,
     },
     itemId: item.id,

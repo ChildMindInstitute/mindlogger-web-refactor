@@ -7,7 +7,7 @@ import { CheckboxItem as CheckboxItemType } from '../../../lib/types/item';
 
 import { randomizeArray, splitList, useCustomMediaQuery } from '~/shared/utils';
 
-type CheckboxItemProps = {
+type Props = {
   item: CheckboxItemType;
   values: string[];
 
@@ -16,13 +16,7 @@ type CheckboxItemProps = {
   isDisabled: boolean;
 };
 
-export const CheckboxItem = ({
-  item,
-  values,
-  onValueChange,
-  isDisabled,
-  replaceText,
-}: CheckboxItemProps) => {
+export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceText }: Props) => {
   const { lessThanSM } = useCustomMediaQuery();
 
   const options = useMemo(() => {
