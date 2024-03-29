@@ -1,7 +1,7 @@
 import { AudioPlayerItem } from './AudioPlayerItem';
 import { CheckboxItem } from './CheckboxItem';
 import { DateItem } from './DateItem';
-import { MatrixCheckboxItem } from './MatrixCheckboxItem';
+import { MatrixCheckboxItem } from './Matrix/MatrixMultiSelectItem';
 import { RadioItem } from './RadioItem';
 import { SelectorItem } from './SelectorItem';
 import { SliderItem } from './SliderItem';
@@ -102,6 +102,9 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
           replaceText={replaceText}
         />
       );
+
+    case 'singleSelectRows':
+      return <div>boom</div>;
 
     default:
       return <></>;

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { StackedItemsGrid } from './StackedItemsGrid';
-import { MatrixMultiSelectAnswer, MultiSelectionRowsItem } from '../../../lib';
+import { MatrixMultiSelectAnswer, MultiSelectionRowsItem } from '../../../../lib';
 
 type Props = {
   item: MultiSelectionRowsItem;
