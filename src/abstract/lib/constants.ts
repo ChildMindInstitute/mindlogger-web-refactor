@@ -14,4 +14,5 @@ export const supportableResponseTypes = [
   'timeRange',
   'audioPlayer',
   'multiSelectRows',
+  'singleSelectRows',
 ];
