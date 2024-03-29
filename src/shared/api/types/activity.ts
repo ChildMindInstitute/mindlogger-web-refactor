@@ -7,6 +7,7 @@ import {
   MultiSelectionRowsItemDTO,
   RadioItemDTO,
   SelectorItemDTO,
+  SingleSelectionRowsItemDTO,
   SliderItemDTO,
   TextItemDTO,
   TimeItemDTO,
@@ -58,7 +59,8 @@ export type ActivityItemDetailsDTO =
   | TimeItemDTO
   | TimeRangeItemDTO
   | AudioPlayerItemDTO
-  | MultiSelectionRowsItemDTO;
+  | MultiSelectionRowsItemDTO
+  | SingleSelectionRowsItemDTO;
 
 export type AnswerPayload = {
   appletId: ID;
