@@ -35,7 +35,7 @@ function LoginPage() {
         state: {
           ...location.state,
           isPasswordReset: undefined,
-        },
+        } as unknown,
         replace: true,
       });
     }
@@ -58,7 +58,7 @@ function LoginPage() {
         </Typography>
 
         <Box className="loginForm" maxWidth="400px" margin="0 auto">
-          <LoginForm locationState={location.state} />
+          <LoginForm locationState={location.state as Record<string, unknown>} />
         </Box>
 
         <Box margin="24px 0px" display="flex" justifyContent="center">

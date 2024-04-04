@@ -14,7 +14,7 @@ export const AppletListWidget = () => {
     isError,
     error,
   } = useAppletListQuery(
-    { userId: user.id! },
+    { userId: user.id ?? '' },
     {
       select: (data) => mapToAppletList(data?.data?.result),
     },

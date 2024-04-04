@@ -6,8 +6,8 @@ import enResources from '~/i18n/en/translation.json';
 import frResources from '~/i18n/fr/translation.json';
 
 const i18nManager = {
-  initialize() {
-    i18n
+  async initialize() {
+    await i18n
       .use(LanguageDetector)
       .use(initReactI18next)
       .init({

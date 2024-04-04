@@ -5,7 +5,7 @@ import { z } from 'zod';
 import type { Resolver } from '../types';
 
 type FieldError = BaseFieldError & {
-  params: Record<string, any>;
+  params: Record<string, unknown>;
 };
 
 const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boolean) => {
@@ -46,7 +46,7 @@ const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boo
         errors,
         code,
         messages
-          ? ([] as string[]).concat(messages as any as string[], error.message)
+          ? ([] as string[]).concat(messages as unknown as string[], error.message)
           : error.message,
       ) as FieldError;
     }
@@ -60,6 +60,7 @@ const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boo
 const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
   return async (values, _, options) => {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const data = await schema[resolverOptions.mode === 'sync' ? 'parse' : 'parseAsync'](
         values,
         schemaOptions,
@@ -69,8 +70,10 @@ const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
 
       return {
         errors: {} as FieldErrors,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         values: resolverOptions.rawValues ? values : data,
       };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.isEmpty) {
         return {

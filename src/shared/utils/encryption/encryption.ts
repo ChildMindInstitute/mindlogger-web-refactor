@@ -63,7 +63,13 @@ class Encryption {
 
   public decryptData = ({ text, key }: DecryptDataProps): string => {
     const textParts = text.split(':');
-    const iv = Buffer.from(textParts.shift()!, 'hex');
+    const firstPart = textParts.shift();
+
+    if (!firstPart) {
+      throw new Error('[Encryption:decryptData] Text decryption failed. First part is empty.');
+    }
+
+    const iv = Buffer.from(firstPart, 'hex');
     const encryptedText = Buffer.from(textParts.join(':'), 'hex');
     const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
     const decrypted = decipher.update(encryptedText);

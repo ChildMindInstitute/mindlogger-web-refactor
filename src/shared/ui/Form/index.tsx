@@ -2,8 +2,10 @@ import { BaseSyntheticEvent } from 'react';
 
 import { FieldValues, FormProvider, FormProviderProps } from 'react-hook-form';
 
+import { Any } from '../../utils';
+
 interface BasicFormProviderProps {
-  onSubmit: (e: BaseSyntheticEvent<object, any, any> | undefined) => void;
+  onSubmit: (e: BaseSyntheticEvent<object, Any, Any> | undefined) => void;
 }
 
 const BasicFormProvider = <TFieldValues extends FieldValues>({

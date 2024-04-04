@@ -8,8 +8,13 @@ import '~/assets/fonts/Atkinson/atkinson.css';
 
 import './index.css';
 
-Mixpanel.init();
-i18nManager.initialize();
+const setUp = async () => {
+  Mixpanel.init();
+  await i18nManager.initialize();
+};
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+setUp();
 
 function App() {
   return (

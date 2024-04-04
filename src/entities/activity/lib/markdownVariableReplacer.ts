@@ -68,8 +68,12 @@ export class MarkdownVariableReplacer {
   };
 
   private getTimeElapsed = () => {
+    if (!this.lastResponseTime) {
+      throw new Error('[markdownVariableReplacer:getTimeElapsed] Last response time is not set');
+    }
+
     const interval = intervalToDuration({
-      start: this.lastResponseTime!,
+      start: this.lastResponseTime,
       end: this.now,
     });
     let formattedString = '';
@@ -95,12 +99,18 @@ export class MarkdownVariableReplacer {
   };
 
   private getLastResponseTime = () => {
-    if (isSameDay(this.now, this.lastResponseTime!)) {
-      return `${format(this.lastResponseTime!, 'hh:mm aa')} today`;
-    } else if (isSameDay(addDays(this.lastResponseTime!, 1), this.now)) {
-      return `${format(this.lastResponseTime!, 'hh:mm aa')} yesterday`;
+    if (!this.lastResponseTime) {
+      throw new Error(
+        '[markdownVariableReplacer:getLastResponseTime] Last response time is not set',
+      );
     }
-    return format(this.lastResponseTime!, 'hh:mm aa dd/MM/y');
+
+    if (isSameDay(this.now, this.lastResponseTime)) {
+      return `${format(this.lastResponseTime, 'hh:mm aa')} today`;
+    } else if (isSameDay(addDays(this.lastResponseTime, 1), this.now)) {
+      return `${format(this.lastResponseTime, 'hh:mm aa')} yesterday`;
+    }
+    return format(this.lastResponseTime, 'hh:mm aa dd/MM/y');
   };
 
   private updateMarkdown = (variableName: string, replaceValue: string, markdown: string) => {
