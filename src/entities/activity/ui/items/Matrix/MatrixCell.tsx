@@ -15,6 +15,7 @@ export const MatrixCell = ({ children, isRowLabel }: Props) => {
 
   return (
     <Box
+      display="flex"
       height={lessThanTarget ? '100px' : '112px'}
       padding={lessThanTarget ? '8px' : '14px'}
       justifyContent="center"
@@ -22,6 +23,7 @@ export const MatrixCell = ({ children, isRowLabel }: Props) => {
       width={isRowLabel ? rowLabelWidth : '100%'}
       minWidth={lessThanTarget ? '70px' : '142px'}
       maxWidth="400px"
+      data-testid="matrix-cell"
     >
       {children}
     </Box>

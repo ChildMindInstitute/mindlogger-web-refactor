@@ -15,7 +15,7 @@ type Props = {
 
 export const CheckboxGrid = ({ rows, options, onChange, values }: Props) => {
   return (
-    <Box display="flex" flex={1} flexDirection="column">
+    <Box display="flex" flex={1} flexDirection="column" data-testid="matrix-checkbox-grid">
       <MatrixHeader options={options} />
 
       {rows.map((row, rowI) => {

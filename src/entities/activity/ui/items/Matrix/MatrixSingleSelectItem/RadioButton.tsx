@@ -14,7 +14,7 @@ type Props = {
 
 export const RadioButton = ({ id, text, isChecked, onChange }: Props) => {
   return (
-    <Box flex={1} key={id}>
+    <Box flex={1} key={id} data-testid="matrix-radio-button-container">
       <MatrixCell>
         <SelectBaseBox
           color={null}
