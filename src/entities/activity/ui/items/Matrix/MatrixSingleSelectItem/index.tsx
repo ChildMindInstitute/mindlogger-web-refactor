@@ -1,17 +1,17 @@
 import { useMemo } from 'react';
 
-import { CheckboxGrid } from './CheckboxGrid';
-import { MatrixMultiSelectAnswer, MultiSelectionRowsItem } from '../../../../lib';
+import { RadioGrid } from './RadioGrid';
+import { SingleMultiSelectAnswer, SingleSelectionRowsItem } from '../../../../lib';
 
 type Props = {
-  item: MultiSelectionRowsItem;
-  values: MatrixMultiSelectAnswer;
+  item: SingleSelectionRowsItem;
+  values: SingleMultiSelectAnswer;
 
-  onValueChange: (value: MatrixMultiSelectAnswer) => void;
+  onValueChange: (value: SingleMultiSelectAnswer) => void;
   replaceText: (value: string) => string;
 };
 
-export const MatrixCheckboxItem = ({ item, values, onValueChange, replaceText }: Props) => {
+export const MatrixRadioItem = ({ item, values, onValueChange, replaceText }: Props) => {
   const { options, rows } = item.responseValues;
 
   const memoizedOptions = useMemo(() => {
@@ -29,25 +29,22 @@ export const MatrixCheckboxItem = ({ item, values, onValueChange, replaceText }:
   }, [replaceText, rows]);
 
   const memoizedValues = useMemo(() => {
-    const initialAnswer = memoizedRows.map(() => memoizedOptions.map(() => null));
+    const initialAnswer = memoizedRows.map(() => null);
 
     return values.length ? values : initialAnswer;
-  }, [memoizedOptions, memoizedRows, values]);
+  }, [memoizedRows, values]);
 
-  const handleValueChange = (rowIndex: number, optionIndex: number, value: string) => {
+  const handleValueChange = (rowIndex: number, value: string) => {
     const newValues = memoizedValues.map((row, i) => {
       if (i === rowIndex) {
-        return row.map((option, j) => {
-          if (j === optionIndex) {
-            if (typeof option === 'string') {
-              return null;
-            } else {
-              return value;
-            }
-          }
+        const hasAnswer = row !== null;
+        const isSameAnswer = row === value;
 
-          return option;
-        });
+        if (hasAnswer && isSameAnswer) {
+          return null;
+        } else {
+          return value;
+        }
       }
 
       return row;
@@ -57,7 +54,7 @@ export const MatrixCheckboxItem = ({ item, values, onValueChange, replaceText }:
   };
 
   return (
-    <CheckboxGrid
+    <RadioGrid
       options={memoizedOptions}
       rows={memoizedRows}
       onChange={handleValueChange}

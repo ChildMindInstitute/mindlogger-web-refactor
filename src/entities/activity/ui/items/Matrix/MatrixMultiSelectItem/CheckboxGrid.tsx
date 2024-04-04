@@ -13,7 +13,7 @@ type Props = {
   values: MatrixMultiSelectAnswer;
 };
 
-export const StackedItemsGrid = ({ rows, options, onChange, values }: Props) => {
+export const CheckboxGrid = ({ rows, options, onChange, values }: Props) => {
   return (
     <Box display="flex" flex={1} flexDirection="column">
       <MatrixHeader options={options} />
