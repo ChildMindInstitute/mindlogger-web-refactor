@@ -58,7 +58,12 @@ export const SliderItemBase = (props: Props) => {
   const selectedValueIndex = marksAndLabelsList.findIndex((item) => item.value === Number(value));
 
   return (
-    <Box width="100%" margin="auto" className={`slider-widget ${value ? 'no-value' : ''}`}>
+    <Box
+      width="100%"
+      margin="auto"
+      className={`slider-widget ${value ? 'no-value' : ''}`}
+      data-testid="slider-container"
+    >
       <Slider
         size="medium"
         min={minValue}
@@ -128,10 +133,14 @@ export const SliderItemBase = (props: Props) => {
             '& > img': { borderRadius: '8px', overflow: 'hidden' },
           }}
         >
-          {minImage && <img src={minImage} width="100%"></img>}
+          {minImage && <img src={minImage} width="100%" data-testid="slider-min-image"></img>}
 
           {minLabel && (
-            <Box textAlign="center" fontSize={lessThanSM ? '14px' : '18px'}>
+            <Box
+              textAlign="center"
+              fontSize={lessThanSM ? '14px' : '18px'}
+              data-testid="slider-min-label"
+            >
               {minLabel}
             </Box>
           )}
@@ -144,10 +153,14 @@ export const SliderItemBase = (props: Props) => {
             '& > img': { borderRadius: '8px', overflow: 'hidden' },
           }}
         >
-          {maxImage && <img src={maxImage} width="100%"></img>}
+          {maxImage && <img src={maxImage} width="100%" data-testid="slider-max-image"></img>}
 
           {maxLabel && (
-            <Box textAlign="center" fontSize={lessThanSM ? '14px' : '18px'}>
+            <Box
+              textAlign="center"
+              fontSize={lessThanSM ? '14px' : '18px'}
+              data-testid="slider-max-label"
+            >
               {maxLabel}
             </Box>
           )}
