@@ -1,7 +1,8 @@
 import { AudioPlayerItem } from './AudioPlayerItem';
 import { CheckboxItem } from './CheckboxItem';
 import { DateItem } from './DateItem';
-import { MatrixCheckboxItem } from './MatrixCheckboxItem';
+import { MatrixCheckboxItem } from './Matrix/MatrixMultiSelectItem';
+import { MatrixRadioItem } from './Matrix/MatrixSingleSelectItem';
 import { RadioItem } from './RadioItem';
 import { SelectorItem } from './SelectorItem';
 import { SliderItem } from './SliderItem';
@@ -96,6 +97,16 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
     case 'multiSelectRows':
       return (
         <MatrixCheckboxItem
+          item={item}
+          values={item.answer}
+          onValueChange={onValueChange}
+          replaceText={replaceText}
+        />
+      );
+
+    case 'singleSelectRows':
+      return (
+        <MatrixRadioItem
           item={item}
           values={item.answer}
           onValueChange={onValueChange}

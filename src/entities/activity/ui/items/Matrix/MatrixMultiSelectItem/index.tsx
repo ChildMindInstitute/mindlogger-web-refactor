@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { StackedItemsGrid } from './StackedItemsGrid';
-import { MatrixMultiSelectAnswer, MultiSelectionRowsItem } from '../../../lib';
+import { CheckboxGrid } from './CheckboxGrid';
+import { MatrixMultiSelectAnswer, MultiSelectionRowsItem } from '../../../../lib';
 
 type Props = {
   item: MultiSelectionRowsItem;
@@ -57,7 +57,7 @@ export const MatrixCheckboxItem = ({ item, values, onValueChange, replaceText }:
   };
 
   return (
-    <StackedItemsGrid
+    <CheckboxGrid
       options={memoizedOptions}
       rows={memoizedRows}
       onChange={handleValueChange}

@@ -8,6 +8,7 @@ import {
   MultiSelectionRowsItem,
   RadioItem,
   SelectorItem,
+  SingleSelectionRowsItem,
   SliderItem,
   TextItem,
   TimeItem,
@@ -68,6 +69,9 @@ export function mapToAnswers(
 
       case 'multiSelectRows':
         return convertToMatrixMultiSelectAnswer(item);
+
+      case 'singleSelectRows':
+        return convertToMatrixSingleSelectAnswer(item);
 
       default:
         return null;
@@ -243,6 +247,16 @@ function convertToAudioPlayerAnswer(item: AudioPlayerItem): ItemAnswer<AudioPlay
 function convertToMatrixMultiSelectAnswer(
   item: MultiSelectionRowsItem,
 ): ItemAnswer<MatrixMultiSelectAnswerPayload> {
+  return {
+    answer: {
+      value: item.answer,
+      text: item.additionalText || null,
+    },
+    itemId: item.id,
+  };
+}
+
+function convertToMatrixSingleSelectAnswer(item: SingleSelectionRowsItem) {
   return {
     answer: {
       value: item.answer,

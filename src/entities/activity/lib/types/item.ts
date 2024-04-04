@@ -2,8 +2,9 @@ import { ConditionalLogic } from '~/shared/api';
 
 export type DefaultAnswer = Array<string>;
 export type MatrixMultiSelectAnswer = Array<Array<string | null>>;
+export type SingleMultiSelectAnswer = Array<string | null>;
 
-export type Answer = DefaultAnswer | MatrixMultiSelectAnswer;
+export type Answer = DefaultAnswer | MatrixMultiSelectAnswer | SingleMultiSelectAnswer;
 
 export type ActivityItemType =
   | 'text'
@@ -312,4 +313,24 @@ export type MatrixSelectRow = {
   rowName: string;
   rowImage: string | null;
   tooltip: string | null;
+};
+
+export interface SingleSelectionRowsItem extends ActivityItemBase {
+  responseType: 'singleSelectRows';
+  config: SingleSelectionRowsItemConfig;
+  responseValues: SingleSelectionRowsItemResponseValues;
+  answer: SingleMultiSelectAnswer;
+}
+
+export type SingleSelectionRowsItemConfig = ButtonsConfig &
+  TimerConfig & {
+    addScores: boolean;
+    setAlerts: boolean;
+    addTooltip: boolean;
+  };
+
+export type SingleSelectionRowsItemResponseValues = {
+  rows: Array<MatrixSelectRow>;
+  options: Array<MatrixSelectOption>;
+  dataMatrix: DataMatrix;
 };

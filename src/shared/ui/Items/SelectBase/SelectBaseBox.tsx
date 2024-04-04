@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import { Theme } from '~/shared/constants';
 
 type Props = PropsWithChildren<{
+  padding?: string;
   justifyContent?:
     | 'flex-start'
     | 'center'
@@ -40,7 +41,7 @@ export const SelectBaseBox = (props: Props) => {
       gap="12px"
       className="response-option"
       borderRadius="12px"
-      padding="16px"
+      padding={props.padding ? props.padding : '16px'}
       border={`2px solid ${borderColor}`}
       bgcolor={props.color ? props.color : backgroundColor}
       onClick={props.onHandleChange}
