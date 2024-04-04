@@ -19,7 +19,7 @@ const LanguageDropdown = (props: Props) => {
   const preparedLanguageList = useLanguageList();
 
   const onSelect = useCallback(
-    (lang: string | null) => {
+    async (lang: string | null) => {
       if (!lang) {
         return;
       }
@@ -27,7 +27,7 @@ const LanguageDropdown = (props: Props) => {
       props.toggleMenuOpen();
 
       setLanguage(lang as SupportableLanguage);
-      i18n.changeLanguage(lang);
+      await i18n.changeLanguage(lang);
     },
     [i18n, props],
   );

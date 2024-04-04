@@ -1,9 +1,9 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 import authorizationService from './authorization.service';
-import { eventEmitter, getLanguage, secureTokensStorage } from '../../utils';
+import { Any, eventEmitter, getLanguage, secureTokensStorage } from '../../utils';
 
-type RequestConfig = AxiosRequestConfig<any> & {
+type RequestConfig = AxiosRequestConfig<Any> & {
   retry?: boolean;
 };
 
@@ -57,10 +57,14 @@ axiosService.interceptors.response.use(
 
         secureTokensStorage.setTokens(data.result);
 
-        config.headers!.Authorization = `${data.result.tokenType} ${data.result.accessToken}`;
+        if (!config.headers) {
+          config.headers = {};
+        }
+
+        config.headers.Authorization = `${data.result.tokenType} ${data.result.accessToken}`;
       } catch (e) {
         eventEmitter.emit('onLogout');
-        Promise.reject(e);
+        await Promise.reject(e);
       }
 
       return axiosService(config);

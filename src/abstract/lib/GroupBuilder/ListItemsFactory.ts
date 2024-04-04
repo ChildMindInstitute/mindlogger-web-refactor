@@ -26,16 +26,22 @@ export class ListItemsFactory {
 
     const isInProgress = this.utility.isInProgress(activityEvent);
 
-    let activity: Activity, position: number;
+    let activity: Activity | undefined, position: number;
 
     if (isInProgress) {
       const progressRecord = this.utility.getProgressRecord(activityEvent) as FlowProgress;
 
-      activity = this.utility.activities.find((x) => x.id === progressRecord.currentActivityId)!;
+      activity = this.utility.activities.find((x) => x.id === progressRecord.currentActivityId);
       position = progressRecord.pipelineActivityOrder + 1;
     } else {
-      activity = this.utility.activities.find((x) => x.id === activityFlow.activityIds[0])!;
+      activity = this.utility.activities.find((x) => x.id === activityFlow.activityIds[0]);
       position = 1;
+    }
+
+    if (!activity) {
+      throw new Error(
+        '[ListItemsFactory:populateActivityFlowFields] Activity not found in activities list',
+      );
     }
 
     item.activityId = activity.id;
@@ -86,8 +92,15 @@ export class ListItemsFactory {
       const isSpread = this.utility.isSpreadToNextDay(event);
 
       const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday();
-      to.setHours(event.availability.timeTo!.hours);
-      to.setMinutes(event.availability.timeTo!.minutes);
+
+      if (!event.availability.timeTo) {
+        throw new Error(
+          '[ListItemsFactory:createAvailableItem] Event availability timeTo is not defined',
+        );
+      }
+
+      to.setHours(event.availability.timeTo.hours);
+      to.setMinutes(event.availability.timeTo.minutes);
       item.availableTo = to;
     } else {
       item.availableTo = MIDNIGHT_DATE;
@@ -111,14 +124,28 @@ export class ListItemsFactory {
     const { event } = eventActivity;
 
     const from = this.utility.getNow();
-    from.setHours(event.availability.timeFrom!.hours);
-    from.setMinutes(event.availability.timeFrom!.minutes);
+
+    if (!event.availability.timeFrom) {
+      throw new Error(
+        '[ListItemsFactory:createScheduledItem] Event availability timeTo is not defined',
+      );
+    }
+
+    from.setHours(event.availability.timeFrom.hours);
+    from.setMinutes(event.availability.timeFrom.minutes);
 
     const isSpread = this.utility.isSpreadToNextDay(event);
 
     const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday();
-    to.setHours(event.availability.timeTo!.hours);
-    to.setMinutes(event.availability.timeTo!.minutes);
+
+    if (!event.availability.timeTo) {
+      throw new Error(
+        '[ListItemsFactory:createScheduledItem] Event availability timeTo is not defined',
+      );
+    }
+
+    to.setHours(event.availability.timeTo.hours);
+    to.setMinutes(event.availability.timeTo.minutes);
 
     item.availableFrom = from;
     item.availableTo = to;
@@ -137,8 +164,15 @@ export class ListItemsFactory {
       const isSpread = this.utility.isSpreadToNextDay(event);
 
       const to = isSpread ? this.utility.getTomorrow() : this.utility.getToday();
-      to.setHours(event.availability.timeTo!.hours);
-      to.setMinutes(event.availability.timeTo!.minutes);
+
+      if (!event.availability.timeTo) {
+        throw new Error(
+          '[ListItemsFactory:createProgressItem] Event availability timeTo is not defined',
+        );
+      }
+
+      to.setHours(event.availability.timeTo.hours);
+      to.setMinutes(event.availability.timeTo.minutes);
       item.availableTo = to;
     } else {
       item.availableTo = MIDNIGHT_DATE;

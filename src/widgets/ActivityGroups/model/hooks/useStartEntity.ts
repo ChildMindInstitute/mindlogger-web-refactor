@@ -65,8 +65,15 @@ export const useStartEntity = (props: Props) => {
     const isActivityInProgress = status === ActivityStatus.InProgress;
 
     if (flowId) {
-      const flow = flows.find((x) => x.id === flowId)!;
-      const firstActivityId: string = flow.activityIds[0];
+      const flow = flows.find((x) => x.id === flowId);
+      const firstActivityId: string | null = flow?.activityIds[0] ?? null;
+
+      if (!firstActivityId) {
+        throw new Error(
+          '[useStartEntity:startActivityOrFlow]First activity id is not found in the flow',
+        );
+      }
+
       const activityIdToNavigate = shouldRestart ? firstActivityId : activityId;
 
       startFlow(flowId, eventId, flows, shouldRestart);

@@ -31,12 +31,16 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   const isEntityAlwaysAvailable = activity.isAlwaysAvailable;
 
-  const formatDate = (date: Date): string => {
+  const formatDate = (date: Date | null): string => {
+    if (!date) {
+      throw new Error('[TimeStatusLabel:FormatDate] Date is not provided');
+    }
+
     const convertResult = convertToTimeOnNoun(date);
     if (convertResult.translationKey) {
       return t(convertResult.translationKey);
     } else {
-      return convertResult.formattedDate!;
+      return convertResult.formattedDate ?? '';
     }
   };
 
@@ -59,9 +63,9 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
       <Box display="flex" alignItems="center" gap="8px" data-testid="time-status-label">
         <Avatar src={ClockIcon} sx={{ width: '24px', height: '24px' }} />
         <Typography variant="body1" sx={timeStatusLabelSx}>
-          {`${t('activity_due_date.available')} ${formatDate(activity.availableFrom!)} ${t(
+          {`${t('activity_due_date.available')} ${formatDate(activity.availableFrom ?? null)} ${t(
             'activity_due_date.to',
-          )} ${formatDate(activity.availableTo!)} ${isSpreadToNextDay ? t('activity_due_date.the_following_day') : ''}`}
+          )} ${formatDate(activity.availableTo ?? null)} ${isSpreadToNextDay ? t('activity_due_date.the_following_day') : ''}`}
         </Typography>
       </Box>
     );
@@ -74,7 +78,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
         <Typography variant="body1" sx={timeStatusLabelSx}>{`${t(
           'time_to_complete_hm',
-          activity.timeLeftToComplete!,
+          activity.timeLeftToComplete ?? {},
         )}`}</Typography>
       </Box>
     );
@@ -87,7 +91,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
         variant="body1"
         sx={timeStatusLabelSx}
       >{`${t('activity_due_date.to')} ${formatDate(
-        activity.availableTo!,
+        activity.availableTo ?? null,
       )} ${isSpreadToNextDay ? t('activity_due_date.the_following_day') : ''}`}</Typography>
     </Box>
   );

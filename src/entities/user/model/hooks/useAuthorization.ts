@@ -21,9 +21,7 @@ export const useAuthorization = (): Return => {
   const tokens = useTokensState();
   const { user } = useUserState();
 
-  const isAuthorized = Boolean(tokens && user.id);
-
-  return isAuthorized
-    ? { isAuthorized: true, user, tokens: tokens! }
+  return tokens && user.id
+    ? { isAuthorized: true, user, tokens }
     : { isAuthorized: false, user: null, tokens: null };
 };

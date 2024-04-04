@@ -14,8 +14,8 @@ export default function RecoveryPasswordPage() {
   const email = searchParams.get('email');
 
   const { isError, isLoading } = useRecoveryPasswordLinkHealthcheckQuery({
-    email: email!,
-    key: key!,
+    email: email ?? '',
+    key: key ?? '',
   });
 
   if (isLoading) {

@@ -33,7 +33,7 @@ function SignupPage() {
         </Typography>
 
         <Box className="signupForm" maxWidth="400px" margin="0 auto">
-          <SignupForm locationState={location.state} />
+          <SignupForm locationState={location.state as Record<string, unknown>} />
         </Box>
 
         <Box margin="24px 0px" display="flex" justifyContent="center">
