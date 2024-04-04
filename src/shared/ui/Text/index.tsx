@@ -30,6 +30,7 @@ type Props = PropsWithChildren<{
 
   sx?: SxProps<Theme>;
   testid?: string;
+  gutterBottom?: boolean;
 }>;
 
 export const Text = ({
@@ -42,6 +43,7 @@ export const Text = ({
   sx,
   variant,
   testid,
+  gutterBottom,
 }: Props) => {
   return (
     <Typography
@@ -50,6 +52,7 @@ export const Text = ({
       fontSize={fontSize}
       fontWeight={fontWeight}
       data-testid={testid}
+      gutterBottom={gutterBottom}
       sx={{ color, padding, margin, ...sx }}
     >
       {children}

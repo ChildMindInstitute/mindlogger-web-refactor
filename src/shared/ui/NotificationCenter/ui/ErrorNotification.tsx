@@ -31,3 +31,5 @@ export const ErrorNotification = forwardRef((props: Props, ref) => {
     </Box>
   );
 });
+
+ErrorNotification.displayName = 'ErrorNotification';

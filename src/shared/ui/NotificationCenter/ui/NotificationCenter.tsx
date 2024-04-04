@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { forwardRef, useCallback, useEffect, useMemo } from 'react';
 
 import Box from '@mui/material/Box';
 
@@ -8,7 +8,11 @@ import { Notification as TNotification } from '../lib/types';
 
 import { eventEmitter, useForceUpdate } from '~/shared/utils';
 
-export const NotificationCenter = () => {
+type Props = {
+  isIntersecting?: boolean;
+};
+
+export const NotificationCenter = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const forceUpdate = useForceUpdate();
   const refMap: WeakMap<TNotification, HTMLDivElement> = useMemo(() => new WeakMap(), []); // Collect refs for each notification element to calculate their height
 
@@ -45,11 +49,20 @@ export const NotificationCenter = () => {
   }, [onNotificationAdded, onNotificationRemoved]);
 
   return (
-    <Box id="app-notification-container" width="100%">
+    <Box
+      ref={ref}
+      id="app-notification-container"
+      width="100%"
+      position="sticky"
+      top={0}
+      zIndex={10}
+    >
       <NotificationAnimation
         notifications={notificationCenterStore.notifications}
         refMap={refMap}
       />
     </Box>
   );
-};
+});
+
+NotificationCenter.displayName = 'NotificationCenter';

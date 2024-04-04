@@ -1,3 +1,5 @@
+import Box from '@mui/material/Box';
+
 import { SliderItem as SliderItemType } from '../../lib';
 
 import { SliderItemBase } from '~/shared/ui';
@@ -17,19 +19,21 @@ export const SliderItem = ({ value, item, onValueChange, isDisabled }: SliderIte
   };
 
   return (
-    <SliderItemBase
-      value={value ? value : responseValues.minValue.toString()}
-      minValue={responseValues.minValue}
-      minLabel={responseValues.minLabel}
-      minImage={responseValues.minImage}
-      maxValue={responseValues.maxValue}
-      maxLabel={responseValues.maxLabel}
-      maxImage={responseValues.maxImage}
-      onChange={onHandleValueChange}
-      disabled={isDisabled}
-      continiusSlider={config.continuousSlider}
-      showStickLabel={config.showTickLabels}
-      showStickMarks={config.showTickMarks}
-    />
+    <Box padding="0px 16px">
+      <SliderItemBase
+        value={value ? value : responseValues.minValue.toString()}
+        minValue={responseValues.minValue}
+        minLabel={responseValues.minLabel}
+        minImage={responseValues.minImage}
+        maxValue={responseValues.maxValue}
+        maxLabel={responseValues.maxLabel}
+        maxImage={responseValues.maxImage}
+        onChange={onHandleValueChange}
+        disabled={isDisabled}
+        continiusSlider={config.continuousSlider}
+        showStickLabel={config.showTickLabels}
+        showStickMarks={config.showTickMarks}
+      />
+    </Box>
   );
 };

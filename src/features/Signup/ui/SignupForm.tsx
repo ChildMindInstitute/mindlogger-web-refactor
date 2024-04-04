@@ -14,6 +14,7 @@ import {
   PasswordIcon,
   BaseButton,
   useNotification,
+  Text,
 } from '~/shared/ui';
 import { Mixpanel, useCustomForm, usePasswordType } from '~/shared/utils';
 
@@ -128,10 +129,12 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
 
         <Box display="flex" justifyContent="center">
           <CheckboxWithLabel id="terms" onChange={() => setTerms((prev) => !prev)}>
-            I agree to the{' '}
-            <a href={TERMS_URL} target="_blank" rel="noreferrer">
-              Terms of Service
-            </a>
+            <Text variant="body1">
+              I agree to the{' '}
+              <a href={TERMS_URL} target="_blank" rel="noreferrer">
+                Terms of Service
+              </a>
+            </Text>
           </CheckboxWithLabel>
         </Box>
 
