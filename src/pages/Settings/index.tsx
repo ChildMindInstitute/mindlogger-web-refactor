@@ -1,11 +1,10 @@
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
 
 import { userModel } from '~/entities/user';
 import { ChangePasswordForm, useChangePasswordTranslation } from '~/features/ChangePassword';
 import { Theme } from '~/shared/constants';
-import { AvatarBase } from '~/shared/ui';
+import { AvatarBase, Text } from '~/shared/ui';
 
 function SettingsPage() {
   const { t } = useChangePasswordTranslation();
@@ -18,9 +17,9 @@ function SettingsPage() {
           <Box sx={{ padding: '0px 15px' }}>
             <AvatarBase name={`${user?.firstName} ${user?.lastName}`} width="40px" height="40px" />
           </Box>
-          <Typography variant="h6" marginBottom="8px">
+          <Text variant="h6" sx={{ marginBottom: '8px' }}>
             {t('settings', { name: `${user?.firstName} ${user?.lastName}` })}
-          </Typography>
+          </Text>
         </Box>
 
         <Divider
@@ -28,9 +27,9 @@ function SettingsPage() {
         />
 
         <Box display="flex" alignItems="center" flexDirection="column">
-          <Typography variant="h5" color={Theme.colors.light.primary}>
+          <Text variant="h5" color={Theme.colors.light.primary}>
             {t('settingsTitle')}
-          </Typography>
+          </Text>
           <ChangePasswordForm title={t('formTitle', { email: user?.email })} />
         </Box>
       </Box>

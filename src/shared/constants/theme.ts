@@ -21,6 +21,7 @@ export const Theme = {
       accentGreen30: 'rgba(15, 123, 108, 0.30)',
       accentYellow: '#DFAC03',
       accentYellow30: 'rgba(223, 172, 3, 0.30)',
+      accentYellow30AnalogueWithoutOpacity: 'rgb(245, 230, 179)', //  Formula: Color * alpha + Background * (1 - alpha)
       accentOrange: '#D9730D',
       accentOrange30: 'rgba(217, 115, 13, 0.30)',
       inverseOnSurface: '#F0F0F4',

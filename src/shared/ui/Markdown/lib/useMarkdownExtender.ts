@@ -15,7 +15,11 @@ export const useMarkdownExtender = (markdown: string) => {
   }, [markdown]);
 
   useEffect(() => {
-    extendMarkdown().then(setExtendedMarkdown);
+    extendMarkdown()
+      .then(setExtendedMarkdown)
+      .catch(() => {
+        throw new Error('Failed to extend markdown');
+      });
   }, [extendMarkdown]);
 
   return {

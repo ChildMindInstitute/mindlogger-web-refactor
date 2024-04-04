@@ -31,10 +31,22 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
 
     const now = this.utility.getNow();
 
+    if (event.availability.timeFrom === null) {
+      throw new Error('[isValidWhenNoSpreadAndNoAccessBeforeStartTime] timeFrom is null');
+    }
+
+    if (event.availability.timeTo === null) {
+      throw new Error('[isValidWhenNoSpreadAndNoAccessBeforeStartTime] timeTo is null');
+    }
+
+    if (event.scheduledAt === null) {
+      throw new Error('[isValidWhenNoSpreadAndNoAccessBeforeStartTime] scheduledAt is null');
+    }
+
     const isCurrentTimeInTimeWindow = isTimeInInterval({
       timeToCheck: getHourMinute(now),
-      intervalFrom: event.availability.timeFrom!,
-      intervalTo: event.availability.timeTo!,
+      intervalFrom: event.availability.timeFrom,
+      intervalTo: event.availability.timeTo,
       including: 'from',
     });
 
@@ -45,7 +57,7 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
     const isCompletedToday = !!endAt && this.utility.isToday(new Date(endAt));
 
     return (
-      isScheduledToday && now > event.scheduledAt! && isCurrentTimeInTimeWindow && !isCompletedToday
+      isScheduledToday && now > event.scheduledAt && isCurrentTimeInTimeWindow && !isCompletedToday
     );
   }
 

@@ -2,9 +2,9 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 
 import { getFirstLetters } from '../../utils';
+import { Text } from '../Text';
 
 export interface CardProps {
   id: string;
@@ -50,24 +50,25 @@ export const CustomCard = ({ id, title, description, imageSrc, onClick }: CardPr
             color="white"
             data-testid="custom-card-image-replacement"
             bgcolor="rgb(119, 119, 119)"
+            fontFamily="Atkinson"
           >
             {getFirstLetters(title)}
           </Box>
         )}
       </Box>
       <CardContent data-testid="custom-card-content-block">
-        <Typography
+        <Text
           gutterBottom
-          component="div"
+          variant="h1"
           fontSize="20px"
           sx={{ wordBreak: 'break-word', '&:hover': { textDecoration: 'underline' } }}
-          data-testid="custom-card-title"
+          testid="custom-card-title"
         >
           {title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary" data-testid="custom-card-description">
+        </Text>
+        <Text variant="body2" color="text.secondary" testid="custom-card-description">
           {description}
-        </Typography>
+        </Text>
       </CardContent>
     </Card>
   );

@@ -35,7 +35,7 @@ const BaseDropdown = ({ title, options, beforeIndexDivider }: BaseDropdownProps)
         aria-expanded={open ? 'true' : undefined}
         variant="contained"
         disableElevation
-        sx={{ textTransform: 'none', fontSize: '16px' }}
+        sx={{ textTransform: 'none', fontSize: '16px', fontFamily: 'Atkinson, sans-serif' }}
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
       >
@@ -64,6 +64,9 @@ const BaseDropdown = ({ title, options, beforeIndexDivider }: BaseDropdownProps)
             borderRadius: '6px',
             marginTop: 1,
             minWidth: 180,
+          },
+          '& .MuiPaper-root li': {
+            fontFamily: 'Atkinson, sans-serif',
           },
         }}
       >
