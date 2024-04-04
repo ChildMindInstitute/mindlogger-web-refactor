@@ -27,7 +27,7 @@ export const RadioGrid = ({ rows, options, onChange, values }: Props) => {
             isEven={isEven}
             item={{ id: row.id, imageUrl: row.rowImage, text: row.rowName, tooltip: row.tooltip }}
           >
-            {options.map((option, optionI) => {
+            {options.map((option) => {
               const isChecked = option.text === values[rowI];
 
               return (
