@@ -30,7 +30,7 @@ import {
   TimeAnswerPayload,
   TimeRangeAnswerPayload,
 } from '~/shared/api';
-import { dateToDayMonthYear, dateToHourMinute } from '~/shared/utils';
+import { dateToDayMonthYear, dateToHourMinute, isExist } from '~/shared/utils';
 
 export function mapToAnswers(
   items: Array<appletModel.ItemRecord>,
@@ -147,7 +147,7 @@ function convertToSliderAnswer(item: SliderItem): ItemAnswer<SliderAnswerPayload
 }
 
 function convertToNumberSelectAnswer(item: SelectorItem): ItemAnswer<NumberSelectAnswerPayload> {
-  if (!item.answer[0]) {
+  if (!isExist(item.answer[0])) {
     return {
       answer: null,
       itemId: item.id,
