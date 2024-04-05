@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import Box from '@mui/material/Box';
+import { useNavigate } from 'react-router-dom';
 
 import { AssessmentLoadingScreen } from './AssessmentLoadingScreen';
 import { AssessmentPassingScreen } from './AssessmentPassingScreen';
@@ -10,10 +10,14 @@ import * as activityDetailsModel from '../model';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
+import { ROUTES } from '~/shared/constants';
+import { useNotification } from '~/shared/ui';
 import { useAppSelector, useCustomTranslation } from '~/shared/utils';
 
 export const ActivityDetailsWidget = () => {
   const { t } = useCustomTranslation();
+  const { showErrorNotification } = useNotification();
+  const navigate = useNavigate();
 
   const context = useContext(ActivityDetailsContext);
 
@@ -27,36 +31,21 @@ export const ActivityDetailsWidget = () => {
 
   const isActivityStarted = items.length > 0;
 
-  const {
-    activityDetails,
-    isLoading,
-    isError,
-    error,
-    appletDetails,
-    eventsRawData,
-    respondentMeta,
-  } = activityDetailsModel.hooks.useActivityDetailsQuery();
+  const { activityDetails, isLoading, isError, appletDetails, eventsRawData, respondentMeta } =
+    activityDetailsModel.hooks.useActivityDetailsQuery();
 
   if (isLoading) {
     return <AssessmentLoadingScreen />;
   }
 
-  if (isError) {
-    return (
-      <Box height="100vh" width="100%" display="flex" justifyContent="center" alignItems="center">
-        <span>
-          {context.isPublic ? t('additional.invalid_public_url') : error?.evaluatedMessage}
-        </span>
-      </Box>
-    );
-  }
+  if (!appletDetails || !activityDetails || !eventsRawData || isError) {
+    setTimeout(() => {
+      showErrorNotification(t('unabletoLoadActivity'));
+    });
 
-  if (!appletDetails || !activityDetails || !eventsRawData) {
-    return (
-      <Box height="100vh" width="100%" display="flex" justifyContent="center" alignItems="center">
-        <span>{t('common_loading_error')}</span>
-      </Box>
-    );
+    navigate(ROUTES.appletList.path);
+
+    return <></>;
   }
 
   if (!isActivityStarted) {
