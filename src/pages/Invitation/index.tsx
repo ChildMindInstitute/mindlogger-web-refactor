@@ -10,7 +10,6 @@ export default function InvitationPage() {
   const location = useLocation();
 
   const redirectState = {
-    isInvitationFlow: true,
     backRedirectPath: `${location.pathname}${location.search}`,
   };
 

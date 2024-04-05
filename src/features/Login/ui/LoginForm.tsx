@@ -25,7 +25,6 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
   const { handleSubmit } = form;
 
   const { onLoginSuccess } = userModel.hooks.useOnLogin({
-    isInvitationFlow: locationState?.isInvitationFlow as boolean,
     backRedirectPath: locationState?.backRedirectPath as string,
   });
 

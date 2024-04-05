@@ -8,7 +8,6 @@ export default function PrivateJoinPage() {
   const location = useLocation();
 
   const redirectState = {
-    isInvitationFlow: true,
     backRedirectPath: `${location.pathname}${location.search}`,
   };
 

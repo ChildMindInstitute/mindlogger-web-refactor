@@ -2,6 +2,7 @@ import { lazy } from 'react';
 
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+import ActivityDetailsPage from './ActivityDetails';
 import ForgotPasswordPage from './ForgotPassword';
 import LoginPage from './Login';
 import SignupPage from './Signup';
@@ -22,6 +23,7 @@ function UnauthorizedRoutes() {
       <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
 
       <Route element={<Layout />}>
+        <Route path={ROUTES.activityDetails.path} element={<ActivityDetailsPage />} />
         <Route index path={ROUTES.login.path} element={<LoginPage />} />
         <Route path={ROUTES.signup.path} element={<SignupPage />} />
         <Route path={ROUTES.forgotPassword.path} element={<ForgotPasswordPage />} />
