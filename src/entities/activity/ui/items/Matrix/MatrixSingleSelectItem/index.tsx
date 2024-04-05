@@ -34,16 +34,16 @@ export const MatrixRadioItem = ({ item, values, onValueChange, replaceText }: Pr
     return values.length ? values : initialAnswer;
   }, [memoizedRows, values]);
 
-  const handleValueChange = (rowIndex: number, value: string) => {
+  const handleValueChange = (rowIndex: number, id: string) => {
     const newValues = memoizedValues.map((row, i) => {
       if (i === rowIndex) {
         const hasAnswer = row !== null;
-        const isSameAnswer = row === value;
+        const isSameAnswer = row === id;
 
         if (hasAnswer && isSameAnswer) {
           return null;
         } else {
-          return value;
+          return id;
         }
       }
 

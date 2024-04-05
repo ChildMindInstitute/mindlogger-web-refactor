@@ -17,7 +17,7 @@ export const CheckboxButton = ({ id, isChecked, text, onChange }: Props) => {
   const { lessThanSM } = useCustomMediaQuery();
 
   return (
-    <Box flex={1} key={id} data-testid="matrix-checkbox-button-container">
+    <Box display="flex" flex={1} key={id} data-testid="matrix-checkbox-button-container">
       <MatrixCell>
         <SelectBaseBox
           color={null}
