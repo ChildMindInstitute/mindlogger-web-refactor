@@ -257,9 +257,20 @@ function convertToMatrixMultiSelectAnswer(
 }
 
 function convertToMatrixSingleSelectAnswer(item: SingleSelectionRowsItem) {
+  const answers = item.answer.map((answer) => {
+    const isAnswerExist = answer !== null;
+    const optionName = item.responseValues.options.find((el) => el.id === answer)?.text;
+
+    if (!isAnswerExist || !optionName) {
+      return null;
+    }
+
+    return optionName;
+  });
+
   return {
     answer: {
-      value: item.answer,
+      value: answers,
       text: item.additionalText || null,
     },
     itemId: item.id,

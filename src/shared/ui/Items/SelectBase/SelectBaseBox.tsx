@@ -36,6 +36,7 @@ export const SelectBaseBox = (props: Props) => {
   return (
     <Box
       display="flex"
+      flex={1}
       alignItems="center"
       justifyContent={props.justifyContent ? props.justifyContent : 'space-between'}
       gap="12px"
