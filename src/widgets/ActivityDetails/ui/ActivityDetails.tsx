@@ -38,14 +38,19 @@ export const ActivityDetailsWidget = () => {
     return <AssessmentLoadingScreen />;
   }
 
-  if (!appletDetails || !activityDetails || !eventsRawData || isError) {
-    setTimeout(() => {
-      showErrorNotification(t('unabletoLoadActivity'));
-    });
-
+  const backToAppletList = () => {
+    setTimeout(() => showErrorNotification(t('unabletoLoadActivity')));
     navigate(ROUTES.appletList.path);
-
     return <></>;
+  };
+
+  if (!appletDetails || !activityDetails || !eventsRawData || isError) {
+    return backToAppletList();
+  } else if (eventsRawData) {
+    const validEventId = eventsRawData.events.find((it) => it.id === context.eventId) !== undefined;
+    if (!validEventId) {
+      return backToAppletList();
+    }
   }
 
   if (!isActivityStarted) {
