@@ -12,6 +12,8 @@ import {
   SingleMultiSelectAnswer,
   SingleSelectionRowsItem,
   SliderItem,
+  SliderRowsAnswer,
+  SliderRowsItem,
   SplashScreenItem,
   TextItem,
   TimeItem,
@@ -45,7 +47,8 @@ export type UserEventResponse =
         | HourMinuteDTO
         | TimeRangeUserEventDto
         | MatrixMultiSelectAnswer
-        | SingleMultiSelectAnswer;
+        | SingleMultiSelectAnswer
+        | SliderRowsAnswer;
       text?: string;
     };
 
@@ -69,7 +72,8 @@ export type ItemRecord =
   | TimeRangeItem
   | AudioPlayerItem
   | MultiSelectionRowsItem
-  | SingleSelectionRowsItem;
+  | SingleSelectionRowsItem
+  | SliderRowsItem;
 
 export type ItemWithAdditionalResponse = Extract<
   ItemRecord,
