@@ -10,6 +10,7 @@ import {
   SelectorItem,
   SingleSelectionRowsItem,
   SliderItem,
+  SliderRowsItem,
   TextItem,
   TimeItem,
   TimeRangeItem,
@@ -72,6 +73,9 @@ export function mapToAnswers(
 
       case 'singleSelectRows':
         return convertToMatrixSingleSelectAnswer(item);
+
+      case 'sliderRows':
+        return convertToSliderRowsAnswer(item);
 
       default:
         return null;
@@ -271,6 +275,16 @@ function convertToMatrixSingleSelectAnswer(item: SingleSelectionRowsItem) {
   return {
     answer: {
       value: answers,
+      text: item.additionalText || null,
+    },
+    itemId: item.id,
+  };
+}
+
+function convertToSliderRowsAnswer(item: SliderRowsItem) {
+  return {
+    answer: {
+      value: item.answer,
       text: item.additionalText || null,
     },
     itemId: item.id,
