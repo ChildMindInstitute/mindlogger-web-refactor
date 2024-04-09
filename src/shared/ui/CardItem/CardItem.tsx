@@ -1,11 +1,11 @@
 import { PropsWithChildren } from 'react';
 
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 import { Theme } from '../../constants';
 import { useCustomMediaQuery, useCustomTranslation } from '../../utils';
 
+import { Box } from '~/shared/ui';
 import { Markdown } from '~/shared/ui';
 
 import './style.css';

@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
-
 import { MatrixCell } from '../MatrixCell';
 
+import { Box } from '~/shared/ui';
 import { CheckboxItem, SelectBaseBox } from '~/shared/ui';
 import { useCustomMediaQuery } from '~/shared/utils';
 

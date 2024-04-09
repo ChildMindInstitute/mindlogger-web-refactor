@@ -1,8 +1,8 @@
-import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 
 import { useAcceptPrivateInviteMutation, useInvitationTranslation } from '~/entities/invitation';
 import { ROUTES } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { BaseButton, useNotification } from '~/shared/ui';
 import { MixEvents, MixProperties, Mixpanel } from '~/shared/utils';
 

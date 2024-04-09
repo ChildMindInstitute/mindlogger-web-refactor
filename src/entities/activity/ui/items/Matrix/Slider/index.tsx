@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { SliderRow } from './SliderRow';
 import { SliderRowsAnswer, SliderRowsItem } from '../../../../lib';
+
+import { Box } from '~/shared/ui';
 
 type Props = {
   item: SliderRowsItem;

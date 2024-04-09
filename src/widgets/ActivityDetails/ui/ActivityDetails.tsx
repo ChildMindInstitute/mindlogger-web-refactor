@@ -1,7 +1,5 @@
 import { useContext } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { AssessmentLoadingScreen } from './AssessmentLoadingScreen';
 import { AssessmentPassingScreen } from './AssessmentPassingScreen';
 import { AssessmentWelcomeScreen } from './AssessmentWelcomeScreen';
@@ -10,6 +8,7 @@ import * as activityDetailsModel from '../model';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
+import { Box } from '~/shared/ui';
 import { useAppSelector, useCustomTranslation } from '~/shared/utils';
 
 export const ActivityDetailsWidget = () => {

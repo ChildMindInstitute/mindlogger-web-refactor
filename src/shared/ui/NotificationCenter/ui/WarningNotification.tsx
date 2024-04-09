@@ -1,9 +1,9 @@
 import { forwardRef } from 'react';
 
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
-import Box from '@mui/material/Box';
 
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { Markdown } from '~/shared/ui';
 
 type Props = {

@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 
 import { ActivityStatus } from '~/abstract/lib/GroupBuilder';
 import ActivityRestartIcon from '~/assets/activity-restart-icon.svg';
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { BaseButton, MuiModal, Text } from '~/shared/ui';
 import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 

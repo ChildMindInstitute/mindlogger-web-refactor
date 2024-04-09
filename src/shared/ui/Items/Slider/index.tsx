@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
-import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {

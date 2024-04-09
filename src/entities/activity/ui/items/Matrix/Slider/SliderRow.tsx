@@ -1,6 +1,5 @@
-import Box from '@mui/material/Box';
-
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { SliderItemBase, Text } from '~/shared/ui';
 
 type Props = {

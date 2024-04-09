@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
-
 import ActivityDefaultIcon from '~/assets/activity-default-icon.svg';
 import ActivityFlowDefaultIcon from '~/assets/activity-flow-default-icon.svg';
+import { Box } from '~/shared/ui';
 import { AvatarBase } from '~/shared/ui';
 
 type Props = {

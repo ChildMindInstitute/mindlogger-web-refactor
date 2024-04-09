@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { AudioPlayerControls } from './AudioPlayerControls';
 import { AudioPlayerDuration } from './AudioPlayerDuration';
 import { AudioPlayerVolume } from './AudioPlayerVolume';
 import { AudioPlayerProgressBar } from './AudipPlayerProgressBar';
 import { useAudioControls, useAudioDuration, useAudioVolume } from '../lib';
 
+import { Box } from '~/shared/ui';
 import { useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {

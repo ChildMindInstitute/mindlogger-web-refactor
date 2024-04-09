@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react';
 
-import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { subMonths } from 'date-fns';
@@ -11,6 +10,7 @@ import { useActivityGroups, useEntitiesSync } from '../model/hooks';
 
 import AppletDefaultIcon from '~/assets/AppletDefaultIcon.svg';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
+import { Box } from '~/shared/ui';
 import { BootstrapModal } from '~/shared/ui';
 import { AvatarBase } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';

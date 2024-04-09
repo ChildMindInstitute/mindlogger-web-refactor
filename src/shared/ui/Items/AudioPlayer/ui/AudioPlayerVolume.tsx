@@ -1,8 +1,9 @@
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Slider from '@mui/material/Slider';
+
+import { Box } from '~/shared/ui';
 
 type Props = {
   isMuted: boolean;

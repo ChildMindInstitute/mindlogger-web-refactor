@@ -1,9 +1,9 @@
-import Box from '@mui/material/Box';
-
 import { CheckboxButton } from './CheckboxButton';
 import { MatrixMultiSelectAnswer, MatrixSelectOption, MatrixSelectRow } from '../../../../lib';
 import { MatrixHeader } from '../MatrixHeader';
 import { MatrixRow } from '../MatrixRow';
+
+import { Box } from '~/shared/ui';
 
 type Props = {
   options: Array<MatrixSelectOption>;

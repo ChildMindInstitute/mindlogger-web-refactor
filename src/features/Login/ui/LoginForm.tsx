@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 
@@ -7,6 +6,7 @@ import { LoginSchema, TLoginForm } from '../model/login.schema';
 
 import { ILoginPayload, useLoginMutation, userModel } from '~/entities/user';
 import { ROUTES, Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { BaseButton, BasicFormProvider, Input, PasswordIcon, useNotification } from '~/shared/ui';
 import { Mixpanel, useCustomForm, usePasswordType } from '~/shared/utils';
 

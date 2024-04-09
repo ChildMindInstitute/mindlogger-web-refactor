@@ -1,7 +1,8 @@
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 import { Theme } from '../../constants';
+
+import { Box } from '~/shared/ui';
 
 interface ErrorLabelProps {
   errorMessage?: string | null;

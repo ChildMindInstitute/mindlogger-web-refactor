@@ -1,10 +1,10 @@
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 import { ActivityCardList } from './ActivityCardList';
 
 import { ActivityListGroup } from '~/abstract/lib/GroupBuilder';
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
 type Props = {

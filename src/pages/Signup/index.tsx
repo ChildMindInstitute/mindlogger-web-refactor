@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Link, useLocation } from 'react-router-dom';
 
 import { SignupForm, useSignupTranslation } from '~/features/Signup';
 import { ROUTES, Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { Mixpanel } from '~/shared/utils';
 
 function SignupPage() {

@@ -1,5 +1,4 @@
-import Box from '@mui/material/Box';
-
+import { Box } from '~/shared/ui';
 import { BaseProgressBar } from '~/shared/ui';
 
 type Props = {

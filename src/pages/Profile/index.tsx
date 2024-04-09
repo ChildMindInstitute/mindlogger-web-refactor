@@ -1,9 +1,9 @@
 import { lazy } from 'react';
 
-import Box from '@mui/material/Box';
 import { isMobile } from 'react-device-detect';
 
 import { userModel } from '~/entities/user';
+import { Box } from '~/shared/ui';
 import { AvatarBase, Text } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 

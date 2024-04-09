@@ -1,8 +1,8 @@
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 import { useAcceptTransferOwnershipQuery } from '../api';
 
+import { Box } from '~/shared/ui';
 import { PageMessage } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { MixEvents, MixProperties, Mixpanel, useCustomTranslation } from '~/shared/utils';

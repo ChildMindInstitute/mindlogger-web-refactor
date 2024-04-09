@@ -1,7 +1,5 @@
 import { useContext } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { ActivityCardBase } from './ActivityCardBase';
 import { ActivityCardDescription } from './ActivityCardDescription';
 import { ActivityCardIcon } from './ActivityCardIcon';
@@ -18,6 +16,7 @@ import { getProgressId, openStoreLink } from '~/abstract/lib';
 import { ActivityListItem } from '~/abstract/lib/GroupBuilder';
 import { useActivityByIdMutation } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
+import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import {
   MixEvents,

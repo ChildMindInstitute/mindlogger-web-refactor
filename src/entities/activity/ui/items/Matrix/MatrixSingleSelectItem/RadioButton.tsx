@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
-
 import { MatrixCell } from '../MatrixCell';
 
+import { Box } from '~/shared/ui';
 import { RadioOption, SelectBaseBox } from '~/shared/ui';
 
 type Props = {

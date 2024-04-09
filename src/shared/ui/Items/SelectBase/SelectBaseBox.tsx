@@ -1,8 +1,7 @@
 import { PropsWithChildren } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
   padding?: string;

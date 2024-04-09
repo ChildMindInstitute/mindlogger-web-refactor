@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
-
 import { AppletList, mapToAppletList, useAppletListQuery } from '~/entities/applet';
 import { userModel } from '~/entities/user';
+import { Box } from '~/shared/ui';
 import { Text } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 

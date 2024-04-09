@@ -1,8 +1,8 @@
-import Box from '@mui/material/Box';
 import { useSearchParams } from 'react-router-dom';
 
 import { useRecoveryPasswordLinkHealthcheckQuery } from '~/entities/user';
 import { RecoveryPasswordForm, useRecoveryPasswordTranslation } from '~/features/RecoveryPassword';
+import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { Text } from '~/shared/ui/Text';
 
@@ -26,7 +26,7 @@ export default function RecoveryPasswordPage() {
     return (
       <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
         <Text variant="body1" fontSize="24px" margin="16px 0px">
-          <Box dangerouslySetInnerHTML={{ __html: t('invalidLink') }} />
+          <Box dangerouslySetInnerHTML={{ __html: t('invalidLink') ?? '' }} />
         </Text>
       </Box>
     );

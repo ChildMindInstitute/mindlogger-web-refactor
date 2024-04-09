@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
-
 import { Text } from '../../../Text';
 
+import { Box } from '~/shared/ui';
 import { useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {

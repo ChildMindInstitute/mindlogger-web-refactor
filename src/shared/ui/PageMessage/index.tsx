@@ -1,6 +1,6 @@
-import Box from '@mui/material/Box';
-
 import { Text } from '../Text';
+
+import { Box } from '~/shared/ui';
 
 interface PageMessageProps {
   message: string;

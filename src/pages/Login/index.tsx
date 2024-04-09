@@ -1,11 +1,11 @@
 import { lazy, useRef } from 'react';
 
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { LoginForm, useLoginTranslation } from '~/features/Login';
 import { ROUTES, Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { useNotification } from '~/shared/ui';
 import { Notification } from '~/shared/ui/NotificationCenter/lib/types';
 import { Mixpanel, useOnceEffect } from '~/shared/utils';

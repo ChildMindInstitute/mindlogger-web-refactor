@@ -1,5 +1,4 @@
 import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 import { SxProps, Theme as MuiTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { addDays, startOfDay } from 'date-fns';
@@ -7,6 +6,7 @@ import { addDays, startOfDay } from 'date-fns';
 import { ActivityListItem, ActivityStatus } from '~/abstract/lib/GroupBuilder';
 import ClockIcon from '~/assets/Clock.svg';
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { convertToTimeOnNoun, useCustomTranslation } from '~/shared/utils';
 
 interface TimeStatusLabelProps {
