@@ -22,3 +22,4 @@ export * from './MuiModal';
 
 // Common - UI
 export * from './Container';
+export { default as Box } from './Box';
