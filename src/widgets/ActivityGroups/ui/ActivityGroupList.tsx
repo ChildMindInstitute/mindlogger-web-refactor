@@ -1,7 +1,6 @@
 import { useContext, useState } from 'react';
 
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import { subMonths } from 'date-fns';
 
 import { ActivityGroup } from './ActivityGroup';
@@ -10,10 +9,11 @@ import { useActivityGroups, useEntitiesSync } from '../model/hooks';
 
 import AppletDefaultIcon from '~/assets/AppletDefaultIcon.svg';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
-import { Box } from '~/shared/ui';
 import { BootstrapModal } from '~/shared/ui';
 import { AvatarBase } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
+import Text from '~/shared/ui/Text';
 import { formatToDtoDate, useCustomTranslation } from '~/shared/utils';
 
 export const ActivityGroupList = () => {
@@ -61,7 +61,7 @@ export const ActivityGroupList = () => {
           variant="rounded"
           testid="applet-image"
         />
-        <Typography
+        <Text
           variant="h4"
           onClick={onCardAboutClick}
           data-testid="applet-name"
@@ -76,7 +76,7 @@ export const ActivityGroupList = () => {
           }}
         >
           {applet.displayName}
-        </Typography>
+        </Text>
       </Box>
 
       <Box>

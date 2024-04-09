@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
 import ButtonBase from '@mui/material/ButtonBase';
-import Typography from '@mui/material/Typography';
 
 import { ActivityStatus } from '~/abstract/lib/GroupBuilder';
 import ActivityRestartIcon from '~/assets/activity-restart-icon.svg';
 import { Theme } from '~/shared/constants';
-import { Box } from '~/shared/ui';
-import { BaseButton, MuiModal, Text } from '~/shared/ui';
+import { BaseButton, MuiModal } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 
 type Props = {
@@ -105,18 +105,16 @@ export const ActivityCardRestartResume = ({
           marginY: 2,
         }}
         labelComponent={
-          <Typography
-            fontFamily="Atkinson"
+          <Text
             fontSize="16px"
-            fontWeight={400}
-            fontStyle="normal"
+            fontWeight="400"
             lineHeight="24px"
             letterSpacing="0.15px"
-            textTransform="none"
             color={Theme.colors.light.onSurface}
+            sx={{ textTransform: 'none' }}
           >
             {t('additional.activity_resume_restart')} <b>{activityName}</b>?
-          </Typography>
+          </Text>
         }
         footerWrapperSXProps={{
           marginLeft: 'auto',

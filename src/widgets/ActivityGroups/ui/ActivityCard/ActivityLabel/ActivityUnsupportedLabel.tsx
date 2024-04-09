@@ -1,11 +1,11 @@
 import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
 import { isIOS } from 'react-device-detect';
 
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from '~/abstract/lib/constants';
 import ExclamationIcon from '~/assets/exclamation-circle.svg';
 import { Theme } from '~/shared/constants';
-import { Box } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 
 export const ActivityUnsupportedLabel = () => {
@@ -34,34 +34,30 @@ export const ActivityUnsupportedLabel = () => {
           }}
         >
           <Avatar src={ExclamationIcon} sx={{ width: '18px', height: '18px' }} />
-          <Typography
+          <Text
             color={Theme.colors.light.onSurface}
-            sx={{
-              fontSize: '14px',
-              fontWeight: 400,
-              fontFamily: 'Atkinson',
-              lineHeight: '20px',
-              letterSpacing: ' 0.1px',
-            }}
+            fontSize="14px"
+            fontWeight="400"
+            lineHeight="20px"
+            letterSpacing="0.1px"
           >
             {t('mustBeCompletedUsingMobileApp')}
-          </Typography>
+          </Text>
         </Box>
 
         <a href={storeLink} target="_blank" rel="noreferrer">
-          <Typography
+          <Text
             color={Theme.colors.light.primary}
+            fontSize="14px"
+            fontWeight="400"
+            lineHeight="20px"
+            letterSpacing="0.1px"
             sx={{
-              fontSize: '14px',
-              fontWeight: 400,
-              fontFamily: 'Atkinson',
-              lineHeight: '20px',
-              letterSpacing: ' 0.1px',
               textDecoration: 'underline',
             }}
           >
             {` ${t('completeUsingAppNow')}.`}
-          </Typography>
+          </Text>
         </a>
       </Box>
     );
@@ -80,32 +76,28 @@ export const ActivityUnsupportedLabel = () => {
       }}
     >
       <Avatar src={ExclamationIcon} sx={{ width: '18px', height: '18px' }} />
-      <Typography
+      <Text
         color={Theme.colors.light.onSurface}
-        sx={{
-          fontSize: '14px',
-          fontWeight: 400,
-          fontFamily: 'Atkinson',
-          lineHeight: '20px',
-          letterSpacing: ' 0.1px',
-        }}
+        fontSize="14px"
+        fontWeight="400"
+        lineHeight="20px"
+        letterSpacing="0.1px"
       >
         {t('pleaseCompleteOnThe')}
-      </Typography>
+      </Text>
       <a href={storeLink} target="_blank" rel="noreferrer">
-        <Typography
+        <Text
           color={Theme.colors.light.primary}
+          fontSize="14px"
+          fontWeight="400"
+          lineHeight="20px"
+          letterSpacing="0.1px"
           sx={{
-            fontSize: '14px',
-            fontWeight: 400,
-            fontFamily: 'Atkinson',
-            lineHeight: '20px',
-            letterSpacing: ' 0.1px',
             textDecoration: 'underline',
           }}
         >
           {` ${t('mindloggerMobileApp')}.`}
-        </Typography>
+        </Text>
       </a>
     </Box>
   );

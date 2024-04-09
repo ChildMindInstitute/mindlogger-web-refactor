@@ -1,13 +1,13 @@
 import { lazy, useRef } from 'react';
 
-import Typography from '@mui/material/Typography';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { LoginForm, useLoginTranslation } from '~/features/Login';
 import { ROUTES, Theme } from '~/shared/constants';
-import { Box } from '~/shared/ui';
 import { useNotification } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
 import { Notification } from '~/shared/ui/NotificationCenter/lib/types';
+import Text from '~/shared/ui/Text';
 import { Mixpanel, useOnceEffect } from '~/shared/utils';
 
 const DownloadMobileLinks = lazy(() => import('~/widgets/DownloadMobileLinks'));
@@ -44,41 +44,30 @@ function LoginPage() {
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
       <Box flex={1} padding="24px 32px" gap="20px" flexDirection="column">
-        <Typography
+        <Text
           variant="h5"
           color={Theme.colors.light.onSurface}
-          fontFamily="Atkinson"
           fontSize="22px"
-          fontStyle="normal"
-          fontWeight={700}
+          fontWeight="700"
           lineHeight="28px"
-          marginBottom="24px"
+          sx={{ marginBottom: '24px' }}
         >
           {t('title')}
-        </Typography>
+        </Text>
 
         <Box className="loginForm" maxWidth="400px" margin="0 auto">
           <LoginForm locationState={location.state as Record<string, unknown>} />
         </Box>
 
         <Box margin="24px 0px" display="flex" justifyContent="center">
-          <Typography
-            fontFamily="Atkinson"
-            fontSize="16px"
-            fontWeight={400}
-            fontStyle="normal"
-            lineHeight="20px"
-            letterSpacing="0.1px"
-          >
+          <Text fontSize="16px" fontWeight="400" lineHeight="20px" letterSpacing="0.1px">
             {t('or')},
-          </Typography>
+          </Text>
           &nbsp;
-          <Typography
+          <Text
             color={Theme.colors.light.primary}
-            fontFamily="Atkinson"
             fontSize="16px"
-            fontWeight={400}
-            fontStyle="normal"
+            fontWeight="400"
             lineHeight="20px"
             letterSpacing="0.1px"
             sx={{ textDecoration: 'underline' }}
@@ -86,7 +75,7 @@ function LoginPage() {
             <Link to={ROUTES.signup.path} relative="path" onClick={onCreateAccountClick}>
               {t('create')}
             </Link>
-          </Typography>
+          </Text>
         </Box>
 
         <DownloadMobileLinks />

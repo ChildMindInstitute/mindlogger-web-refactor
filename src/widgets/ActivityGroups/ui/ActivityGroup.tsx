@@ -1,10 +1,9 @@
-import Typography from '@mui/material/Typography';
-
 import { ActivityCardList } from './ActivityCardList';
 
 import { ActivityListGroup } from '~/abstract/lib/GroupBuilder';
 import { Theme } from '~/shared/constants';
-import { Box } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 import { useCustomTranslation } from '~/shared/utils';
 
 type Props = {
@@ -16,7 +15,7 @@ export const ActivityGroup = ({ group }: Props) => {
 
   return (
     <Box data-testid={`${group.name}-block`}>
-      <Typography
+      <Text
         variant="h3"
         color={Theme.colors.light.onSurface}
         sx={{
@@ -30,7 +29,7 @@ export const ActivityGroup = ({ group }: Props) => {
         }}
       >
         {t(group.name)}
-      </Typography>
+      </Text>
 
       <ActivityCardList activities={group.activities} />
     </Box>

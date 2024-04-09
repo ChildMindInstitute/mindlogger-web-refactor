@@ -1,13 +1,12 @@
-import { Text } from '../Text';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 
-import { Box } from '~/shared/ui';
-
-interface PageMessageProps {
+type Props = {
   message: string;
   testid?: string;
-}
+};
 
-export const PageMessage = ({ message, testid }: PageMessageProps) => {
+export const PageMessage = ({ message, testid }: Props) => {
   return (
     <Box
       display="flex"

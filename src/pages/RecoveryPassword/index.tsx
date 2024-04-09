@@ -4,7 +4,7 @@ import { useRecoveryPasswordLinkHealthcheckQuery } from '~/entities/user';
 import { RecoveryPasswordForm, useRecoveryPasswordTranslation } from '~/features/RecoveryPassword';
 import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
-import { Text } from '~/shared/ui/Text';
+import Text from '~/shared/ui/Text';
 
 export default function RecoveryPasswordPage() {
   const [searchParams] = useSearchParams();

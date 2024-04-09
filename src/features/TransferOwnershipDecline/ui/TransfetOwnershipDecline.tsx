@@ -1,10 +1,9 @@
-import Typography from '@mui/material/Typography';
-
 import { useDeclineTransferOwnershipQuery } from '../api';
 
-import { Box } from '~/shared/ui';
 import { PageMessage } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
+import Text from '~/shared/ui/Text';
 import { Mixpanel, useCustomTranslation } from '~/shared/utils';
 
 type TransferOwnershipProps = {
@@ -42,21 +41,21 @@ export const TransferOwnershipDecline = ({ appletId, keyParam }: TransferOwnersh
       textAlign="center"
       data-testid="transfer-ownership-declined"
     >
-      <Typography
+      <Text
         variant="body1"
         fontSize="30px"
         margin="16px 0px"
         data-testid="transfer-ownership-declined-title"
       >
         {t('declined.title')}
-      </Typography>
+      </Text>
       <Box data-testid="transfer-ownership-declined-content">
-        <Typography variant="body2" fontSize="18px">
+        <Text variant="body2" fontSize="18px">
           {t('declined.message1')}
-        </Typography>
-        <Typography variant="body2" fontSize="18px">
+        </Text>
+        <Text variant="body2" fontSize="18px">
           {t('declined.message2')}
-        </Typography>
+        </Text>
       </Box>
     </Box>
   );
