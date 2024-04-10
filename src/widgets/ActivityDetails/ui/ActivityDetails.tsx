@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import Box from '@mui/material/Box';
 
 import { AssessmentLoadingScreen } from './AssessmentLoadingScreen';
 import { AssessmentPassingScreen } from './AssessmentPassingScreen';
@@ -10,14 +10,10 @@ import * as activityDetailsModel from '../model';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
-import { ROUTES } from '~/shared/constants';
-import { useNotification } from '~/shared/ui';
 import { useAppSelector, useCustomTranslation } from '~/shared/utils';
 
 export const ActivityDetailsWidget = () => {
   const { t } = useCustomTranslation();
-  const { showErrorNotification } = useNotification();
-  const navigate = useNavigate();
 
   const context = useContext(ActivityDetailsContext);
 
@@ -31,26 +27,36 @@ export const ActivityDetailsWidget = () => {
 
   const isActivityStarted = items.length > 0;
 
-  const { activityDetails, isLoading, isError, appletDetails, eventsRawData, respondentMeta } =
-    activityDetailsModel.hooks.useActivityDetailsQuery();
+  const {
+    activityDetails,
+    isLoading,
+    isError,
+    error,
+    appletDetails,
+    eventsRawData,
+    respondentMeta,
+  } = activityDetailsModel.hooks.useActivityDetailsQuery();
 
   if (isLoading) {
     return <AssessmentLoadingScreen />;
   }
 
-  const backToAppletList = () => {
-    setTimeout(() => showErrorNotification(t('unabletoLoadActivity')));
-    navigate(ROUTES.appletList.path);
-    return <></>;
-  };
+  if (isError) {
+    return (
+      <Box height="100vh" width="100%" display="flex" justifyContent="center" alignItems="center">
+        <span>
+          {context.isPublic ? t('additional.invalid_public_url') : error?.evaluatedMessage}
+        </span>
+      </Box>
+    );
+  }
 
-  if (!appletDetails || !activityDetails || !eventsRawData || isError) {
-    return backToAppletList();
-  } else if (eventsRawData) {
-    const validEventId = eventsRawData.events.find((it) => it.id === context.eventId) !== undefined;
-    if (!validEventId) {
-      return backToAppletList();
-    }
+  if (!appletDetails || !activityDetails || !eventsRawData) {
+    return (
+      <Box height="100vh" width="100%" display="flex" justifyContent="center" alignItems="center">
+        <span>{t('common_loading_error')}</span>
+      </Box>
+    );
   }
 
   if (!isActivityStarted) {
