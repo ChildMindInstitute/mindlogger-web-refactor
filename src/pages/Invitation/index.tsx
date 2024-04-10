@@ -1,16 +1,22 @@
 import Box from '@mui/material/Box';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { AuthorizationGuard } from '~/widgets/AuthorizationGuard';
+import { AuthorizationButtons } from '~/widgets/AuthorizationNavigateButtons';
 import { FetchInvitation } from '~/widgets/FetchInvitation';
 
 export default function InvitationPage() {
   const { inviteId } = useParams();
+  const location = useLocation();
+
+  const redirectState = {
+    backRedirectPath: `${location.pathname}${location.search}`,
+  };
 
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" margin="24px">
       {inviteId && (
-        <AuthorizationGuard>
+        <AuthorizationGuard fallback={<AuthorizationButtons redirectState={redirectState} />}>
           <FetchInvitation keyParams={inviteId} />
         </AuthorizationGuard>
       )}
