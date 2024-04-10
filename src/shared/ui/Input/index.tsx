@@ -29,7 +29,7 @@ const Input = (props: IInputCommonProps) => {
 
   const { control } = useFormContext();
   const {
-    field: { onChange: onFormChange, value },
+    field,
     fieldState: { error },
   } = useController({ name, control });
 
@@ -40,7 +40,7 @@ const Input = (props: IInputCommonProps) => {
       onChange(value);
     }
 
-    onFormChange(value);
+    field.onChange(value);
   };
 
   return (
@@ -54,7 +54,7 @@ const Input = (props: IInputCommonProps) => {
         type={type}
         name={name}
         placeholder={placeholder}
-        value={value}
+        value={field.value as string}
         onChange={onInputChange}
         className={className}
         error={!!error}

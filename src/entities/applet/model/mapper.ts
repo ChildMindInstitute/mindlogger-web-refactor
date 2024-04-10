@@ -54,6 +54,21 @@ export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventRes
     };
   }
 
+  if (responseType === 'singleSelectRows') {
+    const value: Array<string | null> = item.answer.map((answer) => {
+      if (answer === null) return answer;
+
+      const option = item.responseValues.options.find((option) => option.id === answer);
+
+      return option?.text ?? answer;
+    });
+
+    return {
+      value,
+      text: item.additionalText ?? undefined,
+    };
+  }
+
   return {
     value: item.answer,
     text: item.additionalText ?? undefined,

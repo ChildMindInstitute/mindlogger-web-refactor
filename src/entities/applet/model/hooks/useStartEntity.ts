@@ -70,9 +70,15 @@ export const useStartEntity = () => {
       return;
     }
 
-    const flow = flows.find((x) => x.id === flowId)!;
+    const flow = flows.find((x) => x.id === flowId);
 
-    const flowActivities: string[] = flow.activityIds;
+    const flowActivities: string[] | null = flow?.activityIds ?? null;
+
+    if (!flowActivities) {
+      throw new Error(
+        `[useStartEntity:startFlow] Flow with id ${flowId} does not have any activities`,
+      );
+    }
 
     const firstActivityId: string = flowActivities[0];
 

@@ -1,15 +1,15 @@
-import Box from '@mui/material/Box';
-
 import { RadioButton } from './RadioButton';
 import { MatrixSelectOption, MatrixSelectRow, SingleMultiSelectAnswer } from '../../../../lib';
 import { MatrixHeader } from '../MatrixHeader';
 import { MatrixRow } from '../MatrixRow';
 
+import { Box } from '~/shared/ui';
+
 type Props = {
   options: Array<MatrixSelectOption>;
   rows: Array<MatrixSelectRow>;
 
-  onChange: (rowIndex: number, value: string) => void;
+  onChange: (rowIndex: number, id: string) => void;
   values: SingleMultiSelectAnswer;
 };
 
@@ -28,7 +28,7 @@ export const RadioGrid = ({ rows, options, onChange, values }: Props) => {
             item={{ id: row.id, imageUrl: row.rowImage, text: row.rowName, tooltip: row.tooltip }}
           >
             {options.map((option) => {
-              const isChecked = option.text === values[rowI];
+              const isChecked = option.id === values[rowI];
 
               return (
                 <RadioButton
@@ -36,7 +36,7 @@ export const RadioGrid = ({ rows, options, onChange, values }: Props) => {
                   id={option.id}
                   text={option.text}
                   isChecked={isChecked}
-                  onChange={() => onChange(rowI, option.text)}
+                  onChange={() => onChange(rowI, option.id)}
                 />
               );
             })}

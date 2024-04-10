@@ -1,12 +1,12 @@
 import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 import { SxProps, Theme as MuiTheme } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
 import { addDays, startOfDay } from 'date-fns';
 
 import { ActivityListItem, ActivityStatus } from '~/abstract/lib/GroupBuilder';
 import ClockIcon from '~/assets/Clock.svg';
 import { Theme } from '~/shared/constants';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 import { convertToTimeOnNoun, useCustomTranslation } from '~/shared/utils';
 
 interface TimeStatusLabelProps {
@@ -31,12 +31,16 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
 
   const isEntityAlwaysAvailable = activity.isAlwaysAvailable;
 
-  const formatDate = (date: Date): string => {
+  const formatDate = (date: Date | null): string => {
+    if (!date) {
+      throw new Error('[TimeStatusLabel:FormatDate] Date is not provided');
+    }
+
     const convertResult = convertToTimeOnNoun(date);
     if (convertResult.translationKey) {
       return t(convertResult.translationKey);
     } else {
-      return convertResult.formattedDate!;
+      return convertResult.formattedDate ?? '';
     }
   };
 
@@ -58,11 +62,11 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
     return (
       <Box display="flex" alignItems="center" gap="8px" data-testid="time-status-label">
         <Avatar src={ClockIcon} sx={{ width: '24px', height: '24px' }} />
-        <Typography variant="body1" sx={timeStatusLabelSx}>
-          {`${t('activity_due_date.available')} ${formatDate(activity.availableFrom!)} ${t(
+        <Text variant="body1" sx={timeStatusLabelSx}>
+          {`${t('activity_due_date.available')} ${formatDate(activity.availableFrom ?? null)} ${t(
             'activity_due_date.to',
-          )} ${formatDate(activity.availableTo!)} ${isSpreadToNextDay ? t('activity_due_date.the_following_day') : ''}`}
-        </Typography>
+          )} ${formatDate(activity.availableTo ?? null)} ${isSpreadToNextDay ? t('activity_due_date.the_following_day') : ''}`}
+        </Text>
       </Box>
     );
   }
@@ -72,10 +76,10 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
       <Box display="flex" alignItems="center" gap="8px" data-testid="time-status-label">
         <Avatar src={ClockIcon} sx={{ width: '24px', height: '24px' }} />
 
-        <Typography variant="body1" sx={timeStatusLabelSx}>{`${t(
+        <Text variant="body1" sx={timeStatusLabelSx}>{`${t(
           'time_to_complete_hm',
-          activity.timeLeftToComplete!,
-        )}`}</Typography>
+          activity.timeLeftToComplete ?? {},
+        )}`}</Text>
       </Box>
     );
   }
@@ -83,12 +87,9 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
   return (
     <Box display="flex" alignItems="center" gap="8px" data-testid="time-status-label">
       <Avatar src={ClockIcon} sx={{ width: '24px', height: '24px' }} />
-      <Typography
-        variant="body1"
-        sx={timeStatusLabelSx}
-      >{`${t('activity_due_date.to')} ${formatDate(
-        activity.availableTo!,
-      )} ${isSpreadToNextDay ? t('activity_due_date.the_following_day') : ''}`}</Typography>
+      <Text variant="body1" sx={timeStatusLabelSx}>{`${t('activity_due_date.to')} ${formatDate(
+        activity.availableTo ?? null,
+      )} ${isSpreadToNextDay ? t('activity_due_date.the_following_day') : ''}`}</Text>
     </Box>
   );
 };

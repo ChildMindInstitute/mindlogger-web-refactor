@@ -1,10 +1,9 @@
 import { useMemo } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { CheckboxItemOption } from './CheckboxItemOption';
 import { CheckboxItem as CheckboxItemType } from '../../../lib/types/item';
 
+import { Box } from '~/shared/ui';
 import { randomizeArray, splitList, useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {

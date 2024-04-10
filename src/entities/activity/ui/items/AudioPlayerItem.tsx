@@ -1,9 +1,8 @@
 import { useCallback } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { AudioPlayerItem as AudioPlayerItemType } from '../../lib/types/item';
 
+import { Box } from '~/shared/ui';
 import { AudioPlayerItemBase } from '~/shared/ui';
 import { AudioPlayerFinished } from '~/shared/ui/Items/AudioPlayer/lib';
 

@@ -119,7 +119,7 @@ export const useAnswer = (props: Props) => {
           itemIds: preparedItemAnswers.itemIds,
           events: encryptedUserEvents,
           userPublicKey,
-          startTime: new Date(groupProgress.startAt!).getTime(),
+          startTime: new Date(groupProgress.startAt ?? Date.now()).getTime(),
           endTime: new Date().getTime(),
           identifier: encryptedIdentifier,
           scheduledEventId: props.eventId,

@@ -1,5 +1,3 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 
 import { useLoginTranslation } from '../lib/useLoginTranslation';
@@ -7,6 +5,7 @@ import { LoginSchema, TLoginForm } from '../model/login.schema';
 
 import { ILoginPayload, useLoginMutation, userModel } from '~/entities/user';
 import { ROUTES, Theme } from '~/shared/constants';
+import { Box, Text } from '~/shared/ui';
 import { BaseButton, BasicFormProvider, Input, PasswordIcon, useNotification } from '~/shared/ui';
 import { Mixpanel, useCustomForm, usePasswordType } from '~/shared/utils';
 
@@ -78,18 +77,16 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
 
         <Box display="flex" justifyContent="center">
           <Link to={ROUTES.forgotPassword.path} relative="path">
-            <Typography
+            <Text
               color={Theme.colors.light.primary}
-              fontFamily="Atkinson"
               fontSize="16px"
-              fontWeight={400}
-              fontStyle="normal"
+              fontWeight="400"
               lineHeight="20px"
               letterSpacing="0.1px"
               sx={{ textDecoration: 'underline' }}
             >
               {t('forgotPassword')}
-            </Typography>
+            </Text>
           </Link>
         </Box>
 

@@ -1,10 +1,10 @@
 import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 
 import { ActivityLabelTypography } from './ActivityLabelTypography';
 
 import DocumentsIcon from '~/assets/documents-icon.svg';
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
 type Props = {

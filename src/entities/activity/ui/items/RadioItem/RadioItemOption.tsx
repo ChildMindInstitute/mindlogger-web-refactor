@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
-import Box from '@mui/material/Box';
-
+import { Box } from '~/shared/ui';
 import {
   CustomTooltip,
   RadioOption,

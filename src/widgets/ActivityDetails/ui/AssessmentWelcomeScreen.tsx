@@ -1,7 +1,5 @@
 import { useContext } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { ActivityMetaData } from './ActivityMetaData';
 import { AssessmentLayout } from './AssessmentLayout';
 import { ActivityDetailsContext } from '../lib';
@@ -10,6 +8,7 @@ import { appletModel } from '~/entities/applet';
 import { StartAssessmentButton } from '~/features/StartAssessment';
 import { ActivityDTO } from '~/shared/api';
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { AvatarBase, Text } from '~/shared/ui';
 import { useCustomMediaQuery, useFlowType } from '~/shared/utils';
 

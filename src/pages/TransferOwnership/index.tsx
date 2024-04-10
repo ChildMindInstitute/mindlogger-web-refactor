@@ -1,8 +1,8 @@
-import Box from '@mui/material/Box';
 import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 
 import { TransferOwnershipAccept } from '~/features/TransferOwnershipAccept';
 import { TransferOwnershipDecline } from '~/features/TransferOwnershipDecline';
+import { Box } from '~/shared/ui';
 import { PageMessage } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 import { AuthorizationGuard } from '~/widgets/AuthorizationGuard';

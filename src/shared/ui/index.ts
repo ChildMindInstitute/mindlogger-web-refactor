@@ -13,7 +13,6 @@ export * from './Items';
 export { CardItem } from './CardItem';
 export * from './Avatar';
 export * from './Tooltip';
-export * from './Text';
 export * from './BaseButton';
 export * from './NotificationCenter';
 
@@ -22,3 +21,6 @@ export * from './MuiModal';
 
 // Common - UI
 export * from './Container';
+export { default as Box } from './Box';
+export { default as BaseTextInput } from './BaseTextInput';
+export { default as Text } from './Text';

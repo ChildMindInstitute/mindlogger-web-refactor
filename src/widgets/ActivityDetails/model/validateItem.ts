@@ -37,6 +37,24 @@ function isAnswerEmpty(item: appletModel.ItemRecord): boolean {
     return Boolean(fromTime) && Boolean(toTime);
   }
 
+  if (item.responseType === 'multiSelectRows') {
+    if (item.answer === null || item.answer.length === 0) return false;
+
+    return item.answer.every((row) => row.some((e) => e !== null));
+  }
+
+  if (item.responseType === 'singleSelectRows') {
+    if (item.answer === null || item.answer.length === 0) return false;
+
+    return item.answer.every((value) => value !== null);
+  }
+
+  if (item.responseType === 'sliderRows') {
+    if (item.answer === null || item.answer.length === 0) return false;
+
+    return item.answer.every((value) => value !== null);
+  }
+
   return item.answer.length > 0;
 }
 

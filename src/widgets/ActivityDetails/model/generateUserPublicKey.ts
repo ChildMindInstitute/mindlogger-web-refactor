@@ -17,8 +17,8 @@ export const generateUserPublicKey = (
 
   const userPublicKey = encryption.getPublicKey({
     privateKey: userPrivateKey,
-    appletPrime: JSON.parse(prime),
-    appletBase: JSON.parse(base),
+    appletPrime: JSON.parse(prime) as number[],
+    appletBase: JSON.parse(base) as number[],
   });
 
   return JSON.stringify(userPublicKey);

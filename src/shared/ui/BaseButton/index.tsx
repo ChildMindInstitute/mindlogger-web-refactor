@@ -3,9 +3,9 @@ import { PropsWithChildren, forwardRef } from 'react';
 import { SxProps } from '@mui/material';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
 
-import { Theme } from '../../constants';
+import { Theme } from '~/shared/constants';
+import Text from '~/shared/ui/Text';
 
 type Props = PropsWithChildren<{
   type: 'button' | 'submit';
@@ -32,17 +32,15 @@ const ButtonTextComponent = (props: ButtonTextComponentProps): JSX.Element => {
   }
 
   return (
-    <Typography
-      fontFamily="Atkinson"
+    <Text
       fontSize="16px"
-      fontWeight={700}
-      fontStyle="normal"
+      fontWeight="700"
       lineHeight="20px"
       letterSpacing="0.1px"
-      textTransform="none"
+      sx={{ textTransform: 'none' }}
     >
       {props.text}
-    </Typography>
+    </Text>
   );
 };
 

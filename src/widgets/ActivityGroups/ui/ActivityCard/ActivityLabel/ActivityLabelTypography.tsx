@@ -1,4 +1,4 @@
-import Typography from '@mui/material/Typography';
+import Text from '~/shared/ui/Text';
 
 type Props = {
   text: string;
@@ -7,17 +7,8 @@ type Props = {
 
 export const ActivityLabelTypography = ({ text, color }: Props) => {
   return (
-    <Typography
-      color={color}
-      sx={{
-        fontSize: '14px',
-        fontWeight: 400,
-        fontFamily: 'Atkinson',
-        lineHeight: '20px',
-        letterSpacing: ' 0.1px',
-      }}
-    >
+    <Text color={color} fontSize="14px" fontWeight="400" lineHeight="20px" letterSpacing="0.1px">
       {text}
-    </Typography>
+    </Text>
   );
 };

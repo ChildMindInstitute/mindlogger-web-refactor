@@ -1,6 +1,6 @@
-import Box from '@mui/material/Box';
 import { useLocation, useParams } from 'react-router-dom';
 
+import { Box } from '~/shared/ui';
 import { AuthorizationGuard } from '~/widgets/AuthorizationGuard';
 import { AuthorizationButtons } from '~/widgets/AuthorizationNavigateButtons';
 import { FetchInvitation } from '~/widgets/FetchInvitation';

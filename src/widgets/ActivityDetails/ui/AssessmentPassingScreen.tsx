@@ -1,7 +1,5 @@
 import { useCallback, useContext, useMemo, useState } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { AssessmentLayout } from './AssessmentLayout';
 import { ActivityDetailsContext } from '../lib';
 import { validateBeforeMoveForward } from '../model';
@@ -27,6 +25,7 @@ import {
   AppletEventsResponse,
   RespondentMetaDTO,
 } from '~/shared/api';
+import { Box } from '~/shared/ui';
 import { MuiModal, useNotification } from '~/shared/ui';
 import { useAppSelector, useCustomTranslation, useFlowType, usePrevious } from '~/shared/utils';
 

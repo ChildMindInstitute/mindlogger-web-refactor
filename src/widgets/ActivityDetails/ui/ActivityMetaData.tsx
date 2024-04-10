@@ -1,7 +1,7 @@
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 import { ActivityPipelineType, GroupProgress } from '~/abstract/lib';
+import { Box } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
 type Props = {

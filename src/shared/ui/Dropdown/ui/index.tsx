@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import { DropdownOptionList } from '../lib/interfaces';
+
+import { Box } from '~/shared/ui';
 
 type BaseDropdownProps = {
   title: string;

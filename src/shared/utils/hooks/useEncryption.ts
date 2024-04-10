@@ -17,9 +17,9 @@ export const useEncryption = () => {
 
   const createEncryptionService = (params: InputProps) => {
     const aesKey = encryption.getAESKey({
-      appletPrime: JSON.parse(params.prime),
-      appletBase: JSON.parse(params.base),
-      appletPublicKey: JSON.parse(params.publicKey),
+      appletPrime: JSON.parse(params.prime) as number[],
+      appletBase: JSON.parse(params.base) as number[],
+      appletPublicKey: JSON.parse(params.publicKey) as number[],
       userPrivateKey: params.privateKey,
     });
 
@@ -35,9 +35,9 @@ export const useEncryption = () => {
 
   const createDecryptionService = (params: InputProps) => {
     const aesKey = encryption.getAESKey({
-      appletPrime: JSON.parse(params.prime),
-      appletBase: JSON.parse(params.base),
-      appletPublicKey: JSON.parse(params.publicKey),
+      appletPrime: JSON.parse(params.prime) as number[],
+      appletBase: JSON.parse(params.base) as number[],
+      appletPublicKey: JSON.parse(params.publicKey) as number[],
       userPrivateKey: params.privateKey,
     });
 

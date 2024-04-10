@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
-
 import { LoginNavigateButton } from '~/features/Login';
 import { SignupNavigateButton } from '~/features/Signup';
+import { Box } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
 interface AuthorizationButtonsProps {

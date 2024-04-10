@@ -1,9 +1,8 @@
-import Box from '@mui/material/Box';
-
 import { useChangePasswordTranslation } from '../lib/useChangePasswordTranslation';
 import { ChangePasswordSchema, TChangePassword } from '../model/schema';
 
 import { useUpdatePasswordMutation } from '~/entities/user';
+import { Box } from '~/shared/ui';
 import {
   BaseButton,
   BasicFormProvider,

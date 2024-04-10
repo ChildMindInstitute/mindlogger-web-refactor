@@ -19,7 +19,7 @@ type TextVariant =
   | 'overline';
 
 type Props = PropsWithChildren<{
-  variant: TextVariant;
+  variant?: TextVariant;
 
   fontSize?: string;
   fontWeight?: string;
@@ -31,9 +31,13 @@ type Props = PropsWithChildren<{
   sx?: SxProps<Theme>;
   testid?: string;
   gutterBottom?: boolean;
+  lineHeight?: string;
+  letterSpacing?: string;
+
+  onClick?: () => void;
 }>;
 
-export const Text = ({
+function Text({
   children,
   fontSize,
   fontWeight,
@@ -44,7 +48,10 @@ export const Text = ({
   variant,
   testid,
   gutterBottom,
-}: Props) => {
+  lineHeight,
+  letterSpacing,
+  onClick,
+}: Props) {
   return (
     <Typography
       variant={variant}
@@ -53,9 +60,14 @@ export const Text = ({
       fontWeight={fontWeight}
       data-testid={testid}
       gutterBottom={gutterBottom}
+      lineHeight={lineHeight}
+      letterSpacing={letterSpacing}
+      onClick={onClick}
       sx={{ color, padding, margin, ...sx }}
     >
       {children}
     </Typography>
   );
-};
+}
+
+export default Text;

@@ -1,6 +1,6 @@
-import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 
+import { Box } from '~/shared/ui';
 import { useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {

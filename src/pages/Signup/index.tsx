@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { Link, useLocation } from 'react-router-dom';
 
 import { SignupForm, useSignupTranslation } from '~/features/Signup';
 import { ROUTES, Theme } from '~/shared/constants';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 import { Mixpanel } from '~/shared/utils';
 
 function SignupPage() {
@@ -19,41 +19,30 @@ function SignupPage() {
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
       <Box flex={1} padding="24px 32px">
-        <Typography
+        <Text
           variant="h5"
           color={Theme.colors.light.onSurface}
-          fontFamily="Atkinson"
           fontSize="22px"
-          fontStyle="normal"
-          fontWeight={700}
+          fontWeight="700"
           lineHeight="28px"
-          marginBottom="24px"
+          sx={{ marginBottom: '24px' }}
         >
           {t('title')}
-        </Typography>
+        </Text>
 
         <Box className="signupForm" maxWidth="400px" margin="0 auto">
-          <SignupForm locationState={location.state} />
+          <SignupForm locationState={location.state as Record<string, unknown>} />
         </Box>
 
         <Box margin="24px 0px" display="flex" justifyContent="center">
-          <Typography
-            fontFamily="Atkinson"
-            fontSize="16px"
-            fontWeight={400}
-            fontStyle="normal"
-            lineHeight="20px"
-            letterSpacing="0.1px"
-          >
+          <Text fontSize="16px" fontWeight="400" lineHeight="20px" letterSpacing="0.1px">
             {t('or')},
-          </Typography>
+          </Text>
           &nbsp;
-          <Typography
+          <Text
             color={Theme.colors.light.primary}
-            fontFamily="Atkinson"
             fontSize="16px"
-            fontWeight={400}
-            fontStyle="normal"
+            fontWeight="400"
             lineHeight="20px"
             letterSpacing="0.1px"
             sx={{ textDecoration: 'underline' }}
@@ -61,7 +50,7 @@ function SignupPage() {
             <Link to={ROUTES.login.path} relative="path">
               {t('logIn')}
             </Link>
-          </Typography>
+          </Text>
         </Box>
       </Box>
     </Box>

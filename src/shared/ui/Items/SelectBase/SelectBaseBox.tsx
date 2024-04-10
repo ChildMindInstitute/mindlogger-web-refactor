@@ -1,8 +1,7 @@
 import { PropsWithChildren } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
   padding?: string;
@@ -36,6 +35,7 @@ export const SelectBaseBox = (props: Props) => {
   return (
     <Box
       display="flex"
+      flex={1}
       alignItems="center"
       justifyContent={props.justifyContent ? props.justifyContent : 'space-between'}
       gap="12px"

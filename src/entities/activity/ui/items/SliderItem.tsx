@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
-
 import { SliderItem as SliderItemType } from '../../lib';
 
+import { Box } from '~/shared/ui';
 import { SliderItemBase } from '~/shared/ui';
 
 type SliderItemProps = {

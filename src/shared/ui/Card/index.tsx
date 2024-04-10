@@ -1,10 +1,11 @@
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 
 import { getFirstLetters } from '../../utils';
-import { Text } from '../Text';
+
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 
 export interface CardProps {
   id: string;
