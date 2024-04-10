@@ -1,10 +1,9 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-
 import { useAcceptTransferOwnershipQuery } from '../api';
 
 import { PageMessage } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
+import Text from '~/shared/ui/Text';
 import { MixEvents, MixProperties, Mixpanel, useCustomTranslation } from '~/shared/utils';
 
 type TransferOwnershipProps = {
@@ -44,28 +43,24 @@ export const TransferOwnershipAccept = ({ appletId, keyParam }: TransferOwnershi
       textAlign="center"
       data-testid="transfer-ownership-accepted"
     >
-      <Typography
+      <Text
         variant="body1"
         fontSize="30px"
         margin="16px 0px"
         data-testid="transfer-ownership-accepted-title"
       >
         {t('accepted.title')}
-      </Typography>
+      </Text>
       <Box data-testid="transfer-ownership-accepted-content">
-        <Typography variant="body2" fontSize="18px">
+        <Text variant="body2" fontSize="18px">
           {t('accepted.message1')}
-        </Typography>
-        <Typography
-          variant="body2"
-          fontSize="18px"
-          sx={{ '& a:hover': { textDecoration: 'underline' } }}
-        >
+        </Text>
+        <Text variant="body2" fontSize="18px" sx={{ '& a:hover': { textDecoration: 'underline' } }}>
           {t('accepted.message2')}{' '}
           <a href={adminPanelUrl} target="_blank" rel="noreferrer">
             {t('adminPanel')}
           </a>
-        </Typography>
+        </Text>
       </Box>
     </Box>
   );

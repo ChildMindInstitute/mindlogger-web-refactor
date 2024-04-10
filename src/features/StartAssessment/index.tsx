@@ -1,5 +1,4 @@
-import Box from '@mui/material/Box';
-
+import { Box } from '~/shared/ui';
 import { BaseButton } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 

@@ -1,11 +1,10 @@
-import Box from '@mui/material/Box';
-
 import { FetchInvitationErrorMapper } from './FetchInvitationErrorMapper';
 import { useAuthorizationGuard } from '../../AuthorizationGuard';
 
 import { Invitation, useInvitationQuery, useInvitationTranslation } from '~/entities/invitation';
 import { InvitationAcceptButton } from '~/features/InvitationAccept';
 import { InvitationDeclineButton } from '~/features/InvitationDecline';
+import { Box } from '~/shared/ui';
 import { Text } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { useCustomMediaQuery } from '~/shared/utils';

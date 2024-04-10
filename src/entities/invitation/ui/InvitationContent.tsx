@@ -1,6 +1,6 @@
-import Box from '@mui/material/Box';
-
 import { useInvitationTranslation } from '../lib';
+
+import { Box } from '~/shared/ui';
 
 interface InvitationContentProps {
   appletName: string;
@@ -15,7 +15,7 @@ export const InvitationContent = ({ appletName, isUserAuthenticated }: Invitatio
       <Box
         className="invitationBody"
         dangerouslySetInnerHTML={{
-          __html: t('inviteContent.description', { displayName: appletName }),
+          __html: t('inviteContent.description', { displayName: appletName }) ?? '',
         }}
       />
       <Box margin="24px 0px">
@@ -28,7 +28,7 @@ export const InvitationContent = ({ appletName, isUserAuthenticated }: Invitatio
           <li>
             <Box
               dangerouslySetInnerHTML={{
-                __html: t('inviteContent.step3', { displayName: appletName }),
+                __html: t('inviteContent.step3', { displayName: appletName }) ?? '',
               }}
             />
           </li>

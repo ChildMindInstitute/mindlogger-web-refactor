@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import MenuIcon from '@mui/icons-material/Menu';
-import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import IconButton from '@mui/material/IconButton';
 
@@ -13,6 +12,7 @@ import { userModel } from '~/entities/user';
 import { LanguageDropdown } from '~/features/language';
 import { Theme } from '~/shared/constants';
 import { ROUTES } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { AvatarBase } from '~/shared/ui';
 import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
 

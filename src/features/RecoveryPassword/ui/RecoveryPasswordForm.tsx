@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 
 import { useRecoveryPasswordTranslation } from '../lib/useRecoveryPasswordTranslation';
@@ -6,6 +5,7 @@ import { RecoveryPassword, RecoveryPasswordSchema } from '../model/schema';
 
 import { useApproveRecoveryPasswordMutation } from '~/entities/user';
 import { ROUTES } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import {
   BaseButton,
   BasicFormProvider,

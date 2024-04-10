@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
-
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import { ROUTES, Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { BaseProgressBar, Text } from '~/shared/ui';
 import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
 

@@ -1,6 +1,6 @@
-import Box from '@mui/material/Box';
-
 import { Theme } from '../../../constants/theme';
+
+import { Box } from '~/shared/ui';
 
 export const BaseRadioActiveIcon = () => {
   return (

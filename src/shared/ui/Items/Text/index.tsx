@@ -1,14 +1,14 @@
-import TextField from '@mui/material/TextField';
+import { BaseTextInput } from '~/shared/ui';
 
-type TextItemProps = {
+type Props = {
   value: string | undefined;
   onValueChange: (value: string) => void;
   disabled: boolean;
 };
 
-export const TextItem = ({ value = '', onValueChange, disabled }: TextItemProps) => {
+export const TextItem = ({ value = '', onValueChange, disabled }: Props) => {
   return (
-    <TextField
+    <BaseTextInput
       fullWidth
       size="small"
       value={value}

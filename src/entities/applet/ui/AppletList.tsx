@@ -1,7 +1,7 @@
-import Box from '@mui/material/Box';
-
 import { AppletCard } from './AppletCard';
 import { AppletListItem } from '../lib';
+
+import { Box } from '~/shared/ui';
 
 type Props = {
   applets: AppletListItem[];

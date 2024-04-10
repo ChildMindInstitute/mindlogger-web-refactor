@@ -1,11 +1,10 @@
 import { forwardRef, useCallback, useEffect, useMemo } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { NotificationAnimation } from './NotificationAnimation';
 import { notificationCenterStore } from '../lib/store';
 import { Notification as TNotification } from '../lib/types';
 
+import { Box } from '~/shared/ui';
 import { eventEmitter, useForceUpdate } from '~/shared/utils';
 
 type Props = {

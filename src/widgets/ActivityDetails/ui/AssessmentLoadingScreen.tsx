@@ -1,11 +1,10 @@
 import { useContext } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { ActivityDetailsContext } from '../lib';
 
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import { ROUTES } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
 

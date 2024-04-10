@@ -3,8 +3,13 @@ import { ConditionalLogic } from '~/shared/api';
 export type DefaultAnswer = Array<string>;
 export type MatrixMultiSelectAnswer = Array<Array<string | null>>;
 export type SingleMultiSelectAnswer = Array<string | null>;
+export type SliderRowsAnswer = Array<number | null>;
 
-export type Answer = DefaultAnswer | MatrixMultiSelectAnswer | SingleMultiSelectAnswer;
+export type Answer =
+  | DefaultAnswer
+  | MatrixMultiSelectAnswer
+  | SingleMultiSelectAnswer
+  | SliderRowsAnswer;
 
 export type ActivityItemType =
   | 'text'
@@ -79,7 +84,8 @@ export type Config =
   | TimeItemItemConfig
   | TimeRangeItemConfig
   | AudioPlayerItemConfig
-  | MultiSelectionRowsItemConfig;
+  | MultiSelectionRowsItemConfig
+  | SliderRowsItemConfig;
 
 export type ResponseValues =
   | EmptyResponseValues
@@ -88,7 +94,8 @@ export type ResponseValues =
   | SliderValues
   | SelectorValues
   | AudioPlayerItemValues
-  | MultiSelectionRowsItemResponseValues;
+  | MultiSelectionRowsItemResponseValues
+  | SliderRowsItemResponseValues;
 
 export type EmptyResponseValues = null;
 
@@ -334,3 +341,39 @@ export type SingleSelectionRowsItemResponseValues = {
   options: Array<MatrixSelectOption>;
   dataMatrix: DataMatrix;
 };
+
+export interface SliderRowsItem extends ActivityItemBase {
+  responseType: 'sliderRows';
+  config: SliderRowsItemConfig;
+  responseValues: SliderRowsItemResponseValues;
+  answer: SliderRowsAnswer;
+}
+
+export type SliderRowsItemConfig = ButtonsConfig &
+  TimerConfig & {
+    addScores: boolean;
+    setAlerts: boolean;
+  };
+
+export type SliderRowsItemResponseValues = {
+  rows: SliderRows;
+};
+
+export type SliderAlerts = Array<{
+  value: number;
+  minValue: number;
+  maxValue: number;
+  alert: string;
+}> | null;
+
+export type SliderRows = Array<{
+  id: string;
+  label: string;
+  minLabel: string | null;
+  maxLabel: string | null;
+  minValue: number;
+  maxValue: number;
+  minImage: string | null;
+  maxImage: string | null;
+  alerts: SliderAlerts;
+}>;

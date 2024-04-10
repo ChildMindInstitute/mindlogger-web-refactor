@@ -1,13 +1,12 @@
-import Box from '@mui/material/Box';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 
-import { Text } from '../Text';
-
-interface PageMessageProps {
+type Props = {
   message: string;
   testid?: string;
-}
+};
 
-export const PageMessage = ({ message, testid }: PageMessageProps) => {
+export const PageMessage = ({ message, testid }: Props) => {
   return (
     <Box
       display="flex"

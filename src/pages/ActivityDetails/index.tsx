@@ -1,6 +1,6 @@
-import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
 
+import { Box } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 import { ActivityDetailsContext, ActivityDetailsWidget } from '~/widgets/ActivityDetails';
 

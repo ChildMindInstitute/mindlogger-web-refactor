@@ -1,11 +1,10 @@
 import { PropsWithChildren } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { AssessmentLayoutFooter } from './AssessmentLayoutFooter';
 import { AssessmentLayoutHeader } from './AssessmentLayoutHeader';
 
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { NotificationCenter } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
