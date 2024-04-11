@@ -31,7 +31,6 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
 
   const [terms, setTerms] = useState<boolean>(false);
   const { onLoginSuccess } = userModel.hooks.useOnLogin({
-    isInvitationFlow: locationState?.isInvitationFlow as boolean,
     backRedirectPath: locationState?.backRedirectPath as string,
   });
 

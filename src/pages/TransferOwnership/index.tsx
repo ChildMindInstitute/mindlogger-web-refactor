@@ -23,7 +23,6 @@ export default function TransferOwnershipPage() {
   }
 
   const redirectState = {
-    isInvitationFlow: true,
     backRedirectPath: `${location.pathname}${location.search}`,
   };
 

@@ -20,10 +20,11 @@ import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import {
   MixEvents,
-  MixProperties,
   Mixpanel,
+  MixProperties,
   useAppSelector,
   useCustomMediaQuery,
+  useOnceEffect,
 } from '~/shared/utils';
 
 type Props = {
@@ -88,7 +89,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
   const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100;
 
-  function onStartActivity(shouldRestart: boolean) {
+  const onStartActivity = (shouldRestart: boolean) => {
     if (isDisabled || !activityListItem) return;
 
     if (!isEntitySupported) {
@@ -115,7 +116,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
         },
       },
     );
-  }
+  };
 
   const restartActivity = () => {
     onStartActivity(true);
@@ -125,6 +126,15 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     onStartActivity(false);
     Mixpanel.track(MixEvents.ActivityResumed, { [MixProperties.AppletId]: context.applet.id });
   };
+
+  useOnceEffect(() => {
+    if (
+      context.startActivityOrFlow &&
+      context.startActivityOrFlow === activityListItem.activityId
+    ) {
+      restartActivity();
+    }
+  });
 
   if (isLoading) {
     return (
