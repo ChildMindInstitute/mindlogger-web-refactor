@@ -101,7 +101,6 @@ export const ActivityCard = ({ activityListItem }: Props) => {
       {
         onSuccess(data) {
           const activity = data.data.result;
-          console.log('Data fetched:', activity);
 
           if (!activity) {
             throw new Error('[useActivityByIdMutation]: Activity not found');
