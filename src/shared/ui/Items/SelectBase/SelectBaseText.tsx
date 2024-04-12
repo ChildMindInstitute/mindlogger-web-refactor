@@ -14,7 +14,7 @@ export const SelectBaseText = (props: Props) => {
       fontWeight="400"
       lineHeight="28px"
       data-testid="select-text"
-      sx={{ cursor: 'pointer' }}
+      sx={{ cursor: 'pointer', lineBreak: 'anywhere' }}
     >
       {props.text}
     </Text>

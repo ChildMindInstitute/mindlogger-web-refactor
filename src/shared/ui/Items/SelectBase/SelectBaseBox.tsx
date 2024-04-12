@@ -5,6 +5,7 @@ import { Box } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
   padding?: string;
+  flex?: number;
   justifyContent?:
     | 'flex-start'
     | 'center'
@@ -35,7 +36,7 @@ export const SelectBaseBox = (props: Props) => {
   return (
     <Box
       display="flex"
-      flex={1}
+      flex={props.flex}
       alignItems="center"
       justifyContent={props.justifyContent ? props.justifyContent : 'space-between'}
       gap="12px"
