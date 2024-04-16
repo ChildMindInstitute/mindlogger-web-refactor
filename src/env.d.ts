@@ -8,6 +8,7 @@ interface ImportMetaEnv {
   readonly VITE_BUILD_VERSION: string;
   readonly VITE_IV_LENGTH: string;
   readonly VITE_MIXPANEL_TOKEN: string;
+  readonly VITE_LAUNCHDARKLY_CLIENT_ID: string;
 }
 
 interface ImportMeta {

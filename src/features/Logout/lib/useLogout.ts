@@ -4,6 +4,7 @@ import { appletModel } from '~/entities/applet';
 import { useLogoutMutation, userModel } from '~/entities/user';
 import { ROUTES } from '~/shared/constants';
 import { Mixpanel, secureTokensStorage, useCustomNavigation } from '~/shared/utils';
+import { LaunchDarkly } from '~/shared/utils/featureFlags';
 
 type UseLogoutReturn = {
   logout: () => void;
@@ -32,6 +33,7 @@ export const useLogout = (): UseLogoutReturn => {
 
     Mixpanel.track('logout');
     Mixpanel.logout();
+    LaunchDarkly.logout();
     return navigator.navigate(ROUTES.login.path);
   }, [clearUser, logoutMutation, navigator, resetAppletsStore]);
 

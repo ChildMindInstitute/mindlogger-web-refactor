@@ -98,6 +98,8 @@ See the documentation on [Vitest](https://vitest.dev/guide/) for more informatio
 | `VITE_SECURE_LOCAL_STORAGE_PREFIX` | yes | `ML_SECURE` | Secure local storage prefix |
 | `VITE_IV_LENGTH` | yes | `16` | Encryption initialization vector length |
 | `VITE_BUILD_VERSION` | yes | `dev-build` | Build version |
+| `VITE_MIXPANEL_TOKEN` | yes | null | Mixpanel client ID, refer to Confluence for correct environment key |
+| `VITE_LAUNCHDARKLY_CLIENT_ID` | yes | null | LaunchDarkly client ID, refer to Confluence for correct environment key |
 
 ## License
 

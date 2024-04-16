@@ -1,5 +1,7 @@
 import { Suspense, lazy } from 'react';
 
+import { withLDProvider } from 'launchdarkly-react-client-sdk';
+
 const App = lazy(() => import('./App'));
 
 import Loader from '~/shared/ui/Loader';
@@ -12,4 +14,6 @@ function AppSuspense() {
   );
 }
 
-export default AppSuspense;
+export default withLDProvider({
+  clientSideID: import.meta.env.VITE_LAUNCHDARKLY_CLIENT_ID,
+})(AppSuspense);
