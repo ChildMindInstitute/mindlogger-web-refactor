@@ -66,6 +66,15 @@ function ValidateTakeNowParams({
     return <ActivityList />;
   }
 
+  if (isLoadingApplet) {
+    return <Loader />;
+  }
+
+  if (isAppletError || !appletData?.data?.result) {
+    // The applet is part of the URL, so we'll let the activity list page handle this error
+    return <ActivityList />;
+  }
+
   if (isLoadingSubject || isLoadingActivity) {
     return <Loader />;
   }
@@ -77,15 +86,6 @@ function ValidateTakeNowParams({
 
   if (isActivityError) {
     setTimeout(() => showErrorNotification(t('takeNow.invalidActivity')));
-    return <ActivityList />;
-  }
-
-  if (isLoadingApplet) {
-    return <Loader />;
-  }
-
-  if (isAppletError || !appletData?.data?.result) {
-    // The applet is part of the URL, so we'll let the activity list page handle this error
     return <ActivityList />;
   }
 
