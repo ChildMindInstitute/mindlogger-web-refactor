@@ -138,7 +138,9 @@ function ValidateTakeNowParams({
   const multiInformantState = getMultiInformantState();
 
   if (!multiInformantState.sourceSubjectId || !multiInformantState.targetSubjectId) {
-    initiateTakeNow({ sourceSubjectId, targetSubjectId });
+    if (sourceSubjectId !== targetSubjectId) {
+      initiateTakeNow({ sourceSubjectId, targetSubjectId });
+    }
   }
 
   return (
