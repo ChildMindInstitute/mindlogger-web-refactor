@@ -85,7 +85,7 @@ function ValidateTakeNowParams({
   }
 
   if (isAppletError || !appletData?.data?.result) {
-    setTimeout(() => showErrorNotification(t('takeNow.invalidApplet')));
+    // The applet is part of the URL, so we'll let the activity list page handle this error
     return <ActivityList />;
   }
 
