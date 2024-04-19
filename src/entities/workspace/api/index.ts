@@ -1,1 +1,1 @@
-export * from './useWorkspaceQuery';
+export * from 'entities/workspace/api/useWorkspaceRolesQuery';
