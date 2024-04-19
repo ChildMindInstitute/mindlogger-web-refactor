@@ -64,7 +64,7 @@ export const ActivityGroupList = () => {
         <Text
           variant="h4"
           onClick={onCardAboutClick}
-          data-testid="applet-name"
+          testid="applet-name"
           sx={{
             fontFamily: 'Atkinson',
             fontSize: '22px',

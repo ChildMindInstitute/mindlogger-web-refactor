@@ -47,7 +47,7 @@ export const TransferOwnershipAccept = ({ appletId, keyParam }: TransferOwnershi
         variant="body1"
         fontSize="30px"
         margin="16px 0px"
-        data-testid="transfer-ownership-accepted-title"
+        testid="transfer-ownership-accepted-title"
       >
         {t('accepted.title')}
       </Text>
