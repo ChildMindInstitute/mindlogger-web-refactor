@@ -13,7 +13,7 @@ export const SelectBaseText = (props: Props) => {
       fontSize="18px"
       fontWeight="400"
       lineHeight="28px"
-      data-testid="select-text"
+      testid="select-text"
       sx={{ cursor: 'pointer', lineBreak: 'anywhere' }}
     >
       {props.text}

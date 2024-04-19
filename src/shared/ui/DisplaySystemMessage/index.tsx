@@ -12,7 +12,7 @@ export const DisplaySystemMessage = ({ errorMessage, successMessage }: ErrorLabe
   return (
     <Box minHeight="8px" maxHeight="64px" padding="4px 0">
       {errorMessage && (
-        <Text fontSize="14px" color={Theme.colors.light.error} data-testid="system-error-message">
+        <Text fontSize="14px" color={Theme.colors.light.error} testid="system-error-message">
           {errorMessage}
         </Text>
       )}

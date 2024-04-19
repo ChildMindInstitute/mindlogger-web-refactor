@@ -38,7 +38,7 @@ export const CardItem = ({ children, markdown, isOptional, testId }: CardItemPro
           <Text
             variant="body1"
             color={Theme.colors.light.outline}
-            data-testid={'optional-item-label'}
+            testid="optional-item-label"
             fontWeight="400"
             fontSize="18px"
             lineHeight="28px"
