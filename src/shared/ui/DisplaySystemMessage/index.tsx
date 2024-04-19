@@ -21,7 +21,7 @@ export const DisplaySystemMessage = ({ errorMessage, successMessage }: ErrorLabe
         <Text
           fontSize="14px"
           color={Theme.colors.light.accentGreen}
-          data-testid="system-success-message"
+          testid="system-success-message"
         >
           {successMessage}
         </Text>
