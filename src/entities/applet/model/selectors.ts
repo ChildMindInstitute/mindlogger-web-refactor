@@ -35,3 +35,8 @@ export const entityCompletionsSelector = createSelector(
   appletsSelector,
   (activity) => activity.completions,
 );
+
+export const multiInformantStateSelector = createSelector(
+  appletsSelector,
+  (state) => state.multiInformantState,
+);

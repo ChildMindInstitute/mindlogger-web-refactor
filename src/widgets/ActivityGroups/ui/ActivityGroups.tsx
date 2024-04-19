@@ -1,11 +1,11 @@
 import { ActivityGroupList } from './ActivityGroupList';
 import { AppletDetailsContext } from '../lib';
 
-import { useAppletBaseInfoByIdQuery } from '~/entities/applet';
+import { appletModel, useAppletBaseInfoByIdQuery } from '~/entities/applet';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
 import { Container } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
-import { useCustomTranslation } from '~/shared/utils';
+import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
 
 type PublicAppletDetails = {
   isPublic: true;
@@ -36,6 +36,14 @@ export const ActivityGroups = (props: Props) => {
     data: events,
   } = useEventsbyAppletIdQuery(props, {
     select: (data) => data.data.result,
+  });
+
+  const { resetMultiInformantState } = appletModel.hooks.useMultiInformantState();
+
+  useOnceEffect(() => {
+    if (!props.startActivityOrFlow) {
+      resetMultiInformantState();
+    }
   });
 
   if (isAppletLoading || isEventsLoading) {

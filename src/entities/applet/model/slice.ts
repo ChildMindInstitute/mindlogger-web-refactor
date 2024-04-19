@@ -2,35 +2,38 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidV4 } from 'uuid';
 
 import {
-  ProgressState,
-  RemoveActivityProgressPayload,
   CompletedEntitiesState,
   CompletedEventEntities,
   InProgressActivity,
   InProgressEntity,
   InProgressFlow,
-  SaveItemAnswerPayload,
+  MultiInformantPayload,
+  ProgressState,
+  RemoveActivityProgressPayload,
   SaveActivityProgressPayload,
+  SaveGroupProgressPayload,
+  SaveItemAdditionalTextPayload,
+  SaveItemAnswerPayload,
   SaveUserEventPayload,
   UpdateStepPayload,
   UpdateUserEventByIndexPayload,
-  SaveGroupProgressPayload,
-  SaveItemAdditionalTextPayload,
 } from './types';
 
 import {
   ActivityPipelineType,
-  GroupProgress,
   FlowProgress,
   getProgressId,
+  GroupProgress,
   GroupProgressState,
 } from '~/abstract/lib';
+import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
 
 type InitialState = {
   groupProgress: GroupProgressState;
   progress: ProgressState;
   completedEntities: CompletedEntitiesState;
   completions: CompletedEventEntities;
+  multiInformantState: MultiInformantState;
 };
 
 const initialState: InitialState = {
@@ -38,6 +41,7 @@ const initialState: InitialState = {
   progress: {},
   completedEntities: {},
   completions: {},
+  multiInformantState: {},
 };
 
 const appletsSlice = createSlice({
@@ -215,6 +219,14 @@ const appletsSlice = createSlice({
         entityCompletions[action.payload.eventId] = [];
       }
       entityCompletions[action.payload.eventId].push(now);
+    },
+
+    initiateTakeNow: (state, action: PayloadAction<MultiInformantPayload>) => {
+      state.multiInformantState = action.payload;
+    },
+
+    resetMultiInformantState: (state) => {
+      state.multiInformantState = {};
     },
   },
 });

@@ -173,3 +173,8 @@ export type InProgressFlow = {
   eventId: string;
   pipelineActivityOrder: number;
 };
+
+export type MultiInformantPayload = {
+  sourceSubjectId: string;
+  targetSubjectId: string;
+};

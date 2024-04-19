@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { useActivityByIdQuery } from '~/entities/activity';
-import { useAppletByIdQuery } from '~/entities/applet';
+import { appletModel, useAppletByIdQuery } from '~/entities/applet';
 import { useSubjectQuery } from '~/entities/subject';
 import { useUserState } from '~/entities/user/model/hooks';
 import { useWorkspaceAppletRespondent, useWorkspaceRolesQuery } from '~/entities/workspace';
@@ -58,6 +58,7 @@ function ValidateTakeNowParams({
   const { showErrorNotification } = useNotification();
   const { t } = useCustomTranslation();
   const { user } = useUserState();
+  const { initiateTakeNow, getMultiInformantState } = appletModel.hooks.useMultiInformantState();
 
   const ActivityList = () => <ActivityGroups isPublic={false} appletId={appletId} />;
 
@@ -134,9 +135,11 @@ function ValidateTakeNowParams({
   }
 
   const { subjectId: sourceSubjectId } = respondentData.data.result;
-  console.log('sourceSubjectId', sourceSubjectId);
+  const multiInformantState = getMultiInformantState();
 
-  // TODO: Create something in redux to indicate that we're in a MI context
+  if (!multiInformantState.sourceSubjectId || !multiInformantState.targetSubjectId) {
+    initiateTakeNow({ sourceSubjectId, targetSubjectId });
+  }
 
   return (
     <ActivityGroups
