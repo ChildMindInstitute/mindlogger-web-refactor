@@ -38,10 +38,16 @@ export const ActivityGroups = (props: Props) => {
     select: (data) => data.data.result,
   });
 
-  const { resetMultiInformantState } = appletModel.hooks.useMultiInformantState();
+  const { getMultiInformantState, resetMultiInformantState } =
+    appletModel.hooks.useMultiInformantState();
 
   useOnceEffect(() => {
-    if (!props.startActivityOrFlow) {
+    const multiInformantState = getMultiInformantState();
+    if (
+      multiInformantState &&
+      (multiInformantState.sourceSubjectId || multiInformantState.targetSubjectId) &&
+      !props.startActivityOrFlow
+    ) {
       resetMultiInformantState();
     }
   });

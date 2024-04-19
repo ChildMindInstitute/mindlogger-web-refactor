@@ -137,7 +137,11 @@ function ValidateTakeNowParams({
   const { subjectId: sourceSubjectId } = respondentData.data.result;
   const multiInformantState = getMultiInformantState();
 
-  if (!multiInformantState.sourceSubjectId || !multiInformantState.targetSubjectId) {
+  if (
+    !multiInformantState ||
+    !multiInformantState.sourceSubjectId ||
+    !multiInformantState.targetSubjectId
+  ) {
     if (sourceSubjectId !== targetSubjectId) {
       initiateTakeNow({ sourceSubjectId, targetSubjectId });
     }
