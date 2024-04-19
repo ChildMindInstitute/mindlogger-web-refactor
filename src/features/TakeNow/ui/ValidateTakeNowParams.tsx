@@ -18,7 +18,7 @@ type ValidateTakeNowParamsProps = {
   respondentId: string;
 };
 
-const TAKE_NOW_ROLES: WorkspaceRole[] = ['super_admin', 'owner', 'manager', 'coordinator'];
+const TAKE_NOW_ROLES: WorkspaceRole[] = ['super_admin', 'owner', 'manager'];
 
 function ValidateTakeNowParams({
   appletId,
