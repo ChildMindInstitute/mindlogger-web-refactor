@@ -4,7 +4,7 @@ import { useActivityByIdQuery } from '~/entities/activity';
 import { useAppletByIdQuery } from '~/entities/applet';
 import { useSubjectQuery } from '~/entities/subject';
 import { useUserState } from '~/entities/user/model/hooks';
-import { useWorkspaceRolesQuery } from '~/entities/workspace';
+import { useWorkspaceAppletRespondent, useWorkspaceRolesQuery } from '~/entities/workspace';
 import { WorkspaceRole } from '~/shared/api/types/workspace';
 import { useNotification } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
@@ -22,11 +22,11 @@ const TAKE_NOW_ROLES: WorkspaceRole[] = ['super_admin', 'owner', 'manager', 'coo
 
 function ValidateTakeNowParams({
   appletId,
-  subjectId,
+  subjectId: targetSubjectId,
   startActivityOrFlow,
   respondentId,
 }: ValidateTakeNowParamsProps) {
-  const { isError: isSubjectError, isLoading: isLoadingSubject } = useSubjectQuery(subjectId);
+  const { isError: isSubjectError, isLoading: isLoadingSubject } = useSubjectQuery(targetSubjectId);
 
   const {
     isError: isAppletError,
@@ -48,6 +48,12 @@ function ValidateTakeNowParams({
   } = useWorkspaceRolesQuery(workspaceId, {
     appletIds: [appletId],
   });
+
+  const {
+    isError: isRespondentError,
+    data: respondentData,
+    isLoading: isLoadingRespondent,
+  } = useWorkspaceAppletRespondent(workspaceId, appletId, respondentId);
 
   const { showErrorNotification } = useNotification();
   const { t } = useCustomTranslation();
@@ -108,9 +114,20 @@ function ValidateTakeNowParams({
       setTimeout(() => showErrorNotification(t('takeNow.invalidRespondent')));
       return <ActivityList />;
     }
-  }
 
-  // TODO: Get the subject ID of the current logged in user
+    if (isLoadingRespondent) {
+      return <Loader />;
+    }
+
+    if (isRespondentError || !respondentData || !respondentData?.data?.result) {
+      // If we're unable to fetch the subject ID for the current user, we can't start the multi-informant flow
+      // eslint-disable-next-line no-console
+      console.error('Unable to fetch subject ID for current user');
+      return <ActivityList />;
+    }
+
+    const { subjectId: sourceSubjectId } = respondentData.data.result;
+  }
 
   // TODO: Create something in redux to indicate that we're in a MI context
 

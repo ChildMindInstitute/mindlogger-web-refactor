@@ -19,3 +19,18 @@ export type WorkspaceRolesDTO = {
 };
 
 export type GetWorkspaceRolesSuccessResponse = BaseSuccessResponse<WorkspaceRolesDTO>;
+
+export type GetWorkspaceAppletRespondentPayload = {
+  workspaceId: string;
+  appletId: string;
+  respondentId: string;
+};
+
+export type RespondentInfoDTO = {
+  secretUserId: string;
+  subjectId: string;
+  nickname: string | null;
+  lastSeen: string | null;
+};
+
+export type GetWorkspaceAppletRespondentSuccessResponse = BaseSuccessResponse<RespondentInfoDTO>;

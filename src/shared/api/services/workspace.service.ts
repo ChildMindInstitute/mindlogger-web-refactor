@@ -1,5 +1,10 @@
 import { axiosService } from '~/shared/api';
-import { GetWorkspaceRoles, GetWorkspaceRolesSuccessResponse } from '~/shared/api/types/workspace';
+import {
+  GetWorkspaceAppletRespondentPayload,
+  GetWorkspaceAppletRespondentSuccessResponse,
+  GetWorkspaceRoles,
+  GetWorkspaceRolesSuccessResponse,
+} from '~/shared/api/types/workspace';
 
 function workspaceService() {
   return {
@@ -13,6 +18,12 @@ function workspaceService() {
               }
             : undefined,
         },
+      );
+    },
+
+    getWorkspaceAppletRespondent(payload: GetWorkspaceAppletRespondentPayload) {
+      return axiosService.get<GetWorkspaceAppletRespondentSuccessResponse>(
+        `/workspaces/${payload.workspaceId}/applets/${payload.appletId}/respondents/${payload.respondentId}`,
       );
     },
   };

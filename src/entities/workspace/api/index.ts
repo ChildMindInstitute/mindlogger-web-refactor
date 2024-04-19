@@ -1,1 +1,2 @@
-export * from 'entities/workspace/api/useWorkspaceRolesQuery';
+export * from './useWorkspaceRolesQuery';
+export * from './useWorkspaceAppletRespondent';
