@@ -26,6 +26,8 @@ function ValidateTakeNowParams({
   startActivityOrFlow,
   respondentId,
 }: ValidateTakeNowParamsProps) {
+  const [workspaceId, setWorkspaceId] = useState<string>('');
+
   const { isError: isSubjectError, isLoading: isLoadingSubject } = useSubjectQuery(targetSubjectId);
 
   const {
@@ -38,8 +40,6 @@ function ValidateTakeNowParams({
     isPublic: false,
     activityId: startActivityOrFlow,
   });
-
-  const [workspaceId, setWorkspaceId] = useState<string>('');
 
   const {
     isError: isWorkspaceRolesError,
@@ -62,7 +62,8 @@ function ValidateTakeNowParams({
   const ActivityList = () => <ActivityGroups isPublic={false} appletId={appletId} />;
 
   if (respondentId !== user.id) {
-    setTimeout(() => showErrorNotification(t('takeNow.invalidRespondent')));
+    // No impersonation allowed... yet?
+    showErrorNotification(t('takeNow.invalidRespondent'));
     return <ActivityList />;
   }
 
@@ -80,54 +81,60 @@ function ValidateTakeNowParams({
   }
 
   if (isSubjectError) {
-    setTimeout(() => showErrorNotification(t('takeNow.invalidSubject')));
+    showErrorNotification(t('takeNow.invalidSubject'));
     return <ActivityList />;
   }
 
   if (isActivityError) {
-    setTimeout(() => showErrorNotification(t('takeNow.invalidActivity')));
+    showErrorNotification(t('takeNow.invalidActivity'));
     return <ActivityList />;
   }
 
+  // At this point we have the subject, applet, and activity data
+  // We can't fetch the workspace roles before we have the applet data
+  // because that's where we get the workspace ID
+
   if (!workspaceId) {
-    const localWorkspaceId = appletData?.data?.result?.encryption?.accountId;
+    const localWorkspaceId = appletData.data.result.encryption?.accountId;
     if (!localWorkspaceId) {
-      setTimeout(() => showErrorNotification(t('common_loading_error')));
-      return <ActivityList />;
-    } else {
-      setWorkspaceId(localWorkspaceId);
-    }
-  } else {
-    if (isLoadingWorkspaceRoles) {
-      return <Loader />;
-    }
-
-    if (isWorkspaceRolesError || !workspaceRolesData?.data?.result) {
-      setTimeout(() => showErrorNotification(t('common_loading_error')));
+      // We can't verify the roles of the current user in this workspace,
+      // so we can't proceed with a multi-informant flow
+      showErrorNotification(t('common_loading_error'));
       return <ActivityList />;
     }
 
-    const roles = workspaceRolesData.data.result[appletId];
-    const hasCorrectRole = TAKE_NOW_ROLES.some((role) => roles.includes(role));
-
-    if (!hasCorrectRole) {
-      setTimeout(() => showErrorNotification(t('takeNow.invalidRespondent')));
-      return <ActivityList />;
-    }
-
-    if (isLoadingRespondent) {
-      return <Loader />;
-    }
-
-    if (isRespondentError || !respondentData || !respondentData?.data?.result) {
-      // If we're unable to fetch the subject ID for the current user, we can't start the multi-informant flow
-      // eslint-disable-next-line no-console
-      console.error('Unable to fetch subject ID for current user');
-      return <ActivityList />;
-    }
-
-    const { subjectId: sourceSubjectId } = respondentData.data.result;
+    setWorkspaceId(localWorkspaceId);
+    return <Loader />;
   }
+
+  if (isLoadingWorkspaceRoles || isLoadingRespondent) {
+    return <Loader />;
+  }
+
+  if (isWorkspaceRolesError || !workspaceRolesData?.data?.result) {
+    // Same as above - we can't verify the roles of the current user in this workspace,
+    // so we can't proceed with a multi-informant flow
+    showErrorNotification(t('common_loading_error'));
+    return <ActivityList />;
+  }
+
+  const roles = workspaceRolesData.data.result[appletId];
+  const hasCorrectRole = TAKE_NOW_ROLES.some((role) => roles.includes(role));
+
+  if (!hasCorrectRole) {
+    showErrorNotification(t('takeNow.invalidRespondent'));
+    return <ActivityList />;
+  }
+
+  if (isRespondentError || !respondentData || !respondentData?.data?.result) {
+    // If we're unable to fetch the subject ID for the current user, we can't start the multi-informant flow
+    // eslint-disable-next-line no-console
+    console.error('Unable to fetch subject ID for current user');
+    return <ActivityList />;
+  }
+
+  const { subjectId: sourceSubjectId } = respondentData.data.result;
+  console.log('sourceSubjectId', sourceSubjectId);
 
   // TODO: Create something in redux to indicate that we're in a MI context
 
