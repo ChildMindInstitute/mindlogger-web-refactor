@@ -3,16 +3,34 @@ import { v4 as uuidv4 } from 'uuid';
 import { Notification, NotificationType } from './types';
 import { useNotificationCenter } from './useNotificationCenter';
 
+import { notificationCenterStore } from '~/shared/ui/NotificationCenter/lib/store';
+
 type NotificationParams = {
   message: string;
   type: NotificationType;
   duration?: number;
+
+  /**
+   * If false, prevents the same notification from being added multiple times. Default is true.
+   */
+  allowDuplicate?: boolean;
 };
+
+type ShowNotificationOptions = Omit<NotificationParams, 'type' | 'message'>;
 
 export const useNotification = () => {
   const notificationCenter = useNotificationCenter();
 
   const showNotification = (params: NotificationParams) => {
+    const existingNotification = notificationCenterStore.notifications.find(
+      (notification) =>
+        notification.message === params.message && notification.type === params.type,
+    );
+
+    if (existingNotification && !params.allowDuplicate) {
+      return;
+    }
+
     const defaultDuration = 3000;
 
     const notification: Notification = {
@@ -28,20 +46,20 @@ export const useNotification = () => {
     return notification;
   };
 
-  const showSuccessNotification = (msg: string, duration?: number) => {
-    return showNotification({ message: msg, type: 'success', duration });
+  const showSuccessNotification = (message: string, options?: ShowNotificationOptions) => {
+    return showNotification({ ...options, message, type: 'success' });
   };
 
-  const showWarningNotification = (msg: string, duration?: number) => {
-    return showNotification({ message: msg, type: 'warning', duration });
+  const showWarningNotification = (message: string, options?: ShowNotificationOptions) => {
+    return showNotification({ ...options, message, type: 'warning' });
   };
 
-  const showErrorNotification = (msg: string, duration?: number) => {
-    return showNotification({ message: msg, type: 'error', duration });
+  const showErrorNotification = (message: string, options?: ShowNotificationOptions) => {
+    return showNotification({ ...options, message, type: 'error' });
   };
 
-  const showInfoNotification = (msg: string, duration?: number) => {
-    return showNotification({ message: msg, type: 'info', duration });
+  const showInfoNotification = (message: string, options?: ShowNotificationOptions) => {
+    return showNotification({ ...options, message, type: 'info' });
   };
 
   return {
