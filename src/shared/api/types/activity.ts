@@ -92,6 +92,8 @@ export type AnswerPayload = {
     localEndDate: string;
     localEndTime: string;
   };
+  sourceSubjectId?: ID | null;
+  targetSubjectId?: ID | null;
 };
 
 export type AlertDTO = {
