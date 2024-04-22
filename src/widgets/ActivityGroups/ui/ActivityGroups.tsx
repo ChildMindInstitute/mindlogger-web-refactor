@@ -6,6 +6,7 @@ import { useEventsbyAppletIdQuery } from '~/entities/event';
 import { Container } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
+import { useLaunchDarkly } from '~/shared/utils/hooks/useLaunchDarkly';
 
 type PublicAppletDetails = {
   isPublic: true;
@@ -38,17 +39,21 @@ export const ActivityGroups = (props: Props) => {
     select: (data) => data.data.result,
   });
 
+  const { flags: featureFlags } = useLaunchDarkly();
+
   const { getMultiInformantState, resetMultiInformantState } =
     appletModel.hooks.useMultiInformantState();
 
   useOnceEffect(() => {
-    const multiInformantState = getMultiInformantState();
-    if (
-      multiInformantState &&
-      (multiInformantState.sourceSubjectId || multiInformantState.targetSubjectId) &&
-      !props.startActivityOrFlow
-    ) {
-      resetMultiInformantState();
+    if (featureFlags.enableMultiInformant) {
+      const multiInformantState = getMultiInformantState();
+      if (
+        multiInformantState &&
+        (multiInformantState.sourceSubjectId || multiInformantState.targetSubjectId) &&
+        !props.startActivityOrFlow
+      ) {
+        resetMultiInformantState();
+      }
     }
   });
 
