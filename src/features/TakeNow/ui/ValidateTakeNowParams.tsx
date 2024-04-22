@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { useActivityByIdQuery } from '~/entities/activity';
 import { appletModel, useAppletByIdQuery } from '~/entities/applet';
@@ -55,25 +55,12 @@ function ValidateTakeNowParams({
     isLoading: isLoadingRespondent,
   } = useWorkspaceAppletRespondent(workspaceId, appletId, respondentId);
 
-  const { showErrorNotification: showError } = useNotification();
+  const { showErrorNotification } = useNotification();
   const { t } = useCustomTranslation();
   const { user } = useUserState();
   const { initiateTakeNow, getMultiInformantState } = appletModel.hooks.useMultiInformantState();
-  const errorNotificationRef = useRef<number>(0);
 
   const ActivityList = () => <ActivityGroups isPublic={false} appletId={appletId} />;
-
-  // This is a temporary hack to prevent showing many error notifications
-  // Working on a more permanent solution
-  const showErrorNotification = useCallback(
-    (message: string) => {
-      if (errorNotificationRef.current < 2) {
-        showError(message);
-        errorNotificationRef.current += 1;
-      }
-    },
-    [showError, errorNotificationRef],
-  );
 
   if (respondentId !== user.id) {
     // No impersonation allowed... yet?
