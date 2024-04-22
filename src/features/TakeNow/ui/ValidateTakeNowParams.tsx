@@ -28,7 +28,11 @@ function ValidateTakeNowParams({
 }: ValidateTakeNowParamsProps) {
   const [workspaceId, setWorkspaceId] = useState<string>('');
 
-  const { isError: isSubjectError, isLoading: isLoadingSubject } = useSubjectQuery(targetSubjectId);
+  const {
+    isError: isSubjectError,
+    data: subjectData,
+    isLoading: isLoadingSubject,
+  } = useSubjectQuery(targetSubjectId);
 
   const {
     isError: isAppletError,
@@ -81,7 +85,11 @@ function ValidateTakeNowParams({
     return <Loader />;
   }
 
-  if (isSubjectError) {
+  if (
+    isSubjectError ||
+    !subjectData?.data?.result ||
+    subjectData.data.result.appletId !== appletId
+  ) {
     showErrorNotification(t('takeNow.invalidSubject'));
     return <ActivityList />;
   }

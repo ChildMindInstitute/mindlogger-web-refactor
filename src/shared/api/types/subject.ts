@@ -6,6 +6,7 @@ export interface GetSubjectByIdPayload {
 
 export type SubjectDTO = {
   secretUserId: string;
+  appletId: string;
   nickname: string | null;
   tag: string | null;
   lastSeen: string | null;
