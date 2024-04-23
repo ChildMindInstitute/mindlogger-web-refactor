@@ -142,8 +142,8 @@ export const useAnswer = (props: Props) => {
       if (featureFlags.enableMultiInformant) {
         const multiInformantState = getMultiInformantState();
         if (isInMultiInformantFlow()) {
-          answer.sourceSubjectId = multiInformantState.sourceSubjectId;
-          answer.targetSubjectId = multiInformantState.targetSubjectId;
+          answer.sourceSubjectId = multiInformantState.sourceSubject?.id;
+          answer.targetSubjectId = multiInformantState.targetSubject?.id;
         }
       }
 

@@ -121,6 +121,9 @@ export const useTakeNowValidation = ({
     return errorState(t('takeNow.invalidSubject'));
   }
 
+  const { nickname: targetSubjectNickname, secretUserId: targetSecretUserId } =
+    subjectData.data.result;
+
   if (isActivityError) {
     return errorState(t('takeNow.invalidActivity'));
   }
@@ -161,15 +164,27 @@ export const useTakeNowValidation = ({
     return errorState(null);
   }
 
-  const { subjectId: sourceSubjectId } = respondentData.data.result;
+  const {
+    subjectId: sourceSubjectId,
+    nickname: sourceSubjectNickname,
+    secretUserId: sourceSecretUserId,
+  } = respondentData.data.result;
 
   return {
     isLoading: false,
     isError: false,
     isSuccess: true,
     data: {
-      sourceSubjectId,
-      targetSubjectId,
+      sourceSubject: {
+        id: sourceSubjectId,
+        nickname: sourceSubjectNickname,
+        secretId: sourceSecretUserId,
+      },
+      targetSubject: {
+        id: targetSubjectId,
+        nickname: targetSubjectNickname,
+        secretId: targetSecretUserId,
+      },
     },
   };
 };

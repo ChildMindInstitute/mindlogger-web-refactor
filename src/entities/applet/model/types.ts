@@ -1,4 +1,5 @@
 import { GroupProgress } from '~/abstract/lib';
+import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
 import {
   Answer,
   AudioPlayerItem,
@@ -174,7 +175,4 @@ export type InProgressFlow = {
   pipelineActivityOrder: number;
 };
 
-export type MultiInformantPayload = {
-  sourceSubjectId: string;
-  targetSubjectId: string;
-};
+export type MultiInformantPayload = Required<MultiInformantState>;
