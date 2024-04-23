@@ -31,7 +31,7 @@ export const useNotification = () => {
       return;
     }
 
-    const defaultDuration = 3000;
+    const defaultDuration = 5000;
 
     const notification: Notification = {
       id: uuidv4(),
