@@ -1,14 +1,13 @@
-import { useCallback, useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
 import { useActivityByIdQuery } from '~/entities/activity';
-import { appletModel, useAppletByIdQuery } from '~/entities/applet';
+import { useAppletByIdQuery } from '~/entities/applet';
 import { useSubjectQuery } from '~/entities/subject';
 import { useUserState } from '~/entities/user/model/hooks';
 import { useWorkspaceAppletRespondent, useWorkspaceRolesQuery } from '~/entities/workspace';
 import { TakeNowParams } from '~/features/TakeNow/lib/TakeNowParams.types';
 import { WorkspaceRole } from '~/shared/api/types/workspace';
-import { useNotification } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
 const TAKE_NOW_ROLES: WorkspaceRole[] = ['super_admin', 'owner', 'manager'];
@@ -60,11 +59,8 @@ export const useTakeNowValidation = ({
     isLoading: isLoadingRespondent,
   } = useWorkspaceAppletRespondent(workspaceId, appletId, respondentId);
 
-  const { showErrorNotification: showError } = useNotification();
   const { t } = useCustomTranslation();
   const { user } = useUserState();
-  const { initiateTakeNow, getMultiInformantState } = appletModel.hooks.useMultiInformantState();
-  const errorNotificationRef = useRef<number>(0);
 
   const loadingState: TakeNowValidatedState = {
     isLoading: true,
@@ -78,19 +74,6 @@ export const useTakeNowValidation = ({
     isSuccess: false,
     error,
   });
-
-  const showErrorNotification = useCallback(
-    (message: string) => {
-      if (errorNotificationRef.current < 2) {
-        showError(message, {
-          allowDuplicate: false,
-          duration: 7000,
-        });
-        errorNotificationRef.current += 1;
-      }
-    },
-    [showError, errorNotificationRef],
-  );
 
   if (respondentId !== user.id) {
     return errorState(t<string>('takeNow.invalidRespondent'));
