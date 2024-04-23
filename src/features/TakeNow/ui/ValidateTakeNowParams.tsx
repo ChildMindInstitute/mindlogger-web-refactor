@@ -72,6 +72,7 @@ function ValidateTakeNowParams({
       if (errorNotificationRef.current < 2) {
         showError(message, {
           allowDuplicate: false,
+          duration: 7000,
         });
         errorNotificationRef.current += 1;
       }
