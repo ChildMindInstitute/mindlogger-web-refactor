@@ -2,16 +2,19 @@ import { useMultiInformantState } from '~/entities/applet/model/hooks';
 import { MultiInformantBadgeTile } from '~/features/TakeNow/ui/MultiInformantBadgeTile';
 import { Theme } from '~/shared/constants';
 import { Box } from '~/shared/ui';
+import { useLaunchDarkly } from '~/shared/utils/hooks/useLaunchDarkly';
 
 export const MultiInformantBadge = () => {
   const { getMultiInformantState } = useMultiInformantState();
+  const { flags: featureFlags } = useLaunchDarkly();
 
   const multiInformantState = getMultiInformantState();
 
   if (
     multiInformantState.sourceSubject === undefined ||
     multiInformantState.targetSubject === undefined ||
-    multiInformantState.sourceSubject.id === multiInformantState.targetSubject.id
+    multiInformantState.sourceSubject.id === multiInformantState.targetSubject.id ||
+    !featureFlags.enableMultiInformant
   ) {
     return null;
   }
