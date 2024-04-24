@@ -5,21 +5,18 @@ import { Box } from '~/shared/ui';
 import { useLaunchDarkly } from '~/shared/utils/hooks/useLaunchDarkly';
 
 export const MultiInformantBadge = () => {
-  const { getMultiInformantState } = useMultiInformantState();
+  const { getMultiInformantState, isInMultiInformantFlow } = useMultiInformantState();
   const { flags: featureFlags } = useLaunchDarkly();
 
-  const multiInformantState = getMultiInformantState();
-
-  if (
-    multiInformantState.sourceSubject === undefined ||
-    multiInformantState.targetSubject === undefined ||
-    multiInformantState.sourceSubject.id === multiInformantState.targetSubject.id ||
-    !featureFlags.enableMultiInformant
-  ) {
+  if (!isInMultiInformantFlow() || !featureFlags.enableMultiInformant) {
     return null;
   }
 
-  const { sourceSubject, targetSubject } = multiInformantState;
+  const { sourceSubject, targetSubject } = getMultiInformantState();
+
+  if (!sourceSubject || !targetSubject) {
+    return null;
+  }
 
   return (
     <Box
