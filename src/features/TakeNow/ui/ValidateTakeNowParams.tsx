@@ -12,7 +12,7 @@ function ValidateTakeNowParams({
   respondentId,
 }: TakeNowParams) {
   const { showErrorNotification } = useNotification();
-  const { initiateTakeNow, getMultiInformantState } = appletModel.hooks.useMultiInformantState();
+  const { initiateTakeNow, isInMultiInformantFlow } = appletModel.hooks.useMultiInformantState();
 
   const { isError, isLoading, isSuccess, error, data } = useTakeNowValidation({
     appletId,
@@ -38,17 +38,10 @@ function ValidateTakeNowParams({
   }
 
   if (isSuccess && data) {
-    const multiInformantState = getMultiInformantState();
     const { sourceSubjectId, targetSubjectId } = data;
 
-    if (
-      !multiInformantState ||
-      !multiInformantState.sourceSubjectId ||
-      !multiInformantState.targetSubjectId
-    ) {
-      if (sourceSubjectId !== targetSubjectId) {
-        initiateTakeNow({ sourceSubjectId, targetSubjectId });
-      }
+    if (!isInMultiInformantFlow()) {
+      initiateTakeNow({ sourceSubjectId, targetSubjectId });
     }
 
     return (

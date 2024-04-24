@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '~/shared/utils';
 
 type Return = {
   getMultiInformantState: () => MultiInformantState;
+  isInMultiInformantFlow: () => boolean;
   initiateTakeNow: (payload: MultiInformantPayload) => void;
   resetMultiInformantState: () => void;
 };
@@ -18,6 +19,10 @@ export const useMultiInformantState = (): Return => {
   const multiInformantState = useAppSelector(multiInformantStateSelector);
 
   const getMultiInformantState = useCallback(() => multiInformantState, [multiInformantState]);
+
+  const isInMultiInformantFlow = useCallback(() => {
+    return !!multiInformantState.sourceSubjectId && !!multiInformantState.targetSubjectId;
+  }, [multiInformantState]);
 
   const initiateTakeNow = useCallback(
     (payload: MultiInformantPayload) => {
@@ -32,6 +37,7 @@ export const useMultiInformantState = (): Return => {
 
   return {
     getMultiInformantState,
+    isInMultiInformantFlow,
     initiateTakeNow,
     resetMultiInformantState,
   };

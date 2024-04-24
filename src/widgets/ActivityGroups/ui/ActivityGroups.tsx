@@ -41,17 +41,12 @@ export const ActivityGroups = (props: Props) => {
 
   const { flags: featureFlags } = useLaunchDarkly();
 
-  const { getMultiInformantState, resetMultiInformantState } =
+  const { isInMultiInformantFlow, resetMultiInformantState } =
     appletModel.hooks.useMultiInformantState();
 
   useOnceEffect(() => {
     if (featureFlags.enableMultiInformant) {
-      const multiInformantState = getMultiInformantState();
-      if (
-        multiInformantState &&
-        (multiInformantState.sourceSubjectId || multiInformantState.targetSubjectId) &&
-        !props.startActivityOrFlow
-      ) {
+      if (isInMultiInformantFlow() && !props.startActivityOrFlow) {
         resetMultiInformantState();
       }
     }
