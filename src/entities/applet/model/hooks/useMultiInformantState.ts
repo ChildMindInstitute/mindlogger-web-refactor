@@ -21,7 +21,7 @@ export const useMultiInformantState = (): Return => {
   const getMultiInformantState = useCallback(() => multiInformantState, [multiInformantState]);
 
   const isInMultiInformantFlow = useCallback(() => {
-    return !!multiInformantState.sourceSubjectId && !!multiInformantState.targetSubjectId;
+    return !!multiInformantState.sourceSubject?.id && !!multiInformantState.targetSubject?.id;
   }, [multiInformantState]);
 
   const initiateTakeNow = useCallback(
