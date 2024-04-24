@@ -31,6 +31,7 @@ export const useTakeNowValidation = ({
   const {
     isError: isSubjectError,
     data: subjectData,
+    error: subjectError,
     isLoading: isLoadingSubject,
   } = useSubjectQuery(targetSubjectId);
 
@@ -89,6 +90,17 @@ export const useTakeNowValidation = ({
 
   if (isLoadingSubject || isLoadingActivity) {
     return loadingState;
+  }
+
+  if (
+    isSubjectError &&
+    subjectError &&
+    'status' in subjectError.response &&
+    subjectError.response.status === 403
+  ) {
+    // The logged-in user doesn't have permission to fetch the subject details,
+    // so they probably don't have permission to perform the activity
+    return errorState(t('takeNow.invalidRespondent'));
   }
 
   if (
