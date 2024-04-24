@@ -76,7 +76,7 @@ export const useTakeNowValidation = ({
   });
 
   if (respondentId !== user.id) {
-    return errorState(t<string>('takeNow.invalidRespondent'));
+    return errorState(t('takeNow.invalidRespondent'));
   }
 
   if (isLoadingApplet) {
@@ -96,11 +96,11 @@ export const useTakeNowValidation = ({
     !subjectData?.data?.result ||
     subjectData.data.result.appletId !== appletId
   ) {
-    return errorState(t<string>('takeNow.invalidSubject'));
+    return errorState(t('takeNow.invalidSubject'));
   }
 
   if (isActivityError) {
-    return errorState(t<string>('takeNow.invalidActivity'));
+    return errorState(t('takeNow.invalidActivity'));
   }
 
   // At this point we have the subject, applet, and activity data
@@ -112,7 +112,7 @@ export const useTakeNowValidation = ({
     if (!localWorkspaceId) {
       // We can't verify the roles of the current user in this workspace,
       // so we can't proceed with a multi-informant flow
-      return errorState(t<string>('common_loading_error'));
+      return errorState(t('common_loading_error'));
     }
 
     setWorkspaceId(localWorkspaceId);
@@ -126,7 +126,7 @@ export const useTakeNowValidation = ({
   if (isWorkspaceRolesError || !workspaceRolesData?.data?.result) {
     // Same as above - we can't verify the roles of the current user in this workspace,
     // so we can't proceed with a multi-informant flow
-    return errorState(t<string>('common_loading_error'));
+    return errorState(t('common_loading_error'));
   }
 
   const roles = workspaceRolesData.data.result[appletId];
