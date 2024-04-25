@@ -52,13 +52,14 @@ export const useTakeNowValidation = ({
     isLoading: isLoadingWorkspaceRoles,
   } = useWorkspaceRolesQuery(workspaceId, {
     appletIds: [appletId],
+    options: { enabled: !!workspaceId },
   });
 
   const {
     isError: isRespondentError,
     data: respondentData,
     isLoading: isLoadingRespondent,
-  } = useWorkspaceAppletRespondent(workspaceId, appletId, respondentId);
+  } = useWorkspaceAppletRespondent(workspaceId, appletId, respondentId, { enabled: !!workspaceId });
 
   const { t } = useCustomTranslation();
   const { user } = useUserState();
