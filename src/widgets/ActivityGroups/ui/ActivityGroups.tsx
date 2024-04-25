@@ -3,6 +3,7 @@ import { AppletDetailsContext } from '../lib';
 
 import { appletModel, useAppletBaseInfoByIdQuery } from '~/entities/applet';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
+import { TakeNowSuccessModal } from '~/features/TakeNow/ui/TakeNowSuccessModal';
 import { Container } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
@@ -75,6 +76,7 @@ export const ActivityGroups = (props: Props) => {
   return (
     <AppletDetailsContext.Provider value={{ ...props, applet, events }}>
       <ActivityGroupList />
+      <TakeNowSuccessModal />
     </AppletDetailsContext.Provider>
   );
 };

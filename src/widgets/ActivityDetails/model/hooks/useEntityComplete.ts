@@ -1,9 +1,12 @@
+import type { NavigateOptions } from 'react-router/dist/lib/context';
+
 import { ActivityPipelineType } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { AppletDetailsDTO } from '~/shared/api';
 import { ROUTES } from '~/shared/constants';
 import { useNotification } from '~/shared/ui';
 import { useCustomNavigation, useCustomTranslation } from '~/shared/utils';
+import { useLaunchDarkly } from '~/shared/utils/hooks/useLaunchDarkly';
 
 type Props = {
   applet: AppletDetailsDTO;
@@ -17,6 +20,8 @@ type Props = {
 export const useEntityComplete = (props: Props) => {
   const navigator = useCustomNavigation();
   const { t } = useCustomTranslation();
+  const { flags: featureFlags } = useLaunchDarkly();
+  const { isInMultiInformantFlow } = appletModel.hooks.useMultiInformantState();
 
   const { removeActivityProgress } = appletModel.hooks.useRemoveActivityProgress();
 
@@ -39,9 +44,15 @@ export const useEntityComplete = (props: Props) => {
       });
     }
 
-    return navigator.navigate(ROUTES.appletDetails.navigateTo(props.applet.id), {
+    const navigateOptions: NavigateOptions = {
       replace: true,
-    });
+    };
+
+    if (featureFlags.enableMultiInformant && isInMultiInformantFlow()) {
+      navigateOptions.state = { showTakeNowSuccessModal: true };
+    }
+
+    return navigator.navigate(ROUTES.appletDetails.navigateTo(props.applet.id), navigateOptions);
   };
 
   const redirectToNextActivity = (activityId: string) => {
