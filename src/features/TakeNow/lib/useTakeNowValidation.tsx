@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
 import { useActivityByIdQuery } from '~/entities/activity';
@@ -26,7 +26,7 @@ export const useTakeNowValidation = ({
   startActivityOrFlow,
   respondentId,
 }: TakeNowParams): TakeNowValidatedState => {
-  const [workspaceId, setWorkspaceId] = useState<string>('');
+  const [workspaceId, setWorkspaceId] = useState<string | null>();
 
   const {
     isError: isSubjectError,
@@ -50,7 +50,7 @@ export const useTakeNowValidation = ({
     isError: isWorkspaceRolesError,
     data: workspaceRolesData,
     isLoading: isLoadingWorkspaceRoles,
-  } = useWorkspaceRolesQuery(workspaceId, {
+  } = useWorkspaceRolesQuery(workspaceId ?? '', {
     appletIds: [appletId],
     options: { enabled: !!workspaceId },
   });
@@ -59,7 +59,16 @@ export const useTakeNowValidation = ({
     isError: isRespondentError,
     data: respondentData,
     isLoading: isLoadingRespondent,
-  } = useWorkspaceAppletRespondent(workspaceId, appletId, respondentId, { enabled: !!workspaceId });
+  } = useWorkspaceAppletRespondent(workspaceId ?? '', appletId, respondentId, {
+    enabled: !!workspaceId,
+  });
+
+  useEffect(() => {
+    if (!workspaceId && !isLoadingApplet && appletData) {
+      const localWorkspaceId = appletData?.data.result.encryption?.accountId;
+      setWorkspaceId(localWorkspaceId || null);
+    }
+  }, [appletData, isLoadingApplet, workspaceId]);
 
   const { t } = useCustomTranslation();
   const { user } = useUserState();
@@ -120,20 +129,12 @@ export const useTakeNowValidation = ({
   // We can't fetch the workspace roles before we have the applet data
   // because that's where we get the workspace ID
 
-  if (!workspaceId) {
-    const localWorkspaceId = appletData.data.result.encryption?.accountId;
-    if (!localWorkspaceId) {
-      // We can't verify the roles of the current user in this workspace,
-      // so we can't proceed with a multi-informant flow
-      return errorState(t('common_loading_error'));
-    }
-
-    setWorkspaceId(localWorkspaceId);
+  if (workspaceId === undefined || isLoadingWorkspaceRoles) {
     return loadingState;
   }
 
-  if (isLoadingWorkspaceRoles || isLoadingRespondent) {
-    return loadingState;
+  if (workspaceId === null) {
+    return errorState(t('common_loading_error'));
   }
 
   if (isWorkspaceRolesError || !workspaceRolesData?.data?.result) {
@@ -147,6 +148,10 @@ export const useTakeNowValidation = ({
 
   if (!hasCorrectRole) {
     return errorState(t('takeNow.invalidRespondent'));
+  }
+
+  if (isLoadingRespondent) {
+    return loadingState;
   }
 
   if (isRespondentError || !respondentData || !respondentData?.data?.result) {

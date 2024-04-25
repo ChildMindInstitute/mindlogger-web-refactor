@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { appletModel } from '~/entities/applet';
 import { TakeNowParams } from '~/features/TakeNow/lib/TakeNowParams.types';
 import { useTakeNowValidation } from '~/features/TakeNow/lib/useTakeNowValidation';
@@ -21,29 +23,35 @@ function ValidateTakeNowParams({
     respondentId,
   });
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  useEffect(() => {
+    if (isSuccess && data) {
+      const { sourceSubjectId, targetSubjectId } = data;
 
-  if (isError) {
+      if (!isInMultiInformantFlow()) {
+        initiateTakeNow({ sourceSubjectId, targetSubjectId });
+      }
+    }
+  }, [data, initiateTakeNow, isInMultiInformantFlow, isSuccess]);
+
+  useEffect(() => {
     if (error) {
       showErrorNotification(error, {
         allowDuplicate: false,
         duration: 7000,
       });
     }
+  }, [error, showErrorNotification]);
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError) {
     // If there's no error message, then we fall back to the ActivityGroups error handling
     return <ActivityGroups isPublic={false} appletId={appletId} />;
   }
 
-  if (isSuccess && data) {
-    const { sourceSubjectId, targetSubjectId } = data;
-
-    if (!isInMultiInformantFlow()) {
-      initiateTakeNow({ sourceSubjectId, targetSubjectId });
-    }
-
+  if (isSuccess) {
     return (
       <ActivityGroups
         isPublic={false}
