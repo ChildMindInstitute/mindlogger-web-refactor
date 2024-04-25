@@ -9,3 +9,4 @@ export * from './useActivityProgress';
 
 export * from './useUserEvents';
 export * from './useStartEntity';
+export * from './useMultiInformantState';
