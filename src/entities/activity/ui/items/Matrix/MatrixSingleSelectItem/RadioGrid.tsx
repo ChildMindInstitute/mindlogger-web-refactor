@@ -3,8 +3,9 @@ import { MatrixSelectOption, MatrixSelectRow, SingleMultiSelectAnswer } from '..
 import { MatrixHeader } from '../MatrixHeader';
 import { MatrixRow } from '../MatrixRow';
 
-import { Box } from '~/shared/ui';
 
+import { Box } from '~/shared/ui';
+  
 type Props = {
   options: Array<MatrixSelectOption>;
   rows: Array<MatrixSelectRow>;

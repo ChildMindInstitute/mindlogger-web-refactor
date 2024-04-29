@@ -114,7 +114,6 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
           replaceText={replaceText}
         />
       );
-
     case 'sliderRows':
       return <SliderRows item={item} values={item.answer} onValueChange={onValueChange} />;
 

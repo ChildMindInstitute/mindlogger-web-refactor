@@ -370,3 +370,4 @@ export type SliderRowsDto = Array<{
   maxImage: string | null;
   alerts: SliderAlertsDto;
 }>;
+

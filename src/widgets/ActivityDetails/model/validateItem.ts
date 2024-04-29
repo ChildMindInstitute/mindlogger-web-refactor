@@ -55,6 +55,7 @@ function isAnswerEmpty(item: appletModel.ItemRecord): boolean {
     return item.answer.every((value) => value !== null);
   }
 
+
   return item.answer.length > 0;
 }
 

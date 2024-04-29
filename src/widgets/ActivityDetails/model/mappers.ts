@@ -291,6 +291,7 @@ function convertToSliderRowsAnswer(item: SliderRowsItem) {
   };
 }
 
+
 export function mapAlerts(items: Array<appletModel.ItemRecord>): Array<AlertDTO> {
   const alerts = items.map((item) => {
     switch (item.responseType) {
