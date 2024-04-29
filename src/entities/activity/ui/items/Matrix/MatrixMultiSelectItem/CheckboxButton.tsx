@@ -25,6 +25,7 @@ export const CheckboxButton = ({ id, isChecked, text, onChange }: Props) => {
           checked={isChecked}
           justifyContent="center"
           padding={lessThanSM ? '12px 8px' : '16px'}
+          flex={1}
         >
           <CheckboxItem
             id={id}

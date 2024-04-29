@@ -21,6 +21,7 @@ export const RadioButton = ({ id, text, isChecked, onChange }: Props) => {
           onHandleChange={onChange}
           checked={isChecked}
           justifyContent="center"
+          flex={1}
         >
           <RadioOption
             id={id}
