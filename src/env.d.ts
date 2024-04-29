@@ -9,6 +9,9 @@ interface ImportMetaEnv {
   readonly VITE_IV_LENGTH: string;
   readonly VITE_MIXPANEL_TOKEN: string;
   readonly VITE_LAUNCHDARKLY_CLIENT_ID: string;
+
+  readonly VITE_SENTRY_DSN: string;
+  readonly VITE_SENTRY_TRACE_PROPAGATION_TARGETS: string; // List of domains Array<string>
 }
 
 interface ImportMeta {
