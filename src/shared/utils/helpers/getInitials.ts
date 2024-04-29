@@ -1,4 +1,8 @@
-export const getInitials = (value: string) => {
+export const getInitials = (value?: string) => {
+  if (!value) {
+    return '';
+  }
+
   if (value.length < 2) {
     return value;
   }

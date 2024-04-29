@@ -2,9 +2,17 @@ import { PropsWithChildren } from 'react';
 
 import Box from '@mui/material/Box';
 
-import { Theme } from '../../../constants';
+import { Theme } from '~/shared/constants';
 
 type Props = PropsWithChildren<{
+  padding?: string;
+  justifyContent?:
+    | 'flex-start'
+    | 'center'
+    | 'flex-end'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly';
   color: string | null;
   checked?: boolean | undefined;
   onHandleChange: () => void;
@@ -28,12 +36,13 @@ export const SelectBaseBox = (props: Props) => {
   return (
     <Box
       display="flex"
+      flex={1}
       alignItems="center"
-      justifyContent="space-between"
+      justifyContent={props.justifyContent ? props.justifyContent : 'space-between'}
       gap="12px"
       className="response-option"
       borderRadius="12px"
-      padding="16px"
+      padding={props.padding ? props.padding : '16px'}
       border={`2px solid ${borderColor}`}
       bgcolor={props.color ? props.color : backgroundColor}
       onClick={props.onHandleChange}

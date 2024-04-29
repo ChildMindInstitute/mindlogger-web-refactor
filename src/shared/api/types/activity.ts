@@ -4,8 +4,10 @@ import {
   CheckboxItemDTO,
   DateItemDTO,
   MessageItemDTO,
+  MultiSelectionRowsItemDTO,
   RadioItemDTO,
   SelectorItemDTO,
+  SingleSelectionRowsItemDTO,
   SliderItemDTO,
   TextItemDTO,
   TimeItemDTO,
@@ -56,7 +58,9 @@ export type ActivityItemDetailsDTO =
   | DateItemDTO
   | TimeItemDTO
   | TimeRangeItemDTO
-  | AudioPlayerItemDTO;
+  | AudioPlayerItemDTO
+  | MultiSelectionRowsItemDTO
+  | SingleSelectionRowsItemDTO;
 
 export type AnswerPayload = {
   appletId: ID;
@@ -103,7 +107,8 @@ export type AnswerTypesPayload =
   | DateAnswerPayload
   | TimeAnswerPayload
   | TimeRangeAnswerPayload
-  | AudioPlayerAnswerPayload;
+  | AudioPlayerAnswerPayload
+  | MatrixMultiSelectAnswerPayload;
 
 export type EmptyAnswerPayload = null;
 
@@ -161,6 +166,21 @@ export type TimeRangeAnswerPayload = {
 
 export type AudioPlayerAnswerPayload = {
   value: boolean;
+  text: string | null;
+};
+
+export type MultiSelectMatrixAnswerPayload = {
+  value: Array<Array<string>>;
+  text: string | null;
+};
+
+export type SingleSelectMatrixAnswerPayload = {
+  value: Array<string>;
+  text: string | null;
+};
+
+export type MatrixMultiSelectAnswerPayload = {
+  value: Array<Array<string | null>>;
   text: string | null;
 };
 

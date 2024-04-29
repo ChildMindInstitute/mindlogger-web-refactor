@@ -1,11 +1,16 @@
 import { GroupProgress } from '~/abstract/lib';
 import {
+  Answer,
   AudioPlayerItem,
   CheckboxItem,
   DateItem,
+  MatrixMultiSelectAnswer,
   MessageItem,
+  MultiSelectionRowsItem,
   RadioItem,
   SelectorItem,
+  SingleMultiSelectAnswer,
+  SingleSelectionRowsItem,
   SliderItem,
   SplashScreenItem,
   TextItem,
@@ -38,7 +43,9 @@ export type UserEventResponse =
         | number[]
         | DayMonthYearDTO
         | HourMinuteDTO
-        | TimeRangeUserEventDto;
+        | TimeRangeUserEventDto
+        | MatrixMultiSelectAnswer
+        | SingleMultiSelectAnswer;
       text?: string;
     };
 
@@ -60,7 +67,9 @@ export type ItemRecord =
   | DateItem
   | TimeItem
   | TimeRangeItem
-  | AudioPlayerItem;
+  | AudioPlayerItem
+  | MultiSelectionRowsItem
+  | SingleSelectionRowsItem;
 
 export type ItemWithAdditionalResponse = Extract<
   ItemRecord,
@@ -107,7 +116,7 @@ export type SaveItemAnswerPayload = {
   entityId: string;
   eventId: string;
   itemId: string;
-  answer: string[];
+  answer: Answer;
 };
 
 export type SaveItemAdditionalTextPayload = {

@@ -55,6 +55,8 @@ export const SliderItemBase = (props: Props) => {
     return stickLabels;
   }, [maxValue, minValue]);
 
+  const selectedValueIndex = marksAndLabelsList.findIndex((item) => item.value === Number(value));
+
   return (
     <Box width="100%" margin="auto" className={`slider-widget ${value ? 'no-value' : ''}`}>
       <Slider
@@ -110,7 +112,7 @@ export const SliderItemBase = (props: Props) => {
               backgroundColor: Theme.colors.light.primary,
             },
           },
-          [`& .MuiSlider-markLabel[data-index="${value}"]`]: {
+          [`& .MuiSlider-markLabel[data-index="${selectedValueIndex}"]`]: {
             color: Theme.colors.light.primary,
             fontWeight: 700,
           },

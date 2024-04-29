@@ -1,12 +1,12 @@
 import { MarkdownVariableReplacer } from '../markdownVariableReplacer';
+import { Answer } from '../types';
 
-import { Answers } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { RespondentMetaDTO } from '~/shared/api';
 
 type Props = {
   items: appletModel.ItemRecord[];
-  answers: Answers;
+  answers: Array<Answer>;
   respondentMeta?: RespondentMetaDTO;
   completedEntityTime: number;
 };

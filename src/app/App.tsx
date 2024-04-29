@@ -1,11 +1,8 @@
-import { lazy } from 'react';
-
+import Providers from './providers';
 import i18nManager from './system/locale/i18n';
 
+import ApplicationRouter from '~/pages';
 import { Mixpanel } from '~/shared/utils';
-
-const Providers = lazy(() => import('./providers'));
-const ApplicationRouter = lazy(() => import('~/pages'));
 
 import '~/assets/fonts/Atkinson/atkinson.css';
 

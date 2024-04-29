@@ -1,5 +1,10 @@
-import { Answer } from '~/abstract/lib';
 import { ConditionalLogic } from '~/shared/api';
+
+export type DefaultAnswer = Array<string>;
+export type MatrixMultiSelectAnswer = Array<Array<string | null>>;
+export type SingleMultiSelectAnswer = Array<string | null>;
+
+export type Answer = DefaultAnswer | MatrixMultiSelectAnswer | SingleMultiSelectAnswer;
 
 export type ActivityItemType =
   | 'text'
@@ -39,6 +44,15 @@ export type AdditionalResponseConfig = {
   };
 };
 
+export type DataMatrix = Array<{
+  rowId: string;
+  options: Array<{
+    optionId: string;
+    score: number;
+    alert: string | null;
+  }>;
+}>;
+
 export interface ActivityItemBase {
   id: string;
   name: string;
@@ -64,7 +78,8 @@ export type Config =
   | DateItemConfig
   | TimeItemItemConfig
   | TimeRangeItemConfig
-  | AudioPlayerItemConfig;
+  | AudioPlayerItemConfig
+  | MultiSelectionRowsItemConfig;
 
 export type ResponseValues =
   | EmptyResponseValues
@@ -72,7 +87,8 @@ export type ResponseValues =
   | RadioValues
   | SliderValues
   | SelectorValues
-  | AudioPlayerItemValues;
+  | AudioPlayerItemValues
+  | MultiSelectionRowsItemResponseValues;
 
 export type EmptyResponseValues = null;
 
@@ -80,6 +96,7 @@ export interface TextItem extends ActivityItemBase {
   responseType: 'text';
   config: TextItemConfig;
   responseValues: EmptyResponseValues;
+  answer: DefaultAnswer;
 }
 
 export type TextItemConfig = ButtonsConfig & {
@@ -95,6 +112,7 @@ export interface CheckboxItem extends ActivityItemBase {
   responseType: 'multiSelect';
   config: CheckboxItemConfig;
   responseValues: CheckboxValues;
+  answer: DefaultAnswer;
 }
 
 export type CheckboxItemConfig = ButtonsConfig &
@@ -126,6 +144,7 @@ export interface RadioItem extends ActivityItemBase {
   responseType: 'singleSelect';
   config: RadioItemConfig;
   responseValues: RadioValues;
+  answer: DefaultAnswer;
 }
 
 export type RadioItemConfig = ButtonsConfig &
@@ -157,6 +176,7 @@ export interface SliderItem extends ActivityItemBase {
   responseType: 'slider';
   config: SliderItemConfig;
   responseValues: SliderValues;
+  answer: DefaultAnswer;
 }
 
 export type SliderItemConfig = ButtonsConfig &
@@ -189,6 +209,7 @@ export interface SelectorItem extends ActivityItemBase {
   responseType: 'numberSelect';
   config: SelectorItemConfig;
   responseValues: SelectorValues;
+  answer: DefaultAnswer;
 }
 
 export type SelectorItemConfig = ButtonsConfig & AdditionalResponseConfig;
@@ -201,6 +222,7 @@ export interface SplashScreenItem extends ActivityItemBase {
   responseType: 'splashScreen';
   config: SplashScreenItemConfig;
   responseValues: EmptyResponseValues;
+  answer: DefaultAnswer;
 }
 
 export type SplashScreenItemConfig = ButtonsConfig & {
@@ -211,6 +233,7 @@ export interface MessageItem extends ActivityItemBase {
   responseType: 'message';
   config: MessageItemConfig;
   responseValues: EmptyResponseValues;
+  answer: DefaultAnswer;
 }
 
 export type MessageItemConfig = ButtonsConfig;
@@ -219,6 +242,7 @@ export interface DateItem extends ActivityItemBase {
   responseType: 'date';
   config: DateItemConfig;
   responseValues: EmptyResponseValues;
+  answer: DefaultAnswer;
 }
 
 export type DateItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig;
@@ -227,6 +251,7 @@ export interface TimeItem extends ActivityItemBase {
   responseType: 'time';
   config: TimeItemItemConfig;
   responseValues: EmptyResponseValues;
+  answer: DefaultAnswer;
 }
 
 export type TimeItemItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig;
@@ -235,6 +260,7 @@ export interface TimeRangeItem extends ActivityItemBase {
   responseType: 'timeRange';
   config: TimeRangeItemConfig;
   responseValues: EmptyResponseValues;
+  answer: DefaultAnswer;
 }
 
 export type TimeRangeItemConfig = ButtonsConfig & AdditionalResponseConfig & TimerConfig;
@@ -243,6 +269,7 @@ export interface AudioPlayerItem extends ActivityItemBase {
   responseType: 'audioPlayer';
   config: AudioPlayerItemConfig;
   responseValues: AudioPlayerItemValues;
+  answer: DefaultAnswer;
 }
 
 export type AudioPlayerItemConfig = ButtonsConfig &
@@ -252,4 +279,58 @@ export type AudioPlayerItemConfig = ButtonsConfig &
 
 export type AudioPlayerItemValues = {
   file: string;
+};
+
+export interface MultiSelectionRowsItem extends ActivityItemBase {
+  responseType: 'multiSelectRows';
+  config: MultiSelectionRowsItemConfig;
+  responseValues: MultiSelectionRowsItemResponseValues;
+  answer: MatrixMultiSelectAnswer;
+}
+
+export type MultiSelectionRowsItemConfig = ButtonsConfig &
+  TimerConfig & {
+    addScores: boolean;
+    setAlerts: boolean;
+    addTooltip: boolean;
+  };
+
+export type MultiSelectionRowsItemResponseValues = {
+  rows: Array<MatrixSelectRow>;
+  options: Array<MatrixSelectOption>;
+  dataMatrix: DataMatrix;
+};
+
+export type MatrixSelectOption = {
+  id: string;
+  text: string;
+  image: string | null;
+  tooltip: string | null;
+};
+
+export type MatrixSelectRow = {
+  id: string;
+  rowName: string;
+  rowImage: string | null;
+  tooltip: string | null;
+};
+
+export interface SingleSelectionRowsItem extends ActivityItemBase {
+  responseType: 'singleSelectRows';
+  config: SingleSelectionRowsItemConfig;
+  responseValues: SingleSelectionRowsItemResponseValues;
+  answer: SingleMultiSelectAnswer;
+}
+
+export type SingleSelectionRowsItemConfig = ButtonsConfig &
+  TimerConfig & {
+    addScores: boolean;
+    setAlerts: boolean;
+    addTooltip: boolean;
+  };
+
+export type SingleSelectionRowsItemResponseValues = {
+  rows: Array<MatrixSelectRow>;
+  options: Array<MatrixSelectOption>;
+  dataMatrix: DataMatrix;
 };

@@ -3,13 +3,15 @@ import Avatar from '@mui/material/Avatar';
 import { getInitials } from '../../utils';
 
 type Props = {
-  src?: string;
-  name: string;
+  src?: string | null;
+  name?: string;
 
+  borderRadius?: string;
   width?: string;
   height?: string;
   variant?: 'circular' | 'rounded' | 'square';
   testid?: string;
+  backgroundColor?: string;
 };
 
 export const AvatarBase = ({
@@ -19,8 +21,10 @@ export const AvatarBase = ({
   height = '32px',
   variant = 'circular',
   testid,
+  borderRadius,
+  backgroundColor,
 }: Props) => {
-  const avatarOptions = (name: string, src?: string) => {
+  const avatarOptions = (name?: string, src?: string | null) => {
     if (src) {
       return {
         src,
@@ -36,7 +40,7 @@ export const AvatarBase = ({
     <Avatar
       {...avatarOptions(name, src)}
       alt={`${name} image`}
-      sx={{ width, height }}
+      sx={{ width, height, borderRadius, backgroundColor }}
       variant={variant}
       data-testid={testid}
     />

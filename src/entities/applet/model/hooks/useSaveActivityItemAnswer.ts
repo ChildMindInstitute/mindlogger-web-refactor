@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { actions } from '../slice';
 
+import { Answer } from '~/entities/activity';
 import { useAppDispatch } from '~/shared/utils';
 
 type Props = {
@@ -13,7 +14,7 @@ export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
   const dispatch = useAppDispatch();
 
   const saveItemAnswer = useCallback(
-    (itemId: string, answer: string[]) => {
+    (itemId: string, answer: Answer) => {
       dispatch(
         actions.saveItemAnswer({
           entityId: activityId,
