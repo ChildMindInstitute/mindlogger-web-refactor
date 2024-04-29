@@ -14,16 +14,14 @@ type Props = {
 export const SliderRows = (props: Props) => {
   const onHandleValueChange = useCallback(
     (value: string, index: number) => {
-      if (props.values.length === 0) {
-        props.onValueChange(
-          Array.from({ length: props.item.responseValues.rows.length }, () => null),
-        );
-        return;
+      let values = [...props.values];
+
+      if (values.length === 0) {
+        values = Array.from({ length: props.item.responseValues.rows.length }, () => null);
       }
 
-      const newValues = [...props.values];
-      newValues[index] = Number(value);
-      return props.onValueChange(newValues);
+      values[index] = Number(value);
+      return props.onValueChange(values);
     },
     [props],
   );
