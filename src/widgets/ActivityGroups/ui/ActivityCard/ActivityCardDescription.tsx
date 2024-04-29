@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-
 import { Theme } from '~/shared/constants';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 
 type Props = {
   description: string;
@@ -11,21 +10,19 @@ type Props = {
 export const ActivityCardDescription = ({ description, isFlow }: Props) => {
   return (
     <Box data-testid={isFlow ? 'flow-card-description' : 'activity-card-description'}>
-      <Typography
+      <Text
         variant="body1"
         color={Theme.colors.light.onSurface}
+        fontSize="16px"
+        fontWeight="400"
+        lineHeight="24px"
+        letterSpacing="0.15px"
         sx={{
-          fontSize: '16px',
-          fontFamily: 'Atkinson',
-          fontWeight: 400,
-          fontStyle: 'normal',
-          lineHeight: '24px',
-          letterSpacing: '0.15px',
           textAlign: 'left',
         }}
       >
         {description}
-      </Typography>
+      </Text>
     </Box>
   );
 };

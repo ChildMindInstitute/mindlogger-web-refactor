@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
-
 import { useInvitationTranslation } from '../lib';
 
+import { Box } from '~/shared/ui';
 import { Text } from '~/shared/ui';
 
 interface InvitationHeaderProps {

@@ -1,12 +1,11 @@
 import { PropsWithChildren } from 'react';
 
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-
 import { Theme } from '../../constants';
 import { useCustomMediaQuery, useCustomTranslation } from '../../utils';
 
 import { Markdown } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 
 import './style.css';
 
@@ -36,14 +35,16 @@ export const CardItem = ({ children, markdown, isOptional, testId }: CardItemPro
       <Box>
         <Markdown markdown={markdown} />
         {isOptional && (
-          <Typography
+          <Text
             variant="body1"
             color={Theme.colors.light.outline}
             data-testid={'optional-item-label'}
-            sx={{ fontFamily: 'Atkinson', fontWeight: '400', fontSize: '18px', lineHeight: '28px' }}
+            fontWeight="400"
+            fontSize="18px"
+            lineHeight="28px"
           >
             {`(${t('optional')})`}
-          </Typography>
+          </Text>
         )}
       </Box>
       <Box>{children}</Box>

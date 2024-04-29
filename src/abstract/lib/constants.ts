@@ -15,4 +15,5 @@ export const supportableResponseTypes = [
   'audioPlayer',
   'multiSelectRows',
   'singleSelectRows',
+  'sliderRows',
 ];

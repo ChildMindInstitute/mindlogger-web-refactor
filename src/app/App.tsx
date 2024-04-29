@@ -8,8 +8,12 @@ import '~/assets/fonts/Atkinson/atkinson.css';
 
 import './index.css';
 
-Mixpanel.init();
-i18nManager.initialize();
+const setUp = () => {
+  Mixpanel.init();
+  i18nManager.initialize();
+};
+
+setUp();
 
 function App() {
   return (

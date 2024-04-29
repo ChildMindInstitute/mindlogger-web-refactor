@@ -1,8 +1,7 @@
-import Box from '@mui/material/Box';
-
 import { AppletListItem } from '../lib';
 
 import { ROUTES } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { CustomCard } from '~/shared/ui';
 import { MixEvents, MixProperties, Mixpanel, useCustomNavigation } from '~/shared/utils';
 

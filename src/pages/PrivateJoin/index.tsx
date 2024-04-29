@@ -1,6 +1,6 @@
-import Box from '@mui/material/Box';
 import { useLocation, useParams } from 'react-router-dom';
 
+import { Box } from '~/shared/ui';
 import { FetchPrivateInvitation } from '~/widgets/FetchInvitation';
 
 export default function PrivateJoinPage() {
@@ -8,7 +8,6 @@ export default function PrivateJoinPage() {
   const location = useLocation();
 
   const redirectState = {
-    isInvitationFlow: true,
     backRedirectPath: `${location.pathname}${location.search}`,
   };
 

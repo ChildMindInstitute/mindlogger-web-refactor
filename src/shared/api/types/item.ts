@@ -44,7 +44,8 @@ export type ConfigDTO =
   | TimeRangeItemConfigDTO
   | AudioPlayerItemConfigDTO
   | MultiSelectionRowsItemConfigDTO
-  | SingleSelectionRowsItemConfigDTO;
+  | SingleSelectionRowsItemConfigDTO
+  | SliderRowsItemConfigDTO;
 
 export type ResponseValuesDTO =
   | EmptyResponseValuesDTO
@@ -54,7 +55,8 @@ export type ResponseValuesDTO =
   | SelectorItemResponseValues
   | AudioPlayerItemResponseValuesDTO
   | MultiSelectionRowsItemResponseValuesDTO
-  | SingleSelectionRowsItemResponseValuesDTO;
+  | SingleSelectionRowsItemResponseValuesDTO
+  | SliderRowsItemResponseValuesDTO;
 
 type EmptyResponseValuesDTO = null;
 
@@ -333,3 +335,39 @@ type SingleSelectionRowsItemResponseValuesDTO = {
   }>;
   dataMatrix: DataMatrixDto;
 };
+
+export interface SliderRowsItemDTO extends ItemDetailsBaseDTO {
+  responseType: 'sliderRows';
+  config: SliderRowsItemConfigDTO;
+  responseValues: SliderRowsItemResponseValuesDTO;
+}
+
+type SliderRowsItemConfigDTO = ButtonsConfigDTO &
+  TimerConfigDTO & {
+    addScores: boolean;
+    setAlerts: boolean;
+  };
+
+type SliderRowsItemResponseValuesDTO = {
+  rows: SliderRowsDto;
+};
+
+export type SliderAlertsDto = Array<{
+  value: number;
+  minValue: number;
+  maxValue: number;
+  alert: string;
+}> | null;
+
+export type SliderRowsDto = Array<{
+  id: string;
+  label: string;
+  minLabel: string | null;
+  maxLabel: string | null;
+  minValue: number;
+  maxValue: number;
+  minImage: string | null;
+  maxImage: string | null;
+  alerts: SliderAlertsDto;
+}>;
+

@@ -5,7 +5,6 @@ import { ROUTES } from '~/shared/constants';
 import { Mixpanel, secureTokensStorage, useCustomNavigation, useEncryption } from '~/shared/utils';
 
 type Params = {
-  isInvitationFlow?: boolean | undefined;
   backRedirectPath?: string | undefined;
 };
 
@@ -40,8 +39,8 @@ export const useOnLogin = (params: Params) => {
     setUser({ id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName });
     secureTokensStorage.setTokens(tokens);
 
-    if (params.isInvitationFlow) {
-      navigate(params.backRedirectPath as string);
+    if (params.backRedirectPath !== undefined) {
+      navigate(params.backRedirectPath);
     } else {
       Mixpanel.track('Login Successful');
       Mixpanel.login(user.id);

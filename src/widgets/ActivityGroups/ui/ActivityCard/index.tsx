@@ -1,7 +1,5 @@
 import { useContext } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { ActivityCardBase } from './ActivityCardBase';
 import { ActivityCardDescription } from './ActivityCardDescription';
 import { ActivityCardIcon } from './ActivityCardIcon';
@@ -18,13 +16,15 @@ import { getProgressId, openStoreLink } from '~/abstract/lib';
 import { ActivityListItem } from '~/abstract/lib/GroupBuilder';
 import { useActivityByIdMutation } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
+import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import {
   MixEvents,
-  MixProperties,
   Mixpanel,
+  MixProperties,
   useAppSelector,
   useCustomMediaQuery,
+  useOnceEffect,
 } from '~/shared/utils';
 
 type Props = {
@@ -89,7 +89,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
   const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100;
 
-  function onStartActivity(shouldRestart: boolean) {
+  const onStartActivity = (shouldRestart: boolean) => {
     if (isDisabled || !activityListItem) return;
 
     if (!isEntitySupported) {
@@ -116,7 +116,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
         },
       },
     );
-  }
+  };
 
   const restartActivity = () => {
     onStartActivity(true);
@@ -126,6 +126,15 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     onStartActivity(false);
     Mixpanel.track(MixEvents.ActivityResumed, { [MixProperties.AppletId]: context.applet.id });
   };
+
+  useOnceEffect(() => {
+    if (
+      context.startActivityOrFlow &&
+      context.startActivityOrFlow === activityListItem.activityId
+    ) {
+      restartActivity();
+    }
+  });
 
   if (isLoading) {
     return (

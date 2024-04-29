@@ -1,6 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Breakpoint } from '@mui/material';
-import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -11,6 +10,7 @@ import Typography, { TypographyProps } from '@mui/material/Typography';
 import { BaseButton } from '../BaseButton';
 
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 
 type Props = {
   isOpen: boolean;

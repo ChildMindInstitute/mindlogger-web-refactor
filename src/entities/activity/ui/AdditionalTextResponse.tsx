@@ -1,13 +1,13 @@
-import TextField from '@mui/material/TextField';
+import { BaseTextInput } from '~/shared/ui';
 
-type AdditionalTextResponseProps = {
+type Props = {
   value: string;
   onValueChange: (value: string) => void;
 };
 
-export const AdditionalTextResponse = ({ value, onValueChange }: AdditionalTextResponseProps) => {
+export const AdditionalTextResponse = ({ value, onValueChange }: Props) => {
   return (
-    <TextField
+    <BaseTextInput
       fullWidth
       size="small"
       value={value}

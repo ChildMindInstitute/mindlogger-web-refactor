@@ -1,9 +1,9 @@
-import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 
 import { userModel } from '~/entities/user';
 import { ChangePasswordForm, useChangePasswordTranslation } from '~/features/ChangePassword';
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { AvatarBase, Text } from '~/shared/ui';
 
 function SettingsPage() {

@@ -6,6 +6,7 @@ import ForgotPasswordPage from './ForgotPassword';
 import LoginPage from './Login';
 import SignupPage from './Signup';
 
+import AppletDetailsPage from '~/pages/AppletDetailsPage';
 import { ROUTES } from '~/shared/constants';
 import Layout from '~/widgets/AppLayout';
 
@@ -22,6 +23,7 @@ function UnauthorizedRoutes() {
       <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
 
       <Route element={<Layout />}>
+        <Route path={ROUTES.appletDetails.path} element={<AppletDetailsPage />} />
         <Route index path={ROUTES.login.path} element={<LoginPage />} />
         <Route path={ROUTES.signup.path} element={<SignupPage />} />
         <Route path={ROUTES.forgotPassword.path} element={<ForgotPasswordPage />} />

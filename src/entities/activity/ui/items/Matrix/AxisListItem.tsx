@@ -1,5 +1,4 @@
-import Box from '@mui/material/Box';
-
+import { Box } from '~/shared/ui';
 import { AvatarBase, CustomTooltip, Text } from '~/shared/ui';
 import { useCustomMediaQuery } from '~/shared/utils';
 

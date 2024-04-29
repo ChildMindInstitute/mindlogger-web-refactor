@@ -49,6 +49,13 @@ function isAnswerEmpty(item: appletModel.ItemRecord): boolean {
     return item.answer.every((value) => value !== null);
   }
 
+  if (item.responseType === 'sliderRows') {
+    if (item.answer === null || item.answer.length === 0) return false;
+
+    return item.answer.every((value) => value !== null);
+  }
+
+
   return item.answer.length > 0;
 }
 

@@ -1,10 +1,11 @@
-import Box from '@mui/material/Box';
-
 import { RadioButton } from './RadioButton';
 import { MatrixSelectOption, MatrixSelectRow, SingleMultiSelectAnswer } from '../../../../lib';
 import { MatrixHeader } from '../MatrixHeader';
 import { MatrixRow } from '../MatrixRow';
 
+
+import { Box } from '~/shared/ui';
+  
 type Props = {
   options: Array<MatrixSelectOption>;
   rows: Array<MatrixSelectRow>;

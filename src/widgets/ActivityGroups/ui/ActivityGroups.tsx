@@ -9,11 +9,13 @@ import { useCustomTranslation } from '~/shared/utils';
 
 type PublicAppletDetails = {
   isPublic: true;
+  startActivityOrFlow?: string | null;
   publicAppletKey: string;
 };
 
 type PrivateAppletDetails = {
   isPublic: false;
+  startActivityOrFlow?: string | null;
   appletId: string;
 };
 

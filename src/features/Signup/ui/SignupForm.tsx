@@ -1,12 +1,11 @@
 import { useState } from 'react';
 
-import Box from '@mui/material/Box';
-
 import { TERMS_URL } from '../lib/constants';
 import { useSignupTranslation } from '../lib/useSignupTranslation';
 import { SignupFormSchema, TSignupForm } from '../model/signup.schema';
 
 import { useLoginMutation, userModel, useSignupMutation } from '~/entities/user';
+import { Box } from '~/shared/ui';
 import {
   Input,
   CheckboxWithLabel,
@@ -32,7 +31,6 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
 
   const [terms, setTerms] = useState<boolean>(false);
   const { onLoginSuccess } = userModel.hooks.useOnLogin({
-    isInvitationFlow: locationState?.isInvitationFlow as boolean,
     backRedirectPath: locationState?.backRedirectPath as string,
   });
 

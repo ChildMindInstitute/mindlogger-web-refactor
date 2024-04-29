@@ -1,4 +1,4 @@
-export const isObjectEmpty = (obj: Record<any, any> | undefined) => {
+export const isObjectEmpty = (obj: Record<string, unknown> | undefined) => {
   if (!obj) {
     return false;
   }

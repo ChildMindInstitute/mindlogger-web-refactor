@@ -1,6 +1,7 @@
 import { FieldValues, ResolverResult, ResolverOptions } from 'react-hook-form';
 import { z } from 'zod';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Resolver = <T extends z.Schema<any, any>>(
   schema: T,
   schemaOptions?: Partial<z.ParseParams>,

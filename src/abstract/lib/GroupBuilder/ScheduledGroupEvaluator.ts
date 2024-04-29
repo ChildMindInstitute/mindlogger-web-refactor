@@ -33,8 +33,12 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
 
       const isSpreadToNextDay = this.utility.isSpreadToNextDay(event);
 
+      if (!event.scheduledAt) {
+        throw new Error('[ScheduledGroupdEvaluator:evaluate] Event scheduledAt is not defined');
+      }
+
       const isCandidateForBeingScheduled: boolean =
-        isTypeScheduled && isScheduledToday && now < event.scheduledAt! && !isAccessBeforeTimeFrom;
+        isTypeScheduled && isScheduledToday && now < event.scheduledAt && !isAccessBeforeTimeFrom;
 
       if (!isCandidateForBeingScheduled) {
         continue;

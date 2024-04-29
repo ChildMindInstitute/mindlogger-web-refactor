@@ -1,7 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-import Box from '@mui/material/Box';
-
+import { Box } from '~/shared/ui';
 import { useCustomMediaQuery } from '~/shared/utils';
 
 type Props = PropsWithChildren<{

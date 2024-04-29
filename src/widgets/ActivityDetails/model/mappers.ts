@@ -10,6 +10,7 @@ import {
   SelectorItem,
   SingleSelectionRowsItem,
   SliderItem,
+  SliderRowsItem,
   TextItem,
   TimeItem,
   TimeRangeItem,
@@ -30,7 +31,7 @@ import {
   TimeAnswerPayload,
   TimeRangeAnswerPayload,
 } from '~/shared/api';
-import { dateToDayMonthYear, dateToHourMinute } from '~/shared/utils';
+import { dateToDayMonthYear, dateToHourMinute, isExist } from '~/shared/utils';
 
 export function mapToAnswers(
   items: Array<appletModel.ItemRecord>,
@@ -72,6 +73,9 @@ export function mapToAnswers(
 
       case 'singleSelectRows':
         return convertToMatrixSingleSelectAnswer(item);
+
+      case 'sliderRows':
+        return convertToSliderRowsAnswer(item);
 
       default:
         return null;
@@ -147,7 +151,7 @@ function convertToSliderAnswer(item: SliderItem): ItemAnswer<SliderAnswerPayload
 }
 
 function convertToNumberSelectAnswer(item: SelectorItem): ItemAnswer<NumberSelectAnswerPayload> {
-  if (!item.answer[0]) {
+  if (!isExist(item.answer[0])) {
     return {
       answer: null,
       itemId: item.id,
@@ -276,6 +280,17 @@ function convertToMatrixSingleSelectAnswer(item: SingleSelectionRowsItem) {
     itemId: item.id,
   };
 }
+
+function convertToSliderRowsAnswer(item: SliderRowsItem) {
+  return {
+    answer: {
+      value: item.answer,
+      text: item.additionalText || null,
+    },
+    itemId: item.id,
+  };
+}
+
 
 export function mapAlerts(items: Array<appletModel.ItemRecord>): Array<AlertDTO> {
   const alerts = items.map((item) => {

@@ -1,10 +1,10 @@
 import { forwardRef } from 'react';
 
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import Box from '@mui/material/Box';
 
 import { Theme } from '~/shared/constants';
 import { Markdown } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
 
 type Props = {
   id: string;

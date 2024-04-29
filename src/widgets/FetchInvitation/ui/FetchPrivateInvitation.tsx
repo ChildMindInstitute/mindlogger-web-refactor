@@ -1,5 +1,3 @@
-import Box from '@mui/material/Box';
-
 import { useAuthorizationGuard } from '../../AuthorizationGuard';
 
 import {
@@ -9,6 +7,7 @@ import {
 } from '~/entities/invitation';
 import { PrivateJoinAcceptButton } from '~/features/PrivateJoinAccept';
 import { PrivateJoinDeclineButton } from '~/features/PrivateJoinDecline';
+import { Box } from '~/shared/ui';
 import { PageMessage } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { useCustomMediaQuery } from '~/shared/utils';

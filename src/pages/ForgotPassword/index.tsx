@@ -1,7 +1,6 @@
-import Box from '@mui/material/Box';
-
 import { ForgotPasswordForm } from '~/features/ForgotPassword';
 import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
 import { Text } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
