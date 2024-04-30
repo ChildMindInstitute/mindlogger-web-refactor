@@ -29,7 +29,6 @@ export const TakeNowSuccessModal = () => {
   return (
     <MuiModal
       isOpen={isOpen}
-      onHide={() => {}}
       title={t('takeNow.successModalTitle')}
       label={t('takeNow.successModalLabel')}
       footerPrimaryButton={t('takeNow.successModalPrimaryAction')}

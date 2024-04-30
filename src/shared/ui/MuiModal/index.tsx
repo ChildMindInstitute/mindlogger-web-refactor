@@ -10,14 +10,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { SxProps } from '@mui/material/styles';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 
-import { BaseButton } from '../BaseButton';
-
 import { Theme } from '~/shared/constants';
+import { BaseButton } from '~/shared/ui';
 import { Box } from '~/shared/ui';
 
 type Props = {
   isOpen: boolean;
-  onHide: DOMAttributes<SVGSVGElement>['onClick'];
+  onHide?: DOMAttributes<SVGSVGElement>['onClick'];
   title?: string | null;
   label?: string | null;
   footerPrimaryButton?: string | null;
