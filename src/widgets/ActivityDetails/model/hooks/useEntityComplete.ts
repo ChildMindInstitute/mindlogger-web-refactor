@@ -6,7 +6,7 @@ import { AppletDetailsDTO } from '~/shared/api';
 import { ROUTES } from '~/shared/constants';
 import { useNotification } from '~/shared/ui';
 import { useCustomNavigation, useCustomTranslation } from '~/shared/utils';
-import { useLaunchDarkly } from '~/shared/utils/hooks/useLaunchDarkly';
+import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
 type Props = {
   applet: AppletDetailsDTO;
@@ -20,7 +20,7 @@ type Props = {
 export const useEntityComplete = (props: Props) => {
   const navigator = useCustomNavigation();
   const { t } = useCustomTranslation();
-  const { flags: featureFlags } = useLaunchDarkly();
+  const { featureFlags } = useFeatureFlags();
   const { isInMultiInformantFlow } = appletModel.hooks.useMultiInformantState();
 
   const { removeActivityProgress } = appletModel.hooks.useRemoveActivityProgress();

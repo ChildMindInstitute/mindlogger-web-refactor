@@ -7,7 +7,7 @@ import { TakeNowSuccessModal } from '~/features/TakeNow/ui/TakeNowSuccessModal';
 import { Container } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
-import { useLaunchDarkly } from '~/shared/utils/hooks/useLaunchDarkly';
+import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
 type PublicAppletDetails = {
   isPublic: true;
@@ -40,7 +40,7 @@ export const ActivityGroups = (props: Props) => {
     select: (data) => data.data.result,
   });
 
-  const { flags: featureFlags } = useLaunchDarkly();
+  const { featureFlags } = useFeatureFlags();
 
   const { isInMultiInformantFlow, resetMultiInformantState } =
     appletModel.hooks.useMultiInformantState();

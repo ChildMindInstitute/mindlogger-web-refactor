@@ -5,14 +5,14 @@ import { FeatureFlags, FeatureFlagsKeys } from '../types/featureFlags';
 /**
  * Internal wrapper for LaunchDarkly's hooks and flags.
  */
-export const useLaunchDarkly = () => {
+export const useFeatureFlags = () => {
   const ldClient = useLDClient();
   const flags = useFlags();
 
   /**
    * Resets the active context back to an anonymous user account.
    */
-  const resetLDContext = () => {
+  const resetContext = () => {
     void ldClient?.identify({
       kind: 'user',
       anonymous: true,
@@ -29,5 +29,5 @@ export const useLaunchDarkly = () => {
     return features;
   };
 
-  return { resetLDContext, flags: featureFlags() };
+  return { resetContext, featureFlags: featureFlags() };
 };

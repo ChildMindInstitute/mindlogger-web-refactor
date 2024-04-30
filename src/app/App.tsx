@@ -7,7 +7,7 @@ import i18nManager from './system/locale/i18n';
 
 import ApplicationRouter from '~/pages';
 import { Mixpanel } from '~/shared/utils';
-import { LaunchDarkly } from '~/shared/utils/featureFlags';
+import { FeatureFlags } from '~/shared/utils/featureFlags';
 
 import '~/assets/fonts/Atkinson/atkinson.css';
 
@@ -25,7 +25,7 @@ function App() {
   const ldClient = useLDClient();
   useEffect(() => {
     if (!ldClient) return;
-    LaunchDarkly.init(ldClient);
+    FeatureFlags.init(ldClient);
   }, [ldClient]);
 
   return (
