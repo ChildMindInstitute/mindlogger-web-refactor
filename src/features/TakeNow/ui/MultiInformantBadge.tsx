@@ -27,7 +27,6 @@ export const MultiInformantBadge = () => {
       alignItems="center"
       gap="4px"
       width="192px"
-      height="40px"
       borderRadius="8px"
       border={`${borderSize}px solid ${Theme.colors.light.surfaceVariant}`}
     >
