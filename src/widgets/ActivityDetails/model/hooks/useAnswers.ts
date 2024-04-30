@@ -14,6 +14,7 @@ import { appletModel } from '~/entities/applet';
 import { userModel } from '~/entities/user';
 import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from '~/shared/api';
 import { formatToDtoDate, formatToDtoTime, useEncryption } from '~/shared/utils';
+import { useLaunchDarkly } from '~/shared/utils/hooks/useLaunchDarkly';
 
 type Props = {
   applet: AppletDetailsDTO;
@@ -36,6 +37,9 @@ export const useAnswer = (props: Props) => {
   const { encryptPayload } = useEncryptPayload();
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
+  const { getMultiInformantState, isInMultiInformantFlow } =
+    appletModel.hooks.useMultiInformantState();
+  const { flags: featureFlags } = useLaunchDarkly();
 
   const getSubmitId = (groupInProgress: GroupProgress): string => {
     const isFlow = groupInProgress.type === ActivityPipelineType.Flow;
@@ -135,6 +139,14 @@ export const useAnswer = (props: Props) => {
         },
       };
 
+      if (featureFlags.enableMultiInformant) {
+        const multiInformantState = getMultiInformantState();
+        if (isInMultiInformantFlow()) {
+          answer.sourceSubjectId = multiInformantState.sourceSubjectId;
+          answer.targetSubjectId = multiInformantState.targetSubjectId;
+        }
+      }
+
       const scheduledTime = getScheduledTimeFromEvents(props.eventsRawData, props.activityId);
       if (scheduledTime) {
         answer.answer.scheduledTime = scheduledTime;
@@ -154,6 +166,7 @@ export const useAnswer = (props: Props) => {
       props.eventId,
       props.eventsRawData,
       props.flowId,
+      getMultiInformantState,
     ],
   );
 
