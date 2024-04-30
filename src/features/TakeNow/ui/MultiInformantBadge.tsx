@@ -4,6 +4,8 @@ import { Theme } from '~/shared/constants';
 import { Box } from '~/shared/ui';
 import { useLaunchDarkly } from '~/shared/utils/hooks/useLaunchDarkly';
 
+const borderSize = 1;
+
 export const MultiInformantBadge = () => {
   const { getMultiInformantState, isInMultiInformantFlow } = useMultiInformantState();
   const { flags: featureFlags } = useLaunchDarkly();
@@ -21,13 +23,13 @@ export const MultiInformantBadge = () => {
   return (
     <Box
       display="flex"
-      padding="4px"
+      padding={`${4 - borderSize}px`}
       alignItems="center"
       gap="4px"
       width="192px"
       height="40px"
       borderRadius="8px"
-      border={`1px solid ${Theme.colors.light.surfaceVariant}`}
+      border={`${borderSize}px solid ${Theme.colors.light.surfaceVariant}`}
     >
       <MultiInformantBadgeTile type="Respondent" subject={sourceSubject} />
       <MultiInformantBadgeTile type="Subject" subject={targetSubject} />
