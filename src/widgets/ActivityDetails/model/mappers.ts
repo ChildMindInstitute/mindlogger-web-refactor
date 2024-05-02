@@ -309,6 +309,9 @@ export function mapAlerts(items: Array<appletModel.ItemRecord>): Array<AlertDTO>
       case 'multiSelectRows':
         return convertMultiRowsToAlert(item);
 
+      case 'singleSelectRows':
+        return convertSingleRowsToAlert(item);
+
       default:
         return null;
     }
@@ -440,4 +443,24 @@ function convertMultiRowsToAlert(item: MultiSelectionRowsItem): Array<AlertDTO> 
   return alerts;
 }
 
-// function convertSingleRowsToAlert(item: SingleSelectionRowsItem): Array<AlertDTO> {}
+function convertSingleRowsToAlert(item: SingleSelectionRowsItem): Array<AlertDTO> {
+  const answer = item.answer;
+
+  const alerts: Array<AlertDTO> = [];
+
+  item.responseValues.dataMatrix.forEach((row) => {
+    row.options.forEach((option, optionIndex) => {
+      answer.forEach((itemAnswer, answerIndex) => {
+        if (itemAnswer === option.optionId && optionIndex === answerIndex) {
+          option.alert &&
+            alerts.push({
+              activityItemId: item.id,
+              message: option.alert,
+            });
+        }
+      });
+    });
+  });
+
+  return alerts;
+}
