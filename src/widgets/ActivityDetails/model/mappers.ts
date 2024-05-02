@@ -303,6 +303,12 @@ export function mapAlerts(items: Array<appletModel.ItemRecord>): Array<AlertDTO>
       case 'slider':
         return convertSliderToAlert(item);
 
+      case 'sliderRows':
+        return convertSliderRowsToAlert(item);
+
+      case 'multiSelectRows':
+        return convertMultiRowsToAlert(item);
+
       default:
         return null;
     }
@@ -374,3 +380,64 @@ function convertSliderToAlert(item: SliderItem): Array<AlertDTO> {
 
   return alert;
 }
+
+function convertSliderRowsToAlert(item: SliderRowsItem): Array<AlertDTO> {
+  const sliderAnswer = item.answer;
+
+  if (!sliderAnswer) {
+    return [];
+  }
+
+  const alerts: Array<AlertDTO> = [];
+
+  item.responseValues.rows.forEach((row, rowIndex) => {
+    if (row.alerts) {
+      row.alerts.forEach((alert) => {
+        if (alert.value === sliderAnswer[rowIndex]) {
+          alerts.push({
+            activityItemId: item.id,
+            message: alert.alert,
+          });
+        }
+      });
+    }
+  });
+
+  return alerts;
+}
+
+function convertMultiRowsToAlert(item: MultiSelectionRowsItem): Array<AlertDTO> {
+  const answer = item.answer;
+
+  if (!answer) {
+    return [];
+  }
+
+  const alerts: Array<AlertDTO> = [];
+
+  item.responseValues.dataMatrix.forEach((row, rowIndex) => {
+    const columnAnswers = answer[rowIndex];
+
+    if (columnAnswers?.length) {
+      row.options.forEach((option) => {
+        const optionText = item.responseValues.options.find(
+          (el) => el.id === option.optionId,
+        )?.text;
+
+        columnAnswers.forEach((cellAnswer) => {
+          if (cellAnswer === optionText) {
+            option.alert &&
+              alerts.push({
+                activityItemId: item.id,
+                message: option.alert,
+              });
+          }
+        });
+      });
+    }
+  });
+
+  return alerts;
+}
+
+// function convertSingleRowsToAlert(item: SingleSelectionRowsItem): Array<AlertDTO> {}
