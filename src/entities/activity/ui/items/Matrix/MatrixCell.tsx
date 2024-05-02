@@ -23,6 +23,7 @@ export const MatrixCell = ({ children, isRowLabel }: Props) => {
       minWidth={lessThanTarget ? '70px' : '142px'}
       maxWidth="400px"
       data-testid="matrix-cell"
+      margin="0 auto"
     >
       {children}
     </Box>
