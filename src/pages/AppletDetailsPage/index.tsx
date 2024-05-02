@@ -2,7 +2,7 @@ import { useLocation, useParams } from 'react-router-dom';
 
 import ValidateTakeNowParams from '~/features/TakeNow/ui/ValidateTakeNowParams';
 import { useCustomTranslation } from '~/shared/utils';
-import { useLaunchDarkly } from '~/shared/utils/hooks/useLaunchDarkly';
+import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 import { ActivityGroups } from '~/widgets/ActivityGroups';
 import { AuthorizationGuard } from '~/widgets/AuthorizationGuard';
 import { LoginWithRedirect } from '~/widgets/LoginWithRedirect';
@@ -11,7 +11,7 @@ function AppletDetailsPage() {
   const { appletId } = useParams();
   const location = useLocation();
   const { t } = useCustomTranslation();
-  const { flags: featureFlags } = useLaunchDarkly();
+  const { featureFlags } = useFeatureFlags();
 
   const queryParams = new URLSearchParams(location.search);
   const startActivityOrFlow = queryParams.get('startActivityOrFlow');

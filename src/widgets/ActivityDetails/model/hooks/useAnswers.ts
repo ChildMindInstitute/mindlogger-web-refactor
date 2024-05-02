@@ -14,7 +14,7 @@ import { appletModel } from '~/entities/applet';
 import { userModel } from '~/entities/user';
 import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from '~/shared/api';
 import { formatToDtoDate, formatToDtoTime, useEncryption } from '~/shared/utils';
-import { useLaunchDarkly } from '~/shared/utils/hooks/useLaunchDarkly';
+import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
 type Props = {
   applet: AppletDetailsDTO;
@@ -39,7 +39,7 @@ export const useAnswer = (props: Props) => {
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
   const { getMultiInformantState, isInMultiInformantFlow } =
     appletModel.hooks.useMultiInformantState();
-  const { flags: featureFlags } = useLaunchDarkly();
+  const { featureFlags } = useFeatureFlags();
 
   const getSubmitId = (groupInProgress: GroupProgress): string => {
     const isFlow = groupInProgress.type === ActivityPipelineType.Flow;

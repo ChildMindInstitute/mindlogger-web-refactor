@@ -3,7 +3,7 @@ import { secureUserPrivateKeyStorage } from '../secureUserPrivateKeyStorage';
 
 import { ROUTES } from '~/shared/constants';
 import { Mixpanel, secureTokensStorage, useCustomNavigation, useEncryption } from '~/shared/utils';
-import { LaunchDarkly } from '~/shared/utils/featureFlags';
+import { FeatureFlags } from '~/shared/utils/featureFlags';
 
 type Params = {
   backRedirectPath?: string | undefined;
@@ -47,7 +47,7 @@ export const useOnLogin = (params: Params) => {
       Mixpanel.login(user.id);
 
       navigate(ROUTES.appletList.path);
-      LaunchDarkly.login(user.id);
+      FeatureFlags.login(user.id);
     }
   };
 

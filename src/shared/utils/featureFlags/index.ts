@@ -1,1 +1,1 @@
-export * from './launchDarkly';
+export * from './featureFlags';

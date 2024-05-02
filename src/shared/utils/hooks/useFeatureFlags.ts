@@ -1,23 +1,12 @@
-import { useFlags, useLDClient } from 'launchdarkly-react-client-sdk';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { FeatureFlags, FeatureFlagsKeys } from '../types/featureFlags';
 
 /**
  * Internal wrapper for LaunchDarkly's hooks and flags.
  */
-export const useLaunchDarkly = () => {
-  const ldClient = useLDClient();
+export const useFeatureFlags = () => {
   const flags = useFlags();
-
-  /**
-   * Resets the active context back to an anonymous user account.
-   */
-  const resetLDContext = () => {
-    void ldClient?.identify({
-      kind: 'user',
-      anonymous: true,
-    });
-  };
 
   const featureFlags = () => {
     const keys = Object.keys(FeatureFlagsKeys) as (keyof typeof FeatureFlagsKeys)[];
@@ -29,5 +18,5 @@ export const useLaunchDarkly = () => {
     return features;
   };
 
-  return { resetLDContext, flags: featureFlags() };
+  return { featureFlags: featureFlags() };
 };
