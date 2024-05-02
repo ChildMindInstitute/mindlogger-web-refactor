@@ -11,12 +11,11 @@ type MultiInformantBadgeTileProps = {
 
 export const MultiInformantBadgeTile = ({ subject, type }: MultiInformantBadgeTileProps) => {
   const { id, secretId, nickname } = subject;
-  let text = secretId ?? id;
+  const text = secretId ?? id;
+  let tooltipText = `${type}: ${text}`;
   if (nickname) {
-    text += `, ${nickname}`;
+    tooltipText += `, ${nickname}`;
   }
-
-  const tooltipText = `${type}: ${text}`;
 
   const backgroundColor = type === 'Subject' ? Theme.colors.light.inverseOnSurface : 'transparent';
 

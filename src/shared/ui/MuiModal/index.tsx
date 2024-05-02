@@ -1,20 +1,22 @@
+import { DOMAttributes } from 'react';
+
 import CloseIcon from '@mui/icons-material/Close';
 import { Breakpoint } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
+import { DialogProps } from '@mui/material/Dialog/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { SxProps } from '@mui/material/styles';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 
-import { BaseButton } from '../BaseButton';
-
 import { Theme } from '~/shared/constants';
+import { BaseButton } from '~/shared/ui';
 import { Box } from '~/shared/ui';
 
 type Props = {
   isOpen: boolean;
-  onHide: () => void;
+  onHide?: DOMAttributes<SVGSVGElement>['onClick'];
   title?: string | null;
   label?: string | null;
   footerPrimaryButton?: string | null;
@@ -31,6 +33,7 @@ type Props = {
   labelComponent?: JSX.Element;
   footerWrapperSXProps?: SxProps;
   maxWidth?: Breakpoint;
+  DialogProps?: Omit<DialogProps, 'open'>;
 };
 
 export const MuiModal = (props: Props) => {
@@ -53,6 +56,7 @@ export const MuiModal = (props: Props) => {
     labelComponent,
     footerWrapperSXProps,
     maxWidth = 'xs',
+    DialogProps,
   } = props;
 
   return (
@@ -80,6 +84,7 @@ export const MuiModal = (props: Props) => {
           paddingTop: '24px',
         },
       }}
+      {...DialogProps}
     >
       {showCloseIcon && (
         <CloseIcon
