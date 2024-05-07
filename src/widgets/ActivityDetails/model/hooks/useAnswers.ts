@@ -160,18 +160,21 @@ export const useAnswer = (props: Props) => {
       return answer;
     },
     [
-      encryptPayload,
-      generateUserPrivateKey,
-      getGroupProgress,
-      props.activityId,
-      props.applet.activityFlows,
       props.applet.encryption,
+      props.applet.activityFlows,
       props.applet.id,
       props.applet.version,
+      props.flowId,
+      props.activityId,
       props.eventId,
       props.eventsRawData,
-      props.flowId,
+      encryptPayload,
+      getGroupProgress,
+      appletConsents?.shareToPublic,
+      featureFlags.enableMultiInformant,
+      generateUserPrivateKey,
       getMultiInformantState,
+      isInMultiInformantFlow,
     ],
   );
 
