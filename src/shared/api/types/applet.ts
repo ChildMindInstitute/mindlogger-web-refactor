@@ -1,106 +1,145 @@
-import { HourMinute } from "../../utils"
-import { BaseSuccessListResponse, BaseSuccessResponse } from "./base"
-import { PeriodicityTypeDTO } from "./events"
+import { BaseSuccessListResponse, BaseSuccessResponse } from './base';
+import { PeriodicityTypeDTO } from './events';
+import { ItemResponseTypeDTO } from './item';
+import { HourMinute } from '../../utils';
 
 // API payloads
 export type GetAppletByIdPayload = {
-  appletId: string
-}
+  appletId: string;
+};
 
 export type GetPublicAppletByIdPayload = {
-  publicAppletKey: string
-}
+  publicAppletKey: string;
+};
 
 export type GetPublicAppletActivityByIdPayload = {
-  publicAppletKey: string
-  activityId: string
-}
+  publicAppletKey: string;
+  activityId: string;
+};
 
-// API Responses
-export type AppletListSuccessResponse = BaseSuccessListResponse<AppletListDTO>
-export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDTO> & { respondentMeta: { nickname: string } }
+export type RespondentMetaDTO = { nickname: string };
+
+// API Responses - Success
+export type AppletListSuccessResponse = BaseSuccessListResponse<AppletListDTO>;
+export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDTO> & {
+  respondentMeta: RespondentMetaDTO;
+};
+
+export type AppletDetailsBaseInfoSuccess = BaseSuccessResponse<AppletDetailsBaseInfoDTO>;
 
 export type AppletListDTO = {
-  id: string
-  displayName: string
-  version: string
-  description: string
-  about: string
-  image: string | ""
-  watermark: string | ""
-}
+  id: string;
+  displayName: string;
+  version: string;
+  description: string;
+  about: string;
+  image: string;
+  watermark: string;
+};
 
 export type AppletDetailsDTO = {
-  id: string
-  displayName: string
-  version: string
-  description: string
-  about: string
-  image: string | ""
-  watermark: string | ""
-  activities: AppletDetailsActivityDTO[]
-  activityFlows: ActivityFlowDTO[]
-  encryption: AppletEncryptionDTO | null
-  integrations: Integration[]
-}
+  id: string;
+  displayName: string;
+  version: string;
+  description: string;
+  about: string;
+  image: string;
+  watermark: string;
+  activities: AppletDetailsActivityDTO[];
+  activityFlows: ActivityFlowDTO[];
+  encryption: AppletEncryptionDTO | null;
+  integrations: Integration[];
+};
 
-type Integration = "loris"
+export type AppletDetailsBaseInfoDTO = {
+  id: string;
+  displayName: string;
+  version: string;
+  description: string;
+  about: string;
+  image: string;
+  watermark: string;
+  createdAt: string;
+  updatedAt: string;
+  activities: Array<ActivityBaseInfoDTO>;
+  activityFlows: Array<ActivityFlowDTO>;
+  encryption: AppletEncryptionDTO | null;
+  integrations?: Integration[];
+};
+
+export type ActivityBaseInfoDTO = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  isHidden: boolean;
+  order: number;
+  containsResponseTypes: Array<ItemResponseTypeDTO>;
+  itemCount: number;
+};
+
+type Integration = 'loris';
 
 export type AppletDetailsActivityDTO = {
-  id: string
-  name: string
-  description: string
-  splashScreen: string | ""
-  image: string | ""
-  showAllAtOnce: boolean
-  isSkippable: boolean
-  isReviewable: boolean
-  isHidden: boolean
-  responseIsEditable: boolean
-  order: number
-}
+  id: string;
+  name: string;
+  description: string;
+  splashScreen: string;
+  image: string;
+  showAllAtOnce: boolean;
+  isSkippable: boolean;
+  isReviewable: boolean;
+  isHidden: boolean;
+  responseIsEditable: boolean;
+  order: number;
+};
 
 export type ActivityFlowDTO = {
-  id: string
-  name: string
-  description: string
-  image: string | ""
-  isSingleReport: boolean
-  hideBadge: boolean
-  order: number
-  isHidden: boolean
-  activityIds: Array<string>
-}
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  isSingleReport: boolean;
+  hideBadge: boolean;
+  order: number;
+  isHidden: boolean;
+  activityIds: Array<string>;
+};
 
 export type EventAvailabilityDto = {
-  oneTimeCompletion: boolean
-  periodicityType: PeriodicityTypeDTO
-  timeFrom: HourMinute | null
-  timeTo: HourMinute | null
-  allowAccessBeforeFromTime: boolean
-  startDate?: string | null
-  endDate?: string | null
-}
+  oneTimeCompletion: boolean;
+  periodicityType: PeriodicityTypeDTO;
+  timeFrom: HourMinute | null;
+  timeTo: HourMinute | null;
+  allowAccessBeforeFromTime: boolean;
+  startDate?: string | null;
+  endDate?: string | null;
+};
 
 export type ScheduleEventDto = {
-  id: string
-  entityId: string
-  availabilityType: string
-  availability: EventAvailabilityDto
-  selectedDate: string | null
+  id: string;
+  entityId: string;
+  availabilityType: string;
+  availability: EventAvailabilityDto;
+  selectedDate: string | null;
   timers: {
-    timer: HourMinute | null
-    idleTimer: HourMinute | null
-  }
-}
+    timer: HourMinute | null;
+    idleTimer: HourMinute | null;
+  };
+};
 
 export type AppletEventsResponse = {
-  events: ScheduleEventDto[]
-}
+  events: ScheduleEventDto[];
+};
+
+export type AllUserEventsDTO = {
+  appletId: string;
+  events: ScheduleEventDto[];
+};
 
 export type AppletEncryptionDTO = {
-  accountId: string
-  base: string // Contains number[]
-  prime: string // Contains number[]
-  publicKey: string // Contains number[]
-}
+  accountId: string;
+  base: string; // Contains number[]
+  prime: string; // Contains number[]
+  publicKey: string; // Contains number[]
+};

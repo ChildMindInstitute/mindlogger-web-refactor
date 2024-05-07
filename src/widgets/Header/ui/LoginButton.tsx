@@ -1,27 +1,32 @@
-import { useNavigate } from "react-router-dom"
+import Button from '@mui/material/Button';
 
-import { useNavbarTranslation } from "../lib/useNavbarTranslation"
+import { useNavbarTranslation } from '../lib/useNavbarTranslation';
 
-import { NavbarButton } from "~/shared/ui"
-import { ROUTES } from "~/shared/utils"
+import { ROUTES } from '~/shared/constants';
+import { useCustomNavigation } from '~/shared/utils';
 
-export interface LoginButtonProps {
-  onClickExtended?: () => void
-}
+type Props = {
+  toggleMenuOpen: () => void;
+};
 
-const LoginButton = ({ onClickExtended }: LoginButtonProps) => {
-  const { t } = useNavbarTranslation()
-  const navigate = useNavigate()
+const LoginButton = ({ toggleMenuOpen }: Props) => {
+  const { t } = useNavbarTranslation();
+  const navigator = useCustomNavigation();
 
   const onLoginButtonClickHandler = () => {
-    navigate(ROUTES.login.path)
+    toggleMenuOpen();
+    return navigator.navigate(ROUTES.login.path);
+  };
 
-    if (onClickExtended) {
-      onClickExtended()
-    }
-  }
+  return (
+    <Button
+      variant="text"
+      onClick={onLoginButtonClickHandler}
+      sx={{ color: 'rgba(255, 255, 255, 0.55)', textTransform: 'none', fontFamily: 'Atkinson' }}
+    >
+      {t('logIn')}
+    </Button>
+  );
+};
 
-  return <NavbarButton label={t("logIn")} onClick={onLoginButtonClickHandler} />
-}
-
-export default LoginButton
+export default LoginButton;

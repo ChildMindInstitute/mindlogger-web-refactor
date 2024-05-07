@@ -1,3 +1,12 @@
+export type Consents = {
+  shareToPublic: boolean;
+  shareMediaToPublic: boolean;
+};
+
+export type AppletId = string;
+
+export type ActivityConsents = Record<AppletId, Consents | undefined>;
+
 export const enum ActivityPipelineType {
   NotDefined = 0,
   Regular,
@@ -5,32 +14,26 @@ export const enum ActivityPipelineType {
 }
 
 export type FlowProgress = {
-  type: ActivityPipelineType.Flow
-  currentActivityId: string
-  pipelineActivityOrder: number
-  currentActivityStartAt: number | null
-  executionGroupKey: string
-}
+  type: ActivityPipelineType.Flow;
+  currentActivityId: string;
+  pipelineActivityOrder: number;
+  currentActivityStartAt: number | null;
+  executionGroupKey: string;
+};
 
 export type ActivityProgress = {
-  type: ActivityPipelineType.Regular
-}
+  type: ActivityPipelineType.Regular;
+};
 
-export type ActivityOrFlowProgress = FlowProgress | ActivityProgress
+export type ActivityOrFlowProgress = FlowProgress | ActivityProgress;
 
 type EventProgressTimestampState = {
-  startAt: Date | null
-  endAt: Date | null
-}
+  startAt: number | null;
+  endAt: number | null;
+};
 
-type EventId = string
-type EntityId = string
-type AppletId = string
+export type GroupProgress = ActivityOrFlowProgress & EventProgressTimestampState;
 
-export type EventProgressState = ActivityOrFlowProgress & EventProgressTimestampState
+type GroupProgressId = string; // Group progress id is a combination of activityId and eventId (activityId/eventId)
 
-export type EventsProgress = Record<EventId, EventProgressState>
-
-export type EntitiesProgress = Record<EntityId, EventsProgress>
-
-export type Progress = Record<AppletId, EntitiesProgress>
+export type GroupProgressState = Record<GroupProgressId, GroupProgress>;

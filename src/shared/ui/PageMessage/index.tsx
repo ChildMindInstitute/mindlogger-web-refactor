@@ -1,15 +1,24 @@
-import classNames from "classnames"
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 
-import "./style.scss"
+type Props = {
+  message: string;
+  testid?: string;
+};
 
-interface PageMessageProps {
-  message: string
-}
-
-export const PageMessage = ({ message }: PageMessageProps) => {
+export const PageMessage = ({ message, testid }: Props) => {
   return (
-    <div className={classNames("d-flex", "justify-content-center", "align-items-center", "text-center")}>
-      <div className={"page-message"}>{message}</div>
-    </div>
-  )
-}
+    <Box
+      display="flex"
+      flex={1}
+      justifyContent="center"
+      alignItems="center"
+      textAlign="center"
+      data-testid={testid}
+    >
+      <Text variant="body1" fontSize="24px" margin="16px 0px">
+        {message}
+      </Text>
+    </Box>
+  );
+};

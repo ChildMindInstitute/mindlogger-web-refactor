@@ -1,44 +1,52 @@
-import classNames from "classnames"
+import { InvitationContent } from './InvitationContent';
+import { InvitationHeader } from './InvitationHeader';
+import { InvitationDetails, useInvitationTranslation } from '../lib';
 
-import { InvitationDetails, useInvitationTranslation } from "../lib"
-import { InvitationContent } from "./InvitationContent"
-import { InvitationHeader } from "./InvitationHeader"
-
-import { Logo, PageMessage } from "~/shared/ui"
+import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
+import { PageMessage } from '~/shared/ui';
+import Logo from '~/shared/ui/Logo';
 
 interface InvitationProps {
-  actionComponent: JSX.Element
-  invite?: InvitationDetails
-  isUserAuthenticated: boolean
+  actionComponent: JSX.Element;
+  invite?: InvitationDetails;
+  isUserAuthenticated: boolean;
 }
 
 export const Invitation = ({ invite, actionComponent, isUserAuthenticated }: InvitationProps) => {
-  const { t } = useInvitationTranslation()
+  const { t } = useInvitationTranslation();
 
-  if (invite?.status === "approved") {
-    return <PageMessage message={t("invitationAlreadyAccepted")} />
+  if (invite?.status === 'approved') {
+    return <PageMessage message={t('invitationAlreadyAccepted')} />;
   }
 
-  if (invite?.status === "declined") {
-    return <PageMessage message={t("invitationAlreadyDeclined")} />
+  if (invite?.status === 'declined') {
+    return <PageMessage message={t('invitationAlreadyDeclined')} />;
   }
 
   return (
-    <div className={classNames("invitationBody")}>
+    <Box
+      color={Theme.colors.light.onPrimaryContainer}
+      textAlign="left"
+      data-testid="invitation-block"
+    >
       {invite && (
         <>
           <InvitationHeader appletName={invite.appletName} role={invite.role} />
-          <div className={classNames("mb-3")}>{actionComponent}</div>
-          <InvitationContent appletName={invite.appletName} isUserAuthenticated={isUserAuthenticated} />
+          {actionComponent}
+          <InvitationContent
+            appletName={invite.appletName}
+            isUserAuthenticated={isUserAuthenticated}
+          />
 
-          <div>
-            <div>
+          <Box margin="12px 0px" data-testid="invitation-footer">
+            <Box>
               <Logo size={{ width: 200, height: 80 }} />
-            </div>
-            <small>{t("inviteContent.footer")}</small>
-          </div>
+            </Box>
+            <small>{t('inviteContent.footer')}</small>
+          </Box>
         </>
       )}
-    </div>
-  )
-}
+    </Box>
+  );
+};

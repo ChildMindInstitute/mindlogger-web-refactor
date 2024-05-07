@@ -1,1 +1,2 @@
-export * from "./useEventsByAppletIdQuery"
+export * from './useEventsByAppletIdQuery';
+export * from './useUserEventsMutation';

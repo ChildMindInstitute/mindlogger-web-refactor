@@ -1,7 +1,7 @@
-import { useCustomTranslation } from "~/shared/utils"
+import { useCustomTranslation } from '~/shared/utils';
 
 export const useNavbarTranslation = () => {
-  const { t, i18n } = useCustomTranslation({ keyPrefix: "Navbar" })
+  const { t, i18n } = useCustomTranslation({ keyPrefix: 'Navbar' });
 
-  return { t, i18n }
-}
+  return { t, i18n };
+};

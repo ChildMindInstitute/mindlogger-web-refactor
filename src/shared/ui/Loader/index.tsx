@@ -1,24 +1,20 @@
-import classNames from "classnames"
-import { Container, Spinner } from "react-bootstrap"
+import CircularProgress from '@mui/material/CircularProgress';
 
-import "./styles.scss"
-
-type LoaderProps = {
-  defaultSize?: boolean
-}
-
-export const Loader = ({ defaultSize }: LoaderProps) => {
+// This Loader component is very common component
+// Don`t remove default export
+// Don`t remove inline styles. It was made for component lightness
+export default function Loader() {
   return (
-    <Container
-      className={classNames(
-        "d-flex",
-        "w-100",
-        "justify-content-center",
-        "align-items-center",
-        { "default-loader-height": defaultSize },
-        { "h-100": !defaultSize },
-      )}>
-      <Spinner as="div" animation="border" role="status" aria-hidden="true" />
-    </Container>
-  )
+    <div
+      style={{
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <CircularProgress />
+    </div>
+  );
 }

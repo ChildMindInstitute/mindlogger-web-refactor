@@ -1,6 +1,7 @@
-import { FieldValues, ResolverResult, ResolverOptions } from "react-hook-form"
-import { z } from "zod"
+import { FieldValues, ResolverResult, ResolverOptions } from 'react-hook-form';
+import { z } from 'zod';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Resolver = <T extends z.Schema<any, any>>(
   schema: T,
   schemaOptions?: Partial<z.ParseParams>,
@@ -8,15 +9,15 @@ export type Resolver = <T extends z.Schema<any, any>>(
     /**
      * @default async
      */
-    mode?: "async" | "sync"
+    mode?: 'async' | 'sync';
     /**
      * Return the raw input values rather than the parsed values.
      * @default false
      */
-    rawValues?: boolean
+    rawValues?: boolean;
   },
 ) => <TFieldValues extends FieldValues, TContext>(
   values: TFieldValues,
   context: TContext | undefined,
   options: ResolverOptions<TFieldValues>,
-) => Promise<ResolverResult<TFieldValues>>
+) => Promise<ResolverResult<TFieldValues>>;

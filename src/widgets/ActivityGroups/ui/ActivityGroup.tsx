@@ -1,27 +1,37 @@
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
+import { ActivityCardList } from './ActivityCardList';
 
-import { ActivityListGroup } from "../lib/types"
+import { ActivityListGroup } from '~/abstract/lib/GroupBuilder';
+import { Theme } from '~/shared/constants';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
+import { useCustomTranslation } from '~/shared/utils';
 
-import { ActivityList, ActivityListItem } from "~/entities/activity"
-import { useCustomTranslation } from "~/shared/utils"
+type Props = {
+  group: ActivityListGroup;
+};
 
-interface ActivityGroupProps {
-  group: ActivityListGroup
-  isPublic: boolean
-  onActivityCardClick: (activity: ActivityListItem) => void
-}
-
-export const ActivityGroup = ({ group, onActivityCardClick, isPublic }: ActivityGroupProps) => {
-  const { t } = useCustomTranslation()
+export const ActivityGroup = ({ group }: Props) => {
+  const { t } = useCustomTranslation();
 
   return (
-    <Container>
-      <p className={classNames("mt-2", "text-capitalize")}>{t(group.name)}</p>
+    <Box data-testid={`${group.name}-block`}>
+      <Text
+        variant="h3"
+        color={Theme.colors.light.onSurface}
+        sx={{
+          marginTop: '24px',
+          marginBottom: '16px',
+          fontFamily: 'Atkinson',
+          fontSize: '22px',
+          fontStyle: 'normal',
+          fontWeight: 700,
+          lineHeight: '28px',
+        }}
+      >
+        {t(group.name)}
+      </Text>
 
-      <div>
-        <ActivityList activities={group.activities} onActivityCardClick={onActivityCardClick} isPublic={isPublic} />
-      </div>
-    </Container>
-  )
-}
+      <ActivityCardList activities={group.activities} />
+    </Box>
+  );
+};

@@ -1,21 +1,31 @@
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
+import { Theme } from '../../constants';
 
-import "./styles.scss"
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 
 interface ErrorLabelProps {
-  errorMessage?: string | null
-  successMessage?: string | null
+  errorMessage?: string | null;
+  successMessage?: string | null;
 }
 
 export const DisplaySystemMessage = ({ errorMessage, successMessage }: ErrorLabelProps) => {
   return (
-    <Container className={classNames("system-message-box")}>
-      {errorMessage && <span className={classNames("system-message-label", "failed-message")}>{errorMessage}</span>}
+    <Box minHeight="8px" maxHeight="64px" padding="4px 0">
+      {errorMessage && (
+        <Text fontSize="14px" color={Theme.colors.light.error} testid="system-error-message">
+          {errorMessage}
+        </Text>
+      )}
 
       {successMessage && (
-        <span className={classNames("system-message-label", "success-message")}>{successMessage}</span>
+        <Text
+          fontSize="14px"
+          color={Theme.colors.light.accentGreen}
+          testid="system-success-message"
+        >
+          {successMessage}
+        </Text>
       )}
-    </Container>
-  )
-}
+    </Box>
+  );
+};

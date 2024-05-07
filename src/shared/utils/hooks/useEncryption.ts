@@ -1,57 +1,59 @@
-import { useCallback } from "react"
-
-import { AppletEncryptionDTO } from "../../api"
-import { encryption } from "../encryption"
+import { AppletEncryptionDTO } from '../../api';
+import { encryption } from '../encryption';
 
 type InputProps = AppletEncryptionDTO & {
-  privateKey: number[]
-}
+  privateKey: number[];
+};
 
 type GenerateUserPrivateKeyParams = {
-  userId: string
-  email: string
-  password: string
-}
-
-type GenerateAesKeyProps = {
-  userPrivateKey: number[]
-  appletPublicKey: number[]
-  appletPrime: number[]
-  appletBase: number[]
-}
+  userId: string;
+  email: string;
+  password: string;
+};
 
 export const useEncryption = () => {
-  const generateUserPrivateKey = useCallback((params: GenerateUserPrivateKeyParams) => {
-    return encryption.getPrivateKey(params)
-  }, [])
+  const generateUserPrivateKey = (params: GenerateUserPrivateKeyParams) =>
+    encryption.getPrivateKey(params);
 
-  const generateAesKey = useCallback((params: GenerateAesKeyProps) => {
-    return encryption.getAESKey(params)
-  }, [])
+  const createEncryptionService = (params: InputProps) => {
+    const aesKey = encryption.getAESKey({
+      appletPrime: JSON.parse(params.prime) as number[],
+      appletBase: JSON.parse(params.base) as number[],
+      appletPublicKey: JSON.parse(params.publicKey) as number[],
+      userPrivateKey: params.privateKey,
+    });
 
-  const createEncryptionService = useCallback(
-    (params: InputProps) => {
-      const aesKey = generateAesKey({
-        appletPrime: JSON.parse(params.prime),
-        appletBase: JSON.parse(params.base),
-        appletPublicKey: JSON.parse(params.publicKey),
-        userPrivateKey: params.privateKey,
-      })
+    const encrypt = (json: string) => {
+      return encryption.encryptData({
+        text: json,
+        key: aesKey,
+      });
+    };
 
-      const encrypt = (json: string) => {
-        return encryption.encryptData({
-          text: json,
-          key: aesKey,
-        })
-      }
+    return { encrypt };
+  };
 
-      return { encrypt }
-    },
-    [generateAesKey],
-  )
+  const createDecryptionService = (params: InputProps) => {
+    const aesKey = encryption.getAESKey({
+      appletPrime: JSON.parse(params.prime) as number[],
+      appletBase: JSON.parse(params.base) as number[],
+      appletPublicKey: JSON.parse(params.publicKey) as number[],
+      userPrivateKey: params.privateKey,
+    });
+
+    const decrypt = (json: string) => {
+      return encryption.decryptData({
+        text: json,
+        key: aesKey,
+      });
+    };
+
+    return { decrypt };
+  };
 
   return {
     createEncryptionService,
+    createDecryptionService,
     generateUserPrivateKey,
-  }
-}
+  };
+};

@@ -1,15 +1,34 @@
-import React from "react"
+import React from 'react';
 
-import ReactDOM from "react-dom/client"
+import { init as SentryInit, replayIntegration } from '@sentry/react';
+import ReactDOM from 'react-dom/client';
 
-import App from "./App"
+import AppSuspense from './AppSuspense';
 
-import { Mixpanel } from "~/shared/utils"
+SentryInit({
+  dsn: import.meta.env.VITE_SENTRY_DSN ?? '',
+  integrations: [
+    // See docs for support of different versions of variation of react router
+    // https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/react-router/
+    replayIntegration(),
+  ],
 
-Mixpanel.init()
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  tracesSampleRate: 1.0,
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  tracePropagationTargets: import.meta.env.VITE_SENTRY_TRACE_PROPAGATION_TARGETS
+    ? (JSON.parse(import.meta.env.VITE_SENTRY_TRACE_PROPAGATION_TARGETS) as Array<string>)
+    : [],
+
+  // Capture Replay for 10% of all sessions,
+  // plus for 100% of sessions with an error
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
+});
+
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <AppSuspense />
   </React.StrictMode>,
-)
+);

@@ -1,25 +1,18 @@
-import { OverlayTrigger, Tooltip, Image } from "react-bootstrap"
+import Avatar from '@mui/material/Avatar';
+import Tooltip from '@mui/material/Tooltip';
 
-import { Markdown } from "../Markdown"
+import { Markdown } from '../Markdown';
 
-import questionMark from "~/assets/question-mark.svg"
-import "./style.scss"
+import TooltipIcon from '~/assets/tooltip-icon.svg';
 
 type TooltipProps = {
-  markdown: string
-}
+  markdown: string;
+};
 
 export const CustomTooltip = ({ markdown }: TooltipProps) => {
   return (
-    <OverlayTrigger
-      placement="bottom"
-      delay={{ show: 250, hide: 200 }}
-      overlay={
-        <Tooltip id="button-tooltip">
-          <Markdown markdown={markdown} />
-        </Tooltip>
-      }>
-      <Image src={questionMark} className="tooltip-icon" />
-    </OverlayTrigger>
-  )
-}
+    <Tooltip title={<Markdown markdown={markdown} />} data-testid="tooltip">
+      <Avatar src={TooltipIcon} variant="square" sx={{ width: '24px', height: '24px' }} />
+    </Tooltip>
+  );
+};

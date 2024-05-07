@@ -1,33 +1,31 @@
-import { useNavigate } from "react-router-dom"
+import { AppletListItem } from '../lib';
 
-import { AppletListItem } from "../lib"
+import { ROUTES } from '~/shared/constants';
+import { Box } from '~/shared/ui';
+import { CustomCard } from '~/shared/ui';
+import { MixEvents, MixProperties, Mixpanel, useCustomNavigation } from '~/shared/utils';
 
-import { CustomCard } from "~/shared/ui"
-import { Mixpanel, ROUTES } from "~/shared/utils"
+type Props = {
+  applet: AppletListItem;
+};
 
-interface AppletCardProps {
-  applet: AppletListItem
-}
-
-const AppletCard = ({ applet }: AppletCardProps) => {
-  const navigate = useNavigate()
+export const AppletCard = ({ applet }: Props) => {
+  const navigator = useCustomNavigation();
 
   const onAppletCardClick = () => {
-    navigate(ROUTES.activityList.navigateTo(applet.id))
-
-    Mixpanel.track("Applet click")
-  }
+    Mixpanel.track(MixEvents.AppletClick, { [MixProperties.AppletId]: applet.id });
+    return navigator.navigate(ROUTES.appletDetails.navigateTo(applet.id));
+  };
 
   return (
-    <CustomCard
-      type="link"
-      id={applet.id}
-      title={applet.displayName}
-      description={applet.description}
-      imageSrc={applet.image}
-      onClick={onAppletCardClick}
-    />
-  )
-}
-
-export default AppletCard
+    <Box data-testid="applet-card">
+      <CustomCard
+        id={applet.id}
+        title={applet.displayName}
+        description={applet.description}
+        imageSrc={applet.image}
+        onClick={onAppletCardClick}
+      />
+    </Box>
+  );
+};

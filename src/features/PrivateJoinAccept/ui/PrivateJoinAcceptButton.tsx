@@ -1,36 +1,46 @@
-import classNames from "classnames"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom';
 
-import { useAcceptPrivateInviteMutation, useInvitationTranslation } from "~/entities/invitation"
-import Button from "~/shared/ui/Button"
-import { Mixpanel, ROUTES } from "~/shared/utils"
+import { useAcceptPrivateInviteMutation, useInvitationTranslation } from '~/entities/invitation';
+import { ROUTES } from '~/shared/constants';
+import { Box } from '~/shared/ui';
+import { BaseButton, useNotification } from '~/shared/ui';
+import { MixEvents, MixProperties, Mixpanel } from '~/shared/utils';
 
 interface PrivateJoinAcceptButtonProps {
-  invitationKey: string
+  invitationKey: string;
+  appletId: string;
 }
 
-export const PrivateJoinAcceptButton = ({ invitationKey }: PrivateJoinAcceptButtonProps) => {
-  const { t } = useInvitationTranslation()
-  const navigate = useNavigate()
+export const PrivateJoinAcceptButton = ({
+  invitationKey,
+  appletId,
+}: PrivateJoinAcceptButtonProps) => {
+  const { t } = useInvitationTranslation();
+  const navigate = useNavigate();
+  const { showSuccessNotification } = useNotification();
 
   const { mutate: acceptPrivateInvite, isLoading } = useAcceptPrivateInviteMutation({
     onSuccess() {
-      navigate(ROUTES.invitationAccept.path)
-      Mixpanel.track("Invitation Accepted")
+      showSuccessNotification(t('invitationAccepted'));
+      Mixpanel.track(MixEvents.InvitationAccepted, { [MixProperties.AppletId]: appletId });
+      return navigate(ROUTES.appletList.path);
     },
-  })
+  });
 
   const onPrivateJoinAccept = () => {
-    acceptPrivateInvite({ invitationId: invitationKey })
-  }
+    return acceptPrivateInvite({ invitationId: invitationKey });
+  };
 
   return (
-    <Button
-      onClick={onPrivateJoinAccept}
-      variant="success"
-      className={classNames("mx-2", "mb-2", "invitation-buttons", "color-white")}
-      loading={isLoading}>
-      {t("buttons.acceptInvitation")}
-    </Button>
-  )
-}
+    <Box width="250px">
+      <BaseButton
+        type="button"
+        variant="contained"
+        color="success"
+        onClick={onPrivateJoinAccept}
+        isLoading={isLoading}
+        text={t('buttons.acceptInvitation')}
+      />
+    </Box>
+  );
+};

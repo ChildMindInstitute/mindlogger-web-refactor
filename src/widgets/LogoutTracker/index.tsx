@@ -1,38 +1,22 @@
-import { PropsWithChildren, useCallback, useEffect } from "react"
+import { PropsWithChildren, useEffect } from 'react';
 
-import { useNavigate } from "react-router-dom"
+import { useLogout } from '~/features/Logout';
+import { eventEmitter } from '~/shared/utils';
 
-import { activityModel } from "~/entities/activity"
-import { useLogoutMutation, userModel } from "~/entities/user"
-import { eventEmitter, ROUTES, secureTokensStorage } from "~/shared/utils"
+type LogoutTrackerProps = PropsWithChildren<unknown>;
 
-type LogoutTrackerProps = PropsWithChildren<unknown>
-
-export const LogoutTracker = ({ children }: LogoutTrackerProps) => {
-  const navigate = useNavigate()
-  const { mutate: logout } = useLogoutMutation()
-  const tokens = userModel.hooks.useTokensState()
-  const { clearUser } = userModel.hooks.useUserState()
-  const { clearActivityInProgressState } = activityModel.hooks.useActivityClearState()
-
-  const onLogoutEvent = useCallback(() => {
-    if (tokens?.accessToken) {
-      logout({ accessToken: tokens.accessToken })
-    }
-
-    secureTokensStorage.clearTokens()
-    clearUser()
-    clearActivityInProgressState()
-    navigate(ROUTES.login.path)
-  }, [clearUser, logout, navigate, tokens?.accessToken, clearActivityInProgressState])
+function LogoutTracker({ children }: LogoutTrackerProps) {
+  const { logout } = useLogout();
 
   useEffect(() => {
-    eventEmitter.on("onLogout", onLogoutEvent)
+    eventEmitter.on('onLogout', logout);
 
     return () => {
-      eventEmitter.off("onLogout", onLogoutEvent)
-    }
-  }, [onLogoutEvent])
+      eventEmitter.off('onLogout', logout);
+    };
+  }, [logout]);
 
-  return children as JSX.Element
+  return children as JSX.Element;
 }
+
+export default LogoutTracker;

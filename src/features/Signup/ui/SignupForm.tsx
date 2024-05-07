@@ -1,129 +1,148 @@
-import { useState } from "react"
+import { useState } from 'react';
 
-import classNames from "classnames"
-import { useNavigate } from "react-router-dom"
+import { TERMS_URL } from '../lib/constants';
+import { useSignupTranslation } from '../lib/useSignupTranslation';
+import { SignupFormSchema, TSignupForm } from '../model/signup.schema';
 
-import { TERMS_URL } from "../lib/constants"
-import { useSignupTranslation } from "../lib/useSignupTranslation"
-import { SignupFormSchema, TSignupForm } from "../model/signup.schema"
-
-import { useLoginMutation, userModel, useSignupMutation } from "~/entities/user"
-import { Input, Checkbox, BasicButton, BasicFormProvider, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
+import { useLoginMutation, userModel, useSignupMutation } from '~/entities/user';
+import { Box } from '~/shared/ui';
 import {
-  Mixpanel,
-  secureTokensStorage,
-  secureUserPrivateKeyStorage,
-  useCustomForm,
-  useEncryption,
-  usePasswordType,
-} from "~/shared/utils"
+  Input,
+  CheckboxWithLabel,
+  BasicFormProvider,
+  PasswordIcon,
+  BaseButton,
+  useNotification,
+  Text,
+} from '~/shared/ui';
+import { Mixpanel, useCustomForm, usePasswordType } from '~/shared/utils';
 
 interface SignupFormProps {
-  locationState?: Record<string, unknown>
+  locationState?: Record<string, unknown>;
 }
 
 export const SignupForm = ({ locationState }: SignupFormProps) => {
-  const { t } = useSignupTranslation()
-  const navigate = useNavigate()
+  const { t } = useSignupTranslation();
 
-  const [passwordType, onPasswordIconClick] = usePasswordType()
-  const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType()
+  const { showErrorNotification, showSuccessNotification } = useNotification();
 
-  const [terms, setTerms] = useState<boolean>(false)
-  const { setUser } = userModel.hooks.useUserState()
+  const [passwordType, onPasswordIconClick] = usePasswordType();
+  const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType();
+
+  const [terms, setTerms] = useState<boolean>(false);
+  const { onLoginSuccess } = userModel.hooks.useOnLogin({
+    backRedirectPath: locationState?.backRedirectPath as string,
+  });
 
   const form = useCustomForm(
-    { defaultValues: { email: "", firstName: "", lastName: "", password: "", confirmPassword: "" } },
+    {
+      defaultValues: { email: '', firstName: '', lastName: '', password: '', confirmPassword: '' },
+    },
     SignupFormSchema,
-  )
-  const { handleSubmit, reset } = form
-  const { generateUserPrivateKey } = useEncryption()
+  );
+  const { handleSubmit } = form;
 
-  const { mutate: login } = useLoginMutation({
+  const { mutate: login, isLoading: isLoginLoading } = useLoginMutation({
     onSuccess(data, variables) {
-      const { user, token } = data.data.result
+      const { user, token } = data.data.result;
 
-      const userParams = {
-        userId: data.data.result.user.id,
-        email: data.data.result.user.email,
-        password: variables.password,
-      }
-
-      const userPrivateKey = generateUserPrivateKey(userParams)
-      secureUserPrivateKeyStorage.setUserPrivateKey(userPrivateKey)
-
-      setUser(user)
-      secureTokensStorage.setTokens(token)
-
-      Mixpanel.track("Login Successful")
-      Mixpanel.login(data.data.result.user.id)
-
-      return navigate(locationState?.backRedirectPath as string)
+      return onLoginSuccess({
+        user: {
+          ...user,
+          password: variables.password,
+        },
+        tokens: token,
+      });
     },
-  })
+  });
 
-  const {
-    mutate: signup,
-    error,
-    isSuccess,
-    isLoading,
-  } = useSignupMutation({
+  const { mutate: signup, isLoading: isSignupLoading } = useSignupMutation({
     onSuccess() {
-      if (locationState?.isInvitationFlow) {
-        const { email, password } = form.getValues()
-        login({ email, password })
-      }
+      showSuccessNotification(t('success'));
+      Mixpanel.track('Signup Successful');
+      const { email, password } = form.getValues();
 
-      Mixpanel.track("Account Creation complete")
-
-      reset()
+      return login({ email, password });
     },
-  })
+    onError(error) {
+      if (error.evaluatedMessage) {
+        showErrorNotification(error.evaluatedMessage);
+      }
+    },
+  });
 
   const onSignupSubmit = (data: TSignupForm) => {
-    return signup(data)
-  }
+    if (!terms) {
+      return showErrorNotification(t('pleaseAgreeTerms'));
+    }
+
+    return signup(data);
+  };
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onSignupSubmit)}>
-      <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
-      <Input type="text" name="firstName" placeholder={t("firstName") || ""} />
-      <Input type="text" name="lastName" placeholder={t("lastName") || ""} />
-      <Input
-        type={passwordType}
-        name="password"
-        placeholder={t("password") || ""}
-        autoComplete="new-password"
-        Icon={<PasswordIcon isSecure={passwordType === "password"} onClick={onPasswordIconClick} />}
-      />
-      <Input
-        type={confirmPasswordType}
-        name="confirmPassword"
-        placeholder={t("confirmPassword") || ""}
-        autoComplete="new-password"
-        Icon={<PasswordIcon isSecure={confirmPasswordType === "password"} onClick={onConfirmPasswordIconClick} />}
-      />
+      <Box display="flex" flexDirection="column" gap="24px">
+        <Input
+          id="signup-form-email"
+          type="text"
+          name="email"
+          placeholder={t('email') || ''}
+          autoComplete="username"
+        />
+        <Input
+          id="signup-form-firstname"
+          type="text"
+          name="firstName"
+          placeholder={t('firstName') || ''}
+        />
+        <Input
+          id="signup-form-lastname"
+          type="text"
+          name="lastName"
+          placeholder={t('lastName') || ''}
+        />
+        <Input
+          id="signup-form-new-password"
+          type={passwordType}
+          name="password"
+          placeholder={t('password') || ''}
+          autoComplete="new-password"
+          Icon={
+            <PasswordIcon isSecure={passwordType === 'password'} onClick={onPasswordIconClick} />
+          }
+        />
+        <Input
+          id="signup-form-confirm-password"
+          type={confirmPasswordType}
+          name="confirmPassword"
+          placeholder={t('confirmPassword') || ''}
+          autoComplete="new-password"
+          Icon={
+            <PasswordIcon
+              isSecure={confirmPasswordType === 'password'}
+              onClick={onConfirmPasswordIconClick}
+            />
+          }
+        />
 
-      <div className="d-flex mb-3">
-        <Checkbox uniqId="terms" onChange={() => setTerms(prev => !prev)}>
-          I agree to the{" "}
-          <a href={TERMS_URL} target="_blank" rel="noreferrer">
-            Terms of Service
-          </a>
-        </Checkbox>
-      </div>
+        <Box display="flex" justifyContent="center">
+          <CheckboxWithLabel id="terms" onChange={() => setTerms((prev) => !prev)}>
+            <Text variant="body1">
+              I agree to the{' '}
+              <a href={TERMS_URL} target="_blank" rel="noreferrer">
+                Terms of Service
+              </a>
+            </Text>
+          </CheckboxWithLabel>
+        </Box>
 
-      <DisplaySystemMessage errorMessage={error?.evaluatedMessage} successMessage={isSuccess ? t("success") : null} />
-
-      <BasicButton
-        className={classNames("mt-3")}
-        type="submit"
-        variant="primary"
-        disabled={!terms || isLoading}
-        defaultSize
-        loading={isLoading}>
-        {t("create")}
-      </BasicButton>
+        <BaseButton
+          type="submit"
+          variant="contained"
+          text={t('create')}
+          isLoading={isSignupLoading || isLoginLoading}
+        />
+      </Box>
     </BasicFormProvider>
-  )
-}
+  );
+};

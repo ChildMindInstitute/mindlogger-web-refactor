@@ -1,54 +1,79 @@
-import classNames from "classnames"
-import { Spinner } from "react-bootstrap"
+import { useAuthorizationGuard } from '../../AuthorizationGuard';
 
-import { useAuthorizationGuard } from "../../AuthorizationGuard"
-
-import { Invitation, useInvitationTranslation, usePrivateInvitationQuery } from "~/entities/invitation"
-import { PrivateJoinAcceptButton } from "~/features/PrivateJoinAccept"
-import { PrivateJoinDeclineButton } from "~/features/PrivateJoinDecline"
-import { PageMessage } from "~/shared/ui"
-import { AuthorizationButtons } from "~/widgets/AuthorizationNavigateButtons"
+import {
+  Invitation,
+  useInvitationTranslation,
+  usePrivateInvitationQuery,
+} from '~/entities/invitation';
+import { PrivateJoinAcceptButton } from '~/features/PrivateJoinAccept';
+import { PrivateJoinDeclineButton } from '~/features/PrivateJoinDecline';
+import { Box } from '~/shared/ui';
+import { PageMessage } from '~/shared/ui';
+import Loader from '~/shared/ui/Loader';
+import { useCustomMediaQuery } from '~/shared/utils';
+import { AuthorizationButtons } from '~/widgets/AuthorizationNavigateButtons';
 
 interface FetchPrivateInvitationProps {
-  keyParams: string
-  redirectState?: Record<string, unknown>
+  keyParams: string;
+  redirectState?: Record<string, unknown>;
 }
 
-export const FetchPrivateInvitation = ({ keyParams, redirectState }: FetchPrivateInvitationProps) => {
-  const { t } = useInvitationTranslation()
-  const { isAuthenticated } = useAuthorizationGuard()
+export const FetchPrivateInvitation = ({
+  keyParams,
+  redirectState,
+}: FetchPrivateInvitationProps) => {
+  const { t } = useInvitationTranslation();
+  const { isAuthenticated } = useAuthorizationGuard();
+  const { lessThanSM } = useCustomMediaQuery();
 
-  const { isError, data, isLoading } = usePrivateInvitationQuery(keyParams)
+  const { isError, data, isLoading } = usePrivateInvitationQuery(keyParams);
 
   if (isError) {
-    return <PageMessage message={t("notFound")} />
+    return <PageMessage message={t('notFound')} />;
   }
 
   if (isLoading) {
     return (
-      <div className={classNames("d-flex", "justify-content-center", "align-items-center", "text-center")}>
-        <div className="loading">{t("loadingInvitation")}</div>
-        <Spinner animation="border" variant="primary" />
-      </div>
-    )
+      <Box
+        display="flex"
+        flex={1}
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+      >
+        <Box>
+          <div className="loading">{t('loadingInvitation')}</div>
+          <Loader />
+        </Box>
+      </Box>
+    );
   }
+
+  const invitation = data?.data?.result;
 
   return (
     <Invitation
-      invite={data?.data?.result}
+      invite={invitation}
       isUserAuthenticated={isAuthenticated}
       actionComponent={
-        <div className={classNames("d-flex", "justify-content-center", "align-items-center", "flex-row")}>
+        <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row">
           {isAuthenticated ? (
-            <>
-              <PrivateJoinAcceptButton invitationKey={keyParams} />
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              gap="12px"
+              margin="16px 0px"
+              flexDirection={lessThanSM ? 'column' : 'row'}
+            >
+              <PrivateJoinAcceptButton invitationKey={keyParams} appletId={invitation.appletId} />
               <PrivateJoinDeclineButton />
-            </>
+            </Box>
           ) : (
             <AuthorizationButtons redirectState={redirectState} />
           )}
-        </div>
+        </Box>
       }
     />
-  )
-}
+  );
+};

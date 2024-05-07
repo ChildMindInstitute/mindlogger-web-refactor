@@ -1,24 +1,29 @@
-import classNames from "classnames"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom';
 
-import { useInvitationTranslation } from "~/entities/invitation"
-import Button from "~/shared/ui/Button"
-import { ROUTES } from "~/shared/utils"
+import { useInvitationTranslation } from '~/entities/invitation';
+import { ROUTES } from '~/shared/constants';
+import { Box } from '~/shared/ui';
+import { BaseButton, useNotification } from '~/shared/ui';
 
 export const PrivateJoinDeclineButton = () => {
-  const { t } = useInvitationTranslation()
-  const navigate = useNavigate()
+  const { t } = useInvitationTranslation();
+  const navigate = useNavigate();
+  const { showErrorNotification } = useNotification();
 
   const onInviteDecline = () => {
-    navigate(ROUTES.invitationDecline.path)
-  }
+    showErrorNotification(t('invitationDeclined'));
+    return navigate(ROUTES.appletList.path);
+  };
 
   return (
-    <Button
-      onClick={onInviteDecline}
-      variant="danger"
-      className={classNames("mx-2", "mb-2", "invitation-buttons", "color-white")}>
-      {t("buttons.declineInvitation")}
-    </Button>
-  )
-}
+    <Box width="250px">
+      <BaseButton
+        type="button"
+        onClick={onInviteDecline}
+        variant="contained"
+        color="error"
+        text={t('buttons.declineInvitation')}
+      />
+    </Box>
+  );
+};

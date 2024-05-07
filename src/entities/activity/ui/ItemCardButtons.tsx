@@ -1,80 +1,60 @@
-import classNames from "classnames"
-
-import { ItemCardButtonsConfig } from "../lib"
-
-import { BasicButton } from "~/shared/ui"
-import { useCustomTranslation } from "~/shared/utils"
-
-import "./style.scss"
+import { Theme } from '~/shared/constants';
+import { Box } from '~/shared/ui';
+import { BaseButton } from '~/shared/ui';
+import { useCustomMediaQuery } from '~/shared/utils';
 
 type ItemCardButtonsProps = {
-  config: ItemCardButtonsConfig
-  isSubmitShown: boolean
-  isOnePageAssessment: boolean
-  onBackButtonClick?: () => void
-  onNextButtonClick?: () => void
-  onSubmitButtonClick?: () => void
-}
+  isLoading: boolean;
+  isBackShown: boolean;
+
+  backButtonText: string;
+  nextButtonText: string;
+
+  onBackButtonClick?: () => void;
+  onNextButtonClick: () => void;
+};
 
 export const ItemCardButton = ({
-  config,
-  isSubmitShown,
-  isOnePageAssessment,
+  isBackShown,
   onBackButtonClick,
   onNextButtonClick,
-  onSubmitButtonClick,
+  isLoading,
+  nextButtonText,
+  backButtonText,
 }: ItemCardButtonsProps) => {
-  const { t } = useCustomTranslation()
-
-  const nextLabel = config.isNextDisable && config.isSkippable ? t("Consent.skip") : t("Consent.next")
-  const submitLabel = t("submit")
-
-  if (isOnePageAssessment) {
-    return (
-      <div className={classNames("no-gutters", "d-flex", "flex-row", "justify-content-around")}>
-        {(isSubmitShown && (
-          <BasicButton
-            variant="outline-dark"
-            size="lg"
-            onClick={onSubmitButtonClick}
-            className={classNames("mb-2", "navigator-button")}>
-            {submitLabel}
-          </BasicButton>
-        )) || <div />}
-
-        {config.isSkippable && (
-          <BasicButton
-            disabled={!config.isNextDisable}
-            variant="outline-dark"
-            size="lg"
-            className={classNames("mb-2", "navigator-button")}>
-            {t("Consent.skip")}
-          </BasicButton>
-        )}
-      </div>
-    )
-  }
+  const { greaterThanSM } = useCustomMediaQuery();
 
   return (
-    <div className={classNames("no-gutters", "d-flex", "flex-row", "justify-content-around")}>
-      {(config.isBackShown && (
-        <BasicButton
-          variant="outline-dark"
-          size="lg"
-          onClick={onBackButtonClick}
-          className={classNames("mb-2", "navigator-button")}>
-          {t("Consent.back")}
-        </BasicButton>
-      )) || <div />}
+    <Box
+      display="flex"
+      flex={1}
+      justifyContent="space-between"
+      alignItems="center"
+      margin="0 auto"
+      padding={greaterThanSM ? '0px 24px' : '0px 16px'}
+      maxWidth="900px"
+    >
+      {(isBackShown && (
+        <Box width={greaterThanSM ? '208px' : '120px'} data-testid="assessment-back-button">
+          <BaseButton
+            type="button"
+            variant="outlined"
+            onClick={onBackButtonClick}
+            text={backButtonText}
+            borderColor={Theme.colors.light.outline}
+          />
+        </Box>
+      )) || <div></div>}
 
-      <BasicButton
-        variant="outline-dark"
-        size="lg"
-        disabled={!config.isSkippable && config.isNextDisable}
-        className={classNames("mb-2", "navigator-button")}
-        onClick={isSubmitShown ? onSubmitButtonClick : onNextButtonClick}>
-        {isSubmitShown ? submitLabel : nextLabel}
-      </BasicButton>
-    </div>
-  )
-}
+      <Box width={greaterThanSM ? '208px' : '120px'} data-testid="assessment-next-button">
+        <BaseButton
+          type="button"
+          variant="contained"
+          isLoading={isLoading}
+          onClick={onNextButtonClick}
+          text={nextButtonText}
+        />
+      </Box>
+    </Box>
+  );
+};

@@ -4,13 +4,41 @@
     "about": "About",
     "time_to_complete": "Time to complete",
     "time_to_complete_hm": "Time to complete: {{hours}} hours and {{minutes}} minutes",
-    "hours" : "hours",
+    "hours": "hours",
     "please": "Please",
     "login": "Login",
     "or": "or",
     "singUp": "Sign Up",
     "mobileOnly": "Mobile only",
+    "start": "Start",
+    "continue": "Continue",
+    "save_and_exit": "Save & exit",
+    "optional": "Optional",
+    "pleaseAnswerTheQuestion": "Please answer the question.",
+    "pleaseProvideAdditionalText": "Please provide additional text",
+    "pleaseListenToAudio": "Please listen to the audio until the end.",
+    "onlyNumbersAllowed": "Only numbers are allowed",
 
+    "question_count_plural": "{{length}} questions",
+    "question_count_singular": "{{length}} question",
+    "countOfCompletedQuestions": "{{countOfCompletedQuestions}} of {{length}} questions completed",
+    "activityFlowLength": "{{length}} activities",
+    "countOfCompletedActivities": "{{countOfCompletedActivities}} of {{length}} activities completed",
+
+    "pleaseCompleteOnThe": "Please complete on the",
+    "mindloggerMobileApp": "MindLogger mobile app",
+    "mustBeCompletedUsingMobileApp": "Please use the MindLogger mobile app",
+    "completeUsingAppNow": "Get the app now",
+
+    "common_loading_error": "Something gone wrong during data loading :(",
+    "toast": {
+      "answers_submitted": "<strong>Done!</strong> We received your answers.",
+      "next_activity": "<strong>Done!</strong> Let’s move to the next activity."
+    },
+    "applet_list_component": {
+      "noon": "Noon",
+      "midnight": "Midnight"
+    },
     "wrondLinkParametrError": "You have reached this URL in error. Please reach out to the organizer of this applet for further assistance.",
     "activity_due_date": {
       "available_all_day": "Available: All day",
@@ -45,6 +73,21 @@
       "firstNameRequired": "First name is required.",
       "lastNameRequired": "Last name is required.",
       "passwordShouldNotContainSpaces": "Password should not contain spaces."
+    },
+
+    "transferOwnership": {
+      "adminPanel": "Admin Panel",
+      "notFound": "The transfer ownership link is either invalid or no long active.",
+      "accepted": {
+        "title": "Ownership Accepted",
+        "message1": "The Applet is now in your ownership and is accessible from your Dashboard.",
+        "message2": "To start working with the Applet, log in to the"
+      },
+      "declined": {
+        "title": "Ownership Declined",
+        "message1": "You have declined the Applet ownership transfer.",
+        "message2": "If this was a mistake, please reach out to the Applet owner and ask them to initiate the transfer again."
+      }
     },
 
     "invitation": {
@@ -84,7 +127,7 @@
     },
 
     "Login": {
-      "welcomeMessage": "Welcome to the MindLogger",
+      "title": "Log In",
       "appType": "Web Application",
       "button": "Log In",
       "submit": "Submit",
@@ -93,14 +136,15 @@
       "email": "Email",
       "accountMessage": " Don't have an account? ",
       "forgotPassword": " Forgot Password?",
-      "create": " Create Account",
+      "create": "Create an account",
       "reset": " Reset it",
       "errorMessage": "Incorrect password if that user exists.",
-      "logging": "Loggin in..."
+      "or": "Or",
+      "passwordResetSuccessful": "Your password has been reset successfully. Please log in with your new password."
     },
 
     "SignUp": {
-      "title": "Sign up",
+      "title": "Create Account",
       "submit": "Submit",
       "email": "Email",
       "firstName": "First Name",
@@ -114,8 +158,10 @@
       "reset": " Reset it",
       "passwordsUnmatched": "Passwords Do Not Match",
       "account": "Already have an account?",
-      "logIn": "Login",
-      "success": "Registration completed successfully"
+      "logIn": "Log In",
+      "success": "Registration completed successfully",
+      "or": "Or",
+      "pleaseAgreeTerms": "*Please agree to the Terms of Service."
     },
     "ForgotPassword": {
       "title": "Reset Password",
@@ -124,7 +170,7 @@
       "email": "Email",
       "create": " Create One ",
       "reset": " Reset it",
-      "button": "Get Reset It",
+      "button": "Send reset link",
       "accountMessage": " Don't have an account? ",
       "forgotPassword": " Forgot Password?",
       "rememberPassword": "Remember password?",
@@ -145,7 +191,7 @@
       "failed": "Failed",
       "backToLogin": "Back to Log in",
       "backToSettings": "Back to Settings",
-      "invalidLink": "Link is invalid"
+      "invalidLink": "This link is invalid or expired. Please click <a href='/forgotpassword'>here</a> to reset your password."
     },
     "Landing": {
       "title": "Welcome to MindLogger",
@@ -195,6 +241,9 @@
       "signUp": "Sign Up"
     },
     "submit": "Submit",
+    "submitAnswerModalTitle": "Submit answer?",
+    "submitAnswerModalDescription": "If you’re ready, send us your answers.",
+    "goBack": "Go Back",
     "incorrect_answer": "Incorrect answer. Please try again",
     "failed": "Failed",
     "additional": {
@@ -202,11 +251,13 @@
       "saved_answers": "We've saved your answers!",
       "close": "Close",
       "resume_activity": "Resume activity",
-      "activity_resume_restart":"Would you like to resume this activity in progress or restart?",
+      "restart_activity": "Restart activity",
+      "cancel": "Cancel",
+      "activity_resume_restart": "Are you sure you want clear all progress and restart",
       "restart": "Restart",
       "resume": "Resume",
       "in_progress": "In Progress",
-      "unscheduled":"Unscheduled",
+      "unscheduled": "Unscheduled",
       "scheduled": "Scheduled",
       "past_due": "Past Due",
       "available": "Available",
@@ -222,9 +273,20 @@
       "footer_text": "CHILD MIND INSTITUTE, INC. AND CHILD MIND MEDICAL PRACTICE, PLLC (TOGETHER, “CMI”) DOES NOT DIRECTLY OR INDIRECTLY PRACTICE MEDICINE OR DISPENSE MEDICAL ADVICE AS PART OF THIS QUESTIONNAIRE. CMI ASSUMES NO LIABILITY FOR ANY DIAGNOSIS, TREATMENT, DECISION MADE, OR ACTION TAKEN IN RELIANCE UPON INFORMATION PROVIDED BY THIS QUESTIONNAIRE, AND ASSUMES NO RESPONSIBILITY FOR YOUR USE OF THIS QUESTIONNAIRE.",
       "child_score": "Your Child's Score",
       "child_score_on_subscale": "Your child’s score on the {{name}} subscale was",
-      "fill_out_fields": "Please fill out the required fields"
+      "fill_out_fields": "Please fill out the required fields",
+      "additional_text": "Additional Text"
     },
     "no_markdown": "The authors of this applet have not provided any information!",
-    "no_applets": "You currently do not have any applets."
+    "no_applets": "You currently do not have any applets.",
+    "unabletoLoadActivity": "Unable to load activity",
+    "takeNow": {
+      "invalidRespondent": "You are not authorized to complete this assessment on behalf of this subject.",
+      "invalidSubject": "This subject does not exist.",
+      "invalidActivity": "This activity does not exist.",
+      "successModalTitle": "Activity Done",
+      "successModalLabel": "Your answers have been submitted. Please return to the Admin App to complete another activity or view results.",
+      "successModalPrimaryAction": "Return to Admin App",
+      "successModalSecondaryAction": "Dismiss"
+    }
   }
 }

@@ -1,32 +1,38 @@
-import { Suspense } from "react"
+import { useEffect } from 'react';
 
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import { useLDClient } from 'launchdarkly-react-client-sdk';
 
-import Layout from "./Layout"
-import { ReactQuery, Redux, RouteProvider } from "./providers"
-import i18nManager from "./system/locale/i18n"
+import Providers from './providers';
+import i18nManager from './system/locale/i18n';
 
-import ApplicationRouter from "~/pages"
+import ApplicationRouter from '~/pages';
+import { Mixpanel } from '~/shared/utils';
+import { FeatureFlags } from '~/shared/utils/featureFlags';
 
-import "./index.css"
+import '~/assets/fonts/Atkinson/atkinson.css';
 
-i18nManager.initialize()
+import './index.css';
+
+const setUp = () => {
+  Mixpanel.init();
+  i18nManager.initialize();
+};
+
+setUp();
 
 function App() {
+  // Retrieves the LD client after initialization to pass it to our singleton
+  const ldClient = useLDClient();
+  useEffect(() => {
+    if (!ldClient) return;
+    FeatureFlags.init(ldClient);
+  }, [ldClient]);
+
   return (
-    <Suspense>
-      <RouteProvider>
-        <Redux>
-          <ReactQuery>
-            <Layout>
-              <ApplicationRouter />
-            </Layout>
-            <ReactQueryDevtools initialIsOpen={false} />
-          </ReactQuery>
-        </Redux>
-      </RouteProvider>
-    </Suspense>
-  )
+    <Providers>
+      <ApplicationRouter />
+    </Providers>
+  );
 }
 
-export default App
+export default App;

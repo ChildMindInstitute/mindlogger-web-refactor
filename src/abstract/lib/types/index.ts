@@ -1,1 +1,2 @@
-export * from "./entityProgress"
+export * from './entityProgress';
+export * from './event';

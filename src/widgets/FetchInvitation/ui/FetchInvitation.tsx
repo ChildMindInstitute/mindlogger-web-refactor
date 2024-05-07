@@ -1,34 +1,44 @@
-import classNames from "classnames"
-import { Spinner } from "react-bootstrap"
+import { FetchInvitationErrorMapper } from './FetchInvitationErrorMapper';
+import { useAuthorizationGuard } from '../../AuthorizationGuard';
 
-import { useAuthorizationGuard } from "../../AuthorizationGuard"
-import { FetchInvitationErrorMapper } from "./FetchInvitationErrorMapper"
-
-import { Invitation, useInvitationQuery, useInvitationTranslation } from "~/entities/invitation"
-import { InvitationAcceptButton } from "~/features/InvitationAccept"
-import { InvitationDeclineButton } from "~/features/InvitationDecline"
+import { Invitation, useInvitationQuery, useInvitationTranslation } from '~/entities/invitation';
+import { InvitationAcceptButton } from '~/features/InvitationAccept';
+import { InvitationDeclineButton } from '~/features/InvitationDecline';
+import { Box } from '~/shared/ui';
+import { Text } from '~/shared/ui';
+import Loader from '~/shared/ui/Loader';
+import { useCustomMediaQuery } from '~/shared/utils';
 
 interface FetchInvitationProps {
-  keyParams: string
+  keyParams: string;
 }
 
 export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
-  const { t } = useInvitationTranslation()
-  const { isAuthenticated } = useAuthorizationGuard()
+  const { t } = useInvitationTranslation();
+  const { isAuthenticated } = useAuthorizationGuard();
+  const { lessThanSM } = useCustomMediaQuery();
 
-  const { isError, data, isLoading, error } = useInvitationQuery(keyParams)
+  const { isError, data, error, isLoading } = useInvitationQuery(keyParams);
 
   if (isError) {
-    return <FetchInvitationErrorMapper error={error} />
+    return <FetchInvitationErrorMapper error={error} />;
   }
 
   if (isLoading) {
     return (
-      <div className={classNames("d-flex", "justify-content-center", "align-items-center", "text-center")}>
-        <div className="loading">{t("loadingInvitation")}</div>
-        <Spinner animation="border" variant="primary" />
-      </div>
-    )
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+        textAlign="center"
+      >
+        <Text variant="body1" margin="12px">
+          {t('loadingInvitation')}
+        </Text>
+        <Loader />
+      </Box>
+    );
   }
 
   return (
@@ -36,11 +46,18 @@ export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
       invite={data?.data?.result}
       isUserAuthenticated={isAuthenticated}
       actionComponent={
-        <div className={classNames("d-flex", "justify-content-center", "align-items-center", "flex-row")}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection={lessThanSM ? 'column' : 'row'}
+          gap="12px"
+          margin="16px 0px"
+        >
           <InvitationAcceptButton invitationKey={keyParams} />
           <InvitationDeclineButton invitationKey={keyParams} />
-        </div>
+        </Box>
       }
     />
-  )
-}
+  );
+};

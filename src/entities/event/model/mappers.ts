@@ -1,10 +1,10 @@
-import { ScheduleEvent, PeriodicityType, AvailabilityLabelType } from "../lib"
+import { ScheduleEvent, PeriodicityType, AvailabilityLabelType } from '../lib';
 
-import { buildDateFromDto } from "~/abstract/lib"
-import { PeriodicityTypeDTO, ScheduleEventDto } from "~/shared/api"
+import { buildDateFromDto } from '~/abstract/lib';
+import { PeriodicityTypeDTO, ScheduleEventDto } from '~/shared/api';
 
 export function mapEventsFromDto(eventsDto: ScheduleEventDto[]): ScheduleEvent[] {
-  return eventsDto.map<ScheduleEvent>(x => mapEventFromDto(x))
+  return eventsDto.map<ScheduleEvent>((x) => mapEventFromDto(x));
 }
 export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
   return {
@@ -26,22 +26,26 @@ export function mapEventFromDto(dto: ScheduleEventDto): ScheduleEvent {
       timeFrom: dto.availability.timeFrom,
       timeTo: dto.availability.timeTo,
     },
-  }
+    notificationSettings: {
+      notifications: [],
+      reminder: null,
+    },
+  };
 }
 
 export function convertPeriodicitType(type: PeriodicityTypeDTO): PeriodicityType {
   switch (type) {
-    case "ONCE":
-      return PeriodicityType.Once
-    case "DAILY":
-      return PeriodicityType.Daily
-    case "WEEKLY":
-      return PeriodicityType.Weekly
-    case "WEEKDAYS":
-      return PeriodicityType.Weekdays
-    case "MONTHLY":
-      return PeriodicityType.Monthly
+    case 'ONCE':
+      return PeriodicityType.Once;
+    case 'DAILY':
+      return PeriodicityType.Daily;
+    case 'WEEKLY':
+      return PeriodicityType.Weekly;
+    case 'WEEKDAYS':
+      return PeriodicityType.Weekdays;
+    case 'MONTHLY':
+      return PeriodicityType.Monthly;
     default:
-      return PeriodicityType.Once
+      return PeriodicityType.Once;
   }
 }

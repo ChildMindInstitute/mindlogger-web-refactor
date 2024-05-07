@@ -1,61 +1,73 @@
-import React, { HTMLInputTypeAttribute } from "react"
+import React, { HTMLInputTypeAttribute } from 'react';
 
-import classNames from "classnames"
-import { Form } from "react-bootstrap"
-import { useController, useFormContext } from "react-hook-form"
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import { useController, useFormContext } from 'react-hook-form';
 
-import { useCustomTranslation } from "../../utils"
-
-import "./style.scss"
+import { Theme } from '../../constants';
+import { useCustomTranslation } from '../../utils';
 
 interface IInputCommonProps {
-  type: HTMLInputTypeAttribute
-  autoComplete?: string
+  id: string;
+  type: HTMLInputTypeAttribute;
+  autoComplete?: string;
 
-  name: string
-  placeholder?: string
-  onChange?: (e: string | number) => void
-  className?: string
+  name: string;
+  placeholder?: string;
+  onChange?: (e: string | number) => void;
+  className?: string;
 
-  Icon?: JSX.Element
+  Icon?: JSX.Element;
 }
 
 const Input = (props: IInputCommonProps) => {
-  const { type, name, placeholder, onChange, className, Icon } = props
-  const { t } = useCustomTranslation()
+  const { type, name, placeholder, onChange, className, Icon, id } = props;
+  const { t } = useCustomTranslation();
 
-  const { control } = useFormContext()
+  const { control } = useFormContext();
   const {
-    field: { onChange: onFormChange, value },
+    field,
     fieldState: { error },
-  } = useController({ name, control })
+  } = useController({ name, control });
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
+    const { value } = event.target;
 
     if (onChange) {
-      onChange(value)
+      onChange(value);
     }
 
-    onFormChange(value)
-  }
+    field.onChange(value);
+  };
 
   return (
-    <div className={classNames("input-with-icon-wrap")}>
-      <Form.Control
+    <FormControl error={!!error} sx={{ width: '100%', fontFamily: 'Atkinson' }} variant="outlined">
+      <InputLabel htmlFor={id} sx={{ fontFamily: 'Atkinson' }}>
+        {placeholder}
+      </InputLabel>
+      <OutlinedInput
+        id={id}
+        label={placeholder}
         type={type}
         name={name}
         placeholder={placeholder}
-        value={value}
+        value={field.value as string}
         onChange={onInputChange}
-        className={classNames("default-input", className, { "input-error-shadow": error })}
+        className={className}
+        error={!!error}
+        endAdornment={<InputAdornment position="end">{Icon}</InputAdornment>}
+        sx={{ backgroundColor: Theme.colors.light.onPrimary, fontFamily: 'Atkinson' }}
       />
+      {error?.message && (
+        <FormHelperText id={id} sx={{ fontFamily: 'Atkinson' }}>
+          {t(error.message)}
+        </FormHelperText>
+      )}
+    </FormControl>
+  );
+};
 
-      {Icon && <div className={classNames("input-icon")}>{Icon}</div>}
-
-      <span className={classNames("input-error-box")}>{error?.message && t(error.message)}</span>
-    </div>
-  )
-}
-
-export default Input
+export default Input;

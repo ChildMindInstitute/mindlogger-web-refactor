@@ -1,36 +1,41 @@
-import classNames from "classnames"
-import { useNavigate } from "react-router-dom"
-
-import { useAcceptInviteMutation, useInvitationTranslation } from "~/entities/invitation"
-import Button from "~/shared/ui/Button"
-import { Mixpanel, ROUTES } from "~/shared/utils"
+import { useAcceptInviteMutation, useInvitationTranslation } from '~/entities/invitation';
+import { ROUTES } from '~/shared/constants';
+import { Box } from '~/shared/ui';
+import { BaseButton, useNotification } from '~/shared/ui';
+import { Mixpanel, useCustomNavigation } from '~/shared/utils';
 
 interface InvitationAcceptButtonProps {
-  invitationKey: string
+  invitationKey: string;
 }
 
 export const InvitationAcceptButton = ({ invitationKey }: InvitationAcceptButtonProps) => {
-  const { t } = useInvitationTranslation()
-  const navigate = useNavigate()
+  const { t } = useInvitationTranslation();
+  const { navigate } = useCustomNavigation();
+
+  const { showSuccessNotification } = useNotification();
 
   const { mutate: acceptInvite, isLoading: isAcceptLoading } = useAcceptInviteMutation({
     onSuccess() {
-      navigate(ROUTES.invitationAccept.path)
-      Mixpanel.track("Invitation Accepted")
+      showSuccessNotification(t('invitationAccepted'));
+      Mixpanel.track('Invitation Accepted');
+      return navigate(ROUTES.appletList.path);
     },
-  })
+  });
 
   const onInviteAccept = () => {
-    acceptInvite({ invitationId: invitationKey })
-  }
+    return acceptInvite({ invitationId: invitationKey });
+  };
 
   return (
-    <Button
-      onClick={onInviteAccept}
-      variant="success"
-      className={classNames("mx-2", "mb-2", "invitation-buttons", "color-white")}
-      loading={isAcceptLoading}>
-      {t("buttons.acceptInvitation")}
-    </Button>
-  )
-}
+    <Box width="250px">
+      <BaseButton
+        type="button"
+        variant="contained"
+        color="success"
+        onClick={onInviteAccept}
+        isLoading={isAcceptLoading}
+        text={t('buttons.acceptInvitation')}
+      ></BaseButton>
+    </Box>
+  );
+};

@@ -4,14 +4,42 @@
     "about": "À propos",
     "time_to_complete": "Time to complete",
     "time_to_complete_hm": "Temps pour terminer: {{hours}} heures et {{minutes}} minutes",
-    "hours" : "hours",
+    "hours": "hours",
     "please": "S'il te plaît",
     "login": "Connexion",
     "or": "ou",
     "singUp": "S'inscrire",
     "mobileOnly": "Mobile uniquement",
+    "start": "Commencer",
+    "continue": "Continuer",
+    "save_and_exit": "Enregistrer et quitter",
+    "optional": "Facultatif",
+    "pleaseAnswerTheQuestion": "Veuillez répondre à la question.",
+    "pleaseProvideAdditionalText": "Veuillez fournir un texte supplémentaire",
+    "pleaseListenToAudio": "Veuillez écouter l'audio jusqu'à la fin.",
+    "onlyNumbersAllowed": "Seuls les numéros sont autorisés",
 
-    "wrondLinkParametrError": "Vous avez atteint cette URL par erreur. Veuillez contacter l'organisateur de cette applet pour obtenir de l'aide.",
+    "question_count_plural": "{{length}} questions",
+    "question_count_singular": "{{length}} question",
+    "countOfCompletedQuestions": "{{countOfCompletedQuestions}} of {{length}} questions completed",
+    "activityFlowLength": "{{length}} activities",
+    "countOfCompletedActivities": "{{countOfCompletedActivities}} of {{length}} activities completed",
+
+    "pleaseCompleteOnThe": "Please complete on the",
+    "mindloggerMobileApp": "MindLogger mobile app",
+    "mustBeCompletedUsingMobileApp": "Veuillez utiliser l'application mobile Mini logger",
+    "completeUsingAppNow": "Téléchargez l'application maintenant",
+
+    "common_loading_error": "Quelque chose s'est mal passé lors du chargement des données :(",
+    "toast": {
+      "answers_submitted": "Done! We received your answers.",
+      "next_activity": "Done! Let’s move to the next activity."
+    },
+    "applet_list_component": {
+      "noon": "Noon",
+      "midnoight": "Midnight"
+    },
+    "wrondLinkParametrError": "You have reached this URL in error. Please reach out to the organizer of this applet for further assistance.",
     "activity_due_date": {
       "available_all_day": "Disponible : Toute la journée",
       "available": "Disponible",
@@ -32,7 +60,6 @@
       }
     },
 
-
     "Language": {
       "english": "Anglaise",
       "french": "Français"
@@ -49,8 +76,23 @@
       "passwordShouldNotContainSpaces": "Le mot de passe ne doit pas contenir d'espaces."
     },
 
+    "transferOwnership": {
+      "adminPanel": "Panneau d'Administration",
+      "notFound": "Le lien de transfert de propriété n'est pas valide ou n'est pas actif depuis longtemps.",
+      "accepted": {
+        "title": "Propriété Acceptée",
+        "message1": "L'applet vous appartient désormais et est accessible depuis votre tableau de bord.",
+        "message2": "Pour commencer à travailler avec l'applet, connectez-vous au"
+      },
+      "declined": {
+        "title": "Propriété Refusée",
+        "message1": "Vous avez refusé le transfert de propriété de l'applet.",
+        "message2": "S'il s'agissait d'une erreur, veuillez contacter le propriétaire de l'applet et lui demander de relancer le transfert."
+      }
+    },
+
     "invitation": {
-      "loadingInvitation" : "Chargement de l'invitation",
+      "loadingInvitation": "Chargement de l'invitation",
       "invitationRemoved": "Invitation supprimée",
       "networkError": "Erreur réseau. Revenir ",
       "invitationAlreadyRemoved": "Votre invitation a déjà été supprimée.",
@@ -98,7 +140,8 @@
       "create": " Créer une",
       "reset": " Réinitialisez-le",
       "errorMessage": "Mot de passe incorrect si cet utilisateur existe.",
-      "logging": "Se connecter..."
+      "logging": "Se connecter...",
+      "passwordResetSuccessful": "Votre mot de passe a été réinitialisé avec succès. Veuillez vous connecter avec votre nouveau mot de passe."
     },
 
     "SignUp": {
@@ -117,7 +160,8 @@
       "passwordsUnmatched": "Les mots de passe ne correspondent pas",
       "account": "Vous avez déjà un compte?",
       "logIn": "Connexion",
-      "success": "Inscription terminée avec succès"
+      "success": "Inscription terminée avec succès",
+      "pleaseAgreeTerms": "*Please agree to the Terms of Service."
     },
     "ForgotPassword": {
       "title": "réinitialiser le mot de passe",
@@ -126,7 +170,7 @@
       "email": "E-mail",
       "create": " Créer une ",
       "reset": " Réinitialisez-le",
-      "button": "Obtenez-Le Réinitialisé",
+      "button": "Envoyer le lien de réinitialisation",
       "accountMessage": " Vous n'avez pas de compte? ",
       "forgotPassword": " Mot de passe oublié?",
       "rememberPassword": "Se souvenir du mot de passe?",
@@ -147,7 +191,7 @@
       "password": "le mot de passe",
       "backToLogin": "Back to Log in",
       "backToSettings": "Back to Settings",
-      "invalidLink": "Link is invalid"
+      "invalidLink": "Ce lien est invalide ou expiré. Veuillez cliquer <a href='/forgotpassword'>ici</a> pour réinitialiser votre mot de passe."
     },
     "Landing": {
       "title": "Bienvenue dans MindLogger",
@@ -205,18 +249,23 @@
       "signUp": "S'inscrire"
     },
     "submit": "Soumettre",
-    "incorrect_answer": "Mauvaise réponse. Veuillez réessayer",
-    "failed": "Échec",
+    "goBack": "Revenir En Arrière",
+    "submitAnswerModalTitle": "Soumettre une réponse?",
+    "submitAnswerModalDescription": "Si vous êtes prêt, envoyez-nous vos réponses.",
+    "incorrect_answer": "Incorrect answer. Please try again",
+    "failed": "Failed",
     "additional": {
       "thanks": "Merci!",
       "saved_answers": "Réponses sauvegardées !",
       "close": "Fermer",
+      "restart_activity": "Redémarrer l'activité",
+      "cancel": "Annuler",
+      "activity_resume_restart": "Êtes-vous sûr de vouloir effacer toute la progression et redémarrer",
       "resume_activity": "Reprendre l'activité",
-      "activity_resume_restart":"Souhaitez-vous reprendre cette activité en cours ou la recommencer?",
       "restart": "Recommencer",
       "resume": "Reprendre",
       "in_progress": "En cours",
-      "unscheduled":"Non programmé",
+      "unscheduled": "Non programmé",
       "scheduled": "Programmé",
       "past_due": "En retard",
       "available": "disponible",
@@ -232,9 +281,20 @@
       "child_score_on_subscale": "Le score de votre enfant pour la sous-échelle {{name}} est de",
       "share_report": "Partager le rapport",
       "share_all_reports": "Partager tous les rapports",
-      "fill_out_fields": "Veuillez remplir les champs obligatoires"
+      "fill_out_fields": "Veuillez remplir les champs obligatoires",
+      "additional_text": "Texte supplémentaire"
     },
     "no_markdown": "Les auteurs de cette applet n'ont fourni aucune information !",
-    "no_applets": "Vous n'avez actuellement pas d'applets."
+    "no_applets": "Vous n'avez actuellement pas d'applets.",
+    "unabletoLoadActivity": "Impossible de charger l'activité",
+    "takeNow": {
+      "invalidRespondent": "Vous n'êtes pas autorisé à effectuer cette évaluation au nom de ce sujet.",
+      "invalidSubject": "Ce sujet n'existe pas.",
+      "invalidActivity": "Cette activité n'existe pas.",
+      "successModalTitle": "Activité terminée",
+      "successModalLabel": "Vos réponses ont été soumises. Veuillez revenir à l'application d'administration pour terminer une autre activité ou afficher les résultats.",
+      "successModalPrimaryAction": "Revenir à l'application d'administration",
+      "successModalSecondaryAction": "Rejeter"
+    }
   }
 }

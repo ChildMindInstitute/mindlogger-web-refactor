@@ -1,29 +1,25 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit"
-import persistReducer from "redux-persist/es/persistReducer"
-import persistStore from "redux-persist/es/persistStore"
-import storage from "redux-persist/lib/storage"
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import persistReducer from 'redux-persist/es/persistReducer';
+import persistStore from 'redux-persist/es/persistStore';
+import storage from 'redux-persist/lib/storage';
 
-import { migrate } from "./model"
-
-import { activityModel } from "~/entities/activity"
-import { userModel } from "~/entities/user"
+import { appletModel } from '~/entities/applet';
+import { userModel } from '~/entities/user';
 
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage,
-  version: 1,
-  migrate,
-}
+};
 
 export const rootReducer = combineReducers({
   user: userModel.reducer,
-  activity: activityModel.reducer,
-})
+  applets: appletModel.reducer,
+});
 
 const store = configureStore({
   reducer: persistReducer(persistConfig, rootReducer),
-})
+});
 
-export const persistor = persistStore(store)
+export const persistor = persistStore(store);
 
-export default store
+export default store;

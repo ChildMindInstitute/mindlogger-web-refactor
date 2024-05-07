@@ -1,111 +1,103 @@
-import classNames from "classnames"
-import { Container } from "react-bootstrap"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from 'react-router-dom';
 
-import { useLoginTranslation } from "../lib/useLoginTranslation"
-import { LoginSchema, TLoginForm } from "../model/login.schema"
+import { useLoginTranslation } from '../lib/useLoginTranslation';
+import { LoginSchema, TLoginForm } from '../model/login.schema';
 
-import { ILoginPayload, useLoginMutation, userModel } from "~/entities/user"
-import { BasicButton, BasicFormProvider, Input, DisplaySystemMessage, PasswordIcon } from "~/shared/ui"
-import {
-  Mixpanel,
-  ROUTES,
-  secureTokensStorage,
-  secureUserPrivateKeyStorage,
-  useCustomForm,
-  useEncryption,
-  usePasswordType,
-} from "~/shared/utils"
+import { ILoginPayload, useLoginMutation, userModel } from '~/entities/user';
+import { ROUTES, Theme } from '~/shared/constants';
+import { Box, Text } from '~/shared/ui';
+import { BaseButton, BasicFormProvider, Input, PasswordIcon, useNotification } from '~/shared/ui';
+import { Mixpanel, useCustomForm, usePasswordType } from '~/shared/utils';
 
 interface LoginFormProps {
-  locationState?: Record<string, unknown>
+  locationState?: Record<string, unknown>;
 }
 
 export const LoginForm = ({ locationState }: LoginFormProps) => {
-  const { t } = useLoginTranslation()
-  const navigate = useNavigate()
+  const { t } = useLoginTranslation();
 
-  const [passwordType, onPasswordIconClick] = usePasswordType()
+  const { showErrorNotification } = useNotification();
 
-  const { setUser } = userModel.hooks.useUserState()
-  const { generateUserPrivateKey } = useEncryption()
+  const [passwordType, onPasswordIconClick] = usePasswordType();
 
-  const form = useCustomForm({ defaultValues: { email: "", password: "" } }, LoginSchema)
-  const {
-    handleSubmit,
-    formState: { isValid },
-  } = form
+  const form = useCustomForm({ defaultValues: { email: '', password: '' } }, LoginSchema);
+  const { handleSubmit } = form;
 
-  const {
-    mutate: login,
-    isLoading,
-    error,
-  } = useLoginMutation({
+  const { onLoginSuccess } = userModel.hooks.useOnLogin({
+    backRedirectPath: locationState?.backRedirectPath as string,
+  });
+
+  const { mutate: login, isLoading } = useLoginMutation({
     onSuccess(data, variables) {
-      const userParams = {
-        userId: data.data.result.user.id,
-        email: data.data.result.user.email,
-        password: variables.password,
-      }
+      const { user, token } = data.data.result;
 
-      const userPrivateKey = generateUserPrivateKey(userParams)
-      secureUserPrivateKeyStorage.setUserPrivateKey(userPrivateKey)
-
-      setUser(data.data.result.user)
-      secureTokensStorage.setTokens(data.data.result.token)
-
-      if (locationState?.isInvitationFlow) {
-        navigate(locationState.backRedirectPath as string)
-      } else {
-        navigate(ROUTES.applets.path)
-      }
-
-      Mixpanel.track("Login Successful")
-      Mixpanel.login(data.data.result.user.id)
+      return onLoginSuccess({
+        user: {
+          ...user,
+          password: variables.password,
+        },
+        tokens: token,
+      });
     },
-  })
+    onError(error) {
+      if (error.evaluatedMessage) {
+        showErrorNotification(error.evaluatedMessage);
+      }
+    },
+  });
 
   const onLoginSubmit = (data: TLoginForm) => {
-    login(data as ILoginPayload)
-  }
+    login(data as ILoginPayload);
+  };
 
-  const onLoginButtonPress = () => {
-    Mixpanel.track("Login Button click")
-  }
+  const onLoginButtonClick = () => {
+    Mixpanel.track('Login Button click');
+  };
 
   return (
     <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
-      <Input type="text" name="email" placeholder={t("email") || ""} autoComplete="username" />
-      <Input
-        type={passwordType}
-        name="password"
-        placeholder={t("password") || ""}
-        autoComplete="current-password"
-        Icon={<PasswordIcon isSecure={passwordType === "password"} onClick={onPasswordIconClick} />}
-      />
+      <Box display="flex" flex={1} flexDirection="column" gap="24px">
+        <Input
+          id="login-form-email-input"
+          type="text"
+          name="email"
+          placeholder={t('email') || ''}
+          autoComplete="username"
+        />
+        <Input
+          id="login-form-password-input"
+          type={passwordType}
+          name="password"
+          placeholder={t('password') || ''}
+          autoComplete="current-password"
+          Icon={
+            <PasswordIcon isSecure={passwordType === 'password'} onClick={onPasswordIconClick} />
+          }
+        />
 
-      <Container className="d-flex justify-content-start p-0 mb-3">
-        <BasicButton type="button" variant="link" className={classNames("p-0", "ms-3")}>
+        <Box display="flex" justifyContent="center">
           <Link to={ROUTES.forgotPassword.path} relative="path">
-            {t("forgotPassword")}
+            <Text
+              color={Theme.colors.light.primary}
+              fontSize="16px"
+              fontWeight="400"
+              lineHeight="20px"
+              letterSpacing="0.1px"
+              sx={{ textDecoration: 'underline' }}
+            >
+              {t('forgotPassword')}
+            </Text>
           </Link>
-        </BasicButton>
-      </Container>
+        </Box>
 
-      <DisplaySystemMessage errorMessage={error?.evaluatedMessage} />
-
-      <Container>
-        <BasicButton
-          className={classNames("mt-3")}
+        <BaseButton
           type="submit"
-          onClick={onLoginButtonPress}
-          variant="primary"
-          disabled={!isValid || isLoading}
-          loading={isLoading}
-          defaultSize>
-          {t("button")}
-        </BasicButton>
-      </Container>
+          variant="contained"
+          isLoading={isLoading}
+          onClick={onLoginButtonClick}
+          text={t('button')}
+        />
+      </Box>
     </BasicFormProvider>
-  )
-}
+  );
+};

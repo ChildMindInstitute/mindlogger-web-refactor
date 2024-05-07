@@ -1,18 +1,19 @@
-import { activityModel } from "~/entities/activity"
+import { DefaultAnswer } from '~/entities/activity';
+import { appletModel } from '~/entities/applet';
 
 export const getFirstResponseDataIdentifierTextItem = (
-  activityEventProgress: activityModel.types.ActivityEventProgressRecord[],
+  activityEventProgress: appletModel.ItemRecord[],
 ): string | null => {
-  const firstResponseDataIdentifier = activityEventProgress.find(item => {
-    if (item.responseType === "text") {
-      return item.config.responseDataIdentifier
+  const firstResponseDataIdentifier = activityEventProgress.find((item) => {
+    if (item.responseType === 'text') {
+      return item.config.responseDataIdentifier;
     }
-    return false
-  })
+    return false;
+  });
 
   if (!firstResponseDataIdentifier) {
-    return null
+    return null;
   }
 
-  return firstResponseDataIdentifier.answer[0]
-}
+  return (firstResponseDataIdentifier.answer as DefaultAnswer)[0];
+};

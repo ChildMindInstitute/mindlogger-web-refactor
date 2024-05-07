@@ -1,13 +1,20 @@
-import "./style.scss"
+import { Box } from '~/shared/ui';
 
 type SplashScreenItemProps = {
-  imageSrc: string
-}
+  imageSrc: string;
+};
 
 export const SplashScreenItem = ({ imageSrc }: SplashScreenItemProps) => {
   return (
-    <div className="splash-container">
-      <img src={imageSrc} className="image-splash" />
-    </div>
-  )
-}
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      width="90%"
+      margin="auto"
+      data-testid="splash-screen-item"
+    >
+      <img src={imageSrc} style={{ maxWidth: '100%' }} />
+    </Box>
+  );
+};

@@ -1,57 +1,82 @@
-import classNames from "classnames"
-import { Container, Spinner } from "react-bootstrap"
+import { ActivityGroupList } from './ActivityGroupList';
+import { AppletDetailsContext } from '../lib';
 
-import { ActivityGroupList } from "./ActivityGroupList"
+import { appletModel, useAppletBaseInfoByIdQuery } from '~/entities/applet';
+import { useEventsbyAppletIdQuery } from '~/entities/event';
+import { TakeNowSuccessModal } from '~/features/TakeNow/ui/TakeNowSuccessModal';
+import { Container } from '~/shared/ui';
+import Loader from '~/shared/ui/Loader';
+import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
+import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
-import { useAppletByIdQuery } from "~/entities/applet"
-import { useEventsbyAppletIdQuery } from "~/entities/event"
-import { useCustomTranslation } from "~/shared/utils"
+type PublicAppletDetails = {
+  isPublic: true;
+  startActivityOrFlow?: string | null;
+  publicAppletKey: string;
+};
 
-type FetchPublicActivitiesProps = {
-  isPublic: true
-  publicAppletKey: string
-}
+type PrivateAppletDetails = {
+  isPublic: false;
+  startActivityOrFlow?: string | null;
+  appletId: string;
+};
 
-type FetchPrivateActivitiesProps = {
-  isPublic: false
-  appletId: string
-}
+type Props = PublicAppletDetails | PrivateAppletDetails;
 
-type FetchActivitiesProps = FetchPublicActivitiesProps | FetchPrivateActivitiesProps
+export const ActivityGroups = (props: Props) => {
+  const { t } = useCustomTranslation();
 
-export const ActivityGroups = (props: FetchActivitiesProps) => {
-  const { t } = useCustomTranslation()
+  const {
+    isError: isAppletError,
+    isLoading: isAppletLoading,
+    data: applet,
+  } = useAppletBaseInfoByIdQuery(props, { select: (data) => data.data.result });
 
-  const { isError: isAppletError, isLoading: isAppletLoading, data: appletData } = useAppletByIdQuery(props)
-  const { isError: isEventsError, isLoading: isEventsLoading, data: eventsData } = useEventsbyAppletIdQuery(props)
+  const {
+    isError: isEventsError,
+    isLoading: isEventsLoading,
+    data: events,
+  } = useEventsbyAppletIdQuery(props, {
+    select: (data) => data.data.result,
+  });
+
+  const { featureFlags } = useFeatureFlags();
+
+  const { isInMultiInformantFlow, resetMultiInformantState } =
+    appletModel.hooks.useMultiInformantState();
+
+  useOnceEffect(() => {
+    if (featureFlags.enableMultiInformant) {
+      if (isInMultiInformantFlow() && !props.startActivityOrFlow) {
+        resetMultiInformantState();
+      }
+    }
+  });
 
   if (isAppletLoading || isEventsLoading) {
-    return (
-      <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
-        <Spinner as="div" animation="border" role="status" aria-hidden="true" />
-      </Container>
-    )
+    return <Loader />;
   }
 
   if (isEventsError || isAppletError) {
     return (
-      <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
-        <span>{t("additional.invalid_public_url")}</span>
+      <Container
+        sx={{
+          display: 'flex',
+          height: '100%',
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <span>{t('additional.invalid_public_url')}</span>
       </Container>
-    )
+    );
   }
 
-  const appletDetails = appletData?.data?.result
-  const eventsDetails = eventsData?.data?.result
-
   return (
-    appletDetails && (
-      <ActivityGroupList
-        appletDetails={appletDetails}
-        eventsDetails={eventsDetails}
-        isPublic={props.isPublic}
-        publicAppletKey={props.isPublic ? props.publicAppletKey : null}
-      />
-    )
-  )
-}
+    <AppletDetailsContext.Provider value={{ ...props, applet, events }}>
+      <ActivityGroupList />
+      <TakeNowSuccessModal />
+    </AppletDetailsContext.Provider>
+  );
+};

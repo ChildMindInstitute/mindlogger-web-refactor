@@ -1,60 +1,76 @@
-import classNames from "classnames"
-import { Card } from "react-bootstrap"
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 
-import { getFirstLetters } from "../../utils"
-import Button from "../Button"
+import { getFirstLetters } from '../../utils';
 
-import "./style.scss"
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 
 export interface CardProps {
-  type: "card" | "link"
-  id: string | number
-  title: string
-  description?: string
-  buttonLabel?: string | null
-  buttonOnClick?: () => void
-  imageSrc?: string
-  onClick?: () => void
-  className?: string
+  id: string;
+  title: string;
+  description?: string;
+  imageSrc?: string;
+  onClick?: () => void;
 }
 
-const CustomCard = ({
-  id,
-  title,
-  description,
-  imageSrc,
-  onClick,
-  buttonLabel,
-  buttonOnClick,
-  type,
-  className,
-}: CardProps) => {
-  const cardAsLink = type === "link"
-  const cardAsCard = type === "card"
-
-  const styles = classNames({ "card-link-custom": cardAsLink }, { "card-custom": cardAsCard })
-
+export const CustomCard = ({ id, title, description, imageSrc, onClick }: CardProps) => {
   return (
-    <Card className={classNames(styles, className)} onClick={onClick} key={id}>
-      {imageSrc ? (
-        <Card.Img className="image-card-size image-size" variant="top" src={imageSrc} />
-      ) : (
-        <div className="image-card-size image-size">{getFirstLetters(title)}</div>
-      )}
-      <Card.Body className={classNames("custom-card-body")}>
-        <Card.Title className={classNames({ "text-center": cardAsCard })}>{title}</Card.Title>
-        {description && <Card.Text>{description}</Card.Text>}
-        {buttonLabel && buttonOnClick && (
-          <Button
-            className={classNames("card-button-shadow", "card-about-button")}
-            variant="link"
-            onClick={buttonOnClick}>
-            {buttonLabel}
-          </Button>
+    <Card
+      id={id}
+      onClick={onClick}
+      data-testid="custom-card"
+      sx={{
+        width: '280px',
+        minHeight: '390px',
+        margin: '20px',
+        cursor: 'pointer',
+        boxShadow:
+          '0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%)',
+      }}
+    >
+      <Box width={280} height={280} data-testid="custom-card-media-block">
+        {imageSrc ? (
+          <CardMedia
+            component="img"
+            height="280px"
+            width="280px"
+            image={imageSrc}
+            alt="Applet Logo"
+            data-testid="custom-card-image"
+          />
+        ) : (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            fontSize="93px"
+            width={280}
+            height={280}
+            color="white"
+            data-testid="custom-card-image-replacement"
+            bgcolor="rgb(119, 119, 119)"
+            fontFamily="Atkinson"
+          >
+            {getFirstLetters(title)}
+          </Box>
         )}
-      </Card.Body>
+      </Box>
+      <CardContent data-testid="custom-card-content-block">
+        <Text
+          gutterBottom
+          variant="h1"
+          fontSize="20px"
+          sx={{ wordBreak: 'break-word', '&:hover': { textDecoration: 'underline' } }}
+          testid="custom-card-title"
+        >
+          {title}
+        </Text>
+        <Text variant="body2" color="text.secondary" testid="custom-card-description">
+          {description}
+        </Text>
+      </CardContent>
     </Card>
-  )
-}
-
-export default CustomCard
+  );
+};

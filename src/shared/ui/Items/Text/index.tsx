@@ -1,13 +1,19 @@
-import { Form } from "react-bootstrap"
+import { BaseTextInput } from '~/shared/ui';
 
-type TextItemProps = {
-  value: string | undefined
-  onValueChange: (value: string) => void
-  disabled: boolean
-}
+type Props = {
+  value: string | undefined;
+  onValueChange: (value: string) => void;
+  disabled: boolean;
+};
 
-export const TextItem = ({ value = "", onValueChange, disabled }: TextItemProps) => {
+export const TextItem = ({ value = '', onValueChange, disabled }: Props) => {
   return (
-    <Form.Control type="text" value={value} onChange={event => onValueChange(event.target.value)} disabled={disabled} />
-  )
-}
+    <BaseTextInput
+      fullWidth
+      size="small"
+      value={value}
+      onChange={(e) => onValueChange(e.target.value)}
+      disabled={disabled}
+    />
+  );
+};

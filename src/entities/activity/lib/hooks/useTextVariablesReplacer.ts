@@ -1,34 +1,31 @@
-import { completedEntitiesSelector } from "../../model/selectors"
-import { ActivityEventProgressRecord } from "../../model/types"
-import { MarkdownVariableReplacer } from "../markdownVariableReplacer"
-import { Answers } from "../types"
+import { MarkdownVariableReplacer } from '../markdownVariableReplacer';
+import { Answer } from '../types';
 
-import { useAppSelector } from "~/shared/utils"
+import { appletModel } from '~/entities/applet';
+import { RespondentMetaDTO } from '~/shared/api';
 
-type UseTextVariablesReplacerProps = {
-  items: ActivityEventProgressRecord[]
-  answers: Answers
-  activityId: string
-  respondentNickname: string
-}
+type Props = {
+  items: appletModel.ItemRecord[];
+  answers: Array<Answer>;
+  respondentMeta?: RespondentMetaDTO;
+  completedEntityTime: number;
+};
 
 export const useTextVariablesReplacer = ({
   items,
   answers,
-  activityId,
-  respondentNickname,
-}: UseTextVariablesReplacerProps) => {
-  const completedEntities = useAppSelector(completedEntitiesSelector)
-
-  const completedEntityTime = completedEntities[activityId]
-
+  respondentMeta,
+  completedEntityTime,
+}: Props) => {
   const replaceTextVariables = (text: string) => {
     if (items && answers) {
-      const replacer = new MarkdownVariableReplacer(items, answers, completedEntityTime, respondentNickname)
-      return replacer.process(text)
-    }
-    return text
-  }
+      const nickname = respondentMeta?.nickname;
 
-  return { replaceTextVariables }
-}
+      const replacer = new MarkdownVariableReplacer(items, answers, completedEntityTime, nickname);
+      return replacer.process(text);
+    }
+    return text;
+  };
+
+  return { replaceTextVariables };
+};

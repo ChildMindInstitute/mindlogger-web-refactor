@@ -1,26 +1,26 @@
-import { Container } from "react-bootstrap"
-import { useParams } from "react-router-dom"
+import { useParams } from 'react-router-dom';
 
-import { useCustomTranslation } from "~/shared/utils"
-import { ActivityDetailsWidget } from "~/widgets/ActivityDetails"
+import { Box } from '~/shared/ui';
+import { useCustomTranslation } from '~/shared/utils';
+import { ActivityDetailsContext, ActivityDetailsWidget } from '~/widgets/ActivityDetails';
 
-export const PublicActivityDetailsPage = () => {
-  const { appletId, activityId, eventId, publicAppletKey } = useParams()
-  const { t } = useCustomTranslation()
+function PublicActivityDetailsPage() {
+  const { appletId, activityId, eventId, publicAppletKey } = useParams();
+  const { t } = useCustomTranslation();
 
-  if (!appletId && !activityId && !eventId && !publicAppletKey) {
-    return <div>{t("wrondLinkParametrError")}</div>
+  if (!appletId || !activityId || !eventId || !publicAppletKey) {
+    return <div>{t('wrondLinkParametrError')}</div>;
   }
 
   return (
-    <Container>
-      <ActivityDetailsWidget
-        isPublic={true}
-        appletId={appletId!}
-        activityId={activityId!}
-        eventId={eventId!}
-        publicAppletKey={publicAppletKey!}
-      />
-    </Container>
-  )
+    <Box display="flex" flex={1}>
+      <ActivityDetailsContext.Provider
+        value={{ appletId, activityId, eventId, publicAppletKey, isPublic: true }}
+      >
+        <ActivityDetailsWidget />
+      </ActivityDetailsContext.Provider>
+    </Box>
+  );
 }
+
+export default PublicActivityDetailsPage;

@@ -1,7 +1,7 @@
-import { useCustomTranslation } from "~/shared/utils"
+import { useCustomTranslation } from '~/shared/utils';
 
 export const useChangePasswordTranslation = () => {
-  const { t, i18n } = useCustomTranslation({ keyPrefix: "ChangePassword" })
+  const { t, i18n } = useCustomTranslation({ keyPrefix: 'ChangePassword' });
 
-  return { t, i18n }
-}
+  return { t, i18n };
+};

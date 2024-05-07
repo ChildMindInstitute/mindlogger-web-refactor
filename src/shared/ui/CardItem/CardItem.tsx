@@ -1,37 +1,53 @@
-import { PropsWithChildren, ReactNode } from "react"
+import { PropsWithChildren } from 'react';
 
-import classNames from "classnames"
-import { Card, Col, Image, Row } from "react-bootstrap"
+import { Theme } from '../../constants';
+import { useCustomMediaQuery, useCustomTranslation } from '../../utils';
 
-import { Markdown } from "~/shared/ui"
+import { Markdown } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 
-import "./style.scss"
+import './style.css';
 
 interface CardItemProps extends PropsWithChildren {
-  watermark?: string
-  isInvalid?: boolean
-  buttons?: ReactNode
-  markdown: string
+  watermark?: string;
+  isInvalid?: boolean;
+  isOptional?: boolean;
+  markdown: string;
+  testId?: string;
 }
 
-export const CardItem = ({ watermark, isInvalid, children, buttons, markdown }: CardItemProps) => {
+export const CardItem = ({ children, markdown, isOptional, testId }: CardItemProps) => {
+  const { greaterThanSM } = useCustomMediaQuery();
+
+  const { t } = useCustomTranslation();
+
   return (
-    <Card className={classNames("mb-3", "px-3", { invalid: isInvalid })}>
-      <Row className={classNames("no-gutters")}>
-        <Col md={12}>
-          <Card.Title className={classNames("question")}>
-            {watermark && <Image src={watermark} alt="watermark" rounded className={classNames("watermark")} />}
-            <div className={classNames("markdown")}>
-              <Markdown markdown={markdown} />
-            </div>
-          </Card.Title>
-          <Card.Body>
-            <Row className="no-gutters px-4 py-4">{children}</Row>
-          </Card.Body>
-        </Col>
-      </Row>
-
-      {buttons}
-    </Card>
-  )
-}
+    <Box
+      data-testid={testId || 'active-item'}
+      display="flex"
+      flex={1}
+      padding={greaterThanSM ? '72px 48px' : '36px 16px'}
+      flexDirection="column"
+      gap="48px"
+      sx={{ fontFamily: 'Atkinson', fontWeight: '400', fontSize: '18px', lineHeight: '28px' }}
+    >
+      <Box>
+        <Markdown markdown={markdown} />
+        {isOptional && (
+          <Text
+            variant="body1"
+            color={Theme.colors.light.outline}
+            testid="optional-item-label"
+            fontWeight="400"
+            fontSize="18px"
+            lineHeight="28px"
+          >
+            {`(${t('optional')})`}
+          </Text>
+        )}
+      </Box>
+      <Box>{children}</Box>
+    </Box>
+  );
+};

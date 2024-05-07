@@ -1,33 +1,39 @@
-import classNames from "classnames"
+import { useInvitationTranslation } from '../lib';
 
-import { useInvitationTranslation } from "../lib"
+import { Box } from '~/shared/ui';
 
 interface InvitationContentProps {
-  appletName: string
-  isUserAuthenticated: boolean
+  appletName: string;
+  isUserAuthenticated: boolean;
 }
 
 export const InvitationContent = ({ appletName, isUserAuthenticated }: InvitationContentProps) => {
-  const { t } = useInvitationTranslation()
+  const { t } = useInvitationTranslation();
 
   return (
-    <div>
-      <div
+    <Box data-testid="invitation-content">
+      <Box
         className="invitationBody"
-        dangerouslySetInnerHTML={{ __html: t("inviteContent.description", { displayName: appletName }) }}
+        dangerouslySetInnerHTML={{
+          __html: t('inviteContent.description', { displayName: appletName }) ?? '',
+        }}
       />
-      <div className={classNames("mb-3")}>
+      <Box margin="24px 0px">
         <ol>
-          <li>{t("inviteContent.step1")}</li>
+          <li>{t('inviteContent.step1')}</li>
           <li>
-            {t("inviteContent.step2")}
-            {!isUserAuthenticated ? t("inviteContent.step2_1") : ""}
+            {t('inviteContent.step2')}
+            {!isUserAuthenticated ? t('inviteContent.step2_1') : ''}
           </li>
           <li>
-            <div dangerouslySetInnerHTML={{ __html: t("inviteContent.step3", { displayName: appletName }) }} />
+            <Box
+              dangerouslySetInnerHTML={{
+                __html: t('inviteContent.step3', { displayName: appletName }) ?? '',
+              }}
+            />
           </li>
         </ol>
-      </div>
-    </div>
-  )
-}
+      </Box>
+    </Box>
+  );
+};

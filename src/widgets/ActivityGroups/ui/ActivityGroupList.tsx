@@ -1,238 +1,102 @@
-import { useState } from "react"
+import { useContext, useState } from 'react';
 
-import classNames from "classnames"
-import { subMonths } from "date-fns"
-import { Col, Container, Row, Spinner } from "react-bootstrap"
+import Container from '@mui/material/Container';
+import { subMonths } from 'date-fns';
 
-import CustomModal from "../../Modal"
-import { useActivityGroups, useEntitiesSync, useIntegrationsSync } from "../model/hooks"
-import { ActivityGroup } from "./ActivityGroup"
+import { ActivityGroup } from './ActivityGroup';
+import { AppletDetailsContext } from '../lib';
+import { useActivityGroups, useEntitiesSync, useIntegrationsSync } from '../model/hooks';
 
-import { ActivityOrFlowProgress, ActivityPipelineType } from "~/abstract/lib"
-import {
-  ActivityListItem,
-  activityModel,
-  ActivityStatus,
-  SharedContentConsent,
-  useCompletedEntitiesQuery,
-} from "~/entities/activity"
-import { AppletDetailsDTO, AppletEventsResponse } from "~/shared/api"
-import { CustomCard } from "~/shared/ui"
-import { formatToDtoDate, Mixpanel, ROUTES, useCustomNavigation, useCustomTranslation } from "~/shared/utils"
+import AppletDefaultIcon from '~/assets/AppletDefaultIcon.svg';
+import { SharedContentConsent } from '~/entities/activity';
+import { useCompletedEntitiesQuery } from '~/entities/activity';
+import { BootstrapModal } from '~/shared/ui';
+import { AvatarBase } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
+import Loader from '~/shared/ui/Loader';
+import Text from '~/shared/ui/Text';
+import { formatToDtoDate, useCustomTranslation } from '~/shared/utils';
 
-type PrivateActivityListWidgetProps = {
-  isPublic: false
-  appletDetails: AppletDetailsDTO
-  eventsDetails: AppletEventsResponse
-}
+export const ActivityGroupList = () => {
+  const { t } = useCustomTranslation();
 
-type PublicActivityListWidgetProps = {
-  isPublic: true
-  publicAppletKey: string | null
-  appletDetails: AppletDetailsDTO
-  eventsDetails: AppletEventsResponse
-}
+  const { applet, events, isPublic } = useContext(AppletDetailsContext);
 
-type ActivityListWidgetProps = PublicActivityListWidgetProps | PrivateActivityListWidgetProps
+  useIntegrationsSync({ appletDetails: applet });
 
-type ResumeActivityState = {
-  isOpen: boolean
-  selectedActivity: ActivityListItem | null
-}
-
-type NavigateToActivityDetailsPageProps = {
-  appletId: string
-  activityId: string
-  eventId: string
-}
-
-export const ActivityGroupList = (props: ActivityListWidgetProps) => {
-  const { t } = useCustomTranslation()
-  const { data: completedEntities, isFetching: isCompletedEntitiesFetching } = useCompletedEntitiesQuery(
-    {
-      appletId: props.appletDetails.id,
-      version: props.appletDetails.version,
-      fromDate: formatToDtoDate(subMonths(new Date(), 1)),
-    },
-    { select: data => data.data.result, enabled: !props.isPublic },
-  )
-
-  useIntegrationsSync({ appletDetails: props.appletDetails })
-
-  const navigatator = useCustomNavigation()
-
-  const navigateToActivityDetailsPage = (
-    { appletId, activityId, eventId }: NavigateToActivityDetailsPageProps,
-    options: { isRestart: boolean },
-  ) => {
-    if (props.isPublic && props.publicAppletKey) {
-      return navigatator.navigate(
-        ROUTES.publicActivityDetails.navigateTo(appletId, activityId, eventId, props.publicAppletKey),
-        {
-          state: {
-            isRestart: options.isRestart,
-          },
-        },
-      )
-    }
-
-    return navigatator.navigate(ROUTES.activityDetails.navigateTo(appletId, activityId, eventId), {
-      state: {
-        isRestart: options.isRestart,
+  const { data: completedEntities, isFetching: isCompletedEntitiesFetching } =
+    useCompletedEntitiesQuery(
+      {
+        appletId: applet.id,
+        version: applet.version,
+        fromDate: formatToDtoDate(subMonths(new Date(), 1)),
       },
-    })
-  }
+      { select: (data) => data.data.result, enabled: !isPublic },
+    );
 
-  const [isAboutOpen, setIsAboutOpen] = useState(false)
-  const [resumeActivityState, setResumeActivityState] = useState<ResumeActivityState>({
-    isOpen: false,
-    selectedActivity: null,
-  })
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
-  const { upsertGroupInProgress } = activityModel.hooks.useActivityGroupsInProgressState()
+  const isAppletAboutExist = Boolean(applet?.about);
+  const isAppletImageExist = Boolean(applet?.image);
+
+  const { groups } = useActivityGroups({ applet, events });
 
   const onCardAboutClick = () => {
-    setIsAboutOpen(true)
-  }
+    if (!isAppletAboutExist) return;
 
-  const onAboutModalClose = () => {
-    setIsAboutOpen(false)
-  }
+    setIsAboutOpen(true);
+  };
 
-  const onResumeActivityModalClose = () => {
-    setResumeActivityState({ isOpen: false, selectedActivity: null })
-  }
-
-  const { groups } = useActivityGroups(props.appletDetails, props.eventsDetails)
-
-  const navigateToActivityDetailsWithEmptyProgress = (activity: ActivityListItem) => {
-    const isActivityPipelineFlow = !!activity.activityFlowDetails
-    const isInActivityFlow = activity.isInActivityFlow
-
-    let activityPipelineDetails: ActivityOrFlowProgress | undefined
-
-    if (isActivityPipelineFlow && isInActivityFlow) {
-      activityPipelineDetails = {
-        type: ActivityPipelineType.Flow,
-        currentActivityId: activity.activityId,
-        pipelineActivityOrder: 0, // Hardcoded because WEB APP not supported activity flow
-        currentActivityStartAt: null, // Hardcoded because WEB APP not supported activity flow
-        executionGroupKey: "mocked", // Hardcoded because WEB APP not supported activity flow
-      }
-    } else {
-      activityPipelineDetails = {
-        type: ActivityPipelineType.Regular,
-      }
-    }
-
-    upsertGroupInProgress({
-      appletId: props.appletDetails.id,
-      activityId: activity.activityId,
-      eventId: activity.eventId,
-      progressPayload: {
-        ...activityPipelineDetails,
-        startAt: new Date(),
-        endAt: null,
-      },
-    })
-
-    return navigateToActivityDetailsPage(
-      {
-        appletId: props.appletDetails.id,
-        activityId: activity.activityId,
-        eventId: activity.eventId,
-      },
-      { isRestart: true },
-    )
-  }
-
-  const onActivityCardClick = (activity: ActivityListItem) => {
-    if (activity.status === ActivityStatus.InProgress) {
-      setResumeActivityState({ isOpen: true, selectedActivity: activity })
-    } else {
-      Mixpanel.track("Assessment Started")
-
-      return navigateToActivityDetailsWithEmptyProgress(activity)
-    }
-  }
-
-  const onActivityResume = () => {
-    if (resumeActivityState.selectedActivity) {
-      return navigateToActivityDetailsPage(
-        {
-          appletId: props.appletDetails.id,
-          activityId: resumeActivityState.selectedActivity.activityId,
-          eventId: resumeActivityState.selectedActivity.eventId,
-        },
-        { isRestart: false },
-      )
-    }
-  }
-
-  const onActivityRestart = () => {
-    const { selectedActivity } = resumeActivityState
-
-    if (selectedActivity?.activityId && selectedActivity?.eventId) {
-      return navigateToActivityDetailsWithEmptyProgress(selectedActivity)
-    }
-  }
-
-  useEntitiesSync({ completedEntities, appletId: props.appletDetails.id })
+  useEntitiesSync({ completedEntities });
 
   if (isCompletedEntitiesFetching) {
-    return (
-      <Container className={classNames("d-flex", "h-100", "w-100", "justify-content-center", "align-items-center")}>
-        <Spinner as="div" animation="border" role="status" aria-hidden="true" />
-      </Container>
-    )
+    return <Loader />;
   }
 
   return (
-    <Container fluid>
-      <Row className={classNames("mt-5", "mb-3")}>
-        <Col lg={3} className={classNames("d-flex", "justify-content-center")}>
-          {props.appletDetails && (
-            <CustomCard
-              type="card"
-              id={props.appletDetails.id}
-              title={props.appletDetails.displayName}
-              imageSrc={props.appletDetails.image}
-              buttonLabel={t("about")}
-              buttonOnClick={onCardAboutClick}
-            />
-          )}
-        </Col>
-        <Col lg={7}>
-          <SharedContentConsent appletId={props.appletDetails.id} />
+    <Container sx={{ flex: '1' }}>
+      <Box display="flex" gap="16px" marginTop="24px" alignItems="center">
+        <AvatarBase
+          src={isAppletImageExist ? applet.image : AppletDefaultIcon}
+          name={applet.displayName}
+          width="48px"
+          height="48px"
+          variant="rounded"
+          testid="applet-image"
+        />
+        <Text
+          variant="h4"
+          onClick={onCardAboutClick}
+          testid="applet-name"
+          sx={{
+            fontFamily: 'Atkinson',
+            fontSize: '22px',
+            fontWeight: 400,
+            lineHeight: '28px',
+            fontStyle: 'normal',
+            cursor: isAppletAboutExist ? 'pointer' : 'default',
+            wordBreak: 'break-word',
+          }}
+        >
+          {applet.displayName}
+        </Text>
+      </Box>
 
-          {groups
-            ?.filter(g => g.activities.length)
-            .map(g => (
-              <ActivityGroup
-                group={g}
-                key={g.name}
-                onActivityCardClick={onActivityCardClick}
-                isPublic={props.isPublic}
-              />
-            ))}
-        </Col>
-      </Row>
-      <CustomModal
+      <Box>
+        <SharedContentConsent appletId={applet.id} />
+
+        {groups
+          .filter((g) => g.activities.length)
+          .map((g) => (
+            <ActivityGroup group={g} key={g.name} />
+          ))}
+      </Box>
+      <BootstrapModal
         show={isAboutOpen}
-        onHide={onAboutModalClose}
-        title={t("about")}
-        label={props.appletDetails?.about ? props.appletDetails.about : t("no_markdown")}
-      />
-      <CustomModal
-        show={resumeActivityState.isOpen}
-        onHide={onResumeActivityModalClose}
-        title={t("additional.resume_activity")}
-        label={t("additional.activity_resume_restart")}
-        footerPrimaryButton={t("additional.restart")}
-        onPrimaryButtonClick={onActivityRestart}
-        footerSecondaryButton={t("additional.resume")}
-        onSecondaryButtonClick={onActivityResume}
+        onHide={() => setIsAboutOpen(false)}
+        title={t('about')}
+        label={applet.about ? applet.about : t('no_markdown')}
       />
     </Container>
-  )
-}
+  );
+};

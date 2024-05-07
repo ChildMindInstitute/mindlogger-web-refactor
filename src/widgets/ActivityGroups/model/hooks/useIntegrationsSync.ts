@@ -1,20 +1,20 @@
-import { useEffect } from "react"
+import { useEffect } from 'react';
 
-import { AppletIntegrationsService } from "~/entities/activity/model/integrations"
-import { AppletDetailsDTO } from "~/shared/api"
-import { useAppDispatch, useAppSelector } from "~/shared/utils"
+import { AppletIntegrationsService } from '~/entities/applet/model/integrations';
+import { AppletDetailsBaseInfoDTO } from '~/shared/api';
+import { useAppDispatch, useAppSelector } from '~/shared/utils';
 
 type Props = {
-  appletDetails: AppletDetailsDTO
-}
+  appletDetails: AppletDetailsBaseInfoDTO;
+};
 
 export const useIntegrationsSync = ({ appletDetails }: Props) => {
-  const dispatch = useAppDispatch()
-  const rootState = useAppSelector(state => state)
+  const dispatch = useAppDispatch();
+  const rootState = useAppSelector((state) => state);
 
   useEffect(() => {
-    const appletIntegrationService = new AppletIntegrationsService(rootState, dispatch)
+    const appletIntegrationService = new AppletIntegrationsService(rootState, dispatch);
 
-    appletIntegrationService.applyIntegrations(appletDetails)
-  }, [appletDetails, dispatch, rootState])
-}
+    appletIntegrationService.applyIntegrations(appletDetails);
+  }, [appletDetails, dispatch, rootState]);
+};

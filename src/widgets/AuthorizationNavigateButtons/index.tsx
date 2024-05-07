@@ -1,26 +1,32 @@
-import classNames from "classnames"
-
-import { LoginNavigateButton } from "~/features/Login"
-import { SignupNavigateButton } from "~/features/Signup"
-import { useCustomTranslation } from "~/shared/utils"
+import { LoginNavigateButton } from '~/features/Login';
+import { SignupNavigateButton } from '~/features/Signup';
+import { Box } from '~/shared/ui';
+import { useCustomTranslation } from '~/shared/utils';
 
 interface AuthorizationButtonsProps {
-  redirectState?: Record<string, unknown>
+  redirectState?: Record<string, unknown>;
 }
 
 export const AuthorizationButtons = ({ redirectState }: AuthorizationButtonsProps) => {
-  const { t } = useCustomTranslation()
+  const { t } = useCustomTranslation();
 
   return (
-    <div className={classNames("d-flex", "justify-content-center")}>
-      <div>
-        <span>{t("please")}</span>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      gap={1}
+      fontSize={18}
+      marginY={2}
+    >
+      <span>{t('please')}</span>
+      <Box width={150}>
         <LoginNavigateButton redirectState={redirectState} />
-      </div>
-      <div>
-        <span>{t("or")}</span>
+      </Box>
+      <span>{t('or')}</span>
+      <Box width={150}>
         <SignupNavigateButton redirectState={redirectState} />
-      </div>
-    </div>
-  )
-}
+      </Box>
+    </Box>
+  );
+};

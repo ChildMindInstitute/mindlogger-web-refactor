@@ -1,66 +1,14 @@
-import { ActivityItemBase } from "./item"
-
-import { HourMinute } from "~/shared/utils"
-
-export type ActivityListItem = {
-  activityId: string
-  flowId: string | null
-  eventId: string
-
-  name: string
-  description: string
-  image?: string | null
-
-  status: ActivityStatus
-  type: ActivityType
-
-  isInActivityFlow: boolean
-  isOnePageAssessment?: boolean
-
-  activityFlowDetails?: {
-    showActivityFlowBadge: boolean
-    activityFlowName: string
-    numberOfActivitiesInFlow: number
-    activityPositionInFlow: number
-  } | null
-
-  availableFrom?: Date | null
-  availableTo?: Date | null
-
-  isTimerSet: boolean
-  isTimerElapsed: boolean
-  timeLeftToComplete?: HourMinute | null
-}
-
-export const enum ActivityStatus {
-  NotDefined = 0,
-  InProgress = 1,
-  Scheduled = 2,
-  Available = 3,
-}
-
-export const enum ActivityType {
-  NotDefined = 0,
-  Flanker = 1,
-}
+import { ActivityItemDetailsDTO } from '~/shared/api';
 
 export type ActivityDetails = {
-  id: string
-  name: string
-  description: string
-  image: string | ""
-  splashScreen: string | ""
-  showAllAtOnce: boolean
-  isSkippable: boolean
-  isReviewable: boolean
-  responseIsEditable: boolean
-  ordering: number
-  items: Array<ActivityItemBase>
-}
-
-export type ActivityProgressPreview = {
-  id: string
-  title: string
-  activityId: string
-  eventId: string
-}
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  splashScreen: string;
+  isSkippable: boolean;
+  isReviewable: boolean;
+  responseIsEditable: boolean;
+  order: number;
+  items: ActivityItemDetailsDTO[];
+};

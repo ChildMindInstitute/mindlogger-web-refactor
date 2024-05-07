@@ -1,7 +1,6 @@
-import { AlertDTO, AnswerTypesPayload } from "~/shared/api"
+import { AnswerTypesPayload } from '~/shared/api';
 
-export type ItemAnswer = {
-  answer: AnswerTypesPayload | null
-  itemId: string
-  alert: Array<AlertDTO>
+export interface ItemAnswer<T extends AnswerTypesPayload> {
+  answer: T | null;
+  itemId: string;
 }

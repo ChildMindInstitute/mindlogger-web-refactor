@@ -1,10 +1,11 @@
-import { BaseSyntheticEvent } from "react"
+import { BaseSyntheticEvent } from 'react';
 
-import { Container } from "react-bootstrap"
-import { FieldValues, FormProvider, FormProviderProps } from "react-hook-form"
+import { FieldValues, FormProvider, FormProviderProps } from 'react-hook-form';
+
+import { Any } from '../../utils';
 
 interface BasicFormProviderProps {
-  onSubmit: (e: BaseSyntheticEvent<object, any, any> | undefined) => void
+  onSubmit: (e: BaseSyntheticEvent<object, Any, Any> | undefined) => void;
 }
 
 const BasicFormProvider = <TFieldValues extends FieldValues>({
@@ -14,13 +15,9 @@ const BasicFormProvider = <TFieldValues extends FieldValues>({
 }: FormProviderProps<TFieldValues> & BasicFormProviderProps) => {
   return (
     <FormProvider {...rest}>
-      <form onSubmit={onSubmit}>
-        <Container fluid className="mt-3 mb-2">
-          {children}
-        </Container>
-      </form>
+      <form onSubmit={onSubmit}>{children}</form>
     </FormProvider>
-  )
-}
+  );
+};
 
-export default BasicFormProvider
+export default BasicFormProvider;

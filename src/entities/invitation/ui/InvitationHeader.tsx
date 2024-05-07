@@ -1,22 +1,25 @@
-import classNames from "classnames"
+import { useInvitationTranslation } from '../lib';
 
-import { useInvitationTranslation } from "../lib"
+import { Box } from '~/shared/ui';
+import { Text } from '~/shared/ui';
 
 interface InvitationHeaderProps {
-  appletName: string
-  role: string
+  appletName: string;
+  role: string;
 }
 
 export const InvitationHeader = ({ appletName, role }: InvitationHeaderProps) => {
-  const { t } = useInvitationTranslation()
+  const { t } = useInvitationTranslation();
 
   return (
-    <div>
-      <h3 className={classNames("mb-2")}>
-        {t("inviteContent.welcome")}
+    <Box data-testid="invitation-header">
+      <Text variant="h4" margin="12px 0px">
+        {t('inviteContent.welcome')}
         <strong>{` ${appletName}`}</strong>
-      </h3>
-      <p>{`${t("inviteContent.title", { role })} ${appletName}. ${t("inviteContent.toAccept")}`}</p>
-    </div>
-  )
-}
+      </Text>
+      <Text variant="body1">{`${t('inviteContent.title', { role })} ${appletName}. ${t(
+        'inviteContent.toAccept',
+      )}`}</Text>
+    </Box>
+  );
+};
