@@ -1,17 +1,21 @@
+import { SxProps } from '@mui/material';
+
 import Box from '~/shared/ui/Box';
 import { CheckboxWithLabel } from '~/shared/ui/Checkbox';
 
 type Props = {
   id: string;
-  value?: boolean;
+  checked?: boolean;
   label: JSX.Element;
   onChange: () => void;
+
+  sx?: SxProps;
 };
 
-export const ConsentCheckbox = ({ id, label, onChange, value }: Props) => {
+export const ConsentCheckbox = ({ id, label, onChange, checked, sx }: Props) => {
   return (
-    <Box display="flex">
-      <CheckboxWithLabel id={id} onChange={onChange} value={value}>
+    <Box display="flex" sx={sx}>
+      <CheckboxWithLabel id={id} checked={checked} onChange={onChange}>
         {label}
       </CheckboxWithLabel>
     </Box>

@@ -7,21 +7,14 @@ import FormGroup from '@mui/material/FormGroup';
 export interface CheckboxWithLabelProps extends PropsWithChildren {
   id?: string;
   onChange: () => void;
-  defaultChecked?: boolean;
-  value?: boolean;
+  checked?: boolean;
 }
 
-export const CheckboxWithLabel = ({
-  onChange,
-  children,
-  id,
-  defaultChecked,
-  value,
-}: CheckboxWithLabelProps) => {
+export const CheckboxWithLabel = ({ onChange, children, id, checked }: CheckboxWithLabelProps) => {
   return (
     <FormGroup id={id}>
       <FormControlLabel
-        control={<Checkbox value={value} defaultChecked={defaultChecked} onChange={onChange} />}
+        control={<Checkbox checked={checked} onChange={onChange} />}
         label={children}
       />
     </FormGroup>

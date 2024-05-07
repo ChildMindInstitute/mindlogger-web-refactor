@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-import { MuiModal } from '~/shared/ui';
+import { Theme } from '~/shared/constants';
+import { Box, MuiModal } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
 export const ConsentPublicModal = () => {
@@ -8,15 +9,17 @@ export const ConsentPublicModal = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const onPublicClick = () => {
+  const onPublicClick = (event: React.MouseEvent<HTMLSpanElement>) => {
+    event.preventDefault();
+
     setIsOpen(true);
   };
 
   return (
     <>
-      <span role="button" onClick={onPublicClick} className="text-primary ms-1 mb-2">
+      <Box component="span" onClick={onPublicClick} color={Theme.colors.light.primary}>
         {t('data_sharing.public')}
-      </span>
+      </Box>
       <MuiModal
         isOpen={isOpen}
         onHide={() => setIsOpen(false)}

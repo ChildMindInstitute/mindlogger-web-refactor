@@ -4,6 +4,7 @@ import { actions } from '../model';
 import { selectConsents } from '../model/selectors';
 
 import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 import { useAppDispatch, useAppSelector, useCustomTranslation } from '~/shared/utils';
 
 type Props = {
@@ -36,26 +37,29 @@ export const SharedContentConsent = ({ appletId }: Props) => {
   };
 
   return (
-    <Box display="flex" justifyContent="center" margin="8px">
+    <Box display="flex" justifyContent="flex-start" margin="8px">
       <Box display="flex" flexDirection="column">
         <ConsentCheckbox
           id={`shareToPublic-${appletId}`}
-          value={consents.shareToPublic?.shareToPublic}
+          checked={appletConsents.shareToPublic}
           onChange={toggleShareConsent}
           label={
-            <p>
+            <Text>
               {t('data_sharing.consent')} {<ConsentPublicModal />}
-            </p>
+            </Text>
           }
         />
         <ConsentCheckbox
           id={`shareMediaToPublic-${appletId}`}
-          value={consents.shareMediaToPublic?.shareMediaToPublic}
+          checked={appletConsents.shareMediaToPublic}
           onChange={toggleMediaConsent}
+          sx={{
+            marginLeft: '16px',
+          }}
           label={
-            <p>
+            <Text>
               {t('data_sharing.media_consent')} {<ConsentPublicModal />}
-            </p>
+            </Text>
           }
         />
       </Box>
