@@ -3,6 +3,7 @@ import { ConsentPublicModal } from './ConsentPublicModal';
 import { actions } from '../model';
 import { selectConsents } from '../model/selectors';
 
+import Box from '~/shared/ui/Box';
 import { useAppDispatch, useAppSelector, useCustomTranslation } from '~/shared/utils';
 
 type Props = {
@@ -35,8 +36,8 @@ export const SharedContentConsent = ({ appletId }: Props) => {
   };
 
   return (
-    <div className="d-flex justify-content-center m-2">
-      <div className="d-flex flex-column">
+    <Box display="flex" justifyContent="center" margin="8px">
+      <Box display="flex" flexDirection="column">
         <ConsentCheckbox
           id={`shareToPublic-${appletId}`}
           value={consents.shareToPublic?.shareToPublic}
@@ -57,7 +58,7 @@ export const SharedContentConsent = ({ appletId }: Props) => {
             </p>
           }
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
