@@ -37,7 +37,7 @@ function ValidateTakeNowParams({
         initiateTakeNow({ sourceSubject, targetSubject });
       }
     }
-  }, [data, getMultiInformantState, initiateTakeNow, isInMultiInformantFlow, isSuccess]);
+  }, [data, initiateTakeNow, isInMultiInformantFlow, isSuccess]);
 
   useEffect(() => {
     if (error) {

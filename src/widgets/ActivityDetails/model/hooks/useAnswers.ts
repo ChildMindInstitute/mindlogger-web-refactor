@@ -165,10 +165,8 @@ export const useAnswer = (props: Props) => {
       props.eventsRawData,
       encryptPayload,
       getGroupProgress,
-      featureFlags.enableMultiInformant,
       generateUserPrivateKey,
       getMultiInformantState,
-      isInMultiInformantFlow,
     ],
   );
 
