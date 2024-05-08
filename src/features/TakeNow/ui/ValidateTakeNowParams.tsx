@@ -31,13 +31,13 @@ function ValidateTakeNowParams({
       const multiInformantState = getMultiInformantState();
       if (
         !isInMultiInformantFlow() ||
-        sourceSubject.id !== multiInformantState.sourceSubject?.id ||
-        targetSubject.id !== multiInformantState.targetSubject?.id
+        sourceSubject.id !== multiInformantState?.sourceSubject?.id ||
+        targetSubject.id !== multiInformantState?.targetSubject?.id
       ) {
         initiateTakeNow({ sourceSubject, targetSubject });
       }
     }
-  }, [data, initiateTakeNow, isInMultiInformantFlow, isSuccess]);
+  }, [data, getMultiInformantState, initiateTakeNow, isInMultiInformantFlow, isSuccess]);
 
   useEffect(() => {
     if (error) {
