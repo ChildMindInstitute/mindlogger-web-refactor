@@ -42,10 +42,11 @@ export const ActivityGroups = (props: Props) => {
 
   const { featureFlags } = useFeatureFlags();
 
-  const { isInMultiInformantFlow, resetMultiInformantState } =
+  const { isInMultiInformantFlow, resetMultiInformantState, ensureMultiInformantStateExists } =
     appletModel.hooks.useMultiInformantState();
 
   useOnceEffect(() => {
+    ensureMultiInformantStateExists();
     if (featureFlags.enableMultiInformant) {
       if (isInMultiInformantFlow() && !props.startActivityOrFlow) {
         resetMultiInformantState();
