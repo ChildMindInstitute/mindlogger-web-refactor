@@ -31,8 +31,8 @@ function ValidateTakeNowParams({
       const multiInformantState = getMultiInformantState();
       if (
         !isInMultiInformantFlow() ||
-        sourceSubject.id !== multiInformantState.sourceSubject?.id ||
-        targetSubject.id !== multiInformantState.targetSubject?.id
+        sourceSubject.id !== multiInformantState?.sourceSubject?.id ||
+        targetSubject.id !== multiInformantState?.targetSubject?.id
       ) {
         initiateTakeNow({ sourceSubject, targetSubject });
       }
