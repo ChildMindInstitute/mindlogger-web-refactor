@@ -12,6 +12,7 @@ type Return = {
   isInMultiInformantFlow: () => boolean;
   initiateTakeNow: (payload: MultiInformantPayload) => void;
   resetMultiInformantState: () => void;
+  ensureMultiInformantStateExists: () => void;
 };
 
 export const useMultiInformantState = (): Return => {
@@ -35,10 +36,15 @@ export const useMultiInformantState = (): Return => {
     dispatch(actions.resetMultiInformantState());
   }, [dispatch]);
 
+  const ensureMultiInformantStateExists = useCallback(() => {
+    dispatch(actions.ensureMultiInformantStateExists());
+  }, [dispatch]);
+
   return {
     getMultiInformantState,
     isInMultiInformantFlow,
     initiateTakeNow,
     resetMultiInformantState,
+    ensureMultiInformantStateExists,
   };
 };

@@ -225,6 +225,12 @@ const appletsSlice = createSlice({
       state.multiInformantState = action.payload;
     },
 
+    ensureMultiInformantStateExists: (state) => {
+      if (!state.multiInformantState) {
+        state.multiInformantState = {};
+      }
+    },
+
     resetMultiInformantState: (state) => {
       state.multiInformantState = {};
     },
