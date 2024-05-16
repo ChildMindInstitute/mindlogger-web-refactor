@@ -11,7 +11,7 @@ import {
 } from '~/entities/activity/lib';
 import { appletModel } from '~/entities/applet';
 
-export class AlertsExtractor {
+class AlertsExtractor {
   public extractFromRadio(radioItem: RadioItem): AnswerAlerts {
     const alerts: AnswerAlerts = [];
 

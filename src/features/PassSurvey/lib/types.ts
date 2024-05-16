@@ -4,3 +4,9 @@ export type AnswerAlert = {
 };
 
 export type AnswerAlerts = Array<AnswerAlert>;
+
+export type ScoreRecord = {
+  name: string;
+  value: number;
+  flagged: boolean;
+};
