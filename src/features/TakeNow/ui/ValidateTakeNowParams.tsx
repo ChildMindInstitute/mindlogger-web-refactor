@@ -9,7 +9,8 @@ import { ActivityGroups } from '~/widgets/ActivityGroups';
 
 function ValidateTakeNowParams({
   appletId,
-  subjectId: targetSubjectId,
+  targetSubjectId,
+  sourceSubjectId,
   startActivityOrFlow,
   respondentId,
 }: TakeNowParams) {
@@ -19,7 +20,8 @@ function ValidateTakeNowParams({
 
   const { isError, isLoading, isSuccess, error, data } = useTakeNowValidation({
     appletId,
-    subjectId: targetSubjectId,
+    targetSubjectId,
+    sourceSubjectId,
     startActivityOrFlow,
     respondentId,
   });

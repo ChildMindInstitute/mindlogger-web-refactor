@@ -15,14 +15,21 @@ function AppletDetailsPage() {
 
   const queryParams = new URLSearchParams(location.search);
   const startActivityOrFlow = queryParams.get('startActivityOrFlow');
-  const subjectId = queryParams.get('subjectId');
+  const targetSubjectId = queryParams.get('targetSubjectId');
+  const sourceSubjectId = queryParams.get('sourceSubjectId');
   const respondentId = queryParams.get('respondentId');
 
   if (!appletId) {
     return <div>{t('wrondLinkParametrError')}</div>;
   }
 
-  if (!startActivityOrFlow || !subjectId || !respondentId || !featureFlags.enableMultiInformant) {
+  if (
+    !startActivityOrFlow ||
+    !sourceSubjectId ||
+    !targetSubjectId ||
+    !respondentId ||
+    !featureFlags.enableMultiInformant
+  ) {
     return (
       <AuthorizationGuard fallback={<LoginWithRedirect />}>
         <ActivityGroups isPublic={false} appletId={appletId} />
@@ -35,7 +42,8 @@ function AppletDetailsPage() {
       <ValidateTakeNowParams
         appletId={appletId}
         startActivityOrFlow={startActivityOrFlow}
-        subjectId={subjectId}
+        targetSubjectId={targetSubjectId}
+        sourceSubjectId={sourceSubjectId}
         respondentId={respondentId}
       />
     </AuthorizationGuard>

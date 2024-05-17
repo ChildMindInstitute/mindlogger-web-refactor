@@ -5,7 +5,7 @@ import { useActivityByIdQuery } from '~/entities/activity';
 import { useAppletByIdQuery } from '~/entities/applet';
 import { useSubjectQuery } from '~/entities/subject';
 import { useUserState } from '~/entities/user/model/hooks';
-import { useWorkspaceAppletRespondent, useWorkspaceRolesQuery } from '~/entities/workspace';
+import { useWorkspaceRolesQuery } from '~/entities/workspace';
 import { TakeNowParams } from '~/features/TakeNow/lib/TakeNowParams.types';
 import { WorkspaceRole } from '~/shared/api/types/workspace';
 import { useCustomTranslation } from '~/shared/utils';
@@ -22,18 +22,26 @@ type TakeNowValidatedState = {
 
 export const useTakeNowValidation = ({
   appletId,
-  subjectId: targetSubjectId,
+  targetSubjectId,
+  sourceSubjectId,
   startActivityOrFlow,
   respondentId,
 }: TakeNowParams): TakeNowValidatedState => {
   const [workspaceId, setWorkspaceId] = useState<string | null>();
 
   const {
-    isError: isSubjectError,
-    data: subjectData,
-    error: subjectError,
-    isLoading: isLoadingSubject,
+    isError: isTargetSubjectError,
+    data: targetSubjectData,
+    error: targetSubjectError,
+    isLoading: isLoadingTargetSubject,
   } = useSubjectQuery(targetSubjectId);
+
+  const {
+    isError: isSourceSubjectError,
+    data: sourceSubjectData,
+    error: sourceSubjectError,
+    isLoading: isLoadingSourceSubject,
+  } = useSubjectQuery(sourceSubjectId);
 
   const {
     isError: isAppletError,
@@ -53,14 +61,6 @@ export const useTakeNowValidation = ({
   } = useWorkspaceRolesQuery(workspaceId ?? '', {
     appletIds: [appletId],
     options: { enabled: !!workspaceId },
-  });
-
-  const {
-    isError: isRespondentError,
-    data: respondentData,
-    isLoading: isLoadingRespondent,
-  } = useWorkspaceAppletRespondent(workspaceId ?? '', appletId, respondentId, {
-    enabled: !!workspaceId,
   });
 
   useEffect(() => {
@@ -98,31 +98,42 @@ export const useTakeNowValidation = ({
     return errorState(null);
   }
 
-  if (isLoadingSubject || isLoadingActivity) {
+  if (isLoadingTargetSubject || isLoadingSourceSubject || isLoadingActivity) {
     return loadingState;
   }
 
-  if (
-    isSubjectError &&
-    subjectError &&
-    'status' in subjectError.response &&
-    subjectError.response.status === 403
-  ) {
+  const subjectPermissionError =
+    (isTargetSubjectError &&
+      targetSubjectError &&
+      'status' in targetSubjectError.response &&
+      targetSubjectError.response.status === 403) ||
+    (isSourceSubjectError &&
+      sourceSubjectError &&
+      'status' in sourceSubjectError.response &&
+      sourceSubjectError.response.status === 403);
+
+  if (subjectPermissionError) {
     // The logged-in user doesn't have permission to fetch the subject details,
     // so they probably don't have permission to perform the activity
     return errorState(t('takeNow.invalidRespondent'));
   }
 
   if (
-    isSubjectError ||
-    !subjectData?.data?.result ||
-    subjectData.data.result.appletId !== appletId
+    isTargetSubjectError ||
+    !targetSubjectData?.data?.result ||
+    targetSubjectData.data.result.appletId !== appletId ||
+    isSourceSubjectError ||
+    !sourceSubjectData?.data?.result ||
+    sourceSubjectData.data.result.appletId !== appletId
   ) {
     return errorState(t('takeNow.invalidSubject'));
   }
 
   const { nickname: targetSubjectNickname, secretUserId: targetSecretUserId } =
-    subjectData.data.result;
+    targetSubjectData.data.result;
+
+  const { nickname: sourceSubjectNickname, secretUserId: sourceSecretUserId } =
+    sourceSubjectData.data.result;
 
   if (isActivityError) {
     return errorState(t('takeNow.invalidActivity'));
@@ -152,23 +163,6 @@ export const useTakeNowValidation = ({
   if (!hasCorrectRole) {
     return errorState(t('takeNow.invalidRespondent'));
   }
-
-  if (isLoadingRespondent) {
-    return loadingState;
-  }
-
-  if (isRespondentError || !respondentData || !respondentData?.data?.result) {
-    // If we're unable to fetch the subject ID for the current user, we can't start the multi-informant flow
-    // eslint-disable-next-line no-console
-    console.error('Unable to fetch subject ID for current user');
-    return errorState(null);
-  }
-
-  const {
-    subjectId: sourceSubjectId,
-    nickname: sourceSubjectNickname,
-    secretUserId: sourceSecretUserId,
-  } = respondentData.data.result;
 
   return {
     isLoading: false,
