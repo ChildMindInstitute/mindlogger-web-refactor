@@ -181,6 +181,9 @@ const appletsSlice = createSlice({
         endAt: null,
         executionGroupKey: uuidV4(),
         pipelineActivityOrder: action.payload.pipelineActivityOrder,
+        context: {
+          summaryData: {},
+        },
       };
 
       state.groupProgress[id] = flowEvent;

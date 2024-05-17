@@ -1591,6 +1591,9 @@ describe('ActivityGroupsBuilder', () => {
           currentActivityStartAt: addMinutes(scheduledAt, 5).getTime(),
           executionGroupKey: 'group-key-1',
           pipelineActivityOrder: 0,
+          context: {
+            summaryData: {},
+          },
         },
       };
 

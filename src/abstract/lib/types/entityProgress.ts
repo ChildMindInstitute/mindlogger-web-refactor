@@ -10,6 +10,9 @@ export type FlowProgress = {
   pipelineActivityOrder: number;
   currentActivityStartAt: number | null;
   executionGroupKey: string;
+  context: {
+    summaryData: Record<string, unknown>;
+  };
 };
 
 export type ActivityProgress = {
