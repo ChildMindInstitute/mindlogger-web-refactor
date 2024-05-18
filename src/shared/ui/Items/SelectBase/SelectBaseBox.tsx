@@ -40,7 +40,6 @@ export const SelectBaseBox = (props: Props) => {
       alignItems="center"
       justifyContent={props.justifyContent ? props.justifyContent : 'space-between'}
       gap="12px"
-      height="64px"
       className="response-option"
       borderRadius="12px"
       padding={props.padding ? props.padding : '16px'}
