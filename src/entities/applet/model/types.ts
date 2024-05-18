@@ -16,6 +16,7 @@ import {
   SliderRowsAnswer,
   SliderRowsItem,
   SplashScreenItem,
+  SummaryScreenItem,
   TextItem,
   TimeItem,
   TimeRangeItem,
@@ -67,6 +68,7 @@ export type ItemRecord =
   | SliderItem
   | SelectorItem
   | SplashScreenItem
+  | SummaryScreenItem
   | MessageItem
   | DateItem
   | TimeItem
