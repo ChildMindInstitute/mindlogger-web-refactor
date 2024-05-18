@@ -21,6 +21,10 @@ export const useGroupProgressState = (): Return => {
 
   const getGroupProgress = useCallback(
     (params: InProgressEntity) => {
+      if (!params.entityId || !params.eventId) {
+        return null;
+      }
+
       return groupProgresses[getProgressId(params.entityId, params.eventId)] ?? null;
     },
     [groupProgresses],
