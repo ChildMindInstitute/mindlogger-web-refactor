@@ -2,7 +2,12 @@ import { useCallback } from 'react';
 
 import { groupProgressSelector } from '../selectors';
 import { actions } from '../slice';
-import { InProgressEntity, InProgressFlow, SaveGroupProgressPayload } from '../types';
+import {
+  InProgressEntity,
+  InProgressFlow,
+  SaveGroupContextPayload,
+  SaveGroupProgressPayload,
+} from '../types';
 
 import { GroupProgress, getProgressId } from '~/abstract/lib';
 import { useAppDispatch, useAppSelector } from '~/shared/utils';
@@ -10,6 +15,7 @@ import { useAppDispatch, useAppSelector } from '~/shared/utils';
 type Return = {
   getGroupProgress: (params: InProgressEntity) => GroupProgress | null;
   saveGroupProgress: (payload: SaveGroupProgressPayload) => void;
+  saveGroupContext: (payload: SaveGroupContextPayload) => void;
 
   entityCompleted: (props: InProgressEntity) => void;
   flowUpdated: (props: InProgressFlow) => void;
@@ -51,10 +57,18 @@ export const useGroupProgressState = (): Return => {
     [dispatch],
   );
 
+  const saveGroupContext = useCallback(
+    (payload: SaveGroupContextPayload) => {
+      dispatch(actions.saveGroupContext(payload));
+    },
+    [dispatch],
+  );
+
   return {
     getGroupProgress,
 
     saveGroupProgress,
+    saveGroupContext,
 
     entityCompleted,
     flowUpdated,

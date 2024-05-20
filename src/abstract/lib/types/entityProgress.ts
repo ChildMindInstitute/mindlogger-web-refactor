@@ -25,13 +25,16 @@ export type FlowProgress = {
   pipelineActivityOrder: number;
   currentActivityStartAt: number | null;
   executionGroupKey: string;
-  context: {
-    summaryData: Record<ActivityId, FlowSummaryData>;
-  };
+  context: ProgressContext;
 };
 
 export type ActivityProgress = {
   type: ActivityPipelineType.Regular;
+  context: ProgressContext;
+};
+
+export type ProgressContext = {
+  summaryData: Record<ActivityId, FlowSummaryData>;
 };
 
 export type ActivityOrFlowProgress = FlowProgress | ActivityProgress;

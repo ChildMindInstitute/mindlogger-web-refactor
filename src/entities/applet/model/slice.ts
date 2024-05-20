@@ -11,6 +11,7 @@ import {
   ProgressState,
   RemoveActivityProgressPayload,
   SaveActivityProgressPayload,
+  SaveGroupContextPayload,
   SaveGroupProgressPayload,
   SaveItemAdditionalTextPayload,
   SaveItemAnswerPayload,
@@ -69,6 +70,22 @@ const appletsSlice = createSlice({
       };
 
       state.groupProgress[id] = updatedProgress;
+    },
+
+    saveGroupContext: (state, action: PayloadAction<SaveGroupContextPayload>) => {
+      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+
+      const groupProgress = state.groupProgress[id] ?? {};
+
+      const updatedContext = {
+        ...groupProgress.context,
+        ...action.payload.context,
+      };
+
+      state.groupProgress[id] = {
+        ...groupProgress,
+        context: updatedContext,
+      };
     },
 
     saveActivityProgress: (state, action: PayloadAction<SaveActivityProgressPayload>) => {
@@ -165,6 +182,9 @@ const appletsSlice = createSlice({
         type: ActivityPipelineType.Regular,
         startAt: new Date().getTime(),
         endAt: null,
+        context: {
+          summaryData: {},
+        },
       };
 
       state.groupProgress[id] = activityEvent;

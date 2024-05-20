@@ -1,4 +1,4 @@
-import { ConditionalLogic, ReportDTO } from '~/shared/api';
+import { ConditionalLogic, ScoreAndReports } from '~/shared/api';
 
 export type DefaultAnswer = Array<string>;
 export type MatrixMultiSelectAnswer = Array<Array<string | null>>;
@@ -246,7 +246,10 @@ export interface SummaryScreenItem extends ActivityItemBase {
 }
 
 export type SummaryScreenItemConfig = ButtonsConfig & {
-  reports: Array<ReportDTO>;
+  scoresAndReports: ScoreAndReports;
+  activityId: string;
+  eventId: string;
+  activityName: string;
 };
 
 export interface MessageItem extends ActivityItemBase {
