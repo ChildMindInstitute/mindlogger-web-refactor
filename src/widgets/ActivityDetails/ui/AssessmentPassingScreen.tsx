@@ -240,6 +240,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         eventId,
         context: {
           summaryData: {
+            ...groupProgress?.context.summaryData,
             [activityId]: summaryDataContext,
           },
         },
