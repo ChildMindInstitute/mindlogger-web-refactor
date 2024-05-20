@@ -10,8 +10,9 @@ import {
   useSubmitAnswersMutations,
   useSurvey,
 } from '../model/hooks';
+import { useSummaryData } from '../model/hooks/useSummaryData';
 
-import { getProgressId } from '~/abstract/lib';
+import { ActivityPipelineType, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import {
   ActivityCardItem,
   Answer,
@@ -59,6 +60,8 @@ export const AssessmentPassingScreen = (props: Props) => {
     appletModel.selectors.selectActivityProgress(state, activityEventId),
   );
 
+  const { getGroupProgress, saveGroupContext } = appletModel.hooks.useGroupProgressState();
+
   const completedEntities = useAppSelector(appletModel.selectors.completedEntitiesSelector);
 
   const userEvents = useMemo(
@@ -81,6 +84,13 @@ export const AssessmentPassingScreen = (props: Props) => {
       activityId,
       eventId,
     });
+
+  const { getSummaryForCurrentActivity } = useSummaryData({
+    activityId,
+    activityName: props.activityDetails.name,
+    eventId,
+    scoresAndReports: props.activityDetails.scoresAndReports,
+  });
 
   const { step, item, hasPrevStep, hasNextStep, progress, conditionallyHiddenItemIds } =
     useSurvey(activityProgress);
@@ -185,22 +195,83 @@ export const AssessmentPassingScreen = (props: Props) => {
       return;
     }
 
-    conditionallyHiddenItemIds?.forEach((id) => removeItemAnswer(id));
+    conditionallyHiddenItemIds?.forEach(removeItemAnswer);
 
-    if (!hasNextStep) {
+    // Should send answers if:
+    // 1. Has no next step
+    // or
+    // 2. has next step but, the next step is summaryScreen and we in flow and it's not the last activity in flow
+
+    const groupProgress = getGroupProgress({
+      entityId: flowParams.isFlow ? flowParams.flowId : activityId,
+      eventId,
+    });
+
+    let isLastActivityInFlow = false;
+
+    const isFlowGroup = groupProgress?.type === ActivityPipelineType.Flow;
+
+    if (groupProgress && isFlowGroup) {
+      const currentPipelineActivityOrder = groupProgress.pipelineActivityOrder;
+
+      const currentFlow = applet.activityFlows.find((flow) => flow.id === flowParams.flowId);
+
+      const nextActivity = currentFlow?.activityIds[currentPipelineActivityOrder + 1] ?? null;
+
+      isLastActivityInFlow = nextActivity === null;
+    }
+
+    const isNextItemSummaryScreen = items[step + 1]?.responseType === 'summaryScreen';
+
+    if (isNextItemSummaryScreen) {
+      const summaryData = getSummaryForCurrentActivity();
+
+      const summaryDataContext: FlowSummaryData = {
+        alerts: summaryData.alerts,
+        scores: {
+          activityName: props.activityDetails.name,
+          scores: summaryData.scores,
+        },
+        order: isFlowGroup ? groupProgress.pipelineActivityOrder : 0,
+      };
+
+      saveGroupContext({
+        activityId: flowParams.isFlow ? flowParams.flowId : activityId,
+        eventId,
+        context: {
+          summaryData: {
+            [activityId]: summaryDataContext,
+          },
+        },
+      });
+    }
+
+    const skipSummaryAndSubmit =
+      hasNextStep && isNextItemSummaryScreen && flowParams.isFlow && !isLastActivityInFlow;
+
+    if (!hasNextStep || skipSummaryAndSubmit) {
       return setIsModalOpen(true);
     }
 
     return onNext();
   }, [
+    item,
+    props.activityDetails,
     conditionallyHiddenItemIds,
     removeItemAnswer,
+    getGroupProgress,
+    flowParams,
+    activityId,
+    eventId,
+    items,
+    step,
     hasNextStep,
-    item,
     onNext,
-    props.activityDetails,
     showWarningNotification,
     t,
+    applet.activityFlows,
+    getSummaryForCurrentActivity,
+    saveGroupContext,
   ]);
 
   const onItemValueChange = (value: Answer) => {

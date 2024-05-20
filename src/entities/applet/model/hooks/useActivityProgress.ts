@@ -36,7 +36,12 @@ export const useActivityProgress = () => {
       let summaryScreenItem: ItemRecord | undefined;
 
       if (isSummaryScreenExist) {
-        summaryScreenItem = mapSummaryScreenToRecord(props.activity.scoresAndReports.reports);
+        summaryScreenItem = mapSummaryScreenToRecord(
+          props.activity.scoresAndReports,
+          props.activity.id,
+          props.activity.name,
+          props.eventId,
+        );
       }
 
       const preparedActivityItemProgressRecords = props.activity.items.map(mapItemToRecord);

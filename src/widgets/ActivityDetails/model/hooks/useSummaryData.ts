@@ -1,16 +1,19 @@
 import { useCallback, useMemo } from 'react';
 
-import { ActivityScore, FlowProgress, getProgressId } from '~/abstract/lib';
+import { ActivityOrFlowProgress, ActivityScore, getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { PassSurveyModel } from '~/features/PassSurvey';
 import { AnswerAlerts, ScoreRecord } from '~/features/PassSurvey/lib';
-import { ActivityDTO } from '~/shared/api';
+import { ScoreAndReports } from '~/shared/api';
 import { useAppSelector } from '~/shared/utils';
 
 type Props = {
-  activity: ActivityDTO;
+  activityId: string;
+  activityName: string;
   eventId: string;
   flowId?: string;
+
+  scoresAndReports: ScoreAndReports;
 };
 
 type UIScore = {
@@ -29,24 +32,22 @@ type UISummaryData = {
   scores: UIActivityScores[];
 };
 
-export const useSummaryData = (props: Props): UISummaryData | null => {
-  const activityRecord = props.activity;
-
+export const useSummaryData = (props: Props) => {
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
 
-  const progressId = getProgressId(activityRecord.id, props.eventId);
+  const progressId = getProgressId(props.activityId, props.eventId);
 
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(state, progressId),
   );
 
   const getSummaryForCurrentActivity = useCallback(() => {
-    if (!activityRecord.scoresAndReports.showScoreSummary) {
+    if (!props.scoresAndReports?.showScoreSummary) {
       return { alerts: [], scores: [] };
     }
 
     const items = activityProgress.items;
-    const reportSettings = activityRecord.scoresAndReports;
+    const reportSettings = props.scoresAndReports;
 
     const extractedAlerts: AnswerAlerts = PassSurveyModel.AlertsExtractor.extractForSummary(items);
 
@@ -56,25 +57,17 @@ export const useSummaryData = (props: Props): UISummaryData | null => {
     );
 
     return { alerts: extractedAlerts, scores: scoreRecords };
-  }, [activityProgress, activityRecord]);
+  }, [activityProgress, props.scoresAndReports]);
 
   const summaryData = useMemo<UISummaryData | null>(() => {
-    if (!props.activity) {
-      return null;
-    }
-
-    const currentActivityName = props.activity.name;
+    const currentActivityName = props.activityName;
 
     const { alerts: currentAlerts, scores: currentScores } = getSummaryForCurrentActivity();
 
-    let flowProgress: FlowProgress | null = null;
-
-    if (props.flowId) {
-      flowProgress = getGroupProgress({
-        entityId: props.flowId,
-        eventId: props.eventId,
-      }) as FlowProgress;
-    }
+    const flowProgress: ActivityOrFlowProgress | null = getGroupProgress({
+      entityId: props.flowId ? props.flowId : props.activityId,
+      eventId: props.eventId,
+    });
 
     if (!flowProgress) {
       return null;
@@ -121,5 +114,8 @@ export const useSummaryData = (props: Props): UISummaryData | null => {
     return result;
   }, [getGroupProgress, getSummaryForCurrentActivity, props]);
 
-  return summaryData;
+  return {
+    getSummaryForCurrentActivity,
+    summaryData,
+  };
 };
