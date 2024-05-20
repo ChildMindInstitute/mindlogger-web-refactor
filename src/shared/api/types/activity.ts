@@ -48,11 +48,13 @@ export type ActivityDTO = {
   isHidden: boolean;
   order: number;
   items: ActivityItemDetailsDTO[];
-  scoresAndReports: {
-    generateReport: boolean;
-    showScoreSummary: boolean;
-    reports: Array<ReportDTO>;
-  };
+  scoresAndReports: ScoreAndReports;
+};
+
+export type ScoreAndReports = {
+  generateReport: boolean;
+  showScoreSummary: boolean;
+  reports: Array<ReportDTO>;
 };
 
 export type ReportDTO = ReportScoreDTO | ReportSectionDTO;

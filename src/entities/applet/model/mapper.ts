@@ -1,6 +1,6 @@
 import { ItemRecord, UserEventResponse } from './types';
 
-import { ActivityItemDetailsDTO, ReportDTO } from '~/shared/api';
+import { ActivityItemDetailsDTO, ScoreAndReports } from '~/shared/api';
 import { dateToDayMonthYear, dateToHourMinute } from '~/shared/utils';
 
 export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventResponse => {
@@ -112,7 +112,12 @@ export function mapSplashScreenToRecord(splashScreen: string): ItemRecord {
   };
 }
 
-export function mapSummaryScreenToRecord(reportsSettings: Array<ReportDTO>): ItemRecord {
+export function mapSummaryScreenToRecord(
+  scoreAndReportSettings: ScoreAndReports,
+  activityId: string,
+  activityName: string,
+  eventId: string,
+): ItemRecord {
   return {
     id: 'summaryScreen',
     name: '',
@@ -121,8 +126,11 @@ export function mapSummaryScreenToRecord(reportsSettings: Array<ReportDTO>): Ite
     responseType: 'summaryScreen',
     config: {
       removeBackButton: true,
-      skippableItem: true,
-      reports: reportsSettings,
+      skippableItem: false,
+      scoresAndReports: scoreAndReportSettings,
+      activityId,
+      activityName,
+      eventId,
     },
     responseValues: null,
     answer: [],
