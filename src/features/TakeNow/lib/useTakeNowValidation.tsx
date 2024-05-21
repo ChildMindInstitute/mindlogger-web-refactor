@@ -5,7 +5,7 @@ import { useActivityByIdQuery } from '~/entities/activity';
 import { useAppletByIdQuery } from '~/entities/applet';
 import { useSubjectQuery } from '~/entities/subject';
 import { useUserState } from '~/entities/user/model/hooks';
-import { useWorkspaceRolesQuery } from '~/entities/workspace';
+import { useWorkspaceAppletRespondent, useWorkspaceRolesQuery } from '~/entities/workspace';
 import { TakeNowParams } from '~/features/TakeNow/lib/TakeNowParams.types';
 import { WorkspaceRole } from '~/shared/api/types/workspace';
 import { useCustomTranslation } from '~/shared/utils';
@@ -42,6 +42,14 @@ export const useTakeNowValidation = ({
     error: sourceSubjectError,
     isLoading: isLoadingSourceSubject,
   } = useSubjectQuery(sourceSubjectId);
+
+  const {
+    isError: isRespondentError,
+    data: respondentData,
+    isLoading: isLoadingRespondent,
+  } = useWorkspaceAppletRespondent(workspaceId ?? '', appletId, respondentId, {
+    enabled: !!workspaceId,
+  });
 
   const {
     isError: isAppletError,
@@ -164,11 +172,33 @@ export const useTakeNowValidation = ({
     return errorState(t('takeNow.invalidRespondent'));
   }
 
+  if (isLoadingRespondent) {
+    return loadingState;
+  }
+
+  if (isRespondentError || !respondentData || !respondentData?.data?.result) {
+    // If we're unable to fetch the subject ID for the current user, we can't start the multi-informant flow
+    // eslint-disable-next-line no-console
+    console.error('Unable to fetch subject ID for current user');
+    return errorState(null);
+  }
+
+  const {
+    subjectId: currentUserSubjectId,
+    nickname: currentUserSubjectNickname,
+    secretUserId: currentUserSecretUserId,
+  } = respondentData.data.result;
+
   return {
     isLoading: false,
     isError: false,
     isSuccess: true,
     data: {
+      currentUserSubject: {
+        id: currentUserSubjectId,
+        nickname: currentUserSubjectNickname,
+        secretId: currentUserSecretUserId,
+      },
       sourceSubject: {
         id: sourceSubjectId,
         nickname: sourceSubjectNickname,
