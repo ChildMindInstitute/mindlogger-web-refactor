@@ -1,5 +1,5 @@
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
-import { MultiInformantBadge } from '~/features/TakeNow';
+import { MultiInformantTooltip } from '~/features/TakeNow';
 import { ROUTES, Theme } from '~/shared/constants';
 import { BaseProgressBar, Box, Text } from '~/shared/ui';
 import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
@@ -48,7 +48,7 @@ export const AssessmentLayoutHeader = (props: Props) => {
         borderBottom: `1px solid ${Theme.colors.light.surfaceVariant}`,
       }}
     >
-      <MultiInformantBadge />
+      <MultiInformantTooltip />
 
       <Box sx={{ gridColumn: '2 / 3' }}>
         <Box

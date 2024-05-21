@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import { SxProps, Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
@@ -33,7 +33,7 @@ type Props = PropsWithChildren<{
   gutterBottom?: boolean;
   lineHeight?: string;
   letterSpacing?: string;
-
+  component?: React.ElementType;
   onClick?: () => void;
 }>;
 
@@ -51,6 +51,7 @@ function Text({
   lineHeight,
   letterSpacing,
   onClick,
+  component,
 }: Props) {
   return (
     <Typography
@@ -63,6 +64,7 @@ function Text({
       lineHeight={lineHeight}
       letterSpacing={letterSpacing}
       onClick={onClick}
+      {...(component ? { component } : {})}
       sx={{ color, padding, margin, ...sx }}
     >
       {children}
