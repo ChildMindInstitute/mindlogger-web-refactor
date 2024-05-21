@@ -60,10 +60,6 @@ export const useSummaryData = (props: Props) => {
   }, [activityProgress, props.scoresAndReports]);
 
   const summaryData = useMemo<UISummaryData | null>(() => {
-    const currentActivityName = props.activityName;
-
-    const { alerts: currentAlerts, scores: currentScores } = getSummaryForCurrentActivity();
-
     const flowProgress: ActivityOrFlowProgress | null = getGroupProgress({
       entityId: props.flowId ? props.flowId : props.activityId,
       eventId: props.eventId,
@@ -90,13 +86,6 @@ export const useSummaryData = (props: Props) => {
       fullScoresList.push(scores);
     }
 
-    fullAlertsList.push(...currentAlerts);
-
-    fullScoresList.push({
-      activityName: currentActivityName,
-      scores: currentScores,
-    });
-
     const result: UISummaryData = {
       alerts: fullAlertsList.map((x) => x.message),
       scores: fullScoresList
@@ -112,7 +101,7 @@ export const useSummaryData = (props: Props) => {
     };
 
     return result;
-  }, [getGroupProgress, getSummaryForCurrentActivity, props]);
+  }, [getGroupProgress, props]);
 
   return {
     getSummaryForCurrentActivity,
