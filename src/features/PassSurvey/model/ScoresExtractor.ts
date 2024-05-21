@@ -25,13 +25,15 @@ class ScoresExtractor {
       return null;
     }
 
+    const fixedScore = Number(score.toFixed(2));
+
     const conditionLogicResults: Array<boolean> = scoreSettings.conditionalLogic
       .filter((x) => x.flagScore)
-      .map((conditions) => this.conditionsEvaluator.evaluate(conditions, score));
+      .map((conditions) => this.conditionsEvaluator.evaluate(conditions, fixedScore));
 
     return {
       name: scoreSettings.type === 'score' ? scoreSettings.name : '',
-      value: score,
+      value: fixedScore,
       flagged: conditionLogicResults.some((x) => x),
     };
   }

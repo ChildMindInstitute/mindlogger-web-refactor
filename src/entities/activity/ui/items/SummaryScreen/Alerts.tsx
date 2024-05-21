@@ -13,12 +13,7 @@ export const Alerts = ({ alerts }: Props) => {
   const { t } = useCustomTranslation();
 
   return (
-    <Box
-      padding="24px 32px"
-      bgcolor={Theme.colors.light.errorVariant10}
-      borderRadius="12px"
-      marginTop="24px"
-    >
+    <Box padding="24px 32px" bgcolor={Theme.colors.light.errorVariant10} borderRadius="12px">
       <Text fontWeight="600" fontSize="24px" lineHeight="32px">
         {t('alerts')}
       </Text>

@@ -1,4 +1,7 @@
+import { Divider } from '@mui/material';
+
 import { Alerts } from './Alerts';
+import { ScoreSection } from './ScoreSection';
 import { SummaryScreenItem } from '../../../lib';
 
 import Box from '~/shared/ui/Box';
@@ -28,7 +31,21 @@ export const SummaryScreen = (props: Props) => {
         <Text fontWeight="400" fontSize="40px" lineHeight="54px">
           {t('reportSummary')}
         </Text>
-        {summaryData && summaryData.alerts.length > 0 && <Alerts alerts={summaryData.alerts} />}
+        {summaryData && summaryData.alerts.length > 0 && (
+          <Box margin="16px 0px">
+            <Alerts alerts={summaryData.alerts} />
+          </Box>
+        )}
+        <Box>
+          {summaryData &&
+            summaryData.scores.length > 0 &&
+            summaryData.scores.map((score, index) => (
+              <Box key={index}>
+                <Divider sx={{ margin: '16px 0px' }} />
+                <ScoreSection score={score} />
+              </Box>
+            ))}
+        </Box>
       </Box>
     </Box>
   );

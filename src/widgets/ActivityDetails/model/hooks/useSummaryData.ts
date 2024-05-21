@@ -16,18 +16,18 @@ type Props = {
   scoresAndReports: ScoreAndReports;
 };
 
-type UIScore = {
+export type UIScore = {
   label: string;
   value: number;
   highlighted: boolean;
 };
 
-type UIActivityScores = {
+export type UIActivityScores = {
   activityName: string;
   scores: Array<UIScore>;
 };
 
-type UISummaryData = {
+export type UISummaryData = {
   alerts: string[];
   scores: UIActivityScores[];
 };
