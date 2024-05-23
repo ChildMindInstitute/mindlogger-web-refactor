@@ -69,7 +69,7 @@ export const useSummaryData = (props: Props) => {
       return null;
     }
 
-    const flowSummaryData = flowProgress.context.summaryData;
+    const flowSummaryData = flowProgress.context?.summaryData ?? {};
 
     let activityIds = Object.keys(flowSummaryData);
 
