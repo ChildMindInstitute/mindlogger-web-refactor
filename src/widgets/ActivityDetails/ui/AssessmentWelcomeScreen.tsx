@@ -5,11 +5,12 @@ import { AssessmentLayout } from './AssessmentLayout';
 import { ActivityDetailsContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
-import { StartAssessmentButton } from '~/features/StartAssessment';
+import { StartAssessmentButton } from '~/features/PassSurvey';
 import { ActivityDTO } from '~/shared/api';
 import { Theme } from '~/shared/constants';
-import { Box } from '~/shared/ui';
-import { AvatarBase, Text } from '~/shared/ui';
+import { AvatarBase } from '~/shared/ui/Avatar';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 import { useCustomMediaQuery, useFlowType } from '~/shared/utils';
 
 type Props = {
@@ -36,12 +37,13 @@ export const AssessmentWelcomeScreen = (props: Props) => {
   return (
     <AssessmentLayout
       activityName={props.activityDetails.name}
-      progress={0}
       appletId={context.appletId}
+      progress={0}
       activityId={props.activityDetails.id}
       eventId={context.eventId}
       isPublic={context.isPublic}
       publicAppletKey={context.isPublic ? context.publicAppletKey : null}
+      isSaveAndExitButtonShown={true}
       footerActions={
         <StartAssessmentButton
           width={greaterThanSM ? '375px' : '335px'}

@@ -13,7 +13,8 @@ type Props = {
   isPublic: boolean;
   publicKey: string | null;
 
-  progress: number;
+  progress?: number;
+  isSaveAndExitButtonShown: boolean;
 };
 
 export const AssessmentLayoutHeader = (props: Props) => {
@@ -64,12 +65,16 @@ export const AssessmentLayoutHeader = (props: Props) => {
           >
             {greaterThanSM ? props.title : cutStringToLength(props.title, 30)}
           </Text>
-          {!greaterThanSM && <SaveAndExitButton onClick={onSaveAndExitClick} />}
+          {!greaterThanSM && props.isSaveAndExitButtonShown && (
+            <SaveAndExitButton onClick={onSaveAndExitClick} />
+          )}
         </Box>
-        <BaseProgressBar percentage={props.progress} testid="assessment-activity-progress-bar" />
+        {props.progress !== undefined && (
+          <BaseProgressBar percentage={props.progress} testid="assessment-activity-progress-bar" />
+        )}
       </Box>
 
-      {greaterThanSM && (
+      {greaterThanSM && props.isSaveAndExitButtonShown && (
         <Box
           width="125px"
           height="100%"

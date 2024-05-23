@@ -7,14 +7,14 @@ type ItemCardButtonsProps = {
   isLoading: boolean;
   isBackShown: boolean;
 
-  backButtonText: string;
+  backButtonText?: string;
   nextButtonText: string;
 
   onBackButtonClick?: () => void;
   onNextButtonClick: () => void;
 };
 
-export const ItemCardButton = ({
+export const SurveyManageButtons = ({
   isBackShown,
   onBackButtonClick,
   onNextButtonClick,

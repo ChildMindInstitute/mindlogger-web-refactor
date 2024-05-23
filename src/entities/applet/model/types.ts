@@ -1,4 +1,4 @@
-import { GroupProgress } from '~/abstract/lib';
+import { GroupProgress, ProgressContext } from '~/abstract/lib';
 import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
 import {
   Answer,
@@ -20,6 +20,7 @@ import {
   TimeItem,
   TimeRangeItem,
 } from '~/entities/activity/lib';
+import { ScoreAndReports } from '~/shared/api';
 import { DayMonthYearDTO, HourMinuteDTO } from '~/shared/utils';
 
 export type UserEventTypes = 'SET_ANSWER' | 'PREV' | 'NEXT' | 'SKIP' | 'DONE';
@@ -92,6 +93,8 @@ export type ActivityProgress = {
   items: ItemRecord[];
   step: number;
   userEvents: Array<UserEvents>;
+  isSummaryScreenOpen: boolean;
+  scoreSettings?: ScoreAndReports;
 };
 
 type ProgressId = string; // Progress ID is a combination of activityId and eventId (activityId/eventId)
@@ -106,6 +109,12 @@ export type SaveActivityProgressPayload = {
   progress: ActivityProgress;
 };
 
+export type ChangeSummaryScreenVisibilityPayload = {
+  activityId: string;
+  eventId: string;
+  isSummaryScreenOpen: boolean;
+};
+
 export type RemoveActivityProgressPayload = {
   activityId: string;
   eventId: string;
@@ -115,6 +124,12 @@ export type SaveGroupProgressPayload = {
   activityId: string;
   eventId: string;
   progressPayload: GroupProgress;
+};
+
+export type SaveGroupContextPayload = {
+  activityId: string;
+  eventId: string;
+  context: ProgressContext;
 };
 
 export type SaveItemAnswerPayload = {

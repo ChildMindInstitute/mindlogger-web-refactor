@@ -7,6 +7,7 @@ type FlowReturn = {
 
 type RegularReturn = {
   isFlow: false;
+  flowId: null;
 };
 
 type Return = FlowReturn | RegularReturn;
@@ -26,5 +27,5 @@ export const useFlowType = (): Return => {
     };
   }
 
-  return { isFlow: false };
+  return { isFlow: false, flowId: null };
 };

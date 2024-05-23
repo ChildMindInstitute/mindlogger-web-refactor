@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidV4 } from 'uuid';
 
 import {
+  ChangeSummaryScreenVisibilityPayload,
   CompletedEntitiesState,
   CompletedEventEntities,
   InProgressActivity,
@@ -11,6 +12,7 @@ import {
   ProgressState,
   RemoveActivityProgressPayload,
   SaveActivityProgressPayload,
+  SaveGroupContextPayload,
   SaveGroupProgressPayload,
   SaveItemAdditionalTextPayload,
   SaveItemAnswerPayload,
@@ -71,10 +73,37 @@ const appletsSlice = createSlice({
       state.groupProgress[id] = updatedProgress;
     },
 
+    saveGroupContext: (state, action: PayloadAction<SaveGroupContextPayload>) => {
+      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+
+      const groupProgress = state.groupProgress[id] ?? {};
+
+      const updatedContext = {
+        ...groupProgress.context,
+        ...action.payload.context,
+      };
+
+      state.groupProgress[id] = {
+        ...groupProgress,
+        context: updatedContext,
+      };
+    },
+
     saveActivityProgress: (state, action: PayloadAction<SaveActivityProgressPayload>) => {
       const id = getProgressId(action.payload.activityId, action.payload.eventId);
 
       state.progress[id] = action.payload.progress;
+    },
+
+    changeSummaryScreenVisibility: (
+      state,
+      action: PayloadAction<ChangeSummaryScreenVisibilityPayload>,
+    ) => {
+      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+
+      const activityProgress = state.progress[id];
+
+      activityProgress.isSummaryScreenOpen = action.payload.isSummaryScreenOpen;
     },
 
     saveItemAnswer: (state, action: PayloadAction<SaveItemAnswerPayload>) => {
@@ -165,6 +194,9 @@ const appletsSlice = createSlice({
         type: ActivityPipelineType.Regular,
         startAt: new Date().getTime(),
         endAt: null,
+        context: {
+          summaryData: {},
+        },
       };
 
       state.groupProgress[id] = activityEvent;
@@ -181,6 +213,9 @@ const appletsSlice = createSlice({
         endAt: null,
         executionGroupKey: uuidV4(),
         pipelineActivityOrder: action.payload.pipelineActivityOrder,
+        context: {
+          summaryData: {},
+        },
       };
 
       state.groupProgress[id] = flowEvent;

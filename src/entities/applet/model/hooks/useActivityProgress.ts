@@ -31,23 +31,49 @@ export const useActivityProgress = () => {
         splashScreenItem = mapSplashScreenToRecord(props.activity.splashScreen);
       }
 
-      const preparedActivityItemProgressRecords = props.activity.items.map((item) => {
-        return mapItemToRecord(item);
-      });
+      const preparedActivityItemProgressRecords = props.activity.items.map(mapItemToRecord);
 
-      const items = splashScreenItem
-        ? [splashScreenItem, ...preparedActivityItemProgressRecords]
-        : preparedActivityItemProgressRecords;
+      if (splashScreenItem) {
+        preparedActivityItemProgressRecords.unshift(splashScreenItem);
+      }
 
       return dispatch(
         actions.saveActivityProgress({
           activityId: props.activity.id,
           eventId: props.eventId,
           progress: {
-            items,
+            items: preparedActivityItemProgressRecords,
             step: initialStep,
             userEvents: [],
+            isSummaryScreenOpen: false,
+            scoreSettings: props.activity.scoresAndReports,
           },
+        }),
+      );
+    },
+    [dispatch],
+  );
+
+  const openSummaryScreen = useCallback(
+    (props: UpdateStepProps) => {
+      dispatch(
+        actions.changeSummaryScreenVisibility({
+          activityId: props.activityId,
+          eventId: props.eventId,
+          isSummaryScreenOpen: true,
+        }),
+      );
+    },
+    [dispatch],
+  );
+
+  const closeSummaryScreen = useCallback(
+    (props: UpdateStepProps) => {
+      dispatch(
+        actions.changeSummaryScreenVisibility({
+          activityId: props.activityId,
+          eventId: props.eventId,
+          isSummaryScreenOpen: false,
         }),
       );
     },
@@ -72,5 +98,7 @@ export const useActivityProgress = () => {
     setInitialProgress,
     incrementStep,
     decrementStep,
+    openSummaryScreen,
+    closeSummaryScreen,
   };
 };

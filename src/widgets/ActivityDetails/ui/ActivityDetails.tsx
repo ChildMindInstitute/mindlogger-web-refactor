@@ -2,6 +2,7 @@ import { useContext } from 'react';
 
 import { AssessmentLoadingScreen } from './AssessmentLoadingScreen';
 import { AssessmentPassingScreen } from './AssessmentPassingScreen';
+import { AssessmentSummaryScreen } from './AssessmentSummaryScreen';
 import { AssessmentWelcomeScreen } from './AssessmentWelcomeScreen';
 import { ActivityDetailsContext } from '../lib';
 import * as activityDetailsModel from '../model';
@@ -23,6 +24,8 @@ export const ActivityDetailsWidget = () => {
   );
 
   const items = activityProgress?.items ?? [];
+
+  const showSummaryScreen = activityProgress?.isSummaryScreenOpen ?? false;
 
   const isActivityStarted = items.length > 0;
 
@@ -60,6 +63,17 @@ export const ActivityDetailsWidget = () => {
 
   if (!isActivityStarted) {
     return <AssessmentWelcomeScreen activityDetails={activityDetails} />;
+  }
+
+  if (showSummaryScreen) {
+    return (
+      <AssessmentSummaryScreen
+        appletDetails={appletDetails}
+        activityDetails={activityDetails}
+        eventsRawData={eventsRawData}
+        respondentMeta={respondentMeta}
+      />
+    );
   }
 
   return (

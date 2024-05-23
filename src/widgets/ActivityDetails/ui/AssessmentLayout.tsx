@@ -9,7 +9,7 @@ import { NotificationCenter } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
   activityName: string;
-  progress: number;
+  progress?: number;
 
   isPublic: boolean;
   publicAppletKey: string | null;
@@ -17,6 +17,8 @@ type Props = PropsWithChildren<{
   appletId: string;
   activityId: string;
   eventId: string;
+
+  isSaveAndExitButtonShown: boolean;
 
   footerActions?: React.ReactNode;
 }>;
@@ -38,6 +40,7 @@ export const AssessmentLayout = (props: Props) => {
         eventId={props.eventId}
         isPublic={props.isPublic}
         publicKey={props.isPublic ? props.publicAppletKey : null}
+        isSaveAndExitButtonShown={props.isSaveAndExitButtonShown}
       />
 
       <Box
