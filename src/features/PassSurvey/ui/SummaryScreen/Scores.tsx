@@ -1,9 +1,10 @@
 import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
 
+import { UIScore } from '../../hooks';
+
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { UIScore } from '~/widgets/ActivityDetails/model/hooks/useSummaryData';
 
 type Props = {
   scores: Array<UIScore>;

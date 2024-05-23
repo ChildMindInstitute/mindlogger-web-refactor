@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidV4 } from 'uuid';
 
 import {
+  ChangeSummaryScreenVisibilityPayload,
   CompletedEntitiesState,
   CompletedEventEntities,
   InProgressActivity,
@@ -92,6 +93,17 @@ const appletsSlice = createSlice({
       const id = getProgressId(action.payload.activityId, action.payload.eventId);
 
       state.progress[id] = action.payload.progress;
+    },
+
+    changeSummaryScreenVisibility: (
+      state,
+      action: PayloadAction<ChangeSummaryScreenVisibilityPayload>,
+    ) => {
+      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+
+      const activityProgress = state.progress[id];
+
+      activityProgress.isSummaryScreenOpen = action.payload.isSummaryScreenOpen;
     },
 
     saveItemAnswer: (state, action: PayloadAction<SaveItemAnswerPayload>) => {

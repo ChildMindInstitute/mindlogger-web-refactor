@@ -13,7 +13,7 @@ type Props = {
   eventId: string;
   flowId?: string;
 
-  scoresAndReports: ScoreAndReports;
+  scoresAndReports?: ScoreAndReports;
 };
 
 export type UIScore = {

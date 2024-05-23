@@ -1,4 +1,4 @@
-import { ConditionalLogic, ScoreAndReports } from '~/shared/api';
+import { ConditionalLogic } from '~/shared/api';
 
 export type DefaultAnswer = Array<string>;
 export type MatrixMultiSelectAnswer = Array<Array<string | null>>;
@@ -31,8 +31,7 @@ export type ActivityItemType =
   | 'audio'
   | 'audioPlayer'
   | 'unsupportable'
-  | 'splashScreen'
-  | 'summaryScreen';
+  | 'splashScreen';
 
 export type ButtonsConfig = {
   removeBackButton: boolean;
@@ -80,7 +79,6 @@ export type Config =
   | SliderItemConfig
   | SelectorItemConfig
   | SplashScreenItemConfig
-  | SummaryScreenItemConfig
   | MessageItemConfig
   | DateItemConfig
   | TimeItemItemConfig
@@ -236,20 +234,6 @@ export interface SplashScreenItem extends ActivityItemBase {
 
 export type SplashScreenItemConfig = ButtonsConfig & {
   imageSrc: string;
-};
-
-export interface SummaryScreenItem extends ActivityItemBase {
-  responseType: 'summaryScreen';
-  config: SummaryScreenItemConfig;
-  responseValues: EmptyResponseValues;
-  answer: DefaultAnswer;
-}
-
-export type SummaryScreenItemConfig = ButtonsConfig & {
-  scoresAndReports: ScoreAndReports;
-  activityId: string;
-  eventId: string;
-  activityName: string;
 };
 
 export interface MessageItem extends ActivityItemBase {

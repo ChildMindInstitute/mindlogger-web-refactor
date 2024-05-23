@@ -8,7 +8,6 @@ import { RadioItem } from './RadioItem';
 import { SelectorItem } from './SelectorItem';
 import { SliderItem } from './SliderItem';
 import { SplashScreen } from './SplashScreen';
-import { SummaryScreen } from './SummaryScreen';
 import { TextItem } from './TextItem';
 import { TimeItem } from './TimeItem';
 import { TimeRangeItem } from './TimeRangeItem';
@@ -28,9 +27,6 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
   switch (item.responseType) {
     case 'splashScreen':
       return <SplashScreen imageSrc={item.config.imageSrc} />;
-
-    case 'summaryScreen':
-      return <SummaryScreen item={item} />;
 
     case 'text':
       return (

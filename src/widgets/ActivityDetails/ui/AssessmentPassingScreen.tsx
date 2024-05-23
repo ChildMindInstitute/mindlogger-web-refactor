@@ -10,9 +10,8 @@ import {
   useSubmitAnswersMutations,
   useSurvey,
 } from '../model/hooks';
-import { useSummaryData } from '../model/hooks/useSummaryData';
 
-import { ActivityPipelineType, FlowSummaryData, getProgressId } from '~/abstract/lib';
+import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import {
   ActivityCardItem,
   Answer,
@@ -20,6 +19,7 @@ import {
   useTextVariablesReplacer,
 } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
+import { useSummaryData } from '~/features/PassSurvey/hooks';
 import {
   ActivityDTO,
   AppletDetailsDTO,
@@ -71,7 +71,8 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const items = useMemo(() => activityProgress?.items ?? [], [activityProgress.items]);
 
-  const { incrementStep, decrementStep } = appletModel.hooks.useActivityProgress();
+  const { incrementStep, decrementStep, openSummaryScreen } =
+    appletModel.hooks.useActivityProgress();
 
   const { saveUserEventByType, saveSetAnswerUserEvent, saveSetAdditionalTextUserEvent } =
     appletModel.hooks.useUserEvents({
@@ -114,8 +115,62 @@ export const AssessmentPassingScreen = (props: Props) => {
     completedEntityTime: completedEntities[activityId],
   });
 
-  const onSubmitSuccess = () =>
-    flowParams.isFlow ? completeFlow(flowParams.flowId) : completeActivity();
+  const onSubmitSuccess = () => {
+    const groupProgress = getGroupProgress({
+      entityId: flowParams.isFlow ? flowParams.flowId : activityId,
+      eventId,
+    });
+
+    const isFlowGroup = groupProgress?.type === ActivityPipelineType.Flow;
+
+    const summaryData = getSummaryForCurrentActivity();
+
+    const summaryDataContext: FlowSummaryData = {
+      alerts: summaryData.alerts,
+      scores: {
+        activityName: props.activityDetails.name,
+        scores: summaryData.scores,
+      },
+      order: isFlowGroup ? groupProgress.pipelineActivityOrder : 0,
+    };
+
+    saveGroupContext({
+      activityId: flowParams.isFlow ? flowParams.flowId : activityId,
+      eventId,
+      context: {
+        summaryData: {
+          ...groupProgress?.context.summaryData,
+          [activityId]: summaryDataContext,
+        },
+      },
+    });
+
+    const showSummaryScreen = props.activityDetails.scoresAndReports.showScoreSummary;
+
+    if (!showSummaryScreen) {
+      return flowParams.isFlow ? completeFlow(flowParams.flowId) : completeActivity();
+    }
+
+    if (!isFlowGroup && !flowParams.isFlow) {
+      // Show summary screen
+      return openSummaryScreen({ activityId, eventId });
+    }
+
+    const currentFlow = applet.activityFlows.find((flow) => flow.id === flowParams.flowId);
+
+    const nextActivityIndex = (groupProgress as FlowProgress).pipelineActivityOrder + 1;
+
+    const nextActivity = currentFlow?.activityIds[nextActivityIndex] ?? null;
+
+    const isLastActivity = nextActivity === null;
+
+    if (isLastActivity) {
+      // Show summary screen
+      return openSummaryScreen({ activityId, eventId });
+    }
+
+    return flowParams.isFlow ? completeFlow(flowParams.flowId) : completeActivity();
+  };
 
   const { submitAnswers, isLoading } = useSubmitAnswersMutations({
     onSubmitSuccess,
@@ -197,60 +252,7 @@ export const AssessmentPassingScreen = (props: Props) => {
 
     conditionallyHiddenItemIds?.forEach(removeItemAnswer);
 
-    // Should send answers if:
-    // 1. Has no next step
-    // or
-    // 2. has next step but, the next step is summaryScreen and we in flow and it's not the last activity in flow
-
-    const groupProgress = getGroupProgress({
-      entityId: flowParams.isFlow ? flowParams.flowId : activityId,
-      eventId,
-    });
-
-    let isLastActivityInFlow = false;
-
-    const isFlowGroup = groupProgress?.type === ActivityPipelineType.Flow;
-
-    if (groupProgress && isFlowGroup) {
-      const currentPipelineActivityOrder = groupProgress.pipelineActivityOrder;
-
-      const currentFlow = applet.activityFlows.find((flow) => flow.id === flowParams.flowId);
-
-      const nextActivity = currentFlow?.activityIds[currentPipelineActivityOrder + 1] ?? null;
-
-      isLastActivityInFlow = nextActivity === null;
-    }
-
-    const isNextItemSummaryScreen = items[step + 1]?.responseType === 'summaryScreen';
-
-    if (isNextItemSummaryScreen) {
-      const summaryData = getSummaryForCurrentActivity();
-
-      const summaryDataContext: FlowSummaryData = {
-        alerts: summaryData.alerts,
-        scores: {
-          activityName: props.activityDetails.name,
-          scores: summaryData.scores,
-        },
-        order: isFlowGroup ? groupProgress.pipelineActivityOrder : 0,
-      };
-
-      saveGroupContext({
-        activityId: flowParams.isFlow ? flowParams.flowId : activityId,
-        eventId,
-        context: {
-          summaryData: {
-            ...groupProgress?.context.summaryData,
-            [activityId]: summaryDataContext,
-          },
-        },
-      });
-    }
-
-    const skipSummaryAndSubmit =
-      hasNextStep && isNextItemSummaryScreen && flowParams.isFlow && !isLastActivityInFlow;
-
-    if (!hasNextStep || skipSummaryAndSubmit) {
+    if (!hasNextStep) {
       return setIsModalOpen(true);
     }
 
@@ -260,19 +262,10 @@ export const AssessmentPassingScreen = (props: Props) => {
     props.activityDetails,
     conditionallyHiddenItemIds,
     removeItemAnswer,
-    getGroupProgress,
-    flowParams,
-    activityId,
-    eventId,
-    items,
-    step,
     hasNextStep,
     onNext,
     showWarningNotification,
     t,
-    applet.activityFlows,
-    getSummaryForCurrentActivity,
-    saveGroupContext,
   ]);
 
   const onItemValueChange = (value: Answer) => {
@@ -314,7 +307,7 @@ export const AssessmentPassingScreen = (props: Props) => {
             isBackShown={hasPrevStep && canGoBack}
             onBackButtonClick={onBack}
             onNextButtonClick={onMoveForward}
-            backButtonText={t('Consent.back')}
+            backButtonText={t('Consent.back') ?? undefined}
             nextButtonText={t('Consent.next')}
           />
         }

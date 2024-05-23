@@ -1,8 +1,8 @@
 import { Scores } from './Scores';
+import { UIActivityScores } from '../../hooks';
 
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { UIActivityScores } from '~/widgets/ActivityDetails/model/hooks/useSummaryData';
 
 type Props = {
   score: UIActivityScores;

@@ -7,7 +7,7 @@ type ItemCardButtonsProps = {
   isLoading: boolean;
   isBackShown: boolean;
 
-  backButtonText: string;
+  backButtonText?: string;
   nextButtonText: string;
 
   onBackButtonClick?: () => void;

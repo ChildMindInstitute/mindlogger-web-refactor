@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { mapItemToRecord, mapSplashScreenToRecord, mapSummaryScreenToRecord } from '../mapper';
+import { mapItemToRecord, mapSplashScreenToRecord } from '../mapper';
 import { actions } from '../slice';
 import { ItemRecord } from '../types';
 
@@ -31,27 +31,10 @@ export const useActivityProgress = () => {
         splashScreenItem = mapSplashScreenToRecord(props.activity.splashScreen);
       }
 
-      const isSummaryScreenExist = props.activity.scoresAndReports?.showScoreSummary;
-
-      let summaryScreenItem: ItemRecord | undefined;
-
-      if (isSummaryScreenExist) {
-        summaryScreenItem = mapSummaryScreenToRecord(
-          props.activity.scoresAndReports,
-          props.activity.id,
-          props.activity.name,
-          props.eventId,
-        );
-      }
-
       const preparedActivityItemProgressRecords = props.activity.items.map(mapItemToRecord);
 
       if (splashScreenItem) {
         preparedActivityItemProgressRecords.unshift(splashScreenItem);
-      }
-
-      if (summaryScreenItem) {
-        preparedActivityItemProgressRecords.push(summaryScreenItem);
       }
 
       return dispatch(
@@ -62,7 +45,35 @@ export const useActivityProgress = () => {
             items: preparedActivityItemProgressRecords,
             step: initialStep,
             userEvents: [],
+            isSummaryScreenOpen: false,
+            scoreSettings: props.activity.scoresAndReports,
           },
+        }),
+      );
+    },
+    [dispatch],
+  );
+
+  const openSummaryScreen = useCallback(
+    (props: UpdateStepProps) => {
+      dispatch(
+        actions.changeSummaryScreenVisibility({
+          activityId: props.activityId,
+          eventId: props.eventId,
+          isSummaryScreenOpen: true,
+        }),
+      );
+    },
+    [dispatch],
+  );
+
+  const closeSummaryScreen = useCallback(
+    (props: UpdateStepProps) => {
+      dispatch(
+        actions.changeSummaryScreenVisibility({
+          activityId: props.activityId,
+          eventId: props.eventId,
+          isSummaryScreenOpen: false,
         }),
       );
     },
@@ -87,5 +98,7 @@ export const useActivityProgress = () => {
     setInitialProgress,
     incrementStep,
     decrementStep,
+    openSummaryScreen,
+    closeSummaryScreen,
   };
 };

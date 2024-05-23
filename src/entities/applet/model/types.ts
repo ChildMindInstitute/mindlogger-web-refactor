@@ -16,11 +16,11 @@ import {
   SliderRowsAnswer,
   SliderRowsItem,
   SplashScreenItem,
-  SummaryScreenItem,
   TextItem,
   TimeItem,
   TimeRangeItem,
 } from '~/entities/activity/lib';
+import { ScoreAndReports } from '~/shared/api';
 import { DayMonthYearDTO, HourMinuteDTO } from '~/shared/utils';
 
 export type UserEventTypes = 'SET_ANSWER' | 'PREV' | 'NEXT' | 'SKIP' | 'DONE';
@@ -68,7 +68,6 @@ export type ItemRecord =
   | SliderItem
   | SelectorItem
   | SplashScreenItem
-  | SummaryScreenItem
   | MessageItem
   | DateItem
   | TimeItem
@@ -94,6 +93,8 @@ export type ActivityProgress = {
   items: ItemRecord[];
   step: number;
   userEvents: Array<UserEvents>;
+  isSummaryScreenOpen: boolean;
+  scoreSettings?: ScoreAndReports;
 };
 
 type ProgressId = string; // Progress ID is a combination of activityId and eventId (activityId/eventId)
@@ -106,6 +107,12 @@ export type SaveActivityProgressPayload = {
   activityId: string;
   eventId: string;
   progress: ActivityProgress;
+};
+
+export type ChangeSummaryScreenVisibilityPayload = {
+  activityId: string;
+  eventId: string;
+  isSummaryScreenOpen: boolean;
 };
 
 export type RemoveActivityProgressPayload = {

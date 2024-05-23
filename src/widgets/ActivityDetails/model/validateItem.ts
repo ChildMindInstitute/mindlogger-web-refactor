@@ -7,9 +7,8 @@ import { stringContainsOnlyNumbers, validateDate, validateTime } from '~/shared/
 function isAnswerShouldBeEmpty(item: appletModel.ItemRecord) {
   const isMessageItem = item.responseType === 'message';
   const isAudioPlayerItem = item.responseType === 'audioPlayer';
-  const isSummaryScreenItem = item.responseType === 'summaryScreen';
 
-  const isItemWithoutAnswer = isMessageItem || isAudioPlayerItem || isSummaryScreenItem;
+  const isItemWithoutAnswer = isMessageItem || isAudioPlayerItem;
 
   return isItemWithoutAnswer;
 }
