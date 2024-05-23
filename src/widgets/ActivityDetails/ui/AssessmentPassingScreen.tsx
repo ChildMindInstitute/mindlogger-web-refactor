@@ -12,22 +12,17 @@ import {
 } from '../model/hooks';
 
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
-import {
-  ActivityCardItem,
-  Answer,
-  ItemCardButton,
-  useTextVariablesReplacer,
-} from '~/entities/activity';
+import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
-import { useSummaryData } from '~/features/PassSurvey/hooks';
+import { SurveyManageButtons, useSummaryData } from '~/features/PassSurvey';
 import {
   ActivityDTO,
   AppletDetailsDTO,
   AppletEventsResponse,
   RespondentMetaDTO,
 } from '~/shared/api';
-import { Box } from '~/shared/ui';
 import { MuiModal, useNotification } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation, useFlowType, usePrevious } from '~/shared/utils';
 
 type Props = {
@@ -302,7 +297,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         isPublic={context.isPublic}
         publicAppletKey={context.isPublic ? context.publicAppletKey : null}
         footerActions={
-          <ItemCardButton
+          <SurveyManageButtons
             isLoading={false}
             isBackShown={hasPrevStep && canGoBack}
             onBackButtonClick={onBack}

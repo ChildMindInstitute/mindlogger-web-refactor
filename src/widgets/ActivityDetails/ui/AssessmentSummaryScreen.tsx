@@ -4,8 +4,7 @@ import { AssessmentLayout } from './AssessmentLayout';
 import { ActivityDetailsContext } from '../lib';
 import { useEntityComplete } from '../model/hooks';
 
-import { ItemCardButton } from '~/entities/activity';
-import { SummaryScreen } from '~/features/PassSurvey';
+import { SummaryScreen, SurveyManageButtons } from '~/features/PassSurvey';
 import {
   ActivityDTO,
   AppletDetailsDTO,
@@ -36,8 +35,6 @@ export const AssessmentSummaryScreen = (props: Props) => {
 
   const eventId = context.eventId;
 
-  // const { closeSummaryScreen } = appletModel.hooks.useActivityProgress();
-
   const { completeActivity, completeFlow } = useEntityComplete({
     applet,
     activityId,
@@ -60,7 +57,7 @@ export const AssessmentSummaryScreen = (props: Props) => {
       isPublic={context.isPublic}
       publicAppletKey={context.isPublic ? context.publicAppletKey : null}
       footerActions={
-        <ItemCardButton
+        <SurveyManageButtons
           isLoading={false}
           isBackShown={false}
           onNextButtonClick={onFinish}

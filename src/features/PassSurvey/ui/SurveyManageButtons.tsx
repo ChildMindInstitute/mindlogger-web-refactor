@@ -14,7 +14,7 @@ type ItemCardButtonsProps = {
   onNextButtonClick: () => void;
 };
 
-export const ItemCardButton = ({
+export const SurveyManageButtons = ({
   isBackShown,
   onBackButtonClick,
   onNextButtonClick,
