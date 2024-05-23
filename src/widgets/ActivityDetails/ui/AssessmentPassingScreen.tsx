@@ -296,6 +296,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         eventId={eventId}
         isPublic={context.isPublic}
         publicAppletKey={context.isPublic ? context.publicAppletKey : null}
+        isSaveAndExitButtonShown={true}
         footerActions={
           <SurveyManageButtons
             isLoading={false}

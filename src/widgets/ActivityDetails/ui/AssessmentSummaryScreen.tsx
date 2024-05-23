@@ -50,18 +50,19 @@ export const AssessmentSummaryScreen = (props: Props) => {
   return (
     <AssessmentLayout
       activityName={props.activityDetails.name}
-      progress={100}
       appletId={applet.id}
       activityId={activityId}
       eventId={eventId}
+      progress={100}
       isPublic={context.isPublic}
       publicAppletKey={context.isPublic ? context.publicAppletKey : null}
+      isSaveAndExitButtonShown={false}
       footerActions={
         <SurveyManageButtons
           isLoading={false}
           isBackShown={false}
           onNextButtonClick={onFinish}
-          nextButtonText={t('Consent.next')}
+          nextButtonText={t('Consent.close')}
         />
       }
     >

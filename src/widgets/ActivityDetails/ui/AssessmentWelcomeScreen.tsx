@@ -37,12 +37,13 @@ export const AssessmentWelcomeScreen = (props: Props) => {
   return (
     <AssessmentLayout
       activityName={props.activityDetails.name}
-      progress={0}
       appletId={context.appletId}
+      progress={0}
       activityId={props.activityDetails.id}
       eventId={context.eventId}
       isPublic={context.isPublic}
       publicAppletKey={context.isPublic ? context.publicAppletKey : null}
+      isSaveAndExitButtonShown={true}
       footerActions={
         <StartAssessmentButton
           width={greaterThanSM ? '375px' : '335px'}
