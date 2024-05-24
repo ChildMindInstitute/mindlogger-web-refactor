@@ -2,6 +2,7 @@ import { IAppletIntegration } from './AppletIntegrationsService';
 import { selectConsents } from '../selectors';
 import { actions } from '../slice';
 
+import { Consents } from '~/abstract/lib';
 import { AppletDetailsBaseInfoDTO } from '~/shared/api';
 import { AppDispatch, RootState } from '~/shared/utils';
 
@@ -16,10 +17,14 @@ class LorisAppletIntegration implements IAppletIntegration {
     this.state = state;
   }
 
-  private getAppletConsents(appletId: string) {
+  private getAppletConsents(appletId: string): Consents | null {
     const consents = selectConsents(this.state);
 
-    const appletConsents = consents[appletId];
+    if (!consents) {
+      return null;
+    }
+
+    const appletConsents = consents[appletId] ?? null;
 
     return appletConsents;
   }
