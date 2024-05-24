@@ -32,10 +32,6 @@ export const ActivityGroups = (props: Props) => {
     data: applet,
   } = useAppletBaseInfoByIdQuery(props, { select: (data) => data.data.result });
 
-  if (applet) {
-    applet.integrations = ['loris'];
-  }
-
   const {
     isError: isEventsError,
     isLoading: isEventsLoading,

@@ -108,7 +108,7 @@ export type AnswerPayload = {
   activityId: ID;
   alerts: Array<AlertDTO>;
   isFlowCompleted: boolean;
-  isDataShare: boolean;
+  isDataShare?: boolean;
   client: {
     appId: 'mindlogger-web';
     appVersion: string;

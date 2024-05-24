@@ -38,7 +38,7 @@ export const useAnswer = (props: Props) => {
 
   const consents = useAppSelector(appletModel.selectors.selectConsents);
 
-  const appletConsents = consents?.[props.applet.id];
+  const appletConsents = consents[props.applet.id] ?? null;
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
   const { getMultiInformantState, isInMultiInformantFlow } =
@@ -122,7 +122,7 @@ export const useAnswer = (props: Props) => {
         version: props.applet.version,
         createdAt: new Date().getTime(),
         isFlowCompleted: isFlow ? isFlowCompleted : true,
-        isDataShare: appletConsents?.shareToPublic ?? false,
+        isDataShare: appletConsents?.shareToPublic ?? undefined,
         answer: {
           answer: encryptedAnswers,
           itemIds: preparedItemAnswers.itemIds,
