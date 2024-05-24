@@ -32,6 +32,8 @@ export const Theme = {
       neutural90: '#E2E2E5',
       error: '#BA1A1A',
       errorVariant: '#FFDAD6',
+      errorVariant10: 'rgba(220, 76, 76, 0.1)',
+      errorVariant100: '#D33333',
     },
     dark: {},
   },

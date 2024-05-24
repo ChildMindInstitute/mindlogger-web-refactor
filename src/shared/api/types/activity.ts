@@ -1,4 +1,5 @@
 import { BaseSuccessResponse } from './base';
+import { ScoreConditionalLogic } from './conditionalLogiс';
 import {
   AudioPlayerItemDTO,
   CheckboxItemDTO,
@@ -53,6 +54,34 @@ export type ActivityDTO = {
   isHidden: boolean;
   order: number;
   items: ActivityItemDetailsDTO[];
+  scoresAndReports: ScoreAndReports;
+};
+
+export type ScoreAndReports = {
+  generateReport: boolean;
+  showScoreSummary: boolean;
+  reports: Array<ReportDTO>;
+};
+
+export type ReportDTO = ReportScoreDTO | ReportSectionDTO;
+
+export type ReportScoreDTO = {
+  type: 'score';
+  id: string;
+  name: string;
+  message: string | null;
+  calculationType: 'sum' | 'average' | 'percentage';
+  itemsPrint: string[]; // Name of items to print
+  itemsScore: string[]; // Name of items to calculates
+  conditionalLogic: Array<ScoreConditionalLogic>;
+};
+
+export type ReportSectionDTO = {
+  type: 'section';
+  id: string;
+  message: string | null;
+  itemsPrint: string[]; // Name of items to print
+  conditionalLogic: Array<ScoreConditionalLogic>;
 };
 
 export type ActivityItemDetailsDTO =

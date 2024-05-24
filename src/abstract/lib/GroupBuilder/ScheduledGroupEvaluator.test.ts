@@ -20,6 +20,9 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
       type: ActivityPipelineType.Regular,
       startAt: startAt.getTime(),
       endAt: endAt ? endAt.getTime() : null,
+      context: {
+        summaryData: {},
+      },
     },
   };
   return result;

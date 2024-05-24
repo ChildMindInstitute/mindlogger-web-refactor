@@ -11,22 +11,18 @@ import {
   useSurvey,
 } from '../model/hooks';
 
-import { getProgressId } from '~/abstract/lib';
-import {
-  ActivityCardItem,
-  Answer,
-  ItemCardButton,
-  useTextVariablesReplacer,
-} from '~/entities/activity';
+import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
+import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
+import { SurveyManageButtons, useSummaryData } from '~/features/PassSurvey';
 import {
   ActivityDTO,
   AppletDetailsDTO,
   AppletEventsResponse,
   RespondentMetaDTO,
 } from '~/shared/api';
-import { Box } from '~/shared/ui';
 import { MuiModal, useNotification } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation, useFlowType, usePrevious } from '~/shared/utils';
 
 type Props = {
@@ -59,6 +55,8 @@ export const AssessmentPassingScreen = (props: Props) => {
     appletModel.selectors.selectActivityProgress(state, activityEventId),
   );
 
+  const { getGroupProgress, saveGroupContext } = appletModel.hooks.useGroupProgressState();
+
   const completedEntities = useAppSelector(appletModel.selectors.completedEntitiesSelector);
 
   const userEvents = useMemo(
@@ -68,7 +66,8 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const items = useMemo(() => activityProgress?.items ?? [], [activityProgress.items]);
 
-  const { incrementStep, decrementStep } = appletModel.hooks.useActivityProgress();
+  const { incrementStep, decrementStep, openSummaryScreen } =
+    appletModel.hooks.useActivityProgress();
 
   const { saveUserEventByType, saveSetAnswerUserEvent, saveSetAdditionalTextUserEvent } =
     appletModel.hooks.useUserEvents({
@@ -81,6 +80,13 @@ export const AssessmentPassingScreen = (props: Props) => {
       activityId,
       eventId,
     });
+
+  const { getSummaryForCurrentActivity } = useSummaryData({
+    activityId,
+    activityName: props.activityDetails.name,
+    eventId,
+    scoresAndReports: props.activityDetails.scoresAndReports,
+  });
 
   const { step, item, hasPrevStep, hasNextStep, progress, conditionallyHiddenItemIds } =
     useSurvey(activityProgress);
@@ -104,8 +110,62 @@ export const AssessmentPassingScreen = (props: Props) => {
     completedEntityTime: completedEntities[activityId],
   });
 
-  const onSubmitSuccess = () =>
-    flowParams.isFlow ? completeFlow(flowParams.flowId) : completeActivity();
+  const onSubmitSuccess = () => {
+    const groupProgress = getGroupProgress({
+      entityId: flowParams.isFlow ? flowParams.flowId : activityId,
+      eventId,
+    });
+
+    const isFlowGroup = groupProgress?.type === ActivityPipelineType.Flow;
+
+    const summaryData = getSummaryForCurrentActivity();
+
+    const summaryDataContext: FlowSummaryData = {
+      alerts: summaryData.alerts,
+      scores: {
+        activityName: props.activityDetails.name,
+        scores: summaryData.scores,
+      },
+      order: isFlowGroup ? groupProgress.pipelineActivityOrder : 0,
+    };
+
+    saveGroupContext({
+      activityId: flowParams.isFlow ? flowParams.flowId : activityId,
+      eventId,
+      context: {
+        summaryData: {
+          ...groupProgress?.context.summaryData,
+          [activityId]: summaryDataContext,
+        },
+      },
+    });
+
+    const showSummaryScreen = props.activityDetails.scoresAndReports.showScoreSummary;
+
+    if (!showSummaryScreen) {
+      return flowParams.isFlow ? completeFlow(flowParams.flowId) : completeActivity();
+    }
+
+    if (!isFlowGroup && !flowParams.isFlow) {
+      // Show summary screen
+      return openSummaryScreen({ activityId, eventId });
+    }
+
+    const currentFlow = applet.activityFlows.find((flow) => flow.id === flowParams.flowId);
+
+    const nextActivityIndex = (groupProgress as FlowProgress).pipelineActivityOrder + 1;
+
+    const nextActivity = currentFlow?.activityIds[nextActivityIndex] ?? null;
+
+    const isLastActivity = nextActivity === null;
+
+    if (isLastActivity) {
+      // Show summary screen
+      return openSummaryScreen({ activityId, eventId });
+    }
+
+    return flowParams.isFlow ? completeFlow(flowParams.flowId) : completeActivity();
+  };
 
   const { submitAnswers, isLoading } = useSubmitAnswersMutations({
     onSubmitSuccess,
@@ -185,7 +245,7 @@ export const AssessmentPassingScreen = (props: Props) => {
       return;
     }
 
-    conditionallyHiddenItemIds?.forEach((id) => removeItemAnswer(id));
+    conditionallyHiddenItemIds?.forEach(removeItemAnswer);
 
     if (!hasNextStep) {
       return setIsModalOpen(true);
@@ -193,12 +253,12 @@ export const AssessmentPassingScreen = (props: Props) => {
 
     return onNext();
   }, [
+    item,
+    props.activityDetails,
     conditionallyHiddenItemIds,
     removeItemAnswer,
     hasNextStep,
-    item,
     onNext,
-    props.activityDetails,
     showWarningNotification,
     t,
   ]);
@@ -236,13 +296,14 @@ export const AssessmentPassingScreen = (props: Props) => {
         eventId={eventId}
         isPublic={context.isPublic}
         publicAppletKey={context.isPublic ? context.publicAppletKey : null}
+        isSaveAndExitButtonShown={true}
         footerActions={
-          <ItemCardButton
+          <SurveyManageButtons
             isLoading={false}
             isBackShown={hasPrevStep && canGoBack}
             onBackButtonClick={onBack}
             onNextButtonClick={onMoveForward}
-            backButtonText={t('Consent.back')}
+            backButtonText={t('Consent.back') ?? undefined}
             nextButtonText={t('Consent.next')}
           />
         }

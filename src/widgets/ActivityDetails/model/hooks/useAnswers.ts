@@ -147,8 +147,8 @@ export const useAnswer = (props: Props) => {
       if (featureFlags.enableMultiInformant) {
         const multiInformantState = getMultiInformantState();
         if (isInMultiInformantFlow()) {
-          answer.sourceSubjectId = multiInformantState.sourceSubject?.id;
-          answer.targetSubjectId = multiInformantState.targetSubject?.id;
+          answer.sourceSubjectId = multiInformantState?.sourceSubject?.id;
+          answer.targetSubjectId = multiInformantState?.targetSubject?.id;
         }
       }
 
@@ -160,14 +160,7 @@ export const useAnswer = (props: Props) => {
       return answer;
     },
     [
-      props.applet.encryption,
-      props.applet.activityFlows,
-      props.applet.id,
-      props.applet.version,
-      props.flowId,
-      props.activityId,
-      props.eventId,
-      props.eventsRawData,
+      props,
       encryptPayload,
       getGroupProgress,
       appletConsents?.shareToPublic,

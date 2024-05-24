@@ -1,5 +1,13 @@
 export type Match = 'any' | 'all';
 
+export type ScoreConditionalLogic = {
+  id: string;
+  name: string;
+  flagScore: boolean;
+  match: Match;
+  conditions: Array<ReportCondition>;
+};
+
 export type ConditionalLogic = {
   match: Match;
   conditions: Array<Condition>;
@@ -10,6 +18,14 @@ export type Condition =
   | NotIncludesOptionCondition
   | EqualToOptionCondition
   | NotEqualToOptionCondition
+  | GreaterThanCondition
+  | LessThanCondition
+  | EqualCondition
+  | NotEqualCondition
+  | BetweenCondition
+  | OutsideOfCondition;
+
+export type ReportCondition =
   | GreaterThanCondition
   | LessThanCondition
   | EqualCondition

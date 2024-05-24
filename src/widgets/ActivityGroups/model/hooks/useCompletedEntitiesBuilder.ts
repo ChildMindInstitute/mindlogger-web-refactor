@@ -36,6 +36,9 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
             type: ActivityPipelineType.Regular,
             startAt: null,
             endAt: new Date(endAtDate).getTime(),
+            context: {
+              summaryData: {},
+            },
           },
         });
       }
