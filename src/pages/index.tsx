@@ -1,7 +1,5 @@
-import { lazy } from 'react';
-
-const UnauthorizedRoutes = lazy(() => import('./UnauthorizedRoutes'));
-const AuthorizedRoutes = lazy(() => import('./AuthorizedRoutes'));
+import AuthorizedRoutes from './AuthorizedRoutes';
+import UnauthorizedRoutes from './UnauthorizedRoutes';
 
 import { userModel } from '~/entities/user';
 

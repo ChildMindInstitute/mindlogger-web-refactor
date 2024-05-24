@@ -13,7 +13,7 @@ import { useEncryptPayload } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { userModel } from '~/entities/user';
 import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from '~/shared/api';
-import { formatToDtoDate, formatToDtoTime, useEncryption } from '~/shared/utils';
+import { formatToDtoDate, formatToDtoTime, useAppSelector, useEncryption } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
 type Props = {
@@ -35,6 +35,10 @@ type SubmitAnswersProps = {
 export const useAnswer = (props: Props) => {
   const { generateUserPrivateKey } = useEncryption();
   const { encryptPayload } = useEncryptPayload();
+
+  const consents = useAppSelector(appletModel.selectors.selectConsents);
+
+  const appletConsents = consents[props.applet.id] ?? null;
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
   const { getMultiInformantState, isInMultiInformantFlow } =
@@ -118,6 +122,7 @@ export const useAnswer = (props: Props) => {
         version: props.applet.version,
         createdAt: new Date().getTime(),
         isFlowCompleted: isFlow ? isFlowCompleted : true,
+        isDataShare: appletConsents?.shareToPublic ?? undefined,
         answer: {
           answer: encryptedAnswers,
           itemIds: preparedItemAnswers.itemIds,
@@ -158,6 +163,7 @@ export const useAnswer = (props: Props) => {
       props,
       encryptPayload,
       getGroupProgress,
+      appletConsents?.shareToPublic,
       featureFlags.enableMultiInformant,
       generateUserPrivateKey,
       getMultiInformantState,

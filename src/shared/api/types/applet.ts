@@ -48,6 +48,7 @@ export type AppletDetailsDTO = {
   activities: AppletDetailsActivityDTO[];
   activityFlows: ActivityFlowDTO[];
   encryption: AppletEncryptionDTO | null;
+  integrations: Integration[];
 };
 
 export type AppletDetailsBaseInfoDTO = {
@@ -62,6 +63,8 @@ export type AppletDetailsBaseInfoDTO = {
   updatedAt: string;
   activities: Array<ActivityBaseInfoDTO>;
   activityFlows: Array<ActivityFlowDTO>;
+  encryption: AppletEncryptionDTO | null;
+  integrations?: Integration[];
 };
 
 export type ActivityBaseInfoDTO = {
@@ -74,6 +77,8 @@ export type ActivityBaseInfoDTO = {
   containsResponseTypes: Array<ItemResponseTypeDTO>;
   itemCount: number;
 };
+
+type Integration = 'loris';
 
 export type AppletDetailsActivityDTO = {
   id: string;

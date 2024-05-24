@@ -22,6 +22,7 @@ import {
 } from './types';
 
 import {
+  ActivityConsents,
   ActivityPipelineType,
   FlowProgress,
   getProgressId,
@@ -36,6 +37,7 @@ type InitialState = {
   completedEntities: CompletedEntitiesState;
   completions: CompletedEventEntities;
   multiInformantState: MultiInformantState;
+  consents: ActivityConsents;
 };
 
 const initialState: InitialState = {
@@ -44,6 +46,7 @@ const initialState: InitialState = {
   completedEntities: {},
   completions: {},
   multiInformantState: {},
+  consents: {},
 };
 
 const appletsSlice = createSlice({
@@ -268,6 +271,50 @@ const appletsSlice = createSlice({
 
     resetMultiInformantState: (state) => {
       state.multiInformantState = {};
+    },
+
+    applyDataSharingSettings: (state, action: PayloadAction<{ appletId: string }>) => {
+      const { appletId } = action.payload;
+
+      state.consents[appletId] = {
+        shareToPublic: true,
+        shareMediaToPublic: true,
+      };
+    },
+
+    removeDataSharingSettings: (state, action: PayloadAction<{ appletId: string }>) => {
+      const { appletId } = action.payload;
+
+      delete state.consents[appletId];
+    },
+
+    toggleShareConsent: (state, action: PayloadAction<{ appletId: string }>) => {
+      const { appletId } = action.payload;
+
+      const consents = state.consents[appletId];
+
+      if (!consents) {
+        return;
+      }
+
+      const currentValue = consents.shareToPublic;
+
+      consents.shareToPublic = !currentValue;
+      consents.shareMediaToPublic = !currentValue;
+    },
+
+    toggleMediaConsent: (state, action: PayloadAction<{ appletId: string }>) => {
+      const { appletId } = action.payload;
+
+      const consents = state.consents[appletId];
+
+      if (!consents) {
+        return;
+      }
+
+      const currentValue = consents.shareMediaToPublic;
+
+      consents.shareMediaToPublic = !currentValue;
     },
   },
 });

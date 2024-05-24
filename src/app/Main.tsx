@@ -1,16 +1,16 @@
 import React from 'react';
 
-import * as Sentry from '@sentry/react';
+import { init as SentryInit, replayIntegration } from '@sentry/react';
 import ReactDOM from 'react-dom/client';
 
 import AppSuspense from './AppSuspense';
 
-Sentry.init({
+SentryInit({
   dsn: import.meta.env.VITE_SENTRY_DSN ?? '',
   integrations: [
     // See docs for support of different versions of variation of react router
     // https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/react-router/
-    Sentry.replayIntegration(),
+    replayIntegration(),
   ],
 
   // Set tracesSampleRate to 1.0 to capture 100%

@@ -1,5 +1,14 @@
 import { AnswerAlert, ScoreRecord } from '~/features/PassSurvey/lib';
 
+export type Consents = {
+  shareToPublic: boolean;
+  shareMediaToPublic: boolean;
+};
+
+export type AppletId = string;
+
+export type ActivityConsents = Record<AppletId, Consents | undefined>;
+
 export const enum ActivityPipelineType {
   NotDefined = 0,
   Regular,

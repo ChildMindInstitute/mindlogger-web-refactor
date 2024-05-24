@@ -5,9 +5,10 @@ import { subMonths } from 'date-fns';
 
 import { ActivityGroup } from './ActivityGroup';
 import { AppletDetailsContext } from '../lib';
-import { useActivityGroups, useEntitiesSync } from '../model/hooks';
+import { useActivityGroups, useEntitiesSync, useIntegrationsSync } from '../model/hooks';
 
 import AppletDefaultIcon from '~/assets/AppletDefaultIcon.svg';
+import { SharedContentConsent } from '~/entities/activity';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
 import { BootstrapModal } from '~/shared/ui';
 import { AvatarBase } from '~/shared/ui';
@@ -20,6 +21,8 @@ export const ActivityGroupList = () => {
   const { t } = useCustomTranslation();
 
   const { applet, events, isPublic } = useContext(AppletDetailsContext);
+
+  useIntegrationsSync({ appletDetails: applet });
 
   const { data: completedEntities, isFetching: isCompletedEntitiesFetching } =
     useCompletedEntitiesQuery(
@@ -80,6 +83,8 @@ export const ActivityGroupList = () => {
       </Box>
 
       <Box>
+        <SharedContentConsent appletId={applet.id} />
+
         {groups
           .filter((g) => g.activities.length)
           .map((g) => (

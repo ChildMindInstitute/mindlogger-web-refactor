@@ -22,6 +22,12 @@ export interface GetActivityByIdPayload {
   activityId: ID;
 }
 
+export interface GetCompletedEntitiesPayload {
+  appletId: ID;
+  version: string;
+  fromDate: string; // example: 2022-01-01
+}
+
 export type GetPublicActivityById = {
   activityId: ID;
 };
@@ -102,6 +108,7 @@ export type AnswerPayload = {
   activityId: ID;
   alerts: Array<AlertDTO>;
   isFlowCompleted: boolean;
+  isDataShare?: boolean;
   client: {
     appId: 'mindlogger-web';
     appVersion: string;

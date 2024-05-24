@@ -40,3 +40,5 @@ export const multiInformantStateSelector = createSelector(
   appletsSelector,
   (state) => state.multiInformantState,
 );
+
+export const selectConsents = createSelector(appletsSelector, (applets) => applets.consents);
