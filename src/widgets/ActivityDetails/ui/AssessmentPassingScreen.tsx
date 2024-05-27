@@ -140,7 +140,7 @@ export const AssessmentPassingScreen = (props: Props) => {
       },
     });
 
-    const showSummaryScreen = props.activityDetails.scoresAndReports.showScoreSummary;
+    const showSummaryScreen = props.activityDetails.scoresAndReports?.showScoreSummary ?? false;
 
     if (!showSummaryScreen) {
       return flowParams.isFlow ? completeFlow(flowParams.flowId) : completeActivity();
