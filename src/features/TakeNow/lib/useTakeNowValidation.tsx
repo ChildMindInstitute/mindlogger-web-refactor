@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
-import { useActivityByIdQuery } from '~/entities/activity';
 import { useValidateMultiInformantAssessmentQuery } from '~/entities/answer';
 import { useAppletByIdQuery } from '~/entities/applet';
 import { useSubjectQuery } from '~/entities/subject';
@@ -66,11 +65,6 @@ export const useTakeNowValidation = ({
     isLoading: isLoadingApplet,
   } = useAppletByIdQuery({ isPublic: false, appletId });
 
-  const { isError: isActivityError, isLoading: isLoadingActivity } = useActivityByIdQuery({
-    isPublic: false,
-    activityId: startActivityOrFlow,
-  });
-
   useEffect(() => {
     if (!workspaceId && !isLoadingApplet && appletData) {
       const localWorkspaceId = appletData?.data.result.encryption?.accountId;
@@ -133,7 +127,7 @@ export const useTakeNowValidation = ({
     return errorState(null);
   }
 
-  if (isLoadingTargetSubject || isLoadingSourceSubject || isLoadingActivity) {
+  if (isLoadingTargetSubject || isLoadingSourceSubject) {
     return loadingState;
   }
 
@@ -169,10 +163,6 @@ export const useTakeNowValidation = ({
 
   const { nickname: sourceSubjectNickname, secretUserId: sourceSecretUserId } =
     sourceSubjectData.data.result;
-
-  if (isActivityError) {
-    return errorState(t('takeNow.invalidActivity'));
-  }
 
   // At this point we have the subject, applet, and activity data
   // We can't fetch the workspace roles before we have the applet data
