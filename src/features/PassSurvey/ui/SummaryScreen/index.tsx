@@ -36,7 +36,7 @@ export const SummaryScreen = (props: Props) => {
 
   return (
     <Box flex={1}>
-      <Text fontWeight="400" fontSize="40px" lineHeight="54px">
+      <Text fontWeight="400" fontSize="40px" lineHeight="54px" testid="report-summary-screen">
         {t('reportSummary')}
       </Text>
       {summaryData && summaryData.alerts.length > 0 && (

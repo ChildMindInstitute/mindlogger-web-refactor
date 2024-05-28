@@ -72,6 +72,7 @@ export const AssessmentSummaryScreen = (props: Props) => {
         alignItems="flex-start"
         flex={1}
         padding={greaterThanSM ? '72px 48px' : '36px 16px'}
+        data-testid="assessment-summary-screen-container"
       >
         <SummaryScreen
           activityId={activityId}
