@@ -37,7 +37,7 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { showWarningNotification } = useNotification();
+  const { showWarningNotification, showSuccessNotification } = useNotification();
 
   const context = useContext(ActivityDetailsContext);
 
@@ -118,6 +118,21 @@ export const AssessmentPassingScreen = (props: Props) => {
 
     const isFlowGroup = groupProgress?.type === ActivityPipelineType.Flow;
 
+    const currentFlow = applet.activityFlows.find((flow) => flow.id === flowParams.flowId);
+
+    const nextActivityIndex = (groupProgress as FlowProgress).pipelineActivityOrder + 1;
+
+    const nextActivity = currentFlow?.activityIds[nextActivityIndex] ?? null;
+
+    const isLastActivity = nextActivity === null;
+
+    // Show notification
+    if (isFlowGroup && !isLastActivity) {
+      showSuccessNotification(t('toast.next_activity'));
+    } else {
+      showSuccessNotification(t('toast.answers_submitted'));
+    }
+
     const summaryData = getSummaryForCurrentActivity();
 
     const summaryDataContext: FlowSummaryData = {
@@ -150,14 +165,6 @@ export const AssessmentPassingScreen = (props: Props) => {
       // Show summary screen
       return openSummaryScreen({ activityId, eventId });
     }
-
-    const currentFlow = applet.activityFlows.find((flow) => flow.id === flowParams.flowId);
-
-    const nextActivityIndex = (groupProgress as FlowProgress).pipelineActivityOrder + 1;
-
-    const nextActivity = currentFlow?.activityIds[nextActivityIndex] ?? null;
-
-    const isLastActivity = nextActivity === null;
 
     if (isLastActivity) {
       // Show summary screen
