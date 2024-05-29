@@ -1,6 +1,7 @@
 export type TakeNowParams = {
   appletId: string;
   startActivityOrFlow: string;
-  subjectId: string;
+  targetSubjectId: string;
+  sourceSubjectId: string;
   respondentId: string;
 };
