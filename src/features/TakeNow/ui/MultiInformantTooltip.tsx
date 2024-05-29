@@ -35,15 +35,15 @@ export const MultiInformantTooltip = () => {
           sx={{ backgroundColor: Theme.colors.light.inverseSurface }}
         >
           <MultiInformantTooltipText
-            caption={t('takeNow.tooltip.providingAnswers')}
+            caption={t('takeNow.tooltip.providingResponses')}
             subject={sourceSubject}
           />
           <MultiInformantTooltipText
-            caption={t('takeNow.tooltip.inputtingAnswers')}
+            caption={t('takeNow.tooltip.inputtingResponses')}
             subject={currentUserSubject}
           />
           <MultiInformantTooltipText
-            caption={t('takeNow.tooltip.subjectOfAnswers')}
+            caption={t('takeNow.tooltip.subjectOfResponses')}
             subject={targetSubject}
           />
         </Box>
