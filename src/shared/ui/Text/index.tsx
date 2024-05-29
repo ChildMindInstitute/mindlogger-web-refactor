@@ -64,7 +64,7 @@ function Text({
       lineHeight={lineHeight}
       letterSpacing={letterSpacing}
       onClick={onClick}
-      {...(component ? { component } : {})}
+      {...(component && { component })}
       sx={{ color, padding, margin, ...sx }}
     >
       {children}
