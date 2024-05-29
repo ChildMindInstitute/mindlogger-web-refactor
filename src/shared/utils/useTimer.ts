@@ -1,29 +1,81 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-type SetTimerProps = {
-  callback: () => void;
-  delay: number;
-};
+/**
+ * Type representing an empty function.
+ */
+type EmptyFunction = () => void;
 
-export const useTimer = () => {
-  const timerRef = useRef<number | undefined>(undefined);
+/**
+ * Interface representing the properties for setting the timer.
+ */
+interface SetTimerProps {
+  duration: number;
+  callback?: EmptyFunction;
+}
 
-  // this resets the timer if it exists.
+/**
+ * Custom hook that provides timer functionality.
+ * @param initialCallback The initial callback function to be executed when the timer ends.
+ * @returns An object containing the current time, setTimer function, and resetTimer function.
+ */
+const useTimer = (initialCallback: EmptyFunction | null = null) => {
+  const [currentTime, setCurrentTime] = useState(0);
+  const timerRef = useRef<number | null>(null);
+  const callbackRef = useRef<EmptyFunction | null>(initialCallback);
+
+  /**
+   * Sets the timer with the specified duration and callback function.
+   * @param duration The duration of the timer in milliseconds.
+   * @param callback The callback function to be executed when the timer ends.
+   */
+  const setTimer = useCallback(({ duration, callback }: SetTimerProps) => {
+    // Clear any existing timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
+    // Set the new callback
+    callbackRef.current = () => {
+      if (initialCallback) initialCallback();
+      if (callback) callback();
+    };
+
+    // Set the timer
+    setCurrentTime(duration);
+    timerRef.current = window.setInterval(() => {
+      setCurrentTime((prevTime) => {
+        if (prevTime <= 0) {
+          timerRef.current && clearInterval(timerRef.current);
+          timerRef.current = null;
+          if (callbackRef.current) callbackRef.current();
+          return 0;
+        }
+        return prevTime - 1000; // Update timer every second
+      });
+    }, 1000);
+  }, []);
+
+  /**
+   * Resets the timer to zero and clears any existing timer.
+   */
   const resetTimer = useCallback(() => {
-    if (timerRef) window.clearTimeout(timerRef.current);
-  }, [timerRef]);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    setCurrentTime(0);
+  }, []);
 
-  const setTimer = useCallback(
-    (props: SetTimerProps) => {
-      timerRef.current = window.setTimeout(() => {
-        // clears any pending timer.
-        resetTimer();
+  useEffect(() => {
+    return () => {
+      // Cleanup on unmount
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
 
-        props.callback();
-      }, props.delay);
-    },
-    [resetTimer],
-  );
-
-  return { setTimer, resetTimer };
+  return { currentTime, setTimer, resetTimer };
 };
+
+export default useTimer;

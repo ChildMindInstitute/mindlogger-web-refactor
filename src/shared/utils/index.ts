@@ -13,7 +13,7 @@ export * from './helpers';
 export * from './eventEmitter';
 export * from './dictionary.map';
 export * from './analytics';
-export * from './useTimer';
+export { default as useTimer } from './useTimer';
 export * from './matchPaths';
 export * from './getLanguage';
 export * from './Calculator';

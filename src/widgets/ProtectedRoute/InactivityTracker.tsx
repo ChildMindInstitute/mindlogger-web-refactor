@@ -1,7 +1,7 @@
 import { PropsWithChildren, useCallback, useEffect } from 'react';
 
 import { useLogout } from '~/features/Logout';
-import { useTimer } from '~/shared/utils';
+import useTimer from '~/shared/utils/useTimer';
 
 export type InactivityTrackerProps = PropsWithChildren<unknown>;
 
@@ -27,7 +27,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
 
   const onActivityEventHandler = useCallback(() => {
     resetTimer();
-    setTimer({ delay: LOGOUT_TIME_LIMIT, callback: onLogoutTimerExpire });
+    setTimer({ duration: LOGOUT_TIME_LIMIT, callback: onLogoutTimerExpire });
   }, [resetTimer, setTimer, onLogoutTimerExpire]);
 
   useEffect(() => {
