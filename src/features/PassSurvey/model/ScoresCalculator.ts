@@ -37,8 +37,7 @@ export class ScoresCalculator implements IScoresCalculator {
 
         return foundAnswer ? option.score : null;
       })
-      .filter((x) => x !== null)
-      .map((x) => x!);
+      .filter((x) => x !== null) as number[];
 
     return Calculator.sum(scores);
   }
@@ -114,15 +113,13 @@ export class ScoresCalculator implements IScoresCalculator {
         case 'singleSelect': {
           const allScores = item.responseValues.options
             .map((x) => x.score)
-            .filter((x) => x !== null)
-            .map((x) => x!);
+            .filter((x) => x !== null) as number[];
           return Math.max(...allScores);
         }
         case 'multiSelect': {
           const allScores = item.responseValues.options
             .map((x) => x.score)
-            .filter((x) => x !== null)
-            .map((x) => x!);
+            .filter((x) => x !== null) as number[];
           return Calculator.sum(allScores);
         }
         case 'slider': {
@@ -167,7 +164,7 @@ export class ScoresCalculator implements IScoresCalculator {
       );
     }
 
-    const filteredScores: number[] = scores.filter((x) => x !== null).map((x) => x!);
+    const filteredScores: number[] = scores.filter((x) => x !== null) as number[];
 
     if (!filteredScores.length) {
       return null;
@@ -181,7 +178,7 @@ export class ScoresCalculator implements IScoresCalculator {
       case 'percentage': {
         const maxScores = this.collectMaxScores(items, settings.itemsScore);
 
-        const filteredMaxScores = maxScores.filter((x) => x !== null).map((x) => x!);
+        const filteredMaxScores = maxScores.filter((x) => x !== null) as number[];
 
         const currentScore = Calculator.sum(filteredScores);
         const sumOfMaxScores = Calculator.sum(filteredMaxScores);
