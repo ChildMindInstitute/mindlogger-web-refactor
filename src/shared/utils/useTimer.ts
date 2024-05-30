@@ -87,6 +87,7 @@ const useTimer = (initialCallback: EmptyFunction | null = null) => {
     setTimer,
     resetTimer,
     percentageLeft,
+    initialTime,
   };
 };
 

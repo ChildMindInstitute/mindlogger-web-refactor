@@ -293,12 +293,10 @@ export const AssessmentPassingScreen = (props: Props) => {
     onForward: onNext,
   });
 
-  const { currentTime, percentageLeft } = useItemTimer({
+  const { currentTime, percentageLeft, initialTime } = useItemTimer({
     item,
     onTimerEnd: () => console.log('Timer ended. Move forward'),
   });
-
-  console.log(`[AssessmentPassingScreen] ${item.name} currentTime: ${currentTime}`);
 
   return (
     <>
@@ -311,10 +309,11 @@ export const AssessmentPassingScreen = (props: Props) => {
         isPublic={context.isPublic}
         publicAppletKey={context.isPublic ? context.publicAppletKey : null}
         isSaveAndExitButtonShown={true}
-        timerTime={currentTime > 0 ? currentTime : undefined}
-        timerProgress={percentageLeft ?? undefined}
         footerActions={
           <SurveyManageButtons
+            timerTime={currentTime > 0 ? currentTime : undefined}
+            timerProgress={percentageLeft ?? undefined}
+            totalDuration={initialTime ?? undefined}
             isLoading={false}
             isBackShown={hasPrevStep && canGoBack}
             onBackButtonClick={onBack}

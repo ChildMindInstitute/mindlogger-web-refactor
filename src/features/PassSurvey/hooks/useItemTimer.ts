@@ -14,7 +14,7 @@ type Props = {
 const ONE_SECOND_IN_MILLISECONDS = 1000;
 
 export const useItemTimer = ({ item, onTimerEnd }: Props) => {
-  const { setTimer, currentTime, percentageLeft } = useTimer();
+  const { setTimer, currentTime, percentageLeft, initialTime } = useTimer();
 
   const prevItem = usePrevious(item);
 
@@ -39,5 +39,6 @@ export const useItemTimer = ({ item, onTimerEnd }: Props) => {
   return {
     currentTime,
     percentageLeft,
+    initialTime,
   };
 };
