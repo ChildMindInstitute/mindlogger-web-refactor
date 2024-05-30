@@ -21,6 +21,8 @@ type Props = PropsWithChildren<{
   isSaveAndExitButtonShown: boolean;
 
   footerActions?: React.ReactNode;
+  timerTime?: number;
+  timerProgress?: number;
 }>;
 
 export const AssessmentLayout = (props: Props) => {
@@ -56,7 +58,9 @@ export const AssessmentLayout = (props: Props) => {
         </Box>
       </Box>
 
-      <AssessmentLayoutFooter>{props.footerActions}</AssessmentLayoutFooter>
+      <AssessmentLayoutFooter timerTime={props.timerTime} timerProgress={props.timerProgress}>
+        {props.footerActions}
+      </AssessmentLayoutFooter>
     </Box>
   );
 };
