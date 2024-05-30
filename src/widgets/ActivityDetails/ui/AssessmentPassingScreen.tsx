@@ -14,7 +14,7 @@ import {
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
-import { SurveyManageButtons, useSummaryData } from '~/features/PassSurvey';
+import { SurveyManageButtons, useItemTimer, useSummaryData } from '~/features/PassSurvey';
 import {
   ActivityDTO,
   AppletDetailsDTO,
@@ -292,6 +292,13 @@ export const AssessmentPassingScreen = (props: Props) => {
     hasNextStep,
     onForward: onNext,
   });
+
+  const { currentTime } = useItemTimer({
+    item,
+    onTimerEnd: () => console.log('Timer ended. Move forward'),
+  });
+
+  console.log(`[AssessmentPassingScreen] currentTime: ${currentTime}`);
 
   return (
     <>
