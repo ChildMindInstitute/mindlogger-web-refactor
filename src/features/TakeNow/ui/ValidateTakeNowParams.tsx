@@ -28,15 +28,16 @@ function ValidateTakeNowParams({
 
   useEffect(() => {
     if (isSuccess && data) {
-      const { sourceSubject, targetSubject } = data;
+      const { currentUserSubject, sourceSubject, targetSubject } = data;
 
       const multiInformantState = getMultiInformantState();
       if (
         !isInMultiInformantFlow() ||
+        currentUserSubject.id !== multiInformantState?.currentUserSubject?.id ||
         sourceSubject.id !== multiInformantState?.sourceSubject?.id ||
         targetSubject.id !== multiInformantState?.targetSubject?.id
       ) {
-        initiateTakeNow({ sourceSubject, targetSubject });
+        initiateTakeNow({ currentUserSubject, sourceSubject, targetSubject });
       }
     }
   }, [data, initiateTakeNow, isInMultiInformantFlow, isSuccess]);

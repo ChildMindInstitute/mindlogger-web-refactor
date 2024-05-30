@@ -5,6 +5,7 @@ export type MultiInformantSubject = {
 };
 
 export type MultiInformantState = {
+  currentUserSubject?: MultiInformantSubject;
   sourceSubject?: MultiInformantSubject;
   targetSubject?: MultiInformantSubject;
 };
