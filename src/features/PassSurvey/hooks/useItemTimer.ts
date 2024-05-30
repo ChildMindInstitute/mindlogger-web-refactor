@@ -13,7 +13,7 @@ type Props = {
 const ONE_SECOND_IN_MILLISECONDS = 1000;
 
 export const useItemTimer = ({ item, onTimerEnd }: Props) => {
-  const { setTimer, currentTime } = useTimer();
+  const { setTimer, currentTime, percentageLeft } = useTimer();
 
   useEffect(() => {
     if (!item) {
@@ -26,9 +26,11 @@ export const useItemTimer = ({ item, onTimerEnd }: Props) => {
 
     if (item.config.timer && item.config.timer > 0)
       setTimer({ duration: item.config.timer * ONE_SECOND_IN_MILLISECONDS, callback: onTimerEnd });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
     currentTime,
+    percentageLeft,
   };
 };

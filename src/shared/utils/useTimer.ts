@@ -19,7 +19,8 @@ interface SetTimerProps {
  * @returns An object containing the current time, setTimer function, and resetTimer function.
  */
 const useTimer = (initialCallback: EmptyFunction | null = null) => {
-  const [currentTime, setCurrentTime] = useState(0); // Timer in miliseconds
+  const [initialTime, setInitialTime] = useState<number | null>(null); // Timer in miliseconds
+  const [currentTime, setCurrentTime] = useState<number>(0); // Timer in miliseconds
 
   const timerRef = useRef<number | null>(null);
   const callbackRef = useRef<EmptyFunction | null>(initialCallback);
@@ -43,6 +44,8 @@ const useTimer = (initialCallback: EmptyFunction | null = null) => {
 
     // Set the timer
     setCurrentTime(duration);
+    setInitialTime(duration);
+
     timerRef.current = window.setInterval(() => {
       setCurrentTime((prevTime) => {
         if (prevTime <= 0) {
@@ -77,10 +80,13 @@ const useTimer = (initialCallback: EmptyFunction | null = null) => {
     };
   }, []);
 
+  const percentageLeft = initialTime ? (currentTime / initialTime) * 100 : null;
+
   return {
     currentTime,
     setTimer,
     resetTimer,
+    percentageLeft,
   };
 };
 
