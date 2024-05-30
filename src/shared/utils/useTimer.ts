@@ -19,13 +19,14 @@ interface SetTimerProps {
  * @returns An object containing the current time, setTimer function, and resetTimer function.
  */
 const useTimer = (initialCallback: EmptyFunction | null = null) => {
-  const [currentTime, setCurrentTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0); // Timer in miliseconds
+
   const timerRef = useRef<number | null>(null);
   const callbackRef = useRef<EmptyFunction | null>(initialCallback);
 
   /**
    * Sets the timer with the specified duration and callback function.
-   * @param duration The duration of the timer in milliseconds.
+   * @param duration The duration of the timer in miliseconds.
    * @param callback The callback function to be executed when the timer ends.
    */
   const setTimer = useCallback(({ duration, callback }: SetTimerProps) => {
@@ -53,6 +54,7 @@ const useTimer = (initialCallback: EmptyFunction | null = null) => {
         return prevTime - 1000; // Update timer every second
       });
     }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -75,7 +77,11 @@ const useTimer = (initialCallback: EmptyFunction | null = null) => {
     };
   }, []);
 
-  return { currentTime, setTimer, resetTimer };
+  return {
+    currentTime,
+    setTimer,
+    resetTimer,
+  };
 };
 
 export default useTimer;

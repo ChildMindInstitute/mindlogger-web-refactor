@@ -243,7 +243,7 @@ export interface MessageItem extends ActivityItemBase {
   answer: DefaultAnswer;
 }
 
-export type MessageItemConfig = ButtonsConfig;
+export type MessageItemConfig = ButtonsConfig & TimerConfig;
 
 export interface DateItem extends ActivityItemBase {
   responseType: 'date';
@@ -280,6 +280,7 @@ export interface AudioPlayerItem extends ActivityItemBase {
 }
 
 export type AudioPlayerItemConfig = ButtonsConfig &
+  TimerConfig &
   AdditionalResponseConfig & {
     playOnce: boolean;
   };

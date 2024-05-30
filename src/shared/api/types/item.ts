@@ -221,9 +221,8 @@ export interface MessageItemDTO extends ItemDetailsBaseDTO {
   responseValues: EmptyResponseValuesDTO;
 }
 
-type MessageItemConfigDTO = {
+type MessageItemConfigDTO = TimerConfigDTO & {
   removeBackButton: boolean;
-  timer: number | null;
 };
 
 export interface DateItemDTO extends ItemDetailsBaseDTO {
@@ -232,11 +231,11 @@ export interface DateItemDTO extends ItemDetailsBaseDTO {
   responseValues: EmptyResponseValuesDTO;
 }
 
-type DateItemConfigDTO = AdditionalResponseOptionConfigDTO & {
-  removeBackButton: boolean;
-  skippableItem: boolean;
-  timer: number | null;
-};
+type DateItemConfigDTO = AdditionalResponseOptionConfigDTO &
+  TimerConfigDTO & {
+    removeBackButton: boolean;
+    skippableItem: boolean;
+  };
 
 export interface TimeItemDTO extends ItemDetailsBaseDTO {
   responseType: 'time';
@@ -256,11 +255,11 @@ export interface TimeRangeItemDTO extends ItemDetailsBaseDTO {
   responseValues: EmptyResponseValuesDTO;
 }
 
-type TimeRangeItemConfigDTO = AdditionalResponseOptionConfigDTO & {
-  removeBackButton: boolean;
-  skippableItem: boolean;
-  timer: number | null;
-};
+type TimeRangeItemConfigDTO = AdditionalResponseOptionConfigDTO &
+  TimerConfigDTO & {
+    removeBackButton: boolean;
+    skippableItem: boolean;
+  };
 
 export interface AudioPlayerItemDTO extends ItemDetailsBaseDTO {
   responseType: 'audioPlayer';
@@ -268,11 +267,12 @@ export interface AudioPlayerItemDTO extends ItemDetailsBaseDTO {
   responseValues: AudioPlayerItemResponseValuesDTO;
 }
 
-type AudioPlayerItemConfigDTO = AdditionalResponseOptionConfigDTO & {
-  playOnce: boolean;
-  removeBackButton: boolean;
-  skippableItem: boolean;
-};
+type AudioPlayerItemConfigDTO = AdditionalResponseOptionConfigDTO &
+  TimerConfigDTO & {
+    playOnce: boolean;
+    removeBackButton: boolean;
+    skippableItem: boolean;
+  };
 
 type AudioPlayerItemResponseValuesDTO = {
   file: string;
