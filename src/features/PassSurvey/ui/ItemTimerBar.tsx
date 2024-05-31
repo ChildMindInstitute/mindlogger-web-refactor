@@ -14,11 +14,11 @@ export const ItemTimerBar = ({ currentTime, progress, totalDuration }: Props) =>
     return progress - 100;
   };
 
-  const almostOutOfTimeLimit = 90000;
+  const almostOutOfTimeLimit = 5000;
   const isTimerTimeLeftLessThan5Seconds = currentTime && currentTime < almostOutOfTimeLimit;
 
-  const isPassedMoreThan = (time: number) => {
-    return currentTime && currentTime < totalDuration - time;
+  const isPassedMoreThan = (timeMS: number) => {
+    return currentTime && currentTime < totalDuration - timeMS;
   };
 
   return (

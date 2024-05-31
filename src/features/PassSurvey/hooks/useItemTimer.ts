@@ -14,7 +14,7 @@ type Props = {
 const ONE_SECOND_IN_MILLISECONDS = 1000;
 
 export const useItemTimer = ({ item, onTimerEnd }: Props) => {
-  const { setTimer, currentTime, percentageLeft, initialTime } = useTimer();
+  const { setTimer, currentTime, percentageLeft, initialTime, resetTimer } = useTimer();
 
   const prevItem = usePrevious(item);
 
@@ -23,16 +23,20 @@ export const useItemTimer = ({ item, onTimerEnd }: Props) => {
       return;
     }
 
-    if (!canItemHaveTimer(item)) {
-      return;
-    }
-
     if (item.id === prevItem?.id) {
       return;
     }
 
-    if (item.config.timer && item.config.timer > 0)
+    if (!canItemHaveTimer(item)) {
+      resetTimer();
+      return;
+    }
+
+    if (item.config.timer && item.config.timer > 0) {
       setTimer({ duration: item.config.timer * ONE_SECOND_IN_MILLISECONDS, callback: onTimerEnd });
+    } else {
+      resetTimer();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item, prevItem]);
 
