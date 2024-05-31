@@ -130,7 +130,8 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   useOnceEffect(() => {
     if (
       context.startActivityOrFlow &&
-      context.startActivityOrFlow === activityListItem.activityId
+      ((!isFlow && context.startActivityOrFlow === activityListItem.activityId) ||
+        (isFlow && context.startActivityOrFlow === activityListItem.flowId))
     ) {
       restartActivity();
     }

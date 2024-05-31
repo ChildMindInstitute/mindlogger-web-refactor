@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 
+import { AxiosError } from 'axios';
+
 import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
-import { useActivityByIdQuery } from '~/entities/activity';
+import { useValidateMultiInformantAssessmentQuery } from '~/entities/answer';
 import { useAppletByIdQuery } from '~/entities/applet';
 import { useSubjectQuery } from '~/entities/subject';
 import { useUserState } from '~/entities/user/model/hooks';
-import { useWorkspaceAppletRespondent, useWorkspaceRolesQuery } from '~/entities/workspace';
+import { useWorkspaceAppletRespondent } from '~/entities/workspace';
 import { TakeNowParams } from '~/features/TakeNow/lib/TakeNowParams.types';
-import { WorkspaceRole } from '~/shared/api/types/workspace';
-import { useCustomTranslation } from '~/shared/utils';
-
-const TAKE_NOW_ROLES: WorkspaceRole[] = ['super_admin', 'owner', 'manager'];
+import { ROUTES } from '~/shared/constants';
+import { useCustomNavigation, useCustomTranslation } from '~/shared/utils';
 
 type TakeNowValidatedState = {
   isLoading: boolean;
@@ -30,11 +31,15 @@ export const useTakeNowValidation = ({
   const [workspaceId, setWorkspaceId] = useState<string | null>();
 
   const {
-    isError: isTargetSubjectError,
-    data: targetSubjectData,
-    error: targetSubjectError,
-    isLoading: isLoadingTargetSubject,
-  } = useSubjectQuery(targetSubjectId);
+    isError: isValidationError,
+    error: validationError,
+    data: validationData,
+    isLoading: isLoadingValidation,
+  } = useValidateMultiInformantAssessmentQuery(appletId, {
+    sourceSubjectId,
+    targetSubjectId,
+    activityOrFlowId: startActivityOrFlow,
+  });
 
   const {
     isError: isSourceSubjectError,
@@ -42,6 +47,13 @@ export const useTakeNowValidation = ({
     error: sourceSubjectError,
     isLoading: isLoadingSourceSubject,
   } = useSubjectQuery(sourceSubjectId);
+
+  const {
+    isError: isTargetSubjectError,
+    data: targetSubjectData,
+    error: targetSubjectError,
+    isLoading: isLoadingTargetSubject,
+  } = useSubjectQuery(targetSubjectId);
 
   const {
     isError: isRespondentError,
@@ -57,20 +69,6 @@ export const useTakeNowValidation = ({
     isLoading: isLoadingApplet,
   } = useAppletByIdQuery({ isPublic: false, appletId });
 
-  const { isError: isActivityError, isLoading: isLoadingActivity } = useActivityByIdQuery({
-    isPublic: false,
-    activityId: startActivityOrFlow,
-  });
-
-  const {
-    isError: isWorkspaceRolesError,
-    data: workspaceRolesData,
-    isLoading: isLoadingWorkspaceRoles,
-  } = useWorkspaceRolesQuery(workspaceId ?? '', {
-    appletIds: [appletId],
-    options: { enabled: !!workspaceId },
-  });
-
   useEffect(() => {
     if (!workspaceId && !isLoadingApplet && appletData) {
       const localWorkspaceId = appletData?.data.result.encryption?.accountId;
@@ -79,6 +77,7 @@ export const useTakeNowValidation = ({
   }, [appletData, isLoadingApplet, workspaceId]);
 
   const { t } = useCustomTranslation();
+  const { navigate } = useCustomNavigation();
   const { user } = useUserState();
 
   const loadingState: TakeNowValidatedState = {
@@ -98,15 +97,57 @@ export const useTakeNowValidation = ({
     return errorState(t('takeNow.invalidRespondent'));
   }
 
+  if (isLoadingValidation) {
+    return loadingState;
+  }
+
+  if (isValidationError && validationError) {
+    if (validationError.response?.status === 403) {
+      return errorState(t('takeNow.invalidRespondent'));
+    } else if (validationError.response?.status === 404) {
+      // Invalid applet ID
+      setTimeout(() => navigate(ROUTES.appletList.path));
+      return errorState(t('takeNow.invalidApplet'));
+    } else if (validationError.response?.status === 422) {
+      const axiosError = validationError as AxiosError<any, any>;
+      const param = axiosError.response?.data?.result?.[0]?.path?.[1] as string | undefined;
+
+      if (!param) return errorState(null);
+
+      switch (param) {
+        case 'activityOrFlowId':
+          return errorState(t('takeNow.invalidActivity'));
+        case 'sourceSubjectId':
+        case 'targetSubjectId':
+          return errorState(t('takeNow.invalidSubject'));
+      }
+    }
+  }
+
+  if (validationData?.data?.result && validationData?.data?.result.code) {
+    switch (validationData.data.result.code) {
+      case 'invalid_activity_or_flow_id':
+        return errorState(t('takeNow.invalidActivity'));
+      case 'invalid_source_subject':
+      case 'invalid_target_subject':
+        return errorState(t('takeNow.invalidSubject'));
+      case 'no_access_to_applet':
+        return errorState(t('takeNow.invalidRespondent'));
+      default:
+        return errorState(null);
+    }
+  }
+
   if (isLoadingApplet) {
     return loadingState;
   }
 
   if (isAppletError || !appletData?.data?.result) {
-    return errorState(null);
+    setTimeout(() => navigate(ROUTES.appletList.path));
+    return errorState(t('takeNow.invalidApplet'));
   }
 
-  if (isLoadingTargetSubject || isLoadingSourceSubject || isLoadingActivity) {
+  if (isLoadingTargetSubject || isLoadingSourceSubject) {
     return loadingState;
   }
 
@@ -143,33 +184,16 @@ export const useTakeNowValidation = ({
   const { nickname: sourceSubjectNickname, secretUserId: sourceSecretUserId } =
     sourceSubjectData.data.result;
 
-  if (isActivityError) {
-    return errorState(t('takeNow.invalidActivity'));
-  }
-
   // At this point we have the subject, applet, and activity data
   // We can't fetch the workspace roles before we have the applet data
   // because that's where we get the workspace ID
 
-  if (workspaceId === undefined || isLoadingWorkspaceRoles) {
+  if (workspaceId === undefined) {
     return loadingState;
   }
 
   if (workspaceId === null) {
     return errorState(t('common_loading_error'));
-  }
-
-  if (isWorkspaceRolesError || !workspaceRolesData?.data?.result) {
-    // Same as above - we can't verify the roles of the current user in this workspace,
-    // so we can't proceed with a multi-informant flow
-    return errorState(t('common_loading_error'));
-  }
-
-  const roles = workspaceRolesData.data.result[appletId];
-  const hasCorrectRole = TAKE_NOW_ROLES.some((role) => roles.includes(role));
-
-  if (!hasCorrectRole) {
-    return errorState(t('takeNow.invalidRespondent'));
   }
 
   if (isLoadingRespondent) {
