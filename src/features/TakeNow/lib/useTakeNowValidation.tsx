@@ -10,7 +10,8 @@ import { useSubjectQuery } from '~/entities/subject';
 import { useUserState } from '~/entities/user/model/hooks';
 import { useWorkspaceAppletRespondent } from '~/entities/workspace';
 import { TakeNowParams } from '~/features/TakeNow/lib/TakeNowParams.types';
-import { useCustomTranslation } from '~/shared/utils';
+import { ROUTES } from '~/shared/constants';
+import { useCustomNavigation, useCustomTranslation } from '~/shared/utils';
 
 type TakeNowValidatedState = {
   isLoading: boolean;
@@ -76,6 +77,7 @@ export const useTakeNowValidation = ({
   }, [appletData, isLoadingApplet, workspaceId]);
 
   const { t } = useCustomTranslation();
+  const { navigate } = useCustomNavigation();
   const { user } = useUserState();
 
   const loadingState: TakeNowValidatedState = {
@@ -104,7 +106,8 @@ export const useTakeNowValidation = ({
       return errorState(t('takeNow.invalidRespondent'));
     } else if (validationError.response?.status === 404) {
       // Invalid applet ID
-      return errorState(null);
+      setTimeout(() => navigate(ROUTES.appletList.path));
+      return errorState(t('takeNow.invalidApplet'));
     } else if (validationError.response?.status === 422) {
       const axiosError = validationError as AxiosError<any, any>;
       const param = axiosError.response?.data?.result?.[0]?.path?.[1] as string | undefined;
@@ -140,7 +143,8 @@ export const useTakeNowValidation = ({
   }
 
   if (isAppletError || !appletData?.data?.result) {
-    return errorState(null);
+    setTimeout(() => navigate(ROUTES.appletList.path));
+    return errorState(t('takeNow.invalidApplet'));
   }
 
   if (isLoadingTargetSubject || isLoadingSourceSubject) {
