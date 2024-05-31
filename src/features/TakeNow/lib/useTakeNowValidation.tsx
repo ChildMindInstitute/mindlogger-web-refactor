@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
+
+import { AxiosError } from 'axios';
 
 import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
 import { useValidateMultiInformantAssessmentQuery } from '~/entities/answer';
@@ -102,6 +105,19 @@ export const useTakeNowValidation = ({
     } else if (validationError.response?.status === 404) {
       // Invalid applet ID
       return errorState(null);
+    } else if (validationError.response?.status === 422) {
+      const axiosError = validationError as AxiosError<any, any>;
+      const param = axiosError.response?.data?.result?.[0]?.path?.[1] as string | undefined;
+
+      if (!param) return errorState(null);
+
+      switch (param) {
+        case 'activityOrFlowId':
+          return errorState(t('takeNow.invalidActivity'));
+        case 'sourceSubjectId':
+        case 'targetSubjectId':
+          return errorState(t('takeNow.invalidSubject'));
+      }
     }
   }
 
