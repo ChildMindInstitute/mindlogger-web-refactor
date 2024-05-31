@@ -94,7 +94,7 @@ export const useTakeNowValidation = ({
   });
 
   if (respondentId !== user.id) {
-    return errorState(t('takeNow.invalidRespondent'));
+    return errorState(t('takeNow.mismatchedRespondent'));
   }
 
   if (isLoadingValidation) {
