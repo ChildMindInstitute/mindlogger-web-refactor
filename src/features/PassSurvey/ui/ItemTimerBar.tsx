@@ -1,11 +1,11 @@
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { convertMillisecondsToMinSec } from '~/shared/utils';
+import { convertSecondsToMinSec } from '~/shared/utils';
 
 type Props = {
-  totalDuration: number; // milliseconds
-  currentTime: number; // milliseconds
+  totalDuration: number; // seconds
+  currentTime: number; // seconds
   progress: number; // percentage
 };
 
@@ -14,8 +14,8 @@ export const ItemTimerBar = ({ currentTime, progress, totalDuration }: Props) =>
     return progress - 100;
   };
 
-  const almostOutOfTimeLimit = 5000;
-  const isTimerTimeLeftLessThan5Seconds = currentTime && currentTime < almostOutOfTimeLimit;
+  const FIVE_SECONDS = 5;
+  const lessThan5Seconds = currentTime && currentTime < FIVE_SECONDS;
 
   const isPassedMoreThan = (timeMS: number) => {
     return currentTime && currentTime < totalDuration - timeMS;
@@ -24,16 +24,14 @@ export const ItemTimerBar = ({ currentTime, progress, totalDuration }: Props) =>
   return (
     <Box width="100%" position="absolute" top={1} left={0} overflow="hidden">
       <Box
-        bgcolor={
-          isTimerTimeLeftLessThan5Seconds ? Theme.colors.light.error : Theme.colors.light.primary
-        }
+        bgcolor={lessThan5Seconds ? Theme.colors.light.error : Theme.colors.light.primary}
         height="2px"
         width="100%"
         sx={{
           transform: `translateX(${getProgressBarShift(progress)}%)`,
           transitionDuration: '1s',
           transitionTimingFunction: 'linear',
-          animation: isTimerTimeLeftLessThan5Seconds ? 'blinking 1s infinite' : 'none',
+          animation: lessThan5Seconds ? 'blinking 1s infinite' : 'none',
           '@keyframes blinking': {
             '0%': { opacity: 1 },
             '50%': { opacity: 0.1 },
@@ -47,18 +45,14 @@ export const ItemTimerBar = ({ currentTime, progress, totalDuration }: Props) =>
             fontSize="14px"
             fontWeight="400"
             lineHeight="20px"
-            color={
-              isTimerTimeLeftLessThan5Seconds
-                ? Theme.colors.light.error
-                : Theme.colors.light.outline
-            }
+            color={lessThan5Seconds ? Theme.colors.light.error : Theme.colors.light.outline}
             sx={{
               textAlign: 'center',
               transform: isPassedMoreThan(5600) ? 'translateX(40px)' : 'none',
               transition: '0.5s',
               cursor: 'default',
 
-              animation: isTimerTimeLeftLessThan5Seconds ? 'blinking 1s infinite' : 'none',
+              animation: lessThan5Seconds ? 'blinking 1s infinite' : 'none',
               '@keyframes blinking': {
                 '0%': { opacity: 1 },
                 '50%': { opacity: 0.1 },
@@ -66,7 +60,7 @@ export const ItemTimerBar = ({ currentTime, progress, totalDuration }: Props) =>
               },
             }}
           >
-            {`${convertMillisecondsToMinSec(currentTime)} remaining `}
+            {`${convertSecondsToMinSec(currentTime)} remaining `}
             <Box
               component="span"
               sx={{
