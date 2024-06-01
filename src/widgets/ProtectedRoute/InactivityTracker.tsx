@@ -27,7 +27,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
 
   const onActivityEventHandler = useCallback(() => {
     resetTimer();
-    setTimer({ duration: LOGOUT_TIME_LIMIT, callback: onLogoutTimerExpire });
+    setTimer({ currentTime: LOGOUT_TIME_LIMIT, onComplete: onLogoutTimerExpire });
   }, [resetTimer, setTimer, onLogoutTimerExpire]);
 
   useEffect(() => {
