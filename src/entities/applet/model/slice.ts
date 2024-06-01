@@ -5,6 +5,7 @@ import {
   ChangeSummaryScreenVisibilityPayload,
   CompletedEntitiesState,
   CompletedEventEntities,
+  ItemTimerTickPayload,
   InProgressActivity,
   InProgressEntity,
   InProgressFlow,
@@ -17,6 +18,7 @@ import {
   SaveItemAdditionalTextPayload,
   SaveItemAnswerPayload,
   SaveUserEventPayload,
+  SetItemTimerPayload,
   UpdateStepPayload,
   UpdateUserEventByIndexPayload,
 } from './types';
@@ -107,6 +109,37 @@ const appletsSlice = createSlice({
       const activityProgress = state.progress[id];
 
       activityProgress.isSummaryScreenOpen = action.payload.isSummaryScreenOpen;
+    },
+
+    setItemTimerStatus: (state, action: PayloadAction<SetItemTimerPayload>) => {
+      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+
+      const progress = state.progress[id];
+
+      if (!progress.itemTimer) {
+        progress.itemTimer = {};
+      }
+
+      progress.itemTimer[action.payload.itemId] = action.payload.timerStatus;
+    },
+
+    itemTimerTick: (state, action: PayloadAction<ItemTimerTickPayload>) => {
+      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+
+      const progress = state.progress[id];
+
+      if (!progress) return state;
+
+      const timer = progress.itemTimer[action.payload.itemId];
+
+      if (!timer) return state;
+
+      if (timer.spentTime >= timer.duration) {
+        timer.isElapsed = true;
+        return state;
+      }
+
+      timer.spentTime += 1;
     },
 
     saveItemAnswer: (state, action: PayloadAction<SaveItemAnswerPayload>) => {
