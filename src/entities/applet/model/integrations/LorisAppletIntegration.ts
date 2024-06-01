@@ -1,30 +1,23 @@
 import { IAppletIntegration } from './AppletIntegrationsService';
-import { selectConsents } from '../selectors';
 import { actions } from '../slice';
 
-import { Consents } from '~/abstract/lib';
+import { ActivityConsents, Consents } from '~/abstract/lib';
 import { AppletDetailsBaseInfoDTO } from '~/shared/api';
-import { AppDispatch, RootState } from '~/shared/utils';
+import { AppDispatch } from '~/shared/utils';
 
 class LorisAppletIntegration implements IAppletIntegration {
   private logger: Console;
   private dispatch: AppDispatch;
-  private state: RootState;
+  private consents: ActivityConsents;
 
-  constructor(state: RootState, dispatch: AppDispatch) {
+  constructor(consents: ActivityConsents, dispatch: AppDispatch) {
     this.logger = console;
     this.dispatch = dispatch;
-    this.state = state;
+    this.consents = consents;
   }
 
   private getAppletConsents(appletId: string): Consents | null {
-    const consents = selectConsents(this.state);
-
-    if (!consents) {
-      return null;
-    }
-
-    const appletConsents = consents[appletId] ?? null;
+    const appletConsents = this.consents[appletId] ?? null;
 
     return appletConsents;
   }
