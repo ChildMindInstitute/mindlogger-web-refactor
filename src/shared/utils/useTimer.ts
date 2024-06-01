@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+const ONE_SECOND_IN_MILLISECONDS = 1000;
+
 /**
  * Type representing an empty function.
  */
@@ -9,54 +11,71 @@ type EmptyFunction = () => void;
  * Interface representing the properties for setting the timer.
  */
 interface SetTimerProps {
-  duration: number;
-  callback?: EmptyFunction;
+  duration?: number;
+  currentTime: number;
+  onComplete?: EmptyFunction;
+  onTick?: EmptyFunction;
 }
+
+type Props = {
+  onComplete?: EmptyFunction;
+  onTick?: EmptyFunction;
+};
 
 /**
  * Custom hook that provides timer functionality.
  * @param initialCallback The initial callback function to be executed when the timer ends.
  * @returns An object containing the current time, setTimer function, and resetTimer function.
  */
-const useTimer = (initialCallback: EmptyFunction | null = null) => {
-  const [initialTime, setInitialTime] = useState<number | null>(null); // Timer in miliseconds
+const useTimer = (props?: Props) => {
+  const [duration, setDuration] = useState<number | null>(null); // Timer in miliseconds
   const [currentTime, setCurrentTime] = useState<number>(0); // Timer in miliseconds
 
   const timerRef = useRef<number | null>(null);
-  const callbackRef = useRef<EmptyFunction | null>(initialCallback);
+  const onCompleteCallbackRef = useRef<EmptyFunction | null>(null);
+  const onTickCallbackRef = useRef<EmptyFunction | null>(null);
 
   /**
    * Sets the timer with the specified duration and callback function.
-   * @param duration The duration of the timer in miliseconds.
+   * @param duration The duration of the timer in seconds.
+   * @param currentTime The current time of the timer in seconds.
    * @param callback The callback function to be executed when the timer ends.
    */
-  const setTimer = useCallback(({ duration, callback }: SetTimerProps) => {
+  const setTimer = useCallback(({ duration, currentTime, onComplete, onTick }: SetTimerProps) => {
     // Clear any existing timer
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
 
-    // Set the new callback
-    callbackRef.current = () => {
-      if (initialCallback) initialCallback();
-      if (callback) callback();
+    // Set the new onCompleteEvent callbacks
+    onCompleteCallbackRef.current = () => {
+      if (props?.onComplete) props.onComplete();
+      if (onComplete) onComplete();
+    };
+
+    onTickCallbackRef.current = () => {
+      if (props?.onTick) props.onTick();
+      if (onTick) onTick();
     };
 
     // Set the timer
-    setCurrentTime(duration);
-    setInitialTime(duration);
+    setCurrentTime(currentTime * ONE_SECOND_IN_MILLISECONDS);
+    duration && setDuration(duration * ONE_SECOND_IN_MILLISECONDS);
 
     timerRef.current = window.setInterval(() => {
       setCurrentTime((prevTime) => {
         if (prevTime <= 0) {
           timerRef.current && clearInterval(timerRef.current);
           timerRef.current = null;
-          if (callbackRef.current) callbackRef.current();
+          if (onCompleteCallbackRef.current) onCompleteCallbackRef.current();
           return 0;
         }
-        return prevTime - 1000; // Update timer every second
+
+        if (onTickCallbackRef.current) onTickCallbackRef.current();
+
+        return prevTime - ONE_SECOND_IN_MILLISECONDS; // Update timer every second
       });
-    }, 1000);
+    }, ONE_SECOND_IN_MILLISECONDS);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -80,14 +99,14 @@ const useTimer = (initialCallback: EmptyFunction | null = null) => {
     };
   }, []);
 
-  const percentageLeft = initialTime ? (currentTime / initialTime) * 100 : null;
+  const percentageLeft = duration ? (currentTime / duration) * 100 : null;
 
   return {
-    currentTime,
+    currentTime: currentTime / ONE_SECOND_IN_MILLISECONDS,
+    duration: duration ? duration / ONE_SECOND_IN_MILLISECONDS : 0,
     setTimer,
     resetTimer,
     percentageLeft,
-    initialTime,
   };
 };
 
