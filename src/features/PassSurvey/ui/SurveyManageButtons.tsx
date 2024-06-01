@@ -1,4 +1,5 @@
 import { ItemTimerBar } from './ItemTimerBar';
+import { TimerSettings } from '../hooks';
 
 import { Theme } from '~/shared/constants';
 import { BaseButton } from '~/shared/ui';
@@ -15,9 +16,7 @@ type ItemCardButtonsProps = {
   onBackButtonClick?: () => void;
   onNextButtonClick: () => void;
 
-  timerTime?: number;
-  timerProgress?: number;
-  totalDuration?: number;
+  timerSettings?: TimerSettings;
 };
 
 export const SurveyManageButtons = ({
@@ -27,11 +26,13 @@ export const SurveyManageButtons = ({
   isLoading,
   nextButtonText,
   backButtonText,
-  timerProgress,
-  timerTime,
-  totalDuration,
+  timerSettings,
 }: ItemCardButtonsProps) => {
   const { greaterThanSM } = useCustomMediaQuery();
+
+  const isTimerPropertyExist = (value: number | null): value is number => {
+    return value !== null;
+  };
 
   return (
     <Box
@@ -45,13 +46,16 @@ export const SurveyManageButtons = ({
       paddingY="23px"
       position="relative"
     >
-      {timerTime && timerProgress && totalDuration && (
-        <ItemTimerBar
-          progress={timerProgress}
-          currentTime={timerTime}
-          totalDuration={totalDuration}
-        />
-      )}
+      {timerSettings &&
+        isTimerPropertyExist(timerSettings.progress) &&
+        isTimerPropertyExist(timerSettings.duration) &&
+        isTimerPropertyExist(timerSettings.time) && (
+          <ItemTimerBar
+            progress={timerSettings.progress}
+            time={timerSettings.time}
+            duration={timerSettings.duration}
+          />
+        )}
 
       {(isBackShown && (
         <Box width={greaterThanSM ? '208px' : '120px'} data-testid="assessment-back-button">

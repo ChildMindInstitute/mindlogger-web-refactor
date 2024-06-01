@@ -134,12 +134,9 @@ const appletsSlice = createSlice({
 
       if (!timer) return state;
 
-      if (timer.spentTime >= timer.duration) {
-        timer.isElapsed = true;
-        return state;
+      if (timer.duration > timer.spentTime) {
+        timer.spentTime += 1;
       }
-
-      timer.spentTime += 1;
     },
 
     saveItemAnswer: (state, action: PayloadAction<SaveItemAnswerPayload>) => {

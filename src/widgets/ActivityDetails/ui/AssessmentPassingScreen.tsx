@@ -293,9 +293,11 @@ export const AssessmentPassingScreen = (props: Props) => {
     onForward: onNext,
   });
 
-  const { currentTime, percentageLeft, initialTime } = useItemTimer({
+  const timerSettings = useItemTimer({
     item,
-    onTimerEnd: () => console.log('Timer ended. Move forward'),
+    activityId,
+    eventId,
+    onTimerEnd: onNext,
   });
 
   return (
@@ -311,9 +313,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         isSaveAndExitButtonShown={true}
         footerActions={
           <SurveyManageButtons
-            timerTime={currentTime > 0 ? currentTime : undefined}
-            timerProgress={percentageLeft ?? undefined}
-            totalDuration={initialTime ?? undefined}
+            timerSettings={timerSettings}
             isLoading={false}
             isBackShown={hasPrevStep && canGoBack}
             onBackButtonClick={onBack}

@@ -103,8 +103,6 @@ type ItemId = string;
 export type ItemTimer = Record<ItemId, ItemTimerProgress>;
 
 export type ItemTimerProgress = {
-  isStarted: boolean;
-  isElapsed: boolean;
   duration: number; // in seconds
   spentTime: number; // in seconds
 };

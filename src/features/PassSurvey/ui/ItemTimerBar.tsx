@@ -1,24 +1,24 @@
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { convertSecondsToMinSec } from '~/shared/utils';
+import { convertMillisecondsToMinSec } from '~/shared/utils';
 
 type Props = {
-  totalDuration: number; // seconds
-  currentTime: number; // seconds
+  duration: number; // seconds
+  time: number; // seconds
   progress: number; // percentage
 };
 
-export const ItemTimerBar = ({ currentTime, progress, totalDuration }: Props) => {
+export const ItemTimerBar = ({ time, progress, duration }: Props) => {
   const getProgressBarShift = (progress: number) => {
     return progress - 100;
   };
 
-  const FIVE_SECONDS = 5;
-  const lessThan5Seconds = currentTime && currentTime < FIVE_SECONDS;
+  const FIVE_SECONDS = 5000;
+  const lessThan5Seconds = time && time < FIVE_SECONDS;
 
   const isPassedMoreThan = (timeMS: number) => {
-    return currentTime && currentTime < totalDuration - timeMS;
+    return time && time < duration - timeMS;
   };
 
   return (
@@ -60,7 +60,7 @@ export const ItemTimerBar = ({ currentTime, progress, totalDuration }: Props) =>
               },
             }}
           >
-            {`${convertSecondsToMinSec(currentTime)} remaining `}
+            {`${convertMillisecondsToMinSec(time)} remaining `}
             <Box
               component="span"
               sx={{

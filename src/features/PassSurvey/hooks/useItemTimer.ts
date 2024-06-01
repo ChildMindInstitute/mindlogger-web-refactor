@@ -1,31 +1,88 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { canItemHaveTimer } from '../lib';
 
 import { appletModel } from '~/entities/applet';
+import { ItemTimerProgress } from '~/entities/applet/model';
 import { usePrevious } from '~/shared/utils';
 import useTimer from '~/shared/utils/useTimer';
 
+const ONE_SEC = 1000;
+
 type Props = {
+  activityId: string;
+  eventId: string;
   item: appletModel.ItemRecord;
   onTimerEnd: () => void;
 };
 
-const ONE_SECOND_IN_MILLISECONDS = 1000;
+export type TimerSettings = {
+  time: number | null;
+  progress: number | null;
+  duration: number | null;
+};
 
-export const useItemTimer = ({ item, onTimerEnd }: Props) => {
-  const { setTimer, currentTime, percentageLeft, initialTime, resetTimer } = useTimer();
-
+export const useItemTimer = ({ item, onTimerEnd, activityId, eventId }: Props): TimerSettings => {
   const prevItem = usePrevious(item);
 
-  useEffect(() => {
-    if (!item) {
-      return;
-    }
+  const [duration, setDuration] = useState<number | null>(null);
 
-    if (item.id === prevItem?.id) {
-      return;
-    }
+  const {
+    itemTimerSettings,
+    initializeTimer: initializeTimerState,
+    timerTick,
+  } = appletModel.hooks.useItemTimerState({
+    activityId,
+    eventId,
+    itemId: item.id,
+  });
+
+  const { setTimer, time, resetTimer } = useTimer();
+
+  const initializeTimer = useCallback(
+    (itemId: string, duration: number) => {
+      setTimer({
+        time: duration * ONE_SEC,
+        onTick: () => timerTick(itemId),
+        onComplete: onTimerEnd,
+      });
+
+      return initializeTimerState({
+        itemId,
+        duration,
+      });
+    },
+    [initializeTimerState, onTimerEnd, setTimer, timerTick],
+  );
+
+  const resumeTimer = useCallback(
+    (timerStatus: ItemTimerProgress, itemId: string) => {
+      return setTimer({
+        time: (timerStatus.duration - timerStatus.spentTime) * ONE_SEC,
+        onTick: () => timerTick(itemId),
+        onComplete: onTimerEnd,
+      });
+    },
+    [onTimerEnd, setTimer, timerTick],
+  );
+
+  const startTimer = useCallback(
+    (duration: number, itemId: string) => {
+      setDuration(duration * ONE_SEC);
+
+      if (itemTimerSettings !== null) {
+        return resumeTimer(itemTimerSettings, itemId);
+      }
+
+      return initializeTimer(itemId, duration);
+    },
+    [itemTimerSettings, initializeTimer, resumeTimer],
+  );
+
+  useEffect(() => {
+    if (!item) throw new Error('[UseItemTimer] Item is required for the timer to work.');
+
+    if (item.id === prevItem?.id) return;
 
     if (!canItemHaveTimer(item)) {
       resetTimer();
@@ -33,16 +90,13 @@ export const useItemTimer = ({ item, onTimerEnd }: Props) => {
     }
 
     if (item.config.timer && item.config.timer > 0) {
-      setTimer({ duration: item.config.timer * ONE_SECOND_IN_MILLISECONDS, callback: onTimerEnd });
-    } else {
-      resetTimer();
+      startTimer(item.config.timer, item.id);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [item, prevItem]);
+  }, [item, prevItem, resetTimer, startTimer]);
 
   return {
-    currentTime,
-    percentageLeft,
-    initialTime,
+    time,
+    progress: duration && time ? (time / duration) * 100 : null,
+    duration,
   };
 };
