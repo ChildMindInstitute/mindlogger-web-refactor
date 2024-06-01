@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { selectActivityProgress } from '../selectors';
 import { actions } from '../slice';
 import { ItemTimerProgress } from '../types';
@@ -12,7 +14,7 @@ type Props = {
 };
 
 type Return = {
-  itemTimerSettings: ItemTimerProgress | null;
+  timerSettings: ItemTimerProgress | null;
   initializeTimer: (props: InitializeTimerProps) => void;
   timerTick: (itemId: string) => void;
 };
@@ -25,38 +27,44 @@ type InitializeTimerProps = {
 export const useItemTimerState = ({ activityId, eventId, itemId }: Props): Return => {
   const dispatch = useAppDispatch();
 
-  const timerSettings = useAppSelector((state) =>
+  const timerSettingsState = useAppSelector((state) =>
     selectActivityProgress(state, getProgressId(activityId, eventId)),
   );
 
-  const itemTimerSettings = timerSettings?.itemTimer[itemId] ?? null;
+  const timerSettings = timerSettingsState?.itemTimer[itemId] ?? null;
 
-  const initializeTimer = ({ itemId, duration }: InitializeTimerProps) => {
-    return dispatch(
-      actions.setItemTimerStatus({
-        activityId,
-        eventId,
-        itemId,
-        timerStatus: {
-          duration,
-          spentTime: 0,
-        },
-      }),
-    );
-  };
+  const initializeTimer = useCallback(
+    ({ itemId, duration }: InitializeTimerProps) => {
+      return dispatch(
+        actions.setItemTimerStatus({
+          activityId,
+          eventId,
+          itemId,
+          timerStatus: {
+            duration,
+            spentTime: 0,
+          },
+        }),
+      );
+    },
+    [activityId, dispatch, eventId],
+  );
 
-  const timerTick = (itemId: string) => {
-    return dispatch(
-      actions.itemTimerTick({
-        activityId,
-        eventId,
-        itemId,
-      }),
-    );
-  };
+  const timerTick = useCallback(
+    (itemId: string) => {
+      return dispatch(
+        actions.itemTimerTick({
+          activityId,
+          eventId,
+          itemId,
+        }),
+      );
+    },
+    [activityId, dispatch, eventId],
+  );
 
   return {
-    itemTimerSettings,
+    timerSettings,
     initializeTimer,
     timerTick,
   };

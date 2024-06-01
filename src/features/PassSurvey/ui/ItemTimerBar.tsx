@@ -14,11 +14,14 @@ export const ItemTimerBar = ({ time, progress, duration }: Props) => {
     return progress - 100;
   };
 
-  const FIVE_SECONDS = 5000;
-  const lessThan5Seconds = time && time < FIVE_SECONDS;
+  const timeMS = time * 1000;
+  const durationMS = duration * 1000;
 
-  const isPassedMoreThan = (timeMS: number) => {
-    return time && time < duration - timeMS;
+  const FIVE_SECONDS = 5000;
+  const lessThan5Seconds = timeMS < FIVE_SECONDS;
+
+  const isPassedMoreThan = (value: number) => {
+    return timeMS < durationMS - value;
   };
 
   return (
@@ -60,7 +63,7 @@ export const ItemTimerBar = ({ time, progress, duration }: Props) => {
               },
             }}
           >
-            {`${convertMillisecondsToMinSec(time)} remaining `}
+            {`${convertMillisecondsToMinSec(timeMS)} remaining `}
             <Box
               component="span"
               sx={{

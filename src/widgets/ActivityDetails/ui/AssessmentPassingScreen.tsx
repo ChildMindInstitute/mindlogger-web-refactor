@@ -208,6 +208,7 @@ export const AssessmentPassingScreen = (props: Props) => {
   ]);
 
   const onNext = useCallback(() => {
+    console.log(`[onNext] Item name: ${item.name}, Item id: ${item.id}`);
     const isItemHasAnswer = item.answer.length;
     const isItemSkippable = item.config.skippableItem || props.activityDetails.isSkippable;
 
@@ -299,6 +300,8 @@ export const AssessmentPassingScreen = (props: Props) => {
     eventId,
     onTimerEnd: onNext,
   });
+
+  console.log(timerSettings);
 
   return (
     <>
