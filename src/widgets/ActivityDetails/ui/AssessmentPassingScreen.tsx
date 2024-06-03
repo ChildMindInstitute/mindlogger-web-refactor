@@ -298,10 +298,9 @@ export const AssessmentPassingScreen = (props: Props) => {
     item,
     activityId,
     eventId,
-    onTimerEnd: onNext,
+    isSubmitModalOpen: isModalOpen,
+    onTimerEnd: hasNextStep ? onNext : () => setIsModalOpen(true),
   });
-
-  console.log(timerSettings);
 
   return (
     <>
@@ -316,7 +315,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         isSaveAndExitButtonShown={true}
         footerActions={
           <SurveyManageButtons
-            timerSettings={timerSettings}
+            timerSettings={!isModalOpen ? timerSettings : undefined}
             isLoading={false}
             isBackShown={hasPrevStep && canGoBack}
             onBackButtonClick={onBack}

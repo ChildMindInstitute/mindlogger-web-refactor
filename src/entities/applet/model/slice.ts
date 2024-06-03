@@ -123,6 +123,20 @@ const appletsSlice = createSlice({
       progress.itemTimer[action.payload.itemId] = action.payload.timerStatus;
     },
 
+    removeItemTimerStatus: (state, action: PayloadAction<ItemTimerTickPayload>) => {
+      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+
+      const progress = state.progress[id];
+
+      if (!progress) return state;
+
+      const timer = progress.itemTimer[action.payload.itemId];
+
+      if (timer) {
+        delete progress.itemTimer[action.payload.itemId];
+      }
+    },
+
     itemTimerTick: (state, action: PayloadAction<ItemTimerTickPayload>) => {
       const id = getProgressId(action.payload.activityId, action.payload.eventId);
 

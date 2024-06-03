@@ -12,6 +12,7 @@ type Props = {
   activityId: string;
   eventId: string;
   item: appletModel.ItemRecord;
+  isSubmitModalOpen: boolean;
   onTimerEnd: () => void;
 };
 
@@ -21,19 +22,26 @@ export type TimerSettings = {
   duration: number | null;
 };
 
-export const useItemTimer = ({ item, onTimerEnd, activityId, eventId }: Props): TimerSettings => {
+export const useItemTimer = ({
+  item,
+  onTimerEnd,
+  activityId,
+  eventId,
+  isSubmitModalOpen,
+}: Props): TimerSettings => {
   const prevItem = usePrevious(item);
 
-  const { timerSettings, initializeTimer, timerTick } = appletModel.hooks.useItemTimerState({
-    activityId,
-    eventId,
-    itemId: item.id,
-  });
+  const { timerSettings, initializeTimer, timerTick, removeTimer } =
+    appletModel.hooks.useItemTimerState({
+      activityId,
+      eventId,
+      itemId: item.id,
+    });
 
   const duration = timerSettings?.duration ?? null;
   const time = timerSettings ? timerSettings.duration - timerSettings.spentTime : null;
 
-  const { setTimer, resetTimer } = useTimer();
+  const { setTimer } = useTimer();
 
   useEffect(() => {
     if (!item) throw new Error('[UseItemTimer] Item is required for the timer to work.');
@@ -44,44 +52,43 @@ export const useItemTimer = ({ item, onTimerEnd, activityId, eventId }: Props): 
 
     if (!timer || timer === 0) return;
 
+    if (isSubmitModalOpen) return;
+
     if (!timerSettings) {
       initializeTimer({
-        itemId: item.id,
         duration: timer,
-      });
-
-      setTimer({
-        time: ONE_SEC,
-        onComplete: () => timerTick(item.id),
       });
       return;
     }
 
-    // const isSameItem = item.id === prevItem?.id;
-
-    // if (isSameItem) return;
-
     const isElapsed = timerSettings.spentTime >= timerSettings.duration;
 
-    if (isElapsed) return;
+    if (isElapsed) {
+      onTimerEnd();
+      removeTimer();
+      return;
+    }
 
     const inProgress =
-      timerSettings.spentTime > 0 && timerSettings.spentTime < timerSettings.duration;
-
-    const isLastTick = timerSettings.spentTime === timerSettings.duration - 1;
-
-    const onCompleteHandler = () => {
-      if (isLastTick) onTimerEnd();
-      timerTick(item.id);
-    };
+      timerSettings.spentTime >= 0 && timerSettings.spentTime < timerSettings.duration;
 
     if (inProgress) {
       setTimer({
         time: ONE_SEC,
-        onComplete: onCompleteHandler,
+        onComplete: timerTick,
       });
     }
-  }, [initializeTimer, item, timerSettings, onTimerEnd, prevItem, resetTimer, setTimer, timerTick]);
+  }, [
+    initializeTimer,
+    item,
+    timerSettings,
+    onTimerEnd,
+    prevItem,
+    setTimer,
+    timerTick,
+    isSubmitModalOpen,
+    removeTimer,
+  ]);
 
   return {
     duration,

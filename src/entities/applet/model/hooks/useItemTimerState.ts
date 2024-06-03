@@ -16,11 +16,11 @@ type Props = {
 type Return = {
   timerSettings: ItemTimerProgress | null;
   initializeTimer: (props: InitializeTimerProps) => void;
-  timerTick: (itemId: string) => void;
+  timerTick: () => void;
+  removeTimer: () => void;
 };
 
 type InitializeTimerProps = {
-  itemId: string;
   duration: number;
 };
 
@@ -34,7 +34,7 @@ export const useItemTimerState = ({ activityId, eventId, itemId }: Props): Retur
   const timerSettings = timerSettingsState?.itemTimer[itemId] ?? null;
 
   const initializeTimer = useCallback(
-    ({ itemId, duration }: InitializeTimerProps) => {
+    ({ duration }: InitializeTimerProps) => {
       return dispatch(
         actions.setItemTimerStatus({
           activityId,
@@ -47,25 +47,33 @@ export const useItemTimerState = ({ activityId, eventId, itemId }: Props): Retur
         }),
       );
     },
-    [activityId, dispatch, eventId],
+    [activityId, dispatch, eventId, itemId],
   );
 
-  const timerTick = useCallback(
-    (itemId: string) => {
-      return dispatch(
-        actions.itemTimerTick({
-          activityId,
-          eventId,
-          itemId,
-        }),
-      );
-    },
-    [activityId, dispatch, eventId],
-  );
+  const removeTimer = useCallback(() => {
+    return dispatch(
+      actions.removeItemTimerStatus({
+        activityId,
+        eventId,
+        itemId,
+      }),
+    );
+  }, [activityId, dispatch, eventId, itemId]);
+
+  const timerTick = useCallback(() => {
+    return dispatch(
+      actions.itemTimerTick({
+        activityId,
+        eventId,
+        itemId,
+      }),
+    );
+  }, [activityId, dispatch, eventId, itemId]);
 
   return {
     timerSettings,
     initializeTimer,
     timerTick,
+    removeTimer,
   };
 };
