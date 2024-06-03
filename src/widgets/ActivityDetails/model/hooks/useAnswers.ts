@@ -38,7 +38,7 @@ export const useAnswer = (props: Props) => {
 
   const consents = useAppSelector(appletModel.selectors.selectConsents);
 
-  const appletConsents = consents[props.applet.id] ?? null;
+  const appletConsents = consents?.[props.applet.id] ?? null;
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
   const { getMultiInformantState, isInMultiInformantFlow } =
