@@ -46,7 +46,7 @@ function ValidateTakeNowParams({
     if (error) {
       showErrorNotification(error, {
         allowDuplicate: false,
-        duration: 7000,
+        duration: 15000,
       });
     }
   }, [error, showErrorNotification]);
