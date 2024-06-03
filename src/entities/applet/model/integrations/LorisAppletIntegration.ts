@@ -24,7 +24,7 @@ class LorisAppletIntegration implements IAppletIntegration {
       return null;
     }
 
-    const appletConsents = consents[appletId] ?? null;
+    const appletConsents = consents?.[appletId] ?? null;
 
     return appletConsents;
   }

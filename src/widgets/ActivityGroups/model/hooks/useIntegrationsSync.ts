@@ -13,8 +13,10 @@ export const useIntegrationsSync = ({ appletDetails }: Props) => {
   const rootState = useAppSelector((state) => state);
 
   useEffect(() => {
-    const appletIntegrationService = new AppletIntegrationsService(rootState, dispatch);
+    if (rootState) {
+      const appletIntegrationService = new AppletIntegrationsService(rootState, dispatch);
 
-    appletIntegrationService.applyIntegrations(appletDetails);
+      appletIntegrationService.applyIntegrations(appletDetails);
+    }
   }, [appletDetails, dispatch, rootState]);
 };
