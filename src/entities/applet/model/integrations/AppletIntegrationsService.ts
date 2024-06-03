@@ -1,7 +1,8 @@
 import LorisAppletIntegration from './LorisAppletIntegration';
 
+import { ActivityConsents } from '~/abstract/lib';
 import { AppletDetailsBaseInfoDTO } from '~/shared/api';
-import { AppDispatch, RootState } from '~/shared/utils';
+import { AppDispatch } from '~/shared/utils';
 
 export interface IAppletIntegration {
   shouldBeIntegrated(applet: AppletDetailsBaseInfoDTO): boolean;
@@ -13,8 +14,8 @@ export interface IAppletIntegration {
 class AppletIntegrationsService {
   private integrations: IAppletIntegration[] = [];
 
-  constructor(state: RootState, dispatch: AppDispatch) {
-    this.integrations.push(new LorisAppletIntegration(state, dispatch));
+  constructor(consents: ActivityConsents, dispatch: AppDispatch) {
+    this.integrations.push(new LorisAppletIntegration(consents, dispatch));
   }
 
   public applyIntegrations(applet: AppletDetailsBaseInfoDTO): void {

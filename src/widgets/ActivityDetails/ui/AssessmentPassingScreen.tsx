@@ -14,7 +14,7 @@ import {
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
-import { SurveyManageButtons, useSummaryData } from '~/features/PassSurvey';
+import { SurveyManageButtons, useItemTimer, useSummaryData } from '~/features/PassSurvey';
 import {
   ActivityDTO,
   AppletDetailsDTO,
@@ -293,6 +293,14 @@ export const AssessmentPassingScreen = (props: Props) => {
     onForward: onNext,
   });
 
+  const timerSettings = useItemTimer({
+    item,
+    activityId,
+    eventId,
+    isSubmitModalOpen: isModalOpen,
+    onTimerEnd: hasNextStep ? onNext : () => setIsModalOpen(true),
+  });
+
   return (
     <>
       <AssessmentLayout
@@ -306,6 +314,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         isSaveAndExitButtonShown={true}
         footerActions={
           <SurveyManageButtons
+            timerSettings={!isModalOpen ? timerSettings : undefined}
             isLoading={false}
             isBackShown={hasPrevStep && canGoBack}
             onBackButtonClick={onBack}

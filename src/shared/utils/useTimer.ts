@@ -1,29 +1,46 @@
 import { useCallback, useRef } from 'react';
 
+type EmptyFunction = () => void;
+
 type SetTimerProps = {
-  callback: () => void;
-  delay: number;
+  time: number;
+  timerName?: string;
+  onComplete?: EmptyFunction;
+  onTick?: EmptyFunction;
 };
 
-export const useTimer = () => {
-  const timerRef = useRef<number | undefined>(undefined);
+const useTimer = () => {
+  const timerIDRef = useRef<number | null>(null);
 
-  // this resets the timer if it exists.
+  const onCompleteRef = useRef<EmptyFunction | null>(null);
+
   const resetTimer = useCallback(() => {
-    if (timerRef) window.clearTimeout(timerRef.current);
-  }, [timerRef]);
+    window.clearTimeout(timerIDRef.current ?? undefined);
+    timerIDRef.current = null;
+  }, []);
 
   const setTimer = useCallback(
-    (props: SetTimerProps) => {
-      timerRef.current = window.setTimeout(() => {
-        // clears any pending timer.
-        resetTimer();
+    ({ time: duration, onComplete }: SetTimerProps) => {
+      // Clear any existing timer
+      resetTimer();
 
-        props.callback();
-      }, props.delay);
+      // Set the new onCompleteEvent callbacks
+      if (onComplete) {
+        onCompleteRef.current = onComplete;
+      }
+
+      timerIDRef.current = window.setTimeout(() => {
+        if (onCompleteRef.current) onCompleteRef.current();
+        resetTimer();
+      }, duration);
     },
     [resetTimer],
   );
 
-  return { setTimer, resetTimer };
+  return {
+    setTimer,
+    resetTimer,
+  };
 };
+
+export default useTimer;

@@ -47,6 +47,7 @@ export const useActivityProgress = () => {
             userEvents: [],
             isSummaryScreenOpen: false,
             scoreSettings: props.activity.scoresAndReports,
+            itemTimer: {},
           },
         }),
       );

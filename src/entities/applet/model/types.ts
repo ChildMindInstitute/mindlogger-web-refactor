@@ -95,6 +95,16 @@ export type ActivityProgress = {
   userEvents: Array<UserEvents>;
   isSummaryScreenOpen: boolean;
   scoreSettings?: ScoreAndReports;
+  itemTimer: ItemTimer;
+};
+
+type ItemId = string;
+
+export type ItemTimer = Record<ItemId, ItemTimerProgress>;
+
+export type ItemTimerProgress = {
+  duration: number; // in seconds
+  spentTime: number; // in seconds
 };
 
 type ProgressId = string; // Progress ID is a combination of activityId and eventId (activityId/eventId)
@@ -113,6 +123,19 @@ export type ChangeSummaryScreenVisibilityPayload = {
   activityId: string;
   eventId: string;
   isSummaryScreenOpen: boolean;
+};
+
+export type SetItemTimerPayload = {
+  activityId: string;
+  eventId: string;
+  itemId: string;
+  timerStatus: ItemTimerProgress;
+};
+
+export type ItemTimerTickPayload = {
+  activityId: string;
+  eventId: string;
+  itemId: string;
 };
 
 export type RemoveActivityProgressPayload = {

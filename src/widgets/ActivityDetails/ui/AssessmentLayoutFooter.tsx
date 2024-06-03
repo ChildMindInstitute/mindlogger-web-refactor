@@ -7,7 +7,11 @@ type Props = PropsWithChildren<unknown>;
 
 export const AssessmentLayoutFooter = ({ children }: Props) => {
   return (
-    <Box sx={{ borderTop: `1px solid ${Theme.colors.light.surfaceVariant}` }} padding="23px 0px">
+    <Box
+      sx={{
+        borderTop: `1px solid ${Theme.colors.light.surfaceVariant}`,
+      }}
+    >
       {children}
     </Box>
   );
