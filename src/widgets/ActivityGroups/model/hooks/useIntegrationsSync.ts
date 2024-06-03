@@ -14,8 +14,10 @@ export const useIntegrationsSync = ({ appletDetails }: Props) => {
   const consents = useAppSelector(appletModel.selectors.selectConsents);
 
   useEffect(() => {
-    const appletIntegrationService = new AppletIntegrationsService(consents, dispatch);
+    if (consents) {
+      const appletIntegrationService = new AppletIntegrationsService(consents, dispatch);
 
-    appletIntegrationService.applyIntegrations(appletDetails);
+      appletIntegrationService.applyIntegrations(appletDetails);
+    }
   }, [appletDetails, dispatch, consents]);
 };
