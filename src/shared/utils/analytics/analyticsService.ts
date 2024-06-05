@@ -9,6 +9,6 @@ export const MixEvents = {
   AssessmentCompleted: 'Assessment completed',
   AssessmentStarted: 'Assessment Started',
   InvitationAccepted: 'Invitation Accepted',
-  ActivityRestarted: '[Web] Activity Restart Button Pressed',
-  ActivityResumed: '[Web] Activity Resume Button Pressed',
+  ActivityRestarted: 'Activity Restart Button Pressed',
+  ActivityResumed: 'Activity Resume Button Pressed',
 };
