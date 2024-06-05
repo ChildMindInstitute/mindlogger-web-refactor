@@ -133,39 +133,48 @@ export const AssessmentPassingScreen = (props: Props) => {
       showSuccessNotification(t('toast.answers_submitted'));
     }
 
-    const showSummaryScreen = props.activityDetails.scoresAndReports?.showScoreSummary ?? false;
+    const isSummaryScreenOn = props.activityDetails.scoresAndReports?.showScoreSummary ?? false;
 
-    if (showSummaryScreen) {
-      const summaryData = getSummaryForCurrentActivity();
+    const summaryData = getSummaryForCurrentActivity();
 
-      const summaryDataContext: FlowSummaryData = {
-        alerts: summaryData.alerts,
-        scores: {
-          activityName: props.activityDetails.name,
-          scores: summaryData.scores,
-        },
-        order: isFlowGroup ? groupProgress.pipelineActivityOrder : 0,
-      };
+    const isAlertsExist = summaryData.alerts.length > 0;
+    const isScoreExist = summaryData.scores.length > 0;
 
-      saveGroupContext({
-        activityId: flowParams.isFlow ? flowParams.flowId : activityId,
-        eventId,
-        context: {
-          summaryData: {
-            ...groupProgress?.context.summaryData,
-            [activityId]: summaryDataContext,
+    const isSummaryDataExist = isAlertsExist || isScoreExist;
+
+    if (isSummaryScreenOn) {
+      if (isSummaryDataExist) {
+        const summaryDataContext: FlowSummaryData = {
+          alerts: summaryData.alerts,
+          scores: {
+            activityName: props.activityDetails.name,
+            scores: summaryData.scores,
           },
-        },
-      });
+          order: isFlowGroup ? groupProgress.pipelineActivityOrder : 0,
+        };
+
+        saveGroupContext({
+          activityId: flowParams.isFlow ? flowParams.flowId : activityId,
+          eventId,
+          context: {
+            summaryData: {
+              ...groupProgress?.context.summaryData,
+              [activityId]: summaryDataContext,
+            },
+          },
+        });
+      }
     }
 
     const hasAnySummaryScreenResults =
       Object.keys(groupProgress?.context.summaryData ?? {}).length > 0;
 
     if (!isFlowGroup && !flowParams.isFlow) {
-      if (showSummaryScreen) return openSummaryScreen({ activityId, eventId });
+      if (isSummaryScreenOn && isSummaryDataExist) {
+        return openSummaryScreen({ activityId, eventId });
+      }
 
-      if (!showSummaryScreen) return completeActivity();
+      return completeActivity();
     }
 
     if (isLastActivity && hasAnySummaryScreenResults) {
