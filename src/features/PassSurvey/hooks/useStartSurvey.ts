@@ -25,7 +25,7 @@ type Props = {
   publicAppletKey: string | null;
 };
 
-export const useStartEntity = (props: Props) => {
+export const useStartSurvey = (props: Props) => {
   const navigator = useCustomNavigation();
 
   const appletId = props.applet.id;
@@ -62,7 +62,7 @@ export const useStartEntity = (props: Props) => {
     );
   }
 
-  function startActivityOrFlow(params: OnActivityCardClickProps) {
+  function startSurvey(params: OnActivityCardClickProps) {
     Mixpanel.track(MixEvents.AssessmentStarted, { [MixProperties.AppletId]: props.applet.id });
 
     const { flowId, eventId, activityId, shouldRestart } = params;
@@ -104,6 +104,6 @@ export const useStartEntity = (props: Props) => {
   }
 
   return {
-    startActivityOrFlow,
+    startSurvey,
   };
 };
