@@ -1,4 +1,4 @@
-import { ActivityCardList } from './ActivityCardList';
+import { ActivityCard } from './ActivityCard';
 
 import { ActivityListGroup } from '~/abstract/lib/GroupBuilder';
 import { Theme } from '~/shared/constants';
@@ -31,7 +31,11 @@ export const ActivityGroup = ({ group }: Props) => {
         {t(group.name)}
       </Text>
 
-      <ActivityCardList activities={group.activities} />
+      <Box display="flex" flex={1} flexDirection="column">
+        {group.activities.map((activity) => {
+          return <ActivityCard key={activity.eventId} activityListItem={activity} />;
+        })}
+      </Box>
     </Box>
   );
 };
