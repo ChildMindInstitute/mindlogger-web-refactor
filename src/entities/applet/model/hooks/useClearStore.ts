@@ -4,14 +4,14 @@ import { actions } from '../slice';
 
 import { useAppDispatch } from '~/shared/utils';
 
-export const useResetAppletsStore = () => {
+export const useClearStore = () => {
   const dispatch = useAppDispatch();
 
-  const resetAppletsStore = useCallback(() => {
-    dispatch(actions.resetAppletsStore());
+  const clearStore = useCallback(() => {
+    dispatch(actions.clearStore());
   }, [dispatch]);
 
   return {
-    resetAppletsStore,
+    clearStore,
   };
 };

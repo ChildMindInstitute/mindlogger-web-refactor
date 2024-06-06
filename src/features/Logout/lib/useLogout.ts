@@ -15,7 +15,7 @@ export const useLogout = (): UseLogoutReturn => {
   const navigator = useCustomNavigation();
 
   const { clearUser } = userModel.hooks.useUserState();
-  const { resetAppletsStore } = appletModel.hooks.useResetAppletsStore();
+  const { clearStore } = appletModel.hooks.useClearStore();
 
   const { mutate: logoutMutation, isLoading } = useLogoutMutation();
 
@@ -27,7 +27,7 @@ export const useLogout = (): UseLogoutReturn => {
     }
 
     clearUser();
-    resetAppletsStore();
+    clearStore();
     secureTokensStorage.clearTokens();
     userModel.secureUserPrivateKeyStorage.clearUserPrivateKey();
 
@@ -35,7 +35,7 @@ export const useLogout = (): UseLogoutReturn => {
     Mixpanel.logout();
     FeatureFlags.logout();
     return navigator.navigate(ROUTES.login.path);
-  }, [clearUser, logoutMutation, navigator, resetAppletsStore]);
+  }, [clearUser, logoutMutation, navigator, clearStore]);
 
   return {
     logout,

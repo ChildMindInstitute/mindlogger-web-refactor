@@ -1,6 +1,6 @@
 export * from './useSaveActivityItemAnswer';
 
-export * from './useResetAppletsStore';
+export * from './useClearStore';
 
 export * from './useGroupProgressState';
 
