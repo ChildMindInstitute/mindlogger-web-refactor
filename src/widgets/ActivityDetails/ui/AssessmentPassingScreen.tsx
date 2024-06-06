@@ -3,13 +3,7 @@ import { useCallback, useContext, useMemo, useState } from 'react';
 import { AssessmentLayout } from './AssessmentLayout';
 import { ActivityDetailsContext } from '../lib';
 import { validateBeforeMoveForward } from '../model';
-import {
-  useAnswer,
-  useAutoForward,
-  useEntityComplete,
-  useSubmitAnswersMutations,
-  useSurvey,
-} from '../model/hooks';
+import { useAnswer, useAutoForward, useSubmitAnswersMutations, useSurvey } from '../model/hooks';
 
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
@@ -95,7 +89,7 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const prevStep = usePrevious(step);
 
-  const { completeActivity, completeFlow } = useEntityComplete({
+  const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
     applet,
     activityId,
     eventId,

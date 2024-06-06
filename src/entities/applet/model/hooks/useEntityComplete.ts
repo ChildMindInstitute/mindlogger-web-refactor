@@ -21,7 +21,7 @@ export const useEntityComplete = (props: Props) => {
   const { featureFlags } = useFeatureFlags();
   const { isInMultiInformantFlow } = appletModel.hooks.useMultiInformantState();
 
-  const { removeActivityProgress } = appletModel.hooks.useRemoveActivityProgress();
+  const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
   const { entityCompleted, flowUpdated, getGroupProgress } =
     appletModel.hooks.useGroupProgressState();

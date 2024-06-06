@@ -2,8 +2,8 @@ import { useContext } from 'react';
 
 import { AssessmentLayout } from './AssessmentLayout';
 import { ActivityDetailsContext } from '../lib';
-import { useEntityComplete } from '../model/hooks';
 
+import { appletModel } from '~/entities/applet';
 import { SummaryScreen, SurveyManageButtons } from '~/features/PassSurvey';
 import {
   ActivityDTO,
@@ -35,7 +35,7 @@ export const AssessmentSummaryScreen = (props: Props) => {
 
   const eventId = context.eventId;
 
-  const { completeActivity, completeFlow } = useEntityComplete({
+  const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
     applet,
     activityId,
     eventId,

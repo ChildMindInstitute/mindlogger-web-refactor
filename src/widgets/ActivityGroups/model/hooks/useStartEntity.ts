@@ -1,5 +1,3 @@
-import { OnActivityCardClickProps } from '../../lib';
-
 import { ActivityStatus, EntityType } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
 import { AppletDetailsBaseInfoDTO } from '~/shared/api';
@@ -11,6 +9,14 @@ type NavigateToEntityProps = {
   activityId: string;
   entityType: EntityType;
   eventId: string;
+};
+
+type OnActivityCardClickProps = {
+  activityId: string;
+  eventId: string;
+  flowId: string | null;
+  status: ActivityStatus;
+  shouldRestart: boolean;
 };
 
 type Props = {
@@ -25,9 +31,9 @@ export const useStartEntity = (props: Props) => {
   const appletId = props.applet.id;
   const flows = props.applet.activityFlows;
 
-  const { setInitialProgress } = appletModel.hooks.useActivityProgress();
+  const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
-  const { startActivity, startFlow } = appletModel.hooks.useStartEntity();
+  const { startActivity, startFlow } = appletModel.hooks.useEntityStart();
 
   function navigateToEntity(params: NavigateToEntityProps) {
     const { activityId, flowId, eventId, entityType } = params;
@@ -59,10 +65,7 @@ export const useStartEntity = (props: Props) => {
   function startActivityOrFlow(params: OnActivityCardClickProps) {
     Mixpanel.track(MixEvents.AssessmentStarted, { [MixProperties.AppletId]: props.applet.id });
 
-    const { flowId, eventId, activity, status, shouldRestart } = params;
-
-    const activityId = activity.id;
-    const isActivityInProgress = status === ActivityStatus.InProgress;
+    const { flowId, eventId, activityId, shouldRestart } = params;
 
     if (flowId) {
       const flow = flows.find((x) => x.id === flowId);
@@ -86,8 +89,8 @@ export const useStartEntity = (props: Props) => {
       });
     }
 
-    if ((!isActivityInProgress || shouldRestart) && params.activity) {
-      setInitialProgress({ activity, eventId: params.eventId });
+    if (shouldRestart && activityId) {
+      removeActivityProgress({ activityId, eventId: params.eventId });
     }
 
     startActivity(activityId, eventId);

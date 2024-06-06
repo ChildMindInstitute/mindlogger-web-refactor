@@ -5,7 +5,7 @@ import { GroupProgress, getProgressId } from '~/abstract/lib';
 import { ActivityFlowDTO } from '~/shared/api';
 import { useAppDispatch, useAppSelector } from '~/shared/utils';
 
-export const useStartEntity = () => {
+export const useEntityStart = () => {
   const dispatch = useAppDispatch();
   const groupProgress = useAppSelector(groupProgressSelector);
 
