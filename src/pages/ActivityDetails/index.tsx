@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 
-import { Box } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
 import { useCustomTranslation } from '~/shared/utils';
-import { ActivityDetailsContext, ActivityDetailsWidget } from '~/widgets/ActivityDetails';
+import { ActivityDetailsWidget, SurveyBasicContext } from '~/widgets/ActivityDetails';
 
 function ActivityDetailsPage() {
   const { appletId, activityId, eventId } = useParams();
@@ -14,9 +14,9 @@ function ActivityDetailsPage() {
 
   return (
     <Box display="flex" flex={1}>
-      <ActivityDetailsContext.Provider value={{ appletId, activityId, eventId, isPublic: false }}>
+      <SurveyBasicContext.Provider value={{ appletId, activityId, eventId, isPublic: false }}>
         <ActivityDetailsWidget />
-      </ActivityDetailsContext.Provider>
+      </SurveyBasicContext.Provider>
     </Box>
   );
 }

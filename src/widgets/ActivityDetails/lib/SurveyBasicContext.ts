@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-type PrivateActivityAssessmentProps = {
+type PrivateContext = {
   isPublic: false;
 
   appletId: string;
@@ -8,7 +8,7 @@ type PrivateActivityAssessmentProps = {
   eventId: string;
 };
 
-type PublicActivityAssessmentProps = {
+type PublicContext = {
   isPublic: true;
 
   appletId: string;
@@ -18,6 +18,6 @@ type PublicActivityAssessmentProps = {
   publicAppletKey: string;
 };
 
-type Context = PrivateActivityAssessmentProps | PublicActivityAssessmentProps;
+type Context = PrivateContext | PublicContext;
 
-export const ActivityDetailsContext = createContext<Context>({} as Context);
+export const SurveyBasicContext = createContext<Context>({} as Context);
