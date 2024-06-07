@@ -5,7 +5,7 @@ import SurveyLayout from './SurveyLayout';
 import { SurveyBasicContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
-import { StartAssessmentButton, useFlowType } from '~/features/PassSurvey';
+import { StartSurveyButton, useFlowType } from '~/features/PassSurvey';
 import { ActivityDTO } from '~/shared/api';
 import { Theme } from '~/shared/constants';
 import { AvatarBase } from '~/shared/ui/Avatar';
@@ -17,7 +17,7 @@ type Props = {
   activityDetails: ActivityDTO;
 };
 
-export const AssessmentWelcomeScreen = (props: Props) => {
+const WelcomeScreen = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery();
 
   const basicContext = useContext(SurveyBasicContext);
@@ -40,10 +40,7 @@ export const AssessmentWelcomeScreen = (props: Props) => {
       progress={0}
       isSaveAndExitButtonShown={true}
       footerActions={
-        <StartAssessmentButton
-          width={greaterThanSM ? '375px' : '335px'}
-          onClick={startAssessment}
-        />
+        <StartSurveyButton width={greaterThanSM ? '375px' : '335px'} onClick={startAssessment} />
       }
     >
       <Box
@@ -99,3 +96,5 @@ export const AssessmentWelcomeScreen = (props: Props) => {
     </SurveyLayout>
   );
 };
+
+export default WelcomeScreen;

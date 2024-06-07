@@ -8,7 +8,7 @@ import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
 
-export const AssessmentLoadingScreen = () => {
+const LoadingScreen = () => {
   const navigator = useCustomNavigation();
 
   const context = useContext(SurveyBasicContext);
@@ -56,3 +56,5 @@ export const AssessmentLoadingScreen = () => {
     </Box>
   );
 };
+
+export default LoadingScreen;

@@ -7,7 +7,7 @@ type Props = {
   onClick: () => void;
 };
 
-export const StartAssessmentButton = ({ onClick, width }: Props) => {
+export const StartSurveyButton = ({ onClick, width }: Props) => {
   const { t } = useCustomTranslation();
 
   return (

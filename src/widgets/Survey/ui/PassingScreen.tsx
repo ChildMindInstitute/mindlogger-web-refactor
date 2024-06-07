@@ -18,7 +18,7 @@ import { MuiModal, useNotification } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation, usePrevious } from '~/shared/utils';
 
-export const AssessmentPassingScreen = () => {
+const PassingScreen = () => {
   const { t } = useCustomTranslation();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -343,3 +343,5 @@ export const AssessmentPassingScreen = () => {
     </>
   );
 };
+
+export default PassingScreen;

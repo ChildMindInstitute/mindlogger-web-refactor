@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 
-import { AssessmentLoadingScreen } from './AssessmentLoadingScreen';
-import { AssessmentPassingScreen } from './AssessmentPassingScreen';
-import { AssessmentSummaryScreen } from './AssessmentSummaryScreen';
-import { AssessmentWelcomeScreen } from './AssessmentWelcomeScreen';
+import LoadingScreen from './LoadingScreen';
+import PassingScreen from './PassingScreen';
+import SummaryScreen from './SummaryScreen';
+import WelcomeScreen from './WelcomeScreen';
 import { SurveyBasicContext, SurveyContext } from '../lib';
 import { useSurveyDataQuery } from '../model/hooks';
 
@@ -34,7 +34,7 @@ export const SurveyWidget = () => {
     useSurveyDataQuery();
 
   if (isLoading) {
-    return <AssessmentLoadingScreen />;
+    return <LoadingScreen />;
   }
 
   if (isError) {
@@ -56,11 +56,11 @@ export const SurveyWidget = () => {
   }
 
   if (!isActivityStarted) {
-    return <AssessmentWelcomeScreen activityDetails={activityDTO} />;
+    return <WelcomeScreen activityDetails={activityDTO} />;
   }
 
   if (showSummaryScreen) {
-    return <AssessmentSummaryScreen appletDetails={appletDTO} activityName={activityDTO.name} />;
+    return <SummaryScreen appletDetails={appletDTO} activityName={activityDTO.name} />;
   }
 
   return (
@@ -72,7 +72,7 @@ export const SurveyWidget = () => {
         respondentMeta,
       }}
     >
-      <AssessmentPassingScreen />
+      <PassingScreen />
     </SurveyContext.Provider>
   );
 };

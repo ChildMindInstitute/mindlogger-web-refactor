@@ -1,7 +1,6 @@
 import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
 
-import { UIScore } from '../../hooks';
-
+import { UIScore } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';

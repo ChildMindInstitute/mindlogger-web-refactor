@@ -1,6 +1,6 @@
 import { Scores } from './Scores';
-import { UIActivityScores } from '../../hooks';
 
+import { UIActivityScores } from '~/features/PassSurvey';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 

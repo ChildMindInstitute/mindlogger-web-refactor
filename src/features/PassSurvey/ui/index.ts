@@ -1,3 +1,2 @@
-export * from './SummaryScreen';
-export * from './StartAssessmentButton';
+export * from './StartSurveyButton';
 export * from './SurveyManageButtons';
