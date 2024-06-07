@@ -12,7 +12,7 @@ import { appletModel } from '~/entities/applet';
 import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation } from '~/shared/utils';
 
-export const ActivityDetailsWidget = () => {
+export const SurveyWidget = () => {
   const { t } = useCustomTranslation();
 
   const context = useContext(SurveyBasicContext);
