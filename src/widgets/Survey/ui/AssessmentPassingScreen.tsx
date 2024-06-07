@@ -298,11 +298,6 @@ export const AssessmentPassingScreen = () => {
       <SurveyLayout
         activityName={activity.name}
         progress={progress}
-        appletId={applet.id}
-        activityId={activityId}
-        eventId={eventId}
-        isPublic={surveyBasicContext.isPublic}
-        publicAppletKey={surveyBasicContext.isPublic ? surveyBasicContext.publicAppletKey : null}
         isSaveAndExitButtonShown={true}
         footerActions={
           <SurveyManageButtons

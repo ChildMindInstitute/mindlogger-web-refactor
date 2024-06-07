@@ -1,3 +1,7 @@
+import { useContext } from 'react';
+
+import { SurveyBasicContext } from '../lib';
+
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import { MultiInformantTooltip } from '~/features/TakeNow';
 import { ROUTES, Theme } from '~/shared/constants';
@@ -7,17 +11,13 @@ import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
 type Props = {
   title: string;
 
-  appletId: string;
-  activityId: string;
-  eventId: string;
-  isPublic: boolean;
-  publicKey: string | null;
-
   progress?: number;
   isSaveAndExitButtonShown: boolean;
 };
 
 const SurveyHeader = (props: Props) => {
+  const basicContext = useContext(SurveyBasicContext);
+
   const { greaterThanSM } = useCustomMediaQuery();
   const navigator = useCustomNavigation();
 
@@ -27,9 +27,9 @@ const SurveyHeader = (props: Props) => {
 
   const onSaveAndExitClick = () => {
     return navigator.navigate(
-      props.isPublic && props.publicKey
-        ? ROUTES.publicJoin.navigateTo(props.publicKey)
-        : ROUTES.appletDetails.navigateTo(props.appletId),
+      basicContext.isPublic && basicContext.publicAppletKey
+        ? ROUTES.publicJoin.navigateTo(basicContext.publicAppletKey)
+        : ROUTES.appletDetails.navigateTo(basicContext.appletId),
     );
   };
 

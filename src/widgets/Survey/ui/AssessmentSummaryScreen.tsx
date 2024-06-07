@@ -12,12 +12,11 @@ import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 type Props = {
   appletDetails: AppletDetailsDTO;
 
-  activityId: string;
   activityName: string;
 };
 
 export const AssessmentSummaryScreen = (props: Props) => {
-  const context = useContext(SurveyBasicContext);
+  const basicContext = useContext(SurveyBasicContext);
 
   const { t } = useCustomTranslation();
   const { greaterThanSM } = useCustomMediaQuery();
@@ -26,13 +25,13 @@ export const AssessmentSummaryScreen = (props: Props) => {
 
   const applet = props.appletDetails;
 
-  const eventId = context.eventId;
+  const eventId = basicContext.eventId;
 
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
     applet,
-    activityId: props.activityId,
+    activityId: basicContext.activityId,
     eventId,
-    publicAppletKey: context.isPublic ? context.publicAppletKey : null,
+    publicAppletKey: basicContext.isPublic ? basicContext.publicAppletKey : null,
     flowId: flowParams.isFlow ? flowParams.flowId : null,
   });
 
@@ -43,12 +42,7 @@ export const AssessmentSummaryScreen = (props: Props) => {
   return (
     <SurveyLayout
       activityName={props.activityName}
-      appletId={applet.id}
-      activityId={props.activityId}
-      eventId={eventId}
       progress={100}
-      isPublic={context.isPublic}
-      publicAppletKey={context.isPublic ? context.publicAppletKey : null}
       isSaveAndExitButtonShown={false}
       footerActions={
         <SurveyManageButtons
@@ -68,7 +62,7 @@ export const AssessmentSummaryScreen = (props: Props) => {
         data-testid="assessment-summary-screen-container"
       >
         <SummaryScreen
-          activityId={props.activityId}
+          activityId={basicContext.activityId}
           activityName={props.activityName}
           eventId={eventId}
         />

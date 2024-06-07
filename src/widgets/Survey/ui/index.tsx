@@ -67,11 +67,7 @@ export const SurveyWidget = () => {
 
   if (showSummaryScreen) {
     return (
-      <AssessmentSummaryScreen
-        appletDetails={appletDetails}
-        activityId={activityDetails.id}
-        activityName={activityDetails.name}
-      />
+      <AssessmentSummaryScreen appletDetails={appletDetails} activityName={activityDetails.name} />
     );
   }
 

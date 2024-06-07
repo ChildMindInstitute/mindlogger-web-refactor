@@ -20,7 +20,7 @@ type Props = {
 export const AssessmentWelcomeScreen = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery();
 
-  const context = useContext(SurveyBasicContext);
+  const basicContext = useContext(SurveyBasicContext);
 
   const flowParams = useFlowType();
 
@@ -31,18 +31,13 @@ export const AssessmentWelcomeScreen = (props: Props) => {
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
 
   const startAssessment = () => {
-    return setInitialProgress({ activity: props.activityDetails, eventId: context.eventId });
+    return setInitialProgress({ activity: props.activityDetails, eventId: basicContext.eventId });
   };
 
   return (
     <SurveyLayout
       activityName={props.activityDetails.name}
-      appletId={context.appletId}
       progress={0}
-      activityId={props.activityDetails.id}
-      eventId={context.eventId}
-      isPublic={context.isPublic}
-      publicAppletKey={context.isPublic ? context.publicAppletKey : null}
       isSaveAndExitButtonShown={true}
       footerActions={
         <StartAssessmentButton
@@ -76,7 +71,7 @@ export const AssessmentWelcomeScreen = (props: Props) => {
         >
           <ActivityMetaData
             activityLength={props.activityDetails.items.length}
-            groupInProgress={getGroupProgress({ entityId, eventId: context.eventId })}
+            groupInProgress={getGroupProgress({ entityId, eventId: basicContext.eventId })}
           />
         </Text>
         <Text

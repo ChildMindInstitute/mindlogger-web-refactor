@@ -10,13 +10,6 @@ type Props = PropsWithChildren<{
   activityName: string;
   progress?: number;
 
-  isPublic: boolean;
-  publicAppletKey: string | null;
-
-  appletId: string;
-  activityId: string;
-  eventId: string;
-
   isSaveAndExitButtonShown: boolean;
 
   footerActions?: React.ReactNode;
@@ -34,11 +27,6 @@ const SurveyLayout = (props: Props) => {
       <SurveyHeader
         title={props.activityName}
         progress={props.progress}
-        appletId={props.appletId}
-        activityId={props.activityId}
-        eventId={props.eventId}
-        isPublic={props.isPublic}
-        publicKey={props.isPublic ? props.publicAppletKey : null}
         isSaveAndExitButtonShown={props.isSaveAndExitButtonShown}
       />
 
