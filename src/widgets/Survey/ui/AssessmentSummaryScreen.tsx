@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { AssessmentLayout } from './AssessmentLayout';
+import SurveyLayout from './SurveyLayout';
 import { SurveyBasicContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
@@ -41,7 +41,7 @@ export const AssessmentSummaryScreen = (props: Props) => {
   };
 
   return (
-    <AssessmentLayout
+    <SurveyLayout
       activityName={props.activityName}
       appletId={applet.id}
       activityId={props.activityId}
@@ -73,6 +73,6 @@ export const AssessmentSummaryScreen = (props: Props) => {
           eventId={eventId}
         />
       </Box>
-    </AssessmentLayout>
+    </SurveyLayout>
   );
 };

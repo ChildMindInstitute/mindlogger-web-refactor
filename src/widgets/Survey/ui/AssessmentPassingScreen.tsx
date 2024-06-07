@@ -1,6 +1,6 @@
 import { useCallback, useContext, useMemo, useState } from 'react';
 
-import { AssessmentLayout } from './AssessmentLayout';
+import SurveyLayout from './SurveyLayout';
 import { SurveyBasicContext, SurveyContext } from '../lib';
 import { validateBeforeMoveForward } from '../model';
 import { useAnswer, useAutoForward, useSubmitAnswersMutations, useSurvey } from '../model/hooks';
@@ -295,7 +295,7 @@ export const AssessmentPassingScreen = () => {
 
   return (
     <>
-      <AssessmentLayout
+      <SurveyLayout
         activityName={activity.name}
         progress={progress}
         appletId={applet.id}
@@ -331,7 +331,7 @@ export const AssessmentPassingScreen = () => {
             />
           )}
         </Box>
-      </AssessmentLayout>
+      </SurveyLayout>
 
       <MuiModal
         isOpen={isModalOpen}

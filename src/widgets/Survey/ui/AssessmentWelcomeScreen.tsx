@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import { ActivityMetaData } from './ActivityMetaData';
-import { AssessmentLayout } from './AssessmentLayout';
+import SurveyLayout from './SurveyLayout';
 import { SurveyBasicContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
@@ -35,7 +35,7 @@ export const AssessmentWelcomeScreen = (props: Props) => {
   };
 
   return (
-    <AssessmentLayout
+    <SurveyLayout
       activityName={props.activityDetails.name}
       appletId={context.appletId}
       progress={0}
@@ -101,6 +101,6 @@ export const AssessmentWelcomeScreen = (props: Props) => {
           {props.activityDetails.description}
         </Text>
       </Box>
-    </AssessmentLayout>
+    </SurveyLayout>
   );
 };

@@ -23,7 +23,7 @@ type Props = PropsWithChildren<{
   footerActions?: React.ReactNode;
 }>;
 
-export const AssessmentLayout = (props: Props) => {
+const SurveyLayout = (props: Props) => {
   return (
     <Box
       id="assessment-screen-layout"
@@ -60,3 +60,5 @@ export const AssessmentLayout = (props: Props) => {
     </Box>
   );
 };
+
+export default SurveyLayout;
