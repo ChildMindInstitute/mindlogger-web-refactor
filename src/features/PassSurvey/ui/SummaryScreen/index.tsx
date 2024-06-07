@@ -2,13 +2,13 @@ import { Divider } from '@mui/material';
 
 import { Alerts } from './Alerts';
 import { ScoreSection } from './ScoreSection';
-import { useSummaryData } from '../../hooks';
+import { useFlowType, useSummaryData } from '../../hooks';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { useAppSelector, useCustomTranslation, useFlowType } from '~/shared/utils';
+import { useAppSelector, useCustomTranslation } from '~/shared/utils';
 
 type Props = {
   activityId: string;
