@@ -65,7 +65,7 @@ export const useEntityComplete = (props: Props) => {
     }
 
     return navigator.navigate(
-      ROUTES.activityDetails.navigateTo({
+      ROUTES.survey.navigateTo({
         appletId: props.applet.id,
         activityId,
         eventId: props.eventId,

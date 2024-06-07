@@ -4,7 +4,7 @@ import Box from '~/shared/ui/Box';
 import { useCustomTranslation } from '~/shared/utils';
 import { SurveyBasicContext, SurveyWidget } from '~/widgets/Survey';
 
-function ActivityDetailsPage() {
+function SurveyPage() {
   const { appletId, activityId, eventId } = useParams();
   const { t } = useCustomTranslation();
 
@@ -21,4 +21,4 @@ function ActivityDetailsPage() {
   );
 }
 
-export default ActivityDetailsPage;
+export default SurveyPage;

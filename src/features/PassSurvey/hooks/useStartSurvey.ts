@@ -52,7 +52,7 @@ export const useStartSurvey = (props: Props) => {
     }
 
     return navigator.navigate(
-      ROUTES.activityDetails.navigateTo({
+      ROUTES.survey.navigateTo({
         appletId,
         activityId,
         eventId,

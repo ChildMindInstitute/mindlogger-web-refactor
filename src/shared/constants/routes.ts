@@ -61,7 +61,7 @@ export const ROUTES = {
     path: '/protected/applets/:appletId',
     navigateTo: (appletId: string | number) => `/protected/applets/${appletId}`,
   },
-  activityDetails: {
+  survey: {
     path: '/protected/applets/:appletId/activityId/:activityId/event/:eventId/entityType/:entityType',
     navigateTo: ({
       appletId,
