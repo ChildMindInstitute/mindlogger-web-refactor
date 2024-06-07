@@ -14,16 +14,16 @@ import {
 } from '~/shared/api';
 
 type Return = {
-  appletDetails: AppletDetailsDTO | null;
+  appletDTO: AppletDetailsDTO | null;
   respondentMeta?: RespondentMetaDTO;
-  activityDetails: ActivityDTO | null;
-  eventsRawData: AppletEventsResponse | null;
+  activityDTO: ActivityDTO | null;
+  eventsDTO: AppletEventsResponse | null;
   isError: boolean;
   isLoading: boolean;
   error: BaseError | null;
 };
 
-export const useActivityDetailsQuery = (): Return => {
+export const useSurveyDataQuery = (): Return => {
   const context = useContext(SurveyBasicContext);
 
   const {
@@ -56,10 +56,10 @@ export const useActivityDetailsQuery = (): Return => {
   );
 
   return {
-    appletDetails: appletById?.data?.result ?? null,
+    appletDTO: appletById?.data?.result ?? null,
     respondentMeta: appletById?.data?.respondentMeta,
-    activityDetails: activityById?.data?.result ?? null,
-    eventsRawData: eventsByIdData?.data?.result ?? null,
+    activityDTO: activityById?.data?.result ?? null,
+    eventsDTO: eventsByIdData?.data?.result ?? null,
     isError: isAppletError || isActivityError || isEventsError,
     isLoading: isAppletLoading || isActivityLoading || isEventsLoading,
     error: appletError ?? activityError ?? eventsError,

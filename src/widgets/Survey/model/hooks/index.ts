@@ -1,4 +1,4 @@
-export * from './useActivityDetailsQuery';
+export * from './useSurveyDataQuery';
 export * from './useSubmitAnswersMutation';
 export * from './useAnswers';
 export * from './useSurvey';

@@ -5,7 +5,7 @@ import { AssessmentPassingScreen } from './AssessmentPassingScreen';
 import { AssessmentSummaryScreen } from './AssessmentSummaryScreen';
 import { AssessmentWelcomeScreen } from './AssessmentWelcomeScreen';
 import { SurveyBasicContext, SurveyContext } from '../lib';
-import * as activityDetailsModel from '../model';
+import { useSurveyDataQuery } from '../model/hooks';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
@@ -17,10 +17,11 @@ export const SurveyWidget = () => {
 
   const context = useContext(SurveyBasicContext);
 
-  const activityEventId = getProgressId(context.activityId, context.eventId);
-
   const activityProgress = useAppSelector((state) =>
-    appletModel.selectors.selectActivityProgress(state, activityEventId),
+    appletModel.selectors.selectActivityProgress(
+      state,
+      getProgressId(context.activityId, context.eventId),
+    ),
   );
 
   const items = activityProgress?.items ?? [];
@@ -29,15 +30,8 @@ export const SurveyWidget = () => {
 
   const isActivityStarted = items.length > 0;
 
-  const {
-    activityDetails,
-    isLoading,
-    isError,
-    error,
-    appletDetails,
-    eventsRawData,
-    respondentMeta,
-  } = activityDetailsModel.hooks.useActivityDetailsQuery();
+  const { activityDTO, appletDTO, eventsDTO, respondentMeta, isLoading, isError, error } =
+    useSurveyDataQuery();
 
   if (isLoading) {
     return <AssessmentLoadingScreen />;
@@ -53,7 +47,7 @@ export const SurveyWidget = () => {
     );
   }
 
-  if (!appletDetails || !activityDetails || !eventsRawData) {
+  if (!appletDTO || !activityDTO || !eventsDTO) {
     return (
       <Box height="100vh" width="100%" display="flex" justifyContent="center" alignItems="center">
         <span>{t('common_loading_error')}</span>
@@ -62,21 +56,19 @@ export const SurveyWidget = () => {
   }
 
   if (!isActivityStarted) {
-    return <AssessmentWelcomeScreen activityDetails={activityDetails} />;
+    return <AssessmentWelcomeScreen activityDetails={activityDTO} />;
   }
 
   if (showSummaryScreen) {
-    return (
-      <AssessmentSummaryScreen appletDetails={appletDetails} activityName={activityDetails.name} />
-    );
+    return <AssessmentSummaryScreen appletDetails={appletDTO} activityName={activityDTO.name} />;
   }
 
   return (
     <SurveyContext.Provider
       value={{
-        activity: activityDetails,
-        applet: appletDetails,
-        events: eventsRawData,
+        activity: activityDTO,
+        applet: appletDTO,
+        events: eventsDTO,
         respondentMeta,
       }}
     >
