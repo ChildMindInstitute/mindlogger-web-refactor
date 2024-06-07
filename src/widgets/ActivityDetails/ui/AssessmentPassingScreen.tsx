@@ -1,47 +1,42 @@
 import { useCallback, useContext, useMemo, useState } from 'react';
 
 import { AssessmentLayout } from './AssessmentLayout';
-import { ActivityDetailsContext } from '../lib';
+import { SurveyBasicContext, SurveyContext } from '../lib';
 import { validateBeforeMoveForward } from '../model';
 import { useAnswer, useAutoForward, useSubmitAnswersMutations, useSurvey } from '../model/hooks';
 
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
-import { SurveyManageButtons, useItemTimer, useSummaryData } from '~/features/PassSurvey';
 import {
-  ActivityDTO,
-  AppletDetailsDTO,
-  AppletEventsResponse,
-  RespondentMetaDTO,
-} from '~/shared/api';
+  SurveyManageButtons,
+  useFlowType,
+  useItemTimer,
+  useSummaryData,
+} from '~/features/PassSurvey';
 import { MuiModal, useNotification } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
-import { useAppSelector, useCustomTranslation, useFlowType, usePrevious } from '~/shared/utils';
+import { useAppSelector, useCustomTranslation, usePrevious } from '~/shared/utils';
 
-type Props = {
-  activityDetails: ActivityDTO;
-  eventsRawData: AppletEventsResponse;
-  appletDetails: AppletDetailsDTO;
-  respondentMeta?: RespondentMetaDTO;
-};
-
-export const AssessmentPassingScreen = (props: Props) => {
+export const AssessmentPassingScreen = () => {
   const { t } = useCustomTranslation();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { showWarningNotification, showSuccessNotification } = useNotification();
 
-  const context = useContext(ActivityDetailsContext);
+  const surveyBasicContext = useContext(SurveyBasicContext); // This is basic context with { eventId, appletId, activityId, isPublic, publicAppletKey }
+  const surveyContext = useContext(SurveyContext); // This is full context with { applet, activity, events, respondentMeta }
 
   const flowParams = useFlowType();
 
-  const applet = props.appletDetails;
+  const applet = surveyContext.applet;
 
-  const activityId = props.activityDetails.id;
+  const activity = surveyContext.activity;
 
-  const eventId = context.eventId;
+  const activityId = activity.id;
+
+  const eventId = surveyBasicContext.eventId;
 
   const activityEventId = getProgressId(activityId, eventId);
 
@@ -77,15 +72,15 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const { getSummaryForCurrentActivity } = useSummaryData({
     activityId,
-    activityName: props.activityDetails.name,
+    activityName: activity.name,
     eventId,
-    scoresAndReports: props.activityDetails.scoresAndReports,
+    scoresAndReports: activity.scoresAndReports,
   });
 
   const { step, item, hasPrevStep, hasNextStep, progress, conditionallyHiddenItemIds } =
     useSurvey(activityProgress);
 
-  const canGoBack = !item?.config.removeBackButton && props.activityDetails.responseIsEditable;
+  const canGoBack = !item?.config.removeBackButton && activity.responseIsEditable;
 
   const prevStep = usePrevious(step);
 
@@ -93,14 +88,14 @@ export const AssessmentPassingScreen = (props: Props) => {
     applet,
     activityId,
     eventId,
-    publicAppletKey: context.isPublic ? context.publicAppletKey : null,
+    publicAppletKey: surveyBasicContext.isPublic ? surveyBasicContext.publicAppletKey : null,
     flowId: flowParams.isFlow ? flowParams.flowId : null,
   });
 
   const { replaceTextVariables } = useTextVariablesReplacer({
     items,
     answers: items.map((item) => item.answer),
-    respondentMeta: props.respondentMeta,
+    respondentMeta: surveyContext.respondentMeta,
     completedEntityTime: completedEntities[activityId],
   });
 
@@ -127,7 +122,7 @@ export const AssessmentPassingScreen = (props: Props) => {
       showSuccessNotification(t('toast.answers_submitted'));
     }
 
-    const isSummaryScreenOn = props.activityDetails.scoresAndReports?.showScoreSummary ?? false;
+    const isSummaryScreenOn = activity.scoresAndReports?.showScoreSummary ?? false;
 
     const summaryData = getSummaryForCurrentActivity();
 
@@ -141,7 +136,7 @@ export const AssessmentPassingScreen = (props: Props) => {
         const summaryDataContext: FlowSummaryData = {
           alerts: summaryData.alerts,
           scores: {
-            activityName: props.activityDetails.name,
+            activityName: activity.name,
             scores: summaryData.scores,
           },
           order: isFlowGroup ? groupProgress.pipelineActivityOrder : 0,
@@ -180,14 +175,14 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const { submitAnswers, isLoading } = useSubmitAnswersMutations({
     onSubmitSuccess,
-    isPublic: context.isPublic,
+    isPublic: surveyBasicContext.isPublic,
   });
 
   const { processAnswers } = useAnswer({
     applet,
     activityId,
     eventId,
-    eventsRawData: props.eventsRawData,
+    eventsRawData: surveyContext.events,
     flowId: flowParams.isFlow ? flowParams.flowId : null,
   });
 
@@ -197,12 +192,12 @@ export const AssessmentPassingScreen = (props: Props) => {
     const answer = processAnswers({
       items,
       userEvents: [...userEvents, doneUserEvent],
-      isPublic: context.isPublic,
+      isPublic: surveyBasicContext.isPublic,
     });
 
     return submitAnswers(answer);
   }, [
-    context.isPublic,
+    surveyBasicContext.isPublic,
     item,
     items,
     processAnswers,
@@ -213,7 +208,7 @@ export const AssessmentPassingScreen = (props: Props) => {
 
   const onNext = useCallback(() => {
     const isItemHasAnswer = item.answer.length;
-    const isItemSkippable = item.config.skippableItem || props.activityDetails.isSkippable;
+    const isItemSkippable = item.config.skippableItem || activity.isSkippable;
 
     if (!isItemHasAnswer && isItemSkippable) {
       saveUserEventByType('SKIP', item);
@@ -222,14 +217,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     }
 
     return incrementStep({ activityId, eventId });
-  }, [
-    activityId,
-    eventId,
-    incrementStep,
-    item,
-    props.activityDetails.isSkippable,
-    saveUserEventByType,
-  ]);
+  }, [activityId, eventId, incrementStep, item, activity.isSkippable, saveUserEventByType]);
 
   const onBack = useCallback(() => {
     saveUserEventByType('PREV', item);
@@ -248,7 +236,7 @@ export const AssessmentPassingScreen = (props: Props) => {
 
     const isValid = validateBeforeMoveForward({
       item,
-      activity: props.activityDetails,
+      activity,
       showWarning: (key: string) => showWarningNotification(t(key)),
     });
 
@@ -265,7 +253,7 @@ export const AssessmentPassingScreen = (props: Props) => {
     return onNext();
   }, [
     item,
-    props.activityDetails,
+    activity,
     conditionallyHiddenItemIds,
     removeItemAnswer,
     hasNextStep,
@@ -308,13 +296,13 @@ export const AssessmentPassingScreen = (props: Props) => {
   return (
     <>
       <AssessmentLayout
-        activityName={props.activityDetails.name}
+        activityName={activity.name}
         progress={progress}
         appletId={applet.id}
         activityId={activityId}
         eventId={eventId}
-        isPublic={context.isPublic}
-        publicAppletKey={context.isPublic ? context.publicAppletKey : null}
+        isPublic={surveyBasicContext.isPublic}
+        publicAppletKey={surveyBasicContext.isPublic ? surveyBasicContext.publicAppletKey : null}
         isSaveAndExitButtonShown={true}
         footerActions={
           <SurveyManageButtons
@@ -334,8 +322,8 @@ export const AssessmentPassingScreen = (props: Props) => {
               key={item.id}
               item={item}
               replaceText={replaceTextVariables}
-              watermark={props.appletDetails.watermark}
-              allowToSkipAllItems={props.activityDetails.isSkippable}
+              watermark={applet.watermark}
+              allowToSkipAllItems={activity.isSkippable}
               step={step}
               prevStep={prevStep}
               onValueChange={onItemValueChange}

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { ActivityDetailsContext } from '../lib';
+import { SurveyBasicContext } from '../lib';
 
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import { ROUTES } from '~/shared/constants';
@@ -11,7 +11,7 @@ import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
 export const AssessmentLoadingScreen = () => {
   const navigator = useCustomNavigation();
 
-  const context = useContext(ActivityDetailsContext);
+  const context = useContext(SurveyBasicContext);
 
   const { greaterThanSM } = useCustomMediaQuery();
 

@@ -1,28 +1,23 @@
 import { useContext } from 'react';
 
 import { AssessmentLayout } from './AssessmentLayout';
-import { ActivityDetailsContext } from '../lib';
+import { SurveyBasicContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
-import { SummaryScreen, SurveyManageButtons } from '~/features/PassSurvey';
-import {
-  ActivityDTO,
-  AppletDetailsDTO,
-  AppletEventsResponse,
-  RespondentMetaDTO,
-} from '~/shared/api';
+import { SummaryScreen, SurveyManageButtons, useFlowType } from '~/features/PassSurvey';
+import { AppletDetailsDTO } from '~/shared/api';
 import Box from '~/shared/ui/Box';
-import { useCustomMediaQuery, useCustomTranslation, useFlowType } from '~/shared/utils';
+import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 
 type Props = {
-  activityDetails: ActivityDTO;
-  eventsRawData: AppletEventsResponse;
   appletDetails: AppletDetailsDTO;
-  respondentMeta?: RespondentMetaDTO;
+
+  activityId: string;
+  activityName: string;
 };
 
 export const AssessmentSummaryScreen = (props: Props) => {
-  const context = useContext(ActivityDetailsContext);
+  const context = useContext(SurveyBasicContext);
 
   const { t } = useCustomTranslation();
   const { greaterThanSM } = useCustomMediaQuery();
@@ -31,13 +26,11 @@ export const AssessmentSummaryScreen = (props: Props) => {
 
   const applet = props.appletDetails;
 
-  const activityId = props.activityDetails.id;
-
   const eventId = context.eventId;
 
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
     applet,
-    activityId,
+    activityId: props.activityId,
     eventId,
     publicAppletKey: context.isPublic ? context.publicAppletKey : null,
     flowId: flowParams.isFlow ? flowParams.flowId : null,
@@ -49,9 +42,9 @@ export const AssessmentSummaryScreen = (props: Props) => {
 
   return (
     <AssessmentLayout
-      activityName={props.activityDetails.name}
+      activityName={props.activityName}
       appletId={applet.id}
-      activityId={activityId}
+      activityId={props.activityId}
       eventId={eventId}
       progress={100}
       isPublic={context.isPublic}
@@ -75,8 +68,8 @@ export const AssessmentSummaryScreen = (props: Props) => {
         data-testid="assessment-summary-screen-container"
       >
         <SummaryScreen
-          activityId={activityId}
-          activityName={props.activityDetails.name}
+          activityId={props.activityId}
+          activityName={props.activityName}
           eventId={eventId}
         />
       </Box>

@@ -2,16 +2,16 @@ import { useContext } from 'react';
 
 import { ActivityMetaData } from './ActivityMetaData';
 import { AssessmentLayout } from './AssessmentLayout';
-import { ActivityDetailsContext } from '../lib';
+import { SurveyBasicContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
-import { StartAssessmentButton } from '~/features/PassSurvey';
+import { StartAssessmentButton, useFlowType } from '~/features/PassSurvey';
 import { ActivityDTO } from '~/shared/api';
 import { Theme } from '~/shared/constants';
 import { AvatarBase } from '~/shared/ui/Avatar';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { useCustomMediaQuery, useFlowType } from '~/shared/utils';
+import { useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {
   activityDetails: ActivityDTO;
@@ -20,7 +20,7 @@ type Props = {
 export const AssessmentWelcomeScreen = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery();
 
-  const context = useContext(ActivityDetailsContext);
+  const context = useContext(SurveyBasicContext);
 
   const flowParams = useFlowType();
 

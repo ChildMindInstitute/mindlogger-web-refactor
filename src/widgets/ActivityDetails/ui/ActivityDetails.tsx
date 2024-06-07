@@ -4,18 +4,18 @@ import { AssessmentLoadingScreen } from './AssessmentLoadingScreen';
 import { AssessmentPassingScreen } from './AssessmentPassingScreen';
 import { AssessmentSummaryScreen } from './AssessmentSummaryScreen';
 import { AssessmentWelcomeScreen } from './AssessmentWelcomeScreen';
-import { ActivityDetailsContext } from '../lib';
+import { SurveyBasicContext, SurveyContext } from '../lib';
 import * as activityDetailsModel from '../model';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
-import { Box } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation } from '~/shared/utils';
 
 export const ActivityDetailsWidget = () => {
   const { t } = useCustomTranslation();
 
-  const context = useContext(ActivityDetailsContext);
+  const context = useContext(SurveyBasicContext);
 
   const activityEventId = getProgressId(context.activityId, context.eventId);
 
@@ -69,19 +69,22 @@ export const ActivityDetailsWidget = () => {
     return (
       <AssessmentSummaryScreen
         appletDetails={appletDetails}
-        activityDetails={activityDetails}
-        eventsRawData={eventsRawData}
-        respondentMeta={respondentMeta}
+        activityId={activityDetails.id}
+        activityName={activityDetails.name}
       />
     );
   }
 
   return (
-    <AssessmentPassingScreen
-      appletDetails={appletDetails}
-      activityDetails={activityDetails}
-      eventsRawData={eventsRawData}
-      respondentMeta={respondentMeta}
-    />
+    <SurveyContext.Provider
+      value={{
+        activity: activityDetails,
+        applet: appletDetails,
+        events: eventsRawData,
+        respondentMeta,
+      }}
+    >
+      <AssessmentPassingScreen />
+    </SurveyContext.Provider>
   );
 };

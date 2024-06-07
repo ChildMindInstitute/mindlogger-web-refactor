@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { ActivityDetailsContext } from '../../lib';
+import { SurveyBasicContext } from '../../lib';
 
 import { useActivityByIdQuery } from '~/entities/activity';
 import { useAppletByIdQuery } from '~/entities/applet';
@@ -24,7 +24,7 @@ type Return = {
 };
 
 export const useActivityDetailsQuery = (): Return => {
-  const context = useContext(ActivityDetailsContext);
+  const context = useContext(SurveyBasicContext);
 
   const {
     data: appletById,
