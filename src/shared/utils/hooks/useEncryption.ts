@@ -1,7 +1,7 @@
-import { AppletEncryptionDTO } from '../../api';
+import { EncryptionDTO } from '../../api';
 import { encryption } from '../encryption';
 
-type InputProps = AppletEncryptionDTO & {
+type InputProps = EncryptionDTO & {
   privateKey: number[];
 };
 

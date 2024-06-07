@@ -1,8 +1,8 @@
-import { AppletEncryptionDTO } from '~/shared/api';
+import { EncryptionDTO } from '~/shared/api';
 import { encryption } from '~/shared/utils';
 
 export const generateUserPublicKey = (
-  appletEncryption: AppletEncryptionDTO | null,
+  appletEncryption: EncryptionDTO | null,
   userPrivateKey: number[] | null,
 ): string => {
   if (!appletEncryption) {

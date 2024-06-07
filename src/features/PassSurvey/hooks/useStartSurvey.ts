@@ -1,6 +1,6 @@
 import { ActivityStatus, EntityType } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
-import { AppletDetailsBaseInfoDTO } from '~/shared/api';
+import { AppletBaseDTO } from '~/shared/api';
 import ROUTES from '~/shared/constants/routes';
 import { MixEvents, MixProperties, Mixpanel, useCustomNavigation } from '~/shared/utils';
 
@@ -20,7 +20,7 @@ type OnActivityCardClickProps = {
 };
 
 type Props = {
-  applet: AppletDetailsBaseInfoDTO;
+  applet: AppletBaseDTO;
   isPublic: boolean;
   publicAppletKey: string | null;
 };

@@ -2,13 +2,13 @@ import type { NavigateOptions } from 'react-router/dist/lib/context';
 
 import { ActivityPipelineType } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
-import { AppletDetailsDTO } from '~/shared/api';
+import { AppletDTO } from '~/shared/api';
 import ROUTES from '~/shared/constants/routes';
 import { useCustomNavigation } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
 type Props = {
-  applet: AppletDetailsDTO;
+  applet: AppletDTO;
   activityId: string;
   eventId: string;
 

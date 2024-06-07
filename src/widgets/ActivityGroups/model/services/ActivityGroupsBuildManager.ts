@@ -10,14 +10,14 @@ import {
   createActivityGroupsBuilder,
 } from '~/abstract/lib/GroupBuilder';
 import { EventModel, ScheduleEvent } from '~/entities/event';
-import { ActivityBaseInfoDTO, ActivityFlowDTO, AppletEventsResponse } from '~/shared/api';
+import { ActivityBaseDTO, ActivityFlowDTO, AppletEventsResponse } from '~/shared/api';
 
 type BuildResult = {
   groups: ActivityListGroup[];
 };
 
 type ProcessParams = {
-  activities: ActivityBaseInfoDTO[];
+  activities: ActivityBaseDTO[];
   flows: ActivityFlowDTO[];
   events: AppletEventsResponse;
   entityProgress: GroupProgressState;

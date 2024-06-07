@@ -12,12 +12,12 @@ import { ActivityPipelineType, GroupProgress } from '~/abstract/lib';
 import { useEncryptPayload } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { userModel } from '~/entities/user';
-import { AnswerPayload, AppletDetailsDTO, AppletEventsResponse } from '~/shared/api';
+import { AnswerPayload, AppletDTO, AppletEventsResponse } from '~/shared/api';
 import { formatToDtoDate, formatToDtoTime, useAppSelector, useEncryption } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
 type Props = {
-  applet: AppletDetailsDTO;
+  applet: AppletDTO;
 
   flowId: string | null;
   activityId: string;

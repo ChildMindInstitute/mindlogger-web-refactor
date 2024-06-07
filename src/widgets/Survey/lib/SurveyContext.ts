@@ -1,16 +1,11 @@
 import { createContext } from 'react';
 
-import {
-  ActivityDTO,
-  AppletDetailsDTO,
-  AppletEventsResponse,
-  RespondentMetaDTO,
-} from '~/shared/api';
+import { ActivityDTO, AppletDTO, AppletEventsResponse, RespondentMetaDTO } from '~/shared/api';
 
 type Context = {
   activity: ActivityDTO;
   events: AppletEventsResponse;
-  applet: AppletDetailsDTO;
+  applet: AppletDTO;
   respondentMeta?: RespondentMetaDTO;
 };
 

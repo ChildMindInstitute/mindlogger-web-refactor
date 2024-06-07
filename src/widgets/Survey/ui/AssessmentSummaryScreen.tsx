@@ -5,12 +5,12 @@ import { SurveyBasicContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
 import { SummaryScreen, SurveyManageButtons, useFlowType } from '~/features/PassSurvey';
-import { AppletDetailsDTO } from '~/shared/api';
+import { AppletDTO } from '~/shared/api';
 import Box from '~/shared/ui/Box';
 import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 
 type Props = {
-  appletDetails: AppletDetailsDTO;
+  appletDetails: AppletDTO;
 
   activityName: string;
 };

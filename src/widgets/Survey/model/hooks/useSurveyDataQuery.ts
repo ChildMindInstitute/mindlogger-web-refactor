@@ -7,14 +7,14 @@ import { useAppletByIdQuery } from '~/entities/applet';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
 import {
   ActivityDTO,
-  AppletDetailsDTO,
+  AppletDTO,
   AppletEventsResponse,
   BaseError,
   RespondentMetaDTO,
 } from '~/shared/api';
 
 type Return = {
-  appletDTO: AppletDetailsDTO | null;
+  appletDTO: AppletDTO | null;
   respondentMeta?: RespondentMetaDTO;
   activityDTO: ActivityDTO | null;
   eventsDTO: AppletEventsResponse | null;

@@ -1,9 +1,9 @@
 import { ActivityListItem, ActivityStatus } from '~/abstract/lib/GroupBuilder';
 import { isSupportedActivity } from '~/entities/activity';
-import { AppletDetailsBaseInfoDTO } from '~/shared/api';
+import { AppletBaseDTO } from '~/shared/api';
 
 type Props = {
-  applet: AppletDetailsBaseInfoDTO;
+  applet: AppletBaseDTO;
   activityListItem: ActivityListItem;
 };
 
