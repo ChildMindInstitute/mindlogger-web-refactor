@@ -1,7 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-import { AssessmentLayoutFooter } from './AssessmentLayoutFooter';
-import { AssessmentLayoutHeader } from './AssessmentLayoutHeader';
+import SurveyHeader from './SurveyHeader';
 
 import { Theme } from '~/shared/constants';
 import { Box } from '~/shared/ui';
@@ -32,7 +31,7 @@ const SurveyLayout = (props: Props) => {
       flexDirection="column"
       bgcolor={Theme.colors.light.surface}
     >
-      <AssessmentLayoutHeader
+      <SurveyHeader
         title={props.activityName}
         progress={props.progress}
         appletId={props.appletId}
@@ -56,7 +55,13 @@ const SurveyLayout = (props: Props) => {
         </Box>
       </Box>
 
-      <AssessmentLayoutFooter>{props.footerActions}</AssessmentLayoutFooter>
+      <Box
+        sx={{
+          borderTop: `1px solid ${Theme.colors.light.surfaceVariant}`,
+        }}
+      >
+        {props.footerActions}
+      </Box>
     </Box>
   );
 };

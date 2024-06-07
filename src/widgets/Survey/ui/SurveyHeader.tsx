@@ -17,7 +17,7 @@ type Props = {
   isSaveAndExitButtonShown: boolean;
 };
 
-export const AssessmentLayoutHeader = (props: Props) => {
+const SurveyHeader = (props: Props) => {
   const { greaterThanSM } = useCustomMediaQuery();
   const navigator = useCustomNavigation();
 
@@ -89,3 +89,5 @@ export const AssessmentLayoutHeader = (props: Props) => {
     </Box>
   );
 };
+
+export default SurveyHeader;
