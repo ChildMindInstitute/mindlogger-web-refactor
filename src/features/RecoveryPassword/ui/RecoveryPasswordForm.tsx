@@ -4,7 +4,7 @@ import { useRecoveryPasswordTranslation } from '../lib/useRecoveryPasswordTransl
 import { RecoveryPassword, RecoveryPasswordSchema } from '../model/schema';
 
 import { useApproveRecoveryPasswordMutation } from '~/entities/user';
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
 import {
   BaseButton,

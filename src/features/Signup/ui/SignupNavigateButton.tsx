@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { BaseButton } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 

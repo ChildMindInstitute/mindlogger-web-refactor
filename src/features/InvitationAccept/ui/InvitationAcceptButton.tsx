@@ -1,5 +1,5 @@
 import { useAcceptInviteMutation, useInvitationTranslation } from '~/entities/invitation';
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
 import { BaseButton, useNotification } from '~/shared/ui';
 import { Mixpanel, useCustomNavigation } from '~/shared/utils';

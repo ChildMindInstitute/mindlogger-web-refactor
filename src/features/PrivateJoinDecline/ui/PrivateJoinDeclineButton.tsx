@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import { useInvitationTranslation } from '~/entities/invitation';
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
 import { BaseButton, useNotification } from '~/shared/ui';
 

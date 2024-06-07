@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { SurveyBasicContext } from '../lib';
 
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';

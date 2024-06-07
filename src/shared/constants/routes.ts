@@ -1,4 +1,4 @@
-export const ROUTES = {
+const ROUTES = {
   // Public routes
   login: {
     path: '/login',
@@ -92,3 +92,5 @@ export const ROUTES = {
       `/protected/thanks/${appletId}/isPublic/${isPublic}`,
   },
 };
+
+export default ROUTES;

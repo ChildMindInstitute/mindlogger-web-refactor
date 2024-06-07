@@ -11,7 +11,7 @@ import MLLogo from '~/assets/ml-logo.svg';
 import { userModel } from '~/entities/user';
 import { LanguageDropdown } from '~/features/language';
 import { Theme } from '~/shared/constants';
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
 import { AvatarBase } from '~/shared/ui';
 import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';

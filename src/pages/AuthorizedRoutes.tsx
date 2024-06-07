@@ -8,7 +8,7 @@ import ProfilePage from './Profile';
 import SettingsPage from './Settings';
 import SurveyPage from './Survey';
 
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import Layout from '~/widgets/AppLayout';
 import LogoutTracker from '~/widgets/LogoutTracker';
 import ProtectedRoute from '~/widgets/ProtectedRoute';

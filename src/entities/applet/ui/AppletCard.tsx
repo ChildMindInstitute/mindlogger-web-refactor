@@ -1,6 +1,6 @@
 import { AppletListItem } from '../lib';
 
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
 import { CustomCard } from '~/shared/ui';
 import { MixEvents, MixProperties, Mixpanel, useCustomNavigation } from '~/shared/utils';

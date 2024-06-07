@@ -1,7 +1,7 @@
 import { ActivityStatus, EntityType } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
 import { AppletDetailsBaseInfoDTO } from '~/shared/api';
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { MixEvents, MixProperties, Mixpanel, useCustomNavigation } from '~/shared/utils';
 
 type NavigateToEntityProps = {

@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 
 import { useNavbarTranslation } from '../lib/useNavbarTranslation';
 
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { useCustomNavigation } from '~/shared/utils';
 
 type Props = {

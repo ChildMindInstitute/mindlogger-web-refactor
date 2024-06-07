@@ -3,7 +3,7 @@ import type { NavigateOptions } from 'react-router/dist/lib/context';
 import { ActivityPipelineType } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { AppletDetailsDTO } from '~/shared/api';
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { useCustomNavigation } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 

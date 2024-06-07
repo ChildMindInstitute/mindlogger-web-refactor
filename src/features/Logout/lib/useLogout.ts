@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { appletModel } from '~/entities/applet';
 import { useLogoutMutation, userModel } from '~/entities/user';
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { Mixpanel, secureTokensStorage, useCustomNavigation } from '~/shared/utils';
 import { FeatureFlags } from '~/shared/utils/featureFlags';
 
