@@ -4,46 +4,40 @@ import Divider from '@mui/material/Divider';
 
 import { Alerts } from './Alerts';
 import { ScoreSection } from './ScoreSection';
-import { SurveyBasicContext } from '../../lib';
+import { SurveyBasicContext, SurveyContext } from '../../lib';
 import SurveyLayout from '../SurveyLayout';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { SurveyManageButtons, useFlowType, useSummaryData } from '~/features/PassSurvey';
-import { AppletDTO } from '~/shared/api';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { useAppSelector, useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 
-type Props = {
-  appletDetails: AppletDTO;
+const SummaryScreen = () => {
+  const { t } = useCustomTranslation();
 
-  activityName: string;
-};
+  const { greaterThanSM } = useCustomMediaQuery();
 
-const SummaryScreen = (props: Props) => {
   const basicContext = useContext(SurveyBasicContext);
 
-  const { t } = useCustomTranslation();
-  const { greaterThanSM } = useCustomMediaQuery();
+  const surveyContext = useContext(SurveyContext);
 
   const { isFlow, flowId } = useFlowType();
 
-  const applet = props.appletDetails;
+  const applet = surveyContext.applet;
 
   const eventId = basicContext.eventId;
   const activityId = basicContext.activityId;
 
-  const activityEventId = getProgressId(activityId, eventId);
-
   const activityProgress = useAppSelector((state) =>
-    appletModel.selectors.selectActivityProgress(state, activityEventId),
+    appletModel.selectors.selectActivityProgress(state, getProgressId(activityId, eventId)),
   );
 
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
     applet,
-    activityId: basicContext.activityId,
     eventId,
+    activityId: basicContext.activityId,
     publicAppletKey: basicContext.isPublic ? basicContext.publicAppletKey : null,
     flowId: isFlow ? flowId : null,
   });
@@ -54,15 +48,15 @@ const SummaryScreen = (props: Props) => {
 
   const { summaryData } = useSummaryData({
     activityId: basicContext.activityId,
-    activityName: props.activityName,
     eventId: basicContext.eventId,
+    activityName: surveyContext.activity.name,
     scoresAndReports: activityProgress.scoreSettings,
     flowId: isFlow ? flowId : undefined,
   });
 
   return (
     <SurveyLayout
-      activityName={props.activityName}
+      activityName={surveyContext.activity.name}
       progress={100}
       isSaveAndExitButtonShown={false}
       footerActions={

@@ -56,11 +56,22 @@ export const SurveyWidget = () => {
   }
 
   if (!isActivityStarted) {
-    return <WelcomeScreen activityDetails={activityDTO} />;
+    return <WelcomeScreen activity={activityDTO} />;
   }
 
   if (showSummaryScreen) {
-    return <SummaryScreen appletDetails={appletDTO} activityName={activityDTO.name} />;
+    return (
+      <SurveyContext.Provider
+        value={{
+          activity: activityDTO,
+          applet: appletDTO,
+          events: eventsDTO,
+          respondentMeta,
+        }}
+      >
+        <SummaryScreen />;
+      </SurveyContext.Provider>
+    );
   }
 
   return (

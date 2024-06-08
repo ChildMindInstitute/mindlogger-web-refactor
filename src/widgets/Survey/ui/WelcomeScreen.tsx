@@ -14,7 +14,7 @@ import Text from '~/shared/ui/Text';
 import { useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {
-  activityDetails: ActivityDTO;
+  activity: ActivityDTO;
 };
 
 const WelcomeScreen = (props: Props) => {
@@ -26,17 +26,17 @@ const WelcomeScreen = (props: Props) => {
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
-  const entityId = flowParams.isFlow ? flowParams.flowId : props.activityDetails.id;
+  const entityId = flowParams.isFlow ? flowParams.flowId : props.activity.id;
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
 
   const startAssessment = () => {
-    return setInitialProgress({ activity: props.activityDetails, eventId: basicContext.eventId });
+    return setInitialProgress({ activity: props.activity, eventId: basicContext.eventId });
   };
 
   return (
     <SurveyLayout
-      activityName={props.activityDetails.name}
+      activityName={props.activity.name}
       progress={0}
       isSaveAndExitButtonShown={true}
       footerActions={
@@ -52,8 +52,8 @@ const WelcomeScreen = (props: Props) => {
         maxWidth="570px"
       >
         <AvatarBase
-          src={props.activityDetails.image}
-          name={props.activityDetails?.name}
+          src={props.activity.image}
+          name={props.activity.name}
           width="124px"
           height="124px"
           testid="flow-welcome-screen-avatar"
@@ -67,7 +67,7 @@ const WelcomeScreen = (props: Props) => {
           sx={{ marginTop: '24px' }}
         >
           <ActivityMetaData
-            activityLength={props.activityDetails.items.length}
+            activityLength={props.activity.items.length}
             groupInProgress={getGroupProgress({ entityId, eventId: basicContext.eventId })}
           />
         </Text>
@@ -79,7 +79,7 @@ const WelcomeScreen = (props: Props) => {
           margin="16px 0px"
           testid="flow-welcome-screen-title"
         >
-          {props.activityDetails.name}
+          {props.activity.name}
         </Text>
 
         <Text
@@ -90,7 +90,7 @@ const WelcomeScreen = (props: Props) => {
           testid="flow-welcome-screen-decription"
           sx={{ textAlign: 'center' }}
         >
-          {props.activityDetails.description}
+          {props.activity.description}
         </Text>
       </Box>
     </SurveyLayout>
