@@ -3,8 +3,7 @@ import { PropsWithChildren } from 'react';
 import SurveyHeader from './SurveyHeader';
 
 import { Theme } from '~/shared/constants';
-import { Box } from '~/shared/ui';
-import { NotificationCenter } from '~/shared/ui';
+import { Banners, Box } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
   progress?: number;
@@ -35,7 +34,7 @@ const SurveyLayout = (props: Props) => {
         flexDirection="column"
         overflow="scroll"
       >
-        <NotificationCenter />
+        <Banners />
         <Box display="flex" flex={1} justifyContent="center">
           {props.children}
         </Box>

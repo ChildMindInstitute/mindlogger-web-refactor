@@ -3,8 +3,7 @@ import { PropsWithChildren } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { Theme } from '~/shared/constants';
-import { NotificationCenter } from '~/shared/ui';
-import { Box } from '~/shared/ui';
+import { Banners, Box } from '~/shared/ui';
 import Footer from '~/widgets/Footer';
 import Header from '~/widgets/Header';
 
@@ -42,7 +41,7 @@ const Layout = ({
         flexDirection="column"
         overflow="auto"
       >
-        <NotificationCenter />
+        <Banners />
         {children ? children : <Outlet />}
         {footer ? footer : <Footer />}
       </Box>

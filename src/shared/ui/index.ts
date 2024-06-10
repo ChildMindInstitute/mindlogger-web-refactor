@@ -14,7 +14,7 @@ export { CardItem } from './CardItem';
 export * from './Avatar';
 export * from './Tooltip';
 export * from './BaseButton';
-export * from './NotificationCenter';
+export * from './Banners';
 
 export * from './BootstrapModal';
 export * from './MuiModal';

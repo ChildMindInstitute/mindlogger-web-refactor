@@ -8,13 +8,14 @@ import { useAnswer, useAutoForward, useSubmitAnswersMutations, useSurvey } from 
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
+import { useBanners } from '~/entities/banner/model';
 import {
   SurveyManageButtons,
   useFlowType,
   useItemTimer,
   useSummaryData,
 } from '~/features/PassSurvey';
-import { MuiModal, useNotification } from '~/shared/ui';
+import { MuiModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation, usePrevious } from '~/shared/utils';
 
@@ -23,7 +24,7 @@ const PassingScreen = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { showWarningNotification, showSuccessNotification } = useNotification();
+  const { addWarningBanner, addSuccessBanner } = useBanners();
 
   const surveyBasicContext = useContext(SurveyBasicContext); // This is basic context with { eventId, appletId, activityId, isPublic, publicAppletKey }
   const surveyContext = useContext(SurveyContext); // This is full context with { applet, activity, events, respondentMeta }
@@ -117,9 +118,9 @@ const PassingScreen = () => {
 
     // Show notification
     if (isFlowGroup && !isLastActivity) {
-      showSuccessNotification(t('toast.next_activity'));
+      addSuccessBanner(t('toast.next_activity'));
     } else {
-      showSuccessNotification(t('toast.answers_submitted'));
+      addSuccessBanner(t('toast.answers_submitted'));
     }
 
     const isSummaryScreenOn = activity.scoresAndReports?.showScoreSummary ?? false;
@@ -237,7 +238,7 @@ const PassingScreen = () => {
     const isValid = validateBeforeMoveForward({
       item,
       activity,
-      showWarning: (key: string) => showWarningNotification(t(key)),
+      showWarning: (key: string) => addWarningBanner(t(key)),
     });
 
     if (!isValid) {
@@ -258,7 +259,7 @@ const PassingScreen = () => {
     removeItemAnswer,
     hasNextStep,
     onNext,
-    showWarningNotification,
+    addWarningBanner,
     t,
   ]);
 
