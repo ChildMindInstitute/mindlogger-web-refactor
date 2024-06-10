@@ -17,7 +17,7 @@ interface LoginFormProps {
 export const LoginForm = ({ locationState }: LoginFormProps) => {
   const { t } = useLoginTranslation();
 
-  const { addWarningBanner } = useBanners();
+  const { addErrorBanner } = useBanners();
 
   const [passwordType, onPasswordIconClick] = usePasswordType();
 
@@ -42,7 +42,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
     },
     onError(error) {
       if (error.evaluatedMessage) {
-        addWarningBanner(error.evaluatedMessage);
+        addErrorBanner(error.evaluatedMessage);
       }
     },
   });
