@@ -32,7 +32,6 @@ const WelcomeScreen = () => {
 
   return (
     <SurveyLayout
-      activityName={context.activity.name}
       progress={0}
       isSaveAndExitButtonShown={true}
       footerActions={

@@ -7,7 +7,6 @@ import { Box } from '~/shared/ui';
 import { NotificationCenter } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
-  activityName: string;
   progress?: number;
 
   isSaveAndExitButtonShown: boolean;
@@ -25,7 +24,6 @@ const SurveyLayout = (props: Props) => {
       bgcolor={Theme.colors.light.surface}
     >
       <SurveyHeader
-        title={props.activityName}
         progress={props.progress}
         isSaveAndExitButtonShown={props.isSaveAndExitButtonShown}
       />
