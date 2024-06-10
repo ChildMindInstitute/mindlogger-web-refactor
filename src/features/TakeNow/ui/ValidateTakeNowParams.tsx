@@ -2,9 +2,12 @@ import { useEffect } from 'react';
 
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
-import { TakeNowParams } from '~/features/TakeNow/lib/TakeNowParams.types';
+import { useLogout } from '~/features/Logout';
+import { TakeNowParams } from '~/features/TakeNow/lib/types';
 import { useTakeNowValidation } from '~/features/TakeNow/lib/useTakeNowValidation';
+import ROUTES from '~/shared/constants/routes';
 import Loader from '~/shared/ui/Loader';
+import { useCustomNavigation } from '~/shared/utils';
 import { ActivityGroups } from '~/widgets/ActivityGroups';
 
 function ValidateTakeNowParams({
@@ -17,6 +20,8 @@ function ValidateTakeNowParams({
   const { addErrorBanner } = useBanners();
   const { initiateTakeNow, isInMultiInformantFlow, getMultiInformantState } =
     appletModel.hooks.useMultiInformantState();
+  const { navigate } = useCustomNavigation();
+  const { logout } = useLogout();
 
   const { isError, isLoading, isSuccess, error, data } = useTakeNowValidation({
     appletId,
@@ -44,10 +49,21 @@ function ValidateTakeNowParams({
 
   useEffect(() => {
     if (error) {
-      addErrorBanner({
-        children: error,
-        duration: 15000,
-      });
+      let duration: number | null = 15000;
+
+      if (error.type === 'mismatchedRespondent') {
+        logout();
+        duration = null;
+      } else if (error.type === 'invalidApplet') {
+        navigate(ROUTES.appletList.path);
+      }
+
+      setTimeout(() =>
+        addErrorBanner({
+          children: error.error,
+          duration,
+        }),
+      );
     }
   }, [error, addErrorBanner]);
 
