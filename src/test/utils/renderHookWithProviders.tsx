@@ -1,13 +1,13 @@
 import { ReactNode } from 'react';
 
-import { render } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { Route, Routes, MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import { ExtendedRenderOptions, setupStore } from '~/app/store';
 
-export const renderWithProviders = (
-  ui: React.ReactElement,
+export const renderHookWithProviders = (
+  hook: () => unknown,
   {
     route = '/',
     routePath = '/',
@@ -26,5 +26,5 @@ export const renderWithProviders = (
     </Provider>
   );
 
-  return { ...render(ui, { wrapper: Providers, ...options }), store };
+  return { ...renderHook(hook, { wrapper: Providers, ...options }), store };
 };
