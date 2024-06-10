@@ -4,5 +4,5 @@ export const DEFAULT_LANGUAGE: Language = 'en';
 
 export * from './dateTime';
 export * from './theme';
-export * from './routes';
+export { default as ROUTES } from './routes';
 export * from './environment.variables';

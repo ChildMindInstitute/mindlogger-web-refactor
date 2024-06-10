@@ -21,11 +21,11 @@ export type RespondentMetaDTO = { nickname: string };
 
 // API Responses - Success
 export type AppletListSuccessResponse = BaseSuccessListResponse<AppletListDTO>;
-export type AppletSuccessResponse = BaseSuccessResponse<AppletDetailsDTO> & {
+export type AppletSuccessResponse = BaseSuccessResponse<AppletDTO> & {
   respondentMeta: RespondentMetaDTO;
 };
 
-export type AppletDetailsBaseInfoSuccess = BaseSuccessResponse<AppletDetailsBaseInfoDTO>;
+export type AppletDetailsBaseInfoSuccess = BaseSuccessResponse<AppletBaseDTO>;
 
 export type AppletListDTO = {
   id: string;
@@ -37,7 +37,7 @@ export type AppletListDTO = {
   watermark: string;
 };
 
-export type AppletDetailsDTO = {
+export type AppletDTO = {
   id: string;
   displayName: string;
   version: string;
@@ -47,11 +47,11 @@ export type AppletDetailsDTO = {
   watermark: string;
   activities: AppletDetailsActivityDTO[];
   activityFlows: ActivityFlowDTO[];
-  encryption: AppletEncryptionDTO | null;
+  encryption: EncryptionDTO | null;
   integrations: Integration[];
 };
 
-export type AppletDetailsBaseInfoDTO = {
+export type AppletBaseDTO = {
   id: string;
   displayName: string;
   version: string;
@@ -61,13 +61,13 @@ export type AppletDetailsBaseInfoDTO = {
   watermark: string;
   createdAt: string;
   updatedAt: string;
-  activities: Array<ActivityBaseInfoDTO>;
+  activities: Array<ActivityBaseDTO>;
   activityFlows: Array<ActivityFlowDTO>;
-  encryption: AppletEncryptionDTO | null;
+  encryption: EncryptionDTO | null;
   integrations?: Integration[];
 };
 
-export type ActivityBaseInfoDTO = {
+export type ActivityBaseDTO = {
   id: string;
   name: string;
   description: string;
@@ -137,7 +137,7 @@ export type AllUserEventsDTO = {
   events: ScheduleEventDto[];
 };
 
-export type AppletEncryptionDTO = {
+export type EncryptionDTO = {
   accountId: string;
   base: string; // Contains number[]
   prime: string; // Contains number[]

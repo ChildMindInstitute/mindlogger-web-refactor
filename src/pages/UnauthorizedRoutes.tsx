@@ -7,7 +7,7 @@ import LoginPage from './Login';
 import SignupPage from './Signup';
 
 import AppletDetailsPage from '~/pages/AppletDetailsPage';
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import Layout from '~/widgets/AppLayout';
 
 const PublicAppletDetailsPage = lazy(() => import('./PublicJoin'));

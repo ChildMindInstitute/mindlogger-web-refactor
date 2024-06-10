@@ -1,4 +1,4 @@
-export const ROUTES = {
+const ROUTES = {
   // Public routes
   login: {
     path: '/login',
@@ -61,7 +61,7 @@ export const ROUTES = {
     path: '/protected/applets/:appletId',
     navigateTo: (appletId: string | number) => `/protected/applets/${appletId}`,
   },
-  activityDetails: {
+  survey: {
     path: '/protected/applets/:appletId/activityId/:activityId/event/:eventId/entityType/:entityType',
     navigateTo: ({
       appletId,
@@ -92,3 +92,5 @@ export const ROUTES = {
       `/protected/thanks/${appletId}/isPublic/${isPublic}`,
   },
 };
+
+export default ROUTES;

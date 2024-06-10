@@ -1,14 +1,14 @@
 import LorisAppletIntegration from './LorisAppletIntegration';
 
 import { ActivityConsents } from '~/abstract/lib';
-import { AppletDetailsBaseInfoDTO } from '~/shared/api';
+import { AppletBaseDTO } from '~/shared/api';
 import { AppDispatch } from '~/shared/utils';
 
 export interface IAppletIntegration {
-  shouldBeIntegrated(applet: AppletDetailsBaseInfoDTO): boolean;
-  shouldBeDisintegrated(applet: AppletDetailsBaseInfoDTO): boolean;
-  applyIntegration(applet: AppletDetailsBaseInfoDTO): void;
-  removeIntegration(applet: AppletDetailsBaseInfoDTO): void;
+  shouldBeIntegrated(applet: AppletBaseDTO): boolean;
+  shouldBeDisintegrated(applet: AppletBaseDTO): boolean;
+  applyIntegration(applet: AppletBaseDTO): void;
+  removeIntegration(applet: AppletBaseDTO): void;
 }
 
 class AppletIntegrationsService {
@@ -18,7 +18,7 @@ class AppletIntegrationsService {
     this.integrations.push(new LorisAppletIntegration(consents, dispatch));
   }
 
-  public applyIntegrations(applet: AppletDetailsBaseInfoDTO): void {
+  public applyIntegrations(applet: AppletBaseDTO): void {
     this.integrations.forEach((integration) => {
       if (integration.shouldBeIntegrated(applet)) {
         integration.applyIntegration(applet);

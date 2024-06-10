@@ -12,13 +12,20 @@ type SaveProgressProps = {
   eventId: string;
 };
 
-type UpdateStepProps = {
+type DefaultProps = {
   activityId: string;
   eventId: string;
 };
 
 export const useActivityProgress = () => {
   const dispatch = useAppDispatch();
+
+  const removeActivityProgress = useCallback(
+    (props: DefaultProps) => {
+      dispatch(actions.removeActivityProgress(props));
+    },
+    [dispatch],
+  );
 
   const setInitialProgress = useCallback(
     (props: SaveProgressProps) => {
@@ -56,7 +63,7 @@ export const useActivityProgress = () => {
   );
 
   const openSummaryScreen = useCallback(
-    (props: UpdateStepProps) => {
+    (props: DefaultProps) => {
       dispatch(
         actions.changeSummaryScreenVisibility({
           activityId: props.activityId,
@@ -69,7 +76,7 @@ export const useActivityProgress = () => {
   );
 
   const closeSummaryScreen = useCallback(
-    (props: UpdateStepProps) => {
+    (props: DefaultProps) => {
       dispatch(
         actions.changeSummaryScreenVisibility({
           activityId: props.activityId,
@@ -82,14 +89,14 @@ export const useActivityProgress = () => {
   );
 
   const incrementStep = useCallback(
-    (props: UpdateStepProps) => {
+    (props: DefaultProps) => {
       dispatch(actions.incrementStep(props));
     },
     [dispatch],
   );
 
   const decrementStep = useCallback(
-    (props: UpdateStepProps) => {
+    (props: DefaultProps) => {
       dispatch(actions.decrementStep(props));
     },
     [dispatch],
@@ -97,6 +104,7 @@ export const useActivityProgress = () => {
 
   return {
     setInitialProgress,
+    removeActivityProgress,
     incrementStep,
     decrementStep,
     openSummaryScreen,

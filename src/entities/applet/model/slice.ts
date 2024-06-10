@@ -55,7 +55,7 @@ const appletsSlice = createSlice({
   name: 'applets',
   initialState,
   reducers: {
-    resetAppletsStore: () => {
+    clearStore: () => {
       return initialState;
     },
 

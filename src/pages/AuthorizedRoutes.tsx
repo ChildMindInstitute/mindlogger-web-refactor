@@ -2,13 +2,13 @@ import { lazy } from 'react';
 
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import ActivityDetailsPage from './ActivityDetails';
 import AppletDetailsPage from './AppletDetailsPage';
 import AppletListPage from './AppletListPage';
 import ProfilePage from './Profile';
 import SettingsPage from './Settings';
+import SurveyPage from './Survey';
 
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import Layout from '~/widgets/AppLayout';
 import LogoutTracker from '~/widgets/LogoutTracker';
 import ProtectedRoute from '~/widgets/ProtectedRoute';
@@ -28,7 +28,7 @@ function AuthorizedRoutes({ refreshToken }: Props) {
     <LogoutTracker>
       <Routes>
         <Route element={<ProtectedRoute token={refreshToken} />}>
-          <Route path={ROUTES.activityDetails.path} element={<ActivityDetailsPage />} />
+          <Route path={ROUTES.survey.path} element={<SurveyPage />} />
           <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
 
           <Route element={<Layout />}>

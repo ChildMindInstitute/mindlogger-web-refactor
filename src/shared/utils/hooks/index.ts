@@ -7,7 +7,6 @@ export { useOnceEffect } from './useOnceEffect';
 export * from './useModal';
 export * from './useCustomMediaQuery';
 export * from './useIsPublic';
-export * from './useFlowType';
 export * from './useForceUpdate';
 export * from './usePrevious';
 export * from './useIntersectionObserver';

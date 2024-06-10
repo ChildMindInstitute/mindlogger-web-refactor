@@ -1,9 +1,9 @@
 import { createContext } from 'react';
 
-import { AppletDetailsBaseInfoDTO, AppletEventsResponse } from '~/shared/api';
+import { AppletBaseDTO, AppletEventsResponse } from '~/shared/api';
 
 type AppletDetailsContextProps = {
-  applet: AppletDetailsBaseInfoDTO;
+  applet: AppletBaseDTO;
   events: AppletEventsResponse;
 };
 

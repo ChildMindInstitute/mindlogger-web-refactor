@@ -10,7 +10,7 @@ import { useSubjectQuery } from '~/entities/subject';
 import { useUserState } from '~/entities/user/model/hooks';
 import { useWorkspaceAppletRespondent } from '~/entities/workspace';
 import { TakeNowParams } from '~/features/TakeNow/lib/TakeNowParams.types';
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { useCustomNavigation, useCustomTranslation } from '~/shared/utils';
 
 type TakeNowValidatedState = {

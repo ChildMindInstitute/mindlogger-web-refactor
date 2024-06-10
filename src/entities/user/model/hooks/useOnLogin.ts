@@ -1,7 +1,7 @@
 import { useUserState } from './useUserState';
 import { secureUserPrivateKeyStorage } from '../secureUserPrivateKeyStorage';
 
-import { ROUTES } from '~/shared/constants';
+import ROUTES from '~/shared/constants/routes';
 import { Mixpanel, secureTokensStorage, useCustomNavigation, useEncryption } from '~/shared/utils';
 import { FeatureFlags } from '~/shared/utils/featureFlags';
 

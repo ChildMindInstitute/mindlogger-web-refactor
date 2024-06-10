@@ -10,14 +10,12 @@ import { ActivityLabel } from './ActivityLabel';
 import TimeStatusLabel from './TimeStatusLabel';
 import { AppletDetailsContext } from '../../lib';
 import { useEntityCardDetails } from '../../model/hooks';
-import { useStartEntity } from '../../model/hooks/useStartEntity';
 
 import { getProgressId, openStoreLink } from '~/abstract/lib';
 import { ActivityListItem } from '~/abstract/lib/GroupBuilder';
-import { useActivityByIdMutation } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
-import { Box } from '~/shared/ui';
-import Loader from '~/shared/ui/Loader';
+import { useStartSurvey } from '~/features/PassSurvey';
+import Box from '~/shared/ui/Box';
 import {
   MixEvents,
   Mixpanel,
@@ -67,14 +65,10 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   const numberOfActivitiesInFlow =
     activityListItem.activityFlowDetails?.numberOfActivitiesInFlow || 0;
 
-  const { startActivityOrFlow } = useStartEntity({
+  const { startSurvey } = useStartSurvey({
     applet: context.applet,
     isPublic: context.isPublic,
     publicAppletKey: context.isPublic ? context.publicAppletKey : null,
-  });
-
-  const { mutate: getActivityById, isLoading } = useActivityByIdMutation({
-    isPublic: context.isPublic,
   });
 
   const getCompletedActivitiesFromPosition = (position: number) => position - 1;
@@ -96,26 +90,13 @@ export const ActivityCard = ({ activityListItem }: Props) => {
       return openStoreLink();
     }
 
-    return getActivityById(
-      { activityId: activityListItem.activityId },
-      {
-        onSuccess(data) {
-          const activity = data.data.result;
-
-          if (!activity) {
-            throw new Error('[useActivityByIdMutation]: Activity not found');
-          }
-
-          return startActivityOrFlow({
-            activity,
-            eventId: activityListItem.eventId,
-            status: activityListItem.status,
-            flowId: activityListItem.flowId,
-            shouldRestart,
-          });
-        },
-      },
-    );
+    return startSurvey({
+      activityId: activityListItem.activityId,
+      eventId: activityListItem.eventId,
+      status: activityListItem.status,
+      flowId: activityListItem.flowId,
+      shouldRestart,
+    });
   };
 
   const restartActivity = () => {
@@ -136,14 +117,6 @@ export const ActivityCard = ({ activityListItem }: Props) => {
       restartActivity();
     }
   });
-
-  if (isLoading) {
-    return (
-      <ActivityCardBase isDisabled={isDisabled} isFlow={isFlow}>
-        <Loader />
-      </ActivityCardBase>
-    );
-  }
 
   return (
     <ActivityCardBase isDisabled={isDisabled} isFlow={isFlow}>

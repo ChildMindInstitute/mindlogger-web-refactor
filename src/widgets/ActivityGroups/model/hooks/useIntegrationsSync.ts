@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 
 import { appletModel } from '~/entities/applet';
 import { AppletIntegrationsService } from '~/entities/applet/model/integrations';
-import { AppletDetailsBaseInfoDTO } from '~/shared/api';
+import { AppletBaseDTO } from '~/shared/api';
 import { useAppDispatch, useAppSelector } from '~/shared/utils';
 
 type Props = {
-  appletDetails: AppletDetailsBaseInfoDTO;
+  appletDetails: AppletBaseDTO;
 };
 
 export const useIntegrationsSync = ({ appletDetails }: Props) => {

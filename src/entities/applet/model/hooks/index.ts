@@ -1,13 +1,14 @@
 export * from './useSaveActivityItemAnswer';
 
-export * from './useResetAppletsStore';
-export * from './useRemoveActivityProgress';
+export * from './useClearStore';
 
 export * from './useGroupProgressState';
 
 export * from './useActivityProgress';
 
 export * from './useUserEvents';
-export * from './useStartEntity';
 export * from './useMultiInformantState';
 export * from './useItemTimerState';
+
+export * from './useEntityStart';
+export * from './useEntityComplete';
