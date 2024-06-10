@@ -2,41 +2,37 @@ import { useContext } from 'react';
 
 import { ActivityMetaData } from './ActivityMetaData';
 import SurveyLayout from './SurveyLayout';
-import { SurveyBasicContext } from '../lib';
+import { SurveyBasicContext, SurveyContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
 import { StartSurveyButton, useFlowType } from '~/features/PassSurvey';
-import { ActivityDTO } from '~/shared/api';
 import { Theme } from '~/shared/constants';
 import { AvatarBase } from '~/shared/ui/Avatar';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { useCustomMediaQuery } from '~/shared/utils';
 
-type Props = {
-  activity: ActivityDTO;
-};
-
-const WelcomeScreen = (props: Props) => {
+const WelcomeScreen = () => {
   const { greaterThanSM } = useCustomMediaQuery();
 
   const basicContext = useContext(SurveyBasicContext);
+  const context = useContext(SurveyContext);
 
   const flowParams = useFlowType();
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
-  const entityId = flowParams.isFlow ? flowParams.flowId : props.activity.id;
+  const entityId = flowParams.isFlow ? flowParams.flowId : context.activity.id;
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
 
   const startAssessment = () => {
-    return setInitialProgress({ activity: props.activity, eventId: basicContext.eventId });
+    return setInitialProgress({ activity: context.activity, eventId: basicContext.eventId });
   };
 
   return (
     <SurveyLayout
-      activityName={props.activity.name}
+      activityName={context.activity.name}
       progress={0}
       isSaveAndExitButtonShown={true}
       footerActions={
@@ -52,8 +48,8 @@ const WelcomeScreen = (props: Props) => {
         maxWidth="570px"
       >
         <AvatarBase
-          src={props.activity.image}
-          name={props.activity.name}
+          src={context.activity.image}
+          name={context.activity.name}
           width="124px"
           height="124px"
           testid="flow-welcome-screen-avatar"
@@ -67,7 +63,7 @@ const WelcomeScreen = (props: Props) => {
           sx={{ marginTop: '24px' }}
         >
           <ActivityMetaData
-            activityLength={props.activity.items.length}
+            activityLength={context.activity.items.length}
             groupInProgress={getGroupProgress({ entityId, eventId: basicContext.eventId })}
           />
         </Text>
@@ -79,7 +75,7 @@ const WelcomeScreen = (props: Props) => {
           margin="16px 0px"
           testid="flow-welcome-screen-title"
         >
-          {props.activity.name}
+          {context.activity.name}
         </Text>
 
         <Text
@@ -90,7 +86,7 @@ const WelcomeScreen = (props: Props) => {
           testid="flow-welcome-screen-decription"
           sx={{ textAlign: 'center' }}
         >
-          {props.activity.description}
+          {context.activity.description}
         </Text>
       </Box>
     </SurveyLayout>
