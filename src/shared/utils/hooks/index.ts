@@ -10,3 +10,4 @@ export * from './useIsPublic';
 export * from './useForceUpdate';
 export * from './usePrevious';
 export * from './useIntersectionObserver';
+export * from './useWindowFocus';
