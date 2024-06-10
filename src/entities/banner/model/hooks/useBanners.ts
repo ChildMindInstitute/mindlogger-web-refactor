@@ -1,8 +1,7 @@
 import { BannerType, actions } from '..';
 
-import { bannersSelector } from '~/entities/banner/model/selectors';
 import { BannerProps } from '~/shared/ui/Banners/Banner';
-import { useAppDispatch, useAppSelector } from '~/shared/utils';
+import { useAppDispatch } from '~/shared/utils';
 
 // Convenience type for adding banners using just a string, as well as a full BannerProps object.
 // Supports null as well to accommodate t() return type.
@@ -10,7 +9,6 @@ type BannerContent = string | null | BannerProps;
 
 export const useBanners = () => {
   const dispatch = useAppDispatch();
-  const banners = useAppSelector(bannersSelector);
 
   /** Displays a banner having the given key, and content text or BannerProps */
   const addBanner = (key: BannerType, banner: BannerContent) => {
@@ -49,7 +47,6 @@ export const useBanners = () => {
   };
 
   return {
-    banners,
     addBanner,
     addSuccessBanner,
     addErrorBanner,

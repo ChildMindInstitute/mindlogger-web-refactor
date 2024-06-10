@@ -3,7 +3,8 @@ import { TransitionGroup } from 'react-transition-group';
 
 import { BannerComponents } from './lib/const';
 
-import { BannerPayload, BannerType, useBanners } from '~/entities/banner/model';
+import { BannerPayload, BannerType, bannersSelector, useBanners } from '~/entities/banner/model';
+import { useAppSelector } from '~/shared/utils';
 
 const handlePureClose = (
   removeBanner: (key: BannerType) => void,
@@ -14,7 +15,8 @@ const handlePureClose = (
 };
 
 export const Banners = () => {
-  const { banners, removeBanner } = useBanners();
+  const { removeBanner } = useBanners();
+  const banners = useAppSelector(bannersSelector);
 
   return (
     <TransitionGroup>
