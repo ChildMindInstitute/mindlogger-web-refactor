@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
 import { appletModel } from '~/entities/applet';
+import { useBanners } from '~/entities/banner/model';
 import { TakeNowParams } from '~/features/TakeNow/lib/TakeNowParams.types';
 import { useTakeNowValidation } from '~/features/TakeNow/lib/useTakeNowValidation';
-import { useNotification } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { ActivityGroups } from '~/widgets/ActivityGroups';
 
@@ -14,7 +14,7 @@ function ValidateTakeNowParams({
   startActivityOrFlow,
   respondentId,
 }: TakeNowParams) {
-  const { showErrorNotification } = useNotification();
+  const { addErrorBanner } = useBanners();
   const { initiateTakeNow, isInMultiInformantFlow, getMultiInformantState } =
     appletModel.hooks.useMultiInformantState();
 
@@ -44,12 +44,12 @@ function ValidateTakeNowParams({
 
   useEffect(() => {
     if (error) {
-      showErrorNotification(error, {
-        allowDuplicate: false,
+      addErrorBanner({
+        children: error,
         duration: 15000,
       });
     }
-  }, [error, showErrorNotification]);
+  }, [error, addErrorBanner]);
 
   if (isLoading) {
     return <Loader />;

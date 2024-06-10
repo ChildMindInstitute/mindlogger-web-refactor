@@ -1,17 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 
+import { useBanners } from '~/entities/banner/model';
 import { useInvitationTranslation } from '~/entities/invitation';
 import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
-import { BaseButton, useNotification } from '~/shared/ui';
+import { BaseButton } from '~/shared/ui';
 
 export const PrivateJoinDeclineButton = () => {
   const { t } = useInvitationTranslation();
   const navigate = useNavigate();
-  const { showErrorNotification } = useNotification();
+  const { addErrorBanner } = useBanners();
 
   const onInviteDecline = () => {
-    showErrorNotification(t('invitationDeclined'));
+    addErrorBanner(t('invitationDeclined'));
     return navigate(ROUTES.appletList.path);
   };
 

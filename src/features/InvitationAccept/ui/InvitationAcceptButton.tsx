@@ -1,7 +1,8 @@
+import { useBanners } from '~/entities/banner/model';
 import { useAcceptInviteMutation, useInvitationTranslation } from '~/entities/invitation';
 import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
-import { BaseButton, useNotification } from '~/shared/ui';
+import { BaseButton } from '~/shared/ui';
 import { Mixpanel, useCustomNavigation } from '~/shared/utils';
 
 interface InvitationAcceptButtonProps {
@@ -12,11 +13,11 @@ export const InvitationAcceptButton = ({ invitationKey }: InvitationAcceptButton
   const { t } = useInvitationTranslation();
   const { navigate } = useCustomNavigation();
 
-  const { showSuccessNotification } = useNotification();
+  const { addSuccessBanner } = useBanners();
 
   const { mutate: acceptInvite, isLoading: isAcceptLoading } = useAcceptInviteMutation({
     onSuccess() {
-      showSuccessNotification(t('invitationAccepted'));
+      addSuccessBanner(t('invitationAccepted'));
       Mixpanel.track('Invitation Accepted');
       return navigate(ROUTES.appletList.path);
     },

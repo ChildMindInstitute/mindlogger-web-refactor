@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 
+import { useBanners } from '~/entities/banner/model';
 import { useAcceptPrivateInviteMutation, useInvitationTranslation } from '~/entities/invitation';
 import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
-import { BaseButton, useNotification } from '~/shared/ui';
+import { BaseButton } from '~/shared/ui';
 import { MixEvents, MixProperties, Mixpanel } from '~/shared/utils';
 
 interface PrivateJoinAcceptButtonProps {
@@ -17,11 +18,11 @@ export const PrivateJoinAcceptButton = ({
 }: PrivateJoinAcceptButtonProps) => {
   const { t } = useInvitationTranslation();
   const navigate = useNavigate();
-  const { showSuccessNotification } = useNotification();
+  const { addSuccessBanner } = useBanners();
 
   const { mutate: acceptPrivateInvite, isLoading } = useAcceptPrivateInviteMutation({
     onSuccess() {
-      showSuccessNotification(t('invitationAccepted'));
+      addSuccessBanner(t('invitationAccepted'));
       Mixpanel.track(MixEvents.InvitationAccepted, { [MixProperties.AppletId]: appletId });
       return navigate(ROUTES.appletList.path);
     },

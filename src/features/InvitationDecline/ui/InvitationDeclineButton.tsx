@@ -1,7 +1,8 @@
+import { useBanners } from '~/entities/banner/model';
 import { useDeclineInviteMutation, useInvitationTranslation } from '~/entities/invitation';
 import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
-import { BaseButton, useNotification } from '~/shared/ui';
+import { BaseButton } from '~/shared/ui';
 import { useCustomNavigation } from '~/shared/utils';
 
 interface InvitationDeclineButtonProps {
@@ -12,11 +13,11 @@ export const InvitationDeclineButton = ({ invitationKey }: InvitationDeclineButt
   const { t } = useInvitationTranslation();
   const { navigate } = useCustomNavigation();
 
-  const { showErrorNotification } = useNotification();
+  const { addErrorBanner } = useBanners();
 
   const { mutate: declineInvite, isLoading: isDeclineLoading } = useDeclineInviteMutation({
     onSuccess() {
-      showErrorNotification(t('invitationDeclined'));
+      addErrorBanner(t('invitationDeclined'));
       navigate(ROUTES.appletList.path);
     },
   });

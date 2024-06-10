@@ -2,9 +2,9 @@ import { lazy } from 'react';
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import { useBanners } from '~/entities/banner/model';
 import { LoginForm, useLoginTranslation } from '~/features/Login';
 import { ROUTES, Theme } from '~/shared/constants';
-import { useNotification } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { Mixpanel, useOnceEffect } from '~/shared/utils';
@@ -15,7 +15,7 @@ function LoginPage() {
   const { t } = useLoginTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const { showSuccessNotification } = useNotification();
+  const { addSuccessBanner } = useBanners();
 
   const onCreateAccountClick = () => {
     Mixpanel.track('Create account button on login screen click');
@@ -26,10 +26,7 @@ function LoginPage() {
 
     if (location.state?.isPasswordReset) {
       // Shown for 5 seconds
-      showSuccessNotification(t('passwordResetSuccessful'), {
-        duration: 5000,
-        allowDuplicate: false,
-      });
+      addSuccessBanner({ children: t('passwordResetSuccessful'), duration: 5000 });
 
       // Unset the state after showing the notification, so that it doesn't show again if the user navigates back to this page
       navigate(window.location.pathname, {

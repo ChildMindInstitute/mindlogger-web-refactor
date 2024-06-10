@@ -4,6 +4,7 @@ import { TERMS_URL } from '../lib/constants';
 import { useSignupTranslation } from '../lib/useSignupTranslation';
 import { SignupFormSchema, TSignupForm } from '../model/signup.schema';
 
+import { useBanners } from '~/entities/banner/model';
 import { useLoginMutation, userModel, useSignupMutation } from '~/entities/user';
 import { Box } from '~/shared/ui';
 import {
@@ -12,7 +13,6 @@ import {
   BasicFormProvider,
   PasswordIcon,
   BaseButton,
-  useNotification,
   Text,
 } from '~/shared/ui';
 import { Mixpanel, useCustomForm, usePasswordType } from '~/shared/utils';
@@ -24,7 +24,7 @@ interface SignupFormProps {
 export const SignupForm = ({ locationState }: SignupFormProps) => {
   const { t } = useSignupTranslation();
 
-  const { showErrorNotification, showSuccessNotification } = useNotification();
+  const { addErrorBanner, addSuccessBanner, removeErrorBanner } = useBanners();
 
   const [passwordType, onPasswordIconClick] = usePasswordType();
   const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType();
@@ -58,7 +58,8 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
 
   const { mutate: signup, isLoading: isSignupLoading } = useSignupMutation({
     onSuccess() {
-      showSuccessNotification(t('success'));
+      removeErrorBanner();
+      addSuccessBanner(t('success'));
       Mixpanel.track('Signup Successful');
       const { email, password } = form.getValues();
 
@@ -66,14 +67,14 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
     },
     onError(error) {
       if (error.evaluatedMessage) {
-        showErrorNotification(error.evaluatedMessage);
+        addErrorBanner(error.evaluatedMessage);
       }
     },
   });
 
   const onSignupSubmit = (data: TSignupForm) => {
     if (!terms) {
-      return showErrorNotification(t('pleaseAgreeTerms'));
+      return addErrorBanner(t('pleaseAgreeTerms'));
     }
 
     return signup(data);
