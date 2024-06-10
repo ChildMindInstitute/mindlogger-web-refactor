@@ -296,7 +296,6 @@ const PassingScreen = () => {
   return (
     <>
       <SurveyLayout
-        activityName={activity.name}
         progress={progress}
         isSaveAndExitButtonShown={true}
         footerActions={

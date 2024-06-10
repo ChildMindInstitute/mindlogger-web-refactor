@@ -56,7 +56,6 @@ const SummaryScreen = () => {
 
   return (
     <SurveyLayout
-      activityName={surveyContext.activity.name}
       progress={100}
       isSaveAndExitButtonShown={false}
       footerActions={

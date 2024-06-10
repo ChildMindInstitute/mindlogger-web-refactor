@@ -1,22 +1,24 @@
 import { useContext } from 'react';
 
-import { SurveyBasicContext } from '../lib';
+import { SurveyBasicContext, SurveyContext } from '../lib';
 
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import { MultiInformantTooltip } from '~/features/TakeNow';
 import { ROUTES, Theme } from '~/shared/constants';
-import { BaseProgressBar, Box, Text } from '~/shared/ui';
-import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
+import { AvatarBase, BaseProgressBar, Box, Text } from '~/shared/ui';
+import { isStringExist, useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
 
 type Props = {
-  title: string;
-
   progress?: number;
   isSaveAndExitButtonShown: boolean;
 };
 
 const SurveyHeader = (props: Props) => {
   const basicContext = useContext(SurveyBasicContext);
+  const context = useContext(SurveyContext);
+
+  const activityName = context.activity?.name;
+  const watermark = context.applet?.watermark;
 
   const { greaterThanSM } = useCustomMediaQuery();
   const navigator = useCustomNavigation();
@@ -41,7 +43,7 @@ const SurveyHeader = (props: Props) => {
       justifyContent="center"
       gridTemplateColumns="1fr minmax(300px, 900px) 1fr"
       padding={greaterThanSM ? '19px 24px' : '15px 16px'}
-      height={87}
+      height={100}
       gap={1.5}
       sx={{
         backgroundColor: Theme.colors.light.surface,
@@ -57,14 +59,19 @@ const SurveyHeader = (props: Props) => {
           alignItems="center"
           marginBottom={greaterThanSM ? '8px' : '10px'}
         >
-          <Text
-            variant="body1"
-            color={Theme.colors.light.onSurface}
-            testid="assessment-activity-title"
-            sx={{ textAlign: greaterThanSM ? 'center' : 'left' }}
-          >
-            {greaterThanSM ? props.title : cutStringToLength(props.title, 30)}
-          </Text>
+          <Box display="flex" alignItems="center" gap="8px">
+            {isStringExist(watermark) && (
+              <AvatarBase borderRadius="50%" height="36px" width="36px" src={watermark} />
+            )}
+            <Text
+              variant="body1"
+              color={Theme.colors.light.onSurface}
+              testid="assessment-activity-title"
+              sx={{ textAlign: greaterThanSM ? 'center' : 'left' }}
+            >
+              {greaterThanSM ? activityName : cutStringToLength(activityName, 30)}
+            </Text>
+          </Box>
           {!greaterThanSM && props.isSaveAndExitButtonShown && (
             <SaveAndExitButton onClick={onSaveAndExitClick} />
           )}

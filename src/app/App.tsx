@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 
 import { useLDClient } from 'launchdarkly-react-client-sdk';
 
 import Providers from './providers';
 import i18nManager from './system/locale/i18n';
 
-import ApplicationRouter from '~/pages';
+const ApplicationRouter = lazy(() => import('~/pages'));
 import { Mixpanel } from '~/shared/utils';
 import { FeatureFlags } from '~/shared/utils/featureFlags';
 
