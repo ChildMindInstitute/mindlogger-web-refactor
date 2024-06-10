@@ -42,6 +42,22 @@ export const useBanners = () => {
     dispatch(actions.removeBanner({ key }));
   };
 
+  const removeSuccessBanner = () => {
+    removeBanner('SuccessBanner');
+  };
+
+  const removeErrorBanner = () => {
+    removeBanner('ErrorBanner');
+  };
+
+  const removeWarningBanner = () => {
+    removeBanner('WarningBanner');
+  };
+
+  const removeInfoBanner = () => {
+    removeBanner('InfoBanner');
+  };
+
   const removeAllBanners = () => {
     dispatch(actions.removeAllBanners());
   };
@@ -53,6 +69,10 @@ export const useBanners = () => {
     addWarningBanner,
     addInfoBanner,
     removeBanner,
+    removeSuccessBanner,
+    removeErrorBanner,
+    removeWarningBanner,
+    removeInfoBanner,
     removeAllBanners,
   };
 };

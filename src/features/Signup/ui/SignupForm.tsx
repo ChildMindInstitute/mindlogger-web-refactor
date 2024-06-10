@@ -24,7 +24,7 @@ interface SignupFormProps {
 export const SignupForm = ({ locationState }: SignupFormProps) => {
   const { t } = useSignupTranslation();
 
-  const { addErrorBanner, addSuccessBanner } = useBanners();
+  const { addErrorBanner, addSuccessBanner, removeErrorBanner } = useBanners();
 
   const [passwordType, onPasswordIconClick] = usePasswordType();
   const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType();
@@ -58,6 +58,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
 
   const { mutate: signup, isLoading: isSignupLoading } = useSignupMutation({
     onSuccess() {
+      removeErrorBanner();
       addSuccessBanner(t('success'));
       Mixpanel.track('Signup Successful');
       const { email, password } = form.getValues();

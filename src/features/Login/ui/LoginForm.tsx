@@ -17,7 +17,7 @@ interface LoginFormProps {
 export const LoginForm = ({ locationState }: LoginFormProps) => {
   const { t } = useLoginTranslation();
 
-  const { addErrorBanner } = useBanners();
+  const { addErrorBanner, removeErrorBanner } = useBanners();
 
   const [passwordType, onPasswordIconClick] = usePasswordType();
 
@@ -31,6 +31,8 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
   const { mutate: login, isLoading } = useLoginMutation({
     onSuccess(data, variables) {
       const { user, token } = data.data.result;
+
+      removeErrorBanner();
 
       return onLoginSuccess({
         user: {
