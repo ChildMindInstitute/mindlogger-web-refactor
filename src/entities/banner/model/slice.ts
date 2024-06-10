@@ -11,7 +11,7 @@ const initialState: BannersStore = {
 };
 
 const bannersSlice = createSlice({
-  name: 'applets',
+  name: 'banners',
   initialState,
   reducers: {
     addBanner: (state, { payload }: PayloadAction<BannerPayload>): void => {

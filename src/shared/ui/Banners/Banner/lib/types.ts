@@ -1,7 +1,11 @@
 import { AlertProps } from '@mui/material';
 
 export type BannerProps = {
-  /** @default 5000 */
+  /**
+   * Duration in milliseconds after which the banner will be automatically closed.
+   * Provide `null` to disable auto-closing.
+   * @default 5000
+   */
   duration?: number | null;
   /** @default !!onClose */
   hasCloseButton?: boolean;
