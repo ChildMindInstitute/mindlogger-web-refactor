@@ -122,7 +122,7 @@ export const useAnswer = (props: Props) => {
         version: props.applet.version,
         createdAt: new Date().getTime(),
         isFlowCompleted: isFlow ? isFlowCompleted : true,
-        isDataShare: appletConsents?.shareToPublic ?? undefined,
+        isDataShare: appletConsents ? appletConsents.shareToPublic : undefined,
         answer: {
           answer: encryptedAnswers,
           itemIds: preparedItemAnswers.itemIds,
@@ -160,10 +160,14 @@ export const useAnswer = (props: Props) => {
       return answer;
     },
     [
-      props,
+      props.applet,
+      props.flowId,
+      props.activityId,
+      props.eventId,
+      props.eventsRawData,
       encryptPayload,
       getGroupProgress,
-      appletConsents?.shareToPublic,
+      appletConsents,
       featureFlags.enableMultiInformant,
       generateUserPrivateKey,
       getMultiInformantState,
