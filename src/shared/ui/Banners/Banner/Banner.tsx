@@ -5,6 +5,7 @@ import { Alert } from '@mui/material';
 import { BANNER_ICONS } from './lib/const';
 import { BannerProps } from './lib/types';
 
+import { Markdown } from '~/shared/ui/Markdown';
 import Text from '~/shared/ui/Text';
 import { useWindowFocus } from '~/shared/utils';
 
@@ -39,7 +40,7 @@ export const Banner = ({
       severity={severity}
       data-testid={`${severity}-banner`}
     >
-      <Text>{children}</Text>
+      <Text>{typeof children === 'string' ? <Markdown markdown={children} /> : children}</Text>
     </Alert>
   );
 };
