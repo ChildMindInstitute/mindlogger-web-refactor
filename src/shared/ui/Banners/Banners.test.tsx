@@ -14,10 +14,13 @@ const preloadedState: PreloadedState<RootState> = {
 };
 
 describe('Banners', () => {
-  test('should render test banner', () => {
+  test('should render test banner', async () => {
     renderWithProviders(<Banners />, { preloadedState });
 
-    expect(screen.getByText('test message')).toBeInTheDocument();
+    // Wait for markdown to be processed asynchronously
+    await waitFor(() => {
+      expect(screen.getByText('test message')).toBeInTheDocument();
+    });
   });
 
   test('should no longer render banner when its close button clicked', async () => {

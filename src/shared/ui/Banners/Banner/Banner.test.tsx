@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 import { Banner } from './Banner';
 
@@ -18,13 +18,16 @@ describe('Banner', () => {
     jest.resetAllMocks();
   });
 
-  test('should render component', () => {
+  test('should render component', async () => {
     render(<Banner {...props} />);
 
-    expect(screen.queryByText(props.children)).toBeVisible();
-    const closeButton = screen.getByRole('button');
-    expect(closeButton).toBeVisible();
-    expect(closeButton).toHaveAccessibleName('Close');
+    // Wait for markdown to be processed asynchronously
+    await waitFor(() => {
+      expect(screen.queryByText(props.children)).toBeVisible();
+      const closeButton = screen.getByRole('button');
+      expect(closeButton).toBeVisible();
+      expect(closeButton).toHaveAccessibleName('Close');
+    });
   });
 
   test('clicking the close button calls onClose callback', () => {
@@ -63,14 +66,17 @@ describe('Banner', () => {
     ${'error'}   | ${'error banner'}
   `(
     'has text that matches severity $severity',
-    ({ severity, text }: { severity: BannerProps['severity']; text: string }) => {
+    async ({ severity, text }: { severity: BannerProps['severity']; text: string }) => {
       render(
         <Banner {...props} severity={severity}>
           {text}
         </Banner>,
       );
 
-      expect(screen.getByText(text)).toBeInTheDocument();
+      // Wait for markdown to be processed asynchronously
+      await waitFor(() => {
+        expect(screen.getByText(text)).toBeInTheDocument();
+      });
     },
   );
 });
