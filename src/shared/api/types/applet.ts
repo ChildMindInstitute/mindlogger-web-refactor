@@ -45,6 +45,7 @@ export type AppletDTO = {
   about: string;
   image: string;
   watermark: string;
+  ownerId: string;
   activities: AppletDetailsActivityDTO[];
   activityFlows: ActivityFlowDTO[];
   encryption: EncryptionDTO | null;
