@@ -48,7 +48,7 @@ export type AppletDTO = {
   activities: AppletDetailsActivityDTO[];
   activityFlows: ActivityFlowDTO[];
   encryption: EncryptionDTO | null;
-  integrations: Integration[];
+  integrations?: Integration[] | null;
 };
 
 export type AppletBaseDTO = {
