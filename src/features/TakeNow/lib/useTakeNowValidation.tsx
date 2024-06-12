@@ -3,23 +3,17 @@ import { useEffect, useState } from 'react';
 
 import { AxiosError } from 'axios';
 
-import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
 import { useValidateMultiInformantAssessmentQuery } from '~/entities/answer';
 import { useAppletByIdQuery } from '~/entities/applet';
 import { useSubjectQuery } from '~/entities/subject';
 import { useUserState } from '~/entities/user/model/hooks';
 import { useWorkspaceAppletRespondent } from '~/entities/workspace';
-import { TakeNowParams } from '~/features/TakeNow/lib/TakeNowParams.types';
-import ROUTES from '~/shared/constants/routes';
-import { useCustomNavigation, useCustomTranslation } from '~/shared/utils';
-
-type TakeNowValidatedState = {
-  isLoading: boolean;
-  isError: boolean;
-  isSuccess: boolean;
-  error?: string | null;
-  data?: Required<MultiInformantState>;
-};
+import {
+  TakeNowParams,
+  TakeNowValidatedState,
+  TakeNowValidationError,
+} from '~/features/TakeNow/lib/types';
+import { useCustomTranslation } from '~/shared/utils';
 
 export const useTakeNowValidation = ({
   appletId,
@@ -77,7 +71,6 @@ export const useTakeNowValidation = ({
   }, [appletData, isLoadingApplet, workspaceId]);
 
   const { t } = useCustomTranslation();
-  const { navigate } = useCustomNavigation();
   const { user } = useUserState();
 
   const loadingState: TakeNowValidatedState = {
@@ -86,7 +79,7 @@ export const useTakeNowValidation = ({
     isSuccess: false,
   };
 
-  const errorState = (error: string | null): TakeNowValidatedState => ({
+  const errorState = (error: TakeNowValidationError | null): TakeNowValidatedState => ({
     isLoading: false,
     isError: true,
     isSuccess: false,
@@ -94,7 +87,10 @@ export const useTakeNowValidation = ({
   });
 
   if (respondentId !== user.id) {
-    return errorState(t('takeNow.mismatchedRespondent'));
+    return errorState({
+      type: 'mismatchedRespondent',
+      error: t('takeNow.mismatchedRespondent'),
+    });
   }
 
   if (isLoadingValidation) {
@@ -103,11 +99,15 @@ export const useTakeNowValidation = ({
 
   if (isValidationError && validationError) {
     if (validationError.response?.status === 403) {
-      return errorState(t('takeNow.invalidRespondent'));
+      return errorState({
+        type: 'invalidRespondent',
+        error: t('takeNow.invalidRespondent'),
+      });
     } else if (validationError.response?.status === 404) {
-      // Invalid applet ID
-      setTimeout(() => navigate(ROUTES.appletList.path));
-      return errorState(t('takeNow.invalidApplet'));
+      return errorState({
+        type: 'invalidApplet',
+        error: t('takeNow.invalidApplet'),
+      });
     } else if (validationError.response?.status === 422) {
       const axiosError = validationError as AxiosError<any, any>;
       const param = axiosError.response?.data?.result?.[0]?.path?.[1] as string | undefined;
@@ -116,10 +116,16 @@ export const useTakeNowValidation = ({
 
       switch (param) {
         case 'activityOrFlowId':
-          return errorState(t('takeNow.invalidActivity'));
+          return errorState({
+            type: 'invalidActivity',
+            error: t('takeNow.invalidActivity'),
+          });
         case 'sourceSubjectId':
         case 'targetSubjectId':
-          return errorState(t('takeNow.invalidSubject'));
+          return errorState({
+            type: 'invalidSubject',
+            error: t('takeNow.invalidSubject'),
+          });
       }
     }
   }
@@ -127,12 +133,21 @@ export const useTakeNowValidation = ({
   if (validationData?.data?.result && validationData?.data?.result.code) {
     switch (validationData.data.result.code) {
       case 'invalid_activity_or_flow_id':
-        return errorState(t('takeNow.invalidActivity'));
+        return errorState({
+          type: 'invalidActivity',
+          error: t('takeNow.invalidActivity'),
+        });
       case 'invalid_source_subject':
       case 'invalid_target_subject':
-        return errorState(t('takeNow.invalidSubject'));
+        return errorState({
+          type: 'invalidSubject',
+          error: t('takeNow.invalidSubject'),
+        });
       case 'no_access_to_applet':
-        return errorState(t('takeNow.invalidRespondent'));
+        return errorState({
+          type: 'invalidRespondent',
+          error: t('takeNow.invalidRespondent'),
+        });
       default:
         return errorState(null);
     }
@@ -143,8 +158,10 @@ export const useTakeNowValidation = ({
   }
 
   if (isAppletError || !appletData?.data?.result) {
-    setTimeout(() => navigate(ROUTES.appletList.path));
-    return errorState(t('takeNow.invalidApplet'));
+    return errorState({
+      type: 'invalidApplet',
+      error: t('takeNow.invalidApplet'),
+    });
   }
 
   if (isLoadingTargetSubject || isLoadingSourceSubject) {
@@ -164,7 +181,10 @@ export const useTakeNowValidation = ({
   if (subjectPermissionError) {
     // The logged-in user doesn't have permission to fetch the subject details,
     // so they probably don't have permission to perform the activity
-    return errorState(t('takeNow.invalidRespondent'));
+    return errorState({
+      type: 'invalidRespondent',
+      error: t('takeNow.invalidRespondent'),
+    });
   }
 
   if (
@@ -175,7 +195,10 @@ export const useTakeNowValidation = ({
     !sourceSubjectData?.data?.result ||
     sourceSubjectData.data.result.appletId !== appletId
   ) {
-    return errorState(t('takeNow.invalidSubject'));
+    return errorState({
+      type: 'invalidSubject',
+      error: t('takeNow.invalidSubject'),
+    });
   }
 
   const { nickname: targetSubjectNickname, secretUserId: targetSecretUserId } =
@@ -193,7 +216,10 @@ export const useTakeNowValidation = ({
   }
 
   if (workspaceId === null) {
-    return errorState(t('common_loading_error'));
+    return errorState({
+      type: 'common_loading_error',
+      error: t('common.loadingError'),
+    });
   }
 
   if (isLoadingRespondent) {
