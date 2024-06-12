@@ -179,13 +179,7 @@ const PassingScreen = () => {
     isPublic: surveyBasicContext.isPublic,
   });
 
-  const { processAnswers } = useAnswer({
-    applet,
-    activityId,
-    eventId,
-    eventsRawData: surveyContext.events,
-    flowId: flowParams.isFlow ? flowParams.flowId : null,
-  });
+  const { processAnswers } = useAnswer();
 
   const onSubmit = useCallback(() => {
     const doneUserEvent = saveUserEventByType('DONE', item);
