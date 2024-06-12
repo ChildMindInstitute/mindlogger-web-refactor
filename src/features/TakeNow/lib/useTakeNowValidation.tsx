@@ -71,7 +71,7 @@ export const useTakeNowValidation = ({
 
   useEffect(() => {
     if (!workspaceId && !isLoadingApplet && appletData) {
-      const localWorkspaceId = appletData?.data.result.encryption?.accountId;
+      const localWorkspaceId = appletData?.data.result.ownerId;
       setWorkspaceId(localWorkspaceId || null);
     }
   }, [appletData, isLoadingApplet, workspaceId]);
