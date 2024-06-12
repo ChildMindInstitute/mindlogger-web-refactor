@@ -6,10 +6,15 @@ import { ScreenManager } from './ScreenManager';
 import { SurveyBasicContext, SurveyContext } from '../lib';
 import { useSurveyDataQuery } from '../model/hooks';
 
-import { useCustomTranslation } from '~/shared/utils';
+import { useBanners } from '~/entities/banner/model';
+import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
 
 export const SurveyWidget = () => {
   const { t } = useCustomTranslation();
+  const { removeAllBanners } = useBanners();
+
+  // Remove any stale banners on mount
+  useOnceEffect(() => removeAllBanners());
 
   const context = useContext(SurveyBasicContext);
 

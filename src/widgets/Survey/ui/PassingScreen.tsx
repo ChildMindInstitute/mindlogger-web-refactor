@@ -24,7 +24,7 @@ const PassingScreen = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { addWarningBanner, addSuccessBanner } = useBanners();
+  const { addWarningBanner, addSuccessBanner, removeWarningBanner } = useBanners();
 
   const surveyBasicContext = useContext(SurveyBasicContext); // This is basic context with { eventId, appletId, activityId, isPublic, publicAppletKey }
   const surveyContext = useContext(SurveyContext); // This is full context with { applet, activity, events, respondentMeta }
@@ -233,6 +233,7 @@ const PassingScreen = () => {
       item,
       activity,
       showWarning: (key: string) => addWarningBanner(t(key)),
+      hideWarning: removeWarningBanner,
     });
 
     if (!isValid) {
@@ -249,6 +250,7 @@ const PassingScreen = () => {
   }, [
     item,
     activity,
+    removeWarningBanner,
     conditionallyHiddenItemIds,
     removeItemAnswer,
     hasNextStep,

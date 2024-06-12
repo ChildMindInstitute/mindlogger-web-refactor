@@ -94,6 +94,7 @@ function validateResponseCorrectness(item: appletModel.ItemRecord): boolean {
 type ValidateItemProps = {
   item: appletModel.ItemRecord;
   showWarning: (translationKey: string) => void;
+  hideWarning: () => void;
   activity: ActivityDTO;
 };
 
@@ -101,10 +102,12 @@ export function validateBeforeMoveForward({
   item,
   activity,
   showWarning,
+  hideWarning,
 }: ValidateItemProps): boolean {
   const isSkippable = item.config.skippableItem || activity.isSkippable;
 
   if (isSkippable) {
+    hideWarning();
     return true;
   }
 
@@ -145,5 +148,7 @@ export function validateBeforeMoveForward({
     showWarning('pleaseListenToAudio');
     return false;
   }
+
+  hideWarning();
   return true;
 }
