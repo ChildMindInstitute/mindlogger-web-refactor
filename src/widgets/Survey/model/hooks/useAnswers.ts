@@ -141,7 +141,7 @@ export const useAnswer = () => {
       const isIntegrationsEnabled = applet.integrations !== undefined;
 
       if (isIntegrationsEnabled) {
-        answer.isDataShare = appletConsents?.shareToPublic ?? false;
+        answer.consentToShare = appletConsents?.shareToPublic ?? false;
       }
 
       if (featureFlags.enableMultiInformant) {
