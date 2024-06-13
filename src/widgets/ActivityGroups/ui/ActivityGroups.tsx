@@ -14,19 +14,19 @@ import Loader from '~/shared/ui/Loader';
 import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
-type PublicAppletDetails = {
+type PublicProps = {
   isPublic: true;
   startActivityOrFlow?: string | null;
   publicAppletKey: string;
 };
 
-type PrivateAppletDetails = {
+type PrivateProps = {
   isPublic: false;
   startActivityOrFlow?: string | null;
   appletId: string;
 };
 
-type Props = PublicAppletDetails | PrivateAppletDetails;
+type Props = PublicProps | PrivateProps;
 
 export const ActivityGroups = (props: Props) => {
   const { t } = useCustomTranslation();
