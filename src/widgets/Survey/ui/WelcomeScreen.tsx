@@ -29,11 +29,23 @@ const WelcomeScreen = () => {
 
   const entityTimer = eventByEntityID?.timers.timer ?? null;
 
+  const { startActivity, startFlow } = appletModel.hooks.useEntityStart();
+
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
 
   const startAssessment = () => {
+    const groupProgress = getGroupProgress({ entityId, eventId: basicContext.eventId });
+
+    if (flowParams.isFlow && !groupProgress) {
+      startFlow(flowParams.flowId, basicContext.eventId, context.applet.activityFlows);
+    }
+
+    if (!flowParams.isFlow) {
+      startActivity(basicContext.activityId, basicContext.eventId);
+    }
+
     return setInitialProgress({ activity: context.activity, eventId: basicContext.eventId });
   };
 

@@ -4,7 +4,7 @@ import { AppletDetailsContext } from '../lib';
 import { appletModel, useAppletBaseInfoByIdQuery } from '~/entities/applet';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
 import { TakeNowSuccessModal } from '~/features/TakeNow/ui/TakeNowSuccessModal';
-import { Container } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
 import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
@@ -60,17 +60,9 @@ export const ActivityGroups = (props: Props) => {
 
   if (isEventsError || isAppletError) {
     return (
-      <Container
-        sx={{
-          display: 'flex',
-          height: '100%',
-          width: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <Box display="flex" width="100%" height="100%" justifyContent="center" alignItems="center">
         <span>{t('additional.invalid_public_url')}</span>
-      </Container>
+      </Box>
     );
   }
 
