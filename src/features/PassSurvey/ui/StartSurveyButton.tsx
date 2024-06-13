@@ -1,15 +1,13 @@
-import { Box } from '~/shared/ui';
 import { BaseButton } from '~/shared/ui';
-import { useCustomTranslation } from '~/shared/utils';
+import Box from '~/shared/ui/Box';
 
 type Props = {
+  text: string;
   width: string;
   onClick: () => void;
 };
 
-export const StartSurveyButton = ({ onClick, width }: Props) => {
-  const { t } = useCustomTranslation();
-
+export const StartSurveyButton = ({ onClick, width, text }: Props) => {
   return (
     <Box
       display="flex"
@@ -19,7 +17,7 @@ export const StartSurveyButton = ({ onClick, width }: Props) => {
       paddingY="23px"
     >
       <Box width={width}>
-        <BaseButton type="button" variant="contained" onClick={onClick} text={t('start')} />
+        <BaseButton type="button" variant="contained" onClick={onClick} text={text} />
       </Box>
     </Box>
   );
