@@ -7,18 +7,18 @@ type AppletDetailsContextProps = {
   events: AppletEventsResponse;
 };
 
-type PublicAppletDetails = {
+type Public = {
   isPublic: true;
   startActivityOrFlow?: string | null;
   publicAppletKey: string;
 };
 
-type PrivateAppletDetails = {
+type Private = {
   isPublic: false;
   startActivityOrFlow?: string | null;
   appletId: string;
 };
 
-type Context = AppletDetailsContextProps & (PublicAppletDetails | PrivateAppletDetails);
+type Context = AppletDetailsContextProps & (Public | Private);
 
 export const AppletDetailsContext = createContext<Context>({} as Context);
