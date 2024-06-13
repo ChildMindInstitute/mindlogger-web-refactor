@@ -10,19 +10,26 @@ import { Theme } from '~/shared/constants';
 import { AvatarBase } from '~/shared/ui/Avatar';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { useCustomMediaQuery } from '~/shared/utils';
+import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 
 const WelcomeScreen = () => {
   const { greaterThanSM } = useCustomMediaQuery();
 
-  const basicContext = useContext(SurveyBasicContext);
-  const context = useContext(SurveyContext);
+  const { t } = useCustomTranslation();
 
   const flowParams = useFlowType();
 
-  const { setInitialProgress } = appletModel.hooks.useActivityProgress();
+  const basicContext = useContext(SurveyBasicContext);
+
+  const context = useContext(SurveyContext);
 
   const entityId = flowParams.isFlow ? flowParams.flowId : context.activity.id;
+
+  const eventByEntityID = context.events.events.find((ev) => ev.entityId === entityId);
+
+  const entityTimer = eventByEntityID?.timers.timer ?? null;
+
+  const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
 
@@ -35,7 +42,11 @@ const WelcomeScreen = () => {
       progress={0}
       isSaveAndExitButtonShown={true}
       footerActions={
-        <StartSurveyButton width={greaterThanSM ? '375px' : '335px'} onClick={startAssessment} />
+        <StartSurveyButton
+          width={greaterThanSM ? '375px' : '335px'}
+          onClick={startAssessment}
+          text={t('start')}
+        />
       }
     >
       <Box
