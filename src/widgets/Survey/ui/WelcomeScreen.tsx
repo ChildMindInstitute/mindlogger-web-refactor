@@ -18,9 +18,9 @@ const WelcomeScreen = () => {
 
   const context = useContext(SurveyContext);
 
-  const entityTimer = context.event.timers.timer ?? null;
-
   const { startActivity, startFlow } = appletModel.hooks.useEntityStart();
+
+  const entityTimer = context.event.timers.timer;
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
