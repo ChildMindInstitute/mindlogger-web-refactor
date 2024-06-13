@@ -138,8 +138,7 @@ export const useAnswer = () => {
         },
       };
 
-      const isIntegrationsEnabled =
-        applet.integrations !== undefined || applet.integrations !== null;
+      const isIntegrationsEnabled = applet.integrations !== undefined;
 
       if (isIntegrationsEnabled) {
         answer.isDataShare = appletConsents?.shareToPublic ?? false;
