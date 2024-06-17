@@ -5,7 +5,7 @@ import SurveyLayout from './SurveyLayout';
 import { SurveyBasicContext, SurveyContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
-import { StartSurveyButton, useFlowType } from '~/features/PassSurvey';
+import { StartSurveyButton, formatTimerTime, useFlowType } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import { AvatarBase } from '~/shared/ui/Avatar';
 import Box from '~/shared/ui/Box';
@@ -53,6 +53,7 @@ const WelcomeScreen = () => {
     <SurveyLayout
       progress={0}
       isSaveAndExitButtonShown={true}
+      entityTimer={entityTimer ? formatTimerTime(entityTimer) : undefined}
       footerActions={
         <StartSurveyButton
           width={greaterThanSM ? '375px' : '335px'}
