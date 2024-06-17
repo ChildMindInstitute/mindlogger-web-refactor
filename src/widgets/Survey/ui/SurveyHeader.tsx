@@ -5,12 +5,14 @@ import { SurveyBasicContext, SurveyContext } from '../lib';
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import { MultiInformantTooltip } from '~/features/TakeNow';
 import { ROUTES, Theme } from '~/shared/constants';
-import { AvatarBase, BaseProgressBar, Box, Text } from '~/shared/ui';
+import { AvatarBase, BaseProgressBar, Box, ClockIcon, Text } from '~/shared/ui';
 import { isStringExist, useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
 
 type Props = {
   progress?: number;
   isSaveAndExitButtonShown: boolean;
+
+  entityTimer?: string;
 };
 
 const SurveyHeader = (props: Props) => {
@@ -50,6 +52,12 @@ const SurveyHeader = (props: Props) => {
         borderBottom: `1px solid ${Theme.colors.light.surfaceVariant}`,
       }}
     >
+      {props.entityTimer && (
+        <Box display="flex" padding="8px 12px" gap="8px">
+          <ClockIcon width="24px" height="24px" color={Theme.colors.light.outline} />
+          <Text color={Theme.colors.light.outline}>{props.entityTimer}</Text>
+        </Box>
+      )}
       <MultiInformantTooltip />
 
       <Box sx={{ gridColumn: '2 / 3' }}>
