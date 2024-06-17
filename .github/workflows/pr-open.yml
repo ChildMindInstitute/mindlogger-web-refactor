@@ -73,7 +73,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TEST_RESULTS }}
           SLACKIFY_MARKDOWN: true
           SLACK_TITLE: |
-            :rotating_light: Unit test suite failed
+            :rotating_light: Unit test suite failed in ${{ github.repository }}
           SLACK_MESSAGE: >-
             Unit tests for PR-${{ github.event.pull_request.number}} failed
             \n\n
@@ -106,7 +106,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TEST_RESULTS }}
           SLACKIFY_MARKDOWN: true
           SLACK_TITLE: |
-            :rotating_light: E2E test suite failed
+            :rotating_light: E2E test suite failed in ${{ github.repository }}
           SLACK_MESSAGE: >-
             E2E tests for PR-${{ github.event.pull_request.number}} failed
             \n\n
