@@ -57,17 +57,17 @@ jobs:
       - name: Wait for job
         run: |
           while true; do
-            JOB_STATUS=$(aws amplify get-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.env-name }} --job-id ${{ steps.deploy.outputs.job-id }} --query 'job.summary.status')
+            JOB_STATUS=$(aws amplify get-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.env-name }} --job-id ${{ steps.deploy.outputs.job-id }} --query 'job.summary.status' --output text)
             echo "Current job ${{ steps.deploy.outputs.job-id }} status: $JOB_STATUS"
-            case $JOB_STATUS in
-              SUCCEEDED)
+            case "$JOB_STATUS" in
+              "SUCCEED")
                 break
               ;;
-              FAILED)
+              "FAILED" | "CANCELLED")
                 exit 1
               ;;
-              CANCELLED)
-                exit 1
+              *)
+                echo "Waiting..."
               ;;
             esac
             sleep 2
