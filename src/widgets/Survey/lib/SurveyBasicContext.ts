@@ -6,16 +6,19 @@ type PrivateContext = {
   appletId: string;
   activityId: string;
   eventId: string;
+
+  flowId: string | null;
 };
 
 type PublicContext = {
   isPublic: true;
+  publicAppletKey: string;
 
   appletId: string;
   activityId: string;
   eventId: string;
 
-  publicAppletKey: string;
+  flowId: string | null;
 };
 
 type Context = PrivateContext | PublicContext;
