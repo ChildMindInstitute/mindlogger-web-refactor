@@ -58,7 +58,7 @@ jobs:
         run: |
           while true; do
             JOB_STATUS=$(aws amplify get-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.env-name }} --job-id ${{ steps.deploy.outputs.job-id }} --query 'job.summary.status')
-            
+            echo "Current job ${{ steps.deploy.outputs.job-id }} status: $JOB_STATUS"
             case $JOB_STATUS in
               SUCCEEDED)
                 break
@@ -70,6 +70,7 @@ jobs:
                 exit 1
               ;;
             esac
+            sleep 2
           done
     outputs:
       service-url: ${{ inputs.env-name }}.${{ inputs.app-id }}.amplifyapp.com
