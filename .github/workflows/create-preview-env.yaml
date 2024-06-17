@@ -24,6 +24,7 @@ on:
 jobs:
 
   create-preview-env:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     name: Create Preview Env
     permissions:
@@ -51,12 +52,12 @@ jobs:
       - name: Deploy branch
         id: deploy
         run: |
-          JOB_ID=$(aws amplify start-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.branch-name }} --job-type RELEASE --query 'jobSummary.jobId')
+          JOB_ID=$(aws amplify start-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.env-name }} --job-type RELEASE --query 'jobSummary.jobId')
           echo "job-id=$JOB_ID" >> "$GITHUB_OUTPUT"
       - name: Wait for job
         run: |
           while true; do
-            JOB_STATUS=$(aws amplify get-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.branch-name }} --job-id ${{ steps.deploy.outputs.job-id }} --query 'job.summary.status')
+            JOB_STATUS=$(aws amplify get-job --app-id ${{ inputs.app-id }} --branch-name ${{ inputs.env-name }} --job-id ${{ steps.deploy.outputs.job-id }} --query 'job.summary.status')
             
             case $JOB_STATUS in
               SUCCEEDED)
