@@ -4,10 +4,11 @@ import SurveyHeader from './SurveyHeader';
 
 import { Theme } from '~/shared/constants';
 import { Banners, Box } from '~/shared/ui';
+import { HourMinute } from '~/shared/utils';
 
 type Props = PropsWithChildren<{
   progress?: number;
-  entityTimer?: string;
+  entityTimer?: HourMinute;
 
   isSaveAndExitButtonShown: boolean;
 

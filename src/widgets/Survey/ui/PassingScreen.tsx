@@ -9,12 +9,7 @@ import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } fr
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
-import {
-  SurveyManageButtons,
-  useFlowType,
-  useItemTimer,
-  useSummaryData,
-} from '~/features/PassSurvey';
+import { SurveyManageButtons, useItemTimer, useSummaryData } from '~/features/PassSurvey';
 import { MuiModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation, usePrevious } from '~/shared/utils';
@@ -29,8 +24,6 @@ const PassingScreen = () => {
   const surveyBasicContext = useContext(SurveyBasicContext); // This is basic context with { eventId, appletId, activityId, isPublic, publicAppletKey }
   const surveyContext = useContext(SurveyContext); // This is full context with { applet, activity, events, respondentMeta }
 
-  const flowParams = useFlowType();
-
   const applet = surveyContext.applet;
 
   const activity = surveyContext.activity;
@@ -40,6 +33,10 @@ const PassingScreen = () => {
   const eventId = surveyBasicContext.eventId;
 
   const activityEventId = getProgressId(activityId, eventId);
+
+  const event = surveyContext.events.events.find((ev) => ev.id === eventId);
+
+  const entityTimer = event?.timers.timer ?? null;
 
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(state, activityEventId),
@@ -76,6 +73,7 @@ const PassingScreen = () => {
     activityName: activity.name,
     eventId,
     scoresAndReports: activity.scoresAndReports,
+    flowId: null,
   });
 
   const { step, item, hasPrevStep, hasNextStep, progress, conditionallyHiddenItemIds } =
@@ -90,7 +88,7 @@ const PassingScreen = () => {
     activityId,
     eventId,
     publicAppletKey: surveyBasicContext.isPublic ? surveyBasicContext.publicAppletKey : null,
-    flowId: flowParams.isFlow ? flowParams.flowId : null,
+    flowId: surveyBasicContext.flowId,
   });
 
   const { replaceTextVariables } = useTextVariablesReplacer({
@@ -102,13 +100,13 @@ const PassingScreen = () => {
 
   const onSubmitSuccess = () => {
     const groupProgress = getGroupProgress({
-      entityId: flowParams.isFlow ? flowParams.flowId : activityId,
+      entityId: surveyBasicContext.flowId ? surveyBasicContext.flowId : activityId,
       eventId,
     });
 
     const isFlowGroup = groupProgress?.type === ActivityPipelineType.Flow;
 
-    const currentFlow = applet.activityFlows.find((flow) => flow.id === flowParams.flowId);
+    const currentFlow = applet.activityFlows.find((flow) => flow.id === surveyBasicContext.flowId);
 
     const nextActivityIndex = (groupProgress as FlowProgress).pipelineActivityOrder + 1;
 
@@ -144,7 +142,7 @@ const PassingScreen = () => {
         };
 
         saveGroupContext({
-          activityId: flowParams.isFlow ? flowParams.flowId : activityId,
+          activityId: surveyBasicContext.flowId ? surveyBasicContext.flowId : activityId,
           eventId,
           context: {
             summaryData: {
@@ -159,7 +157,7 @@ const PassingScreen = () => {
     const hasAnySummaryScreenResults =
       Object.keys(groupProgress?.context.summaryData ?? {}).length > 0;
 
-    if (!isFlowGroup && !flowParams.isFlow) {
+    if (!isFlowGroup && !surveyBasicContext.flowId) {
       if (isSummaryScreenOn && isSummaryDataExist) {
         return openSummaryScreen({ activityId, eventId });
       }
@@ -171,7 +169,7 @@ const PassingScreen = () => {
       return openSummaryScreen({ activityId, eventId });
     }
 
-    return flowParams.flowId && completeFlow(flowParams.flowId);
+    return surveyBasicContext.flowId && completeFlow(surveyBasicContext.flowId);
   };
 
   const { submitAnswers, isLoading } = useSubmitAnswersMutations({
@@ -295,6 +293,7 @@ const PassingScreen = () => {
       <SurveyLayout
         progress={progress}
         isSaveAndExitButtonShown={true}
+        entityTimer={entityTimer ?? undefined}
         footerActions={
           <SurveyManageButtons
             timerSettings={!isModalOpen ? timerSettings : undefined}
