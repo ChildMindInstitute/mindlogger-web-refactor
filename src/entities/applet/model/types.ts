@@ -143,6 +143,11 @@ export type RemoveActivityProgressPayload = {
   eventId: string;
 };
 
+export type RemoveGroupProgressPayload = {
+  entityId: string;
+  eventId: string;
+};
+
 export type SaveGroupProgressPayload = {
   activityId: string;
   eventId: string;

@@ -31,6 +31,8 @@ export const useStartSurvey = (props: Props) => {
   const appletId = props.applet.id;
   const flows = props.applet.activityFlows;
 
+  const { removeGroupProgress } = appletModel.hooks.useGroupProgressState();
+
   const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
   function navigateToEntity(params: NavigateToEntityProps) {
@@ -77,6 +79,7 @@ export const useStartSurvey = (props: Props) => {
 
       if (shouldRestart) {
         removeActivityProgress({ activityId, eventId });
+        removeGroupProgress({ entityId: flowId, eventId });
       }
 
       const activityIdToNavigate = shouldRestart ? firstActivityId : activityId;
@@ -90,7 +93,8 @@ export const useStartSurvey = (props: Props) => {
     }
 
     if (shouldRestart) {
-      removeActivityProgress({ activityId, eventId: params.eventId });
+      removeActivityProgress({ activityId, eventId });
+      removeGroupProgress({ entityId: activityId, eventId });
     }
 
     return navigateToEntity({

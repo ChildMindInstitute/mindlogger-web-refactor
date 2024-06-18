@@ -5,6 +5,7 @@ import { actions } from '../slice';
 import {
   InProgressEntity,
   InProgressFlow,
+  RemoveGroupProgressPayload,
   SaveGroupContextPayload,
   SaveGroupProgressPayload,
 } from '../types';
@@ -16,6 +17,7 @@ type Return = {
   getGroupProgress: (params: InProgressEntity) => GroupProgress | null;
   saveGroupProgress: (payload: SaveGroupProgressPayload) => void;
   saveGroupContext: (payload: SaveGroupContextPayload) => void;
+  removeGroupProgress: (payload: RemoveGroupProgressPayload) => void;
 
   entityCompleted: (props: InProgressEntity) => void;
   flowUpdated: (props: InProgressFlow) => void;
@@ -57,6 +59,13 @@ export const useGroupProgressState = (): Return => {
     [dispatch],
   );
 
+  const removeGroupProgress = useCallback(
+    (payload: RemoveGroupProgressPayload) => {
+      dispatch(actions.removeGroupProgress(payload));
+    },
+    [dispatch],
+  );
+
   const saveGroupContext = useCallback(
     (payload: SaveGroupContextPayload) => {
       dispatch(actions.saveGroupContext(payload));
@@ -67,6 +76,7 @@ export const useGroupProgressState = (): Return => {
   return {
     getGroupProgress,
 
+    removeGroupProgress,
     saveGroupProgress,
     saveGroupContext,
 
