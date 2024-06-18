@@ -5,7 +5,7 @@ import SurveyLayout from './SurveyLayout';
 import { SurveyBasicContext, SurveyContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
-import { StartSurveyButton, formatTimerTime, useFlowType } from '~/features/PassSurvey';
+import { StartSurveyButton, useFlowType } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import { AvatarBase } from '~/shared/ui/Avatar';
 import Box from '~/shared/ui/Box';
@@ -25,9 +25,9 @@ const WelcomeScreen = () => {
 
   const entityId = flowParams.isFlow ? flowParams.flowId : context.activity.id;
 
-  const eventByEntityID = context.events.events.find((ev) => ev.entityId === entityId);
+  const event = context.events.events.find((ev) => ev.id === basicContext.eventId);
 
-  const entityTimer = eventByEntityID?.timers.timer ?? null;
+  const entityTimer = event?.timers.timer ?? null;
 
   const { startActivity, startFlow } = appletModel.hooks.useEntityStart();
 
@@ -53,7 +53,7 @@ const WelcomeScreen = () => {
     <SurveyLayout
       progress={0}
       isSaveAndExitButtonShown={true}
-      entityTimer={entityTimer ? formatTimerTime(entityTimer) : undefined}
+      entityTimer={entityTimer ?? undefined}
       footerActions={
         <StartSurveyButton
           width={greaterThanSM ? '375px' : '335px'}

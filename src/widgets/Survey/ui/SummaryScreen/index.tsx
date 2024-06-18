@@ -9,7 +9,7 @@ import SurveyLayout from '../SurveyLayout';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
-import { SurveyManageButtons, useFlowType, useSummaryData } from '~/features/PassSurvey';
+import { SurveyManageButtons, useSummaryData } from '~/features/PassSurvey';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { useAppSelector, useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
@@ -22,8 +22,6 @@ const SummaryScreen = () => {
   const basicContext = useContext(SurveyBasicContext);
 
   const surveyContext = useContext(SurveyContext);
-
-  const { isFlow, flowId } = useFlowType();
 
   const applet = surveyContext.applet;
 
@@ -39,11 +37,11 @@ const SummaryScreen = () => {
     eventId,
     activityId: basicContext.activityId,
     publicAppletKey: basicContext.isPublic ? basicContext.publicAppletKey : null,
-    flowId: isFlow ? flowId : null,
+    flowId: basicContext.flowId,
   });
 
   const onFinish = () => {
-    return isFlow ? completeFlow(flowId) : completeActivity();
+    return basicContext.flowId ? completeFlow(basicContext.flowId) : completeActivity();
   };
 
   const { summaryData } = useSummaryData({
@@ -51,7 +49,7 @@ const SummaryScreen = () => {
     eventId: basicContext.eventId,
     activityName: surveyContext.activity.name,
     scoresAndReports: activityProgress.scoreSettings,
-    flowId: isFlow ? flowId : undefined,
+    flowId: basicContext.flowId,
   });
 
   return (
