@@ -11,7 +11,7 @@ type Props = {
   activityId: string;
   activityName: string;
   eventId: string;
-  flowId?: string;
+  flowId: string | null;
 
   scoresAndReports?: ScoreAndReports;
 };
