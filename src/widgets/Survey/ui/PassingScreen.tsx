@@ -1,9 +1,14 @@
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 
 import SurveyLayout from './SurveyLayout';
 import { SurveyBasicContext, SurveyContext } from '../lib';
 import { validateBeforeMoveForward } from '../model';
-import { useAnswer, useAutoForward, useSubmitAnswersMutations, useSurvey } from '../model/hooks';
+import {
+  useAnswer,
+  useAutoForward,
+  useSubmitAnswersMutations,
+  useSurveyState,
+} from '../model/hooks';
 
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
@@ -12,12 +17,12 @@ import { useBanners } from '~/entities/banner/model';
 import { SurveyManageButtons, useItemTimer, useSummaryData } from '~/features/PassSurvey';
 import { MuiModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
-import { useAppSelector, useCustomTranslation, usePrevious } from '~/shared/utils';
+import { useAppSelector, useCustomTranslation, useModal, usePrevious } from '~/shared/utils';
 
 const PassingScreen = () => {
   const { t } = useCustomTranslation();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitModalOpen, openSubmitModal, closeSubmitModal] = useModal();
 
   const { addWarningBanner, addSuccessBanner, removeWarningBanner } = useBanners();
 
@@ -34,9 +39,7 @@ const PassingScreen = () => {
 
   const activityEventId = getProgressId(activityId, eventId);
 
-  const event = surveyContext.events.events.find((ev) => ev.id === eventId);
-
-  const entityTimer = event?.timers.timer ?? null;
+  const entityTimer = surveyContext.event.timers.timer ?? null;
 
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(state, activityEventId),
@@ -77,7 +80,7 @@ const PassingScreen = () => {
   });
 
   const { step, item, hasPrevStep, hasNextStep, progress, conditionallyHiddenItemIds } =
-    useSurvey(activityProgress);
+    useSurveyState(activityProgress);
 
   const canGoBack = !item?.config.removeBackButton && activity.responseIsEditable;
 
@@ -241,7 +244,7 @@ const PassingScreen = () => {
     conditionallyHiddenItemIds?.forEach(removeItemAnswer);
 
     if (!hasNextStep) {
-      return setIsModalOpen(true);
+      return openSubmitModal();
     }
 
     return onNext();
@@ -255,6 +258,7 @@ const PassingScreen = () => {
     onNext,
     addWarningBanner,
     t,
+    openSubmitModal,
   ]);
 
   const onItemValueChange = (value: Answer) => {
@@ -284,8 +288,8 @@ const PassingScreen = () => {
     item,
     activityId,
     eventId,
-    isSubmitModalOpen: isModalOpen,
-    onTimerEnd: hasNextStep ? onNext : () => setIsModalOpen(true),
+    isSubmitModalOpen,
+    onTimerEnd: hasNextStep ? onNext : openSubmitModal,
   });
 
   return (
@@ -296,7 +300,7 @@ const PassingScreen = () => {
         entityTimer={entityTimer ?? undefined}
         footerActions={
           <SurveyManageButtons
-            timerSettings={!isModalOpen ? timerSettings : undefined}
+            timerSettings={!isSubmitModalOpen ? timerSettings : undefined}
             isLoading={false}
             isBackShown={hasPrevStep && canGoBack}
             onBackButtonClick={onBack}
@@ -324,15 +328,15 @@ const PassingScreen = () => {
       </SurveyLayout>
 
       <MuiModal
-        isOpen={isModalOpen}
-        onHide={() => setIsModalOpen(false)}
+        isOpen={isSubmitModalOpen}
+        onHide={closeSubmitModal}
         title={t('submitAnswerModalTitle')}
         label={canGoBack ? t('submitAnswerModalDescription') : undefined}
         footerPrimaryButton={t('submit')}
         onPrimaryButtonClick={onSubmit}
         isPrimaryButtonLoading={isLoading}
         footerSecondaryButton={canGoBack ? t('goBack') : undefined}
-        onSecondaryButtonClick={canGoBack ? () => setIsModalOpen(false) : undefined}
+        onSecondaryButtonClick={canGoBack ? closeSubmitModal : undefined}
         testId="submit-response-modal"
       />
     </>

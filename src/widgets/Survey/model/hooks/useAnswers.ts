@@ -13,7 +13,6 @@ import { ActivityPipelineType, GroupProgress } from '~/abstract/lib';
 import { useEncryptPayload } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { userModel } from '~/entities/user';
-import { useFlowType } from '~/features/PassSurvey';
 import { AnswerPayload } from '~/shared/api';
 import { formatToDtoDate, formatToDtoTime, useAppSelector, useEncryption } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
@@ -27,8 +26,6 @@ type SubmitAnswersProps = {
 export const useAnswer = () => {
   const { generateUserPrivateKey } = useEncryption();
   const { encryptPayload } = useEncryptPayload();
-
-  const flowParams = useFlowType();
 
   const surveyBasicContext = useContext(SurveyBasicContext);
   const surveyContext = useContext(SurveyContext);
@@ -81,7 +78,9 @@ export const useAnswer = () => {
       const encryptedUserEvents = encryptPayload(applet.encryption, params.userEvents, privateKey);
 
       const groupProgress = getGroupProgress({
-        entityId: flowParams.isFlow ? flowParams.flowId : surveyBasicContext.activityId,
+        entityId: surveyBasicContext.flowId
+          ? surveyBasicContext.flowId
+          : surveyBasicContext.activityId,
         eventId: surveyBasicContext.eventId,
       });
 
@@ -99,7 +98,7 @@ export const useAnswer = () => {
       const isFlow = groupProgress.type === ActivityPipelineType.Flow;
       const pipelineAcitivityOrder = isFlow ? groupProgress.pipelineActivityOrder : null;
 
-      const currentFlow = applet.activityFlows?.find(({ id }) => id === flowParams.flowId);
+      const currentFlow = applet.activityFlows?.find(({ id }) => id === surveyBasicContext.flowId);
 
       const currentFlowLength = currentFlow?.activityIds.length;
 
@@ -112,7 +111,7 @@ export const useAnswer = () => {
       const answer: AnswerPayload = {
         appletId: applet.id,
         activityId: surveyBasicContext.activityId,
-        flowId: flowParams.flowId,
+        flowId: surveyBasicContext.flowId,
         submitId: getSubmitId(groupProgress),
         version: applet.version,
         createdAt: new Date().getTime(),
@@ -152,10 +151,7 @@ export const useAnswer = () => {
         }
       }
 
-      const scheduledTime = getScheduledTimeFromEvents(
-        surveyContext.events,
-        surveyBasicContext.activityId,
-      );
+      const scheduledTime = getScheduledTimeFromEvents(surveyContext.event);
 
       if (scheduledTime) {
         answer.answer.scheduledTime = scheduledTime;
@@ -167,7 +163,6 @@ export const useAnswer = () => {
       applet,
       encryptPayload,
       getGroupProgress,
-      flowParams,
       surveyBasicContext,
       surveyContext,
       appletConsents,

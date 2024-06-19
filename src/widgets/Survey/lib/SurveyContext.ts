@@ -1,12 +1,13 @@
 import { createContext } from 'react';
 
-import { ActivityDTO, AppletDTO, AppletEventsResponse, RespondentMetaDTO } from '~/shared/api';
+import { ActivityDTO, AppletDTO, RespondentMetaDTO, ScheduleEventDto } from '~/shared/api';
 
-type Context = {
+export type SurveyContext = {
   activity: ActivityDTO;
-  events: AppletEventsResponse;
   applet: AppletDTO;
   respondentMeta?: RespondentMetaDTO;
+
+  event: ScheduleEventDto;
 };
 
-export const SurveyContext = createContext<Context>({} as Context);
+export const SurveyContext = createContext<SurveyContext>({} as SurveyContext);

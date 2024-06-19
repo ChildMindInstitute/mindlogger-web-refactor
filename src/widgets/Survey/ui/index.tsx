@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { ErrorScreen } from './ErrorScreen';
 import LoadingScreen from './LoadingScreen';
 import { ScreenManager } from './ScreenManager';
-import { SurveyBasicContext, SurveyContext } from '../lib';
+import { SurveyBasicContext, SurveyContext, mapRawDataToSurveyContext } from '../lib';
 import { useSurveyDataQuery } from '../model/hooks';
 
 import { useBanners } from '~/entities/banner/model';
@@ -41,12 +41,13 @@ export const SurveyWidget = () => {
 
   return (
     <SurveyContext.Provider
-      value={{
-        activity: activityDTO,
-        applet: appletDTO,
-        events: eventsDTO,
+      value={mapRawDataToSurveyContext({
+        activityDTO,
+        appletDTO,
+        eventsDTO,
         respondentMeta,
-      }}
+        currentEventId: context.eventId,
+      })}
     >
       <ScreenManager />
     </SurveyContext.Provider>
