@@ -4,6 +4,7 @@ import PassingScreen from './PassingScreen';
 import SummaryScreen from './SummaryScreen';
 import WelcomeScreen from './WelcomeScreen';
 import { SurveyContext } from '../lib';
+import { useEntityTimer } from '../model/hooks/useEntityTimer';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
@@ -21,9 +22,11 @@ export const ScreenManager = () => {
 
   const items = activityProgress?.items ?? [];
 
+  const showSummaryScreen = activityProgress?.isSummaryScreenOpen ?? false;
+
   const isActivityStarted = items.length > 0;
 
-  const showSummaryScreen = activityProgress?.isSummaryScreenOpen ?? false;
+  useEntityTimer();
 
   if (!isActivityStarted) {
     return <WelcomeScreen />;
