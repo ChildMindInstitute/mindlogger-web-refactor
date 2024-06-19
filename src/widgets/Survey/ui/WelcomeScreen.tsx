@@ -35,7 +35,7 @@ const WelcomeScreen = () => {
     const groupProgress = getGroupProgress({ entityId, eventId: basicContext.eventId });
 
     if (basicContext.flowId && !groupProgress) {
-      startFlow(basicContext.flowId, basicContext.eventId, context.applet.activityFlows);
+      startFlow(basicContext.flowId, basicContext.eventId, context.flows);
     }
 
     if (!basicContext.flowId) {

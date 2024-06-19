@@ -4,10 +4,19 @@ import { ActivityDTO, AppletDTO, RespondentMetaDTO, ScheduleEventDto } from '~/s
 
 export type SurveyContext = {
   activity: ActivityDTO;
-  applet: AppletDTO;
   respondentMeta?: RespondentMetaDTO;
 
   event: ScheduleEventDto;
+
+  // Vital Applet Details
+  appletId: string;
+  encryption: AppletDTO['encryption'];
+  appletVersion: string;
+
+  watermark: string;
+  flows: AppletDTO['activityFlows'];
+
+  integrations: AppletDTO['integrations'];
 };
 
 export const SurveyContext = createContext<SurveyContext>({} as SurveyContext);

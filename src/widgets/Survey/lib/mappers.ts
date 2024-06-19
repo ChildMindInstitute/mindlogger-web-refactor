@@ -26,8 +26,14 @@ export const mapRawDataToSurveyContext = (props: Props): SurveyContext => {
 
   return {
     activity: activityDTO,
-    applet: appletDTO,
     event,
     respondentMeta: props.respondentMeta,
+
+    appletId: appletDTO.id,
+    encryption: appletDTO.encryption,
+    appletVersion: appletDTO.version,
+    flows: appletDTO.activityFlows,
+    watermark: appletDTO.watermark,
+    integrations: appletDTO.integrations,
   };
 };
