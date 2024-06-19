@@ -2,9 +2,9 @@ import { useParams, useSearchParams } from 'react-router-dom';
 
 import Box from '~/shared/ui/Box';
 import { useCustomTranslation } from '~/shared/utils';
-import { SurveyBasicContext, SurveyWidget } from '~/widgets/Survey';
+import { SurveyWidget } from '~/widgets/Survey';
 
-function PublicActivityDetailsPage() {
+function PublicSurvey() {
   const { t } = useCustomTranslation();
 
   const { appletId, activityId, eventId, publicAppletKey, entityType } = useParams();
@@ -25,13 +25,15 @@ function PublicActivityDetailsPage() {
 
   return (
     <Box display="flex" flex={1}>
-      <SurveyBasicContext.Provider
-        value={{ appletId, activityId, eventId, publicAppletKey, flowId, isPublic: true }}
-      >
-        <SurveyWidget />
-      </SurveyBasicContext.Provider>
+      <SurveyWidget
+        appletId={appletId}
+        activityId={activityId}
+        eventId={eventId}
+        flowId={flowId}
+        publicAppletKey={publicAppletKey}
+      />
     </Box>
   );
 }
 
-export default PublicActivityDetailsPage;
+export default PublicSurvey;

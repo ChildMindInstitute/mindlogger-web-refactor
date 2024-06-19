@@ -1,7 +1,3 @@
-import { useContext } from 'react';
-
-import { SurveyBasicContext } from '../../lib';
-
 import { useActivityByIdQuery } from '~/entities/activity';
 import { useAppletByIdQuery } from '~/entities/applet';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
@@ -23,8 +19,14 @@ type Return = {
   error: BaseError | null;
 };
 
-export const useSurveyDataQuery = (): Return => {
-  const context = useContext(SurveyBasicContext);
+type Props = {
+  publicAppletKey: string | null;
+  appletId: string;
+  activityId: string;
+};
+
+export const useSurveyDataQuery = (props: Props): Return => {
+  const { appletId, activityId, publicAppletKey } = props;
 
   const {
     data: appletById,
@@ -32,9 +34,7 @@ export const useSurveyDataQuery = (): Return => {
     isLoading: isAppletLoading,
     error: appletError,
   } = useAppletByIdQuery(
-    context.isPublic
-      ? { isPublic: context.isPublic, publicAppletKey: context.publicAppletKey }
-      : { isPublic: context.isPublic, appletId: context.appletId },
+    publicAppletKey ? { isPublic: true, publicAppletKey } : { isPublic: false, appletId },
     { select: (data) => data?.data },
   );
 
@@ -44,7 +44,7 @@ export const useSurveyDataQuery = (): Return => {
     isLoading: isActivityLoading,
     error: activityError,
   } = useActivityByIdQuery(
-    { isPublic: context.isPublic, activityId: context.activityId },
+    { isPublic: !!publicAppletKey, activityId },
     { select: (data) => data?.data?.result },
   );
 
@@ -54,9 +54,7 @@ export const useSurveyDataQuery = (): Return => {
     isLoading: isEventsLoading,
     error: eventsError,
   } = useEventsbyAppletIdQuery(
-    context.isPublic
-      ? { isPublic: context.isPublic, publicAppletKey: context.publicAppletKey }
-      : { isPublic: context.isPublic, appletId: context.appletId },
+    publicAppletKey ? { isPublic: true, publicAppletKey } : { isPublic: false, appletId },
     { select: (data) => data?.data?.result },
   );
 

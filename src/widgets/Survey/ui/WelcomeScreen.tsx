@@ -2,7 +2,7 @@ import { useContext } from 'react';
 
 import { ActivityMetaData } from './ActivityMetaData';
 import SurveyLayout from './SurveyLayout';
-import { SurveyBasicContext, SurveyContext } from '../lib';
+import { SurveyContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
 import { StartSurveyButton } from '~/features/PassSurvey';
@@ -17,11 +17,7 @@ const WelcomeScreen = () => {
 
   const { t } = useCustomTranslation();
 
-  const basicContext = useContext(SurveyBasicContext);
-
   const context = useContext(SurveyContext);
-
-  const entityId = basicContext.flowId ? basicContext.flowId : context.activity.id;
 
   const entityTimer = context.event.timers.timer ?? null;
 
@@ -32,17 +28,20 @@ const WelcomeScreen = () => {
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
 
   const startAssessment = () => {
-    const groupProgress = getGroupProgress({ entityId, eventId: basicContext.eventId });
+    const groupProgress = getGroupProgress({
+      entityId: context.entityId,
+      eventId: context.eventId,
+    });
 
     if (context.flow && !groupProgress) {
-      startFlow(basicContext.eventId, context.flow);
+      startFlow(context.eventId, context.flow);
     }
 
     if (!context.flow) {
-      startActivity(basicContext.activityId, basicContext.eventId);
+      startActivity(context.activityId, context.eventId);
     }
 
-    return setInitialProgress({ activity: context.activity, eventId: basicContext.eventId });
+    return setInitialProgress({ activity: context.activity, eventId: context.eventId });
   };
 
   return (
@@ -83,7 +82,10 @@ const WelcomeScreen = () => {
         >
           <ActivityMetaData
             activityLength={context.activity.items.length}
-            groupInProgress={getGroupProgress({ entityId, eventId: basicContext.eventId })}
+            groupInProgress={getGroupProgress({
+              entityId: context.entityId,
+              eventId: context.eventId,
+            })}
           />
         </Text>
         <Text

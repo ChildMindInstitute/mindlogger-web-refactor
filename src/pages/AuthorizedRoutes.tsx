@@ -13,7 +13,7 @@ import Layout from '~/widgets/AppLayout';
 import LogoutTracker from '~/widgets/LogoutTracker';
 import ProtectedRoute from '~/widgets/ProtectedRoute';
 
-const PublicActivityDetailsPage = lazy(() => import('./PublicActivityDetails'));
+const PublicSurvey = lazy(() => import('./PublicSurvey'));
 const PublicAppletDetailsPage = lazy(() => import('./PublicJoin'));
 const InvitationPage = lazy(() => import('./Invitation'));
 const PrivateJoinPage = lazy(() => import('./PrivateJoin'));
@@ -29,7 +29,7 @@ function AuthorizedRoutes({ refreshToken }: Props) {
       <Routes>
         <Route element={<ProtectedRoute token={refreshToken} />}>
           <Route path={ROUTES.survey.path} element={<SurveyPage />} />
-          <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
+          <Route path={ROUTES.publicActivityDetails.path} element={<PublicSurvey />} />
 
           <Route element={<Layout />}>
             <Route path={ROUTES.appletList.path} element={<AppletListPage />} />

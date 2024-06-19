@@ -27,7 +27,6 @@ const SurveyLayout = (props: Props) => {
       <SurveyHeader
         progress={props.progress}
         isSaveAndExitButtonShown={props.isSaveAndExitButtonShown}
-        entityTimer={props.entityTimer}
       />
 
       <Box

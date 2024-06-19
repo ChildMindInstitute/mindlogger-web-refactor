@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { SurveyBasicContext, SurveyContext } from '../lib';
+import { SurveyContext } from '../lib';
 
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import { MultiInformantTooltip } from '~/features/TakeNow';
@@ -16,11 +16,7 @@ type Props = {
 };
 
 const SurveyHeader = (props: Props) => {
-  const basicContext = useContext(SurveyBasicContext);
   const context = useContext(SurveyContext);
-
-  const activityName = context.activity?.name;
-  const watermark = context.watermark;
 
   const { greaterThanSM } = useCustomMediaQuery();
   const navigator = useCustomNavigation();
@@ -31,9 +27,9 @@ const SurveyHeader = (props: Props) => {
 
   const onSaveAndExitClick = () => {
     return navigator.navigate(
-      basicContext.isPublic && basicContext.publicAppletKey
-        ? ROUTES.publicJoin.navigateTo(basicContext.publicAppletKey)
-        : ROUTES.appletDetails.navigateTo(basicContext.appletId),
+      context.publicAppletKey
+        ? ROUTES.publicJoin.navigateTo(context.publicAppletKey)
+        : ROUTES.appletDetails.navigateTo(context.appletId),
     );
   };
 
@@ -68,8 +64,8 @@ const SurveyHeader = (props: Props) => {
           marginBottom={greaterThanSM ? '8px' : '10px'}
         >
           <Box display="flex" alignItems="center" gap="8px">
-            {isStringExist(watermark) && (
-              <AvatarBase borderRadius="50%" height="36px" width="36px" src={watermark} />
+            {isStringExist(context.watermark) && (
+              <AvatarBase borderRadius="50%" height="36px" width="36px" src={context.watermark} />
             )}
             <Text
               variant="body1"
@@ -77,7 +73,7 @@ const SurveyHeader = (props: Props) => {
               testid="assessment-activity-title"
               sx={{ textAlign: greaterThanSM ? 'center' : 'left' }}
             >
-              {greaterThanSM ? activityName : cutStringToLength(activityName, 30)}
+              {greaterThanSM ? context.activity.name : cutStringToLength(context.activity.name, 30)}
             </Text>
           </Box>
           {!greaterThanSM && props.isSaveAndExitButtonShown && (

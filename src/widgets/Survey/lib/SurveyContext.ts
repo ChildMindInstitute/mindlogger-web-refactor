@@ -9,16 +9,25 @@ import {
 } from '~/shared/api';
 
 export type SurveyContext = {
+  appletId: string;
+  appletVersion: string;
+  watermark: string;
+
+  activityId: string;
+  eventId: string;
+
+  entityId: string;
+
+  publicAppletKey: string | null; // PublicAppletKey used for public applets. When user account not required
+
   activity: ActivityDTO;
+
   respondentMeta?: RespondentMetaDTO;
 
   event: ScheduleEventDto;
 
-  appletId: string;
   encryption: AppletDTO['encryption'];
-  appletVersion: string;
 
-  watermark: string;
   flow: ActivityFlowDTO | null;
 
   integrations: AppletDTO['integrations'];

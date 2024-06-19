@@ -1,27 +1,24 @@
-import { useContext } from 'react';
-
-import { SurveyBasicContext } from '../lib';
-
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
 
-const LoadingScreen = () => {
-  const navigator = useCustomNavigation();
+type Props = {
+  appletId: string;
+  publicAppletKey: string | null;
+};
 
-  const context = useContext(SurveyBasicContext);
+const LoadingScreen = ({ appletId, publicAppletKey }: Props) => {
+  const navigator = useCustomNavigation();
 
   const { greaterThanSM } = useCustomMediaQuery();
 
   const onSaveAndExitClick = () => {
-    const publicKey = context.isPublic ? context.publicAppletKey : null;
-
     return navigator.navigate(
-      context.isPublic && publicKey
-        ? ROUTES.publicJoin.navigateTo(publicKey)
-        : ROUTES.appletDetails.navigateTo(context.appletId),
+      publicAppletKey
+        ? ROUTES.publicJoin.navigateTo(publicAppletKey)
+        : ROUTES.appletDetails.navigateTo(appletId),
     );
   };
 

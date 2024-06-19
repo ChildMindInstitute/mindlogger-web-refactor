@@ -16,6 +16,7 @@ type Props = {
 
   currentEventId: string;
   flowId: string | null;
+  publicAppletKey: string | null;
 };
 
 export const mapRawDataToSurveyContext = (props: Props): SurveyContext => {
@@ -38,15 +39,23 @@ export const mapRawDataToSurveyContext = (props: Props): SurveyContext => {
   }
 
   return {
+    appletId: appletDTO.id,
+    watermark: appletDTO.watermark,
+
+    activityId: activityDTO.id,
+    eventId: currentEventId,
+
+    entityId: flowId ?? activityDTO.id,
+
+    publicAppletKey: props.publicAppletKey,
+
     activity: activityDTO,
     event,
     respondentMeta: props.respondentMeta,
 
-    appletId: appletDTO.id,
     encryption: appletDTO.encryption,
     appletVersion: appletDTO.version,
     flow,
-    watermark: appletDTO.watermark,
     integrations: appletDTO.integrations,
   };
 };

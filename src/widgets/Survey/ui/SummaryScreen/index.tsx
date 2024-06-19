@@ -4,7 +4,7 @@ import Divider from '@mui/material/Divider';
 
 import { Alerts } from './Alerts';
 import { ScoreSection } from './ScoreSection';
-import { SurveyBasicContext, SurveyContext } from '../../lib';
+import { SurveyContext } from '../../lib';
 import SurveyLayout from '../SurveyLayout';
 
 import { getProgressId } from '~/abstract/lib';
@@ -19,36 +19,34 @@ const SummaryScreen = () => {
 
   const { greaterThanSM } = useCustomMediaQuery();
 
-  const basicContext = useContext(SurveyBasicContext);
-
-  const surveyContext = useContext(SurveyContext);
-
-  const eventId = basicContext.eventId;
-  const activityId = basicContext.activityId;
+  const context = useContext(SurveyContext);
 
   const activityProgress = useAppSelector((state) =>
-    appletModel.selectors.selectActivityProgress(state, getProgressId(activityId, eventId)),
+    appletModel.selectors.selectActivityProgress(
+      state,
+      getProgressId(context.activityId, context.eventId),
+    ),
   );
 
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
-    eventId,
-    activityId: basicContext.activityId,
-    publicAppletKey: basicContext.isPublic ? basicContext.publicAppletKey : null,
-    flowId: basicContext.flowId,
-    appletId: surveyContext.appletId,
-    flow: surveyContext.flow,
+    eventId: context.eventId,
+    activityId: context.activityId,
+    publicAppletKey: context.publicAppletKey,
+    flowId: context.flow?.id ?? null,
+    appletId: context.appletId,
+    flow: context.flow,
   });
 
   const onFinish = () => {
-    return surveyContext.flow ? completeFlow() : completeActivity();
+    return context.flow ? completeFlow() : completeActivity();
   };
 
   const { summaryData } = useSummaryData({
-    activityId: basicContext.activityId,
-    eventId: basicContext.eventId,
-    activityName: surveyContext.activity.name,
+    activityId: context.activityId,
+    eventId: context.eventId,
+    activityName: context.activity.name,
     scoresAndReports: activityProgress.scoreSettings,
-    flowId: basicContext.flowId,
+    flowId: context.flow?.id ?? null,
   });
 
   return (
