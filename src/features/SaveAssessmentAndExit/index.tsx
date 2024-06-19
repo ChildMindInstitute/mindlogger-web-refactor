@@ -1,19 +1,30 @@
 import ButtonBase from '@mui/material/ButtonBase';
 
-import { Theme } from '~/shared/constants';
-import { Text } from '~/shared/ui';
-import { useCustomTranslation } from '~/shared/utils';
+import { ROUTES, Theme } from '~/shared/constants';
+import Text from '~/shared/ui/Text';
+import { useCustomNavigation, useCustomTranslation } from '~/shared/utils';
 
 type Props = {
-  onClick: () => void;
+  appletId: string;
+  publicAppletKey: string | null;
 };
 
-export const SaveAndExitButton = ({ onClick }: Props) => {
+export const SaveAndExitButton = ({ appletId, publicAppletKey }: Props) => {
   const { t } = useCustomTranslation();
+
+  const navigator = useCustomNavigation();
+
+  const onSaveAndExitClick = () => {
+    return navigator.navigate(
+      publicAppletKey
+        ? ROUTES.publicJoin.navigateTo(publicAppletKey)
+        : ROUTES.appletDetails.navigateTo(appletId),
+    );
+  };
 
   return (
     <ButtonBase
-      onClick={onClick}
+      onClick={onSaveAndExitClick}
       data-testid="assessment-save-and-exit-button"
       sx={{
         borderRadius: '100px',

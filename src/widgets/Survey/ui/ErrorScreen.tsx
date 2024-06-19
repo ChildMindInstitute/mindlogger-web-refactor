@@ -1,7 +1,6 @@
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
-import ROUTES from '~/shared/constants/routes';
 import Box from '~/shared/ui/Box';
-import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
+import { useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {
   errorLabel: string;
@@ -11,17 +10,7 @@ type Props = {
 };
 
 export const ErrorScreen = ({ errorLabel, publicAppletKey, appletId }: Props) => {
-  const navigator = useCustomNavigation();
-
   const { greaterThanSM } = useCustomMediaQuery();
-
-  const onSaveAndExitClick = () => {
-    return navigator.navigate(
-      publicAppletKey
-        ? ROUTES.publicJoin.navigateTo(publicAppletKey)
-        : ROUTES.appletDetails.navigateTo(appletId),
-    );
-  };
 
   return (
     <Box id="assessment-screen-layout" display="flex" flex={1} flexDirection="column">
@@ -38,7 +27,7 @@ export const ErrorScreen = ({ errorLabel, publicAppletKey, appletId }: Props) =>
           justifyContent="center"
           justifySelf="flex-end"
         >
-          <SaveAndExitButton onClick={onSaveAndExitClick} />
+          <SaveAndExitButton publicAppletKey={publicAppletKey} appletId={appletId} />
         </Box>
       </Box>
 
