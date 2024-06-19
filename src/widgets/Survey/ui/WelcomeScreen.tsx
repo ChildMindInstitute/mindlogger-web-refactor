@@ -5,7 +5,7 @@ import SurveyLayout from './SurveyLayout';
 import { SurveyBasicContext, SurveyContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
-import { StartSurveyButton, useFlowType } from '~/features/PassSurvey';
+import { StartSurveyButton } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import { AvatarBase } from '~/shared/ui/Avatar';
 import Box from '~/shared/ui/Box';
@@ -17,17 +17,13 @@ const WelcomeScreen = () => {
 
   const { t } = useCustomTranslation();
 
-  const flowParams = useFlowType();
-
   const basicContext = useContext(SurveyBasicContext);
 
   const context = useContext(SurveyContext);
 
-  const entityId = flowParams.isFlow ? flowParams.flowId : context.activity.id;
+  const entityId = basicContext.flowId ? basicContext.flowId : context.activity.id;
 
-  const event = context.events.events.find((ev) => ev.id === basicContext.eventId);
-
-  const entityTimer = event?.timers.timer ?? null;
+  const entityTimer = context.event.timers.timer ?? null;
 
   const { startActivity, startFlow } = appletModel.hooks.useEntityStart();
 
@@ -38,11 +34,11 @@ const WelcomeScreen = () => {
   const startAssessment = () => {
     const groupProgress = getGroupProgress({ entityId, eventId: basicContext.eventId });
 
-    if (flowParams.isFlow && !groupProgress) {
-      startFlow(flowParams.flowId, basicContext.eventId, context.applet.activityFlows);
+    if (basicContext.flowId && !groupProgress) {
+      startFlow(basicContext.flowId, basicContext.eventId, context.applet.activityFlows);
     }
 
-    if (!flowParams.isFlow) {
+    if (!basicContext.flowId) {
       startActivity(basicContext.activityId, basicContext.eventId);
     }
 

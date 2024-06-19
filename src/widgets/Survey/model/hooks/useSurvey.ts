@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { appletModel } from '~/entities/applet';
 
-export const useSurvey = (activityProgress: appletModel.ActivityProgress) => {
+export const useSurveyState = (activityProgress: appletModel.ActivityProgress) => {
   const items = useMemo(() => activityProgress?.items ?? [], [activityProgress.items]);
 
   const visibleItems = items.filter((x) => !x.isHidden);

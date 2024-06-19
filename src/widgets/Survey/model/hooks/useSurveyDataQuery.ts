@@ -35,6 +35,7 @@ export const useSurveyDataQuery = (): Return => {
     context.isPublic
       ? { isPublic: context.isPublic, publicAppletKey: context.publicAppletKey }
       : { isPublic: context.isPublic, appletId: context.appletId },
+    { select: (data) => data?.data },
   );
 
   const {
@@ -42,7 +43,10 @@ export const useSurveyDataQuery = (): Return => {
     isError: isActivityError,
     isLoading: isActivityLoading,
     error: activityError,
-  } = useActivityByIdQuery({ isPublic: context.isPublic, activityId: context.activityId });
+  } = useActivityByIdQuery(
+    { isPublic: context.isPublic, activityId: context.activityId },
+    { select: (data) => data?.data?.result },
+  );
 
   const {
     data: eventsByIdData,
@@ -53,13 +57,14 @@ export const useSurveyDataQuery = (): Return => {
     context.isPublic
       ? { isPublic: context.isPublic, publicAppletKey: context.publicAppletKey }
       : { isPublic: context.isPublic, appletId: context.appletId },
+    { select: (data) => data?.data?.result },
   );
 
   return {
-    appletDTO: appletById?.data?.result ?? null,
-    respondentMeta: appletById?.data?.respondentMeta,
-    activityDTO: activityById?.data?.result ?? null,
-    eventsDTO: eventsByIdData?.data?.result ?? null,
+    appletDTO: appletById?.result ?? null,
+    respondentMeta: appletById?.respondentMeta,
+    activityDTO: activityById ?? null,
+    eventsDTO: eventsByIdData ?? null,
     isError: isAppletError || isActivityError || isEventsError,
     isLoading: isAppletLoading || isActivityLoading || isEventsLoading,
     error: appletError ?? activityError ?? eventsError,
