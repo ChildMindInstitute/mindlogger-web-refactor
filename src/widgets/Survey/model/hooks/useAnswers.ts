@@ -2,7 +2,7 @@ import { useCallback, useContext } from 'react';
 
 import { v4 as uuidV4 } from 'uuid';
 
-import { SurveyBasicContext, SurveyContext } from '../../lib';
+import { SurveyContext } from '../../lib';
 import { generateUserPublicKey } from '../generateUserPublicKey';
 import { getFirstResponseDataIdentifierTextItem } from '../getFirstResponseDataIdentifierTextItem';
 import { getScheduledTimeFromEvents } from '../getScheduledTimeFromEvents';
@@ -27,12 +27,11 @@ export const useAnswer = () => {
   const { generateUserPrivateKey } = useEncryption();
   const { encryptPayload } = useEncryptPayload();
 
-  const surveyBasicContext = useContext(SurveyBasicContext);
-  const surveyContext = useContext(SurveyContext);
+  const context = useContext(SurveyContext);
 
   const consents = useAppSelector(appletModel.selectors.selectConsents);
 
-  const appletConsents = consents?.[surveyContext.appletId] ?? null;
+  const appletConsents = consents?.[context.appletId] ?? null;
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
   const { getMultiInformantState, isInMultiInformantFlow } =
@@ -66,24 +65,18 @@ export const useAnswer = () => {
         privateKey = userModel.secureUserPrivateKeyStorage.getUserPrivateKey();
       }
 
-      const userPublicKey = generateUserPublicKey(surveyContext.encryption, privateKey);
+      const userPublicKey = generateUserPublicKey(context.encryption, privateKey);
 
       const encryptedAnswers = encryptPayload(
-        surveyContext.encryption,
+        context.encryption,
         preparedItemAnswers.answer,
         privateKey,
       );
-      const encryptedUserEvents = encryptPayload(
-        surveyContext.encryption,
-        params.userEvents,
-        privateKey,
-      );
+      const encryptedUserEvents = encryptPayload(context.encryption, params.userEvents, privateKey);
 
       const groupProgress = getGroupProgress({
-        entityId: surveyBasicContext.flowId
-          ? surveyBasicContext.flowId
-          : surveyBasicContext.activityId,
-        eventId: surveyBasicContext.eventId,
+        entityId: context.entityId,
+        eventId: context.eventId,
       });
 
       if (!groupProgress) {
@@ -92,7 +85,7 @@ export const useAnswer = () => {
 
       const firstTextItemAnserWithIdentifier = getFirstResponseDataIdentifierTextItem(params.items);
       const encryptedIdentifier = firstTextItemAnserWithIdentifier
-        ? encryptPayload(surveyContext.encryption, firstTextItemAnserWithIdentifier, privateKey)
+        ? encryptPayload(context.encryption, firstTextItemAnserWithIdentifier, privateKey)
         : null;
 
       const now = new Date();
@@ -100,7 +93,7 @@ export const useAnswer = () => {
       const isFlow = groupProgress.type === ActivityPipelineType.Flow;
       const pipelineAcitivityOrder = isFlow ? groupProgress.pipelineActivityOrder : null;
 
-      const currentFlowLength = surveyContext.flow?.activityIds.length;
+      const currentFlowLength = context.flow?.activityIds.length;
 
       const isFlowCompleted =
         currentFlowLength && pipelineAcitivityOrder
@@ -109,11 +102,11 @@ export const useAnswer = () => {
 
       // Step 3 - Send answers to backend
       const answer: AnswerPayload = {
-        appletId: surveyContext.appletId,
-        activityId: surveyBasicContext.activityId,
-        flowId: surveyBasicContext.flowId,
+        appletId: context.appletId,
+        activityId: context.activityId,
+        flowId: context.flow?.id ?? null,
         submitId: getSubmitId(groupProgress),
-        version: surveyContext.appletVersion,
+        version: context.appletVersion,
         createdAt: new Date().getTime(),
         isFlowCompleted: isFlow ? isFlowCompleted : true,
         answer: {
@@ -124,7 +117,7 @@ export const useAnswer = () => {
           startTime: new Date(groupProgress.startAt ?? Date.now()).getTime(),
           endTime: new Date().getTime(),
           identifier: encryptedIdentifier,
-          scheduledEventId: surveyBasicContext.eventId,
+          scheduledEventId: context.eventId,
           localEndDate: formatToDtoDate(now),
           localEndTime: formatToDtoTime(now),
         },
@@ -137,7 +130,7 @@ export const useAnswer = () => {
         },
       };
 
-      const isIntegrationsEnabled = surveyContext.integrations !== undefined;
+      const isIntegrationsEnabled = context.integrations !== undefined;
 
       if (isIntegrationsEnabled) {
         answer.isDataShare = appletConsents?.shareToPublic ?? false;
@@ -151,7 +144,7 @@ export const useAnswer = () => {
         }
       }
 
-      const scheduledTime = getScheduledTimeFromEvents(surveyContext.event);
+      const scheduledTime = getScheduledTimeFromEvents(context.event);
 
       if (scheduledTime) {
         answer.answer.scheduledTime = scheduledTime;
@@ -160,13 +153,21 @@ export const useAnswer = () => {
       return answer;
     },
     [
+      context.encryption,
+      context.entityId,
+      context.eventId,
+      context.flow?.activityIds.length,
+      context.flow?.id,
+      context.appletId,
+      context.activityId,
+      context.appletVersion,
+      context.integrations,
+      context.event,
       encryptPayload,
       getGroupProgress,
-      surveyBasicContext,
-      surveyContext,
-      appletConsents,
       featureFlags.enableMultiInformant,
       generateUserPrivateKey,
+      appletConsents?.shareToPublic,
       getMultiInformantState,
       isInMultiInformantFlow,
     ],

@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { getProgressId } from '../../../abstract/lib';
 import { appletModel } from '../../../entities/applet';
 import { formatTimerTime } from '../../../features/PassSurvey';
-import { SurveyBasicContext } from '../lib';
+import { SurveyContext } from '../lib';
 
 import { MINUTES_IN_HOUR, MS_IN_MINUTE, Theme } from '~/shared/constants';
 import { ClockIcon } from '~/shared/ui';
@@ -22,16 +22,17 @@ type Props = {
 };
 
 export const EntityTimer = ({ entityTimerSettings }: Props) => {
-  const basicContext = useContext(SurveyBasicContext);
+  const context = useContext(SurveyContext);
 
   const [varForDeps, forceUpdate] = useState({});
 
   const { setTimer } = useTimer();
 
-  const entityID = basicContext.flowId ? basicContext.flowId : basicContext.activityId;
-
   const group = useAppSelector((state) =>
-    appletModel.selectors.selectGroupProgress(state, getProgressId(entityID, basicContext.eventId)),
+    appletModel.selectors.selectGroupProgress(
+      state,
+      getProgressId(context.entityId, context.eventId),
+    ),
   );
 
   const groupStartAt = group?.startAt ?? null;
