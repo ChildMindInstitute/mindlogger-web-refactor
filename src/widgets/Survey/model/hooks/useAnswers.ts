@@ -100,9 +100,7 @@ export const useAnswer = () => {
       const isFlow = groupProgress.type === ActivityPipelineType.Flow;
       const pipelineAcitivityOrder = isFlow ? groupProgress.pipelineActivityOrder : null;
 
-      const currentFlow = surveyContext.flows?.find(({ id }) => id === surveyBasicContext.flowId);
-
-      const currentFlowLength = currentFlow?.activityIds.length;
+      const currentFlowLength = surveyContext.flow?.activityIds.length;
 
       const isFlowCompleted =
         currentFlowLength && pipelineAcitivityOrder

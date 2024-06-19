@@ -90,7 +90,7 @@ const PassingScreen = () => {
     publicAppletKey: surveyBasicContext.isPublic ? surveyBasicContext.publicAppletKey : null,
     flowId: surveyBasicContext.flowId,
     appletId: surveyContext.appletId,
-    flows: surveyContext.flows,
+    flow: surveyContext.flow,
   });
 
   const { replaceTextVariables } = useTextVariablesReplacer({
@@ -108,11 +108,9 @@ const PassingScreen = () => {
 
     const isFlowGroup = groupProgress?.type === ActivityPipelineType.Flow;
 
-    const currentFlow = surveyContext.flows.find((flow) => flow.id === surveyBasicContext.flowId);
-
     const nextActivityIndex = (groupProgress as FlowProgress).pipelineActivityOrder + 1;
 
-    const nextActivity = currentFlow?.activityIds[nextActivityIndex] ?? null;
+    const nextActivity = surveyContext.flow?.activityIds[nextActivityIndex] ?? null;
 
     const isLastActivity = nextActivity === null;
 
@@ -171,7 +169,7 @@ const PassingScreen = () => {
       return openSummaryScreen({ activityId, eventId });
     }
 
-    return surveyBasicContext.flowId && completeFlow(surveyBasicContext.flowId);
+    return surveyBasicContext.flowId && completeFlow();
   };
 
   const { submitAnswers, isLoading } = useSubmitAnswersMutations({
