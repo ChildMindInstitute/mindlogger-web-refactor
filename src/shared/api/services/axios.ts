@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 import authorizationService from './authorization.service';
-import { Any, eventEmitter, getLanguage, secureTokensStorage } from '../../utils';
+import { Any, EventEmitter, getLanguage, secureTokensStorage } from '../../utils';
 
 type RequestConfig = AxiosRequestConfig<Any> & {
   retry?: boolean;
@@ -63,7 +63,7 @@ axiosService.interceptors.response.use(
 
         config.headers.Authorization = `${data.result.tokenType} ${data.result.accessToken}`;
       } catch (e) {
-        eventEmitter.emit('onLogout');
+        EventEmitter.emit('onLogout');
         await Promise.reject(e);
       }
 

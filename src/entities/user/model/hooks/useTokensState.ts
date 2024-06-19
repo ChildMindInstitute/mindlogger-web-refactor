@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Tokens } from '../../lib';
 
-import { eventEmitter, secureTokensStorage } from '~/shared/utils';
+import { EventEmitter, secureTokensStorage } from '~/shared/utils';
 
 export const useTokensState = () => {
   const [tokens, setTokens] = useState<Tokens | null>(secureTokensStorage.getTokens());
@@ -12,10 +12,10 @@ export const useTokensState = () => {
   };
 
   useEffect(() => {
-    eventEmitter.on('onTokensChange', updateTokens);
+    EventEmitter.on('onTokensChange', updateTokens);
 
     return () => {
-      eventEmitter.off('onTokensChange', updateTokens);
+      EventEmitter.off('onTokensChange', updateTokens);
     };
   }, [setTokens]);
 
