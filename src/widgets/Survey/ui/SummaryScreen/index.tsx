@@ -23,8 +23,6 @@ const SummaryScreen = () => {
 
   const surveyContext = useContext(SurveyContext);
 
-  const applet = surveyContext.applet;
-
   const eventId = basicContext.eventId;
   const activityId = basicContext.activityId;
 
@@ -33,11 +31,12 @@ const SummaryScreen = () => {
   );
 
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
-    applet,
     eventId,
     activityId: basicContext.activityId,
     publicAppletKey: basicContext.isPublic ? basicContext.publicAppletKey : null,
     flowId: basicContext.flowId,
+    appletId: surveyContext.appletId,
+    flows: surveyContext.flows,
   });
 
   const onFinish = () => {

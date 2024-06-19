@@ -29,8 +29,6 @@ const PassingScreen = () => {
   const surveyBasicContext = useContext(SurveyBasicContext); // This is basic context with { eventId, appletId, activityId, isPublic, publicAppletKey }
   const surveyContext = useContext(SurveyContext); // This is full context with { applet, activity, events, respondentMeta }
 
-  const applet = surveyContext.applet;
-
   const activity = surveyContext.activity;
 
   const activityId = activity.id;
@@ -87,11 +85,12 @@ const PassingScreen = () => {
   const prevStep = usePrevious(step);
 
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
-    applet,
     activityId,
     eventId,
     publicAppletKey: surveyBasicContext.isPublic ? surveyBasicContext.publicAppletKey : null,
     flowId: surveyBasicContext.flowId,
+    appletId: surveyContext.appletId,
+    flows: surveyContext.flows,
   });
 
   const { replaceTextVariables } = useTextVariablesReplacer({
@@ -109,7 +108,7 @@ const PassingScreen = () => {
 
     const isFlowGroup = groupProgress?.type === ActivityPipelineType.Flow;
 
-    const currentFlow = applet.activityFlows.find((flow) => flow.id === surveyBasicContext.flowId);
+    const currentFlow = surveyContext.flows.find((flow) => flow.id === surveyBasicContext.flowId);
 
     const nextActivityIndex = (groupProgress as FlowProgress).pipelineActivityOrder + 1;
 
@@ -316,7 +315,7 @@ const PassingScreen = () => {
               key={item.id}
               item={item}
               replaceText={replaceTextVariables}
-              watermark={applet.watermark}
+              watermark={surveyContext.watermark}
               allowToSkipAllItems={activity.isSkippable}
               step={step}
               prevStep={prevStep}

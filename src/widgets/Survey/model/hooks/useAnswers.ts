@@ -30,11 +30,9 @@ export const useAnswer = () => {
   const surveyBasicContext = useContext(SurveyBasicContext);
   const surveyContext = useContext(SurveyContext);
 
-  const applet = surveyContext.applet;
-
   const consents = useAppSelector(appletModel.selectors.selectConsents);
 
-  const appletConsents = consents?.[applet.id] ?? null;
+  const appletConsents = consents?.[surveyContext.appletId] ?? null;
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
   const { getMultiInformantState, isInMultiInformantFlow } =
@@ -68,14 +66,18 @@ export const useAnswer = () => {
         privateKey = userModel.secureUserPrivateKeyStorage.getUserPrivateKey();
       }
 
-      const userPublicKey = generateUserPublicKey(applet.encryption, privateKey);
+      const userPublicKey = generateUserPublicKey(surveyContext.encryption, privateKey);
 
       const encryptedAnswers = encryptPayload(
-        applet.encryption,
+        surveyContext.encryption,
         preparedItemAnswers.answer,
         privateKey,
       );
-      const encryptedUserEvents = encryptPayload(applet.encryption, params.userEvents, privateKey);
+      const encryptedUserEvents = encryptPayload(
+        surveyContext.encryption,
+        params.userEvents,
+        privateKey,
+      );
 
       const groupProgress = getGroupProgress({
         entityId: surveyBasicContext.flowId
@@ -90,7 +92,7 @@ export const useAnswer = () => {
 
       const firstTextItemAnserWithIdentifier = getFirstResponseDataIdentifierTextItem(params.items);
       const encryptedIdentifier = firstTextItemAnserWithIdentifier
-        ? encryptPayload(applet.encryption, firstTextItemAnserWithIdentifier, privateKey)
+        ? encryptPayload(surveyContext.encryption, firstTextItemAnserWithIdentifier, privateKey)
         : null;
 
       const now = new Date();
@@ -98,7 +100,7 @@ export const useAnswer = () => {
       const isFlow = groupProgress.type === ActivityPipelineType.Flow;
       const pipelineAcitivityOrder = isFlow ? groupProgress.pipelineActivityOrder : null;
 
-      const currentFlow = applet.activityFlows?.find(({ id }) => id === surveyBasicContext.flowId);
+      const currentFlow = surveyContext.flows?.find(({ id }) => id === surveyBasicContext.flowId);
 
       const currentFlowLength = currentFlow?.activityIds.length;
 
@@ -109,11 +111,11 @@ export const useAnswer = () => {
 
       // Step 3 - Send answers to backend
       const answer: AnswerPayload = {
-        appletId: applet.id,
+        appletId: surveyContext.appletId,
         activityId: surveyBasicContext.activityId,
         flowId: surveyBasicContext.flowId,
         submitId: getSubmitId(groupProgress),
-        version: applet.version,
+        version: surveyContext.appletVersion,
         createdAt: new Date().getTime(),
         isFlowCompleted: isFlow ? isFlowCompleted : true,
         answer: {
@@ -137,7 +139,7 @@ export const useAnswer = () => {
         },
       };
 
-      const isIntegrationsEnabled = applet.integrations !== undefined;
+      const isIntegrationsEnabled = surveyContext.integrations !== undefined;
 
       if (isIntegrationsEnabled) {
         answer.consentToShare = appletConsents?.shareToPublic ?? false;
@@ -160,7 +162,6 @@ export const useAnswer = () => {
       return answer;
     },
     [
-      applet,
       encryptPayload,
       getGroupProgress,
       surveyBasicContext,

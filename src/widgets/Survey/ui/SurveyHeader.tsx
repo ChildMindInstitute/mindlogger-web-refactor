@@ -20,7 +20,7 @@ const SurveyHeader = (props: Props) => {
   const context = useContext(SurveyContext);
 
   const activityName = context.activity?.name;
-  const watermark = context.applet?.watermark;
+  const watermark = context.watermark;
 
   const { greaterThanSM } = useCustomMediaQuery();
   const navigator = useCustomNavigation();
