@@ -21,6 +21,7 @@ export type SurveyContext = {
   publicAppletKey: string | null; // PublicAppletKey used for public applets. When user account not required
 
   activity: ActivityDTO;
+
   respondentMeta?: RespondentMetaDTO;
 
   event: ScheduleEventDto;
