@@ -1,48 +1,29 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect } from 'react';
 
-import { getProgressId } from '~/abstract/lib';
+import { SurveyContext } from '../../lib';
+
 import { appletModel } from '~/entities/applet';
-import { SurveyContext } from '~/features/PassSurvey';
-import { getMsFromHours, getMsFromMinutes, useAppSelector, useTimer } from '~/shared/utils';
+import { getMsFromHours, getMsFromMinutes, useTimer } from '~/shared/utils';
 
-type Props = {
-  onFinish: () => void;
-};
-
-export const useEntityTimer = ({ onFinish }: Props) => {
+export const useEntityTimer = () => {
   const context = useContext(SurveyContext);
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
 
-  const activityProgress = useAppSelector((state) =>
-    appletModel.selectors.selectActivityProgress(
-      state,
-      getProgressId(context.activityId, context.eventId),
-    ),
-  );
-
   const { setTimer, resetTimer } = useTimer();
 
-  const finishRef = useRef(onFinish);
-
-  finishRef.current = onFinish;
-
   useEffect(() => {
-    console.log('[useEntityTimer] useEffect');
-    const groupProgress = getGroupProgress({
-      entityId: context.entityId,
-      eventId: context.eventId,
-    });
-
-    const isSummaryScreenOpen = activityProgress?.isSummaryScreenOpen ?? false;
+    const groupProgress = getGroupProgress({ entityId: context.eventId, eventId: context.eventId });
 
     const timerSettings = context.event.timers.timer;
 
     const entityStartedAt = groupProgress?.startAt ?? null;
 
-    if (!groupProgress || !entityStartedAt || !timerSettings || isSummaryScreenOpen) {
+    if (!groupProgress || !entityStartedAt || !timerSettings) {
       return;
     }
+
+    const now = Date.now();
 
     const entityDuration: number =
       getMsFromHours(timerSettings.hours) + getMsFromMinutes(timerSettings.minutes);
@@ -53,12 +34,12 @@ export const useEntityTimer = ({ onFinish }: Props) => {
       return;
     }
 
-    const alreadyElapsed: number = Date.now() - entityStartedAt;
+    const alreadyElapsed: number = now - entityStartedAt;
 
     const noTimeLeft: boolean = alreadyElapsed > entityDuration;
 
     if (noTimeLeft) {
-      finishRef.current();
+      // TODO: add logic for finishing the entity
     }
 
     const durationLeft = entityDuration - alreadyElapsed;
@@ -67,7 +48,7 @@ export const useEntityTimer = ({ onFinish }: Props) => {
     setTimer({
       time: durationLeft,
       onComplete: () => {
-        finishRef.current();
+        // TODO: add logic for finishing the entity
       },
     });
 
@@ -75,14 +56,5 @@ export const useEntityTimer = ({ onFinish }: Props) => {
       console.log('[useEntityTimer] Clearing timer');
       resetTimer();
     };
-  }, [
-    activityProgress?.isSummaryScreenOpen,
-    context.entityId,
-    context.event.timers.timer,
-    context.eventId,
-    getGroupProgress,
-    onFinish,
-    resetTimer,
-    setTimer,
-  ]);
+  }, [context.event.timers.timer, context.eventId, getGroupProgress, resetTimer, setTimer]);
 };

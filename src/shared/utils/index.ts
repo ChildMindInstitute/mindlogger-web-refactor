@@ -10,10 +10,10 @@ export * from './validate';
 export * from './helpers';
 
 // Common
-export * from './eventEmitter';
+export { default as EventEmitter } from './eventEmitter';
+export { default as useTimer } from './useTimer';
 export * from './dictionary.map';
 export * from './analytics';
-export { default as useTimer } from './useTimer';
 export * from './matchPaths';
 export * from './getLanguage';
 export * from './Calculator';

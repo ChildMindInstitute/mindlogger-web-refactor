@@ -1,10 +1,6 @@
 export const EVENTS = {
   onTokensChange: 'ON_TOKENS_CHANGE',
   onLogout: 'ON_LOGOUT',
-
-  onNotificationAdded: 'ON_NOTIFICATION_ADDED',
-  onNotificationRemoved: 'ON_NOTIFICATION_REMOVED',
-  onSingleSelectAnswered: 'ON_SINGLE_SELECT_ANSWERED',
 } as const;
 
 type Events = keyof typeof EVENTS;
@@ -16,9 +12,6 @@ class EventEmitter {
     this._events = {
       onTokensChange: [],
       onLogout: [],
-      onNotificationAdded: [],
-      onNotificationRemoved: [],
-      onSingleSelectAnswered: [],
     };
   }
 
@@ -53,4 +46,4 @@ class EventEmitter {
   }
 }
 
-export const eventEmitter = new EventEmitter();
+export default new EventEmitter();
