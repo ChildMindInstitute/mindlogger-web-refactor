@@ -116,7 +116,7 @@ export const useStartSurvey = (props: Props) => {
         flowId,
       });
     }
-    
+
     if (shouldRestart) {
       removeActivityProgress({ activityId, eventId });
       removeGroupProgress({ entityId: activityId, eventId });
