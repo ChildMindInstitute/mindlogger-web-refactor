@@ -21,13 +21,9 @@ export const ScreenManager = () => {
 
   const items = activityProgress?.items ?? [];
 
-  const isActivityStarted = items.length > 0;
-
   const showSummaryScreen = activityProgress?.isSummaryScreenOpen ?? false;
 
-  // useEntityTimer({
-  //   hourMinuteTimer: surveyContext.
-  // })
+  const isActivityStarted = items.length > 0;
 
   if (!isActivityStarted) {
     return <WelcomeScreen />;
