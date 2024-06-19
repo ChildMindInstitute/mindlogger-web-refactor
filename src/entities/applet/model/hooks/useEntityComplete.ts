@@ -2,7 +2,7 @@ import type { NavigateOptions } from 'react-router/dist/lib/context';
 
 import { ActivityPipelineType } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
-import { AppletDTO } from '~/shared/api';
+import { ActivityFlowDTO } from '~/shared/api';
 import ROUTES from '~/shared/constants/routes';
 import { useCustomNavigation } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
@@ -15,7 +15,7 @@ type Props = {
   publicAppletKey: string | null;
 
   appletId: string;
-  flows: AppletDTO['activityFlows'];
+  flow: ActivityFlowDTO | null;
 };
 
 export const useEntityComplete = (props: Props) => {
@@ -78,8 +78,8 @@ export const useEntityComplete = (props: Props) => {
     );
   };
 
-  const completeFlow = (flowId: string) => {
-    const { flows } = props;
+  const completeFlow = () => {
+    const { flow } = props;
 
     const groupProgress = getGroupProgress({
       entityId: props.flowId ? props.flowId : props.activityId,
@@ -98,17 +98,15 @@ export const useEntityComplete = (props: Props) => {
 
     const currentPipelineActivityOrder = groupProgress.pipelineActivityOrder;
 
-    const currentFlow = flows.find((flow) => flow.id === flowId);
-
-    if (!currentFlow) {
+    if (!flow) {
       throw new Error('[UseEntityComplete:completeFlow] Flow not found');
     }
 
-    const nextActivityId = currentFlow.activityIds[currentPipelineActivityOrder + 1];
+    const nextActivityId = flow.activityIds[currentPipelineActivityOrder + 1];
 
     flowUpdated({
-      activityId: nextActivityId ? nextActivityId : currentFlow.activityIds[0],
-      flowId: currentFlow.id,
+      activityId: nextActivityId ? nextActivityId : flow.activityIds[0],
+      flowId: flow.id,
       eventId: props.eventId,
       pipelineActivityOrder: nextActivityId ? currentPipelineActivityOrder + 1 : 0,
     });

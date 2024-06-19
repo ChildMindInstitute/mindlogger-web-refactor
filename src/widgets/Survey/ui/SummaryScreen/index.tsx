@@ -36,11 +36,11 @@ const SummaryScreen = () => {
     publicAppletKey: basicContext.isPublic ? basicContext.publicAppletKey : null,
     flowId: basicContext.flowId,
     appletId: surveyContext.appletId,
-    flows: surveyContext.flows,
+    flow: surveyContext.flow,
   });
 
   const onFinish = () => {
-    return basicContext.flowId ? completeFlow(basicContext.flowId) : completeActivity();
+    return surveyContext.flow ? completeFlow() : completeActivity();
   };
 
   const { summaryData } = useSummaryData({

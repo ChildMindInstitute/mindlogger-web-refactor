@@ -1,6 +1,12 @@
 import { createContext } from 'react';
 
-import { ActivityDTO, AppletDTO, RespondentMetaDTO, ScheduleEventDto } from '~/shared/api';
+import {
+  ActivityDTO,
+  ActivityFlowDTO,
+  AppletDTO,
+  RespondentMetaDTO,
+  ScheduleEventDto,
+} from '~/shared/api';
 
 export type SurveyContext = {
   activity: ActivityDTO;
@@ -8,13 +14,12 @@ export type SurveyContext = {
 
   event: ScheduleEventDto;
 
-  // Vital Applet Details
   appletId: string;
   encryption: AppletDTO['encryption'];
   appletVersion: string;
 
   watermark: string;
-  flows: AppletDTO['activityFlows'];
+  flow: ActivityFlowDTO | null;
 
   integrations: AppletDTO['integrations'];
 };

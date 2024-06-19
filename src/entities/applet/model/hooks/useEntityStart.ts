@@ -49,14 +49,14 @@ export const useEntityStart = () => {
     return activityStarted(activityId, eventId);
   }
 
-  function startFlow(flowId: string, eventId: string, flows: ActivityFlowDTO[]): void {
+  function startFlow(eventId: string, flow: ActivityFlowDTO): void {
+    const flowId = flow.id;
+
     const isFlowInProgress = isInProgress(getProgress(flowId, eventId));
 
     if (isFlowInProgress) {
       return;
     }
-
-    const flow = flows.find((x) => x.id === flowId);
 
     const flowActivities: string[] | null = flow?.activityIds ?? null;
 

@@ -47,6 +47,7 @@ export const SurveyWidget = () => {
         eventsDTO,
         respondentMeta,
         currentEventId: context.eventId,
+        flowId: context.flowId,
       })}
     >
       <ScreenManager />

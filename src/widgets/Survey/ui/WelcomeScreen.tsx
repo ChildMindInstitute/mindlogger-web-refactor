@@ -34,11 +34,11 @@ const WelcomeScreen = () => {
   const startAssessment = () => {
     const groupProgress = getGroupProgress({ entityId, eventId: basicContext.eventId });
 
-    if (basicContext.flowId && !groupProgress) {
-      startFlow(basicContext.flowId, basicContext.eventId, context.flows);
+    if (context.flow && !groupProgress) {
+      startFlow(basicContext.eventId, context.flow);
     }
 
-    if (!basicContext.flowId) {
+    if (!context.flow) {
       startActivity(basicContext.activityId, basicContext.eventId);
     }
 
