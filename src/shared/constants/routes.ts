@@ -46,6 +46,9 @@ const ROUTES = {
         flowId ? `flowId=${flowId}` : ''
       }`,
   },
+  actionPlan: {
+    path: '/action-plan',
+  },
 
   // Protected routes
   profile: {

@@ -11,6 +11,7 @@ import { isStringExist, useCustomMediaQuery, useCustomNavigation } from '~/share
 type Props = {
   progress?: number;
   isSaveAndExitButtonShown: boolean;
+  title?: string;
 };
 
 const SurveyHeader = (props: Props) => {
@@ -26,6 +27,9 @@ const SurveyHeader = (props: Props) => {
   const cutStringToLength = (str: string, length: number) => {
     return str.length > length ? `${str.substring(0, length)}...` : str;
   };
+
+  const activityTitle = props.title ?? activityName;
+  const displayedTitle = greaterThanSM ? activityTitle : cutStringToLength(activityTitle, 30);
 
   const onSaveAndExitClick = () => {
     return navigator.navigate(
@@ -69,7 +73,7 @@ const SurveyHeader = (props: Props) => {
               testid="assessment-activity-title"
               sx={{ textAlign: greaterThanSM ? 'center' : 'left' }}
             >
-              {greaterThanSM ? activityName : cutStringToLength(activityName, 30)}
+              {displayedTitle}
             </Text>
           </Box>
           {!greaterThanSM && props.isSaveAndExitButtonShown && (

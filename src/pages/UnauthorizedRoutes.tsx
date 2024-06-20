@@ -16,11 +16,13 @@ const RecoveryPasswordPage = lazy(() => import('./RecoveryPassword'));
 const InvitationPage = lazy(() => import('./Invitation'));
 const PrivateJoinPage = lazy(() => import('./PrivateJoin'));
 const TransferOwnershipPage = lazy(() => import('./TransferOwnership'));
+const ActionPlanPage = lazy(() => import('./ActionPlan'));
 
 function UnauthorizedRoutes() {
   return (
     <Routes>
       <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
+      <Route path={ROUTES.actionPlan.path} element={<ActionPlanPage />} />
 
       <Route element={<Layout />}>
         <Route path={ROUTES.appletDetails.path} element={<AppletDetailsPage />} />

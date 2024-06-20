@@ -11,6 +11,8 @@ type Props = PropsWithChildren<{
   isSaveAndExitButtonShown: boolean;
 
   footerActions?: React.ReactNode;
+
+  title?: string;
 }>;
 
 const SurveyLayout = (props: Props) => {
@@ -25,6 +27,7 @@ const SurveyLayout = (props: Props) => {
       <SurveyHeader
         progress={props.progress}
         isSaveAndExitButtonShown={props.isSaveAndExitButtonShown}
+        title={props.title}
       />
 
       <Box
