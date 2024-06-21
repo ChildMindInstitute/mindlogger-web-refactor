@@ -2,12 +2,15 @@ import { useCallback, useContext } from 'react';
 
 import { v4 as uuidV4 } from 'uuid';
 
-import { SurveyContext } from '../../../widgets/Survey/lib';
-import { generateUserPublicKey } from '../../../widgets/Survey/model/generateUserPublicKey';
-import { getFirstResponseDataIdentifierTextItem } from '../../../widgets/Survey/model/getFirstResponseDataIdentifierTextItem';
-import { getScheduledTimeFromEvents } from '../../../widgets/Survey/model/getScheduledTimeFromEvents';
-import { mapAlerts, mapToAnswers } from '../../../widgets/Survey/model/mappers';
-import { prepareItemAnswers } from '../../../widgets/Survey/model/prepareItemAnswers';
+import {
+  mapAlerts,
+  mapToAnswers,
+  generateUserPublicKey,
+  getFirstResponseDataIdentifierTextItem,
+  getScheduledTimeFromEvents,
+  prepareItemAnswers,
+} from '../helpers';
+import { SurveyContext } from '../lib';
 
 import { ActivityPipelineType, GroupProgress } from '~/abstract/lib';
 import { useEncryptPayload } from '~/entities/activity';
