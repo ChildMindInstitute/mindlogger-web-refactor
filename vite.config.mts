@@ -2,7 +2,6 @@
 /// <reference types="vite/client" />
 
 import { UserConfig, defineConfig, loadEnv } from 'vite';
-import AllureReporter from "allure-vitest";
 import react from '@vitejs/plugin-react';
 import eslint from 'vite-plugin-eslint';
 import { resolve } from 'path';
@@ -45,23 +44,6 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
         '~': resolve(__dirname, 'src'),
         Buffer: 'buffer',
       },
-      reporters: [
-      // do not forget to keep the "default" if you want to see something in the console
-      "default",
-      new AllureReporter({
-        links: [
-          {
-            type: "issue",
-            urlTemplate: "https://example.org/issue/%s",
-          },
-          {
-            type: "tms",
-            urlTemplate: "https://example.org/task/%s",
-          },
-        ],
-        resultsDir: "./allure-results",
-      }),
-    ],
     },
   };
 
