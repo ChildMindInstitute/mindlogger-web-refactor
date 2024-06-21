@@ -1,9 +1,8 @@
 import { useContext, useEffect } from 'react';
 
-import { SurveyContext } from '../../lib';
-
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
+import { SurveyContext } from '~/features/PassSurvey';
 import { getMsFromHours, getMsFromMinutes, useAppSelector, useTimer } from '~/shared/utils';
 
 type Props = {

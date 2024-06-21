@@ -1,10 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 
-import { getProgressId } from '../../../abstract/lib';
-import { appletModel } from '../../../entities/applet';
-import { formatTimerTime } from '../../../features/PassSurvey';
-import { SurveyContext } from '../lib';
-
+import { getProgressId } from '~/abstract/lib';
+import { appletModel } from '~/entities/applet';
+import { SurveyContext, formatTimerTime } from '~/features/PassSurvey';
 import { MINUTES_IN_HOUR, MS_IN_MINUTE, Theme } from '~/shared/constants';
 import { ClockIcon } from '~/shared/ui';
 import Box from '~/shared/ui/Box';

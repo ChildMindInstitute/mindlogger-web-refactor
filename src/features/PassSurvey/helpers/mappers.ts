@@ -1,4 +1,4 @@
-import { ItemAnswer } from './itemAnswer';
+import { ItemAnswer } from '../../../features/PassSurvey/helpers/itemAnswer';
 
 import {
   AudioPlayerItem,
