@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 
 import PassingScreen from './PassingScreen';
 import SummaryScreen from './SummaryScreen';
@@ -30,10 +30,10 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
 
   const isActivityStarted = items.length > 0;
 
-  const onEntityTimerFinish = () => {
+  const onEntityTimerFinish = useCallback(() => {
     // Open "Time is up" modal
     openTimesUpModal();
-  };
+  }, [openTimesUpModal]);
 
   useEntityTimer({
     onFinish: onEntityTimerFinish,
