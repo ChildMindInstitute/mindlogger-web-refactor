@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import ForgotPasswordPage from './ForgotPassword';
 import LoginPage from './Login';
+import PublicSurveyAnswerProcessing from './PublicSurveyAnswerProcessing';
 import SignupPage from './Signup';
 
 import AppletDetailsPage from '~/pages/AppletDetailsPage';
@@ -20,7 +21,8 @@ const TransferOwnershipPage = lazy(() => import('./TransferOwnership'));
 function UnauthorizedRoutes() {
   return (
     <Routes>
-      <Route path={ROUTES.publicActivityDetails.path} element={<PublicSurvey />} />
+      <Route path={ROUTES.publicSurvey.path} element={<PublicSurvey />} />
+      <Route path={ROUTES.publicAnswerProcessing.path} element={<PublicSurveyAnswerProcessing />} />
 
       <Route element={<Layout />}>
         <Route path={ROUTES.appletDetails.path} element={<AppletDetailsPage />} />

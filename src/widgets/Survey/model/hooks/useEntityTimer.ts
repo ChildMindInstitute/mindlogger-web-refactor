@@ -4,23 +4,13 @@ import { SurveyContext } from '../../lib';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
-import {
-  HourMinute,
-  getMsFromHours,
-  getMsFromMinutes,
-  useAppSelector,
-  useTimer,
-} from '~/shared/utils';
+import { getMsFromHours, getMsFromMinutes, useAppSelector, useTimer } from '~/shared/utils';
 
 type Props = {
-  hourMinuteTimer: HourMinute;
   onFinish: () => void;
-  entityStartedAt: number;
 };
 
-export const useEntityTimer = (props: Props) => {
-  const { hourMinuteTimer, onFinish, entityStartedAt } = props;
-
+export const useEntityTimer = ({ onFinish }: Props) => {
   const context = useContext(SurveyContext);
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
@@ -37,11 +27,6 @@ export const useEntityTimer = (props: Props) => {
   const finishRef = useRef(onFinish);
 
   finishRef.current = onFinish;
-
-  const entityDuration: number =
-    getMsFromHours(hourMinuteTimer.hours) + getMsFromMinutes(hourMinuteTimer.minutes);
-
-  const timerLogicIsUsed = entityDuration > 0;
 
   useEffect(() => {
     console.log('[useEntityTimer] useEffect');
@@ -96,11 +81,9 @@ export const useEntityTimer = (props: Props) => {
     context.entityId,
     context.event.timers.timer,
     context.eventId,
-    entityDuration,
-    entityStartedAt,
     getGroupProgress,
+    onFinish,
     resetTimer,
     setTimer,
-    timerLogicIsUsed,
   ]);
 };

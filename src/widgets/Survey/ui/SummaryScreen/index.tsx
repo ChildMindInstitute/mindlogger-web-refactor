@@ -51,8 +51,8 @@ const SummaryScreen = () => {
 
   return (
     <SurveyLayout
-      progress={100}
       isSaveAndExitButtonShown={false}
+      progress={100}
       footerActions={
         <SurveyManageButtons
           isLoading={false}

@@ -9,7 +9,11 @@ import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { useAppSelector } from '~/shared/utils';
 
-export const ScreenManager = () => {
+type Props = {
+  openTimesUpModal: () => void;
+};
+
+export const ScreenManager = ({ openTimesUpModal }: Props) => {
   const context = useContext(SurveyContext);
 
   const activityProgress = useAppSelector((state) =>
@@ -24,6 +28,16 @@ export const ScreenManager = () => {
   const showSummaryScreen = activityProgress?.isSummaryScreenOpen ?? false;
 
   const isActivityStarted = items.length > 0;
+
+  // TODO: Commented out because it will be user in the next PR
+  // const onEntityTimerFinish = () => {
+  //   // Open "Time is up" modal
+  //   openTimesUpModal();
+  // };
+
+  // useEntityTimer({
+  //   onFinish: onEntityTimerFinish,
+  // });
 
   if (!isActivityStarted) {
     return <WelcomeScreen />;
