@@ -3,11 +3,11 @@ import { useCallback } from 'react';
 import { ErrorScreen } from './ErrorScreen';
 import LoadingScreen from './LoadingScreen';
 import { ScreenManager } from './ScreenManager';
-import { ROUTES } from '../../../shared/constants';
 import { SurveyContext, mapRawDataToSurveyContext } from '../lib';
-import { useSurveyDataQuery } from '../model/hooks';
 
 import { useBanners } from '~/entities/banner/model';
+import { useSurveyDataQuery } from '~/features/PassSurvey';
+import ROUTES from '~/shared/constants/routes';
 import { MuiModal } from '~/shared/ui';
 import { useCustomNavigation, useCustomTranslation, useModal, useOnceEffect } from '~/shared/utils';
 
