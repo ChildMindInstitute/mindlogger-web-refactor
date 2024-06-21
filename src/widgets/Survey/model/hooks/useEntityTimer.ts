@@ -6,7 +6,11 @@ import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { getMsFromHours, getMsFromMinutes, useAppSelector, useTimer } from '~/shared/utils';
 
-export const useEntityTimer = () => {
+type Props = {
+  onFinish: () => void;
+};
+
+export const useEntityTimer = ({ onFinish }: Props) => {
   const context = useContext(SurveyContext);
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
@@ -54,6 +58,7 @@ export const useEntityTimer = () => {
 
     if (noTimeLeft) {
       // TODO: add logic for finishing the entity
+      onFinish();
     }
 
     const durationLeft = entityDuration - alreadyElapsed;
@@ -62,8 +67,9 @@ export const useEntityTimer = () => {
     setTimer({
       time: durationLeft,
       onComplete: () => {
-        console.log('[useEntityTimer] Timer completed');
         // TODO: add logic for finishing the entity
+        console.log('[useEntityTimer] Timer completed');
+        onFinish();
       },
     });
 
@@ -77,6 +83,7 @@ export const useEntityTimer = () => {
     context.event.timers.timer,
     context.eventId,
     getGroupProgress,
+    onFinish,
     resetTimer,
     setTimer,
   ]);

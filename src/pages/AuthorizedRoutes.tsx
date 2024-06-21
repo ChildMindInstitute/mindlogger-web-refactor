@@ -5,8 +5,10 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import AppletDetailsPage from './AppletDetailsPage';
 import AppletListPage from './AppletListPage';
 import ProfilePage from './Profile';
+import PublicSurveyAnswerProcessing from './PublicSurveyAnswerProcessing';
 import SettingsPage from './Settings';
 import SurveyPage from './Survey';
+import SurveyAnswerProcessing from './SurveyAnswerProcessing';
 
 import ROUTES from '~/shared/constants/routes';
 import Layout from '~/widgets/AppLayout';
@@ -29,7 +31,13 @@ function AuthorizedRoutes({ refreshToken }: Props) {
       <Routes>
         <Route element={<ProtectedRoute token={refreshToken} />}>
           <Route path={ROUTES.survey.path} element={<SurveyPage />} />
-          <Route path={ROUTES.publicActivityDetails.path} element={<PublicSurvey />} />
+          <Route path={ROUTES.publicSurvey.path} element={<PublicSurvey />} />
+
+          <Route path={ROUTES.answerProcessing.path} element={<SurveyAnswerProcessing />} />
+          <Route
+            path={ROUTES.publicAnswerProcessing.path}
+            element={<PublicSurveyAnswerProcessing />}
+          />
 
           <Route element={<Layout />}>
             <Route path={ROUTES.appletList.path} element={<AppletListPage />} />
