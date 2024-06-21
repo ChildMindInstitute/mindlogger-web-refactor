@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 
 import { EntityTimer } from './EntityTimer';
+import { SurveyContext } from '../lib';
 
-import { SurveyContext } from '~/features/PassSurvey';
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import { MultiInformantTooltip } from '~/features/TakeNow';
 import { Theme } from '~/shared/constants';
