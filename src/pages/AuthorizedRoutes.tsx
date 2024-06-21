@@ -41,6 +41,12 @@ function AuthorizedRoutes({ refreshToken }: Props) {
             element={<PublicSurveyAnswerProcessing />}
           />
 
+          <Route path={ROUTES.answerProcessing.path} element={<SurveyAnswerProcessing />} />
+          <Route
+            path={ROUTES.publicAnswerProcessing.path}
+            element={<PublicSurveyAnswerProcessing />}
+          />
+
           <Route element={<Layout header={<Header />} footer={<Footer />} />}>
             <Route path={ROUTES.appletList.path} element={<AppletListPage />} />
             <Route path={ROUTES.appletDetails.path} element={<AppletDetailsPage />} />
