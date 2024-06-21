@@ -7,9 +7,11 @@ import LoginPage from './Login';
 import PublicSurveyAnswerProcessing from './PublicSurveyAnswerProcessing';
 import SignupPage from './Signup';
 
+import Layout from '~/abstract/ui/AppLayout';
 import AppletDetailsPage from '~/pages/AppletDetailsPage';
 import ROUTES from '~/shared/constants/routes';
-import Layout from '~/widgets/AppLayout';
+import Footer from '~/widgets/Footer';
+import Header from '~/widgets/Header';
 
 const PublicAppletDetailsPage = lazy(() => import('./PublicJoin'));
 const PublicSurvey = lazy(() => import('./PublicSurvey'));
@@ -24,7 +26,7 @@ function UnauthorizedRoutes() {
       <Route path={ROUTES.publicSurvey.path} element={<PublicSurvey />} />
       <Route path={ROUTES.publicAnswerProcessing.path} element={<PublicSurveyAnswerProcessing />} />
 
-      <Route element={<Layout />}>
+      <Route element={<Layout header={<Header />} footer={<Footer />} />}>
         <Route path={ROUTES.appletDetails.path} element={<AppletDetailsPage />} />
         <Route index path={ROUTES.login.path} element={<LoginPage />} />
         <Route path={ROUTES.signup.path} element={<SignupPage />} />

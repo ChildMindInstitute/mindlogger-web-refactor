@@ -10,8 +10,10 @@ import SettingsPage from './Settings';
 import SurveyPage from './Survey';
 import SurveyAnswerProcessing from './SurveyAnswerProcessing';
 
+import Layout from '~/abstract/ui/AppLayout';
 import ROUTES from '~/shared/constants/routes';
-import Layout from '~/widgets/AppLayout';
+import Footer from '~/widgets/Footer';
+import Header from '~/widgets/Header';
 import LogoutTracker from '~/widgets/LogoutTracker';
 import ProtectedRoute from '~/widgets/ProtectedRoute';
 
@@ -39,7 +41,7 @@ function AuthorizedRoutes({ refreshToken }: Props) {
             element={<PublicSurveyAnswerProcessing />}
           />
 
-          <Route element={<Layout />}>
+          <Route element={<Layout header={<Header />} footer={<Footer />} />}>
             <Route path={ROUTES.appletList.path} element={<AppletListPage />} />
             <Route path={ROUTES.appletDetails.path} element={<AppletDetailsPage />} />
 

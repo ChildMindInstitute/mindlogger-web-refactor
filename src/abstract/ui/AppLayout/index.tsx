@@ -4,10 +4,8 @@ import { Outlet } from 'react-router-dom';
 
 import { Theme } from '~/shared/constants';
 import { Banners, Box } from '~/shared/ui';
-import Footer from '~/widgets/Footer';
-import Header from '~/widgets/Header';
 
-type LayoutProps = PropsWithChildren<{
+type Props = PropsWithChildren<{
   bgColor?: string;
 
   header?: React.ReactNode | undefined;
@@ -21,7 +19,7 @@ const Layout = ({
   header,
   onKeyDownHandler,
   children,
-}: LayoutProps): null | JSX.Element => {
+}: Props): null | JSX.Element => {
   return (
     <Box
       id="app-main-layout"
@@ -33,7 +31,7 @@ const Layout = ({
         backgroundColor: bgColor,
       }}
     >
-      {header ? header : <Header />}
+      {header && header}
       <Box
         id="app-content-container"
         display="flex"
@@ -43,7 +41,7 @@ const Layout = ({
       >
         <Banners />
         {children ? children : <Outlet />}
-        {footer ? footer : <Footer />}
+        {footer && footer}
       </Box>
     </Box>
   );
