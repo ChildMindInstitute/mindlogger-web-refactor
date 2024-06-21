@@ -25,7 +25,7 @@ const ROUTES = {
   transferOwnership: {
     path: '/transferOwnership/:appletId',
   },
-  publicActivityDetails: {
+  publicSurvey: {
     path: '/public/applets/:appletId/activityId/:activityId/event/:eventId/entityType/:entityType/publicAppletKey/:publicAppletKey',
     navigateTo: ({
       appletId,
@@ -45,6 +45,23 @@ const ROUTES = {
       `/public/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}/publicAppletKey/${publicAppletKey}?${
         flowId ? `flowId=${flowId}` : ''
       }`,
+  },
+  publicAnswerProcessing: {
+    path: '/public/answer-processing',
+    navigateTo: ({
+      appletId,
+      eventId,
+      activityId,
+      flowId,
+      publicAppletKey,
+    }: {
+      appletId: string;
+      activityId: string;
+      eventId: string;
+      flowId: string | null;
+      publicAppletKey: string | null;
+    }) =>
+      `/public/answer-processing?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}&flowId=${flowId}&publicAppletKey=${publicAppletKey}`,
   },
 
   // Protected routes
@@ -86,10 +103,23 @@ const ROUTES = {
   invitationDecline: {
     path: '/protected/invite/declined',
   },
-  thanks: {
-    path: '/protected/thanks/:appletId/isPublic/:isPublic',
-    navigateTo: (appletId: string, isPublic: boolean) =>
-      `/protected/thanks/${appletId}/isPublic/${isPublic}`,
+
+  answerProcessing: {
+    path: '/protected/answer-processing',
+    navigateTo: ({
+      appletId,
+      eventId,
+      activityId,
+      flowId,
+      publicAppletKey,
+    }: {
+      appletId: string;
+      activityId: string;
+      eventId: string;
+      flowId: string | null;
+      publicAppletKey: string | null;
+    }) =>
+      `/protected/answer-processing?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}&flowId=${flowId}&publicAppletKey=${publicAppletKey}`,
   },
 };
 
