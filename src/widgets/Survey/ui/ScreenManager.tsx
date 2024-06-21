@@ -3,7 +3,7 @@ import { useCallback, useContext } from 'react';
 import PassingScreen from './PassingScreen';
 import SummaryScreen from './SummaryScreen';
 import WelcomeScreen from './WelcomeScreen';
-import { useEntityTimer } from '../model/hooks/useEntityTimer';
+import { useEntityTimer } from '../model/hooks';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
