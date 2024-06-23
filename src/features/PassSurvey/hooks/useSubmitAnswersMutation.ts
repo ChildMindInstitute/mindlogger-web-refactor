@@ -8,7 +8,11 @@ type Props = {
 };
 
 export const useSubmitAnswersMutations = (props: Props) => {
-  const { mutate: submitAnswers, isLoading: submitLoading } = useSaveAnswerMutation({
+  const {
+    mutate: submitAnswers,
+    isLoading: submitLoading,
+    mutateAsync: asyncSubmitAnswers,
+  } = useSaveAnswerMutation({
     onSuccess(_, variables) {
       Mixpanel.track(MixEvents.AssessmentCompleted, {
         [MixProperties.AppletId]: variables.appletId,
@@ -19,20 +23,24 @@ export const useSubmitAnswersMutations = (props: Props) => {
     },
   });
 
-  const { mutate: submitPublicAnswers, isLoading: publicSubmitLoading } =
-    usePublicSaveAnswerMutation({
-      onSuccess(_, variables) {
-        Mixpanel.track(MixEvents.AssessmentCompleted, {
-          [MixProperties.AppletId]: variables.appletId,
-          [MixProperties.SubmitId]: variables.submitId,
-        });
+  const {
+    mutate: submitPublicAnswers,
+    isLoading: publicSubmitLoading,
+    mutateAsync: asyncSubmitPublicAnswers,
+  } = usePublicSaveAnswerMutation({
+    onSuccess(_, variables) {
+      Mixpanel.track(MixEvents.AssessmentCompleted, {
+        [MixProperties.AppletId]: variables.appletId,
+        [MixProperties.SubmitId]: variables.submitId,
+      });
 
-        return props.onSubmitSuccess();
-      },
-    });
+      return props.onSubmitSuccess();
+    },
+  });
 
   return {
     submitAnswers: props.isPublic ? submitPublicAnswers : submitAnswers,
+    submitAnswersAsync: props.isPublic ? asyncSubmitPublicAnswers : asyncSubmitAnswers,
     isLoading: submitLoading || publicSubmitLoading,
   };
 };
