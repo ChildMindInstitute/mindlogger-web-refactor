@@ -42,11 +42,6 @@ const PassingScreen = () => {
 
   const completedEntities = useAppSelector(appletModel.selectors.completedEntitiesSelector);
 
-  const userEvents = useMemo(
-    () => activityProgress?.userEvents ?? [],
-    [activityProgress?.userEvents],
-  );
-
   const items = useMemo(() => activityProgress?.items ?? [], [activityProgress.items]);
 
   const { incrementStep, decrementStep, openSummaryScreen } =
@@ -172,27 +167,25 @@ const PassingScreen = () => {
     isPublic: !!context.publicAppletKey,
   });
 
-  const { processAnswers } = useAnswer();
+  const { buildAnswer } = useAnswer();
 
-  const onSubmit = useCallback(() => {
-    const doneUserEvent = saveUserEventByType('DONE', item);
+  const onSubmit = () => {
+    const doneEvent = saveUserEventByType('DONE', item);
 
-    const answer = processAnswers({
-      items,
-      userEvents: [...userEvents, doneUserEvent],
-      isPublic: !!context.publicAppletKey,
+    const answer = buildAnswer({
+      entityId: context.entityId,
+      activityId: context.activityId,
+      appletId: context.appletId,
+      appletVersion: context.appletVersion,
+      encryption: context.encryption,
+      flow: context.flow,
+      publicAppletKey: context.publicAppletKey,
+      event: context.event,
+      userDoneEvent: doneEvent,
     });
 
     return submitAnswers(answer);
-  }, [
-    context.publicAppletKey,
-    item,
-    items,
-    processAnswers,
-    saveUserEventByType,
-    submitAnswers,
-    userEvents,
-  ]);
+  };
 
   const onNext = useCallback(() => {
     const isItemHasAnswer = item.answer.length;
