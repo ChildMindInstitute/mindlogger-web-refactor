@@ -48,7 +48,6 @@ const SurveyHeader = (props: Props) => {
           display="flex"
           justifyContent={greaterThanSM ? 'center' : 'space-between'}
           alignItems="center"
-          marginBottom={greaterThanSM ? '8px' : '10px'}
         >
           <Box display="flex" alignItems="center" gap="8px">
             {isStringExist(context.watermark) && (
@@ -71,7 +70,12 @@ const SurveyHeader = (props: Props) => {
           )}
         </Box>
         {props.progress !== undefined && (
-          <BaseProgressBar percentage={props.progress} testid="assessment-activity-progress-bar" />
+          <Box marginTop={greaterThanSM ? '8px' : '10px'}>
+            <BaseProgressBar
+              percentage={props.progress}
+              testid="assessment-activity-progress-bar"
+            />
+          </Box>
         )}
       </Box>
 
