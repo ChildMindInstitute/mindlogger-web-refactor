@@ -1,8 +1,11 @@
+import { useState } from 'react';
+
 import { ActivityGroupList } from './ActivityGroupList';
 import { AppletDetailsContext } from '../lib';
 
 import { appletModel, useAppletBaseInfoByIdQuery } from '~/entities/applet';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
+import { TakeNowSuccessModalProps } from '~/features/TakeNow/lib/types';
 import { TakeNowSuccessModal } from '~/features/TakeNow/ui/TakeNowSuccessModal';
 import { Container } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
@@ -25,6 +28,10 @@ type Props = PublicAppletDetails | PrivateAppletDetails;
 
 export const ActivityGroups = (props: Props) => {
   const { t } = useCustomTranslation();
+  const [takeNowSuccessModalState, setTakeNowSuccessModalState] =
+    useState<TakeNowSuccessModalProps>({
+      isOpen: false,
+    });
 
   const {
     isError: isAppletError,
@@ -42,13 +49,18 @@ export const ActivityGroups = (props: Props) => {
 
   const { featureFlags } = useFeatureFlags();
 
-  const { isInMultiInformantFlow, resetMultiInformantState, ensureMultiInformantStateExists } =
-    appletModel.hooks.useMultiInformantState();
+  const {
+    isInMultiInformantFlow,
+    getMultiInformantState,
+    resetMultiInformantState,
+    ensureMultiInformantStateExists,
+  } = appletModel.hooks.useMultiInformantState();
 
   useOnceEffect(() => {
     ensureMultiInformantStateExists();
     if (featureFlags.enableMultiInformant) {
       if (isInMultiInformantFlow() && !props.startActivityOrFlow) {
+        setTakeNowSuccessModalState({ isOpen: true, ...getMultiInformantState() });
         resetMultiInformantState();
       }
     }
@@ -77,7 +89,10 @@ export const ActivityGroups = (props: Props) => {
   return (
     <AppletDetailsContext.Provider value={{ ...props, applet, events }}>
       <ActivityGroupList />
-      <TakeNowSuccessModal />
+      <TakeNowSuccessModal
+        onClose={() => setTakeNowSuccessModalState({ isOpen: false })}
+        {...takeNowSuccessModalState}
+      />
     </AppletDetailsContext.Provider>
   );
 };

@@ -17,12 +17,13 @@ import { appletModel } from '~/entities/applet';
 import { useStartSurvey } from '~/features/PassSurvey';
 import Box from '~/shared/ui/Box';
 import {
-  MixEvents,
+  MixpanelEvents,
   Mixpanel,
-  MixProperties,
+  MixpanelProps,
   useAppSelector,
   useCustomMediaQuery,
   useOnceEffect,
+  MixpanelPayload,
 } from '~/shared/utils';
 
 type Props = {
@@ -84,7 +85,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100;
 
   const onStartActivity = (shouldRestart: boolean) => {
-    if (isDisabled || !activityListItem) return;
+    if (isDisabled) return;
 
     if (!isEntitySupported) {
       return openStoreLink();
@@ -101,20 +102,45 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
   const restartActivity = () => {
     onStartActivity(true);
-    Mixpanel.track(MixEvents.ActivityRestarted, { [MixProperties.AppletId]: context.applet.id });
-  };
-  const resumeActivity = () => {
-    onStartActivity(false);
-    Mixpanel.track(MixEvents.ActivityResumed, { [MixProperties.AppletId]: context.applet.id });
+
+    const analyticsPayload: MixpanelPayload = {
+      [MixpanelProps.AppletId]: context.applet.id,
+      [MixpanelProps.ActivityId]: activityListItem.activityId,
+    };
+
+    if (isFlow) {
+      analyticsPayload[MixpanelProps.ActivityFlowId] = activityListItem.flowId;
+    }
+
+    Mixpanel.track(MixpanelEvents.ActivityRestarted, analyticsPayload);
   };
 
+  const resumeActivity = () => {
+    onStartActivity(false);
+
+    const analyticsPayload: MixpanelPayload = {
+      [MixpanelProps.AppletId]: context.applet.id,
+      [MixpanelProps.ActivityId]: activityListItem.activityId,
+    };
+
+    if (isFlow) {
+      analyticsPayload[MixpanelProps.ActivityFlowId] = activityListItem.flowId;
+    }
+
+    Mixpanel.track(MixpanelEvents.ActivityResumed, {
+      [MixpanelProps.AppletId]: context.applet.id,
+    });
+  };
+
+  // Start activity on mount if direct linking to this activity; pass `true` to onStartActivity to
+  // ensure it doesn't resume from a previous progress state.
   useOnceEffect(() => {
     if (
       context.startActivityOrFlow &&
       ((!isFlow && context.startActivityOrFlow === activityListItem.activityId) ||
         (isFlow && context.startActivityOrFlow === activityListItem.flowId))
     ) {
-      restartActivity();
+      onStartActivity(true);
     }
   });
 

@@ -21,6 +21,7 @@ export const useTakeNowValidation = ({
   sourceSubjectId,
   startActivityOrFlow,
   respondentId,
+  multiInformantAssessmentId,
 }: TakeNowParams): TakeNowValidatedState => {
   const [workspaceId, setWorkspaceId] = useState<string | null>();
 
@@ -239,6 +240,19 @@ export const useTakeNowValidation = ({
     secretUserId: currentUserSecretUserId,
   } = respondentData.data.result;
 
+  // Finally, determine if this is an activity or activity flow for analytics.
+  const { activities, activityFlows } = appletData.data.result;
+  const activityId = activities.some(({ id }) => id === startActivityOrFlow)
+    ? startActivityOrFlow
+    : null;
+
+  let activityFlowId: string | null = null;
+  if (!activityId) {
+    activityFlowId = activityFlows.some(({ id }) => id === startActivityOrFlow)
+      ? startActivityOrFlow
+      : null;
+  }
+
   return {
     isLoading: false,
     isError: false,
@@ -259,6 +273,10 @@ export const useTakeNowValidation = ({
         nickname: targetSubjectNickname,
         secretId: targetSecretUserId,
       },
+      appletId,
+      activityId,
+      activityFlowId,
+      multiInformantAssessmentId,
     },
   };
 };

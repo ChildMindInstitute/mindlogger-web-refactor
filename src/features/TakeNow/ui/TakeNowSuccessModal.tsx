@@ -1,30 +1,51 @@
-import { useState } from 'react';
-
-import { useLocation, useNavigate } from 'react-router-dom';
+import { TakeNowSuccessModalProps } from '../lib/types';
 
 import { MuiModal } from '~/shared/ui';
-import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
+import {
+  Mixpanel,
+  MixpanelEvents,
+  MixpanelPayload,
+  MixpanelProps,
+  useCustomTranslation,
+} from '~/shared/utils';
 
-export const TakeNowSuccessModal = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+export const TakeNowSuccessModal = ({
+  isOpen,
+  onClose,
+  appletId,
+  multiInformantAssessmentId,
+  activityId,
+  activityFlowId,
+}: TakeNowSuccessModalProps) => {
   const { t } = useCustomTranslation();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const handleReturnToAdminAppClick = () => {
+    const analyticsPayload: MixpanelPayload = {
+      [MixpanelProps.AppletId]: appletId,
+    };
 
-  useOnceEffect(() => {
-    if (location.state && location.state.showTakeNowSuccessModal && !isOpen) {
-      navigate(window.location.pathname, {
-        state: {
-          ...location.state,
-          showTakeNowSuccessModal: undefined,
-        } as unknown,
-        replace: true,
-      });
-
-      setIsOpen(true);
+    if (activityId) {
+      analyticsPayload[MixpanelProps.ActivityId] = activityId;
+    } else if (activityFlowId) {
+      analyticsPayload[MixpanelProps.ActivityFlowId] = activityFlowId;
     }
-  });
+
+    analyticsPayload[MixpanelProps.Feature] = 'Multi-informant';
+
+    if (multiInformantAssessmentId) {
+      analyticsPayload[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
+    }
+
+    Mixpanel.track(
+      MixpanelEvents.ReturnToAdminApp,
+      analyticsPayload,
+      { send_immediately: true },
+      () => {
+        onClose?.();
+        window.close();
+      },
+    );
+  };
 
   return (
     <MuiModal
@@ -32,12 +53,9 @@ export const TakeNowSuccessModal = () => {
       title={t('takeNow.successModalTitle')}
       label={t('takeNow.successModalLabel')}
       footerPrimaryButton={t('takeNow.successModalPrimaryAction')}
-      onPrimaryButtonClick={() => {
-        window.close();
-        setIsOpen(false);
-      }}
+      onPrimaryButtonClick={handleReturnToAdminAppClick}
       footerSecondaryButton={t('takeNow.successModalSecondaryAction')}
-      onSecondaryButtonClick={() => setIsOpen(false)}
+      onSecondaryButtonClick={onClose}
       DialogProps={{
         disableEscapeKeyDown: true,
       }}

@@ -1,4 +1,6 @@
-import mixpanel, { Dict } from 'mixpanel-browser';
+import mixpanel, { Callback, RequestOptions } from 'mixpanel-browser';
+
+import { MixpanelPayload } from './mixpanel.types';
 
 const PROJECT_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN;
 
@@ -20,8 +22,14 @@ export const Mixpanel = {
   trackPageView(pageName: string) {
     if (shouldEnableMixpanel) mixpanel.track_pageview({ page: `[Web] ${pageName}` });
   },
-  track(action: string, payload?: Dict) {
-    if (shouldEnableMixpanel) mixpanel.track(`[Web] ${action}`, payload);
+  track(
+    action: string,
+    payload?: MixpanelPayload,
+    optionsOrCallback?: RequestOptions | Callback,
+    callback?: Callback,
+  ) {
+    if (shouldEnableMixpanel)
+      mixpanel.track(`[Web] ${action}`, payload, optionsOrCallback, callback);
   },
   login(userId: string) {
     if (shouldEnableMixpanel) {
