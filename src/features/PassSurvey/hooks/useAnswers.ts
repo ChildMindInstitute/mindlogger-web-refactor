@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 
 import { SurveyContext } from '../lib';
 import AnswersConstructService from '../model/AnswersConstructService';
@@ -21,7 +21,8 @@ type BuildAnswerParams = {
   flow: ActivityFlowDTO | null;
   publicAppletKey: string | null;
 
-  userDoneEvent?: appletModel.UserEvent;
+  items: appletModel.ItemRecord[];
+  userEvents: appletModel.UserEvent[];
 };
 
 export const useAnswer = () => {
@@ -31,75 +32,71 @@ export const useAnswer = () => {
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
 
-  const { getActivityProgress } = appletModel.hooks.useActivityProgress();
-
   const { getMultiInformantState, isInMultiInformantFlow } =
     appletModel.hooks.useMultiInformantState();
 
   const { featureFlags } = useFeatureFlags();
 
-  const buildAnswer = (params: BuildAnswerParams): AnswerPayload => {
-    const groupProgress = getGroupProgress({
-      entityId: params.entityId,
-      eventId: params.event.id,
-    });
+  const buildAnswer = useCallback(
+    (params: BuildAnswerParams): AnswerPayload => {
+      const groupProgress = getGroupProgress({
+        entityId: params.entityId,
+        eventId: params.event.id,
+      });
 
-    const activityProgress = getActivityProgress({
-      activityId: params.activityId,
-      eventId: params.event.id,
-    });
-
-    if (!groupProgress) {
-      throw new Error('[useAnswer] Group progress is not found');
-    }
-
-    if (!activityProgress) {
-      throw new Error('[useAnswer] Activity progress is not found');
-    }
-
-    if (!params.encryption) {
-      throw new Error('[useAnswer] Encryption is not found');
-    }
-
-    let userEvents = activityProgress.userEvents;
-
-    if (params.userDoneEvent) {
-      userEvents = [...userEvents, params.userDoneEvent];
-    }
-
-    const answerConstructService = new AnswersConstructService({
-      groupProgress,
-      userEvents,
-      items: activityProgress.items,
-      event: params.event,
-      activityId: params.activityId,
-      appletId: params.appletId,
-      appletVersion: params.appletVersion,
-      flow: params.flow,
-      encryption: params.encryption,
-      publicAppletKey: params.publicAppletKey,
-    });
-
-    const answer = answerConstructService.build();
-
-    const isIntegrationsEnabled = context.integrations !== undefined;
-
-    const appletConsents = consents?.[context.appletId] ?? null;
-
-    if (isIntegrationsEnabled) {
-      answer.isDataShare = appletConsents?.shareToPublic ?? false;
-    }
-
-    if (featureFlags.enableMultiInformant) {
-      const multiInformantState = getMultiInformantState();
-      if (isInMultiInformantFlow()) {
-        answer.sourceSubjectId = multiInformantState?.sourceSubject?.id;
-        answer.targetSubjectId = multiInformantState?.targetSubject?.id;
+      if (!groupProgress) {
+        throw new Error('[useAnswer] Group progress is not found');
       }
-    }
 
-    return answer;
-  };
+      if (!params.encryption) {
+        throw new Error('[useAnswer] Encryption is not found');
+      }
+
+      console.log('[BuildAnswerParams] params: ', params);
+
+      const answerConstructService = new AnswersConstructService({
+        groupProgress,
+        userEvents: params.userEvents,
+        items: params.items,
+        event: params.event,
+        activityId: params.activityId,
+        appletId: params.appletId,
+        appletVersion: params.appletVersion,
+        flow: params.flow,
+        encryption: params.encryption,
+        publicAppletKey: params.publicAppletKey,
+      });
+
+      const answer = answerConstructService.build();
+
+      const isIntegrationsEnabled = context.integrations !== undefined;
+
+      const appletConsents = consents?.[context.appletId] ?? null;
+
+      if (isIntegrationsEnabled) {
+        answer.isDataShare = appletConsents?.shareToPublic ?? false;
+      }
+
+      if (featureFlags.enableMultiInformant) {
+        const multiInformantState = getMultiInformantState();
+        if (isInMultiInformantFlow()) {
+          answer.sourceSubjectId = multiInformantState?.sourceSubject?.id;
+          answer.targetSubjectId = multiInformantState?.targetSubject?.id;
+        }
+      }
+
+      return answer;
+    },
+    [
+      consents,
+      context.appletId,
+      context.integrations,
+      featureFlags.enableMultiInformant,
+      getGroupProgress,
+      getMultiInformantState,
+      isInMultiInformantFlow,
+    ],
+  );
 
   return { buildAnswer };
 };

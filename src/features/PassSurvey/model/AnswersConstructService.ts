@@ -85,17 +85,19 @@ export default class AnswersConstructService {
 
     const preparedAlerts = mapAlerts(this.items);
 
-    const encryptedAnswers = this.encrypt(JSON.stringify(answersDictionary));
+    const privateKey = this.generatePrivateKey(this.isPublic(this.publicAppletKey));
 
-    const encryptedUserEvents = this.encrypt(JSON.stringify(this.userEvents));
+    const encryptedAnswers = this.encrypt(JSON.stringify(answersDictionary), privateKey);
+
+    const encryptedUserEvents = this.encrypt(JSON.stringify(this.userEvents), privateKey);
 
     const dataIdentifier = this.getDataIdentifier(this.items);
 
-    const encryptedIdentifier = dataIdentifier ? this.encrypt(dataIdentifier) : null;
+    const encryptedIdentifier = dataIdentifier ? this.encrypt(dataIdentifier, privateKey) : null;
 
     const isSurveyCompleted = this.isSurveyCompleted();
 
-    const publicKey = this.generatePublicKey();
+    const publicKey = this.generatePublicKey(privateKey);
 
     return {
       appletId: this.appletId,
@@ -150,9 +152,7 @@ export default class AnswersConstructService {
     return userPrivateKey;
   }
 
-  private generatePublicKey() {
-    const privateKey: number[] = this.generatePrivateKey(this.isPublic(this.publicAppletKey));
-
+  private generatePublicKey(privateKey: number[]) {
     return encryption.getPublicKey({
       privateKey,
       appletPrime: JSON.parse(this.encryption.prime) as number[],
@@ -160,9 +160,7 @@ export default class AnswersConstructService {
     });
   }
 
-  private encrypt(payload: string): string {
-    const privateKey: number[] = this.generatePrivateKey(this.isPublic(this.publicAppletKey));
-
+  private encrypt(payload: string, privateKey: number[]): string {
     const aeskey = encryption.getAESKey({
       appletPrime: JSON.parse(this.encryption.prime) as number[],
       appletBase: JSON.parse(this.encryption.base) as number[],
