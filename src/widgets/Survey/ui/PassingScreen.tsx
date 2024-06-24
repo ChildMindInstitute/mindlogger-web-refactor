@@ -172,6 +172,10 @@ const PassingScreen = () => {
   const onSubmit = () => {
     const doneEvent = saveUserEventByType('DONE', item);
 
+    if (!activityProgress) {
+      throw new Error('[PassingScreen:onSubmit] ActivityProgress is not defined');
+    }
+
     const answer = buildAnswer({
       entityId: context.entityId,
       activityId: context.activityId,
@@ -181,7 +185,8 @@ const PassingScreen = () => {
       flow: context.flow,
       publicAppletKey: context.publicAppletKey,
       event: context.event,
-      userDoneEvent: doneEvent,
+      items: activityProgress.items,
+      userEvents: [...activityProgress.userEvents, doneEvent],
     });
 
     return submitAnswers(answer);

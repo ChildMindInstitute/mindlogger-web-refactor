@@ -118,8 +118,9 @@ const ROUTES = {
       eventId: string;
       flowId: string | null;
       publicAppletKey: string | null;
-    }) =>
-      `/protected/answer-processing?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}&flowId=${flowId}&publicAppletKey=${publicAppletKey}`,
+    }) => {
+      return `/protected/answer-processing?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}${flowId ? `&flowId=${flowId}` : ''}${publicAppletKey ? `&publicAppletKey=${publicAppletKey}` : ''}`;
+    },
   },
 };
 
