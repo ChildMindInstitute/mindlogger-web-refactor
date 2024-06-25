@@ -52,8 +52,6 @@ export const useAnswer = () => {
         throw new Error('[useAnswer] Encryption is not found');
       }
 
-      console.log('[BuildAnswerParams] params: ', params);
-
       const answerConstructService = new AnswersConstructService({
         groupProgress,
         userEvents: params.userEvents,
