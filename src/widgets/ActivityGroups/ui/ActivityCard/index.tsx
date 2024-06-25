@@ -191,6 +191,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
           activityStatus={activityListItem.status}
           onRestartClick={restartActivity}
           onResumeClick={resumeActivity}
+          onStartClick={() => onStartActivity(false)}
           activityName={title}
           isDisabled={isDisabled}
         />
