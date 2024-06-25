@@ -10,6 +10,7 @@ import { AvatarBase, BaseProgressBar, Box, Text } from '~/shared/ui';
 import { HourMinute, isStringExist, useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {
+  title?: string;
   progress?: number;
   isSaveAndExitButtonShown: boolean;
 
@@ -24,6 +25,8 @@ const SurveyHeader = (props: Props) => {
   const cutStringToLength = (str: string, length: number) => {
     return str.length > length ? `${str.substring(0, length)}...` : str;
   };
+
+  const title = props.title ?? context.activity.name;
 
   return (
     <Box
@@ -59,7 +62,7 @@ const SurveyHeader = (props: Props) => {
               testid="assessment-activity-title"
               sx={{ textAlign: greaterThanSM ? 'center' : 'left' }}
             >
-              {greaterThanSM ? context.activity.name : cutStringToLength(context.activity.name, 30)}
+              {greaterThanSM ? title : cutStringToLength(title, 30)}
             </Text>
           </Box>
           {!greaterThanSM && props.isSaveAndExitButtonShown && (
