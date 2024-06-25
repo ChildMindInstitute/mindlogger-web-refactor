@@ -1,5 +1,7 @@
 import { useContext } from 'react';
 
+import { unstable_useId } from '@mui/material';
+
 import { ActivityCardBase } from './ActivityCardBase';
 import { ActivityCardDescription } from './ActivityCardDescription';
 import { ActivityCardIcon } from './ActivityCardIcon';
@@ -28,10 +30,12 @@ import {
 
 type Props = {
   activityListItem: ActivityListItem;
+  keyProp: string;
 };
 
-export const ActivityCard = ({ activityListItem }: Props) => {
+export const ActivityCard = ({ activityListItem, keyProp }: Props) => {
   const { lessThanSM } = useCustomMediaQuery();
+  const uniqueID = unstable_useId();
 
   const context = useContext(AppletDetailsContext);
 
@@ -135,11 +139,17 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   // Start activity on mount if direct linking to this activity; pass `true` to onStartActivity to
   // ensure it doesn't resume from a previous progress state.
   useOnceEffect(() => {
+    console.log(
+      `Running ActivityCard.useOnceEffect (name: ${title}, key: ${keyProp}, ID: ${uniqueID})`,
+    );
     if (
       context.startActivityOrFlow &&
       ((!isFlow && context.startActivityOrFlow === activityListItem.activityId) ||
         (isFlow && context.startActivityOrFlow === activityListItem.flowId))
     ) {
+      console.log(
+        `Running ActivityCard.onStartActivity (name: ${title}, key: ${keyProp}, ID: ${uniqueID})`,
+      );
       onStartActivity(true);
     }
   });

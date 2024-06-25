@@ -33,7 +33,13 @@ export const ActivityGroup = ({ group }: Props) => {
 
       <Box display="flex" flex={1} flexDirection="column">
         {group.activities.map((activity) => {
-          return <ActivityCard key={activity.eventId} activityListItem={activity} />;
+          return (
+            <ActivityCard
+              key={activity.eventId}
+              keyProp={activity.eventId}
+              activityListItem={activity}
+            />
+          );
         })}
       </Box>
     </Box>
