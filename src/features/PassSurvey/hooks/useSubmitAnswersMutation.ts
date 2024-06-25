@@ -4,7 +4,7 @@ import { MixEvents, MixProperties, Mixpanel } from '~/shared/utils';
 type Props = {
   isPublic: boolean;
 
-  onSubmitSuccess: () => void;
+  onSubmitSuccess?: () => void;
 };
 
 export const useSubmitAnswersMutations = (props: Props) => {
@@ -19,7 +19,9 @@ export const useSubmitAnswersMutations = (props: Props) => {
         [MixProperties.SubmitId]: variables.submitId,
       });
 
-      return props.onSubmitSuccess();
+      if (props.onSubmitSuccess) {
+        props.onSubmitSuccess();
+      }
     },
   });
 
@@ -34,7 +36,9 @@ export const useSubmitAnswersMutations = (props: Props) => {
         [MixProperties.SubmitId]: variables.submitId,
       });
 
-      return props.onSubmitSuccess();
+      if (props.onSubmitSuccess) {
+        props.onSubmitSuccess();
+      }
     },
   });
 
