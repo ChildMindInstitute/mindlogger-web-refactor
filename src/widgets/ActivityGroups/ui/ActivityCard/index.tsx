@@ -22,8 +22,8 @@ import {
   MixpanelProps,
   useAppSelector,
   useCustomMediaQuery,
-  useOnceEffect,
   MixpanelPayload,
+  useOnceLayoutEffect,
 } from '~/shared/utils';
 
 type Props = {
@@ -130,14 +130,14 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     Mixpanel.track(MixpanelEvents.ActivityResumed, analyticsPayload);
   };
 
-  // Start activity on mount if direct linking to this activity; pass `true` to onStartActivity to
-  // ensure it doesn't resume from a previous progress state.
-  useOnceEffect(() => {
+  // Start activity on mount if doing Take Now on this activity.
+  useOnceLayoutEffect(() => {
     if (
       context.startActivityOrFlow &&
       ((!isFlow && context.startActivityOrFlow === activityListItem.activityId) ||
         (isFlow && context.startActivityOrFlow === activityListItem.flowId))
     ) {
+      // Pass `true` to ensure activity doesn't resume from a previous progress state.
       onStartActivity(true);
     }
   });
