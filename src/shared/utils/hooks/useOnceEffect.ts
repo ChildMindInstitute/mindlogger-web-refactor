@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { EffectCallback } from 'react';
 
 /**
@@ -6,6 +6,16 @@ import type { EffectCallback } from 'react';
  * @param effect Some code that you'd normally put in a `useEffect` hook.
  */
 export const useOnceEffect = (effect: EffectCallback) => {
+  const previouslyMounted = useRef(false);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(effect, []);
+  useEffect(() => {
+    if (previouslyMounted.current) {
+      return;
+    } else {
+      previouslyMounted.current = true;
+    }
+
+    effect();
+  }, []);
 };
