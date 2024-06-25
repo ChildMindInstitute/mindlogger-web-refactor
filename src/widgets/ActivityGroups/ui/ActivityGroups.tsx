@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import { ActivityGroupList } from './ActivityGroupList';
 import { AppletDetailsContext } from '../lib';
 
@@ -28,6 +30,8 @@ type Props = PublicAppletDetails | PrivateAppletDetails;
 
 export const ActivityGroups = (props: Props) => {
   const { t } = useCustomTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [takeNowSuccessModalState, setTakeNowSuccessModalState] =
     useState<TakeNowSuccessModalProps>({
       isOpen: false,
@@ -60,8 +64,20 @@ export const ActivityGroups = (props: Props) => {
     ensureMultiInformantStateExists();
     if (featureFlags.enableMultiInformant) {
       if (isInMultiInformantFlow() && !props.startActivityOrFlow) {
-        setTakeNowSuccessModalState({ isOpen: true, ...getMultiInformantState() });
         resetMultiInformantState();
+      }
+
+      // We rely on location state to evaluate whether to show the modal so that it only displays
+      // after the activity is complete (and not when it's paused). See useEntityComplete hook.
+      if (location.state?.showTakeNowSuccessModal && !takeNowSuccessModalState.isOpen) {
+        navigate(window.location.pathname, {
+          state: {
+            ...location.state,
+            showTakeNowSuccessModal: undefined,
+          } as unknown,
+          replace: true,
+        });
+        setTakeNowSuccessModalState({ isOpen: true, ...getMultiInformantState() });
       }
     }
   });
