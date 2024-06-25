@@ -127,9 +127,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
       analyticsPayload[MixpanelProps.ActivityFlowId] = activityListItem.flowId;
     }
 
-    Mixpanel.track(MixpanelEvents.ActivityResumed, {
-      [MixpanelProps.AppletId]: context.applet.id,
-    });
+    Mixpanel.track(MixpanelEvents.ActivityResumed, analyticsPayload);
   };
 
   // Start activity on mount if direct linking to this activity; pass `true` to onStartActivity to
