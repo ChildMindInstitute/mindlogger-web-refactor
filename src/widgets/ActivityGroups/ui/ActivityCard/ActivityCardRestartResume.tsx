@@ -13,8 +13,9 @@ import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 type Props = {
   activityStatus: ActivityStatus;
   activityName: string;
-  onResumeClick: () => void;
   onRestartClick: () => void;
+  onResumeClick: () => void;
+  onStartClick: () => void;
   isDisabled: boolean;
 };
 
@@ -22,6 +23,7 @@ export const ActivityCardRestartResume = ({
   activityStatus,
   onRestartClick,
   onResumeClick,
+  onStartClick,
   activityName,
   isDisabled,
 }: Props) => {
@@ -83,7 +85,7 @@ export const ActivityCardRestartResume = ({
             disabled={isDisabled}
             type="button"
             variant="contained"
-            onClick={onResumeClick}
+            onClick={onStartClick}
             text={t('start')}
             data-testid="assessment-start-button"
           />

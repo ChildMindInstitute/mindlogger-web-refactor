@@ -16,6 +16,7 @@ function ValidateTakeNowParams({
   sourceSubjectId,
   startActivityOrFlow,
   respondentId,
+  multiInformantAssessmentId,
 }: TakeNowParams) {
   const { addErrorBanner } = useBanners();
   const { initiateTakeNow, isInMultiInformantFlow, getMultiInformantState } =
@@ -29,11 +30,12 @@ function ValidateTakeNowParams({
     sourceSubjectId,
     startActivityOrFlow,
     respondentId,
+    multiInformantAssessmentId,
   });
 
   useEffect(() => {
     if (isSuccess && data) {
-      const { currentUserSubject, sourceSubject, targetSubject } = data;
+      const { currentUserSubject, sourceSubject, targetSubject, ...rest } = data;
 
       const multiInformantState = getMultiInformantState();
       if (
@@ -42,10 +44,22 @@ function ValidateTakeNowParams({
         sourceSubject.id !== multiInformantState?.sourceSubject?.id ||
         targetSubject.id !== multiInformantState?.targetSubject?.id
       ) {
-        initiateTakeNow({ currentUserSubject, sourceSubject, targetSubject });
+        initiateTakeNow({
+          currentUserSubject,
+          sourceSubject,
+          targetSubject,
+          ...rest,
+        });
       }
     }
-  }, [data, initiateTakeNow, isInMultiInformantFlow, isSuccess]);
+  }, [
+    data,
+    getMultiInformantState,
+    initiateTakeNow,
+    isInMultiInformantFlow,
+    isSuccess,
+    multiInformantAssessmentId,
+  ]);
 
   useEffect(() => {
     if (error) {
