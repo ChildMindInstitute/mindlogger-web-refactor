@@ -24,9 +24,9 @@ import {
   MixpanelProps,
   useAppSelector,
   useCustomMediaQuery,
-  useOnceEffect,
   MixpanelPayload,
 } from '~/shared/utils';
+import { useOnceLayoutEffect } from '~/shared/utils/hooks/useOnceEffect';
 
 type Props = {
   activityListItem: ActivityListItem;
@@ -138,7 +138,7 @@ export const ActivityCard = ({ activityListItem, keyProp }: Props) => {
 
   // Start activity on mount if direct linking to this activity; pass `true` to onStartActivity to
   // ensure it doesn't resume from a previous progress state.
-  useOnceEffect(() => {
+  useOnceLayoutEffect(() => {
     console.log(
       `Running ActivityCard.useOnceEffect (name: ${title}, key: ${keyProp}, ID: ${uniqueID})`,
     );
