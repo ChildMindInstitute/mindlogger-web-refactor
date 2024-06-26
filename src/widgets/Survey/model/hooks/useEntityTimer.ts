@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect } from 'react';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
@@ -23,10 +23,6 @@ export const useEntityTimer = ({ onFinish }: Props) => {
 
   const { setTimer, resetTimer } = useTimer();
 
-  const finishRef = useRef(onFinish);
-
-  finishRef.current = onFinish;
-
   useEffect(() => {
     console.log('[useEntityTimer] useEffect');
     const groupProgress = getGroupProgress({
@@ -44,6 +40,8 @@ export const useEntityTimer = ({ onFinish }: Props) => {
       return;
     }
 
+    const now = Date.now();
+
     const entityDuration: number =
       getMsFromHours(timerSettings.hours) + getMsFromMinutes(timerSettings.minutes);
 
@@ -53,12 +51,13 @@ export const useEntityTimer = ({ onFinish }: Props) => {
       return;
     }
 
-    const alreadyElapsed: number = Date.now() - entityStartedAt;
+    const alreadyElapsed: number = now - entityStartedAt;
 
     const noTimeLeft: boolean = alreadyElapsed > entityDuration;
 
     if (noTimeLeft) {
-      finishRef.current();
+      onFinish();
+      return;
     }
 
     const durationLeft = entityDuration - alreadyElapsed;
@@ -67,7 +66,8 @@ export const useEntityTimer = ({ onFinish }: Props) => {
     setTimer({
       time: durationLeft,
       onComplete: () => {
-        finishRef.current();
+        console.log('[useEntityTimer] Timer completed');
+        onFinish();
       },
     });
 

@@ -1,11 +1,13 @@
 import { useCallback } from 'react';
 
 import { mapItemToRecord, mapSplashScreenToRecord } from '../mapper';
+import { activityProgressSelector } from '../selectors';
 import { actions } from '../slice';
-import { ItemRecord } from '../types';
+import { ActivityProgress, ItemRecord } from '../types';
 
+import { getProgressId } from '~/abstract/lib';
 import { ActivityDTO } from '~/shared/api';
-import { useAppDispatch } from '~/shared/utils';
+import { useAppDispatch, useAppSelector } from '~/shared/utils';
 
 type SaveProgressProps = {
   activity: ActivityDTO;
@@ -19,6 +21,17 @@ type DefaultProps = {
 
 export const useActivityProgress = () => {
   const dispatch = useAppDispatch();
+
+  const activitiesProgressState = useAppSelector(activityProgressSelector);
+
+  const getActivityProgress = useCallback(
+    (props: DefaultProps): ActivityProgress | null => {
+      const progress = activitiesProgressState[getProgressId(props.activityId, props.eventId)];
+
+      return progress ?? null;
+    },
+    [activitiesProgressState],
+  );
 
   const removeActivityProgress = useCallback(
     (props: DefaultProps) => {
@@ -103,6 +116,7 @@ export const useActivityProgress = () => {
   );
 
   return {
+    getActivityProgress,
     setInitialProgress,
     removeActivityProgress,
     incrementStep,

@@ -7,7 +7,7 @@ import { MixpanelEvents, MixpanelPayload, MixpanelProps, Mixpanel } from '~/shar
 
 type Props = {
   isPublic: boolean;
-  onSubmitSuccess: () => void;
+  onSubmitSuccess?: () => void;
 };
 
 export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess }: Props) => {
@@ -36,19 +36,30 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess }: Props) 
 
     Mixpanel.track(MixpanelEvents.AssessmentCompleted, analyticsPayload);
 
-    return onSubmitSuccess();
+    if (onSubmitSuccess) {
+      onSubmitSuccess();
+    }
   };
 
-  const { mutate: submit, isLoading: submitLoading } = useSaveAnswerMutation({
+  const {
+    mutate: submit,
+    isLoading: submitLoading,
+    mutateAsync: asyncSubmit,
+  } = useSaveAnswerMutation({
     onSuccess,
   });
 
-  const { mutate: publicSubmit, isLoading: publicSubmitLoading } = usePublicSaveAnswerMutation({
+  const {
+    mutate: publicSubmit,
+    isLoading: publicSubmitLoading,
+    mutateAsync: publicAsyncSubmit,
+  } = usePublicSaveAnswerMutation({
     onSuccess,
   });
 
   return {
     submitAnswers: isPublic ? publicSubmit : submit,
+    submitAnswersAsync: isPublic ? publicAsyncSubmit : asyncSubmit,
     isLoading: submitLoading || publicSubmitLoading,
   };
 };

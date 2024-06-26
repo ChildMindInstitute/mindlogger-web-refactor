@@ -1,17 +1,20 @@
 import { useContext } from 'react';
 
-import { SurveyContext } from '~/features/PassSurvey';
+import { EntityTimer } from './EntityTimer';
+import { SurveyContext } from '../lib';
+
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import { MultiInformantTooltip } from '~/features/TakeNow';
 import { Theme } from '~/shared/constants';
-import { AvatarBase, BaseProgressBar, Box, ClockIcon, Text } from '~/shared/ui';
-import { isStringExist, useCustomMediaQuery } from '~/shared/utils';
+import { AvatarBase, BaseProgressBar, Box, Text } from '~/shared/ui';
+import { HourMinute, isStringExist, useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {
+  title?: string;
   progress?: number;
   isSaveAndExitButtonShown: boolean;
 
-  entityTimer?: string;
+  entityTimer?: HourMinute;
 };
 
 const SurveyHeader = (props: Props) => {
@@ -22,6 +25,8 @@ const SurveyHeader = (props: Props) => {
   const cutStringToLength = (str: string, length: number) => {
     return str.length > length ? `${str.substring(0, length)}...` : str;
   };
+
+  const title = props.title ?? context.activity.name;
 
   return (
     <Box
@@ -38,12 +43,7 @@ const SurveyHeader = (props: Props) => {
         borderBottom: `1px solid ${Theme.colors.light.surfaceVariant}`,
       }}
     >
-      {props.entityTimer && (
-        <Box display="flex" padding="8px 12px" gap="8px">
-          <ClockIcon width="24px" height="24px" color={Theme.colors.light.outline} />
-          <Text color={Theme.colors.light.outline}>{props.entityTimer}</Text>
-        </Box>
-      )}
+      {props.entityTimer && <EntityTimer entityTimerSettings={props.entityTimer} />}
       <MultiInformantTooltip />
 
       <Box sx={{ gridColumn: '2 / 3' }}>
@@ -51,7 +51,6 @@ const SurveyHeader = (props: Props) => {
           display="flex"
           justifyContent={greaterThanSM ? 'center' : 'space-between'}
           alignItems="center"
-          marginBottom={greaterThanSM ? '8px' : '10px'}
         >
           <Box display="flex" alignItems="center" gap="8px">
             {isStringExist(context.watermark) && (
@@ -63,7 +62,7 @@ const SurveyHeader = (props: Props) => {
               testid="assessment-activity-title"
               sx={{ textAlign: greaterThanSM ? 'center' : 'left' }}
             >
-              {greaterThanSM ? context.activity.name : cutStringToLength(context.activity.name, 30)}
+              {greaterThanSM ? title : cutStringToLength(title, 30)}
             </Text>
           </Box>
           {!greaterThanSM && props.isSaveAndExitButtonShown && (
@@ -74,7 +73,12 @@ const SurveyHeader = (props: Props) => {
           )}
         </Box>
         {props.progress !== undefined && (
-          <BaseProgressBar percentage={props.progress} testid="assessment-activity-progress-bar" />
+          <Box marginTop={greaterThanSM ? '8px' : '10px'}>
+            <BaseProgressBar
+              percentage={props.progress}
+              testid="assessment-activity-progress-bar"
+            />
+          </Box>
         )}
       </Box>
 

@@ -1,8 +1,9 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 
 import PassingScreen from './PassingScreen';
 import SummaryScreen from './SummaryScreen';
 import WelcomeScreen from './WelcomeScreen';
+import { useEntityTimer } from '../model/hooks';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
@@ -29,15 +30,14 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
 
   const isActivityStarted = items.length > 0;
 
-  // TODO: Commented out because it will be user in the next PR
-  // const onEntityTimerFinish = () => {
-  //   // Open "Time is up" modal
-  //   openTimesUpModal();
-  // };
+  const onEntityTimerFinish = useCallback(() => {
+    // Open "Time is up" modal
+    openTimesUpModal();
+  }, [openTimesUpModal]);
 
-  // useEntityTimer({
-  //   onFinish: onEntityTimerFinish,
-  // });
+  useEntityTimer({
+    onFinish: onEntityTimerFinish,
+  });
 
   if (!isActivityStarted) {
     return <WelcomeScreen />;

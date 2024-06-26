@@ -1,6 +1,5 @@
 import { useCallback, useContext, useMemo } from 'react';
 
-import SurveyLayout from './SurveyLayout';
 import { validateBeforeMoveForward } from '../model';
 import { useAutoForward, useSurveyState } from '../model/hooks';
 
@@ -9,6 +8,7 @@ import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/a
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
 import {
+  SurveyLayout,
   SurveyContext,
   SurveyManageButtons,
   useAnswer,
@@ -41,11 +41,6 @@ const PassingScreen = () => {
   const { getGroupProgress, saveGroupContext } = appletModel.hooks.useGroupProgressState();
 
   const completedEntities = useAppSelector(appletModel.selectors.completedEntitiesSelector);
-
-  const userEvents = useMemo(
-    () => activityProgress?.userEvents ?? [],
-    [activityProgress?.userEvents],
-  );
 
   const items = useMemo(() => activityProgress?.items ?? [], [activityProgress.items]);
 
@@ -172,27 +167,30 @@ const PassingScreen = () => {
     isPublic: !!context.publicAppletKey,
   });
 
-  const { processAnswers } = useAnswer();
+  const { buildAnswer } = useAnswer();
 
-  const onSubmit = useCallback(() => {
-    const doneUserEvent = saveUserEventByType('DONE', item);
+  const onSubmit = () => {
+    const doneEvent = saveUserEventByType('DONE', item);
 
-    const answer = processAnswers({
-      items,
-      userEvents: [...userEvents, doneUserEvent],
-      isPublic: !!context.publicAppletKey,
+    if (!activityProgress) {
+      throw new Error('[PassingScreen:onSubmit] ActivityProgress is not defined');
+    }
+
+    const answer = buildAnswer({
+      entityId: context.entityId,
+      activityId: context.activityId,
+      appletId: context.appletId,
+      appletVersion: context.appletVersion,
+      encryption: context.encryption,
+      flow: context.flow,
+      publicAppletKey: context.publicAppletKey,
+      event: context.event,
+      items: activityProgress.items,
+      userEvents: [...activityProgress.userEvents, doneEvent],
     });
 
     return submitAnswers(answer);
-  }, [
-    context.publicAppletKey,
-    item,
-    items,
-    processAnswers,
-    saveUserEventByType,
-    submitAnswers,
-    userEvents,
-  ]);
+  };
 
   const onNext = useCallback(() => {
     const isItemHasAnswer = item.answer.length;

@@ -1,10 +1,9 @@
 import { useContext } from 'react';
 
 import { ActivityMetaData } from './ActivityMetaData';
-import SurveyLayout from './SurveyLayout';
 
 import { appletModel } from '~/entities/applet';
-import { StartSurveyButton, SurveyContext } from '~/features/PassSurvey';
+import { StartSurveyButton, SurveyContext, SurveyLayout } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import { AvatarBase } from '~/shared/ui/Avatar';
 import Box from '~/shared/ui/Box';
@@ -20,25 +19,14 @@ const WelcomeScreen = () => {
 
   const entityTimer = context.event.timers.timer ?? null;
 
-  const { startActivity, startFlow } = appletModel.hooks.useEntityStart();
+  const { startSurvey } = appletModel.hooks.useEntityStart();
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
 
   const startAssessment = () => {
-    const groupProgress = getGroupProgress({
-      entityId: context.entityId,
-      eventId: context.eventId,
-    });
-
-    if (context.flow && !groupProgress) {
-      startFlow(context.eventId, context.flow);
-    }
-
-    if (!context.flow) {
-      startActivity(context.activityId, context.eventId);
-    }
+    startSurvey({ eventId: context.eventId, activityId: context.activityId, flow: context.flow });
 
     return setInitialProgress({ activity: context.activity, eventId: context.eventId });
   };

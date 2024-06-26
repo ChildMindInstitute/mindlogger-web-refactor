@@ -54,7 +54,7 @@ export type UserEventResponse =
       text?: string;
     };
 
-export type UserEvents = {
+export type UserEvent = {
   type: UserEventTypes;
   time: number;
   screen: string;
@@ -92,7 +92,7 @@ export type ItemWithAdditionalResponse = Extract<
 export type ActivityProgress = {
   items: ItemRecord[];
   step: number;
-  userEvents: Array<UserEvents>;
+  userEvents: Array<UserEvent>;
   isSummaryScreenOpen: boolean;
   scoreSettings?: ScoreAndReports;
   itemTimer: ItemTimer;
@@ -183,14 +183,14 @@ export type SaveUserEventPayload = {
   entityId: string;
   eventId: string;
   itemId: string;
-  userEvent: UserEvents;
+  userEvent: UserEvent;
 };
 
 export type UpdateUserEventByIndexPayload = {
   entityId: string;
   eventId: string;
   userEventIndex: number;
-  userEvent: UserEvents;
+  userEvent: UserEvent;
 };
 
 export type SupportableActivities = Record<string, boolean>;

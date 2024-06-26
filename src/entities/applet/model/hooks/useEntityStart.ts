@@ -1,18 +1,22 @@
-import { groupProgressSelector } from '../selectors';
+import { useGroupProgressState } from './useGroupProgressState';
 import { actions } from '../slice';
 
-import { GroupProgress, getProgressId } from '~/abstract/lib';
+import { GroupProgress } from '~/abstract/lib';
 import { ActivityFlowDTO } from '~/shared/api';
-import { useAppDispatch, useAppSelector } from '~/shared/utils';
+import { useAppDispatch } from '~/shared/utils';
+
+type StartSurveyPayload = {
+  eventId: string;
+  activityId: string;
+  flow: ActivityFlowDTO | null;
+};
 
 export const useEntityStart = () => {
   const dispatch = useAppDispatch();
-  const groupProgress = useAppSelector(groupProgressSelector);
 
-  const getProgress = (entityId: string, eventId: string): GroupProgress =>
-    groupProgress[getProgressId(entityId, eventId)];
+  const { getGroupProgress } = useGroupProgressState();
 
-  const isInProgress = (payload: GroupProgress): boolean => payload && !payload.endAt;
+  const isInProgress = (payload: GroupProgress | null): boolean => !!payload && !payload.endAt;
 
   function activityStarted(activityId: string, eventId: string): void {
     dispatch(
@@ -40,7 +44,7 @@ export const useEntityStart = () => {
   }
 
   function startActivity(activityId: string, eventId: string): void {
-    const isActivityInProgress = isInProgress(getProgress(activityId, eventId));
+    const isActivityInProgress = isInProgress(getGroupProgress({ entityId: activityId, eventId }));
 
     if (isActivityInProgress) {
       return;
@@ -50,26 +54,36 @@ export const useEntityStart = () => {
   }
 
   function startFlow(eventId: string, flow: ActivityFlowDTO): void {
-    const flowId = flow.id;
-
-    const isFlowInProgress = isInProgress(getProgress(flowId, eventId));
-
-    if (isFlowInProgress) {
-      return;
-    }
-
-    const flowActivities: string[] | null = flow?.activityIds ?? null;
+    const flowActivities: string[] | null = flow.activityIds ?? null;
 
     if (!flowActivities) {
       throw new Error(
-        `[useStartEntity:startFlow] Flow with id ${flowId} does not have any activities`,
+        `[useStartEntity:startFlow] Flow with id ${flow.id} does not have any activities`,
       );
     }
 
     const firstActivityId: string = flowActivities[0];
 
-    return flowStarted(flowId, firstActivityId, eventId, 0);
+    return flowStarted(flow.id, firstActivityId, eventId, 0);
   }
 
-  return { startActivity, startFlow };
+  function startSurvey({ eventId, activityId, flow }: StartSurveyPayload): void {
+    const entityId = flow?.id ?? activityId;
+
+    const groupProgress = getGroupProgress({ entityId, eventId });
+
+    const isSurveyInProgress = isInProgress(groupProgress);
+
+    const isFlow = !!flow;
+
+    if (isFlow && !isSurveyInProgress) {
+      return startFlow(eventId, flow);
+    }
+
+    if (!isFlow && !isSurveyInProgress) {
+      return startActivity(activityId, eventId);
+    }
+  }
+
+  return { startSurvey };
 };

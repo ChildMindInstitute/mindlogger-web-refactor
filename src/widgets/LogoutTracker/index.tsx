@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect } from 'react';
 
 import { useLogout } from '~/features/Logout';
-import { eventEmitter } from '~/shared/utils';
+import { EventEmitter } from '~/shared/utils';
 
 type LogoutTrackerProps = PropsWithChildren<unknown>;
 
@@ -9,10 +9,10 @@ function LogoutTracker({ children }: LogoutTrackerProps) {
   const { logout } = useLogout();
 
   useEffect(() => {
-    eventEmitter.on('onLogout', logout);
+    EventEmitter.on('onLogout', logout);
 
     return () => {
-      eventEmitter.off('onLogout', logout);
+      EventEmitter.off('onLogout', logout);
     };
   }, [logout]);
 

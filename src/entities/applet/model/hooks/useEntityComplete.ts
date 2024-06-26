@@ -78,7 +78,7 @@ export const useEntityComplete = (props: Props) => {
     );
   };
 
-  const completeFlow = () => {
+  const completeFlow = (forceComplete?: boolean) => {
     const { flow } = props;
 
     const groupProgress = getGroupProgress({
@@ -113,11 +113,11 @@ export const useEntityComplete = (props: Props) => {
 
     removeActivityProgress({ activityId: props.activityId, eventId: props.eventId });
 
-    if (!nextActivityId) {
-      return completeEntityAndRedirect();
+    if (nextActivityId && !forceComplete) {
+      return redirectToNextActivity(nextActivityId);
     }
 
-    return redirectToNextActivity(nextActivityId);
+    return completeEntityAndRedirect();
   };
 
   const completeActivity = () => {

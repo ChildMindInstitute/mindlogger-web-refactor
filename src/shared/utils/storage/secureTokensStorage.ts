@@ -1,12 +1,12 @@
 import { Tokens } from '~/entities/user/lib';
-import { eventEmitter, securelocalStorageService } from '~/shared/utils';
+import { EventEmitter, securelocalStorageService } from '~/shared/utils';
 
 const createSecureTokensStorage = () => {
   const name = 'tokens';
 
   const setTokens = (data: Tokens) => {
     securelocalStorageService.setItem(name, data);
-    eventEmitter.emit('onTokensChange');
+    EventEmitter.emit('onTokensChange');
   };
 
   const getTokens = () => {
@@ -15,7 +15,7 @@ const createSecureTokensStorage = () => {
 
   const clearTokens = () => {
     securelocalStorageService.removeItem(name);
-    eventEmitter.emit('onTokensChange');
+    EventEmitter.emit('onTokensChange');
   };
 
   return { setTokens, getTokens, clearTokens };
