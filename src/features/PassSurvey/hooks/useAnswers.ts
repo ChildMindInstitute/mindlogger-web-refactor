@@ -1,180 +1,105 @@
-import { useCallback, useContext } from 'react';
+import { useContext } from 'react';
 
-import { v4 as uuidV4 } from 'uuid';
-
-import {
-  mapAlerts,
-  mapToAnswers,
-  generateUserPublicKey,
-  getFirstResponseDataIdentifierTextItem,
-  getScheduledTimeFromEvents,
-  prepareItemAnswers,
-} from '../helpers';
 import { SurveyContext } from '../lib';
+import AnswersConstructService from '../model/AnswersConstructService';
 
-import { ActivityPipelineType, GroupProgress } from '~/abstract/lib';
-import { useEncryptPayload } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
-import { userModel } from '~/entities/user';
-import { AnswerPayload } from '~/shared/api';
-import { formatToDtoDate, formatToDtoTime, useAppSelector, useEncryption } from '~/shared/utils';
+import { ActivityFlowDTO, AnswerPayload, EncryptionDTO, ScheduleEventDto } from '~/shared/api';
+import { useAppSelector } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
-type SubmitAnswersProps = {
-  items: appletModel.ItemRecord[];
-  userEvents: appletModel.UserEvents[];
-  isPublic: boolean;
+type BuildAnswerParams = {
+  event: ScheduleEventDto;
+
+  entityId: string;
+  activityId: string;
+  appletId: string;
+  appletVersion: string;
+
+  encryption: EncryptionDTO | null;
+
+  flow: ActivityFlowDTO | null;
+  publicAppletKey: string | null;
+
+  userDoneEvent?: appletModel.UserEvent;
 };
 
 export const useAnswer = () => {
-  const { generateUserPrivateKey } = useEncryption();
-  const { encryptPayload } = useEncryptPayload();
-
   const context = useContext(SurveyContext);
 
   const consents = useAppSelector(appletModel.selectors.selectConsents);
 
-  const appletConsents = consents?.[context.appletId] ?? null;
-
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
+
+  const { getActivityProgress } = appletModel.hooks.useActivityProgress();
+
   const { getMultiInformantState, isInMultiInformantFlow } =
     appletModel.hooks.useMultiInformantState();
+
   const { featureFlags } = useFeatureFlags();
 
-  const getSubmitId = (groupInProgress: GroupProgress): string => {
-    const isFlow = groupInProgress.type === ActivityPipelineType.Flow;
+  const buildAnswer = (params: BuildAnswerParams): AnswerPayload => {
+    const groupProgress = getGroupProgress({
+      entityId: params.entityId,
+      eventId: params.event.id,
+    });
 
-    return isFlow ? groupInProgress.executionGroupKey : uuidV4();
+    const activityProgress = getActivityProgress({
+      activityId: params.activityId,
+      eventId: params.event.id,
+    });
+
+    if (!groupProgress) {
+      throw new Error('[useAnswer] Group progress is not found');
+    }
+
+    if (!activityProgress) {
+      throw new Error('[useAnswer] Activity progress is not found');
+    }
+
+    if (!params.encryption) {
+      throw new Error('[useAnswer] Encryption is not found');
+    }
+
+    let userEvents = activityProgress.userEvents;
+
+    if (params.userDoneEvent) {
+      userEvents = [...userEvents, params.userDoneEvent];
+    }
+
+    const answerConstructService = new AnswersConstructService({
+      groupProgress,
+      userEvents,
+      items: activityProgress.items,
+      event: params.event,
+      activityId: params.activityId,
+      appletId: params.appletId,
+      appletVersion: params.appletVersion,
+      flow: params.flow,
+      encryption: params.encryption,
+      publicAppletKey: params.publicAppletKey,
+    });
+
+    const answer = answerConstructService.build();
+
+    const isIntegrationsEnabled = context.integrations !== undefined;
+
+    const appletConsents = consents?.[context.appletId] ?? null;
+
+    if (isIntegrationsEnabled) {
+      answer.consentToShare = appletConsents?.shareToPublic ?? false;
+    }
+
+    if (featureFlags.enableMultiInformant) {
+      const multiInformantState = getMultiInformantState();
+      if (isInMultiInformantFlow()) {
+        answer.sourceSubjectId = multiInformantState?.sourceSubject?.id;
+        answer.targetSubjectId = multiInformantState?.targetSubject?.id;
+      }
+    }
+
+    return answer;
   };
 
-  const processAnswers = useCallback(
-    (params: SubmitAnswersProps): AnswerPayload => {
-      // Step 1 - Collect answers from store and transform to answer payload
-      const itemAnswers = mapToAnswers(params.items);
-      const preparedItemAnswers = prepareItemAnswers(itemAnswers);
-
-      const preparedAlerts = mapAlerts(params.items);
-
-      // Step 2 - Encrypt answers
-      let privateKey: number[] | null = null;
-
-      if (params.isPublic) {
-        privateKey = generateUserPrivateKey({
-          userId: uuidV4(),
-          email: uuidV4(),
-          password: uuidV4(),
-        });
-      } else {
-        privateKey = userModel.secureUserPrivateKeyStorage.getUserPrivateKey();
-      }
-
-      const userPublicKey = generateUserPublicKey(context.encryption, privateKey);
-
-      const encryptedAnswers = encryptPayload(
-        context.encryption,
-        preparedItemAnswers.answer,
-        privateKey,
-      );
-      const encryptedUserEvents = encryptPayload(context.encryption, params.userEvents, privateKey);
-
-      const groupProgress = getGroupProgress({
-        entityId: context.entityId,
-        eventId: context.eventId,
-      });
-
-      if (!groupProgress) {
-        throw new Error('[Activity item list] Group in progress not found');
-      }
-
-      const firstTextItemAnserWithIdentifier = getFirstResponseDataIdentifierTextItem(params.items);
-      const encryptedIdentifier = firstTextItemAnserWithIdentifier
-        ? encryptPayload(context.encryption, firstTextItemAnserWithIdentifier, privateKey)
-        : null;
-
-      const now = new Date();
-
-      const isFlow = groupProgress.type === ActivityPipelineType.Flow;
-      const pipelineAcitivityOrder = isFlow ? groupProgress.pipelineActivityOrder : null;
-
-      const currentFlowLength = context.flow?.activityIds.length;
-
-      const isFlowCompleted =
-        currentFlowLength && pipelineAcitivityOrder
-          ? currentFlowLength === pipelineAcitivityOrder + 1
-          : false;
-
-      // Step 3 - Send answers to backend
-      const answer: AnswerPayload = {
-        appletId: context.appletId,
-        activityId: context.activityId,
-        flowId: context.flow?.id ?? null,
-        submitId: getSubmitId(groupProgress),
-        version: context.appletVersion,
-        createdAt: new Date().getTime(),
-        isFlowCompleted: isFlow ? isFlowCompleted : true,
-        answer: {
-          answer: encryptedAnswers,
-          itemIds: preparedItemAnswers.itemIds,
-          events: encryptedUserEvents,
-          userPublicKey,
-          startTime: new Date(groupProgress.startAt ?? Date.now()).getTime(),
-          endTime: new Date().getTime(),
-          identifier: encryptedIdentifier,
-          scheduledEventId: context.eventId,
-          localEndDate: formatToDtoDate(now),
-          localEndTime: formatToDtoTime(now),
-        },
-        alerts: preparedAlerts,
-        client: {
-          appId: 'mindlogger-web',
-          appVersion: import.meta.env.VITE_BUILD_VERSION,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        },
-      };
-
-      const isIntegrationsEnabled = context.integrations !== undefined;
-
-      if (isIntegrationsEnabled) {
-        answer.consentToShare = appletConsents?.shareToPublic ?? false;
-      }
-
-      if (featureFlags.enableMultiInformant) {
-        const multiInformantState = getMultiInformantState();
-        if (isInMultiInformantFlow()) {
-          answer.sourceSubjectId = multiInformantState?.sourceSubject?.id;
-          answer.targetSubjectId = multiInformantState?.targetSubject?.id;
-        }
-      }
-
-      const scheduledTime = getScheduledTimeFromEvents(context.event);
-
-      if (scheduledTime) {
-        answer.answer.scheduledTime = scheduledTime;
-      }
-
-      return answer;
-    },
-    [
-      context.encryption,
-      context.entityId,
-      context.eventId,
-      context.flow?.activityIds.length,
-      context.flow?.id,
-      context.appletId,
-      context.activityId,
-      context.appletVersion,
-      context.integrations,
-      context.event,
-      encryptPayload,
-      getGroupProgress,
-      featureFlags.enableMultiInformant,
-      generateUserPrivateKey,
-      appletConsents?.shareToPublic,
-      getMultiInformantState,
-      isInMultiInformantFlow,
-    ],
-  );
-
-  return { processAnswers };
+  return { buildAnswer };
 };

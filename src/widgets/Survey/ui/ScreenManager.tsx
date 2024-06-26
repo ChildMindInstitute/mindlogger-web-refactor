@@ -29,16 +29,6 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
 
   const isActivityStarted = items.length > 0;
 
-  // TODO: Commented out because it will be user in the next PR
-  // const onEntityTimerFinish = () => {
-  //   // Open "Time is up" modal
-  //   openTimesUpModal();
-  // };
-
-  // useEntityTimer({
-  //   onFinish: onEntityTimerFinish,
-  // });
-
   if (!isActivityStarted) {
     return <WelcomeScreen />;
   }
