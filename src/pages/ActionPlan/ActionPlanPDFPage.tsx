@@ -1,6 +1,5 @@
 import React, { PropsWithChildren, useContext } from 'react';
 
-import PageBackground from '~/assets/action-plan-page-background.svg';
 import { Body } from '~/pages/ActionPlan/components/Body';
 import { Header } from '~/pages/ActionPlan/components/Header';
 import { PhraseCard } from '~/pages/ActionPlan/components/PhraseCard';
@@ -62,7 +61,7 @@ function WhiteBackgroundContainer({ children }: PropsWithChildren) {
         backgroundSize: 'contain',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundImage: `url(${PageBackground})`,
+        backgroundImage: `url(/action-plan-page-background.svg)`,
       }}
     >
       <Box
