@@ -1,12 +1,11 @@
 import { useContext } from 'react';
 
-import { SurveyContext } from '../lib';
-
+import { SurveyContext } from '~/features/PassSurvey';
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import { MultiInformantTooltip } from '~/features/TakeNow';
-import { ROUTES, Theme } from '~/shared/constants';
+import { Theme } from '~/shared/constants';
 import { AvatarBase, BaseProgressBar, Box, ClockIcon, Text } from '~/shared/ui';
-import { isStringExist, useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
+import { isStringExist, useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {
   progress?: number;
@@ -19,18 +18,9 @@ const SurveyHeader = (props: Props) => {
   const context = useContext(SurveyContext);
 
   const { greaterThanSM } = useCustomMediaQuery();
-  const navigator = useCustomNavigation();
 
   const cutStringToLength = (str: string, length: number) => {
     return str.length > length ? `${str.substring(0, length)}...` : str;
-  };
-
-  const onSaveAndExitClick = () => {
-    return navigator.navigate(
-      context.publicAppletKey
-        ? ROUTES.publicJoin.navigateTo(context.publicAppletKey)
-        : ROUTES.appletDetails.navigateTo(context.appletId),
-    );
   };
 
   return (
@@ -77,7 +67,10 @@ const SurveyHeader = (props: Props) => {
             </Text>
           </Box>
           {!greaterThanSM && props.isSaveAndExitButtonShown && (
-            <SaveAndExitButton onClick={onSaveAndExitClick} />
+            <SaveAndExitButton
+              publicAppletKey={context.publicAppletKey}
+              appletId={context.appletId}
+            />
           )}
         </Box>
         {props.progress !== undefined && (
@@ -94,7 +87,10 @@ const SurveyHeader = (props: Props) => {
           justifyContent="center"
           justifySelf="flex-end"
         >
-          <SaveAndExitButton onClick={onSaveAndExitClick} />
+          <SaveAndExitButton
+            publicAppletKey={context.publicAppletKey}
+            appletId={context.appletId}
+          />
         </Box>
       )}
     </Box>

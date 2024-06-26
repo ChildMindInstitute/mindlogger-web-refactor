@@ -1,5 +1,3 @@
-import { ItemAnswer } from './itemAnswer';
-
 import {
   AudioPlayerItem,
   CheckboxItem,
@@ -16,6 +14,7 @@ import {
   TimeRangeItem,
 } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
+import { ItemAnswer } from '~/features/PassSurvey/helpers/itemAnswer';
 import {
   AlertDTO,
   AnswerTypesPayload,

@@ -54,7 +54,7 @@ export const useEntityComplete = (props: Props) => {
   const redirectToNextActivity = (activityId: string) => {
     if (props.publicAppletKey) {
       return navigator.navigate(
-        ROUTES.publicActivityDetails.navigateTo({
+        ROUTES.publicSurvey.navigateTo({
           appletId: props.appletId,
           activityId,
           eventId: props.eventId,

@@ -5,11 +5,15 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import AppletDetailsPage from './AppletDetailsPage';
 import AppletListPage from './AppletListPage';
 import ProfilePage from './Profile';
+import PublicSurveyAnswerProcessing from './PublicSurveyAnswerProcessing';
 import SettingsPage from './Settings';
 import SurveyPage from './Survey';
+import SurveyAnswerProcessing from './SurveyAnswerProcessing';
 
+import Layout from '~/abstract/ui/AppLayout';
 import ROUTES from '~/shared/constants/routes';
-import Layout from '~/widgets/AppLayout';
+import Footer from '~/widgets/Footer';
+import Header from '~/widgets/Header';
 import LogoutTracker from '~/widgets/LogoutTracker';
 import ProtectedRoute from '~/widgets/ProtectedRoute';
 
@@ -29,9 +33,15 @@ function AuthorizedRoutes({ refreshToken }: Props) {
       <Routes>
         <Route element={<ProtectedRoute token={refreshToken} />}>
           <Route path={ROUTES.survey.path} element={<SurveyPage />} />
-          <Route path={ROUTES.publicActivityDetails.path} element={<PublicSurvey />} />
+          <Route path={ROUTES.publicSurvey.path} element={<PublicSurvey />} />
 
-          <Route element={<Layout />}>
+          <Route path={ROUTES.answerProcessing.path} element={<SurveyAnswerProcessing />} />
+          <Route
+            path={ROUTES.publicAnswerProcessing.path}
+            element={<PublicSurveyAnswerProcessing />}
+          />
+
+          <Route element={<Layout header={<Header />} footer={<Footer />} />}>
             <Route path={ROUTES.appletList.path} element={<AppletListPage />} />
             <Route path={ROUTES.appletDetails.path} element={<AppletDetailsPage />} />
 

@@ -49,7 +49,7 @@ export const useStartSurvey = (props: Props) => {
 
     if (props.isPublic && props.publicAppletKey) {
       return navigator.navigate(
-        ROUTES.publicActivityDetails.navigateTo({
+        ROUTES.publicSurvey.navigateTo({
           appletId,
           activityId,
           eventId,
@@ -116,7 +116,7 @@ export const useStartSurvey = (props: Props) => {
         flowId,
       });
     }
-    
+
     if (shouldRestart) {
       removeActivityProgress({ activityId, eventId });
       removeGroupProgress({ entityId: activityId, eventId });

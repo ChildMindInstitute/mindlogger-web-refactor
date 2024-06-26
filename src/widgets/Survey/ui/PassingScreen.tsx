@@ -1,20 +1,21 @@
 import { useCallback, useContext, useMemo } from 'react';
 
 import SurveyLayout from './SurveyLayout';
-import { SurveyContext } from '../lib';
 import { validateBeforeMoveForward } from '../model';
-import {
-  useAnswer,
-  useAutoForward,
-  useSubmitAnswersMutations,
-  useSurveyState,
-} from '../model/hooks';
+import { useAutoForward, useSurveyState } from '../model/hooks';
 
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
-import { SurveyManageButtons, useItemTimer, useSummaryData } from '~/features/PassSurvey';
+import {
+  SurveyContext,
+  SurveyManageButtons,
+  useAnswer,
+  useItemTimer,
+  useSubmitAnswersMutations,
+  useSummaryData,
+} from '~/features/PassSurvey';
 import { MuiModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation, useModal, usePrevious } from '~/shared/utils';
