@@ -1,8 +1,13 @@
+import { useState } from 'react';
+
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import { ActivityGroupList } from './ActivityGroupList';
 import { AppletDetailsContext } from '../lib';
 
 import { appletModel, useAppletBaseInfoByIdQuery } from '~/entities/applet';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
+import { TakeNowSuccessModalProps } from '~/features/TakeNow/lib/types';
 import { TakeNowSuccessModal } from '~/features/TakeNow/ui/TakeNowSuccessModal';
 import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
@@ -25,6 +30,12 @@ type Props = PublicAppletDetails | PrivateAppletDetails;
 
 export const ActivityGroups = (props: Props) => {
   const { t } = useCustomTranslation();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [takeNowSuccessModalState, setTakeNowSuccessModalState] =
+    useState<TakeNowSuccessModalProps>({
+      isOpen: false,
+    });
 
   const {
     isError: isAppletError,
@@ -42,14 +53,31 @@ export const ActivityGroups = (props: Props) => {
 
   const { featureFlags } = useFeatureFlags();
 
-  const { isInMultiInformantFlow, resetMultiInformantState, ensureMultiInformantStateExists } =
-    appletModel.hooks.useMultiInformantState();
+  const {
+    isInMultiInformantFlow,
+    getMultiInformantState,
+    resetMultiInformantState,
+    ensureMultiInformantStateExists,
+  } = appletModel.hooks.useMultiInformantState();
 
   useOnceEffect(() => {
     ensureMultiInformantStateExists();
     if (featureFlags.enableMultiInformant) {
       if (isInMultiInformantFlow() && !props.startActivityOrFlow) {
         resetMultiInformantState();
+      }
+
+      // We rely on location state to evaluate whether to show the modal so that it only displays
+      // after the activity is complete (and not when it's paused). See useEntityComplete hook.
+      if (location.state?.showTakeNowSuccessModal && !takeNowSuccessModalState.isOpen) {
+        navigate(window.location.pathname, {
+          state: {
+            ...location.state,
+            showTakeNowSuccessModal: undefined,
+          } as unknown,
+          replace: true,
+        });
+        setTakeNowSuccessModalState({ isOpen: true, ...getMultiInformantState() });
       }
     }
   });
@@ -69,7 +97,10 @@ export const ActivityGroups = (props: Props) => {
   return (
     <AppletDetailsContext.Provider value={{ ...props, applet, events }}>
       <ActivityGroupList />
-      <TakeNowSuccessModal />
+      <TakeNowSuccessModal
+        onClose={() => setTakeNowSuccessModalState({ isOpen: false })}
+        {...takeNowSuccessModalState}
+      />
     </AppletDetailsContext.Provider>
   );
 };

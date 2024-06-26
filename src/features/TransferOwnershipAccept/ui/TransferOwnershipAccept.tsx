@@ -4,7 +4,7 @@ import { PageMessage } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
 import Text from '~/shared/ui/Text';
-import { MixEvents, MixProperties, Mixpanel, useCustomTranslation } from '~/shared/utils';
+import { MixpanelEvents, MixpanelProps, Mixpanel, useCustomTranslation } from '~/shared/utils';
 
 type TransferOwnershipProps = {
   appletId: string;
@@ -20,7 +20,9 @@ export const TransferOwnershipAccept = ({ appletId, keyParam }: TransferOwnershi
     { appletId, key: keyParam },
     {
       onSuccess() {
-        Mixpanel.track(MixEvents.TransferOwnershipAccepted, { [MixProperties.AppletId]: appletId });
+        Mixpanel.track(MixpanelEvents.TransferOwnershipAccepted, {
+          [MixpanelProps.AppletId]: appletId,
+        });
       },
     },
   );

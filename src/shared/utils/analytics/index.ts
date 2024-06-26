@@ -1,2 +1,2 @@
 export * from './mixpanel';
-export * from './analyticsService';
+export * from './mixpanel.types';

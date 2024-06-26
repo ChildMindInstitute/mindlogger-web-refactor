@@ -6,6 +6,7 @@ export type TakeNowParams = {
   targetSubjectId: string;
   sourceSubjectId: string;
   respondentId: string;
+  multiInformantAssessmentId: string | null;
 };
 
 export type TakeNowValidationErrorType =
@@ -27,4 +28,9 @@ export type TakeNowValidatedState = {
   isSuccess: boolean;
   error?: TakeNowValidationError | null;
   data?: Required<MultiInformantState>;
+};
+
+export type TakeNowSuccessModalProps = MultiInformantState & {
+  isOpen: boolean;
+  onClose?: () => void;
 };

@@ -18,6 +18,7 @@ function AppletDetailsPage() {
   const targetSubjectId = queryParams.get('targetSubjectId');
   const sourceSubjectId = queryParams.get('sourceSubjectId');
   const respondentId = queryParams.get('respondentId');
+  const multiInformantAssessmentId = queryParams.get('multiInformantAssessmentId');
 
   if (!appletId) {
     return <div>{t('wrondLinkParametrError')}</div>;
@@ -45,6 +46,7 @@ function AppletDetailsPage() {
         targetSubjectId={targetSubjectId}
         sourceSubjectId={sourceSubjectId}
         respondentId={respondentId}
+        multiInformantAssessmentId={multiInformantAssessmentId}
       />
     </AuthorizationGuard>
   );

@@ -2,7 +2,13 @@ import { ActivityStatus, EntityType } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
 import { AppletBaseDTO } from '~/shared/api';
 import ROUTES from '~/shared/constants/routes';
-import { MixEvents, MixProperties, Mixpanel, useCustomNavigation } from '~/shared/utils';
+import {
+  MixpanelEvents,
+  MixpanelPayload,
+  MixpanelProps,
+  Mixpanel,
+  useCustomNavigation,
+} from '~/shared/utils';
 
 type NavigateToEntityProps = {
   flowId: string | null;
@@ -35,6 +41,9 @@ export const useStartSurvey = (props: Props) => {
 
   const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
+  const { isInMultiInformantFlow, getMultiInformantState } =
+    appletModel.hooks.useMultiInformantState();
+
   function navigateToEntity(params: NavigateToEntityProps) {
     const { activityId, flowId, eventId, entityType } = params;
 
@@ -62,10 +71,26 @@ export const useStartSurvey = (props: Props) => {
     );
   }
 
-  function startSurvey(params: OnActivityCardClickProps) {
-    Mixpanel.track(MixEvents.AssessmentStarted, { [MixProperties.AppletId]: props.applet.id });
+  function startSurvey({ activityId, flowId, eventId, shouldRestart }: OnActivityCardClickProps) {
+    const analyticsPayload: MixpanelPayload = {
+      [MixpanelProps.AppletId]: props.applet.id,
+      [MixpanelProps.ActivityId]: activityId,
+    };
 
-    const { flowId, eventId, activityId, shouldRestart } = params;
+    if (flowId) {
+      analyticsPayload[MixpanelProps.ActivityFlowId] = flowId;
+    }
+
+    if (isInMultiInformantFlow()) {
+      analyticsPayload[MixpanelProps.Feature] = 'Multi-informant';
+
+      const { multiInformantAssessmentId } = getMultiInformantState();
+      if (multiInformantAssessmentId) {
+        analyticsPayload[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
+      }
+    }
+
+    Mixpanel.track(MixpanelEvents.AssessmentStarted, analyticsPayload);
 
     if (flowId) {
       const flow = flows.find((x) => x.id === flowId);
@@ -91,7 +116,7 @@ export const useStartSurvey = (props: Props) => {
         flowId,
       });
     }
-
+    
     if (shouldRestart) {
       removeActivityProgress({ activityId, eventId });
       removeGroupProgress({ entityId: activityId, eventId });
