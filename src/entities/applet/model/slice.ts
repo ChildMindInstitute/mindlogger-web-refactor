@@ -21,6 +21,7 @@ import {
   SetItemTimerPayload,
   UpdateStepPayload,
   UpdateUserEventByIndexPayload,
+  RemoveGroupProgressPayload,
 } from './types';
 
 import {
@@ -76,6 +77,12 @@ const appletsSlice = createSlice({
       };
 
       state.groupProgress[id] = updatedProgress;
+    },
+
+    removeGroupProgress: (state, action: PayloadAction<RemoveGroupProgressPayload>) => {
+      const id = getProgressId(action.payload.entityId, action.payload.eventId);
+
+      delete state.groupProgress[id];
     },
 
     saveGroupContext: (state, action: PayloadAction<SaveGroupContextPayload>) => {

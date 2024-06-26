@@ -1,21 +1,8 @@
 import { getUnixTime } from 'date-fns';
 
-import { AppletEventsResponse } from '~/shared/api';
+import { ScheduleEventDto } from '~/shared/api';
 
-export const getScheduledTimeFromEvents = (
-  eventsRawData: AppletEventsResponse | null,
-  entityId: string,
-): number | null => {
-  if (!eventsRawData) {
-    return null;
-  }
-
-  const event = eventsRawData.events.find((event) => event.entityId === entityId);
-
-  if (!event) {
-    return null;
-  }
-
+export const getScheduledTimeFromEvents = (event: ScheduleEventDto): number | null => {
   const startFromDate = event.availability.startDate;
   const startFromHour = event.availability.timeFrom?.hours;
   const startFromMinute = event.availability.timeFrom?.minutes;

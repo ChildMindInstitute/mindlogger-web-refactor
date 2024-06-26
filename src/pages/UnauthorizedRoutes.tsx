@@ -11,7 +11,7 @@ import ROUTES from '~/shared/constants/routes';
 import Layout from '~/widgets/AppLayout';
 
 const PublicAppletDetailsPage = lazy(() => import('./PublicJoin'));
-const PublicActivityDetailsPage = lazy(() => import('./PublicActivityDetails'));
+const PublicSurvey = lazy(() => import('./PublicSurvey'));
 const RecoveryPasswordPage = lazy(() => import('./RecoveryPassword'));
 const InvitationPage = lazy(() => import('./Invitation'));
 const PrivateJoinPage = lazy(() => import('./PrivateJoin'));
@@ -20,7 +20,7 @@ const TransferOwnershipPage = lazy(() => import('./TransferOwnership'));
 function UnauthorizedRoutes() {
   return (
     <Routes>
-      <Route path={ROUTES.publicActivityDetails.path} element={<PublicActivityDetailsPage />} />
+      <Route path={ROUTES.publicActivityDetails.path} element={<PublicSurvey />} />
 
       <Route element={<Layout />}>
         <Route path={ROUTES.appletDetails.path} element={<AppletDetailsPage />} />

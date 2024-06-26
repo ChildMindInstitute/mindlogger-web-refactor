@@ -6,7 +6,6 @@ type SetTimerProps = {
   time: number;
   timerName?: string;
   onComplete?: EmptyFunction;
-  onTick?: EmptyFunction;
 };
 
 const useTimer = () => {

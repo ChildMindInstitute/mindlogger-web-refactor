@@ -1,52 +1,71 @@
-import { useContext } from 'react';
-
 import { ErrorScreen } from './ErrorScreen';
 import LoadingScreen from './LoadingScreen';
 import { ScreenManager } from './ScreenManager';
-import { SurveyBasicContext, SurveyContext } from '../lib';
+import { SurveyContext, mapRawDataToSurveyContext } from '../lib';
 import { useSurveyDataQuery } from '../model/hooks';
 
 import { useBanners } from '~/entities/banner/model';
 import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
 
-export const SurveyWidget = () => {
+type Props = {
+  publicAppletKey: string | null;
+
+  appletId: string;
+  activityId: string;
+  eventId: string;
+
+  flowId: string | null;
+};
+
+export const SurveyWidget = (props: Props) => {
+  const { publicAppletKey, appletId, activityId, eventId, flowId } = props;
+
   const { t } = useCustomTranslation();
   const { removeAllBanners } = useBanners();
 
   // Remove any stale banners on mount
   useOnceEffect(() => removeAllBanners());
 
-  const context = useContext(SurveyBasicContext);
-
   const { activityDTO, appletDTO, eventsDTO, respondentMeta, isLoading, isError, error } =
-    useSurveyDataQuery();
+    useSurveyDataQuery({ publicAppletKey, appletId, activityId });
 
   if (isLoading) {
-    return <LoadingScreen />;
+    return <LoadingScreen publicAppletKey={publicAppletKey} appletId={appletId} />;
   }
 
   if (isError) {
     return (
       <ErrorScreen
+        publicAppletKey={publicAppletKey}
+        appletId={appletId}
         errorLabel={
-          context.isPublic ? t('additional.invalid_public_url') : error?.evaluatedMessage ?? ''
+          publicAppletKey ? t('additional.invalid_public_url') : error?.evaluatedMessage ?? ''
         }
       />
     );
   }
 
   if (!appletDTO || !activityDTO || !eventsDTO) {
-    return <ErrorScreen errorLabel={t('common_loading_error')} />;
+    return (
+      <ErrorScreen
+        errorLabel={t('common_loading_error')}
+        publicAppletKey={publicAppletKey}
+        appletId={appletId}
+      />
+    );
   }
 
   return (
     <SurveyContext.Provider
-      value={{
-        activity: activityDTO,
-        applet: appletDTO,
-        events: eventsDTO,
+      value={mapRawDataToSurveyContext({
+        activityDTO,
+        appletDTO,
+        eventsDTO,
         respondentMeta,
-      }}
+        currentEventId: eventId,
+        flowId,
+        publicAppletKey,
+      })}
     >
       <ScreenManager />
     </SurveyContext.Provider>

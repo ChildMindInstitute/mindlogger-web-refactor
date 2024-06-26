@@ -2,40 +2,59 @@ import { useContext } from 'react';
 
 import { ActivityMetaData } from './ActivityMetaData';
 import SurveyLayout from './SurveyLayout';
-import { SurveyBasicContext, SurveyContext } from '../lib';
+import { SurveyContext } from '../lib';
 
 import { appletModel } from '~/entities/applet';
-import { StartSurveyButton, useFlowType } from '~/features/PassSurvey';
+import { StartSurveyButton } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import { AvatarBase } from '~/shared/ui/Avatar';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { useCustomMediaQuery } from '~/shared/utils';
+import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 
 const WelcomeScreen = () => {
   const { greaterThanSM } = useCustomMediaQuery();
 
-  const basicContext = useContext(SurveyBasicContext);
+  const { t } = useCustomTranslation();
+
   const context = useContext(SurveyContext);
 
-  const flowParams = useFlowType();
+  const entityTimer = context.event.timers.timer ?? null;
+
+  const { startActivity, startFlow } = appletModel.hooks.useEntityStart();
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
-
-  const entityId = flowParams.isFlow ? flowParams.flowId : context.activity.id;
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
 
   const startAssessment = () => {
-    return setInitialProgress({ activity: context.activity, eventId: basicContext.eventId });
+    const groupProgress = getGroupProgress({
+      entityId: context.entityId,
+      eventId: context.eventId,
+    });
+
+    if (context.flow && !groupProgress) {
+      startFlow(context.eventId, context.flow);
+    }
+
+    if (!context.flow) {
+      startActivity(context.activityId, context.eventId);
+    }
+
+    return setInitialProgress({ activity: context.activity, eventId: context.eventId });
   };
 
   return (
     <SurveyLayout
       progress={0}
       isSaveAndExitButtonShown={true}
+      entityTimer={entityTimer ?? undefined}
       footerActions={
-        <StartSurveyButton width={greaterThanSM ? '375px' : '335px'} onClick={startAssessment} />
+        <StartSurveyButton
+          width={greaterThanSM ? '375px' : '335px'}
+          onClick={startAssessment}
+          text={t('start')}
+        />
       }
     >
       <Box
@@ -63,7 +82,10 @@ const WelcomeScreen = () => {
         >
           <ActivityMetaData
             activityLength={context.activity.items.length}
-            groupInProgress={getGroupProgress({ entityId, eventId: basicContext.eventId })}
+            groupInProgress={getGroupProgress({
+              entityId: context.entityId,
+              eventId: context.eventId,
+            })}
           />
         </Text>
         <Text

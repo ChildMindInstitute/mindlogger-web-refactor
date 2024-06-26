@@ -24,3 +24,5 @@ export * from './Container';
 export { default as Box } from './Box';
 export { default as BaseTextInput } from './BaseTextInput';
 export { default as Text } from './Text';
+
+export * from './Icons';

@@ -1,48 +1,40 @@
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 
 import SurveyLayout from './SurveyLayout';
-import { SurveyBasicContext, SurveyContext } from '../lib';
+import { SurveyContext } from '../lib';
 import { validateBeforeMoveForward } from '../model';
-import { useAnswer, useAutoForward, useSubmitAnswersMutations, useSurvey } from '../model/hooks';
+import {
+  useAnswer,
+  useAutoForward,
+  useSubmitAnswersMutations,
+  useSurveyState,
+} from '../model/hooks';
 
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
-import {
-  SurveyManageButtons,
-  useFlowType,
-  useItemTimer,
-  useSummaryData,
-} from '~/features/PassSurvey';
+import { SurveyManageButtons, useItemTimer, useSummaryData } from '~/features/PassSurvey';
 import { MuiModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
-import { useAppSelector, useCustomTranslation, usePrevious } from '~/shared/utils';
+import { useAppSelector, useCustomTranslation, useModal, usePrevious } from '~/shared/utils';
 
 const PassingScreen = () => {
   const { t } = useCustomTranslation();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitModalOpen, openSubmitModal, closeSubmitModal] = useModal();
 
   const { addWarningBanner, addSuccessBanner, removeWarningBanner } = useBanners();
 
-  const surveyBasicContext = useContext(SurveyBasicContext); // This is basic context with { eventId, appletId, activityId, isPublic, publicAppletKey }
-  const surveyContext = useContext(SurveyContext); // This is full context with { applet, activity, events, respondentMeta }
+  const context = useContext(SurveyContext);
 
-  const flowParams = useFlowType();
-
-  const applet = surveyContext.applet;
-
-  const activity = surveyContext.activity;
-
-  const activityId = activity.id;
-
-  const eventId = surveyBasicContext.eventId;
-
-  const activityEventId = getProgressId(activityId, eventId);
+  const entityTimer = context.event.timers.timer ?? null;
 
   const activityProgress = useAppSelector((state) =>
-    appletModel.selectors.selectActivityProgress(state, activityEventId),
+    appletModel.selectors.selectActivityProgress(
+      state,
+      getProgressId(context.activityId, context.eventId),
+    ),
   );
 
   const { getGroupProgress, saveGroupContext } = appletModel.hooks.useGroupProgressState();
@@ -61,58 +53,58 @@ const PassingScreen = () => {
 
   const { saveUserEventByType, saveSetAnswerUserEvent, saveSetAdditionalTextUserEvent } =
     appletModel.hooks.useUserEvents({
-      activityId,
-      eventId,
+      activityId: context.activityId,
+      eventId: context.eventId,
     });
 
   const { saveItemAnswer, saveItemAdditionalText, removeItemAnswer } =
     appletModel.hooks.useSaveItemAnswer({
-      activityId,
-      eventId,
+      activityId: context.activityId,
+      eventId: context.eventId,
     });
 
   const { getSummaryForCurrentActivity } = useSummaryData({
-    activityId,
-    activityName: activity.name,
-    eventId,
-    scoresAndReports: activity.scoresAndReports,
+    activityId: context.activityId,
+    activityName: context.activity.name,
+    eventId: context.eventId,
+    scoresAndReports: context.activity.scoresAndReports,
+    flowId: null,
   });
 
   const { step, item, hasPrevStep, hasNextStep, progress, conditionallyHiddenItemIds } =
-    useSurvey(activityProgress);
+    useSurveyState(activityProgress);
 
-  const canGoBack = !item?.config.removeBackButton && activity.responseIsEditable;
+  const canGoBack = !item?.config.removeBackButton && context.activity.responseIsEditable;
 
   const prevStep = usePrevious(step);
 
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
-    applet,
-    activityId,
-    eventId,
-    publicAppletKey: surveyBasicContext.isPublic ? surveyBasicContext.publicAppletKey : null,
-    flowId: flowParams.isFlow ? flowParams.flowId : null,
+    activityId: context.activityId,
+    eventId: context.eventId,
+    publicAppletKey: context.publicAppletKey,
+    flowId: context.flow?.id ?? null,
+    appletId: context.appletId,
+    flow: context.flow,
   });
 
   const { replaceTextVariables } = useTextVariablesReplacer({
     items,
     answers: items.map((item) => item.answer),
-    respondentMeta: surveyContext.respondentMeta,
-    completedEntityTime: completedEntities[activityId],
+    respondentMeta: context.respondentMeta,
+    completedEntityTime: completedEntities[context.activityId],
   });
 
   const onSubmitSuccess = () => {
     const groupProgress = getGroupProgress({
-      entityId: flowParams.isFlow ? flowParams.flowId : activityId,
-      eventId,
+      entityId: context.entityId,
+      eventId: context.eventId,
     });
 
     const isFlowGroup = groupProgress?.type === ActivityPipelineType.Flow;
 
-    const currentFlow = applet.activityFlows.find((flow) => flow.id === flowParams.flowId);
-
     const nextActivityIndex = (groupProgress as FlowProgress).pipelineActivityOrder + 1;
 
-    const nextActivity = currentFlow?.activityIds[nextActivityIndex] ?? null;
+    const nextActivity = context.flow?.activityIds[nextActivityIndex] ?? null;
 
     const isLastActivity = nextActivity === null;
 
@@ -123,7 +115,7 @@ const PassingScreen = () => {
       addSuccessBanner(t('toast.answers_submitted'));
     }
 
-    const isSummaryScreenOn = activity.scoresAndReports?.showScoreSummary ?? false;
+    const isSummaryScreenOn = context.activity.scoresAndReports?.showScoreSummary ?? false;
 
     const summaryData = getSummaryForCurrentActivity();
 
@@ -137,19 +129,19 @@ const PassingScreen = () => {
         const summaryDataContext: FlowSummaryData = {
           alerts: summaryData.alerts,
           scores: {
-            activityName: activity.name,
+            activityName: context.activity.name,
             scores: summaryData.scores,
           },
           order: isFlowGroup ? groupProgress.pipelineActivityOrder : 0,
         };
 
         saveGroupContext({
-          activityId: flowParams.isFlow ? flowParams.flowId : activityId,
-          eventId,
+          activityId: context.entityId,
+          eventId: context.eventId,
           context: {
             summaryData: {
               ...groupProgress?.context.summaryData,
-              [activityId]: summaryDataContext,
+              [context.activityId]: summaryDataContext,
             },
           },
         });
@@ -159,24 +151,24 @@ const PassingScreen = () => {
     const hasAnySummaryScreenResults =
       Object.keys(groupProgress?.context.summaryData ?? {}).length > 0;
 
-    if (!isFlowGroup && !flowParams.isFlow) {
+    if (!isFlowGroup && !context.flow) {
       if (isSummaryScreenOn && isSummaryDataExist) {
-        return openSummaryScreen({ activityId, eventId });
+        return openSummaryScreen({ activityId: context.activityId, eventId: context.eventId });
       }
 
       return completeActivity();
     }
 
     if (isLastActivity && hasAnySummaryScreenResults) {
-      return openSummaryScreen({ activityId, eventId });
+      return openSummaryScreen({ activityId: context.activityId, eventId: context.eventId });
     }
 
-    return flowParams.flowId && completeFlow(flowParams.flowId);
+    return context.flow && completeFlow();
   };
 
   const { submitAnswers, isLoading } = useSubmitAnswersMutations({
     onSubmitSuccess,
-    isPublic: surveyBasicContext.isPublic,
+    isPublic: !!context.publicAppletKey,
   });
 
   const { processAnswers } = useAnswer();
@@ -187,12 +179,12 @@ const PassingScreen = () => {
     const answer = processAnswers({
       items,
       userEvents: [...userEvents, doneUserEvent],
-      isPublic: surveyBasicContext.isPublic,
+      isPublic: !!context.publicAppletKey,
     });
 
     return submitAnswers(answer);
   }, [
-    surveyBasicContext.isPublic,
+    context.publicAppletKey,
     item,
     items,
     processAnswers,
@@ -203,7 +195,7 @@ const PassingScreen = () => {
 
   const onNext = useCallback(() => {
     const isItemHasAnswer = item.answer.length;
-    const isItemSkippable = item.config.skippableItem || activity.isSkippable;
+    const isItemSkippable = item.config.skippableItem || context.activity.isSkippable;
 
     if (!isItemHasAnswer && isItemSkippable) {
       saveUserEventByType('SKIP', item);
@@ -211,8 +203,15 @@ const PassingScreen = () => {
       saveUserEventByType('NEXT', item);
     }
 
-    return incrementStep({ activityId, eventId });
-  }, [activityId, eventId, incrementStep, item, activity.isSkippable, saveUserEventByType]);
+    return incrementStep({ activityId: context.activityId, eventId: context.eventId });
+  }, [
+    item,
+    context.activity.isSkippable,
+    context.activityId,
+    context.eventId,
+    incrementStep,
+    saveUserEventByType,
+  ]);
 
   const onBack = useCallback(() => {
     saveUserEventByType('PREV', item);
@@ -221,8 +220,8 @@ const PassingScreen = () => {
       return;
     }
 
-    return decrementStep({ activityId, eventId });
-  }, [activityId, decrementStep, eventId, hasPrevStep, item, saveUserEventByType]);
+    return decrementStep({ activityId: context.activityId, eventId: context.eventId });
+  }, [context.activityId, context.eventId, decrementStep, hasPrevStep, item, saveUserEventByType]);
 
   const onMoveForward = useCallback(() => {
     if (!item) {
@@ -231,7 +230,7 @@ const PassingScreen = () => {
 
     const isValid = validateBeforeMoveForward({
       item,
-      activity,
+      activity: context.activity,
       showWarning: (key: string) => addWarningBanner(t(key)),
       hideWarning: removeWarningBanner,
     });
@@ -243,13 +242,13 @@ const PassingScreen = () => {
     conditionallyHiddenItemIds?.forEach(removeItemAnswer);
 
     if (!hasNextStep) {
-      return setIsModalOpen(true);
+      return openSubmitModal();
     }
 
     return onNext();
   }, [
     item,
-    activity,
+    context.activity,
     removeWarningBanner,
     conditionallyHiddenItemIds,
     removeItemAnswer,
@@ -257,6 +256,7 @@ const PassingScreen = () => {
     onNext,
     addWarningBanner,
     t,
+    openSubmitModal,
   ]);
 
   const onItemValueChange = (value: Answer) => {
@@ -284,10 +284,10 @@ const PassingScreen = () => {
 
   const timerSettings = useItemTimer({
     item,
-    activityId,
-    eventId,
-    isSubmitModalOpen: isModalOpen,
-    onTimerEnd: hasNextStep ? onNext : () => setIsModalOpen(true),
+    activityId: context.activityId,
+    eventId: context.eventId,
+    isSubmitModalOpen,
+    onTimerEnd: hasNextStep ? onNext : openSubmitModal,
   });
 
   return (
@@ -295,9 +295,10 @@ const PassingScreen = () => {
       <SurveyLayout
         progress={progress}
         isSaveAndExitButtonShown={true}
+        entityTimer={entityTimer ?? undefined}
         footerActions={
           <SurveyManageButtons
-            timerSettings={!isModalOpen ? timerSettings : undefined}
+            timerSettings={!isSubmitModalOpen ? timerSettings : undefined}
             isLoading={false}
             isBackShown={hasPrevStep && canGoBack}
             onBackButtonClick={onBack}
@@ -313,8 +314,8 @@ const PassingScreen = () => {
               key={item.id}
               item={item}
               replaceText={replaceTextVariables}
-              watermark={applet.watermark}
-              allowToSkipAllItems={activity.isSkippable}
+              watermark={context.watermark}
+              allowToSkipAllItems={context.activity.isSkippable}
               step={step}
               prevStep={prevStep}
               onValueChange={onItemValueChange}
@@ -325,15 +326,15 @@ const PassingScreen = () => {
       </SurveyLayout>
 
       <MuiModal
-        isOpen={isModalOpen}
-        onHide={() => setIsModalOpen(false)}
+        isOpen={isSubmitModalOpen}
+        onHide={closeSubmitModal}
         title={t('submitAnswerModalTitle')}
         label={canGoBack ? t('submitAnswerModalDescription') : undefined}
         footerPrimaryButton={t('submit')}
         onPrimaryButtonClick={onSubmit}
         isPrimaryButtonLoading={isLoading}
         footerSecondaryButton={canGoBack ? t('goBack') : undefined}
-        onSecondaryButtonClick={canGoBack ? () => setIsModalOpen(false) : undefined}
+        onSecondaryButtonClick={canGoBack ? closeSubmitModal : undefined}
         testId="submit-response-modal"
       />
     </>

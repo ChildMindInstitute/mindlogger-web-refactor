@@ -37,9 +37,9 @@ export const useStartSurvey = (props: Props) => {
   const appletId = props.applet.id;
   const flows = props.applet.activityFlows;
 
-  const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
+  const { removeGroupProgress } = appletModel.hooks.useGroupProgressState();
 
-  const { startActivity, startFlow } = appletModel.hooks.useEntityStart();
+  const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
   const { isInMultiInformantFlow, getMultiInformantState } =
     appletModel.hooks.useMultiInformantState();
@@ -102,9 +102,12 @@ export const useStartSurvey = (props: Props) => {
         );
       }
 
-      const activityIdToNavigate = shouldRestart ? firstActivityId : activityId;
+      if (shouldRestart) {
+        removeActivityProgress({ activityId, eventId });
+        removeGroupProgress({ entityId: flowId, eventId });
+      }
 
-      startFlow(flowId, eventId, flows, shouldRestart);
+      const activityIdToNavigate = shouldRestart ? firstActivityId : activityId;
 
       return navigateToEntity({
         activityId: activityIdToNavigate,
@@ -113,12 +116,11 @@ export const useStartSurvey = (props: Props) => {
         flowId,
       });
     }
-
-    if (shouldRestart && activityId) {
+    
+    if (shouldRestart) {
       removeActivityProgress({ activityId, eventId });
+      removeGroupProgress({ entityId: activityId, eventId });
     }
-
-    startActivity(activityId, eventId);
 
     return navigateToEntity({
       activityId,

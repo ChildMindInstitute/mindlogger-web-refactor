@@ -4,12 +4,12 @@ import Divider from '@mui/material/Divider';
 
 import { Alerts } from './Alerts';
 import { ScoreSection } from './ScoreSection';
-import { SurveyBasicContext, SurveyContext } from '../../lib';
+import { SurveyContext } from '../../lib';
 import SurveyLayout from '../SurveyLayout';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
-import { SurveyManageButtons, useFlowType, useSummaryData } from '~/features/PassSurvey';
+import { SurveyManageButtons, useSummaryData } from '~/features/PassSurvey';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { useAppSelector, useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
@@ -19,39 +19,34 @@ const SummaryScreen = () => {
 
   const { greaterThanSM } = useCustomMediaQuery();
 
-  const basicContext = useContext(SurveyBasicContext);
-
-  const surveyContext = useContext(SurveyContext);
-
-  const { isFlow, flowId } = useFlowType();
-
-  const applet = surveyContext.applet;
-
-  const eventId = basicContext.eventId;
-  const activityId = basicContext.activityId;
+  const context = useContext(SurveyContext);
 
   const activityProgress = useAppSelector((state) =>
-    appletModel.selectors.selectActivityProgress(state, getProgressId(activityId, eventId)),
+    appletModel.selectors.selectActivityProgress(
+      state,
+      getProgressId(context.activityId, context.eventId),
+    ),
   );
 
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
-    applet,
-    eventId,
-    activityId: basicContext.activityId,
-    publicAppletKey: basicContext.isPublic ? basicContext.publicAppletKey : null,
-    flowId: isFlow ? flowId : null,
+    eventId: context.eventId,
+    activityId: context.activityId,
+    publicAppletKey: context.publicAppletKey,
+    flowId: context.flow?.id ?? null,
+    appletId: context.appletId,
+    flow: context.flow,
   });
 
   const onFinish = () => {
-    return isFlow ? completeFlow(flowId) : completeActivity();
+    return context.flow ? completeFlow() : completeActivity();
   };
 
   const { summaryData } = useSummaryData({
-    activityId: basicContext.activityId,
-    eventId: basicContext.eventId,
-    activityName: surveyContext.activity.name,
+    activityId: context.activityId,
+    eventId: context.eventId,
+    activityName: context.activity.name,
     scoresAndReports: activityProgress.scoreSettings,
-    flowId: isFlow ? flowId : undefined,
+    flowId: context.flow?.id ?? null,
   });
 
   return (

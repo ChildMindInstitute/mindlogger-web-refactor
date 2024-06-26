@@ -23,15 +23,6 @@ export const useEntityStart = () => {
     );
   }
 
-  function removeActivityProgress(activityId: string, eventId: string): void {
-    dispatch(
-      actions.removeActivityProgress({
-        activityId,
-        eventId,
-      }),
-    );
-  }
-
   function flowStarted(
     flowId: string,
     activityId: string,
@@ -58,19 +49,14 @@ export const useEntityStart = () => {
     return activityStarted(activityId, eventId);
   }
 
-  function startFlow(
-    flowId: string,
-    eventId: string,
-    flows: ActivityFlowDTO[],
-    shouldRestart: boolean,
-  ): void {
+  function startFlow(eventId: string, flow: ActivityFlowDTO): void {
+    const flowId = flow.id;
+
     const isFlowInProgress = isInProgress(getProgress(flowId, eventId));
 
-    if (isFlowInProgress && !shouldRestart) {
+    if (isFlowInProgress) {
       return;
     }
-
-    const flow = flows.find((x) => x.id === flowId);
 
     const flowActivities: string[] | null = flow?.activityIds ?? null;
 
@@ -82,17 +68,7 @@ export const useEntityStart = () => {
 
     const firstActivityId: string = flowActivities[0];
 
-    if (shouldRestart) {
-      removeFlowActivitiesProgress(flowActivities, eventId);
-    }
-
     return flowStarted(flowId, firstActivityId, eventId, 0);
-  }
-
-  function removeFlowActivitiesProgress(actividyIds: string[], eventId: string): void {
-    for (const activityId of actividyIds) {
-      removeActivityProgress(activityId, eventId);
-    }
   }
 
   return { startActivity, startFlow };

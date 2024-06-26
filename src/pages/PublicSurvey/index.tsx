@@ -4,10 +4,10 @@ import Box from '~/shared/ui/Box';
 import { useCustomTranslation } from '~/shared/utils';
 import { SurveyWidget } from '~/widgets/Survey';
 
-function SurveyPage() {
+function PublicSurvey() {
   const { t } = useCustomTranslation();
 
-  const { appletId, activityId, eventId, entityType } = useParams();
+  const { appletId, activityId, eventId, publicAppletKey, entityType } = useParams();
 
   const [searchParams] = useSearchParams();
 
@@ -19,7 +19,7 @@ function SurveyPage() {
     flowId = searchParams.get('flowId');
   }
 
-  if (!appletId || !activityId || !eventId) {
+  if (!appletId || !activityId || !eventId || !publicAppletKey) {
     return <div>{t('wrondLinkParametrError')}</div>;
   }
 
@@ -30,10 +30,10 @@ function SurveyPage() {
         activityId={activityId}
         eventId={eventId}
         flowId={flowId}
-        publicAppletKey={null}
+        publicAppletKey={publicAppletKey}
       />
     </Box>
   );
 }
 
-export default SurveyPage;
+export default PublicSurvey;
