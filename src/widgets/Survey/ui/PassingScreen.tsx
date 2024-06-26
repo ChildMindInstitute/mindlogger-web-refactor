@@ -1,6 +1,5 @@
 import { useCallback, useContext, useMemo } from 'react';
 
-import SurveyLayout from './SurveyLayout';
 import { validateBeforeMoveForward } from '../model';
 import { useAutoForward, useSurveyState } from '../model/hooks';
 
@@ -10,6 +9,7 @@ import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
 import {
   SurveyContext,
+  SurveyLayout,
   SurveyManageButtons,
   useAnswer,
   useItemTimer,

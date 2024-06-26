@@ -1,10 +1,9 @@
 import { useContext } from 'react';
 
 import { ActivityMetaData } from './ActivityMetaData';
-import SurveyLayout from './SurveyLayout';
 
 import { appletModel } from '~/entities/applet';
-import { StartSurveyButton, SurveyContext } from '~/features/PassSurvey';
+import { StartSurveyButton, SurveyContext, SurveyLayout } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import { AvatarBase } from '~/shared/ui/Avatar';
 import Box from '~/shared/ui/Box';

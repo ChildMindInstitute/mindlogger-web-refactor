@@ -4,11 +4,15 @@ import Divider from '@mui/material/Divider';
 
 import { Alerts } from './Alerts';
 import { ScoreSection } from './ScoreSection';
-import SurveyLayout from '../SurveyLayout';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
-import { SurveyContext, SurveyManageButtons, useSummaryData } from '~/features/PassSurvey';
+import {
+  SurveyContext,
+  SurveyLayout,
+  SurveyManageButtons,
+  useSummaryData,
+} from '~/features/PassSurvey';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { useAppSelector, useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
