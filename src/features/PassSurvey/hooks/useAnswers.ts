@@ -87,7 +87,7 @@ export const useAnswer = () => {
     const appletConsents = consents?.[context.appletId] ?? null;
 
     if (isIntegrationsEnabled) {
-      answer.isDataShare = appletConsents?.shareToPublic ?? false;
+      answer.consentToShare = appletConsents?.shareToPublic ?? false;
     }
 
     if (featureFlags.enableMultiInformant) {
