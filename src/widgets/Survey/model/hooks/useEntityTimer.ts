@@ -56,8 +56,8 @@ export const useEntityTimer = ({ onFinish }: Props) => {
     const noTimeLeft: boolean = alreadyElapsed > entityDuration;
 
     if (noTimeLeft) {
-      // TODO: add logic for finishing the entity
       onFinish();
+      return;
     }
 
     const durationLeft = entityDuration - alreadyElapsed;
@@ -66,7 +66,6 @@ export const useEntityTimer = ({ onFinish }: Props) => {
     setTimer({
       time: durationLeft,
       onComplete: () => {
-        // TODO: add logic for finishing the entity
         console.log('[useEntityTimer] Timer completed');
         onFinish();
       },
