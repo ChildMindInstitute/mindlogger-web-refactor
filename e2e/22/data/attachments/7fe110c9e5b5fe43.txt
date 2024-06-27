@@ -1,0 +1,210 @@
+.........Console Logs.........
+
+2024-06-27T21:35:58.997Z INFO webdriver: COMMAND navigateTo("https://pr-489.d34nh6rsqmrdi2.amplifyapp.com/protected/applets")
+2024-06-27T21:35:58.997Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/url
+2024-06-27T21:35:58.998Z INFO webdriver: DATA {
+  url: 'https://pr-489.d34nh6rsqmrdi2.amplifyapp.com/protected/applets'
+}
+2024-06-27T21:35:59.286Z INFO webdriver: RESULT null
+2024-06-27T21:35:59.286Z INFO webdriver: COMMAND isAlertOpen()
+2024-06-27T21:35:59.287Z INFO webdriver: [GET] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/alert
+2024-06-27T21:35:59.289Z INFO webdriver: RESULT false
+2024-06-27T21:35:59.289Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="header-user-account-dropdown"]")
+2024-06-27T21:35:59.289Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/element
+2024-06-27T21:35:59.290Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="header-user-account-dropdown"]'
+}
+2024-06-27T21:35:59.779Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.787'
+}
+2024-06-27T21:35:59.784Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-27T21:35:59.788Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/execute/sync
+2024-06-27T21:35:59.788Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.787',
+      ELEMENT: 'f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.787'
+    }
+  ]
+}
+2024-06-27T21:35:59.796Z INFO webdriver: RESULT true
+2024-06-27T21:35:59.797Z INFO webdriver: COMMAND findElement("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-27T21:35:59.797Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/element
+2024-06-27T21:35:59.797Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-27T21:35:59.811Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.788'
+}
+2024-06-27T21:35:59.815Z INFO webdriver: COMMAND findElements("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-27T21:35:59.816Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/elements
+2024-06-27T21:35:59.816Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-27T21:35:59.825Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.788'
+  }
+]
+2024-06-27T21:36:00.316Z INFO webdriver: COMMAND findElements("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-27T21:36:00.317Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/elements
+2024-06-27T21:36:00.318Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-27T21:36:02.846Z INFO webdriver: RESULT []
+2024-06-27T21:36:02.849Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="applet-card"]")
+2024-06-27T21:36:02.849Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/elements
+2024-06-27T21:36:02.849Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="applet-card"]' }
+2024-06-27T21:36:02.858Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.789'
+  }
+]
+2024-06-27T21:36:02.863Z INFO webdriver: COMMAND findElementFromElement("f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.789", "css selector", "[data-testid$="card-title"]")
+2024-06-27T21:36:02.863Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/element/f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.789/element
+2024-06-27T21:36:02.864Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid$="card-title"]' }
+2024-06-27T21:36:02.872Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.790'
+}
+2024-06-27T21:36:02.874Z INFO webdriver: COMMAND getElementText("f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.790")
+2024-06-27T21:36:02.874Z INFO webdriver: [GET] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/element/f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.790/text
+2024-06-27T21:36:02.885Z INFO webdriver: RESULT AutotestAppletea862999-8b99-4a7e-90bb-5df931189db0
+2024-06-27T21:36:02.885Z INFO webdriver: COMMAND findElementFromElement("f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.789", "css selector", "[data-testid$="card-title"]")
+2024-06-27T21:36:02.886Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/element/f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.789/element
+2024-06-27T21:36:02.886Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid$="card-title"]' }
+2024-06-27T21:36:02.900Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.790'
+}
+2024-06-27T21:36:02.904Z INFO webdriver: COMMAND elementClick("f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.790")
+2024-06-27T21:36:02.910Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/element/f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.790/click
+2024-06-27T21:36:02.974Z INFO webdriver: RESULT null
+2024-06-27T21:36:02.974Z INFO webdriver: COMMAND findElement("css selector", "h4[data-testid="applet-name"]")
+2024-06-27T21:36:02.975Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/element
+2024-06-27T21:36:02.975Z INFO webdriver: DATA { using: 'css selector', value: 'h4[data-testid="applet-name"]' }
+2024-06-27T21:36:04.463Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.793'
+}
+2024-06-27T21:36:04.465Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-27T21:36:04.466Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/execute/sync
+2024-06-27T21:36:04.466Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.793',
+      ELEMENT: 'f.515F2E9AD25D3844C44D961CA05659F7.d.F9A60C771EB47D66B069302AC97AA394.e.793'
+    }
+  ]
+}
+2024-06-27T21:36:04.475Z INFO webdriver: RESULT true
+2024-06-27T21:36:04.475Z INFO webdriver: COMMAND findElement("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-27T21:36:04.477Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/element
+2024-06-27T21:36:04.477Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-27T21:36:07.032Z INFO webdriver: RESULT {
+  error: 'no such element',
+  message: 'no such element: Unable to locate element: {"method":"css selector","selector":"span.MuiCircularProgress-root[role=progressbar]"}\n' +
+    '  (Session info: chrome-headless-shell=126.0.6478.126)',
+  stacktrace: '\tGetHandleVerifier [0x00007FF6552DEEA2+31554]\n' +
+    '\t(No symbol) [0x00007FF655257ED9]\n' +
+    '\t(No symbol) [0x00007FF65511872A]\n' +
+    '\t(No symbol) [0x00007FF655168434]\n' +
+    '\t(No symbol) [0x00007FF65516853C]\n' +
+    '\t(No symbol) [0x00007FF6551AF6A7]\n' +
+    '\t(No symbol) [0x00007FF65518D06F]\n' +
+    '\t(No symbol) [0x00007FF6551AC977]\n' +
+    '\t(No symbol) [0x00007FF65518CDD3]\n' +
+    '\t(No symbol) [0x00007FF65515A33B]\n' +
+    '\t(No symbol) [0x00007FF65515AED1]\n' +
+    '\tGetHandleVerifier [0x00007FF6555E8B1D+3217341]\n' +
+    '\tGetHandleVerifier [0x00007FF655635AE3+3532675]\n' +
+    '\tGetHandleVerifier [0x00007FF65562B0E0+3489152]\n' +
+    '\tGetHandleVerifier [0x00007FF65538E776+750614]\n' +
+    '\t(No symbol) [0x00007FF65526375F]\n' +
+    '\t(No symbol) [0x00007FF65525EB14]\n' +
+    '\t(No symbol) [0x00007FF65525ECA2]\n' +
+    '\t(No symbol) [0x00007FF65524E16F]\n' +
+    '\tBaseThreadInitThunk [0x00007FFD42254CB0+16]\n' +
+    '\tRtlUserThreadStart [0x00007FFD4369ECEB+43]\n'
+}
+2024-06-27T21:36:07.035Z INFO webdriver: COMMAND findElements("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-27T21:36:07.036Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/elements
+2024-06-27T21:36:07.036Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-27T21:36:09.580Z INFO webdriver: RESULT []
+2024-06-27T21:36:09.582Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="flow-card"]")
+2024-06-27T21:36:09.584Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/elements
+2024-06-27T21:36:09.584Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="flow-card"]' }
+2024-06-27T21:36:12.092Z INFO webdriver: RESULT []
+2024-06-27T21:36:12.095Z INFO webdriver: COMMAND refresh()
+2024-06-27T21:36:12.096Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/refresh
+2024-06-27T21:36:12.370Z INFO webdriver: RESULT null
+2024-06-27T21:36:12.371Z INFO webdriver: COMMAND findElement("css selector", "h4[data-testid="applet-name"]")
+2024-06-27T21:36:12.372Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/element
+2024-06-27T21:36:12.372Z INFO webdriver: DATA { using: 'css selector', value: 'h4[data-testid="applet-name"]' }
+2024-06-27T21:36:14.184Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.515F2E9AD25D3844C44D961CA05659F7.d.9EA4892A005621FA2A83C056FC219C28.e.808'
+}
+2024-06-27T21:36:14.187Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-27T21:36:14.188Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/execute/sync
+2024-06-27T21:36:14.188Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.515F2E9AD25D3844C44D961CA05659F7.d.9EA4892A005621FA2A83C056FC219C28.e.808',
+      ELEMENT: 'f.515F2E9AD25D3844C44D961CA05659F7.d.9EA4892A005621FA2A83C056FC219C28.e.808'
+    }
+  ]
+}
+2024-06-27T21:36:14.195Z INFO webdriver: RESULT true
+2024-06-27T21:36:14.195Z INFO webdriver: COMMAND findElement("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-27T21:36:14.195Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/element
+2024-06-27T21:36:14.195Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-27T21:36:16.746Z INFO webdriver: RESULT {
+  error: 'no such element',
+  message: 'no such element: Unable to locate element: {"method":"css selector","selector":"span.MuiCircularProgress-root[role=progressbar]"}\n' +
+    '  (Session info: chrome-headless-shell=126.0.6478.126)',
+  stacktrace: '\tGetHandleVerifier [0x00007FF6552DEEA2+31554]\n' +
+    '\t(No symbol) [0x00007FF655257ED9]\n' +
+    '\t(No symbol) [0x00007FF65511872A]\n' +
+    '\t(No symbol) [0x00007FF655168434]\n' +
+    '\t(No symbol) [0x00007FF65516853C]\n' +
+    '\t(No symbol) [0x00007FF6551AF6A7]\n' +
+    '\t(No symbol) [0x00007FF65518D06F]\n' +
+    '\t(No symbol) [0x00007FF6551AC977]\n' +
+    '\t(No symbol) [0x00007FF65518CDD3]\n' +
+    '\t(No symbol) [0x00007FF65515A33B]\n' +
+    '\t(No symbol) [0x00007FF65515AED1]\n' +
+    '\tGetHandleVerifier [0x00007FF6555E8B1D+3217341]\n' +
+    '\tGetHandleVerifier [0x00007FF655635AE3+3532675]\n' +
+    '\tGetHandleVerifier [0x00007FF65562B0E0+3489152]\n' +
+    '\tGetHandleVerifier [0x00007FF65538E776+750614]\n' +
+    '\t(No symbol) [0x00007FF65526375F]\n' +
+    '\t(No symbol) [0x00007FF65525EB14]\n' +
+    '\t(No symbol) [0x00007FF65525ECA2]\n' +
+    '\t(No symbol) [0x00007FF65524E16F]\n' +
+    '\tBaseThreadInitThunk [0x00007FFD42254CB0+16]\n' +
+    '\tRtlUserThreadStart [0x00007FFD4369ECEB+43]\n'
+}
+2024-06-27T21:36:16.751Z INFO webdriver: COMMAND findElements("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-27T21:36:16.752Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/elements
+2024-06-27T21:36:16.752Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-27T21:36:19.277Z INFO webdriver: RESULT []
+2024-06-27T21:36:19.279Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="flow-card"]")
+2024-06-27T21:36:19.279Z INFO webdriver: [POST] http://0.0.0.0:50675/session/e6e319338309d1143ede2858ef976c29/elements
+2024-06-27T21:36:19.279Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="flow-card"]' }
+2024-06-27T21:36:21.811Z INFO webdriver: RESULT []
