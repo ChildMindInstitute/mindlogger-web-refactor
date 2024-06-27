@@ -1,0 +1,1314 @@
+.........Console Logs.........
+
+2024-06-27T20:34:53.775Z INFO webdriver: COMMAND navigateTo("https://pr-489.d34nh6rsqmrdi2.amplifyapp.com/protected/applets")
+2024-06-27T20:34:53.776Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/url
+2024-06-27T20:34:53.776Z INFO webdriver: DATA {
+  url: 'https://pr-489.d34nh6rsqmrdi2.amplifyapp.com/protected/applets'
+}
+2024-06-27T20:34:53.912Z INFO webdriver: RESULT null
+2024-06-27T20:34:53.912Z INFO webdriver: COMMAND isAlertOpen()
+2024-06-27T20:34:53.912Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/alert
+2024-06-27T20:34:53.914Z INFO webdriver: RESULT false
+2024-06-27T20:34:53.914Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="header-user-account-dropdown"]")
+2024-06-27T20:34:53.915Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element
+2024-06-27T20:34:53.915Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="header-user-account-dropdown"]'
+}
+2024-06-27T20:34:54.159Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.118'
+}
+2024-06-27T20:34:54.161Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-27T20:34:54.162Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/execute/sync
+2024-06-27T20:34:54.162Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.118',
+      ELEMENT: 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.118'
+    }
+  ]
+}
+2024-06-27T20:34:54.173Z INFO webdriver: RESULT true
+2024-06-27T20:34:54.173Z INFO webdriver: COMMAND findElement("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-27T20:34:54.174Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element
+2024-06-27T20:34:54.174Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-27T20:34:54.183Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.119'
+}
+2024-06-27T20:34:54.185Z INFO webdriver: COMMAND findElements("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-27T20:34:54.186Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:34:54.186Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-27T20:34:54.193Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.119'
+  }
+]
+2024-06-27T20:34:54.686Z INFO webdriver: COMMAND findElements("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-27T20:34:54.687Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:34:54.687Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-27T20:34:57.225Z INFO webdriver: RESULT []
+2024-06-27T20:34:57.226Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="applet-card"]")
+2024-06-27T20:34:57.227Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:34:57.227Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="applet-card"]' }
+2024-06-27T20:34:57.233Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.120'
+  }
+]
+2024-06-27T20:34:57.235Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.120", "css selector", "[data-testid$="card-title"]")
+2024-06-27T20:34:57.235Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.120/element
+2024-06-27T20:34:57.235Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid$="card-title"]' }
+2024-06-27T20:34:57.241Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.121'
+}
+2024-06-27T20:34:57.242Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.121")
+2024-06-27T20:34:57.243Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.121/text
+2024-06-27T20:34:57.250Z INFO webdriver: RESULT AutotestApplet0de0b6b4-a5b9-41a8-a5db-245af587be26
+2024-06-27T20:34:57.250Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.120", "css selector", "[data-testid$="card-title"]")
+2024-06-27T20:34:57.251Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.120/element
+2024-06-27T20:34:57.251Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid$="card-title"]' }
+2024-06-27T20:34:57.257Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.121'
+}
+2024-06-27T20:34:57.258Z INFO webdriver: COMMAND elementClick("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.121")
+2024-06-27T20:34:57.259Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.121/click
+2024-06-27T20:34:57.295Z INFO webdriver: RESULT null
+2024-06-27T20:34:57.295Z INFO webdriver: COMMAND findElement("css selector", "h4[data-testid="applet-name"]")
+2024-06-27T20:34:57.295Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element
+2024-06-27T20:34:57.296Z INFO webdriver: DATA { using: 'css selector', value: 'h4[data-testid="applet-name"]' }
+2024-06-27T20:34:58.556Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.133'
+}
+2024-06-27T20:34:58.558Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-27T20:34:58.558Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/execute/sync
+2024-06-27T20:34:58.559Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.133',
+      ELEMENT: 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.133'
+    }
+  ]
+}
+2024-06-27T20:34:58.569Z INFO webdriver: RESULT true
+2024-06-27T20:34:58.569Z INFO webdriver: COMMAND findElement("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-27T20:34:58.570Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element
+2024-06-27T20:34:58.570Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-27T20:35:01.109Z INFO webdriver: RESULT {
+  error: 'no such element',
+  message: 'no such element: Unable to locate element: {"method":"css selector","selector":"span.MuiCircularProgress-root[role=progressbar]"}\n' +
+    '  (Session info: chrome-headless-shell=126.0.6478.126)',
+  stacktrace: '#0 0x557ce8b7ac7a <unknown>\n' +
+    '#1 0x557ce885de2c <unknown>\n' +
+    '#2 0x557ce88aa661 <unknown>\n' +
+    '#3 0x557ce88aa751 <unknown>\n' +
+    '#4 0x557ce88eef64 <unknown>\n' +
+    '#5 0x557ce88cd5ed <unknown>\n' +
+    '#6 0x557ce88ec303 <unknown>\n' +
+    '#7 0x557ce88cd363 <unknown>\n' +
+    '#8 0x557ce889d247 <unknown>\n' +
+    '#9 0x557ce889db9e <unknown>\n' +
+    '#10 0x557ce8b4124b <unknown>\n' +
+    '#11 0x557ce8b452f1 <unknown>\n' +
+    '#12 0x557ce8b2cafe <unknown>\n' +
+    '#13 0x557ce8b45e52 <unknown>\n' +
+    '#14 0x557ce8b1179f <unknown>\n' +
+    '#15 0x557ce8b6a638 <unknown>\n' +
+    '#16 0x557ce8b6a810 <unknown>\n' +
+    '#17 0x557ce8b79dac <unknown>\n' +
+    '#18 0x7fdf0c094ac3 <unknown>\n'
+}
+2024-06-27T20:35:01.112Z INFO webdriver: COMMAND findElements("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-27T20:35:01.112Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:01.112Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-27T20:35:03.656Z INFO webdriver: RESULT []
+2024-06-27T20:35:03.658Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"]")
+2024-06-27T20:35:03.663Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:03.664Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="activity-card"]' }
+2024-06-27T20:35:03.672Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:03.684Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"]")
+2024-06-27T20:35:03.686Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:03.686Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="activity-card"]' }
+2024-06-27T20:35:03.694Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:03.706Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:03.707Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:03.708Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:03.708Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:03.708Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:03.710Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:03.710Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:03.711Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:03.711Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:03.711Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:03.711Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:03.713Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:03.713Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:03.713Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:03.713Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:03.720Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:03.722Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:03.724Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:03.727Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:03.729Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:03.734Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:03.738Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:03.740Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:03.748Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:03.753Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:03.754Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:03.756Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:03.758Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:03.759Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:03.761Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:03.764Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:03.765Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"],[data-testid="flow-card"]")
+2024-06-27T20:35:03.767Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:03.767Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: '[data-testid="activity-card"],[data-testid="flow-card"]'
+}
+2024-06-27T20:35:03.774Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:03.785Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:03.791Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:03.798Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:03.806Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:03.813Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:03.814Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:03.814Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:03.814Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:03.814Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:03.815Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:03.815Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:03.815Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:03.815Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:03.823Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:03.824Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:03.825Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:03.826Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:03.827Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:03.829Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:03.831Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:03.833Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:03.835Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:03.837Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:03.838Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:03.839Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:03.840Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:03.843Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:03.847Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:03.850Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:03.853Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:03.858Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:03.860Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:03.867Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:03.868Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:03.869Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testid='unsupported-activity-label']")
+2024-06-27T20:35:03.869Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:03.870Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:03.870Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: "div[data-testid='unsupported-activity-label']"
+}
+2024-06-27T20:35:03.876Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:03.886Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:03.895Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:03.905Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:06.469Z INFO webdriver: RESULT {
+  error: 'no such element',
+  message: `no such element: Unable to locate element: {"method":"css selector","selector":"div[data-testid='unsupported-activity-label']"}\n` +
+    '  (Session info: chrome-headless-shell=126.0.6478.126)',
+  stacktrace: '#0 0x557ce8b7ac7a <unknown>\n' +
+    '#1 0x557ce885de2c <unknown>\n' +
+    '#2 0x557ce88aa661 <unknown>\n' +
+    '#3 0x557ce88aa751 <unknown>\n' +
+    '#4 0x557ce889ebf6 <unknown>\n' +
+    '#5 0x557ce88cd5ed <unknown>\n' +
+    '#6 0x557ce889ead9 <unknown>\n' +
+    '#7 0x557ce88cd78e <unknown>\n' +
+    '#8 0x557ce88ec303 <unknown>\n' +
+    '#9 0x557ce88cd363 <unknown>\n' +
+    '#10 0x557ce889d247 <unknown>\n' +
+    '#11 0x557ce889db9e <unknown>\n' +
+    '#12 0x557ce8b4124b <unknown>\n' +
+    '#13 0x557ce8b452f1 <unknown>\n' +
+    '#14 0x557ce8b2cafe <unknown>\n' +
+    '#15 0x557ce8b45e52 <unknown>\n' +
+    '#16 0x557ce8b1179f <unknown>\n' +
+    '#17 0x557ce8b6a638 <unknown>\n' +
+    '#18 0x557ce8b6a810 <unknown>\n' +
+    '#19 0x557ce8b79dac <unknown>\n' +
+    '#20 0x7fdf0c094ac3 <unknown>\n'
+}
+2024-06-27T20:35:06.472Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testid='unsupported-activity-label']")
+2024-06-27T20:35:06.473Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:06.473Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: "div[data-testid='unsupported-activity-label']"
+}
+2024-06-27T20:35:09.008Z INFO webdriver: RESULT {
+  error: 'no such element',
+  message: `no such element: Unable to locate element: {"method":"css selector","selector":"div[data-testid='unsupported-activity-label']"}\n` +
+    '  (Session info: chrome-headless-shell=126.0.6478.126)',
+  stacktrace: '#0 0x557ce8b7ac7a <unknown>\n' +
+    '#1 0x557ce885de2c <unknown>\n' +
+    '#2 0x557ce88aa661 <unknown>\n' +
+    '#3 0x557ce88aa751 <unknown>\n' +
+    '#4 0x557ce889ebf6 <unknown>\n' +
+    '#5 0x557ce88cd5ed <unknown>\n' +
+    '#6 0x557ce889ead9 <unknown>\n' +
+    '#7 0x557ce88cd78e <unknown>\n' +
+    '#8 0x557ce88ec303 <unknown>\n' +
+    '#9 0x557ce88cd363 <unknown>\n' +
+    '#10 0x557ce889d247 <unknown>\n' +
+    '#11 0x557ce889db9e <unknown>\n' +
+    '#12 0x557ce8b4124b <unknown>\n' +
+    '#13 0x557ce8b452f1 <unknown>\n' +
+    '#14 0x557ce8b2cafe <unknown>\n' +
+    '#15 0x557ce8b45e52 <unknown>\n' +
+    '#16 0x557ce8b1179f <unknown>\n' +
+    '#17 0x557ce8b6a638 <unknown>\n' +
+    '#18 0x557ce8b6a810 <unknown>\n' +
+    '#19 0x557ce8b79dac <unknown>\n' +
+    '#20 0x7fdf0c094ac3 <unknown>\n'
+}
+2024-06-27T20:35:09.010Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"]")
+2024-06-27T20:35:09.011Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:09.011Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="activity-card"]' }
+2024-06-27T20:35:09.017Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:09.021Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.022Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.022Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.022Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.023Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.025Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:09.025Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.025Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:09.025Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.025Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:09.026Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.026Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:09.026Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.026Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:09.026Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.034Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:09.035Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:09.036Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:09.039Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:09.040Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:09.041Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:09.044Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:09.045Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:09.046Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:09.049Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:09.051Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:09.052Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:09.059Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:09.061Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:09.062Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:09.066Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:09.073Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:09.079Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:09.080Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"],[data-testid="flow-card"]")
+2024-06-27T20:35:09.083Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:09.083Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: '[data-testid="activity-card"],[data-testid="flow-card"]'
+}
+2024-06-27T20:35:09.088Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:09.095Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:09.100Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:09.105Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.105Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.105Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.106Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.106Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.106Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:09.106Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.107Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:09.107Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.107Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:09.107Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.108Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:09.108Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.108Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:09.109Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.118Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:09.120Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:09.121Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:09.125Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:09.127Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:09.128Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:09.131Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:09.133Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:09.136Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:09.138Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:09.140Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:09.140Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:09.143Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:09.145Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:09.145Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:09.149Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:09.154Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:09.159Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:09.159Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testid='unsupported-activity-label']")
+2024-06-27T20:35:09.160Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:09.160Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: "div[data-testid='unsupported-activity-label']"
+}
+2024-06-27T20:35:09.165Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:09.170Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:09.174Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.152'
+}
+2024-06-27T20:35:09.176Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-27T20:35:09.176Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/execute/sync
+2024-06-27T20:35:09.176Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.152',
+      ELEMENT: 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.152'
+    }
+  ]
+}
+2024-06-27T20:35:09.182Z INFO webdriver: RESULT true
+2024-06-27T20:35:09.182Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"],[data-testid="flow-card"]")
+2024-06-27T20:35:09.182Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:09.182Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: '[data-testid="activity-card"],[data-testid="flow-card"]'
+}
+2024-06-27T20:35:09.188Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:09.191Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.192Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.192Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.192Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.193Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.193Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:09.193Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.193Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:09.193Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.194Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:09.194Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.195Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:09.195Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.195Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:09.195Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.201Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:09.203Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:09.203Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:09.206Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:09.208Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:09.208Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:09.211Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:09.213Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:09.214Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:09.217Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:09.219Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:09.220Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:09.223Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:09.225Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:09.226Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:09.229Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:09.234Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:09.239Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:09.239Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testid='unsupported-activity-label']")
+2024-06-27T20:35:09.240Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:09.240Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: "div[data-testid='unsupported-activity-label']"
+}
+2024-06-27T20:35:09.245Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:09.250Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:09.254Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.152'
+}
+2024-06-27T20:35:09.256Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.152")
+2024-06-27T20:35:09.259Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.152/text
+2024-06-27T20:35:09.266Z INFO webdriver: RESULT Please complete on the
+MindLogger mobile app.
+2024-06-27T20:35:09.267Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"]")
+2024-06-27T20:35:09.267Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:09.267Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="activity-card"]' }
+2024-06-27T20:35:09.273Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:09.277Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.277Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.277Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.278Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.278Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:09.278Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:09.278Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.278Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:09.279Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.279Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:09.279Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.279Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:09.279Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.280Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:09.281Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:09.286Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:09.287Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:09.287Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:09.290Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:09.292Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:09.292Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:09.295Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:09.298Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:09.298Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:09.300Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:09.302Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:09.303Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:09.306Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:09.308Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:09.308Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:09.312Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:09.317Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:09.321Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:09.322Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "xpath", ".//div[@data-testid="assessment-buttons"]//p[contains(text(), "Start")]/parent::button")
+2024-06-27T20:35:09.323Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:09.323Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: './/div[@data-testid="assessment-buttons"]//p[contains(text(), "Start")]/parent::button'
+}
+2024-06-27T20:35:09.327Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:09.333Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:09.338Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.153'
+}
+2024-06-27T20:35:09.339Z INFO webdriver: COMMAND elementClick("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.153")
+2024-06-27T20:35:09.340Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.153/click
+2024-06-27T20:35:09.370Z INFO webdriver: RESULT null
+2024-06-27T20:35:09.370Z INFO webdriver: COMMAND getWindowHandles()
+2024-06-27T20:35:09.371Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/window/handles
+2024-06-27T20:35:09.527Z INFO webdriver: RESULT [
+  'BA8DBEE2FB8559F1E5B7907A9224EE99',
+  '1950274D10E221E0AE7761CAB350AE1F'
+]
+2024-06-27T20:35:09.527Z INFO webdriver: COMMAND getWindowHandles()
+2024-06-27T20:35:09.529Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/window/handles
+2024-06-27T20:35:09.534Z INFO webdriver: RESULT [
+  'BA8DBEE2FB8559F1E5B7907A9224EE99',
+  '1950274D10E221E0AE7761CAB350AE1F'
+]
+2024-06-27T20:35:09.535Z INFO webdriver: COMMAND switchToWindow("<Screenshot[base64]>")
+2024-06-27T20:35:09.536Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/window
+2024-06-27T20:35:09.536Z INFO webdriver: DATA { handle: 'BA8DBEE2FB8559F1E5B7907A9224EE99' }
+2024-06-27T20:35:09.538Z INFO webdriver: RESULT null
+2024-06-27T20:35:09.538Z INFO webdriver: COMMAND getUrl()
+2024-06-27T20:35:09.539Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/url
+2024-06-27T20:35:09.544Z INFO webdriver: RESULT https://pr-489.d34nh6rsqmrdi2.amplifyapp.com/protected/applets/7d1a9c54-0f3c-44a9-b164-b7efcbafcd8b
+2024-06-27T20:35:09.544Z INFO webdriver: COMMAND getTitle()
+2024-06-27T20:35:09.545Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/title
+2024-06-27T20:35:09.553Z INFO webdriver: RESULT MindLogger
+2024-06-27T20:35:09.553Z INFO webdriver: COMMAND executeScript("return (() => window.name).apply(null, arguments)", <object>)
+2024-06-27T20:35:09.554Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/execute/sync
+2024-06-27T20:35:09.554Z INFO webdriver: DATA {
+  script: 'return (() => window.name).apply(null, arguments)',
+  args: []
+}
+2024-06-27T20:35:09.561Z INFO webdriver: RESULT 
+2024-06-27T20:35:09.562Z INFO webdriver: COMMAND switchToWindow("<Screenshot[base64]>")
+2024-06-27T20:35:09.565Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/window
+2024-06-27T20:35:09.565Z INFO webdriver: DATA { handle: '1950274D10E221E0AE7761CAB350AE1F' }
+2024-06-27T20:35:09.580Z INFO webdriver: RESULT null
+2024-06-27T20:35:09.580Z INFO webdriver: COMMAND getUrl()
+2024-06-27T20:35:09.591Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/url
+2024-06-27T20:35:10.324Z INFO webdriver: RESULT https://play.google.com/store/apps/details?id=lab.childmindinstitute.data
+2024-06-27T20:35:10.324Z INFO webdriver: COMMAND getUrl()
+2024-06-27T20:35:10.324Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/url
+2024-06-27T20:35:10.328Z INFO webdriver: RESULT https://play.google.com/store/apps/details?id=lab.childmindinstitute.data
+2024-06-27T20:35:10.328Z INFO webdriver: COMMAND getWindowHandles()
+2024-06-27T20:35:10.329Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/window/handles
+2024-06-27T20:35:10.331Z INFO webdriver: RESULT [
+  'BA8DBEE2FB8559F1E5B7907A9224EE99',
+  '1950274D10E221E0AE7761CAB350AE1F'
+]
+2024-06-27T20:35:10.331Z INFO webdriver: COMMAND switchToWindow("<Screenshot[base64]>")
+2024-06-27T20:35:10.334Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/window
+2024-06-27T20:35:10.334Z INFO webdriver: DATA { handle: 'BA8DBEE2FB8559F1E5B7907A9224EE99' }
+2024-06-27T20:35:10.336Z INFO webdriver: RESULT null
+2024-06-27T20:35:10.336Z INFO webdriver: COMMAND getUrl()
+2024-06-27T20:35:10.337Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/url
+2024-06-27T20:35:10.340Z INFO webdriver: RESULT https://pr-489.d34nh6rsqmrdi2.amplifyapp.com/protected/applets/7d1a9c54-0f3c-44a9-b164-b7efcbafcd8b
+2024-06-27T20:35:10.340Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"]")
+2024-06-27T20:35:10.341Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:10.341Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="activity-card"]' }
+2024-06-27T20:35:10.348Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:10.353Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.354Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.354Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.354Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.354Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.355Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:10.355Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.355Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:10.355Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.355Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:10.355Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.356Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:10.356Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.357Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:10.357Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.363Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:10.365Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:10.366Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:10.369Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:10.370Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:10.370Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:10.374Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:10.375Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:10.376Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:10.379Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:10.381Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:10.382Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:10.385Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:10.386Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:10.387Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:10.390Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:10.396Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:10.397Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"],[data-testid="flow-card"]")
+2024-06-27T20:35:10.397Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:10.397Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: '[data-testid="activity-card"],[data-testid="flow-card"]'
+}
+2024-06-27T20:35:10.402Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:10.407Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:10.412Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:10.417Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:10.421Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.421Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.422Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.422Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.422Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.422Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:10.422Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.425Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:10.425Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.426Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:10.426Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.426Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:10.426Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.427Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:10.427Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.431Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:10.433Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:10.436Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:10.437Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:10.439Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:10.439Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:10.443Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:10.444Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:10.446Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:10.451Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:10.453Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:10.454Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:10.457Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:10.459Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:10.459Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:10.463Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:10.468Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:10.469Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testid='unsupported-activity-label']")
+2024-06-27T20:35:10.469Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:10.469Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: "div[data-testid='unsupported-activity-label']"
+}
+2024-06-27T20:35:10.474Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:10.481Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:10.486Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:10.491Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.155'
+}
+2024-06-27T20:35:10.492Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-27T20:35:10.493Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/execute/sync
+2024-06-27T20:35:10.493Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.155',
+      ELEMENT: 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.155'
+    }
+  ]
+}
+2024-06-27T20:35:10.499Z INFO webdriver: RESULT true
+2024-06-27T20:35:10.499Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"]")
+2024-06-27T20:35:10.500Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:10.500Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="activity-card"]' }
+2024-06-27T20:35:10.505Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:10.509Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.510Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.510Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.510Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.510Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.511Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:10.511Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.511Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:10.511Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.511Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:10.511Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.512Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:10.512Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.514Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:10.514Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.520Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:10.521Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:10.522Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:10.524Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:10.526Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:10.526Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:10.530Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:10.532Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:10.534Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:10.537Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:10.538Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:10.539Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:10.542Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:10.544Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:10.544Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:10.549Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:10.554Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:10.559Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:10.565Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:10.566Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"],[data-testid="flow-card"]")
+2024-06-27T20:35:10.566Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:10.566Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: '[data-testid="activity-card"],[data-testid="flow-card"]'
+}
+2024-06-27T20:35:10.571Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:10.575Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:10.579Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.580Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.580Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.580Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.580Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.581Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:10.581Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.581Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:10.581Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.581Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:10.581Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.582Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:10.582Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.583Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:10.583Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.596Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:10.598Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:10.598Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:10.609Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:10.611Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:10.613Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:10.617Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:10.619Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:10.620Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:10.623Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:10.625Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:10.626Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:10.629Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:10.631Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:10.632Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:10.636Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:10.642Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:10.647Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:10.651Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:10.652Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testid='unsupported-activity-label']")
+2024-06-27T20:35:10.652Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:10.652Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: "div[data-testid='unsupported-activity-label']"
+}
+2024-06-27T20:35:10.657Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:10.661Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.156'
+}
+2024-06-27T20:35:10.663Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-27T20:35:10.663Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/execute/sync
+2024-06-27T20:35:10.664Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.156',
+      ELEMENT: 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.156'
+    }
+  ]
+}
+2024-06-27T20:35:10.669Z INFO webdriver: RESULT true
+2024-06-27T20:35:10.669Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"]")
+2024-06-27T20:35:10.670Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:10.670Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="activity-card"]' }
+2024-06-27T20:35:10.676Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:10.680Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.681Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.681Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.681Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.681Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.682Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:10.682Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.682Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:10.682Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.682Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:10.682Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.683Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:10.683Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.684Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:10.684Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.690Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:10.692Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:10.692Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:10.696Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:10.698Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:10.703Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:10.704Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:10.709Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:10.711Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:10.714Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:10.717Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:10.721Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:10.732Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:10.733Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:10.734Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:10.734Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:10.740Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:10.745Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:10.750Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:10.755Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:10.756Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"],[data-testid="flow-card"]")
+2024-06-27T20:35:10.756Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:10.756Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: '[data-testid="activity-card"],[data-testid="flow-card"]'
+}
+2024-06-27T20:35:10.761Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:10.765Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.765Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.765Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.766Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.766Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.766Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:10.766Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.766Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:10.767Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.767Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:10.767Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.767Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:10.767Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.769Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:10.769Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.774Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:10.776Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:10.779Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:10.781Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:10.783Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:10.783Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:10.786Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:10.788Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:10.788Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:10.793Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:10.796Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:10.799Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:10.801Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:10.801Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:10.802Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:10.806Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:10.811Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:10.816Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:10.821Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:10.825Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:10.826Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testid='unsupported-activity-label']")
+2024-06-27T20:35:10.826Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:10.826Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: "div[data-testid='unsupported-activity-label']"
+}
+2024-06-27T20:35:10.832Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.157'
+}
+2024-06-27T20:35:10.834Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-27T20:35:10.834Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/execute/sync
+2024-06-27T20:35:10.834Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.157',
+      ELEMENT: 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.157'
+    }
+  ]
+}
+2024-06-27T20:35:10.839Z INFO webdriver: RESULT true
+2024-06-27T20:35:10.839Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"]")
+2024-06-27T20:35:10.840Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/elements
+2024-06-27T20:35:10.840Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="activity-card"]' }
+2024-06-27T20:35:10.845Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146'
+  }
+]
+2024-06-27T20:35:10.849Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.850Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.850Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.850Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.850Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-27T20:35:10.851Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:10.851Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.851Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.144/element
+2024-06-27T20:35:10.851Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.852Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.143/element
+2024-06-27T20:35:10.852Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.859Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147'
+}
+2024-06-27T20:35:10.860Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147")
+2024-06-27T20:35:10.863Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.145/element
+2024-06-27T20:35:10.863Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.864Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.146/element
+2024-06-27T20:35:10.864Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-27T20:35:10.864Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.147/text
+2024-06-27T20:35:10.866Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148'
+}
+2024-06-27T20:35:10.867Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148")
+2024-06-27T20:35:10.868Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.148/text
+2024-06-27T20:35:10.870Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151'
+}
+2024-06-27T20:35:10.872Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151")
+2024-06-27T20:35:10.873Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.151/text
+2024-06-27T20:35:10.876Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149'
+}
+2024-06-27T20:35:10.878Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149")
+2024-06-27T20:35:10.878Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.149/text
+2024-06-27T20:35:10.883Z INFO webdriver: RESULT volt yahoo Bedfordshire
+2024-06-27T20:35:10.883Z INFO webdriver: COMMAND findElementFromElement("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142", "xpath", ".//div[@data-testid="assessment-buttons"]//p[contains(text(), "Start")]/parent::button")
+2024-06-27T20:35:10.884Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.142/element
+2024-06-27T20:35:10.884Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: './/div[@data-testid="assessment-buttons"]//p[contains(text(), "Start")]/parent::button'
+}
+2024-06-27T20:35:10.890Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150'
+}
+2024-06-27T20:35:10.892Z INFO webdriver: COMMAND getElementText("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150")
+2024-06-27T20:35:10.893Z INFO webdriver: [GET] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.150/text
+2024-06-27T20:35:10.896Z INFO webdriver: RESULT CST Gyroscope
+2024-06-27T20:35:10.903Z INFO webdriver: RESULT Electric Northeast Movies
+2024-06-27T20:35:10.908Z INFO webdriver: RESULT A/B Trails Mobile
+2024-06-27T20:35:10.913Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.158'
+}
+2024-06-27T20:35:10.915Z INFO webdriver: COMMAND elementClick("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.158")
+2024-06-27T20:35:10.918Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.158/click
+2024-06-27T20:35:10.920Z INFO webdriver: RESULT Simple & Choice Reaction Time Task builder two buttons
+2024-06-27T20:35:10.961Z INFO webdriver: RESULT null
+2024-06-27T20:35:10.961Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="start-assessment-widget"] button")
+2024-06-27T20:35:10.962Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element
+2024-06-27T20:35:10.962Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="start-assessment-widget"] button'
+}
+2024-06-27T20:35:11.621Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.160'
+}
+2024-06-27T20:35:11.623Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-27T20:35:11.623Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/execute/sync
+2024-06-27T20:35:11.623Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.160',
+      ELEMENT: 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.160'
+    }
+  ]
+}
+2024-06-27T20:35:11.628Z INFO webdriver: RESULT true
+2024-06-27T20:35:11.629Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="start-assessment-widget"] button")
+2024-06-27T20:35:11.629Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element
+2024-06-27T20:35:11.629Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="start-assessment-widget"] button'
+}
+2024-06-27T20:35:11.634Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.160'
+}
+2024-06-27T20:35:11.636Z INFO webdriver: COMMAND elementClick("f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.160")
+2024-06-27T20:35:11.636Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element/f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.160/click
+2024-06-27T20:35:11.707Z INFO webdriver: RESULT null
+2024-06-27T20:35:11.707Z INFO webdriver: COMMAND findElement("css selector", "button[data-testid="assessment-save-and-exit-button"]")
+2024-06-27T20:35:11.707Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/element
+2024-06-27T20:35:11.708Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'button[data-testid="assessment-save-and-exit-button"]'
+}
+2024-06-27T20:35:11.716Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.161'
+}
+2024-06-27T20:35:11.718Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-27T20:35:11.718Z INFO webdriver: [POST] http://0.0.0.0:46449/session/8f63037d904b7460d6fb17b62af20c3e/execute/sync
+2024-06-27T20:35:11.718Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.161',
+      ELEMENT: 'f.BA8DBEE2FB8559F1E5B7907A9224EE99.d.4A35D4FD1F66216C208A82D40E8F975E.e.161'
+    }
+  ]
+}
+2024-06-27T20:35:11.726Z INFO webdriver: RESULT true
