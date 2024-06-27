@@ -1,5 +1,7 @@
 import React, { PropsWithChildren, useContext } from 'react';
 
+import { Page, View } from '@react-pdf/renderer';
+
 import { Body } from '~/pages/ActionPlan/components/Body';
 import { Header } from '~/pages/ActionPlan/components/Header';
 import { PhraseCard } from '~/pages/ActionPlan/components/PhraseCard';
@@ -13,7 +15,6 @@ import {
 import { PDFDocumentContext } from '~/pages/ActionPlan/PDFDocumentContext';
 import { Phrase } from '~/pages/ActionPlan/types';
 import { Theme } from '~/shared/constants';
-import Box from '~/shared/ui/Box';
 
 export type ActionPlanPDFPageProps = {
   pageNumber: number;
@@ -27,8 +28,10 @@ export function BlueBorderContainer({ children }: PropsWithChildren) {
   const scaledPadding = useXScaledDimension(16);
 
   return (
-    <Box
-      sx={{
+    <Page
+      size="LETTER"
+      orientation="portrait"
+      style={{
         width: `${pageWidth}px`,
         padding: `0 ${scaledPadding}px ${scaledPadding}px`,
         backgroundColor: Theme.colors.light.primaryFixed,
@@ -36,7 +39,7 @@ export function BlueBorderContainer({ children }: PropsWithChildren) {
       }}
     >
       {children}
-    </Box>
+    </Page>
   );
 }
 
@@ -50,31 +53,38 @@ function WhiteBackgroundContainer({ children }: PropsWithChildren) {
   const height = useBackgroundHeight();
 
   return (
-    <Box
-      paddingTop={`${scaledTopPadding}px`}
-      paddingRight={`${scaledRightPadding}px`}
-      paddingBottom={`${scaledBottomPadding}px`}
-      paddingLeft={`${scaledLeftPadding}px`}
-      width={`${width}px`}
-      height={`${height}px`}
-      sx={{
-        backgroundSize: 'contain',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundImage: `url(/action-plan-page-background.svg)`,
+    <View
+      style={{
+        // TODO: The <View /> doesn't support background images, so we'll have to find a workaround
+        // backgroundSize: 'contain',
+        // backgroundPosition: 'center',
+        // backgroundRepeat: 'no-repeat',
+        // backgroundImage: `url(/action-plan-page-background.svg)`,
+
+        display: 'flex',
+        backgroundColor: 'white',
+        borderRadius: '16px',
+        paddingTop: `${scaledTopPadding}px`,
+        paddingRight: `${scaledRightPadding}px`,
+        paddingBottom: `${scaledBottomPadding}px`,
+        paddingLeft: `${scaledLeftPadding}px`,
+        width: `${width}px`,
+        height: `${height}px`,
       }}
     >
-      <Box
-        display="flex"
-        flexDirection="column"
-        gap="24px"
-        width="100%"
-        height="100%"
-        sx={{ overflow: 'hidden' }}
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '24px',
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden',
+        }}
       >
         {children}
-      </Box>
-    </Box>
+      </View>
+    </View>
   );
 }
 

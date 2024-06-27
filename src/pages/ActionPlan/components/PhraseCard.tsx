@@ -1,19 +1,13 @@
 import React from 'react';
 
-import Avatar from '@mui/material/Avatar';
+import { Image, View, Text } from '@react-pdf/renderer';
 
 import { useXScaledDimension, useYScaledDimension } from '~/pages/ActionPlan/hooks';
 import { Phrase } from '~/pages/ActionPlan/types';
 import { Theme } from '~/shared/constants';
-import Box from '~/shared/ui/Box';
-import Text from '~/shared/ui/Text';
 
 function TextSegment({ text }: { text: string }) {
-  return (
-    <Text component="span" fontSize="inherit" lineHeight="inherit">
-      {text}
-    </Text>
-  );
+  return <Text style={{ fontSize: 'inherit', lineHeight: 'inherit' }}>{text}</Text>;
 }
 
 function ResponseSegment({ text }: { text: string | string[] }) {
@@ -24,12 +18,13 @@ function ResponseSegment({ text }: { text: string | string[] }) {
 
   if (Array.isArray(text)) {
     prefixComponent = <br />;
+    // TODO: Figure out how to do a bullet list
     textComponent = (
-      <Box component="ul" paddingLeft={`${listPadding}px`}>
+      <View style={{ paddingLeft: `${listPadding}px` }}>
         {text.map((item, index) => (
-          <li key={index}>{item}</li>
+          <Text key={index}>{item}</Text>
         ))}
-      </Box>
+      </View>
     );
   } else {
     prefixComponent = <>&nbsp;</>;
@@ -37,7 +32,13 @@ function ResponseSegment({ text }: { text: string | string[] }) {
   }
 
   return (
-    <Text component="span" fontWeight="700" fontSize="inherit" lineHeight="inherit">
+    <Text
+      style={{
+        fontWeight: 700,
+        fontSize: 'inherit',
+        lineHeight: 'inherit',
+      }}
+    >
       {prefixComponent}
       {textComponent}
     </Text>
@@ -76,21 +77,31 @@ export function PhraseCard({ phrase }: PhraseProps) {
   }
 
   return (
-    <Box display="flex" gap={`${gap}px`} minHeight={minHeight}>
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        sx={{
-          minWidth: imageWidth,
-          height: imageHeight,
+    <View
+      style={{
+        display: 'flex',
+        gap: `${gap}px`,
+        minHeight: `${minHeight}px`,
+      }}
+    >
+      <View
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minWidth: `${imageWidth}px`,
+          height: `${imageHeight}px`,
         }}
       >
         {phrase.image && (
-          <Avatar
-            src={phrase.image}
-            variant="square"
-            sx={{
+          <Image
+            src={{
+              uri: phrase.image,
+              method: 'GET',
+              headers: { 'Cache-Control': 'no-cache' },
+              body: '',
+            }}
+            style={{
               width: imageWidth,
               height: imageHeight,
               borderRadius: '8px',
@@ -99,10 +110,15 @@ export function PhraseCard({ phrase }: PhraseProps) {
             }}
           />
         )}
-      </Box>
-      <Box fontSize={`${fontSize}px`} lineHeight={`${lineHeight}px`}>
+      </View>
+      <View
+        style={{
+          fontSize: `${fontSize}px`,
+          lineHeight: `${lineHeight}px`,
+        }}
+      >
         {components}
-      </Box>
-    </Box>
+      </View>
+    </View>
   );
 }

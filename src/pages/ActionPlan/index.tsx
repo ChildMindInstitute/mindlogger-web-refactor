@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Avatar } from '@mui/material';
 import Button from '@mui/material/Button';
-import html2canvas from 'html2canvas';
+import { pdf /*, PDFViewer*/ } from '@react-pdf/renderer';
 
 import DownloadIconLight from '~/assets/download-icon-light.svg';
 import DownloadIconDark from '~/assets/download-icon.svg';
@@ -104,25 +104,8 @@ function ActionPlanPage() {
       ],
     },
   ];
-  const ref = React.createRef<HTMLDivElement>();
 
-  const handleDownloadImage = useCallback(async () => {
-    if (!ref.current) {
-      return;
-    }
-    const element = ref.current;
-    const canvas = await html2canvas(element);
-
-    const data = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-
-    link.href = data;
-    link.download = `${title} Action Plan.png`;
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }, [ref]);
+  const Document = <ActionPlanPDFDocument title={title} phrases={phrases} />;
 
   return (
     <SurveyLayout
@@ -167,7 +150,19 @@ function ActionPlanPage() {
           disableElevation={true}
           onMouseEnter={() => setDownloadIcon(DownloadIconLight)}
           onMouseLeave={() => setDownloadIcon(DownloadIconDark)}
-          onClick={handleDownloadImage}
+          onClick={async () => {
+            const blob = await pdf(Document).toBlob();
+
+            // initiate file download
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+            // const a = document.createElement('a');
+            // a.href = url;
+            // a.download = url.split('/').pop() as string;
+            // document.body.appendChild(a);
+            // a.click();
+            // document.body.removeChild(a);
+          }}
           sx={{
             width: '172px',
             height: '48px',
@@ -194,7 +189,9 @@ function ActionPlanPage() {
         >
           Download
         </Button>
-        <ActionPlanPDFDocument title={title} phrases={phrases} ref={ref} />
+        {/*<PDFViewer width={612} height={912} showToolbar={false}>*/}
+        {Document}
+        {/*</PDFViewer>*/}
       </Box>
     </SurveyLayout>
   );

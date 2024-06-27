@@ -1,9 +1,9 @@
 import React from 'react';
 
+import { Text, View } from '@react-pdf/renderer';
+
 import { useXScaledDimension } from '~/pages/ActionPlan/hooks';
 import { Theme } from '~/shared/constants';
-import Box from '~/shared/ui/Box';
-import Text from '~/shared/ui/Text';
 
 export function Title({ children }: { children: string }) {
   const titleFontSize = useXScaledDimension(16);
@@ -14,25 +14,29 @@ export function Title({ children }: { children: string }) {
   const letterSpacing = useXScaledDimension(0.15);
 
   return (
-    <Box
-      paddingTop={`${scaledTopPadding}px`}
-      paddingBottom={`${scaledBottomPadding}px`}
-      paddingRight={`${scaledRightPadding}px`}
-      paddingLeft={`${scaledLeftPadding}px`}
-      display={'flex'}
-      alignItems="center"
-      justifyContent="center"
+    <View
+      style={{
+        paddingTop: `${scaledTopPadding}px`,
+        paddingBottom: `${scaledBottomPadding}px`,
+        paddingRight: `${scaledRightPadding}px`,
+        paddingLeft: `${scaledLeftPadding}px`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
       <Text
-        fontSize={`${titleFontSize}px`}
-        fontWeight="700"
-        lineHeight="24px"
-        letterSpacing={`${letterSpacing}px`}
-        color={Theme.colors.light.onSurface}
-        sx={{ textAlign: 'center' }}
+        style={{
+          textAlign: 'center',
+          fontSize: `${titleFontSize}px`,
+          fontWeight: 700,
+          lineHeight: '24px',
+          letterSpacing: `${letterSpacing}px`,
+          color: Theme.colors.light.onSurface,
+        }}
       >
         {children}
       </Text>
-    </Box>
+    </View>
   );
 }
