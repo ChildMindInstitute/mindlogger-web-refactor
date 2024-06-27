@@ -51,6 +51,8 @@ jobs:
         run: |
           sed -i 's/WEB_APP_BASE_URL.*//' .env ;
           echo 'WEB_APP_BASE_URL=${{ inputs.service-url }}' >> .env
+          sed -i 's/API_DOMAIN.*//' .env ;
+          echo 'API_DOMAIN=https://api-dev.cmiml.net' >> .env
       - name: Validate Environment
         run: cat .env
       - name: Get Secrets by Name and by ARN
