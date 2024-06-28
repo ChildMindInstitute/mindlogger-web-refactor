@@ -1,0 +1,126 @@
+.........Console Logs.........
+
+2024-06-28T18:19:47.792Z INFO webdriver: COMMAND navigateTo("https://pr-489.d34nh6rsqmrdi2.amplifyapp.com/login")
+2024-06-28T18:19:47.792Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/url
+2024-06-28T18:19:47.793Z INFO webdriver: DATA { url: 'https://pr-489.d34nh6rsqmrdi2.amplifyapp.com/login' }
+2024-06-28T18:19:48.111Z INFO webdriver: RESULT null
+2024-06-28T18:19:48.111Z INFO webdriver: COMMAND isAlertOpen()
+2024-06-28T18:19:48.112Z INFO webdriver: [GET] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/alert
+2024-06-28T18:19:48.114Z INFO webdriver: RESULT false
+2024-06-28T18:19:48.114Z INFO webdriver: COMMAND findElement("xpath", ".//button[normalize-space(text()) = "Log In"] | .//button[not(.//button[normalize-space(text()) = "Log In"]) and normalize-space() = "Log In"]")
+2024-06-28T18:19:48.114Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element
+2024-06-28T18:19:48.115Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: './/button[normalize-space(text()) = "Log In"] | .//button[not(.//button[normalize-space(text()) = "Log In"]) and normalize-space() = "Log In"]'
+}
+2024-06-28T18:19:48.744Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.25'
+}
+2024-06-28T18:19:48.758Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T18:19:48.759Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/execute/sync
+2024-06-28T18:19:48.759Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.25',
+      ELEMENT: 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.25'
+    }
+  ]
+}
+2024-06-28T18:19:48.768Z INFO webdriver: RESULT true
+2024-06-28T18:19:48.769Z INFO webdriver: COMMAND findElement("xpath", "//p[text()=" Forgot Password?"]/parent::a")
+2024-06-28T18:19:48.769Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element
+2024-06-28T18:19:48.769Z INFO webdriver: DATA { using: 'xpath', value: '//p[text()=" Forgot Password?"]/parent::a' }
+2024-06-28T18:19:48.776Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.27'
+}
+2024-06-28T18:19:48.778Z INFO webdriver: COMMAND elementClick("f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.27")
+2024-06-28T18:19:48.778Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element/f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.27/click
+2024-06-28T18:19:48.827Z INFO webdriver: RESULT null
+2024-06-28T18:19:48.827Z INFO webdriver: COMMAND findElement("xpath", "//p[text()="Send reset link"]/parent::button")
+2024-06-28T18:19:48.828Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element
+2024-06-28T18:19:48.828Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: '//p[text()="Send reset link"]/parent::button'
+}
+2024-06-28T18:19:48.835Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.28'
+}
+2024-06-28T18:19:48.836Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T18:19:48.837Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/execute/sync
+2024-06-28T18:19:48.837Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.28',
+      ELEMENT: 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.28'
+    }
+  ]
+}
+2024-06-28T18:19:48.844Z INFO webdriver: RESULT true
+2024-06-28T18:19:48.845Z INFO webdriver: COMMAND findElement("css selector", "input#forgot-password-form-email")
+2024-06-28T18:19:48.846Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element
+2024-06-28T18:19:48.846Z INFO webdriver: DATA { using: 'css selector', value: 'input#forgot-password-form-email' }
+2024-06-28T18:19:48.852Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.29'
+}
+2024-06-28T18:19:48.854Z INFO webdriver: COMMAND isElementEnabled("f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.29")
+2024-06-28T18:19:48.854Z INFO webdriver: [GET] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element/f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.29/enabled
+2024-06-28T18:19:48.860Z INFO webdriver: RESULT true
+2024-06-28T18:19:48.860Z INFO webdriver: COMMAND elementClear("f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.29")
+2024-06-28T18:19:48.861Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element/f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.29/clear
+2024-06-28T18:19:48.882Z INFO webdriver: RESULT null
+2024-06-28T18:19:48.882Z INFO webdriver: COMMAND elementSendKeys("f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.29", "autotestuser+29b60f42-69c4-4e3f-8710-0db633c9abab@mailinator.com")
+2024-06-28T18:19:48.883Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element/f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.29/value
+2024-06-28T18:19:48.883Z INFO webdriver: DATA {
+  text: 'autotestuser+29b60f42-69c4-4e3f-8710-0db633c9abab@mailinator.com'
+}
+2024-06-28T18:19:49.099Z INFO webdriver: RESULT null
+2024-06-28T18:19:49.862Z INFO webdriver: COMMAND findElement("xpath", "//p[text()="Send reset link"]/parent::button")
+2024-06-28T18:19:49.862Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element
+2024-06-28T18:19:49.862Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: '//p[text()="Send reset link"]/parent::button'
+}
+2024-06-28T18:19:49.869Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.28'
+}
+2024-06-28T18:19:49.871Z INFO webdriver: COMMAND elementClick("f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.28")
+2024-06-28T18:19:49.872Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element/f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.28/click
+2024-06-28T18:19:49.924Z INFO webdriver: RESULT null
+2024-06-28T18:19:49.925Z INFO webdriver: COMMAND findElement("css selector", "p[data-testid='system-success-message']")
+2024-06-28T18:19:49.925Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element
+2024-06-28T18:19:49.925Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: "p[data-testid='system-success-message']"
+}
+2024-06-28T18:19:50.317Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.32'
+}
+2024-06-28T18:19:50.318Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T18:19:50.321Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/execute/sync
+2024-06-28T18:19:50.321Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.32',
+      ELEMENT: 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.32'
+    }
+  ]
+}
+2024-06-28T18:19:50.328Z INFO webdriver: RESULT true
+2024-06-28T18:19:50.328Z INFO webdriver: COMMAND findElement("css selector", "p[data-testid='system-success-message']")
+2024-06-28T18:19:50.329Z INFO webdriver: [POST] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element
+2024-06-28T18:19:50.329Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: "p[data-testid='system-success-message']"
+}
+2024-06-28T18:19:50.335Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.32'
+}
+2024-06-28T18:19:50.336Z INFO webdriver: COMMAND isElementEnabled("f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.32")
+2024-06-28T18:19:50.337Z INFO webdriver: [GET] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element/f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.32/enabled
+2024-06-28T18:19:50.344Z INFO webdriver: RESULT true
+2024-06-28T18:19:50.344Z INFO webdriver: COMMAND getElementText("f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.32")
+2024-06-28T18:19:50.344Z INFO webdriver: [GET] http://0.0.0.0:64611/session/7426a1591cd0079692606acaad00f4d0/element/f.DAC9D3BC382BA9292F89551FDE2CA0F1.d.5BA141C21F7FE1EBC765101BCBB88300.e.32/text
+2024-06-28T18:19:50.352Z INFO webdriver: RESULT Password reset link is sent to autotestuser+29b60f42-69c4-4e3f-8710-0db633c9abab@mailinator.com

@@ -1,0 +1,784 @@
+.........Console Logs.........
+
+2024-06-28T17:55:36.732Z INFO webdriver: COMMAND navigateTo("https://pr-489.d34nh6rsqmrdi2.amplifyapp.com/protected/applets")
+2024-06-28T17:55:36.733Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/url
+2024-06-28T17:55:36.733Z INFO webdriver: DATA {
+  url: 'https://pr-489.d34nh6rsqmrdi2.amplifyapp.com/protected/applets'
+}
+2024-06-28T17:55:37.142Z INFO webdriver: RESULT null
+2024-06-28T17:55:37.142Z INFO webdriver: COMMAND isAlertOpen()
+2024-06-28T17:55:37.143Z INFO webdriver: [GET] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/alert
+2024-06-28T17:55:37.146Z INFO webdriver: RESULT false
+2024-06-28T17:55:37.146Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="header-user-account-dropdown"]")
+2024-06-28T17:55:37.147Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:37.147Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="header-user-account-dropdown"]'
+}
+2024-06-28T17:55:37.664Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.557'
+}
+2024-06-28T17:55:37.666Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T17:55:37.667Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/execute/sync
+2024-06-28T17:55:37.668Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.557',
+      ELEMENT: 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.557'
+    }
+  ]
+}
+2024-06-28T17:55:37.678Z INFO webdriver: RESULT true
+2024-06-28T17:55:37.678Z INFO webdriver: COMMAND findElement("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-28T17:55:37.679Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:37.679Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-28T17:55:37.696Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.558'
+}
+2024-06-28T17:55:37.698Z INFO webdriver: COMMAND findElements("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-28T17:55:37.699Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/elements
+2024-06-28T17:55:37.699Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-28T17:55:37.713Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.558'
+  }
+]
+2024-06-28T17:55:38.198Z INFO webdriver: COMMAND findElements("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-28T17:55:38.199Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/elements
+2024-06-28T17:55:38.199Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-28T17:55:40.739Z INFO webdriver: RESULT []
+2024-06-28T17:55:40.740Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="applet-card"]")
+2024-06-28T17:55:40.740Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/elements
+2024-06-28T17:55:40.741Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="applet-card"]' }
+2024-06-28T17:55:40.750Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.559'
+  }
+]
+2024-06-28T17:55:40.752Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.559", "css selector", "[data-testid$="card-title"]")
+2024-06-28T17:55:40.752Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.559/element
+2024-06-28T17:55:40.752Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid$="card-title"]' }
+2024-06-28T17:55:40.763Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.560'
+}
+2024-06-28T17:55:40.764Z INFO webdriver: COMMAND getElementText("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.560")
+2024-06-28T17:55:40.765Z INFO webdriver: [GET] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.560/text
+2024-06-28T17:55:40.784Z INFO webdriver: RESULT AutotestAppleta7d1b64d-5427-4fc1-8986-54f3bf4ffaa8
+2024-06-28T17:55:40.784Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.559", "css selector", "[data-testid$="card-title"]")
+2024-06-28T17:55:40.787Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.559/element
+2024-06-28T17:55:40.787Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid$="card-title"]' }
+2024-06-28T17:55:40.796Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.560'
+}
+2024-06-28T17:55:40.798Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.560")
+2024-06-28T17:55:40.798Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.560/click
+2024-06-28T17:55:40.849Z INFO webdriver: RESULT null
+2024-06-28T17:55:40.849Z INFO webdriver: COMMAND findElement("css selector", "h4[data-testid="applet-name"]")
+2024-06-28T17:55:40.850Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:40.850Z INFO webdriver: DATA { using: 'css selector', value: 'h4[data-testid="applet-name"]' }
+2024-06-28T17:55:42.171Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.565'
+}
+2024-06-28T17:55:42.173Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T17:55:42.176Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/execute/sync
+2024-06-28T17:55:42.176Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.565',
+      ELEMENT: 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.565'
+    }
+  ]
+}
+2024-06-28T17:55:42.184Z INFO webdriver: RESULT true
+2024-06-28T17:55:42.184Z INFO webdriver: COMMAND findElement("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-28T17:55:42.185Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:42.185Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-28T17:55:44.694Z INFO webdriver: RESULT {
+  error: 'no such element',
+  message: 'no such element: Unable to locate element: {"method":"css selector","selector":"span.MuiCircularProgress-root[role=progressbar]"}\n' +
+    '  (Session info: chrome-headless-shell=126.0.6478.126)',
+  stacktrace: '\tGetHandleVerifier [0x00007FF716B7EEA2+31554]\n' +
+    '\t(No symbol) [0x00007FF716AF7ED9]\n' +
+    '\t(No symbol) [0x00007FF7169B872A]\n' +
+    '\t(No symbol) [0x00007FF716A08434]\n' +
+    '\t(No symbol) [0x00007FF716A0853C]\n' +
+    '\t(No symbol) [0x00007FF716A4F6A7]\n' +
+    '\t(No symbol) [0x00007FF716A2D06F]\n' +
+    '\t(No symbol) [0x00007FF716A4C977]\n' +
+    '\t(No symbol) [0x00007FF716A2CDD3]\n' +
+    '\t(No symbol) [0x00007FF7169FA33B]\n' +
+    '\t(No symbol) [0x00007FF7169FAED1]\n' +
+    '\tGetHandleVerifier [0x00007FF716E88B1D+3217341]\n' +
+    '\tGetHandleVerifier [0x00007FF716ED5AE3+3532675]\n' +
+    '\tGetHandleVerifier [0x00007FF716ECB0E0+3489152]\n' +
+    '\tGetHandleVerifier [0x00007FF716C2E776+750614]\n' +
+    '\t(No symbol) [0x00007FF716B0375F]\n' +
+    '\t(No symbol) [0x00007FF716AFEB14]\n' +
+    '\t(No symbol) [0x00007FF716AFECA2]\n' +
+    '\t(No symbol) [0x00007FF716AEE16F]\n' +
+    '\tBaseThreadInitThunk [0x00007FFA32444CB0+16]\n' +
+    '\tRtlUserThreadStart [0x00007FFA33DFECEB+43]\n'
+}
+2024-06-28T17:55:44.696Z INFO webdriver: COMMAND findElements("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-28T17:55:44.697Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/elements
+2024-06-28T17:55:44.697Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-28T17:55:47.243Z INFO webdriver: RESULT []
+2024-06-28T17:55:47.245Z INFO webdriver: COMMAND findElements("css selector", "[data-testid="activity-card"]")
+2024-06-28T17:55:47.245Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/elements
+2024-06-28T17:55:47.245Z INFO webdriver: DATA { using: 'css selector', value: '[data-testid="activity-card"]' }
+2024-06-28T17:55:47.252Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.569'
+  }
+]
+2024-06-28T17:55:47.253Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.569", "css selector", "div[data-testId$='-card-title'] h3")
+2024-06-28T17:55:47.254Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.569/element
+2024-06-28T17:55:47.254Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testId$='-card-title'] h3" }
+2024-06-28T17:55:47.261Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.570'
+}
+2024-06-28T17:55:47.263Z INFO webdriver: COMMAND getElementText("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.570")
+2024-06-28T17:55:47.263Z INFO webdriver: [GET] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.570/text
+2024-06-28T17:55:47.270Z INFO webdriver: RESULT systemic embrace Southeast
+2024-06-28T17:55:47.271Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.569", "xpath", ".//div[@data-testid="assessment-buttons"]//p[contains(text(), "Start")]/parent::button")
+2024-06-28T17:55:47.271Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.569/element
+2024-06-28T17:55:47.271Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: './/div[@data-testid="assessment-buttons"]//p[contains(text(), "Start")]/parent::button'
+}
+2024-06-28T17:55:47.279Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.571'
+}
+2024-06-28T17:55:47.281Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.571")
+2024-06-28T17:55:47.282Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.571/click
+2024-06-28T17:55:47.335Z INFO webdriver: RESULT null
+2024-06-28T17:55:47.335Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="start-assessment-widget"] button")
+2024-06-28T17:55:47.336Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:47.336Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="start-assessment-widget"] button'
+}
+2024-06-28T17:55:48.165Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.573'
+}
+2024-06-28T17:55:48.167Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T17:55:48.167Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/execute/sync
+2024-06-28T17:55:48.167Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.573',
+      ELEMENT: 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.573'
+    }
+  ]
+}
+2024-06-28T17:55:48.174Z INFO webdriver: RESULT true
+2024-06-28T17:55:48.174Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="start-assessment-widget"] button")
+2024-06-28T17:55:48.175Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:48.175Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="start-assessment-widget"] button'
+}
+2024-06-28T17:55:48.182Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.573'
+}
+2024-06-28T17:55:48.183Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.573")
+2024-06-28T17:55:48.184Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.573/click
+2024-06-28T17:55:48.270Z INFO webdriver: RESULT null
+2024-06-28T17:55:48.271Z INFO webdriver: COMMAND findElement("css selector", "button[data-testid="assessment-save-and-exit-button"]")
+2024-06-28T17:55:48.272Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:48.272Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'button[data-testid="assessment-save-and-exit-button"]'
+}
+2024-06-28T17:55:48.285Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.574'
+}
+2024-06-28T17:55:48.286Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T17:55:48.287Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/execute/sync
+2024-06-28T17:55:48.287Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.574',
+      ELEMENT: 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.574'
+    }
+  ]
+}
+2024-06-28T17:55:48.294Z INFO webdriver: RESULT true
+2024-06-28T17:55:48.294Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid='active-item']")
+2024-06-28T17:55:48.294Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:48.295Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testid='active-item']" }
+2024-06-28T17:55:48.300Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.575'
+}
+2024-06-28T17:55:48.302Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.575", "xpath", ".//p[text()='very bad']/ancestor::div[contains(@data-testid, "select-box")]//input[@type='radio']")
+2024-06-28T17:55:48.302Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.575/element
+2024-06-28T17:55:48.302Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: `.//p[text()='very bad']/ancestor::div[contains(@data-testid, "select-box")]//input[@type='radio']`
+}
+2024-06-28T17:55:48.313Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.576'
+}
+2024-06-28T17:55:48.315Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.576")
+2024-06-28T17:55:48.315Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.576/click
+2024-06-28T17:55:48.368Z INFO webdriver: RESULT null
+2024-06-28T17:55:48.368Z INFO webdriver: COMMAND findElement("xpath", "//p[text()="Next"]/parent::button")
+2024-06-28T17:55:48.369Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:48.369Z INFO webdriver: DATA { using: 'xpath', value: '//p[text()="Next"]/parent::button' }
+2024-06-28T17:55:48.375Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579'
+}
+2024-06-28T17:55:48.378Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579")
+2024-06-28T17:55:48.378Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579/click
+2024-06-28T17:55:48.449Z INFO webdriver: RESULT null
+2024-06-28T17:55:49.460Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid='active-item']")
+2024-06-28T17:55:49.461Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:49.461Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testid='active-item']" }
+2024-06-28T17:55:49.468Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.580'
+}
+2024-06-28T17:55:49.470Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.580", "css selector", "div[data-testid="markdown"] p")
+2024-06-28T17:55:49.470Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.580/element
+2024-06-28T17:55:49.470Z INFO webdriver: DATA { using: 'css selector', value: 'div[data-testid="markdown"] p' }
+2024-06-28T17:55:49.477Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.581'
+}
+2024-06-28T17:55:49.478Z INFO webdriver: COMMAND getElementText("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.581")
+2024-06-28T17:55:49.479Z INFO webdriver: [GET] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.581/text
+2024-06-28T17:55:49.485Z INFO webdriver: RESULT Incredible Chief indexing Andorra vanquish
+2024-06-28T17:55:49.485Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid='active-item']")
+2024-06-28T17:55:49.486Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:49.486Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testid='active-item']" }
+2024-06-28T17:55:49.493Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.580'
+}
+2024-06-28T17:55:49.494Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.580", "xpath", ".//p[text()='bad']/ancestor::div[contains(@data-testid, "select-box")]//input[@type='checkbox']")
+2024-06-28T17:55:49.497Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.580/element
+2024-06-28T17:55:49.497Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: `.//p[text()='bad']/ancestor::div[contains(@data-testid, "select-box")]//input[@type='checkbox']`
+}
+2024-06-28T17:55:49.509Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.582'
+}
+2024-06-28T17:55:49.510Z INFO webdriver: COMMAND isElementSelected("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.582")
+2024-06-28T17:55:49.511Z INFO webdriver: [GET] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.582/selected
+2024-06-28T17:55:49.518Z INFO webdriver: RESULT false
+2024-06-28T17:55:49.518Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.580", "xpath", ".//p[text()='bad']/ancestor::div[contains(@data-testid, "select-box")]//input[@type='checkbox']")
+2024-06-28T17:55:49.519Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.580/element
+2024-06-28T17:55:49.519Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: `.//p[text()='bad']/ancestor::div[contains(@data-testid, "select-box")]//input[@type='checkbox']`
+}
+2024-06-28T17:55:49.528Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.582'
+}
+2024-06-28T17:55:49.529Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.582")
+2024-06-28T17:55:49.530Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.582/click
+2024-06-28T17:55:49.579Z INFO webdriver: RESULT null
+2024-06-28T17:55:49.579Z INFO webdriver: COMMAND findElement("xpath", "//p[text()="Next"]/parent::button")
+2024-06-28T17:55:49.580Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:49.580Z INFO webdriver: DATA { using: 'xpath', value: '//p[text()="Next"]/parent::button' }
+2024-06-28T17:55:49.587Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579'
+}
+2024-06-28T17:55:49.589Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579")
+2024-06-28T17:55:49.589Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579/click
+2024-06-28T17:55:49.647Z INFO webdriver: RESULT null
+2024-06-28T17:55:50.647Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid='active-item']")
+2024-06-28T17:55:50.648Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:50.648Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testid='active-item']" }
+2024-06-28T17:55:50.655Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.586'
+}
+2024-06-28T17:55:50.656Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.586", "css selector", "div[data-testid="markdown"] p")
+2024-06-28T17:55:50.657Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.586/element
+2024-06-28T17:55:50.657Z INFO webdriver: DATA { using: 'css selector', value: 'div[data-testid="markdown"] p' }
+2024-06-28T17:55:50.665Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.587'
+}
+2024-06-28T17:55:50.666Z INFO webdriver: COMMAND getElementText("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.587")
+2024-06-28T17:55:50.667Z INFO webdriver: [GET] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.587/text
+2024-06-28T17:55:50.674Z INFO webdriver: RESULT North bandwidth Jazz payment Bronze
+2024-06-28T17:55:50.674Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid='active-item']")
+2024-06-28T17:55:50.675Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:50.675Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testid='active-item']" }
+2024-06-28T17:55:50.682Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.586'
+}
+2024-06-28T17:55:50.683Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.586", "css selector", "input[type=text]")
+2024-06-28T17:55:50.684Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.586/element
+2024-06-28T17:55:50.684Z INFO webdriver: DATA { using: 'css selector', value: 'input[type=text]' }
+2024-06-28T17:55:50.695Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.588'
+}
+2024-06-28T17:55:50.697Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.588")
+2024-06-28T17:55:50.698Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.588/click
+2024-06-28T17:55:50.735Z INFO webdriver: RESULT null
+2024-06-28T17:55:50.735Z INFO webdriver: COMMAND performActions(<object>)
+2024-06-28T17:55:50.735Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/actions
+2024-06-28T17:55:50.735Z INFO webdriver: DATA {
+  actions: [ { id: 'action49', type: 'key', parameters: {}, actions: [Array] } ]
+}
+2024-06-28T17:55:50.751Z INFO webdriver: RESULT null
+2024-06-28T17:55:50.753Z INFO webdriver: COMMAND performActions(<object>)
+2024-06-28T17:55:50.754Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/actions
+2024-06-28T17:55:50.754Z INFO webdriver: DATA {
+  actions: [ { id: 'action50', type: 'key', parameters: {}, actions: [Array] } ]
+}
+2024-06-28T17:55:51.536Z INFO webdriver: RESULT null
+2024-06-28T17:55:52.286Z INFO webdriver: COMMAND findElement("xpath", "//p[text()="Next"]/parent::button")
+2024-06-28T17:55:52.287Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:52.287Z INFO webdriver: DATA { using: 'xpath', value: '//p[text()="Next"]/parent::button' }
+2024-06-28T17:55:52.296Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579'
+}
+2024-06-28T17:55:52.298Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579")
+2024-06-28T17:55:52.298Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579/click
+2024-06-28T17:55:52.354Z INFO webdriver: RESULT null
+2024-06-28T17:55:53.366Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="submit-response-modal"] div[role="dialog"]")
+2024-06-28T17:55:53.367Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:53.367Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="submit-response-modal"] div[role="dialog"]'
+}
+2024-06-28T17:55:53.373Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.591'
+}
+2024-06-28T17:55:53.375Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T17:55:53.375Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/execute/sync
+2024-06-28T17:55:53.376Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.591',
+      ELEMENT: 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.591'
+    }
+  ]
+}
+2024-06-28T17:55:53.382Z INFO webdriver: RESULT true
+2024-06-28T17:55:53.382Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="submit-response-modal"] div[role="dialog"]")
+2024-06-28T17:55:53.383Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:53.383Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="submit-response-modal"] div[role="dialog"]'
+}
+2024-06-28T17:55:53.389Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.591'
+}
+2024-06-28T17:55:53.390Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.591", "css selector", "div[data-testid="assessment-back-button"] button")
+2024-06-28T17:55:53.390Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.591/element
+2024-06-28T17:55:53.390Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="assessment-back-button"] button'
+}
+2024-06-28T17:55:53.400Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.592'
+}
+2024-06-28T17:55:53.401Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.592")
+2024-06-28T17:55:53.402Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.592/click
+2024-06-28T17:55:53.445Z INFO webdriver: RESULT null
+2024-06-28T17:55:53.445Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="submit-response-modal"] div[role="dialog"]")
+2024-06-28T17:55:53.445Z INFO webdriver: COMMAND setTimeouts(0, undefined, undefined)
+2024-06-28T17:55:53.446Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:53.446Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="submit-response-modal"] div[role="dialog"]'
+}
+2024-06-28T17:55:53.447Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/timeouts
+2024-06-28T17:55:53.447Z INFO webdriver: DATA { implicit: 0 }
+2024-06-28T17:55:53.454Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.591'
+}
+2024-06-28T17:55:53.455Z INFO webdriver: RESULT null
+2024-06-28T17:55:53.456Z INFO webdriver: COMMAND setTimeouts(2500, undefined, undefined)
+2024-06-28T17:55:53.456Z INFO webdriver: COMMAND findElements("css selector", "div[data-testid="submit-response-modal"] div[role="dialog"]")
+2024-06-28T17:55:53.459Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/timeouts
+2024-06-28T17:55:53.459Z INFO webdriver: DATA { implicit: 2500 }
+2024-06-28T17:55:53.459Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/elements
+2024-06-28T17:55:53.459Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="submit-response-modal"] div[role="dialog"]'
+}
+2024-06-28T17:55:53.461Z INFO webdriver: RESULT null
+2024-06-28T17:55:53.468Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.591'
+  }
+]
+2024-06-28T17:55:53.958Z INFO webdriver: COMMAND findElements("css selector", "div[data-testid="submit-response-modal"] div[role="dialog"]")
+2024-06-28T17:55:53.958Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/elements
+2024-06-28T17:55:53.958Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="submit-response-modal"] div[role="dialog"]'
+}
+2024-06-28T17:55:56.512Z INFO webdriver: RESULT []
+2024-06-28T17:55:56.513Z INFO webdriver: COMMAND findElement("css selector", "div[role=alert][data-testid$=banner]")
+2024-06-28T17:55:56.514Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:56.514Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[role=alert][data-testid$=banner]'
+}
+2024-06-28T17:55:59.039Z INFO webdriver: RESULT {
+  error: 'no such element',
+  message: 'no such element: Unable to locate element: {"method":"css selector","selector":"div[role=alert][data-testid$=banner]"}\n' +
+    '  (Session info: chrome-headless-shell=126.0.6478.126)',
+  stacktrace: '\tGetHandleVerifier [0x00007FF716B7EEA2+31554]\n' +
+    '\t(No symbol) [0x00007FF716AF7ED9]\n' +
+    '\t(No symbol) [0x00007FF7169B872A]\n' +
+    '\t(No symbol) [0x00007FF716A08434]\n' +
+    '\t(No symbol) [0x00007FF716A0853C]\n' +
+    '\t(No symbol) [0x00007FF716A4F6A7]\n' +
+    '\t(No symbol) [0x00007FF716A2D06F]\n' +
+    '\t(No symbol) [0x00007FF716A4C977]\n' +
+    '\t(No symbol) [0x00007FF716A2CDD3]\n' +
+    '\t(No symbol) [0x00007FF7169FA33B]\n' +
+    '\t(No symbol) [0x00007FF7169FAED1]\n' +
+    '\tGetHandleVerifier [0x00007FF716E88B1D+3217341]\n' +
+    '\tGetHandleVerifier [0x00007FF716ED5AE3+3532675]\n' +
+    '\tGetHandleVerifier [0x00007FF716ECB0E0+3489152]\n' +
+    '\tGetHandleVerifier [0x00007FF716C2E776+750614]\n' +
+    '\t(No symbol) [0x00007FF716B0375F]\n' +
+    '\t(No symbol) [0x00007FF716AFEB14]\n' +
+    '\t(No symbol) [0x00007FF716AFECA2]\n' +
+    '\t(No symbol) [0x00007FF716AEE16F]\n' +
+    '\tBaseThreadInitThunk [0x00007FFA32444CB0+16]\n' +
+    '\tRtlUserThreadStart [0x00007FFA33DFECEB+43]\n'
+}
+2024-06-28T17:55:59.041Z INFO webdriver: COMMAND findElement("css selector", "div[role=alert][data-testid$=banner]")
+2024-06-28T17:55:59.042Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:55:59.042Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[role=alert][data-testid$=banner]'
+}
+2024-06-28T17:56:01.573Z INFO webdriver: RESULT {
+  error: 'no such element',
+  message: 'no such element: Unable to locate element: {"method":"css selector","selector":"div[role=alert][data-testid$=banner]"}\n' +
+    '  (Session info: chrome-headless-shell=126.0.6478.126)',
+  stacktrace: '\tGetHandleVerifier [0x00007FF716B7EEA2+31554]\n' +
+    '\t(No symbol) [0x00007FF716AF7ED9]\n' +
+    '\t(No symbol) [0x00007FF7169B872A]\n' +
+    '\t(No symbol) [0x00007FF716A08434]\n' +
+    '\t(No symbol) [0x00007FF716A0853C]\n' +
+    '\t(No symbol) [0x00007FF716A4F6A7]\n' +
+    '\t(No symbol) [0x00007FF716A2D06F]\n' +
+    '\t(No symbol) [0x00007FF716A4C977]\n' +
+    '\t(No symbol) [0x00007FF716A2CDD3]\n' +
+    '\t(No symbol) [0x00007FF7169FA33B]\n' +
+    '\t(No symbol) [0x00007FF7169FAED1]\n' +
+    '\tGetHandleVerifier [0x00007FF716E88B1D+3217341]\n' +
+    '\tGetHandleVerifier [0x00007FF716ED5AE3+3532675]\n' +
+    '\tGetHandleVerifier [0x00007FF716ECB0E0+3489152]\n' +
+    '\tGetHandleVerifier [0x00007FF716C2E776+750614]\n' +
+    '\t(No symbol) [0x00007FF716B0375F]\n' +
+    '\t(No symbol) [0x00007FF716AFEB14]\n' +
+    '\t(No symbol) [0x00007FF716AFECA2]\n' +
+    '\t(No symbol) [0x00007FF716AEE16F]\n' +
+    '\tBaseThreadInitThunk [0x00007FFA32444CB0+16]\n' +
+    '\tRtlUserThreadStart [0x00007FFA33DFECEB+43]\n'
+}
+2024-06-28T17:56:01.576Z INFO webdriver: COMMAND findElement("css selector", "button[data-testid="assessment-save-and-exit-button"]")
+2024-06-28T17:56:01.577Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:01.577Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'button[data-testid="assessment-save-and-exit-button"]'
+}
+2024-06-28T17:56:01.583Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.574'
+}
+2024-06-28T17:56:01.584Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T17:56:01.585Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/execute/sync
+2024-06-28T17:56:01.585Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.574',
+      ELEMENT: 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.574'
+    }
+  ]
+}
+2024-06-28T17:56:01.590Z INFO webdriver: RESULT true
+2024-06-28T17:56:01.591Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid='active-item']")
+2024-06-28T17:56:01.591Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:01.591Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testid='active-item']" }
+2024-06-28T17:56:01.598Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.586'
+}
+2024-06-28T17:56:01.600Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.586", "css selector", "input[type=text]")
+2024-06-28T17:56:01.600Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.586/element
+2024-06-28T17:56:01.600Z INFO webdriver: DATA { using: 'css selector', value: 'input[type=text]' }
+2024-06-28T17:56:01.606Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.588'
+}
+2024-06-28T17:56:01.608Z INFO webdriver: COMMAND isElementEnabled("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.588")
+2024-06-28T17:56:01.608Z INFO webdriver: [GET] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.588/enabled
+2024-06-28T17:56:01.616Z INFO webdriver: RESULT true
+2024-06-28T17:56:01.617Z INFO webdriver: COMMAND getElementProperty("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.588", "value")
+2024-06-28T17:56:01.617Z INFO webdriver: [GET] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.588/property/value
+2024-06-28T17:56:01.622Z INFO webdriver: RESULT Royce minus Welch Franc Data Recycled invoice Virginia Northwest Georgia
+2024-06-28T17:56:01.622Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid='assessment-back-button'] button")
+2024-06-28T17:56:01.622Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:01.622Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: "div[data-testid='assessment-back-button'] button"
+}
+2024-06-28T17:56:01.632Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.594'
+}
+2024-06-28T17:56:01.634Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.594")
+2024-06-28T17:56:01.634Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.594/click
+2024-06-28T17:56:01.706Z INFO webdriver: RESULT null
+2024-06-28T17:56:02.709Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid='active-item']")
+2024-06-28T17:56:02.710Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:02.710Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testid='active-item']" }
+2024-06-28T17:56:02.717Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.596'
+}
+2024-06-28T17:56:02.718Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.596", "css selector", "div[data-testid="markdown"] p")
+2024-06-28T17:56:02.718Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.596/element
+2024-06-28T17:56:02.719Z INFO webdriver: DATA { using: 'css selector', value: 'div[data-testid="markdown"] p' }
+2024-06-28T17:56:02.726Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.597'
+}
+2024-06-28T17:56:02.728Z INFO webdriver: COMMAND getElementText("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.597")
+2024-06-28T17:56:02.729Z INFO webdriver: [GET] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.597/text
+2024-06-28T17:56:02.737Z INFO webdriver: RESULT Incredible Chief indexing Andorra vanquish
+2024-06-28T17:56:02.737Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid='active-item']")
+2024-06-28T17:56:02.738Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:02.738Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testid='active-item']" }
+2024-06-28T17:56:02.744Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.596'
+}
+2024-06-28T17:56:02.746Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.596", "xpath", ".//p[text()='bad']/ancestor::div[contains(@data-testid, "select-box")]//input[@type='checkbox']")
+2024-06-28T17:56:02.746Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.596/element
+2024-06-28T17:56:02.746Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: `.//p[text()='bad']/ancestor::div[contains(@data-testid, "select-box")]//input[@type='checkbox']`
+}
+2024-06-28T17:56:02.753Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.598'
+}
+2024-06-28T17:56:02.755Z INFO webdriver: COMMAND isElementSelected("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.598")
+2024-06-28T17:56:02.755Z INFO webdriver: [GET] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.598/selected
+2024-06-28T17:56:02.762Z INFO webdriver: RESULT true
+2024-06-28T17:56:02.762Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid='active-item']")
+2024-06-28T17:56:02.763Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:02.763Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testid='active-item']" }
+2024-06-28T17:56:02.769Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.596'
+}
+2024-06-28T17:56:02.770Z INFO webdriver: COMMAND findElementsFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.596", "css selector", "div[data-testid^="select-box"]")
+2024-06-28T17:56:02.771Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.596/elements
+2024-06-28T17:56:02.771Z INFO webdriver: DATA { using: 'css selector', value: 'div[data-testid^="select-box"]' }
+2024-06-28T17:56:02.781Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.599'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.600'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.601'
+  },
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.602'
+  }
+]
+2024-06-28T17:56:02.785Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.602", "css selector", "input[type='checkbox']")
+2024-06-28T17:56:02.788Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.602/element
+2024-06-28T17:56:02.788Z INFO webdriver: DATA { using: 'css selector', value: "input[type='checkbox']" }
+2024-06-28T17:56:02.799Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.603'
+}
+2024-06-28T17:56:02.800Z INFO webdriver: COMMAND isElementSelected("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.603")
+2024-06-28T17:56:02.801Z INFO webdriver: [GET] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.603/selected
+2024-06-28T17:56:02.807Z INFO webdriver: RESULT false
+2024-06-28T17:56:02.808Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.602", "css selector", "input[type='checkbox']")
+2024-06-28T17:56:02.808Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.602/element
+2024-06-28T17:56:02.808Z INFO webdriver: DATA { using: 'css selector', value: "input[type='checkbox']" }
+2024-06-28T17:56:02.815Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.603'
+}
+2024-06-28T17:56:02.816Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.603")
+2024-06-28T17:56:02.817Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.603/click
+2024-06-28T17:56:02.864Z INFO webdriver: RESULT null
+2024-06-28T17:56:02.865Z INFO webdriver: COMMAND findElement("xpath", "//p[text()="Next"]/parent::button")
+2024-06-28T17:56:02.866Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:02.866Z INFO webdriver: DATA { using: 'xpath', value: '//p[text()="Next"]/parent::button' }
+2024-06-28T17:56:02.873Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579'
+}
+2024-06-28T17:56:02.874Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579")
+2024-06-28T17:56:02.875Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579/click
+2024-06-28T17:56:02.924Z INFO webdriver: RESULT null
+2024-06-28T17:56:03.927Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid='active-item']")
+2024-06-28T17:56:03.927Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:03.927Z INFO webdriver: DATA { using: 'css selector', value: "div[data-testid='active-item']" }
+2024-06-28T17:56:03.935Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.605'
+}
+2024-06-28T17:56:03.936Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.605", "css selector", "input[type=text]")
+2024-06-28T17:56:03.937Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.605/element
+2024-06-28T17:56:03.937Z INFO webdriver: DATA { using: 'css selector', value: 'input[type=text]' }
+2024-06-28T17:56:03.944Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.606'
+}
+2024-06-28T17:56:03.945Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.606")
+2024-06-28T17:56:03.946Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.606/click
+2024-06-28T17:56:03.978Z INFO webdriver: RESULT null
+2024-06-28T17:56:03.978Z INFO webdriver: COMMAND performActions(<object>)
+2024-06-28T17:56:03.979Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/actions
+2024-06-28T17:56:03.979Z INFO webdriver: DATA {
+  actions: [ { id: 'action51', type: 'key', parameters: {}, actions: [Array] } ]
+}
+2024-06-28T17:56:03.996Z INFO webdriver: RESULT null
+2024-06-28T17:56:03.996Z INFO webdriver: COMMAND performActions(<object>)
+2024-06-28T17:56:03.997Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/actions
+2024-06-28T17:56:03.997Z INFO webdriver: DATA {
+  actions: [ { id: 'action52', type: 'key', parameters: {}, actions: [Array] } ]
+}
+2024-06-28T17:56:04.069Z INFO webdriver: RESULT null
+2024-06-28T17:56:04.819Z INFO webdriver: COMMAND findElement("xpath", "//p[text()="Next"]/parent::button")
+2024-06-28T17:56:04.820Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:04.820Z INFO webdriver: DATA { using: 'xpath', value: '//p[text()="Next"]/parent::button' }
+2024-06-28T17:56:04.828Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579'
+}
+2024-06-28T17:56:04.830Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579")
+2024-06-28T17:56:04.830Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.579/click
+2024-06-28T17:56:04.882Z INFO webdriver: RESULT null
+2024-06-28T17:56:05.897Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="submit-response-modal"] div[role="dialog"]")
+2024-06-28T17:56:05.897Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:05.898Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="submit-response-modal"] div[role="dialog"]'
+}
+2024-06-28T17:56:05.906Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.610'
+}
+2024-06-28T17:56:05.907Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T17:56:05.908Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/execute/sync
+2024-06-28T17:56:05.908Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.610',
+      ELEMENT: 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.610'
+    }
+  ]
+}
+2024-06-28T17:56:05.915Z INFO webdriver: RESULT true
+2024-06-28T17:56:05.915Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="submit-response-modal"] div[role="dialog"]")
+2024-06-28T17:56:05.916Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:05.916Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="submit-response-modal"] div[role="dialog"]'
+}
+2024-06-28T17:56:05.923Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.610'
+}
+2024-06-28T17:56:05.924Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.610", "css selector", "div[data-testid="popup-primary-button"] button")
+2024-06-28T17:56:05.925Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.610/element
+2024-06-28T17:56:05.925Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="popup-primary-button"] button'
+}
+2024-06-28T17:56:05.935Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.611'
+}
+2024-06-28T17:56:05.936Z INFO webdriver: COMMAND elementClick("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.611")
+2024-06-28T17:56:05.937Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.611/click
+2024-06-28T17:56:06.072Z INFO webdriver: RESULT null
+2024-06-28T17:56:06.073Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="submit-response-modal"] div[role="dialog"]")
+2024-06-28T17:56:06.073Z INFO webdriver: COMMAND setTimeouts(0, undefined, undefined)
+2024-06-28T17:56:06.073Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:06.073Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="submit-response-modal"] div[role="dialog"]'
+}
+2024-06-28T17:56:06.075Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/timeouts
+2024-06-28T17:56:06.075Z INFO webdriver: DATA { implicit: 0 }
+2024-06-28T17:56:06.083Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.610'
+}
+2024-06-28T17:56:06.085Z INFO webdriver: RESULT null
+2024-06-28T17:56:06.085Z INFO webdriver: COMMAND setTimeouts(2500, undefined, undefined)
+2024-06-28T17:56:06.086Z INFO webdriver: COMMAND findElements("css selector", "div[data-testid="submit-response-modal"] div[role="dialog"]")
+2024-06-28T17:56:06.086Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/timeouts
+2024-06-28T17:56:06.086Z INFO webdriver: DATA { implicit: 2500 }
+2024-06-28T17:56:06.087Z INFO webdriver: RESULT null
+2024-06-28T17:56:06.089Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/elements
+2024-06-28T17:56:06.089Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="submit-response-modal"] div[role="dialog"]'
+}
+2024-06-28T17:56:06.097Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.610'
+  }
+]
+2024-06-28T17:56:06.585Z INFO webdriver: COMMAND findElements("css selector", "div[data-testid="submit-response-modal"] div[role="dialog"]")
+2024-06-28T17:56:06.585Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/elements
+2024-06-28T17:56:06.586Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="submit-response-modal"] div[role="dialog"]'
+}
+2024-06-28T17:56:09.108Z INFO webdriver: RESULT []
+2024-06-28T17:56:09.110Z INFO webdriver: COMMAND findElement("css selector", "div[role=alert][data-testid$=banner]")
+2024-06-28T17:56:09.110Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:09.111Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[role=alert][data-testid$=banner]'
+}
+2024-06-28T17:56:09.121Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.618'
+}
+2024-06-28T17:56:09.124Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T17:56:09.127Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/execute/sync
+2024-06-28T17:56:09.128Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.618',
+      ELEMENT: 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.618'
+    }
+  ]
+}
+2024-06-28T17:56:09.138Z INFO webdriver: RESULT true
+2024-06-28T17:56:09.138Z INFO webdriver: COMMAND findElement("css selector", "div[role=alert][data-testid$=banner]")
+2024-06-28T17:56:09.139Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element
+2024-06-28T17:56:09.139Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[role=alert][data-testid$=banner]'
+}
+2024-06-28T17:56:09.147Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.618'
+}
+2024-06-28T17:56:09.149Z INFO webdriver: COMMAND findElementFromElement("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.618", "css selector", "div#markdown-wrapper p")
+2024-06-28T17:56:09.149Z INFO webdriver: [POST] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.618/element
+2024-06-28T17:56:09.149Z INFO webdriver: DATA { using: 'css selector', value: 'div#markdown-wrapper p' }
+2024-06-28T17:56:09.159Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.619'
+}
+2024-06-28T17:56:09.161Z INFO webdriver: COMMAND getElementText("f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.619")
+2024-06-28T17:56:09.161Z INFO webdriver: [GET] http://0.0.0.0:63692/session/de19c1b0b77979fcb539b115560b6d1c/element/f.9102CD95CB38C5C96DA0488FE4461754.d.F000F0D92AA8670AE9707B541807D432.e.619/text
+2024-06-28T17:56:09.169Z INFO webdriver: RESULT Done! We received your answers.

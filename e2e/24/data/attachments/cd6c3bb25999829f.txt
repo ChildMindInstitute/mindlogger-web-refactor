@@ -1,0 +1,284 @@
+.........Console Logs.........
+
+{
+  message: 'Response body of POST https://api-dev.cmiml.net/users: {"result":{"email":"autotestuser+9424db32-3b3c-48e9-aacd-2a23b30d76e6@mailinator.com","firstName":"Kaycee","lastName":"Satterfield","id":"c4d6b2a1-6ab9-4518-b60e-159cf730fdb5"}}',
+  level: 'debug',
+  timestamp: '2024-06-28T17:59:49.145Z'
+}
+{
+  message: 'Response body of POST https://api-dev.cmiml.net/auth/login: {"result":{"token":{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNGQ2YjJhMS02YWI5LTQ1MTgtYjYwZS0xNTljZjczMGZkYjUiLCJyanRpIjoiOGM2ZDk4Y2ItNjg3OC00N2M2LWI3OTQtNTFhZmFjNzE4NzY0IiwiZXhwIjoxNzIyMTg5NTg5LCJqdGkiOiI5OWRmZDJhMy1mNGQxLTQ1MTUtYTdjZC0xNWFiYzhkMDI4ZmEifQ.By2ZEVBMIFXwZHPkrzyAD5Eo3h5RCKVaEnySqh4k7Ko","refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNGQ2YjJhMS02YWI5LTQ1MTgtYjYwZS0xNTljZjczMGZkYjUiLCJqdGkiOiI4YzZkOThjYi02ODc4LTQ3YzYtYjc5NC01MWFmYWM3MTg3NjQiLCJleHAiOjE3NTA3MDE1ODl9.EJK_WMbe3OYmsTy1K0lWZkNwgoLN8EcRthQyTaEJAAk","tokenType":"Bearer"},"user":{"email":"autotestuser+9424db32-3b3c-48e9-aacd-2a23b30d76e6@mailinator.com","firstName":"Kaycee","lastName":"Satterfield","id":"c4d6b2a1-6ab9-4518-b60e-159cf730fdb5"}}}',
+  level: 'debug',
+  timestamp: '2024-06-28T17:59:49.917Z'
+}
+2024-06-28T17:59:49.918Z INFO webdriver: COMMAND navigateTo("https://pr-489.d34nh6rsqmrdi2.amplifyapp.com/login")
+2024-06-28T17:59:49.919Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/url
+2024-06-28T17:59:49.919Z INFO webdriver: DATA { url: 'https://pr-489.d34nh6rsqmrdi2.amplifyapp.com/login' }
+2024-06-28T17:59:50.138Z INFO webdriver: RESULT null
+2024-06-28T17:59:50.138Z INFO webdriver: COMMAND isAlertOpen()
+2024-06-28T17:59:50.139Z INFO webdriver: [GET] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/alert
+2024-06-28T17:59:50.141Z INFO webdriver: RESULT false
+2024-06-28T17:59:50.142Z INFO webdriver: COMMAND findElement("xpath", ".//button[normalize-space(text()) = "Log In"] | .//button[not(.//button[normalize-space(text()) = "Log In"]) and normalize-space() = "Log In"]")
+2024-06-28T17:59:50.142Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:50.142Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: './/button[normalize-space(text()) = "Log In"] | .//button[not(.//button[normalize-space(text()) = "Log In"]) and normalize-space() = "Log In"]'
+}
+2024-06-28T17:59:50.757Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.268'
+}
+2024-06-28T17:59:50.760Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T17:59:50.760Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/execute/sync
+2024-06-28T17:59:50.761Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.268',
+      ELEMENT: 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.268'
+    }
+  ]
+}
+2024-06-28T17:59:50.772Z INFO webdriver: RESULT true
+2024-06-28T17:59:50.772Z INFO webdriver: COMMAND findElement("css selector", "input[name=email]")
+2024-06-28T17:59:50.773Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:50.773Z INFO webdriver: DATA { using: 'css selector', value: 'input[name=email]' }
+2024-06-28T17:59:50.786Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.269'
+}
+2024-06-28T17:59:50.788Z INFO webdriver: COMMAND isElementEnabled("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.269")
+2024-06-28T17:59:50.788Z INFO webdriver: [GET] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.269/enabled
+2024-06-28T17:59:50.798Z INFO webdriver: RESULT true
+2024-06-28T17:59:50.798Z INFO webdriver: COMMAND elementClear("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.269")
+2024-06-28T17:59:50.799Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.269/clear
+2024-06-28T17:59:50.827Z INFO webdriver: RESULT null
+2024-06-28T17:59:50.827Z INFO webdriver: COMMAND elementSendKeys("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.269", "autotestuser+9424db32-3b3c-48e9-aacd-2a23b30d76e6@mailinator.com")
+2024-06-28T17:59:50.828Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.269/value
+2024-06-28T17:59:50.828Z INFO webdriver: DATA {
+  text: 'autotestuser+9424db32-3b3c-48e9-aacd-2a23b30d76e6@mailinator.com'
+}
+2024-06-28T17:59:51.082Z INFO webdriver: RESULT null
+2024-06-28T17:59:51.832Z INFO webdriver: COMMAND findElement("css selector", "input[name=password]")
+2024-06-28T17:59:51.833Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:51.833Z INFO webdriver: DATA { using: 'css selector', value: 'input[name=password]' }
+2024-06-28T17:59:51.841Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.288'
+}
+2024-06-28T17:59:51.843Z INFO webdriver: COMMAND isElementEnabled("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.288")
+2024-06-28T17:59:51.843Z INFO webdriver: [GET] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.288/enabled
+2024-06-28T17:59:51.850Z INFO webdriver: RESULT true
+2024-06-28T17:59:51.850Z INFO webdriver: COMMAND elementClear("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.288")
+2024-06-28T17:59:51.852Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.288/clear
+2024-06-28T17:59:51.873Z INFO webdriver: RESULT null
+2024-06-28T17:59:51.874Z INFO webdriver: COMMAND elementSendKeys("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.288", "Autotest123")
+2024-06-28T17:59:51.874Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.288/value
+2024-06-28T17:59:51.874Z INFO webdriver: DATA { text: 'Autotest123' }
+2024-06-28T17:59:51.950Z INFO webdriver: RESULT null
+2024-06-28T17:59:52.705Z INFO webdriver: COMMAND findElement("xpath", ".//button[normalize-space(text()) = "Log In"] | .//button[not(.//button[normalize-space(text()) = "Log In"]) and normalize-space() = "Log In"]")
+2024-06-28T17:59:52.706Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:52.706Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: './/button[normalize-space(text()) = "Log In"] | .//button[not(.//button[normalize-space(text()) = "Log In"]) and normalize-space() = "Log In"]'
+}
+2024-06-28T17:59:52.714Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.268'
+}
+2024-06-28T17:59:52.715Z INFO webdriver: COMMAND elementClick("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.268")
+2024-06-28T17:59:52.716Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.268/click
+2024-06-28T17:59:52.767Z INFO webdriver: RESULT null
+2024-06-28T17:59:52.767Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="header-user-account-dropdown"]")
+2024-06-28T17:59:52.768Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:52.768Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="header-user-account-dropdown"]'
+}
+2024-06-28T17:59:53.670Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.291'
+}
+2024-06-28T17:59:53.673Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T17:59:53.674Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/execute/sync
+2024-06-28T17:59:53.674Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.291',
+      ELEMENT: 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.291'
+    }
+  ]
+}
+2024-06-28T17:59:53.681Z INFO webdriver: RESULT true
+2024-06-28T17:59:53.681Z INFO webdriver: COMMAND findElement("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-28T17:59:53.682Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:53.682Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-28T17:59:53.689Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.292'
+}
+2024-06-28T17:59:53.691Z INFO webdriver: COMMAND findElements("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-28T17:59:53.691Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/elements
+2024-06-28T17:59:53.691Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-28T17:59:53.699Z INFO webdriver: RESULT [
+  {
+    'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.292'
+  }
+]
+2024-06-28T17:59:54.197Z INFO webdriver: COMMAND findElements("css selector", "span.MuiCircularProgress-root[role=progressbar]")
+2024-06-28T17:59:54.198Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/elements
+2024-06-28T17:59:54.199Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'span.MuiCircularProgress-root[role=progressbar]'
+}
+2024-06-28T17:59:56.737Z INFO webdriver: RESULT []
+2024-06-28T17:59:56.738Z INFO webdriver: COMMAND findElement("css selector", "div[data-testid="header-user-account-dropdown"]")
+2024-06-28T17:59:56.739Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:56.739Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'div[data-testid="header-user-account-dropdown"]'
+}
+2024-06-28T17:59:56.746Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.291'
+}
+2024-06-28T17:59:56.748Z INFO webdriver: COMMAND elementClick("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.291")
+2024-06-28T17:59:56.749Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.291/click
+2024-06-28T17:59:56.809Z INFO webdriver: RESULT null
+2024-06-28T17:59:56.809Z INFO webdriver: COMMAND findElement("xpath", "//li[@role="menuitem" and contains(text(), "Settings")]")
+2024-06-28T17:59:56.810Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:56.810Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: '//li[@role="menuitem" and contains(text(), "Settings")]'
+}
+2024-06-28T17:59:56.818Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.296'
+}
+2024-06-28T17:59:56.820Z INFO webdriver: COMMAND elementClick("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.296")
+2024-06-28T17:59:56.821Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.296/click
+2024-06-28T17:59:56.902Z INFO webdriver: RESULT null
+2024-06-28T17:59:56.904Z INFO webdriver: COMMAND findElement("css selector", "input#change-password-form-confirm-password")
+2024-06-28T17:59:56.905Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:56.905Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'input#change-password-form-confirm-password'
+}
+2024-06-28T17:59:56.917Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.297'
+}
+2024-06-28T17:59:56.919Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T17:59:56.921Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/execute/sync
+2024-06-28T17:59:56.921Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.297',
+      ELEMENT: 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.297'
+    }
+  ]
+}
+2024-06-28T17:59:57.044Z INFO webdriver: RESULT true
+2024-06-28T17:59:57.046Z INFO webdriver: COMMAND findElement("css selector", "input#change-password-form-old-password")
+2024-06-28T17:59:57.050Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:57.050Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'input#change-password-form-old-password'
+}
+2024-06-28T17:59:57.061Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.299'
+}
+2024-06-28T17:59:57.064Z INFO webdriver: COMMAND isElementEnabled("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.299")
+2024-06-28T17:59:57.075Z INFO webdriver: [GET] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.299/enabled
+2024-06-28T17:59:57.083Z INFO webdriver: RESULT true
+2024-06-28T17:59:57.083Z INFO webdriver: COMMAND elementClear("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.299")
+2024-06-28T17:59:57.084Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.299/clear
+2024-06-28T17:59:57.108Z INFO webdriver: RESULT null
+2024-06-28T17:59:57.108Z INFO webdriver: COMMAND elementSendKeys("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.299", "Autotest123")
+2024-06-28T17:59:57.109Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.299/value
+2024-06-28T17:59:57.109Z INFO webdriver: DATA { text: 'Autotest123' }
+2024-06-28T17:59:57.188Z INFO webdriver: RESULT null
+2024-06-28T17:59:57.953Z INFO webdriver: COMMAND findElement("css selector", "input#change-password-form-new-password")
+2024-06-28T17:59:57.954Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:57.954Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'input#change-password-form-new-password'
+}
+2024-06-28T17:59:57.962Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.302'
+}
+2024-06-28T17:59:57.964Z INFO webdriver: COMMAND isElementEnabled("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.302")
+2024-06-28T17:59:57.964Z INFO webdriver: [GET] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.302/enabled
+2024-06-28T17:59:57.971Z INFO webdriver: RESULT true
+2024-06-28T17:59:57.972Z INFO webdriver: COMMAND elementClear("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.302")
+2024-06-28T17:59:57.972Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.302/clear
+2024-06-28T17:59:57.994Z INFO webdriver: RESULT null
+2024-06-28T17:59:57.994Z INFO webdriver: COMMAND elementSendKeys("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.302", "UpdatedAutotest123")
+2024-06-28T17:59:57.995Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.302/value
+2024-06-28T17:59:57.995Z INFO webdriver: DATA { text: 'UpdatedAutotest123' }
+2024-06-28T17:59:58.102Z INFO webdriver: RESULT null
+2024-06-28T17:59:58.863Z INFO webdriver: COMMAND findElement("css selector", "input#change-password-form-confirm-password")
+2024-06-28T17:59:58.864Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:58.864Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'input#change-password-form-confirm-password'
+}
+2024-06-28T17:59:58.872Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.297'
+}
+2024-06-28T17:59:58.873Z INFO webdriver: COMMAND isElementEnabled("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.297")
+2024-06-28T17:59:58.874Z INFO webdriver: [GET] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.297/enabled
+2024-06-28T17:59:58.881Z INFO webdriver: RESULT true
+2024-06-28T17:59:58.882Z INFO webdriver: COMMAND elementClear("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.297")
+2024-06-28T17:59:58.882Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.297/clear
+2024-06-28T17:59:58.905Z INFO webdriver: RESULT null
+2024-06-28T17:59:58.905Z INFO webdriver: COMMAND elementSendKeys("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.297", "Autotest123")
+2024-06-28T17:59:58.906Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.297/value
+2024-06-28T17:59:58.906Z INFO webdriver: DATA { text: 'Autotest123' }
+2024-06-28T17:59:58.984Z INFO webdriver: RESULT null
+2024-06-28T17:59:59.737Z INFO webdriver: COMMAND findElement("xpath", ".//button[normalize-space(text()) = "Submit"] | .//button[not(.//button[normalize-space(text()) = "Submit"]) and normalize-space() = "Submit"]")
+2024-06-28T17:59:59.738Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:59.738Z INFO webdriver: DATA {
+  using: 'xpath',
+  value: './/button[normalize-space(text()) = "Submit"] | .//button[not(.//button[normalize-space(text()) = "Submit"]) and normalize-space() = "Submit"]'
+}
+2024-06-28T17:59:59.746Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.306'
+}
+2024-06-28T17:59:59.748Z INFO webdriver: COMMAND elementClick("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.306")
+2024-06-28T17:59:59.748Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.306/click
+2024-06-28T17:59:59.792Z INFO webdriver: RESULT null
+2024-06-28T17:59:59.792Z INFO webdriver: COMMAND findElement("css selector", "p#change-password-form-confirm-password")
+2024-06-28T17:59:59.793Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:59.793Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'p#change-password-form-confirm-password'
+}
+2024-06-28T17:59:59.802Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.328'
+}
+2024-06-28T17:59:59.805Z INFO webdriver: COMMAND executeScript(<fn>, <object>)
+2024-06-28T17:59:59.805Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/execute/sync
+2024-06-28T17:59:59.805Z INFO webdriver: DATA {
+  script: 'isElementDisplayed(...) [8489 bytes]',
+  args: [
+    {
+      'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.328',
+      ELEMENT: 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.328'
+    }
+  ]
+}
+2024-06-28T17:59:59.813Z INFO webdriver: RESULT true
+2024-06-28T17:59:59.814Z INFO webdriver: COMMAND findElement("css selector", "p#change-password-form-confirm-password")
+2024-06-28T17:59:59.814Z INFO webdriver: [POST] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element
+2024-06-28T17:59:59.814Z INFO webdriver: DATA {
+  using: 'css selector',
+  value: 'p#change-password-form-confirm-password'
+}
+2024-06-28T17:59:59.822Z INFO webdriver: RESULT {
+  'element-6066-11e4-a52e-4f735466cecf': 'f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.328'
+}
+2024-06-28T17:59:59.824Z INFO webdriver: COMMAND isElementEnabled("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.328")
+2024-06-28T17:59:59.825Z INFO webdriver: [GET] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.328/enabled
+2024-06-28T17:59:59.833Z INFO webdriver: RESULT true
+2024-06-28T17:59:59.833Z INFO webdriver: COMMAND getElementText("f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.328")
+2024-06-28T17:59:59.864Z INFO webdriver: [GET] http://0.0.0.0:63980/session/90fd77048f787da7d72eeb558ef182c2/element/f.EB533849DB838664D00B1C3EB1EEA241.d.6D6A17170BAF10A52F1BF20ABB4D9704.e.328/text
+2024-06-28T17:59:59.873Z INFO webdriver: RESULT Passwords Do Not Match
