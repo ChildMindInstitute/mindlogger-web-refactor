@@ -28,6 +28,10 @@ const SurveyHeader = (props: Props) => {
 
   const title = props.title ?? context.activity.name;
 
+  const isProgressDefined = props.progress !== undefined;
+
+  const titleMarginBottom = greaterThanSM ? '8px' : '10px';
+
   return (
     <Box
       paddingX={greaterThanSM ? '24px' : '16px'}
@@ -49,7 +53,6 @@ const SurveyHeader = (props: Props) => {
         display="flex"
         alignItems="center"
         justifyContent="space-between"
-        height="100px"
         gap={1.5}
       >
         {greaterThanSM && props.entityTimer && (
@@ -63,7 +66,7 @@ const SurveyHeader = (props: Props) => {
             display="flex"
             justifyContent={greaterThanSM ? 'center' : 'space-between'}
             alignItems="center"
-            marginBottom={greaterThanSM ? '8px' : '10px'}
+            marginBottom={isProgressDefined ? titleMarginBottom : undefined}
           >
             <Box display="flex" alignItems="center" gap="8px">
               {isStringExist(context.watermark) && (
@@ -85,9 +88,9 @@ const SurveyHeader = (props: Props) => {
               />
             )}
           </Box>
-          {props.progress !== undefined && (
+          {isProgressDefined && (
             <BaseProgressBar
-              percentage={props.progress}
+              percentage={props.progress as number}
               testid="assessment-activity-progress-bar"
             />
           )}
