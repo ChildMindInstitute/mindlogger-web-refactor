@@ -28,7 +28,7 @@ export const ProcessingScreen = () => {
   return (
     <SurveyLayout
       isSaveAndExitButtonShown={false}
-      // headerTitle={headerTitle}
+      title="Test Activity Or Flow Title" // TODO: Change on real one
       footerActions={
         <SurveyManageButtons
           isLoading={false}
