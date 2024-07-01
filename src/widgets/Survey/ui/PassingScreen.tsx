@@ -29,8 +29,6 @@ const PassingScreen = () => {
 
   const context = useContext(SurveyContext);
 
-  const entityTimer = context.event.timers.timer ?? null;
-
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(
       state,
@@ -293,7 +291,6 @@ const PassingScreen = () => {
       <SurveyLayout
         progress={progress}
         isSaveAndExitButtonShown={true}
-        entityTimer={entityTimer ?? undefined}
         footerActions={
           <SurveyManageButtons
             timerSettings={!isSubmitModalOpen ? timerSettings : undefined}
