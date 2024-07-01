@@ -31,7 +31,11 @@ const WelcomeScreen = () => {
       eventId: context.eventId,
     });
 
-    if (context.flow && !groupProgress) {
+    const isGroupDefined = !!groupProgress;
+
+    const isGroupStarted = isGroupDefined && groupProgress.startAt && !groupProgress.endAt;
+
+    if (context.flow && !isGroupStarted) {
       startFlow(context.eventId, context.flow);
     }
 
