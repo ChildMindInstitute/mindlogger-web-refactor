@@ -7,6 +7,7 @@ import { Banners, Box } from '~/shared/ui';
 import { HourMinute } from '~/shared/utils';
 
 type Props = PropsWithChildren<{
+  title?: string;
   progress?: number;
   entityTimer?: HourMinute;
 
@@ -27,6 +28,8 @@ const SurveyLayout = (props: Props) => {
       <SurveyHeader
         progress={props.progress}
         isSaveAndExitButtonShown={props.isSaveAndExitButtonShown}
+        entityTimer={props.entityTimer}
+        title={props.title}
       />
 
       <Box

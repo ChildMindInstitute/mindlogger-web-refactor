@@ -61,7 +61,7 @@ const ROUTES = {
       flowId: string | null;
       publicAppletKey: string | null;
     }) =>
-      `/public/answer-processing?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}&flowId=${flowId}&publicAppletKey=${publicAppletKey}`,
+      `/public/answer-processing?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}${flowId ? `flowId=${flowId}` : ''}${publicAppletKey ? `publicAppletKey=${publicAppletKey}` : ''}`,
   },
 
   // Protected routes
@@ -119,7 +119,7 @@ const ROUTES = {
       flowId: string | null;
       publicAppletKey: string | null;
     }) =>
-      `/protected/answer-processing?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}&flowId=${flowId}&publicAppletKey=${publicAppletKey}`,
+      `/protected/answer-processing?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}${flowId ? `flowId=${flowId}` : ''}${publicAppletKey ? `publicAppletKey=${publicAppletKey}` : ''}`,
   },
 };
 
