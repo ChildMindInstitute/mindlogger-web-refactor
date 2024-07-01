@@ -159,8 +159,8 @@ const PassingScreen = () => {
       return completeFlow();
     }
 
-    if (isSummaryScreenOn && hasAnySummaryScreenResults) {
-      openSummaryScreen({ activityId: context.activityId, eventId: context.eventId });
+    if (isSummaryScreenOn && isSummaryDataExist) {
+      return openSummaryScreen({ activityId: context.activityId, eventId: context.eventId });
     }
 
     return completeActivity();
