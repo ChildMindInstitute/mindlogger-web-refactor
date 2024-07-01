@@ -91,27 +91,24 @@ const PassingScreen = () => {
   });
 
   const onSubmitSuccess = () => {
+    const isSummaryScreenOn = context.activity.scoresAndReports?.showScoreSummary ?? false;
+
     const groupProgress = getGroupProgress({
       entityId: context.entityId,
       eventId: context.eventId,
     });
 
-    const isFlowGroup = groupProgress?.type === ActivityPipelineType.Flow;
+    if (!groupProgress) {
+      throw new Error('[obSubmitSuccess] GroupProgress is not defined');
+    }
+
+    const isFlowGroup = groupProgress.type === ActivityPipelineType.Flow;
 
     const nextActivityIndex = (groupProgress as FlowProgress).pipelineActivityOrder + 1;
 
     const nextActivity = context.flow?.activityIds[nextActivityIndex] ?? null;
 
     const isLastActivity = nextActivity === null;
-
-    // Show notification
-    if (isFlowGroup && !isLastActivity) {
-      addSuccessBanner(t('toast.next_activity'));
-    } else {
-      addSuccessBanner(t('toast.answers_submitted'));
-    }
-
-    const isSummaryScreenOn = context.activity.scoresAndReports?.showScoreSummary ?? false;
 
     const summaryData = getSummaryForCurrentActivity();
 
@@ -147,19 +144,26 @@ const PassingScreen = () => {
     const hasAnySummaryScreenResults =
       Object.keys(groupProgress?.context.summaryData ?? {}).length > 0;
 
-    if (!isFlowGroup && !context.flow) {
-      if (isSummaryScreenOn && isSummaryDataExist) {
+    // Show notification
+    if (isFlowGroup && !isLastActivity) {
+      addSuccessBanner(t('toast.next_activity'));
+    } else {
+      addSuccessBanner(t('toast.answers_submitted'));
+    }
+
+    if (isFlowGroup && context.flow) {
+      if (isLastActivity && hasAnySummaryScreenResults) {
         return openSummaryScreen({ activityId: context.activityId, eventId: context.eventId });
       }
 
-      return completeActivity();
+      return completeFlow();
     }
 
-    if (isLastActivity && hasAnySummaryScreenResults) {
+    if (isSummaryScreenOn && isSummaryDataExist) {
       return openSummaryScreen({ activityId: context.activityId, eventId: context.eventId });
     }
 
-    return context.flow && completeFlow();
+    return completeActivity();
   };
 
   const { submitAnswers, isLoading } = useSubmitAnswersMutations({
