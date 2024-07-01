@@ -67,6 +67,34 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
     return `${formatTimerTime(timeToLeft)} remaining`;
   };
 
+  const checkLessThan10Mins = (): boolean => {
+    if (!groupStartAt) {
+      return false;
+    }
+
+    const timeToLeft = getTimeToLeft(new Date(groupStartAt));
+
+    if (!timeToLeft) {
+      return false;
+    }
+
+    const timeLeftInMs = getMsFromHours(timeToLeft.hours) + getMsFromMinutes(timeToLeft.minutes);
+
+    const SEC = 1000;
+
+    const MIN = SEC * 60;
+
+    const isLessThan10Mins = timeLeftInMs < MIN * 10;
+
+    return isLessThan10Mins;
+  };
+
+  const getColor = () => {
+    const isLessThan10Mins = checkLessThan10Mins();
+
+    return isLessThan10Mins ? Theme.colors.light.error : Theme.colors.light.outline;
+  };
+
   useEffect(() => {
     if (groupStartAt) {
       setTimer({
@@ -79,9 +107,21 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
   }, [groupStartAt, setTimer, varForDeps]);
 
   return (
-    <Box display="flex" padding="8px 12px" gap="8px" minWidth="175px">
-      <ClockIcon width="24px" height="24px" color={Theme.colors.light.outline} />
-      <Text color={Theme.colors.light.outline}>{showTimeToLeft()}</Text>
+    <Box
+      display="flex"
+      gap="8px"
+      minWidth="175px"
+      sx={{
+        animation: checkLessThan10Mins() ? 'blinking 1s infinite' : 'none',
+        '@keyframes blinking': {
+          '0%': { opacity: 1 },
+          '50%': { opacity: 0.1 },
+          '100%': { opacity: 1 },
+        },
+      }}
+    >
+      <ClockIcon width="24px" height="24px" color={getColor()} />
+      <Text color={getColor()}>{showTimeToLeft()}</Text>
     </Box>
   );
 };

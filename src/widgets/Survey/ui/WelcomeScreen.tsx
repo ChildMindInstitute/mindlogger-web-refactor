@@ -17,8 +17,6 @@ const WelcomeScreen = () => {
 
   const context = useContext(SurveyContext);
 
-  const entityTimer = context.event.timers.timer ?? null;
-
   const { startActivity, startFlow } = appletModel.hooks.useEntityStart();
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
@@ -50,7 +48,6 @@ const WelcomeScreen = () => {
     <SurveyLayout
       progress={0}
       isSaveAndExitButtonShown={true}
-      entityTimer={entityTimer ?? undefined}
       footerActions={
         <StartSurveyButton
           width={greaterThanSM ? '375px' : '335px'}
