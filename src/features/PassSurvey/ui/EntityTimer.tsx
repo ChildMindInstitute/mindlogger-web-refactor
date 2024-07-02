@@ -35,7 +35,7 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
 
   const groupStartAt = group?.startAt ?? null;
 
-  const getTimeToLeft = (startAt: Date) => {
+  const calculateTimeLeft = (startAt: Date) => {
     const activityDuration: number =
       getMsFromHours(entityTimerSettings.hours) + getMsFromMinutes(entityTimerSettings.minutes);
 
@@ -53,18 +53,42 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
     }
   };
 
-  const showTimeToLeft = () => {
+  const getTimeToLeft = () => {
     if (!groupStartAt) {
       return formatTimerTime(entityTimerSettings);
     }
 
-    const timeToLeft = getTimeToLeft(new Date(groupStartAt));
+    const timeToLeft = calculateTimeLeft(new Date(groupStartAt));
 
     if (!timeToLeft) {
       return '00:00';
     }
 
     return `${formatTimerTime(timeToLeft)} remaining`;
+  };
+
+  const checkLessThan10Mins = (): boolean => {
+    if (!groupStartAt) {
+      return false;
+    }
+
+    const timeToLeft = calculateTimeLeft(new Date(groupStartAt));
+
+    if (!timeToLeft) {
+      return false;
+    }
+
+    const timeLeftInMs = getMsFromHours(timeToLeft.hours) + getMsFromMinutes(timeToLeft.minutes);
+
+    const isLessThan10Mins = timeLeftInMs < MS_IN_MINUTE * 10;
+
+    return isLessThan10Mins;
+  };
+
+  const getColor = () => {
+    const isLessThan10Mins = checkLessThan10Mins();
+
+    return isLessThan10Mins ? Theme.colors.light.error : Theme.colors.light.outline;
   };
 
   useEffect(() => {
@@ -79,9 +103,21 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
   }, [groupStartAt, setTimer, varForDeps]);
 
   return (
-    <Box display="flex" padding="8px 12px" gap="8px" minWidth="175px">
-      <ClockIcon width="24px" height="24px" color={Theme.colors.light.outline} />
-      <Text color={Theme.colors.light.outline}>{showTimeToLeft()}</Text>
+    <Box
+      display="flex"
+      gap="8px"
+      minWidth="175px"
+      sx={{
+        animation: checkLessThan10Mins() ? 'blinking 1s infinite' : 'none',
+        '@keyframes blinking': {
+          '0%': { opacity: 1 },
+          '50%': { opacity: 0.1 },
+          '100%': { opacity: 1 },
+        },
+      }}
+    >
+      <ClockIcon width="24px" height="24px" color={getColor()} />
+      <Text color={getColor()}>{getTimeToLeft()}</Text>
     </Box>
   );
 };
