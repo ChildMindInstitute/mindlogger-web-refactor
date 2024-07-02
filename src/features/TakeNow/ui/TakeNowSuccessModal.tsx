@@ -42,7 +42,13 @@ export const TakeNowSuccessModal = ({
       { send_immediately: true },
       () => {
         onClose?.();
-        window.close();
+        const targetWindow = window.opener as Window;
+
+        if (targetWindow) {
+          // message sent to the parent window that is opening the file into the new tab
+          // the file receiving the message in the admin panel is TakeNowModal.tsx
+          targetWindow.postMessage('close-me', import.meta.env.VITE_ADMIN_PANEL_HOST);
+        }
       },
     );
   };
