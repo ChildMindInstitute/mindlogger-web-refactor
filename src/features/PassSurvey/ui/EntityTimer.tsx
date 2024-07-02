@@ -35,7 +35,7 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
 
   const groupStartAt = group?.startAt ?? null;
 
-  const getTimeToLeft = (startAt: Date) => {
+  const calculateTimeLeft = (startAt: Date) => {
     const activityDuration: number =
       getMsFromHours(entityTimerSettings.hours) + getMsFromMinutes(entityTimerSettings.minutes);
 
@@ -53,12 +53,12 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
     }
   };
 
-  const showTimeToLeft = () => {
+  const getTimeToLeft = () => {
     if (!groupStartAt) {
       return formatTimerTime(entityTimerSettings);
     }
 
-    const timeToLeft = getTimeToLeft(new Date(groupStartAt));
+    const timeToLeft = calculateTimeLeft(new Date(groupStartAt));
 
     if (!timeToLeft) {
       return '00:00';
@@ -72,7 +72,7 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
       return false;
     }
 
-    const timeToLeft = getTimeToLeft(new Date(groupStartAt));
+    const timeToLeft = calculateTimeLeft(new Date(groupStartAt));
 
     if (!timeToLeft) {
       return false;
@@ -80,11 +80,7 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
 
     const timeLeftInMs = getMsFromHours(timeToLeft.hours) + getMsFromMinutes(timeToLeft.minutes);
 
-    const SEC = 1000;
-
-    const MIN = SEC * 60;
-
-    const isLessThan10Mins = timeLeftInMs < MIN * 10;
+    const isLessThan10Mins = timeLeftInMs < MS_IN_MINUTE * 10;
 
     return isLessThan10Mins;
   };
@@ -121,7 +117,7 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
       }}
     >
       <ClockIcon width="24px" height="24px" color={getColor()} />
-      <Text color={getColor()}>{showTimeToLeft()}</Text>
+      <Text color={getColor()}>{getTimeToLeft()}</Text>
     </Box>
   );
 };
