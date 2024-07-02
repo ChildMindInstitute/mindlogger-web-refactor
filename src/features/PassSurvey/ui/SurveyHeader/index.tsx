@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
-import { EntityTimer } from './EntityTimer';
-import { SurveyContext } from '../lib';
+import { SurveyContext } from '../../lib';
+import { EntityTimer } from '../EntityTimer';
 
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import { MultiInformantTooltip } from '~/features/TakeNow';
@@ -50,18 +50,22 @@ const SurveyHeader = (props: Props) => {
 
       <Box
         id="activity-details-header"
-        display="flex"
+        display="grid"
+        gridAutoFlow="column"
         alignItems="center"
-        justifyContent="space-between"
+        justifyContent="center"
+        gridTemplateColumns="1fr minmax(300px, 900px) 1fr"
         gap={1.5}
       >
         {greaterThanSM && props.entityTimer && (
-          <EntityTimer entityTimerSettings={props.entityTimer} />
+          <Box flex={1}>
+            <EntityTimer entityTimerSettings={props.entityTimer} />
+          </Box>
         )}
 
         {greaterThanSM && <MultiInformantTooltip />}
 
-        <Box flex={1} minWidth="300px" maxWidth="900px">
+        <Box gridColumn="2/3">
           <Box
             display="flex"
             justifyContent={greaterThanSM ? 'center' : 'space-between'}
@@ -88,6 +92,7 @@ const SurveyHeader = (props: Props) => {
               />
             )}
           </Box>
+
           {isProgressDefined && (
             <BaseProgressBar
               percentage={props.progress as number}
@@ -100,6 +105,7 @@ const SurveyHeader = (props: Props) => {
           <Box
             width="125px"
             height="100%"
+            gridColumn="3/4"
             display="flex"
             alignItems="center"
             justifyContent="center"
