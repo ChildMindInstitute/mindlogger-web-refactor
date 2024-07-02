@@ -5,6 +5,7 @@ import {
   mapRawDataToSurveyContext,
   useSurveyDataQuery,
 } from '~/features/PassSurvey';
+import Loader from '~/shared/ui/Loader';
 
 type Props = {
   appletId: string;
@@ -24,7 +25,7 @@ function SurveyAnswerProcessingWidget(props: Props) {
     });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (isError) {
