@@ -5,6 +5,7 @@ import { ProgressBar } from './ProgressBar';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
 import { SurveyContext, SurveyLayout, SurveyManageButtons } from '~/features/PassSurvey';
+import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { useCustomTranslation } from '~/shared/utils';
@@ -61,14 +62,21 @@ export const ProcessingScreen = () => {
             <Text variant="body1">{t('answerProcessingScreen.description')}</Text>
           </Box>
 
-          <ProgressBar
-            activityName={context.activity.name}
-            currentActivityIndex={0}
-            activitiesCount={10}
-            isCompleted={false} // TODO: Change on real one when the store will be ready
-            isNotStarted={true} // TODO: Change on real one when the store will be ready
-            isInProgress={false} // TODO: Change on real one when the store will be ready
-          />
+          <Box
+            padding="16px 8px"
+            marginTop="16px"
+            bgcolor={Theme.colors.light.primary012}
+            borderRadius="12px"
+          >
+            <ProgressBar
+              activityName={context.activity.name}
+              currentActivityIndex={0}
+              activitiesCount={10}
+              isCompleted={false} // TODO: Change on real one when the store will be ready
+              isNotStarted={true} // TODO: Change on real one when the store will be ready
+              isInProgress={false} // TODO: Change on real one when the store will be ready
+            />
+          </Box>
         </Box>
       </Box>
     </SurveyLayout>

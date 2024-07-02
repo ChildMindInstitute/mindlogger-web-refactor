@@ -21,13 +21,7 @@ export const ProgressBar = ({
   isCompleted,
 }: Props) => {
   return (
-    <Box
-      display="flex"
-      borderRadius="12px"
-      padding="16px 8px"
-      marginTop="16px"
-      bgcolor={Theme.colors.light.primary012}
-    >
+    <Box display="flex">
       <Box display="flex" flex={1} justifyContent="center" alignItems="center">
         {isCompleted ? (
           <CheckCircle width="48px" height="48px" color={Theme.colors.light.accentGreen} />
