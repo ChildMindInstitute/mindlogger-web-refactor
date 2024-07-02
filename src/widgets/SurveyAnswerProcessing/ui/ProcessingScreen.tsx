@@ -2,6 +2,7 @@ import { useCallback, useContext } from 'react';
 
 import { ProgressBar } from './ProgressBar';
 
+import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
 import { SurveyContext, SurveyLayout, SurveyManageButtons } from '~/features/PassSurvey';
 import Box from '~/shared/ui/Box';
@@ -15,20 +16,29 @@ export const ProcessingScreen = () => {
 
   const { addWarningBanner } = useBanners();
 
+  const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
+    activityId: context.activityId,
+    eventId: context.eventId,
+    appletId: context.appletId,
+    flow: context.flow,
+    flowId: context.flow?.id ?? null,
+    publicAppletKey: context.publicAppletKey,
+  });
+
   const onFinish = useCallback(() => {
-    const canBeClosed = true;
+    const canBeClosed = true; // TODO: Change on real one when the store will be ready
 
     if (!canBeClosed) {
       return addWarningBanner(t('answerProcessingScreen.processInProgress'));
     }
 
-    return console.log('Entity closed'); // context.flow ? completeFlow(true) : completeActivity();
-  }, [addWarningBanner, t]);
+    return context.flow ? completeFlow({ forceComplete: true }) : completeActivity();
+  }, [addWarningBanner, completeActivity, completeFlow, context.flow, t]);
 
   return (
     <SurveyLayout
       isSaveAndExitButtonShown={false}
-      title="Test Activity Or Flow Title" // TODO: Change on real one
+      title="Test Activity Or Flow Title" // TODO: Change on real one when the store will be ready
       footerActions={
         <SurveyManageButtons
           isLoading={false}
@@ -38,7 +48,7 @@ export const ProcessingScreen = () => {
         />
       }
     >
-      <Box display="flex" flex={1} justifyContent="center" alignItems="center">
+      <Box display="flex" flex={1} justifyContent="center" alignItems="center" paddingX="24px">
         <Box>
           <Box
             display="flex"
@@ -55,9 +65,9 @@ export const ProcessingScreen = () => {
             activityName={context.activity.name}
             currentActivityIndex={0}
             activitiesCount={10}
-            isCompleted={false}
-            isNotStarted={true}
-            isInProgress={false}
+            isCompleted={false} // TODO: Change on real one when the store will be ready
+            isNotStarted={true} // TODO: Change on real one when the store will be ready
+            isInProgress={false} // TODO: Change on real one when the store will be ready
           />
         </Box>
       </Box>
