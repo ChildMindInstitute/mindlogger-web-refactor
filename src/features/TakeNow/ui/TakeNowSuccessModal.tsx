@@ -45,8 +45,7 @@ export const TakeNowSuccessModal = ({
         const targetWindow = window.opener as Window;
 
         if (targetWindow) {
-          // message sent to the parent window that is opening the file into the new tab
-          // the file receiving the message in the admin panel is TakeNowModal.tsx
+          // Send message to the opening tab in the Admin App to close this tab (see its TakeNowModal component).
           targetWindow.postMessage('close-me', import.meta.env.VITE_ADMIN_PANEL_HOST);
         }
       },
