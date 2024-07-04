@@ -13,7 +13,6 @@ import {
   ProgressState,
   RemoveActivityProgressPayload,
   SaveActivityProgressPayload,
-  SaveGroupContextPayload,
   SaveGroupProgressPayload,
   SaveItemAdditionalTextPayload,
   SaveItemAnswerPayload,
@@ -22,6 +21,8 @@ import {
   UpdateStepPayload,
   UpdateUserEventByIndexPayload,
   RemoveGroupProgressPayload,
+  SaveSummaryDataInContext,
+  SaveAutoCompletionInContext,
 } from './types';
 
 import {
@@ -85,20 +86,27 @@ const appletsSlice = createSlice({
       delete state.groupProgress[id];
     },
 
-    saveGroupContext: (state, action: PayloadAction<SaveGroupContextPayload>) => {
+    saveSummaryDataInGroupContext: (state, action: PayloadAction<SaveSummaryDataInContext>) => {
       const id = getProgressId(action.payload.activityId, action.payload.eventId);
 
       const groupProgress = state.groupProgress[id] ?? {};
 
-      const updatedContext = {
-        ...groupProgress.context,
-        ...action.payload.context,
-      };
+      const groupContext = groupProgress.context ?? {};
 
-      state.groupProgress[id] = {
-        ...groupProgress,
-        context: updatedContext,
-      };
+      groupContext.summaryData[action.payload.activityId] = action.payload.summaryData;
+    },
+
+    saveAutoCompletionInGroupContext: (
+      state,
+      action: PayloadAction<SaveAutoCompletionInContext>,
+    ) => {
+      const id = getProgressId(action.payload.entityId, action.payload.eventId);
+
+      const groupProgress = state.groupProgress[id] ?? {};
+
+      const groupContext = groupProgress.context ?? {};
+
+      groupContext.autoCompletion = action.payload.autoCompletion;
     },
 
     saveActivityProgress: (state, action: PayloadAction<SaveActivityProgressPayload>) => {
@@ -250,6 +258,7 @@ const appletsSlice = createSlice({
         endAt: null,
         context: {
           summaryData: {},
+          autoCompletion: null,
         },
       };
 
@@ -269,6 +278,7 @@ const appletsSlice = createSlice({
         pipelineActivityOrder: action.payload.pipelineActivityOrder,
         context: {
           summaryData: {},
+          autoCompletion: null,
         },
       };
 

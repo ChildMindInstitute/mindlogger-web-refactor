@@ -23,6 +23,7 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
       endAt: endAt ? endAt.getTime() : null,
       context: {
         summaryData: {},
+        autoCompletion: null,
       },
     },
   };

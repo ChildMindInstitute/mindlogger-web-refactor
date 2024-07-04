@@ -37,6 +37,7 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
             endAt: new Date(endAtDate).getTime(),
             context: {
               summaryData: {},
+              autoCompletion: null,
             },
           },
         });

@@ -36,7 +36,7 @@ const PassingScreen = () => {
     ),
   );
 
-  const { getGroupProgress, saveGroupContext } = appletModel.hooks.useGroupProgressState();
+  const { getGroupProgress, saveSummaryDataInContext } = appletModel.hooks.useGroupProgressState();
 
   const completedEntities = useAppSelector(appletModel.selectors.completedEntitiesSelector);
 
@@ -126,15 +126,12 @@ const PassingScreen = () => {
           order: isFlowGroup ? groupProgress.pipelineActivityOrder : 0,
         };
 
-        saveGroupContext({
-          activityId: context.entityId,
+        saveSummaryDataInContext({
+          entityId: context.entityId,
           eventId: context.eventId,
-          context: {
-            summaryData: {
-              ...groupProgress?.context.summaryData,
-              [context.activityId]: summaryDataContext,
-            },
-          },
+
+          activityId: context.activityId,
+          summaryData: summaryDataContext,
         });
       }
     }
