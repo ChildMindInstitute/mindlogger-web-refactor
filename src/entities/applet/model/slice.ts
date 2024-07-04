@@ -22,7 +22,6 @@ import {
   UpdateUserEventByIndexPayload,
   RemoveGroupProgressPayload,
   SaveSummaryDataInContext,
-  SaveAutoCompletionInContext,
 } from './types';
 
 import {
@@ -94,19 +93,6 @@ const appletsSlice = createSlice({
       const groupContext = groupProgress.context ?? {};
 
       groupContext.summaryData[action.payload.activityId] = action.payload.summaryData;
-    },
-
-    saveAutoCompletionInGroupContext: (
-      state,
-      action: PayloadAction<SaveAutoCompletionInContext>,
-    ) => {
-      const id = getProgressId(action.payload.entityId, action.payload.eventId);
-
-      const groupProgress = state.groupProgress[id] ?? {};
-
-      const groupContext = groupProgress.context ?? {};
-
-      groupContext.autoCompletion = action.payload.autoCompletion;
     },
 
     saveActivityProgress: (state, action: PayloadAction<SaveActivityProgressPayload>) => {
@@ -258,7 +244,6 @@ const appletsSlice = createSlice({
         endAt: null,
         context: {
           summaryData: {},
-          autoCompletion: null,
         },
       };
 
@@ -278,7 +263,6 @@ const appletsSlice = createSlice({
         pipelineActivityOrder: action.payload.pipelineActivityOrder,
         context: {
           summaryData: {},
-          autoCompletion: null,
         },
       };
 

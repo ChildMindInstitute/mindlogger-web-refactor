@@ -1,4 +1,4 @@
-import { AutoCompletion, FlowSummaryData, GroupProgress } from '~/abstract/lib';
+import { FlowSummaryData, GroupProgress } from '~/abstract/lib';
 import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
 import {
   Answer,
@@ -160,12 +160,6 @@ export type SaveSummaryDataInContext = {
 
   activityId: string;
   summaryData: FlowSummaryData;
-};
-
-export type SaveAutoCompletionInContext = {
-  entityId: string;
-  eventId: string;
-  autoCompletion: AutoCompletion;
 };
 
 export type SaveItemAnswerPayload = {

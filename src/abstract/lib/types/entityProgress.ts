@@ -28,13 +28,6 @@ export type FlowSummaryData = {
   order: number;
 };
 
-export type AutoCompletionStatus = 'notStarted' | 'inProgress' | 'completed';
-
-export type AutoCompletion = {
-  status: AutoCompletionStatus;
-  lastProcessedActivityId: string | null;
-};
-
 export type FlowProgress = {
   type: ActivityPipelineType.Flow;
   currentActivityId: string;
@@ -51,7 +44,6 @@ export type ActivityProgress = {
 
 export type ProgressContext = {
   summaryData: Record<ActivityId, FlowSummaryData>;
-  autoCompletion: AutoCompletion | null;
 };
 
 export type ActivityOrFlowProgress = FlowProgress | ActivityProgress;

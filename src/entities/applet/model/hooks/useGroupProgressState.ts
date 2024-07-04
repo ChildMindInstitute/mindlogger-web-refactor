@@ -6,7 +6,6 @@ import {
   InProgressEntity,
   InProgressFlow,
   RemoveGroupProgressPayload,
-  SaveAutoCompletionInContext,
   SaveGroupProgressPayload,
   SaveSummaryDataInContext,
 } from '../types';
@@ -18,7 +17,6 @@ type Return = {
   getGroupProgress: (params: InProgressEntity) => GroupProgress | null;
   saveGroupProgress: (payload: SaveGroupProgressPayload) => void;
   saveSummaryDataInContext: (payload: SaveSummaryDataInContext) => void;
-  saveAutoCompletionInContext: (payload: SaveAutoCompletionInContext) => void;
   removeGroupProgress: (payload: RemoveGroupProgressPayload) => void;
 
   entityCompleted: (props: InProgressEntity) => void;
@@ -75,20 +73,12 @@ export const useGroupProgressState = (): Return => {
     [dispatch],
   );
 
-  const saveAutoCompletionInContext = useCallback(
-    (payload: SaveAutoCompletionInContext) => {
-      dispatch(actions.saveAutoCompletionInGroupContext(payload));
-    },
-    [dispatch],
-  );
-
   return {
     getGroupProgress,
 
     removeGroupProgress,
     saveGroupProgress,
     saveSummaryDataInContext,
-    saveAutoCompletionInContext,
 
     entityCompleted,
     flowUpdated,

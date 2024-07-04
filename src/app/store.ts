@@ -7,6 +7,7 @@ import storage from 'redux-persist/lib/storage';
 import { appletModel } from '~/entities/applet';
 import { bannerModel } from '~/entities/banner';
 import { userModel } from '~/entities/user';
+import { AutoCompletionModel } from '~/features/AutoCompletion';
 import { RootState } from '~/shared/utils';
 
 const persistConfig = {
@@ -18,6 +19,7 @@ export const rootReducer = combineReducers({
   user: userModel.reducer,
   applets: appletModel.reducer,
   banners: bannerModel.reducer,
+  autoCompletion: AutoCompletionModel.reducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
