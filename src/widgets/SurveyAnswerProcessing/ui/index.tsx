@@ -5,6 +5,7 @@ import {
   mapRawDataToSurveyContext,
   useSurveyDataQuery,
 } from '~/features/PassSurvey';
+import Loader from '~/shared/ui/Loader';
 
 type Props = {
   appletId: string;
@@ -16,14 +17,15 @@ type Props = {
 };
 
 function SurveyAnswerProcessingWidget(props: Props) {
-  const { appletDTO, activityDTO, eventsDTO, isLoading, isError, error } = useSurveyDataQuery({
-    appletId: props.appletId,
-    activityId: props.activityId,
-    publicAppletKey: props.publicAppletKey,
-  });
+  const { appletDTO, activityDTO, eventsDTO, isLoading, isError, error, respondentMeta } =
+    useSurveyDataQuery({
+      appletId: props.appletId,
+      activityId: props.activityId,
+      publicAppletKey: props.publicAppletKey,
+    });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (isError) {
@@ -39,6 +41,7 @@ function SurveyAnswerProcessingWidget(props: Props) {
         currentEventId: props.eventId,
         flowId: props.flowId,
         publicAppletKey: props.publicAppletKey,
+        respondentMeta,
       })}
     >
       <ProcessingScreen />

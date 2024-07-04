@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 
-import SurveyAnswerProcessingWidget from '~/widgets/SurveyAnswerProcessing';
+import { SurveyAnswerProcessingWidget } from '~/widgets/SurveyAnswerProcessing';
 
 function PublicSurveyAnswerProcessing() {
   const [searchParams] = useSearchParams();
