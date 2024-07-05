@@ -1,14 +1,12 @@
-import { CheckCircle } from '../../../shared/ui';
-
 import { Theme } from '~/shared/constants';
+import { CheckCircle } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
 import Text from '~/shared/ui/Text';
 
 type Props = {
-  isNotStarted: boolean;
   isCompleted: boolean;
-  isInProgress: boolean;
+
   activityName: string;
   currentActivityIndex: number;
   activitiesCount: number;
