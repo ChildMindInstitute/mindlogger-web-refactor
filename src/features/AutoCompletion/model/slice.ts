@@ -11,18 +11,13 @@ export type SetAutoCompletionPayload = DefaultProps & {
   autoCompletion: AutoCompletion;
 };
 
-export type SetAutoCompletionStatus = DefaultProps & {
-  status: AutoCompletionStatus;
-};
-
-export type AutoCompletionStatus = 'notStarted' | 'inProgress' | 'completed';
+type ProgressId = string; // `entityId/eventId where entityId is activityId or flowId`;
 
 type AutoCompletion = {
-  status: AutoCompletionStatus;
-  lastProcessedActivityId: string | null; // If null, then it means that auto completion is not started and we have no processed activities yet
-};
+  successfullySubmittedActivityIds: string[]; // List of successfully submitted activities
 
-type ProgressId = string; // `entityId/eventId where entityId is activityId or flowId`;
+  activityIdsToSubmit: string[]; // List of activities that should be submitted
+};
 
 type InitialState = Record<ProgressId, AutoCompletion>;
 
@@ -50,11 +45,14 @@ const slice = createSlice({
       delete state[progressId];
     },
 
-    setAutoCompletionStatus(state, action: PayloadAction<SetAutoCompletionStatus>) {
-      const { entityId, eventId, status } = action.payload;
+    activitySuccessfullySubmitted(
+      state,
+      action: PayloadAction<DefaultProps & { activityId: string }>,
+    ) {
+      const { entityId, eventId, activityId } = action.payload;
       const progressId = getProgressId(entityId, eventId);
 
-      state[progressId].status = status;
+      state[progressId].successfullySubmittedActivityIds.push(activityId);
     },
   },
 });

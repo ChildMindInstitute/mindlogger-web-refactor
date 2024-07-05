@@ -1,8 +1,15 @@
 import { useCallback } from 'react';
 
-import { actions, SetAutoCompletionPayload, SetAutoCompletionStatus } from '../slice';
+import { actions, SetAutoCompletionPayload } from '../slice';
 
 import { useAppDispatch } from '~/shared/utils';
+
+type ActivitySuccessfullySubmitted = {
+  entityId: string;
+  eventId: string;
+
+  activityId: string;
+};
 
 export const useAutoCompletionState = () => {
   const dispatch = useAppDispatch();
@@ -25,9 +32,9 @@ export const useAutoCompletionState = () => {
     [dispatch],
   );
 
-  const setAutoCompletionStatus = useCallback(
-    (payload: SetAutoCompletionStatus) => {
-      dispatch(actions.setAutoCompletionStatus(payload));
+  const activitySuccessfullySubmitted = useCallback(
+    (payload: ActivitySuccessfullySubmitted) => {
+      dispatch(actions.activitySuccessfullySubmitted(payload));
     },
     [dispatch],
   );
@@ -36,6 +43,6 @@ export const useAutoCompletionState = () => {
     clearAutoCompletionState,
     saveAutoCompletion,
     removeAutoCompletion,
-    setAutoCompletionStatus,
+    activitySuccessfullySubmitted,
   };
 };
