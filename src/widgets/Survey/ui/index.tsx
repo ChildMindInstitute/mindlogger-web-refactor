@@ -38,8 +38,6 @@ export const SurveyWidget = (props: Props) => {
   useOnceEffect(() => removeAllBanners());
 
   const onTimesUpModalOKClick = useCallback(() => {
-    // Save all vital data before navigating to the next screen
-
     closeTimesUpModal();
 
     const { appletId, activityId, flowId, eventId, publicAppletKey } = props;
