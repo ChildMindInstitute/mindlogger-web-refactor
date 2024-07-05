@@ -7,6 +7,10 @@ import { useAppDispatch } from '~/shared/utils';
 export const useAutoCompletionState = () => {
   const dispatch = useAppDispatch();
 
+  const clearAutoCompletionState = useCallback(() => {
+    dispatch(actions.clearAutoCompletionState());
+  }, [dispatch]);
+
   const saveAutoCompletion = useCallback(
     (payload: SetAutoCompletionPayload) => {
       dispatch(actions.setAutoCompletion(payload));
@@ -29,6 +33,7 @@ export const useAutoCompletionState = () => {
   );
 
   return {
+    clearAutoCompletionState,
     saveAutoCompletion,
     removeAutoCompletion,
     setAutoCompletionStatus,
