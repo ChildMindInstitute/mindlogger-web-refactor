@@ -119,7 +119,7 @@ const ROUTES = {
       flowId: string | null;
       publicAppletKey: string | null;
     }) =>
-      `/protected/answer-processing?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}${flowId ? `flowId=${flowId}` : ''}${publicAppletKey ? `publicAppletKey=${publicAppletKey}` : ''}`,
+      `/protected/answer-processing?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}${flowId ? `&flowId=${flowId}` : ''}${publicAppletKey ? `&publicAppletKey=${publicAppletKey}` : ''}`,
   },
 };
 
