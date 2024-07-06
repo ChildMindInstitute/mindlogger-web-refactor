@@ -48,6 +48,7 @@ const WelcomeScreen = () => {
     <SurveyLayout
       progress={0}
       isSaveAndExitButtonShown={true}
+      entityTimer={context.event?.timers?.timer ?? undefined}
       footerActions={
         <StartSurveyButton
           width={greaterThanSM ? '375px' : '335px'}

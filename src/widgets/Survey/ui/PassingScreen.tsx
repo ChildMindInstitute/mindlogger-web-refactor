@@ -289,6 +289,7 @@ const PassingScreen = () => {
       <SurveyLayout
         progress={progress}
         isSaveAndExitButtonShown={true}
+        entityTimer={context.event?.timers?.timer ?? undefined}
         footerActions={
           <SurveyManageButtons
             timerSettings={!isSubmitModalOpen ? timerSettings : undefined}

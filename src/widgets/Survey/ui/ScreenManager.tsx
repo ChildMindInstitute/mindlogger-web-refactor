@@ -1,11 +1,13 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 
 import PassingScreen from './PassingScreen';
 import SummaryScreen from './SummaryScreen';
 import WelcomeScreen from './WelcomeScreen';
+import { useEntityTimer } from '../model/hooks';
 
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
+import { AutoCompletionModel } from '~/features/AutoCompletion';
 import { SurveyContext } from '~/features/PassSurvey';
 import { useAppSelector } from '~/shared/utils';
 
@@ -22,6 +24,50 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
       getProgressId(context.activityId, context.eventId),
     ),
   );
+
+  const { saveAutoCompletion } = AutoCompletionModel.useAutoCompletionState();
+
+  const onEntityTimerFinish = useCallback(() => {
+    const activitiesToSubmit: string[] = [];
+
+    if (context.flow) {
+      const activityIds = context.flow.activityIds;
+
+      const interraptedActivityIndex = activityIds.findIndex(
+        (activityId) => activityId === context.activityId,
+      );
+
+      const restOfActivities = activityIds.slice(interraptedActivityIndex);
+
+      restOfActivities.forEach((activityId) => {
+        activitiesToSubmit.push(activityId);
+      });
+    } else {
+      activitiesToSubmit.push(context.activityId);
+    }
+
+    saveAutoCompletion({
+      entityId: context.entityId,
+      eventId: context.eventId,
+      autoCompletion: {
+        activityIdsToSubmit: activitiesToSubmit,
+        successfullySubmittedActivityIds: [],
+      },
+    });
+
+    return openTimesUpModal();
+  }, [
+    context.activityId,
+    context.entityId,
+    context.eventId,
+    context.flow,
+    openTimesUpModal,
+    saveAutoCompletion,
+  ]);
+
+  useEntityTimer({
+    onFinish: onEntityTimerFinish,
+  });
 
   const items = activityProgress?.items ?? [];
 

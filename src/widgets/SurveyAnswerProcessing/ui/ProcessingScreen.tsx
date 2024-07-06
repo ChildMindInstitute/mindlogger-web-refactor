@@ -4,11 +4,12 @@ import { ProgressBar } from './ProgressBar';
 
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
+import { AutoCompletionModel } from '~/features/AutoCompletion';
 import { SurveyContext, SurveyLayout, SurveyManageButtons } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { useCustomTranslation } from '~/shared/utils';
+import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
 
 export const ProcessingScreen = () => {
   const { t } = useCustomTranslation();
@@ -16,6 +17,8 @@ export const ProcessingScreen = () => {
   const context = useContext(SurveyContext);
 
   const { addWarningBanner } = useBanners();
+
+  const { state, startAnswersAutoCompletion } = AutoCompletionModel.useAutoCompletion();
 
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
     activityId: context.activityId,
@@ -27,19 +30,32 @@ export const ProcessingScreen = () => {
   });
 
   const onFinish = useCallback(() => {
-    const canBeClosed = true; // TODO: Change on real one when the store will be ready
+    const canBeClosed =
+      state.activityIdsToSubmit.length === state.successfullySubmittedActivityIds.length;
 
     if (!canBeClosed) {
       return addWarningBanner(t('answerProcessingScreen.processInProgress'));
     }
 
     return context.flow ? completeFlow({ forceComplete: true }) : completeActivity();
-  }, [addWarningBanner, completeActivity, completeFlow, context.flow, t]);
+  }, [
+    addWarningBanner,
+    completeActivity,
+    completeFlow,
+    context.flow,
+    state.activityIdsToSubmit.length,
+    state.successfullySubmittedActivityIds.length,
+    t,
+  ]);
+
+  useOnceEffect(() => {
+    startAnswersAutoCompletion();
+  });
 
   return (
     <SurveyLayout
       isSaveAndExitButtonShown={false}
-      title="Test Activity Or Flow Title" // TODO: Change on real one when the store will be ready
+      title={context.flow ? context.flow.name : context.activity.name}
       footerActions={
         <SurveyManageButtons
           isLoading={false}
@@ -70,11 +86,11 @@ export const ProcessingScreen = () => {
           >
             <ProgressBar
               activityName={context.activity.name}
-              currentActivityIndex={0}
-              activitiesCount={10}
-              isCompleted={false} // TODO: Change on real one when the store will be ready
-              isNotStarted={true} // TODO: Change on real one when the store will be ready
-              isInProgress={false} // TODO: Change on real one when the store will be ready
+              currentActivityIndex={state.successfullySubmittedActivityIds.length}
+              activitiesCount={state.activityIdsToSubmit.length}
+              isCompleted={
+                state.activityIdsToSubmit.length === state.successfullySubmittedActivityIds.length
+              }
             />
           </Box>
         </Box>
