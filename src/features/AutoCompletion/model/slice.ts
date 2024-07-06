@@ -35,7 +35,11 @@ const slice = createSlice({
       const { entityId, eventId, autoCompletion } = action.payload;
       const progressId = getProgressId(entityId, eventId);
 
-      state[progressId] = autoCompletion;
+      const record = state[progressId];
+
+      if (!record) {
+        state[progressId] = autoCompletion;
+      }
     },
 
     removeAutoCompletion(state, action: PayloadAction<DefaultProps>) {
