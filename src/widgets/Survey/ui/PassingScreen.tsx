@@ -180,7 +180,8 @@ const PassingScreen = () => {
       flow: context.flow,
       publicAppletKey: context.publicAppletKey,
       event: context.event,
-      userDoneEvent: doneEvent,
+      userEvents: activityProgress.userEvents.concat(doneEvent),
+      items: activityProgress.items,
     });
 
     return submitAnswers(answer);

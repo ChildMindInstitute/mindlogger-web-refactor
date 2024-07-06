@@ -21,7 +21,9 @@ type BuildAnswerParams = {
   flow: ActivityFlowDTO | null;
   publicAppletKey: string | null;
 
-  userDoneEvent?: appletModel.UserEvent;
+  items: appletModel.ItemRecord[];
+
+  userEvents: appletModel.UserEvent[];
 };
 
 export const useAnswer = () => {
@@ -30,8 +32,6 @@ export const useAnswer = () => {
   const consents = useAppSelector(appletModel.selectors.selectConsents);
 
   const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
-
-  const { getActivityProgress } = appletModel.hooks.useActivityProgress();
 
   const { getMultiInformantState, isInMultiInformantFlow } =
     appletModel.hooks.useMultiInformantState();
@@ -44,33 +44,18 @@ export const useAnswer = () => {
       eventId: params.event.id,
     });
 
-    const activityProgress = getActivityProgress({
-      activityId: params.activityId,
-      eventId: params.event.id,
-    });
-
     if (!groupProgress) {
       throw new Error('[useAnswer] Group progress is not found');
-    }
-
-    if (!activityProgress) {
-      throw new Error('[useAnswer] Activity progress is not found');
     }
 
     if (!params.encryption) {
       throw new Error('[useAnswer] Encryption is not found');
     }
 
-    let userEvents = activityProgress.userEvents;
-
-    if (params.userDoneEvent) {
-      userEvents = [...userEvents, params.userDoneEvent];
-    }
-
     const answerConstructService = new AnswersConstructService({
       groupProgress,
-      userEvents,
-      items: activityProgress.items,
+      userEvents: params.userEvents,
+      items: params.items,
       event: params.event,
       activityId: params.activityId,
       appletId: params.appletId,
