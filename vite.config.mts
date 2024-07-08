@@ -46,7 +46,7 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
       },
     },
     build: {
-      sourcemap: env.VITE_ENV === 'dev'
+      sourcemap: env.VITE_ENV === 'dev',
     }
   };
 
