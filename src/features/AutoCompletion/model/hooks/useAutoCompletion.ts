@@ -2,7 +2,7 @@ import { useCallback, useContext } from 'react';
 
 import { AxiosError } from 'axios';
 
-import { useAutoCompletionStateManager } from './useAutoCompletionState';
+import { useAutoCompletionStateManager } from './useAutoCompletionStateManager';
 import { selectAutoCompletion } from '../selectors';
 
 import { ActivityPipelineType, getProgressId } from '~/abstract/lib';
