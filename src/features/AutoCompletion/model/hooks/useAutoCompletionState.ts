@@ -11,7 +11,7 @@ type ActivitySuccessfullySubmitted = {
   activityId: string;
 };
 
-export const useAutoCompletionState = () => {
+export const useAutoCompletionStateManager = () => {
   const dispatch = useAppDispatch();
 
   const clearAutoCompletionState = useCallback(() => {

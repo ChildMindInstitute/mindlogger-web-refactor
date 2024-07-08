@@ -7,6 +7,8 @@ import ROUTES from '~/shared/constants/routes';
 import { useCustomNavigation } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
+type CompletionType = 'regular' | 'autoCompletion';
+
 type Props = {
   activityId: string;
   eventId: string;
@@ -18,13 +20,15 @@ type Props = {
   flow: ActivityFlowDTO | null;
 };
 
-type CompleteFlowInput = {
-  forceComplete: boolean;
+type CompleteOptions = {
+  type: CompletionType;
 };
 
 export const useEntityComplete = (props: Props) => {
   const navigator = useCustomNavigation();
+
   const { featureFlags } = useFeatureFlags();
+
   const { isInMultiInformantFlow } = appletModel.hooks.useMultiInformantState();
 
   const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
@@ -32,11 +36,17 @@ export const useEntityComplete = (props: Props) => {
   const { entityCompleted, flowUpdated, getGroupProgress } =
     appletModel.hooks.useGroupProgressState();
 
-  const completeEntityAndRedirect = () => {
+  const completeEntityAndRedirect = (completionType: CompletionType) => {
     entityCompleted({
       entityId: props.flowId ? props.flowId : props.activityId,
       eventId: props.eventId,
     });
+
+    const isAutoCompletion = completionType === 'autoCompletion';
+
+    if (isAutoCompletion) {
+      return;
+    }
 
     if (props.publicAppletKey) {
       return navigator.navigate(ROUTES.publicJoin.navigateTo(props.publicAppletKey), {
@@ -82,8 +92,10 @@ export const useEntityComplete = (props: Props) => {
     );
   };
 
-  const completeFlow = (input?: CompleteFlowInput) => {
+  const completeFlow = (input?: CompleteOptions) => {
     const { flow } = props;
+
+    const isAutoCompletion = input?.type === 'autoCompletion';
 
     const groupProgress = getGroupProgress({
       entityId: props.flowId ? props.flowId : props.activityId,
@@ -117,17 +129,19 @@ export const useEntityComplete = (props: Props) => {
 
     removeActivityProgress({ activityId: props.activityId, eventId: props.eventId });
 
-    if (nextActivityId && !input?.forceComplete) {
+    if (nextActivityId && !isAutoCompletion) {
       return redirectToNextActivity(nextActivityId);
     }
 
-    return completeEntityAndRedirect();
+    if (!nextActivityId) {
+      return completeEntityAndRedirect(input?.type || 'regular');
+    }
   };
 
-  const completeActivity = () => {
+  const completeActivity = (input?: CompleteOptions) => {
     removeActivityProgress({ activityId: props.activityId, eventId: props.eventId });
 
-    return completeEntityAndRedirect();
+    return completeEntityAndRedirect(input?.type || 'regular');
   };
 
   return {

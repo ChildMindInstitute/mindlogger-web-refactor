@@ -25,7 +25,7 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
     ),
   );
 
-  const { saveAutoCompletion } = AutoCompletionModel.useAutoCompletionState();
+  const { saveAutoCompletion } = AutoCompletionModel.useAutoCompletionStateManager();
 
   const onEntityTimerFinish = useCallback(() => {
     const activitiesToSubmit: string[] = [];

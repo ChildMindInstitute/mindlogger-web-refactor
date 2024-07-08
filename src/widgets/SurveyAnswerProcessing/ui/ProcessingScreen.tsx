@@ -2,32 +2,26 @@ import { useCallback, useContext } from 'react';
 
 import { ProgressBar } from './ProgressBar';
 
-import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import { SurveyContext, SurveyLayout, SurveyManageButtons } from '~/features/PassSurvey';
-import { Theme } from '~/shared/constants';
+import { ROUTES, Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
+import { useCustomNavigation, useCustomTranslation, useOnceEffect } from '~/shared/utils';
 
 export const ProcessingScreen = () => {
   const { t } = useCustomTranslation();
+
+  const navigator = useCustomNavigation();
 
   const context = useContext(SurveyContext);
 
   const { addWarningBanner } = useBanners();
 
-  const { state, startAnswersAutoCompletion } = AutoCompletionModel.useAutoCompletion();
+  const { removeAutoCompletion } = AutoCompletionModel.useAutoCompletionStateManager();
 
-  const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
-    activityId: context.activityId,
-    eventId: context.eventId,
-    appletId: context.appletId,
-    flow: context.flow,
-    flowId: context.flow?.id ?? null,
-    publicAppletKey: context.publicAppletKey,
-  });
+  const { state, startAnswersAutoCompletion } = AutoCompletionModel.useAutoCompletion();
 
   const onFinish = useCallback(() => {
     const canBeClosed =
@@ -37,12 +31,28 @@ export const ProcessingScreen = () => {
       return addWarningBanner(t('answerProcessingScreen.processInProgress'));
     }
 
-    return context.flow ? completeFlow({ forceComplete: true }) : completeActivity();
+    removeAutoCompletion({
+      entityId: context.entityId,
+      eventId: context.eventId,
+    });
+
+    if (context.publicAppletKey) {
+      return navigator.navigate(ROUTES.publicJoin.navigateTo(context.publicAppletKey), {
+        replace: true,
+      });
+    }
+
+    return navigator.navigate(ROUTES.appletDetails.navigateTo(context.appletId), {
+      replace: true,
+    });
   }, [
     addWarningBanner,
-    completeActivity,
-    completeFlow,
-    context.flow,
+    context.appletId,
+    context.entityId,
+    context.eventId,
+    context.publicAppletKey,
+    navigator,
+    removeAutoCompletion,
     state.activityIdsToSubmit.length,
     state.successfullySubmittedActivityIds.length,
     t,
@@ -85,7 +95,7 @@ export const ProcessingScreen = () => {
             borderRadius="12px"
           >
             <ProgressBar
-              activityName={context.activity.name}
+              activityName={context.activity.name} // Change it to dynamically changed activity name
               currentActivityIndex={state.successfullySubmittedActivityIds.length}
               activitiesCount={state.activityIdsToSubmit.length}
               isCompleted={

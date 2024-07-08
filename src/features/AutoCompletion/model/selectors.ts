@@ -6,7 +6,7 @@ const selectEntityId = (_: unknown, entityId: string) => entityId;
 
 export const selectAutoCompletionState = (state: RootState) => state.autoCompletion;
 
-export const autoCompletionSelector = createSelector(
+export const selectAutoCompletion = createSelector(
   [selectAutoCompletionState, selectEntityId],
   (autoCompletionState, entityId) => autoCompletionState[entityId],
 );

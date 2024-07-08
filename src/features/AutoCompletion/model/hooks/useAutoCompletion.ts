@@ -1,7 +1,9 @@
 import { useCallback, useContext } from 'react';
 
-import { useAutoCompletionState } from './useAutoCompletionState';
-import { autoCompletionSelector } from '../selectors';
+import { AxiosError } from 'axios';
+
+import { useAutoCompletionStateManager } from './useAutoCompletionState';
+import { selectAutoCompletion } from '../selectors';
 
 import { ActivityPipelineType, getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
@@ -10,22 +12,30 @@ import { SurveyContext, useAnswer, useSubmitAnswersMutations } from '~/features/
 import { ActivityDTO, activityService } from '~/shared/api';
 import { useAppSelector } from '~/shared/utils';
 
-type SubmitAnswersPayload = {
-  userEvents: appletModel.UserEvent[];
-  items: appletModel.ItemRecord[];
-  activityId: string;
-};
-
 export const useAutoCompletion = () => {
   const context = useContext(SurveyContext);
 
   const state = useAppSelector((state) =>
-    autoCompletionSelector(state, getProgressId(context.entityId, context.eventId)),
+    selectAutoCompletion(state, getProgressId(context.entityId, context.eventId)),
   );
 
-  const { activitySuccessfullySubmitted } = useAutoCompletionState();
+  const groupProgress = useAppSelector((state) =>
+    appletModel.selectors.selectGroupProgress(
+      state,
+      getProgressId(context.entityId, context.eventId),
+    ),
+  );
 
-  const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
+  const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
+    activityId: context.activityId,
+    eventId: context.eventId,
+    publicAppletKey: context.publicAppletKey,
+    flowId: context.flow?.id ?? null,
+    appletId: context.appletId,
+    flow: context.flow,
+  });
+
+  const { activitySuccessfullySubmitted } = useAutoCompletionStateManager();
 
   const { getActivityProgress } = appletModel.hooks.useActivityProgress();
 
@@ -36,7 +46,28 @@ export const useAutoCompletion = () => {
   });
 
   const submitAnswersForActivity = useCallback(
-    async (params: SubmitAnswersPayload) => {
+    async (activityId: string) => {
+      const activityProgress = getActivityProgress({
+        activityId,
+        eventId: context.eventId,
+      });
+
+      let activity: ActivityDTO | undefined;
+
+      if (!activityProgress) {
+        try {
+          const result = await activityService.getById({ activityId });
+          activity = result.data.result;
+        } catch (e) {
+          console.error(e);
+          throw new Error(
+            `[ProcessingScreen:submitAnswersForEmptyActivities] Error while fetching activity by ID: ${activityId}`,
+          );
+        }
+      }
+
+      const items = activity?.items.map(mapItemToRecord) ?? [];
+
       const answers = buildAnswer({
         entityId: context.entityId,
         event: context.event,
@@ -45,33 +76,48 @@ export const useAutoCompletion = () => {
         encryption: context.encryption,
         flow: context.flow,
         publicAppletKey: context.publicAppletKey,
-        activityId: params.activityId,
-        items: params.items,
-        userEvents: params.userEvents,
+        activityId,
+        items: activityProgress?.items ?? items,
+        userEvents: activityProgress?.userEvents ?? [],
       });
 
       try {
         const result = await submitAnswersAsync(answers);
 
-        console.log(`[ProcessingScreen:submitAnswersForActivity]`, result);
-
         if (result.status === 201) {
+          const isFlow = groupProgress?.type === ActivityPipelineType.Flow;
+
+          if (isFlow) {
+            completeFlow({ type: 'autoCompletion' });
+          } else {
+            completeActivity({ type: 'autoCompletion' });
+          }
+
           activitySuccessfullySubmitted({
             entityId: context.entityId,
             eventId: context.eventId,
-            activityId: params.activityId,
+            activityId,
           });
         }
-      } catch (e) {
+      } catch (e: unknown) {
         console.error(e);
-        throw new Error(
-          '[ProcessingScreen:submitAnswersForActivity] Error while submitting answers',
+
+        console.info(
+          `[ProcessingScreen:submitAnswersForActivity] Error while submitting answers for the ActivityID: ${activityId}`,
         );
+
+        if (e instanceof AxiosError) {
+          console.error(
+            `[ProcessingScreen:submitAnswersForActivity] Error: ${e.response?.data.result[0].message}`,
+          );
+        }
       }
     },
     [
       activitySuccessfullySubmitted,
       buildAnswer,
+      completeActivity,
+      completeFlow,
       context.appletId,
       context.appletVersion,
       context.encryption,
@@ -80,107 +126,30 @@ export const useAutoCompletion = () => {
       context.eventId,
       context.flow,
       context.publicAppletKey,
+      getActivityProgress,
+      groupProgress?.type,
       submitAnswersAsync,
     ],
   );
 
-  const submitAnswersForInteruptedActivity = useCallback(async () => {
-    const acitivtyProgress = getActivityProgress({
-      activityId: context.activityId,
-      eventId: context.eventId,
-    });
+  const startAnswersAutoCompletion = useCallback(async () => {
+    const isCompleted =
+      state.activityIdsToSubmit.length === state.successfullySubmittedActivityIds.length;
 
-    if (!acitivtyProgress) {
-      throw new Error(
-        '[ProcessingScreen:submitAnswersForInteruptedActivity] Activity progress is not found',
-      );
-    }
-
-    const isAlreadySubmitted = state.successfullySubmittedActivityIds.includes(context.activityId);
-
-    if (isAlreadySubmitted) {
+    if (isCompleted) {
       return;
     }
 
-    await submitAnswersForActivity({
-      items: acitivtyProgress.items,
-      userEvents: acitivtyProgress.userEvents,
-      activityId: context.activityId,
-    });
-  }, [
-    context.activityId,
-    context.eventId,
-    getActivityProgress,
-    state.successfullySubmittedActivityIds,
-    submitAnswersForActivity,
-  ]);
+    for (const activityId of state.activityIdsToSubmit) {
+      const isAlreadySubmitted = state.successfullySubmittedActivityIds.includes(activityId);
 
-  const submitAnswersForEmptyActivities = useCallback(
-    async (activityId: string) => {
-      let activity: ActivityDTO | undefined;
-
-      try {
-        const result = await activityService.getById({ activityId });
-        activity = result.data.result;
-      } catch (e) {
-        console.log(e);
-        throw new Error(
-          `[ProcessingScreen:submitAnswersForEmptyActivities] Error while fetching activity by ID: ${activityId}`,
-        );
+      if (isAlreadySubmitted) {
+        continue;
       }
 
-      const items = activity.items.map((item) => mapItemToRecord(item));
-
-      await submitAnswersForActivity({
-        items,
-        userEvents: [],
-        activityId,
-      });
-    },
-    [submitAnswersForActivity],
-  );
-
-  const startAnswersAutoCompletion = useCallback(async () => {
-    console.log('[ProcessingScreen] autoSubmitAnswers');
-
-    const groupProgress = getGroupProgress({
-      entityId: context.entityId,
-      eventId: context.eventId,
-    });
-
-    if (!groupProgress) {
-      throw new Error('[ProcessingScreen] Group progress is not found');
+      await submitAnswersForActivity(activityId);
     }
-
-    const isRegularActivity = groupProgress.type === ActivityPipelineType.Regular;
-
-    if (isRegularActivity) {
-      return submitAnswersForInteruptedActivity();
-    }
-
-    if (!isRegularActivity && context.flow) {
-      await submitAnswersForInteruptedActivity();
-
-      for (const activityId of state.activityIdsToSubmit) {
-        const isAlreadySubmitted = state.successfullySubmittedActivityIds.includes(activityId);
-
-        if (isAlreadySubmitted) {
-          continue;
-        }
-
-        await submitAnswersForEmptyActivities(activityId);
-      }
-    }
-  }, [
-    context.entityId,
-    context.eventId,
-    context.flow,
-    getGroupProgress,
-    state.activityIdsToSubmit,
-    state.successfullySubmittedActivityIds,
-    submitAnswersForEmptyActivities,
-    submitAnswersForInteruptedActivity,
-  ]);
+  }, [state.activityIdsToSubmit, state.successfullySubmittedActivityIds, submitAnswersForActivity]);
 
   return {
     state,

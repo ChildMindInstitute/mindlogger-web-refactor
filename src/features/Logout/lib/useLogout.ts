@@ -17,7 +17,7 @@ export const useLogout = (): UseLogoutReturn => {
 
   const { clearUser } = userModel.hooks.useUserState();
   const { clearStore } = appletModel.hooks.useClearStore();
-  const { clearAutoCompletionState } = AutoCompletionModel.useAutoCompletionState();
+  const { clearAutoCompletionState } = AutoCompletionModel.useAutoCompletionStateManager();
 
   const { mutate: logoutMutation, isLoading } = useLogoutMutation();
 
