@@ -6,8 +6,8 @@ import {
   InProgressEntity,
   InProgressFlow,
   RemoveGroupProgressPayload,
-  SaveGroupContextPayload,
   SaveGroupProgressPayload,
+  SaveSummaryDataInContext,
 } from '../types';
 
 import { GroupProgress, getProgressId } from '~/abstract/lib';
@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from '~/shared/utils';
 type Return = {
   getGroupProgress: (params: InProgressEntity) => GroupProgress | null;
   saveGroupProgress: (payload: SaveGroupProgressPayload) => void;
-  saveGroupContext: (payload: SaveGroupContextPayload) => void;
+  saveSummaryDataInContext: (payload: SaveSummaryDataInContext) => void;
   removeGroupProgress: (payload: RemoveGroupProgressPayload) => void;
 
   entityCompleted: (props: InProgressEntity) => void;
@@ -66,9 +66,9 @@ export const useGroupProgressState = (): Return => {
     [dispatch],
   );
 
-  const saveGroupContext = useCallback(
-    (payload: SaveGroupContextPayload) => {
-      dispatch(actions.saveGroupContext(payload));
+  const saveSummaryDataInContext = useCallback(
+    (payload: SaveSummaryDataInContext) => {
+      dispatch(actions.saveSummaryDataInGroupContext(payload));
     },
     [dispatch],
   );
@@ -78,7 +78,7 @@ export const useGroupProgressState = (): Return => {
 
     removeGroupProgress,
     saveGroupProgress,
-    saveGroupContext,
+    saveSummaryDataInContext,
 
     entityCompleted,
     flowUpdated,

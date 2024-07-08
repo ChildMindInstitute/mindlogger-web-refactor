@@ -1,4 +1,4 @@
-import { GroupProgress, ProgressContext } from '~/abstract/lib';
+import { FlowSummaryData, GroupProgress } from '~/abstract/lib';
 import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
 import {
   Answer,
@@ -154,10 +154,12 @@ export type SaveGroupProgressPayload = {
   progressPayload: GroupProgress;
 };
 
-export type SaveGroupContextPayload = {
-  activityId: string;
+export type SaveSummaryDataInContext = {
+  entityId: string;
   eventId: string;
-  context: ProgressContext;
+
+  activityId: string;
+  summaryData: FlowSummaryData;
 };
 
 export type SaveItemAnswerPayload = {

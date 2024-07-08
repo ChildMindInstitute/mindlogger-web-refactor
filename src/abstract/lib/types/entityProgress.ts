@@ -55,6 +55,6 @@ type EventProgressTimestampState = {
 
 export type GroupProgress = ActivityOrFlowProgress & EventProgressTimestampState;
 
-type GroupProgressId = string; // Group progress id is a combination of activityId and eventId (activityId/eventId)
+type GroupProgressId = string; // Group progress id is a combination of entityId and eventId (EntityId = ActivityId or FlowId)
 
 export type GroupProgressState = Record<GroupProgressId, GroupProgress>;

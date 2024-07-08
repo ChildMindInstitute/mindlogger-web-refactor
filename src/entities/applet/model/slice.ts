@@ -13,7 +13,6 @@ import {
   ProgressState,
   RemoveActivityProgressPayload,
   SaveActivityProgressPayload,
-  SaveGroupContextPayload,
   SaveGroupProgressPayload,
   SaveItemAdditionalTextPayload,
   SaveItemAnswerPayload,
@@ -22,6 +21,7 @@ import {
   UpdateStepPayload,
   UpdateUserEventByIndexPayload,
   RemoveGroupProgressPayload,
+  SaveSummaryDataInContext,
 } from './types';
 
 import {
@@ -85,20 +85,14 @@ const appletsSlice = createSlice({
       delete state.groupProgress[id];
     },
 
-    saveGroupContext: (state, action: PayloadAction<SaveGroupContextPayload>) => {
+    saveSummaryDataInGroupContext: (state, action: PayloadAction<SaveSummaryDataInContext>) => {
       const id = getProgressId(action.payload.activityId, action.payload.eventId);
 
       const groupProgress = state.groupProgress[id] ?? {};
 
-      const updatedContext = {
-        ...groupProgress.context,
-        ...action.payload.context,
-      };
+      const groupContext = groupProgress.context ?? {};
 
-      state.groupProgress[id] = {
-        ...groupProgress,
-        context: updatedContext,
-      };
+      groupContext.summaryData[action.payload.activityId] = action.payload.summaryData;
     },
 
     saveActivityProgress: (state, action: PayloadAction<SaveActivityProgressPayload>) => {
