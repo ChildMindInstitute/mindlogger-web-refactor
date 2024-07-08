@@ -1,10 +1,10 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
-import { UserConfig, defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-import eslint from 'vite-plugin-eslint';
 import { resolve } from 'path';
+import { UserConfig, defineConfig, loadEnv } from 'vite';
+import eslint from 'vite-plugin-eslint';
 import nodePolyfills from 'vite-plugin-node-stdlib-browser';
 
 // https://vitejs.dev/config/
@@ -45,6 +45,9 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
         Buffer: 'buffer',
       },
     },
+    build: {
+      sourcemap: env.VITE_ENV === 'dev'
+    }
   };
 
   if (command === 'serve') {
