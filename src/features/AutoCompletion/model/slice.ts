@@ -17,10 +17,17 @@ export type SetAutoCompletionStatus = DefaultProps & {
 
 export type AutoCompletionStatus = 'notStarted' | 'inProgress' | 'completed';
 
-type AutoCompletion = {
-  status: AutoCompletionStatus;
-  lastProcessedActivityId: string | null; // If null, then it means that auto completion is not started and we have no processed activities yet
+type CompletionNotStarted = {
+  status: 'notStarted';
+  lastProcessedActivityId: null;
 };
+
+type CompletionInProgressOrCompletion = {
+  status: 'inProgress' | 'completed';
+  lastProcessedActivityId: string;
+};
+
+type AutoCompletion = CompletionNotStarted | CompletionInProgressOrCompletion;
 
 type ProgressId = string; // `entityId/eventId where entityId is activityId or flowId`;
 
