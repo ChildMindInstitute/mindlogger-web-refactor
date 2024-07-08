@@ -1,5 +1,7 @@
-import AuthorizedRoutes from './AuthorizedRoutes';
-import UnauthorizedRoutes from './UnauthorizedRoutes';
+import { lazy } from 'react';
+
+const AuthorizedRoutes = lazy(() => import('./AuthorizedRoutes'));
+const UnauthorizedRoutes = lazy(() => import('./UnauthorizedRoutes'));
 
 import { userModel } from '~/entities/user';
 import { useSessionBanners } from '~/shared/utils/hooks/useSessionBanners';
