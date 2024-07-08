@@ -42,7 +42,12 @@ export const TakeNowSuccessModal = ({
       { send_immediately: true },
       () => {
         onClose?.();
-        window.close();
+        const targetWindow = window.opener as Window;
+
+        if (targetWindow) {
+          // Send message to the opening tab in the Admin App to close this tab (see its TakeNowModal component).
+          targetWindow.postMessage('close-me', import.meta.env.VITE_ADMIN_PANEL_HOST);
+        }
       },
     );
   };
