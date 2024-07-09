@@ -3,7 +3,7 @@ import { useCallback, useContext } from 'react';
 import { AxiosError } from 'axios';
 
 import { useAutoCompletionStateManager } from './useAutoCompletionStateManager';
-import { selectAutoCompletion } from '../selectors';
+import { selectAutoCompletionRecord } from '../selectors';
 
 import { ActivityPipelineType, getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
@@ -16,7 +16,7 @@ export const useAutoCompletion = () => {
   const context = useContext(SurveyContext);
 
   const state = useAppSelector((state) =>
-    selectAutoCompletion(state, getProgressId(context.entityId, context.eventId)),
+    selectAutoCompletionRecord(state, getProgressId(context.entityId, context.eventId)),
   );
 
   const groupProgress = useAppSelector((state) =>
