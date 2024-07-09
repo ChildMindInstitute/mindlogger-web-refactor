@@ -28,7 +28,6 @@ export const useEntityTimer = ({ onFinish }: Props) => {
   finishRef.current = onFinish;
 
   useEffect(() => {
-    console.log('[useEntityTimer] useEffect');
     const groupProgress = getGroupProgress({
       entityId: context.entityId,
       eventId: context.eventId,
