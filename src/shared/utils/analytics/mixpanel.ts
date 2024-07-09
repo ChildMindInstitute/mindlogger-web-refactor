@@ -28,8 +28,12 @@ export const Mixpanel = {
     optionsOrCallback?: RequestOptions | Callback,
     callback?: Callback,
   ) {
-    if (shouldEnableMixpanel)
+    if (shouldEnableMixpanel) {
       mixpanel.track(`[Web] ${action}`, payload, optionsOrCallback, callback);
+    } else {
+      if (typeof optionsOrCallback === 'function') optionsOrCallback(0);
+      callback?.(0);
+    }
   },
   login(userId: string) {
     if (shouldEnableMixpanel) {
