@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import { ActivityOrFlowProgress, ActivityScore, getProgressId } from '~/abstract/lib';
+import { ActivityScore, getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { PassSurveyModel } from '~/features/PassSurvey';
 import { AnswerAlerts, ScoreRecord } from '~/features/PassSurvey/lib';
@@ -33,7 +33,10 @@ export type UISummaryData = {
 };
 
 export const useSummaryData = (props: Props) => {
-  const { getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
+  const groupProgress = appletModel.hooks.useGroupProgressRecord({
+    entityId: props.flowId ? props.flowId : props.activityId,
+    eventId: props.eventId,
+  });
 
   const progressId = getProgressId(props.activityId, props.eventId);
 
@@ -60,16 +63,11 @@ export const useSummaryData = (props: Props) => {
   }, [activityProgress, props.scoresAndReports]);
 
   const summaryData = useMemo<UISummaryData | null>(() => {
-    const flowProgress: ActivityOrFlowProgress | null = getGroupProgress({
-      entityId: props.flowId ? props.flowId : props.activityId,
-      eventId: props.eventId,
-    });
-
-    if (!flowProgress) {
+    if (!groupProgress) {
       return null;
     }
 
-    const flowSummaryData = flowProgress.context?.summaryData ?? {};
+    const flowSummaryData = groupProgress.context?.summaryData ?? {};
 
     let activityIds = Object.keys(flowSummaryData);
 
@@ -101,7 +99,7 @@ export const useSummaryData = (props: Props) => {
     };
 
     return result;
-  }, [getGroupProgress, props]);
+  }, [groupProgress]);
 
   return {
     getSummaryForCurrentActivity,

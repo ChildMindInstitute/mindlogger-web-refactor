@@ -31,7 +31,10 @@ export const useAnswer = () => {
 
   const consents = useAppSelector(appletModel.selectors.selectConsents);
 
-  const { getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
+  const groupProgress = appletModel.hooks.useGroupProgressRecord({
+    entityId: context.entityId,
+    eventId: context.eventId,
+  });
 
   const { getMultiInformantState, isInMultiInformantFlow } =
     appletModel.hooks.useMultiInformantState();
@@ -40,11 +43,6 @@ export const useAnswer = () => {
 
   const buildAnswer = useCallback(
     (params: BuildAnswerParams): AnswerPayload => {
-      const groupProgress = getGroupProgress({
-        entityId: params.entityId,
-        eventId: params.event.id,
-      });
-
       if (!groupProgress) {
         throw new Error('[useAnswer] Group progress is not found');
       }
@@ -91,7 +89,7 @@ export const useAnswer = () => {
       context.appletId,
       context.integrations,
       featureFlags.enableMultiInformant,
-      getGroupProgress,
+      groupProgress,
       getMultiInformantState,
       isInMultiInformantFlow,
     ],

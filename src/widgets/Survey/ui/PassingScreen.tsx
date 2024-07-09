@@ -36,8 +36,12 @@ const PassingScreen = () => {
     ),
   );
 
-  const { getGroupProgress, saveSummaryDataInContext } =
-    appletModel.hooks.useGroupProgressStateManager();
+  const groupProgress = appletModel.hooks.useGroupProgressRecord({
+    entityId: context.entityId,
+    eventId: context.eventId,
+  });
+
+  const { saveSummaryDataInContext } = appletModel.hooks.useGroupProgressStateManager();
 
   const completedEntities = useAppSelector(appletModel.selectors.completedEntitiesSelector);
 
@@ -91,11 +95,6 @@ const PassingScreen = () => {
 
   const onSubmitSuccess = () => {
     const isSummaryScreenOn = context.activity.scoresAndReports?.showScoreSummary ?? false;
-
-    const groupProgress = getGroupProgress({
-      entityId: context.entityId,
-      eventId: context.eventId,
-    });
 
     if (!groupProgress) {
       throw new Error('[obSubmitSuccess] GroupProgress is not defined');

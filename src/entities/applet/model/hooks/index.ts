@@ -2,6 +2,7 @@ export * from './useSaveActivityItemAnswer';
 
 export * from './useClearStore';
 
+export * from './useGroupProgressRecord';
 export * from './useGroupProgressStateManager';
 
 export * from './useActivityProgress';
