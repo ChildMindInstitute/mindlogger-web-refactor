@@ -12,7 +12,7 @@ type Props = {
 export const useEntityTimer = ({ onFinish }: Props) => {
   const context = useContext(SurveyContext);
 
-  const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
+  const { getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(

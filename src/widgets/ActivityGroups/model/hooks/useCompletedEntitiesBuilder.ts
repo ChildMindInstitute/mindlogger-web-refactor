@@ -10,7 +10,7 @@ type FilterCompletedEntitiesProps = {
 };
 
 export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
-  const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressState();
+  const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   const syncEntity = useCallback(
     (entity: CompletedEntityDTO) => {

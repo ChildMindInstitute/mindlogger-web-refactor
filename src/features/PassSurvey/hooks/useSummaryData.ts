@@ -33,7 +33,7 @@ export type UISummaryData = {
 };
 
 export const useSummaryData = (props: Props) => {
-  const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
+  const { getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   const progressId = getProgressId(props.activityId, props.eventId);
 

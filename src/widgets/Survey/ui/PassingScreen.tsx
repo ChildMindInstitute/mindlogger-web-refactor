@@ -36,7 +36,8 @@ const PassingScreen = () => {
     ),
   );
 
-  const { getGroupProgress, saveSummaryDataInContext } = appletModel.hooks.useGroupProgressState();
+  const { getGroupProgress, saveSummaryDataInContext } =
+    appletModel.hooks.useGroupProgressStateManager();
 
   const completedEntities = useAppSelector(appletModel.selectors.completedEntitiesSelector);
 

@@ -21,7 +21,7 @@ const WelcomeScreen = () => {
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
-  const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
+  const { getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   const startAssessment = () => {
     const groupProgress = getGroupProgress({

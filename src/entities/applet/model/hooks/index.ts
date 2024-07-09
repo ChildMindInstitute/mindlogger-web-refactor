@@ -2,7 +2,7 @@ export * from './useSaveActivityItemAnswer';
 
 export * from './useClearStore';
 
-export * from './useGroupProgressState';
+export * from './useGroupProgressStateManager';
 
 export * from './useActivityProgress';
 

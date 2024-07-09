@@ -36,7 +36,7 @@ export const useEntityComplete = (props: Props) => {
   const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
   const { entityCompleted, flowUpdated, getGroupProgress } =
-    appletModel.hooks.useGroupProgressState();
+    appletModel.hooks.useGroupProgressStateManager();
 
   const completeEntityAndRedirect = useCallback(
     (completionType: CompletionType) => {
