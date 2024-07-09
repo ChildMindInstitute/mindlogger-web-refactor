@@ -12,7 +12,7 @@ export const useActivitiesByIdsQuery = ({ ids, enabled }: Props) => {
     queries: ids.map((activityId) => {
       return {
         queryKey: ['activity', activityId],
-        queryFn: () => activityService.getById({ activityId }),
+        queryFn: () => activityService.getById(activityId),
         enabled,
       };
     }),

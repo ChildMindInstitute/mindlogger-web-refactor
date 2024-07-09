@@ -16,8 +16,8 @@ export const useActivityByIdQuery = <TData = ReturnAwaited<FetchFn>>(
     ['activityById', params],
     () =>
       params.isPublic
-        ? activityService.getPublicById({ activityId: params.activityId })
-        : activityService.getById({ activityId: params.activityId }),
+        ? activityService.getPublicById(params.activityId)
+        : activityService.getById(params.activityId),
     options,
   );
 };

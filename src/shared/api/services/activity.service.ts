@@ -2,24 +2,20 @@ import axiosService from './axios';
 import {
   AnswerPayload,
   CompletedEntitiesDTOSuccessResponse,
-  GetActivityByIdPayload,
   GetCompletedEntitiesPayload,
-  GetPublicActivityById,
   SuccessResponseActivityById,
 } from '../types';
 
 function activityService() {
   return {
-    getById(payload: GetActivityByIdPayload) {
-      return axiosService.get<SuccessResponseActivityById>(`/activities/${payload.activityId}`);
+    getById(id: string) {
+      return axiosService.get<SuccessResponseActivityById>(`/activities/${id}`);
     },
     saveAnswers(payload: AnswerPayload) {
       return axiosService.post(`/answers`, payload);
     },
-    getPublicById(payload: GetPublicActivityById) {
-      return axiosService.get<SuccessResponseActivityById>(
-        `/public/activities/${payload.activityId}`,
-      );
+    getPublicById(id: string) {
+      return axiosService.get<SuccessResponseActivityById>(`/public/activities/${id}`);
     },
     publicSaveAnswers(payload: AnswerPayload) {
       return axiosService.post(`/public/answers`, payload);

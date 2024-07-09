@@ -5,24 +5,26 @@ import { AxiosError } from 'axios';
 import { useAutoCompletionRecord } from './useAutoCompletionRecord';
 import { useAutoCompletionStateManager } from './useAutoCompletionStateManager';
 
-import { ActivityPipelineType, getProgressId } from '~/abstract/lib';
+import { ActivityPipelineType } from '~/abstract/lib';
+import { useActivityByIdMutation } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { mapItemToRecord } from '~/entities/applet/model/mapper';
 import { SurveyContext, useAnswer, useSubmitAnswersMutations } from '~/features/PassSurvey';
-import { ActivityDTO, activityService } from '~/shared/api';
-import { useAppSelector } from '~/shared/utils';
+import { ActivityDTO } from '~/shared/api';
 
 export const useAutoCompletion = () => {
   const context = useContext(SurveyContext);
 
+  const { mutateAsync: fetchActivityById } = useActivityByIdMutation({
+    isPublic: !!context.publicAppletKey,
+  });
+
   const state = useAutoCompletionRecord({ entityId: context.entityId, eventId: context.eventId });
 
-  const groupProgress = useAppSelector((state) =>
-    appletModel.selectors.selectGroupProgress(
-      state,
-      getProgressId(context.entityId, context.eventId),
-    ),
-  );
+  const groupProgress = appletModel.hooks.useGroupProgressRecord({
+    entityId: context.entityId,
+    eventId: context.eventId,
+  });
 
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
     activityId: context.activityId,
@@ -54,7 +56,7 @@ export const useAutoCompletion = () => {
 
       if (!activityProgress) {
         try {
-          const result = await activityService.getById({ activityId });
+          const result = await fetchActivityById(activityId);
           activity = result.data.result;
         } catch (e) {
           console.error(e);

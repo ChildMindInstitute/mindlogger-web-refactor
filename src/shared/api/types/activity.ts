@@ -18,19 +18,11 @@ import {
 
 export type ID = string;
 
-export interface GetActivityByIdPayload {
-  activityId: ID;
-}
-
 export interface GetCompletedEntitiesPayload {
   appletId: ID;
   version: string;
   fromDate: string; // example: 2022-01-01
 }
-
-export type GetPublicActivityById = {
-  activityId: ID;
-};
 
 export interface GetCompletedEntitiesPayload {
   appletId: ID;
