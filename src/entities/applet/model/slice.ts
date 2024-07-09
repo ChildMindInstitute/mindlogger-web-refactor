@@ -86,7 +86,7 @@ const appletsSlice = createSlice({
     },
 
     saveSummaryDataInGroupContext: (state, action: PayloadAction<SaveSummaryDataInContext>) => {
-      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+      const id = getProgressId(action.payload.entityId, action.payload.eventId);
 
       const groupProgress = state.groupProgress[id] ?? {};
 

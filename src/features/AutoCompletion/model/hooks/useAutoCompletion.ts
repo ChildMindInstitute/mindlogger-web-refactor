@@ -126,6 +126,7 @@ export const useAutoCompletion = () => {
       context.eventId,
       context.flow,
       context.publicAppletKey,
+      fetchActivityById,
       getActivityProgress,
       groupProgress?.type,
       submitAnswersAsync,
