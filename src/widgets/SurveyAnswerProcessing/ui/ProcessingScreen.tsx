@@ -24,7 +24,7 @@ export const ProcessingScreen = () => {
 
   const { removeAutoCompletion } = AutoCompletionModel.useAutoCompletionStateManager();
 
-  const { state, startAnswersAutoCompletion } = AutoCompletionModel.useAutoCompletion();
+  const { state, startEntityCompletion } = AutoCompletionModel.useAutoCompletion();
 
   const onFinish = useCallback(() => {
     const canBeClosed =
@@ -68,7 +68,7 @@ export const ProcessingScreen = () => {
   ]);
 
   useOnceEffect(() => {
-    startAnswersAutoCompletion();
+    startEntityCompletion();
   });
 
   return (

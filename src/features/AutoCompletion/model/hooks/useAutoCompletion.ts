@@ -83,6 +83,12 @@ export const useAutoCompletion = () => {
           });
         }
       } catch (e: unknown) {
+        // We should not throw an error here and stop the process
+        // because we have a chance to get the validation error "Incorrect answer order".
+
+        // Need to discuss with the backend team the implementation of the specific error to determine the required answer.
+        // Now error message - "Incorrect activity order" is not informative enough.
+        // Good error message - { type: "INCORRECT_ANSWER_ORDER", expected: {activityId} }. Then we can handle it and send the correct answer.
         console.error(e);
 
         console.info(
@@ -113,7 +119,7 @@ export const useAutoCompletion = () => {
     ],
   );
 
-  const startAnswersAutoCompletion = useCallback(async () => {
+  const startEntityCompletion = useCallback(async () => {
     const isCompleted =
       state.activityIdsToSubmit.length === state.successfullySubmittedActivityIds.length;
 
@@ -140,6 +146,6 @@ export const useAutoCompletion = () => {
 
   return {
     state,
-    startAnswersAutoCompletion,
+    startEntityCompletion,
   };
 };
