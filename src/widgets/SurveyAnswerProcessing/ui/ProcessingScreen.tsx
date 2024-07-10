@@ -24,7 +24,7 @@ export const ProcessingScreen = () => {
 
   const { removeAutoCompletion } = AutoCompletionModel.useAutoCompletionStateManager();
 
-  const { state, startEntityCompletion } = AutoCompletionModel.useAutoCompletion();
+  const { state, startEntityCompletion, activityName } = AutoCompletionModel.useAutoCompletion();
 
   const onFinish = useCallback(() => {
     if (!state) {
@@ -108,7 +108,7 @@ export const ProcessingScreen = () => {
           >
             {state && (
               <ProgressBar
-                activityName={context.activity.name} // Change it to dynamically changed activity name
+                activityName={activityName}
                 currentActivityIndex={state.successfullySubmittedActivityIds.length}
                 activitiesCount={state.activityIdsToSubmit.length}
                 isCompleted={

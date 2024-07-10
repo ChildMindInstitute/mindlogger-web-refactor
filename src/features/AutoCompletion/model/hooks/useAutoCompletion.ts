@@ -1,9 +1,10 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 
 import { AxiosError } from 'axios';
 
 import { useAutoCompletionRecord } from './useAutoCompletionRecord';
 import { useAutoCompletionStateManager } from './useAutoCompletionStateManager';
+import { usePrevious } from '../../../../shared/utils';
 
 import { useActivityByIdMutation } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
@@ -19,9 +20,26 @@ type SubmitParams = {
 export const useAutoCompletion = () => {
   const context = useContext(SurveyContext);
 
-  const { mutateAsync: fetchActivityById } = useActivityByIdMutation({
+  const { mutateAsync: fetchActivityById, data } = useActivityByIdMutation({
     isPublic: !!context.publicAppletKey,
   });
+
+  const prevFetchedActivity = usePrevious(data?.data.result);
+
+  const activityName = useMemo(() => {
+    // The latest fetched activity name
+    if (data?.data?.result?.name) {
+      return data?.data?.result?.name;
+    }
+
+    // If the latest fetched activity name is not available, return the previous fetched activity name
+    if (prevFetchedActivity?.name) {
+      return prevFetchedActivity?.name;
+    }
+
+    // If no activity name is available, return the current activity name
+    return context.activity.name;
+  }, [context.activity.name, data?.data?.result?.name, prevFetchedActivity?.name]);
 
   const state = useAutoCompletionRecord({ entityId: context.entityId, eventId: context.eventId });
 
@@ -151,6 +169,7 @@ export const useAutoCompletion = () => {
   }, [state, submitAnswersForActivity]);
 
   return {
+    activityName,
     state,
     startEntityCompletion,
   };
