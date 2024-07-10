@@ -13,7 +13,7 @@ export type SetAutoCompletionPayload = DefaultProps & {
 
 type ProgressId = string; // `entityId/eventId where entityId is activityId or flowId`;
 
-type AutoCompletion = {
+export type AutoCompletion = {
   successfullySubmittedActivityIds: string[]; // List of successfully submitted activities
 
   activityIdsToSubmit: string[]; // List of activities that should be submitted

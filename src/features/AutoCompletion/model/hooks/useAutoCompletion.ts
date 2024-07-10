@@ -120,6 +120,12 @@ export const useAutoCompletion = () => {
   );
 
   const startEntityCompletion = useCallback(async () => {
+    if (!state) {
+      throw new Error(
+        '[useAutoCompletion:startEntityCompletion] AutoCompletion state is not defined',
+      );
+    }
+
     const isCompleted =
       state.activityIdsToSubmit.length === state.successfullySubmittedActivityIds.length;
 
@@ -142,7 +148,7 @@ export const useAutoCompletion = () => {
         isLastActivity,
       });
     }
-  }, [state.activityIdsToSubmit, state.successfullySubmittedActivityIds, submitAnswersForActivity]);
+  }, [state, submitAnswersForActivity]);
 
   return {
     state,

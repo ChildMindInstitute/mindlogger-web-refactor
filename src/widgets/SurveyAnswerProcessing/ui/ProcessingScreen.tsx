@@ -27,6 +27,10 @@ export const ProcessingScreen = () => {
   const { state, startEntityCompletion } = AutoCompletionModel.useAutoCompletion();
 
   const onFinish = useCallback(() => {
+    if (!state) {
+      throw new Error('[ProcessingScreen:onFinish] State is not defined');
+    }
+
     const canBeClosed =
       state.activityIdsToSubmit.length === state.successfullySubmittedActivityIds.length;
 
@@ -62,8 +66,7 @@ export const ProcessingScreen = () => {
     entityCompleted,
     navigator,
     removeAutoCompletion,
-    state.activityIdsToSubmit.length,
-    state.successfullySubmittedActivityIds.length,
+    state,
     t,
   ]);
 
@@ -93,8 +96,8 @@ export const ProcessingScreen = () => {
             flexDirection="column"
             gap="12px"
           >
-            <Text variant="h4">{t('answerProcessingScreen.title')}</Text>
-            <Text variant="body1">{t('answerProcessingScreen.description')}</Text>
+            <Text variant="h4">{t('autoCompletion.title')}</Text>
+            <Text variant="body1">{t('autoCompletion.description')}</Text>
           </Box>
 
           <Box
@@ -103,14 +106,16 @@ export const ProcessingScreen = () => {
             bgcolor={Theme.colors.light.primary012}
             borderRadius="12px"
           >
-            <ProgressBar
-              activityName={context.activity.name} // Change it to dynamically changed activity name
-              currentActivityIndex={state.successfullySubmittedActivityIds.length}
-              activitiesCount={state.activityIdsToSubmit.length}
-              isCompleted={
-                state.activityIdsToSubmit.length === state.successfullySubmittedActivityIds.length
-              }
-            />
+            {state && (
+              <ProgressBar
+                activityName={context.activity.name} // Change it to dynamically changed activity name
+                currentActivityIndex={state.successfullySubmittedActivityIds.length}
+                activitiesCount={state.activityIdsToSubmit.length}
+                isCompleted={
+                  state.activityIdsToSubmit.length === state.successfullySubmittedActivityIds.length
+                }
+              />
+            )}
           </Box>
         </Box>
       </Box>
