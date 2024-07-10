@@ -24,6 +24,8 @@ type BuildAnswerParams = {
   items: appletModel.ItemRecord[];
 
   userEvents: appletModel.UserEvent[];
+
+  isFlowCompleted?: boolean;
 };
 
 export const useAnswer = () => {
@@ -62,6 +64,7 @@ export const useAnswer = () => {
         flow: params.flow,
         encryption: params.encryption,
         publicAppletKey: params.publicAppletKey,
+        isFlowCompleted: params.isFlowCompleted,
       });
 
       const answer = answerConstructService.build();

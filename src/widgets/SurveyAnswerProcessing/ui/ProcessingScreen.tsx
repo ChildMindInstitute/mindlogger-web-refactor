@@ -2,6 +2,7 @@ import { useCallback, useContext } from 'react';
 
 import { ProgressBar } from './ProgressBar';
 
+import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import { SurveyContext, SurveyLayout, SurveyManageButtons } from '~/features/PassSurvey';
@@ -19,6 +20,8 @@ export const ProcessingScreen = () => {
 
   const { addWarningBanner } = useBanners();
 
+  const { entityCompleted } = appletModel.hooks.useGroupProgressStateManager();
+
   const { removeAutoCompletion } = AutoCompletionModel.useAutoCompletionStateManager();
 
   const { state, startAnswersAutoCompletion } = AutoCompletionModel.useAutoCompletion();
@@ -32,6 +35,11 @@ export const ProcessingScreen = () => {
     }
 
     removeAutoCompletion({
+      entityId: context.entityId,
+      eventId: context.eventId,
+    });
+
+    entityCompleted({
       entityId: context.entityId,
       eventId: context.eventId,
     });
@@ -51,6 +59,7 @@ export const ProcessingScreen = () => {
     context.entityId,
     context.eventId,
     context.publicAppletKey,
+    entityCompleted,
     navigator,
     removeAutoCompletion,
     state.activityIdsToSubmit.length,

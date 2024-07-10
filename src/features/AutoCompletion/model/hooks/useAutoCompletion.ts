@@ -5,12 +5,16 @@ import { AxiosError } from 'axios';
 import { useAutoCompletionRecord } from './useAutoCompletionRecord';
 import { useAutoCompletionStateManager } from './useAutoCompletionStateManager';
 
-import { ActivityPipelineType } from '~/abstract/lib';
 import { useActivityByIdMutation } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { mapItemToRecord } from '~/entities/applet/model/mapper';
 import { SurveyContext, useAnswer, useSubmitAnswersMutations } from '~/features/PassSurvey';
 import { ActivityDTO } from '~/shared/api';
+
+type SubmitParams = {
+  activityId: string;
+  isLastActivity: boolean;
+};
 
 export const useAutoCompletion = () => {
   const context = useContext(SurveyContext);
@@ -20,20 +24,6 @@ export const useAutoCompletion = () => {
   });
 
   const state = useAutoCompletionRecord({ entityId: context.entityId, eventId: context.eventId });
-
-  const groupProgress = appletModel.hooks.useGroupProgressRecord({
-    entityId: context.entityId,
-    eventId: context.eventId,
-  });
-
-  const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
-    activityId: context.activityId,
-    eventId: context.eventId,
-    publicAppletKey: context.publicAppletKey,
-    flowId: context.flow?.id ?? null,
-    appletId: context.appletId,
-    flow: context.flow,
-  });
 
   const { activitySuccessfullySubmitted } = useAutoCompletionStateManager();
 
@@ -46,9 +36,9 @@ export const useAutoCompletion = () => {
   });
 
   const submitAnswersForActivity = useCallback(
-    async (activityId: string) => {
+    async (params: SubmitParams) => {
       const activityProgress = getActivityProgress({
-        activityId,
+        activityId: params.activityId,
         eventId: context.eventId,
       });
 
@@ -56,12 +46,12 @@ export const useAutoCompletion = () => {
 
       if (!activityProgress) {
         try {
-          const result = await fetchActivityById(activityId);
+          const result = await fetchActivityById(params.activityId);
           activity = result.data.result;
         } catch (e) {
           console.error(e);
           throw new Error(
-            `[ProcessingScreen:submitAnswersForEmptyActivities] Error while fetching activity by ID: ${activityId}`,
+            `[ProcessingScreen:submitAnswersForEmptyActivities] Error while fetching activity by ID: ${params.activityId}`,
           );
         }
       }
@@ -76,34 +66,27 @@ export const useAutoCompletion = () => {
         encryption: context.encryption,
         flow: context.flow,
         publicAppletKey: context.publicAppletKey,
-        activityId,
+        activityId: params.activityId,
         items: activityProgress?.items ?? items,
         userEvents: activityProgress?.userEvents ?? [],
+        isFlowCompleted: params.isLastActivity,
       });
 
       try {
         const result = await submitAnswersAsync(answers);
 
         if (result.status === 201) {
-          const isFlow = groupProgress?.type === ActivityPipelineType.Flow;
-
-          if (isFlow) {
-            completeFlow({ type: 'autoCompletion' });
-          } else {
-            completeActivity({ type: 'autoCompletion' });
-          }
-
           activitySuccessfullySubmitted({
             entityId: context.entityId,
             eventId: context.eventId,
-            activityId,
+            activityId: params.activityId,
           });
         }
       } catch (e: unknown) {
         console.error(e);
 
         console.info(
-          `[ProcessingScreen:submitAnswersForActivity] Error while submitting answers for the ActivityID: ${activityId}`,
+          `[ProcessingScreen:submitAnswersForActivity] Error while submitting answers for the ActivityID: ${params.activityId}`,
         );
 
         if (e instanceof AxiosError) {
@@ -116,8 +99,6 @@ export const useAutoCompletion = () => {
     [
       activitySuccessfullySubmitted,
       buildAnswer,
-      completeActivity,
-      completeFlow,
       context.appletId,
       context.appletVersion,
       context.encryption,
@@ -128,7 +109,6 @@ export const useAutoCompletion = () => {
       context.publicAppletKey,
       fetchActivityById,
       getActivityProgress,
-      groupProgress?.type,
       submitAnswersAsync,
     ],
   );
@@ -144,11 +124,17 @@ export const useAutoCompletion = () => {
     for (const activityId of state.activityIdsToSubmit) {
       const isAlreadySubmitted = state.successfullySubmittedActivityIds.includes(activityId);
 
+      const isLastActivity =
+        state.activityIdsToSubmit[state.activityIdsToSubmit.length - 1] === activityId;
+
       if (isAlreadySubmitted) {
         continue;
       }
 
-      await submitAnswersForActivity(activityId);
+      await submitAnswersForActivity({
+        activityId,
+        isLastActivity,
+      });
     }
   }, [state.activityIdsToSubmit, state.successfullySubmittedActivityIds, submitAnswersForActivity]);
 

@@ -31,13 +31,11 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
     const activitiesToSubmit: string[] = [];
 
     if (context.flow) {
-      const activityIds = context.flow.activityIds;
-
-      const interraptedActivityIndex = activityIds.findIndex(
+      const interraptedActivityIndex = context.flow.activityIds.findIndex(
         (activityId) => activityId === context.activityId,
       );
 
-      const restOfActivities = activityIds.slice(interraptedActivityIndex);
+      const restOfActivities = context.flow.activityIds.slice(interraptedActivityIndex);
 
       restOfActivities.forEach((activityId) => {
         activitiesToSubmit.push(activityId);
