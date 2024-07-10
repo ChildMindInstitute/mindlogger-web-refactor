@@ -4,6 +4,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 
 import { ActivityStatus } from '~/abstract/lib/GroupBuilder';
 import ActivityRestartIcon from '~/assets/activity-restart-icon.svg';
+import { useBanners } from '~/entities/banner/model';
 import { Theme } from '~/shared/constants';
 import { BaseButton, MuiModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
@@ -17,6 +18,7 @@ type Props = {
   onResumeClick: () => void;
   onStartClick: () => void;
   isDisabled: boolean;
+  isAutoCompletionRecordDefined: boolean;
 };
 
 export const ActivityCardRestartResume = ({
@@ -26,12 +28,25 @@ export const ActivityCardRestartResume = ({
   onStartClick,
   activityName,
   isDisabled,
+  isAutoCompletionRecordDefined,
 }: Props) => {
   const [isRestartConfirmationModalOpen, setIsRestartConfirmationModalOpen] = useState(false);
+
   const { lessThanSM } = useCustomMediaQuery();
+
   const { t } = useCustomTranslation();
+
+  const { addWarningBanner } = useBanners();
+
   const closeModal = () => setIsRestartConfirmationModalOpen(false);
-  const openModal = () => setIsRestartConfirmationModalOpen(true);
+
+  const openModal = () => {
+    if (isAutoCompletionRecordDefined) {
+      return addWarningBanner(t('autoCompletion.restartActivityWarning'));
+    }
+
+    setIsRestartConfirmationModalOpen(true);
+  };
 
   return (
     <>
