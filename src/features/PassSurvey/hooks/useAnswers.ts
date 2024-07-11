@@ -8,7 +8,7 @@ import { ActivityFlowDTO, AnswerPayload, EncryptionDTO, ScheduleEventDto } from 
 import { useAppSelector } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
-type BuildAnswerParams = {
+export type BuildAnswerParams = {
   event: ScheduleEventDto;
 
   entityId: string;
@@ -46,11 +46,11 @@ export const useAnswer = () => {
   const buildAnswer = useCallback(
     (params: BuildAnswerParams): AnswerPayload => {
       if (!groupProgress) {
-        throw new Error('[useAnswer] Group progress is not found');
+        throw new Error('[useAnswer:buildAnswer] Group progress is not found');
       }
 
       if (!params.encryption) {
-        throw new Error('[useAnswer] Encryption is not found');
+        throw new Error('[useAnswer:buildAnswer] Encryption is not found');
       }
 
       const answerConstructService = new AnswersConstructService({

@@ -4,7 +4,7 @@ import { actions, SetAutoCompletionPayload } from '../slice';
 
 import { useAppDispatch } from '~/shared/utils';
 
-type ActivitySuccessfullySubmitted = {
+export type ActivitySuccessfullySubmitted = {
   entityId: string;
   eventId: string;
 

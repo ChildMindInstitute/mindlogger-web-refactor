@@ -1,21 +1,13 @@
 import { useCallback, useContext, useMemo } from 'react';
 
-import { AxiosError } from 'axios';
-
+import { CompletionContructService } from './CompletionConstructService';
 import { useAutoCompletionRecord } from './useAutoCompletionRecord';
 import { useAutoCompletionStateManager } from './useAutoCompletionStateManager';
-import { usePrevious } from '../../../../shared/utils';
 
 import { useActivityByIdMutation } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
-import { mapItemToRecord } from '~/entities/applet/model/mapper';
 import { SurveyContext, useAnswer, useSubmitAnswersMutations } from '~/features/PassSurvey';
-import { ActivityDTO } from '~/shared/api';
-
-type SubmitParams = {
-  activityId: string;
-  isLastActivity: boolean;
-};
+import { usePrevious } from '~/shared/utils';
 
 export const useAutoCompletion = () => {
   const context = useContext(SurveyContext);
@@ -53,90 +45,6 @@ export const useAutoCompletion = () => {
     isPublic: !!context.publicAppletKey,
   });
 
-  const submitAnswersForActivity = useCallback(
-    async (params: SubmitParams) => {
-      const activityProgress = getActivityProgress({
-        activityId: params.activityId,
-        eventId: context.eventId,
-      });
-
-      let activity: ActivityDTO | undefined;
-
-      if (!activityProgress) {
-        try {
-          const result = await fetchActivityById(params.activityId);
-          activity = result.data.result;
-        } catch (e) {
-          console.error(e);
-          throw new Error(
-            `[ProcessingScreen:submitAnswersForEmptyActivities] Error while fetching activity by ID: ${params.activityId}`,
-          );
-        }
-      }
-
-      const items = activity?.items.map(mapItemToRecord) ?? [];
-
-      const answers = buildAnswer({
-        entityId: context.entityId,
-        event: context.event,
-        appletId: context.appletId,
-        appletVersion: context.appletVersion,
-        encryption: context.encryption,
-        flow: context.flow,
-        publicAppletKey: context.publicAppletKey,
-        activityId: params.activityId,
-        items: activityProgress?.items ?? items,
-        userEvents: activityProgress?.userEvents ?? [],
-        isFlowCompleted: params.isLastActivity,
-      });
-
-      try {
-        const result = await submitAnswersAsync(answers);
-
-        if (result.status === 201) {
-          activitySuccessfullySubmitted({
-            entityId: context.entityId,
-            eventId: context.eventId,
-            activityId: params.activityId,
-          });
-        }
-      } catch (e: unknown) {
-        // We should not throw an error here and stop the process
-        // because we have a chance to get the validation error "Incorrect answer order".
-
-        // Need to discuss with the backend team the implementation of the specific error to determine the required answer.
-        // Now error message - "Incorrect activity order" is not informative enough.
-        // Good error message - { type: "INCORRECT_ANSWER_ORDER", expected: {activityId} }. Then we can handle it and send the correct answer.
-        console.error(e);
-
-        console.info(
-          `[ProcessingScreen:submitAnswersForActivity] Error while submitting answers for the ActivityID: ${params.activityId}`,
-        );
-
-        if (e instanceof AxiosError) {
-          console.error(
-            `[ProcessingScreen:submitAnswersForActivity] Error: ${e.response?.data.result[0].message}`,
-          );
-        }
-      }
-    },
-    [
-      activitySuccessfullySubmitted,
-      buildAnswer,
-      context.appletId,
-      context.appletVersion,
-      context.encryption,
-      context.entityId,
-      context.event,
-      context.eventId,
-      context.flow,
-      context.publicAppletKey,
-      fetchActivityById,
-      getActivityProgress,
-      submitAnswersAsync,
-    ],
-  );
-
   const startEntityCompletion = useCallback(async () => {
     if (!state) {
       throw new Error(
@@ -151,22 +59,37 @@ export const useAutoCompletion = () => {
       return;
     }
 
-    for (const activityId of state.activityIdsToSubmit) {
-      const isAlreadySubmitted = state.successfullySubmittedActivityIds.includes(activityId);
+    const activityProgress = getActivityProgress({
+      activityId: context.activityId,
+      eventId: context.eventId,
+    });
 
-      const isLastActivity =
-        state.activityIdsToSubmit[state.activityIdsToSubmit.length - 1] === activityId;
-
-      if (isAlreadySubmitted) {
-        continue;
-      }
-
-      await submitAnswersForActivity({
-        activityId,
-        isLastActivity,
-      });
+    if (!activityProgress) {
+      throw new Error(
+        `[useAutoCompletion:startEntityCompletion] Activity progress is not found for activityId: ${context.activityId} and eventId: ${context.eventId}`,
+      );
     }
-  }, [state, submitAnswersForActivity]);
+
+    const completionService = new CompletionContructService({
+      surveyContext: context,
+      completionRecord: state,
+      interruptedProgress: activityProgress,
+      fetchActivityById,
+      submitAnswers: submitAnswersAsync,
+      buildAnswer,
+      activitySuccessfullySubmitted,
+    });
+
+    await completionService.complete();
+  }, [
+    activitySuccessfullySubmitted,
+    buildAnswer,
+    context,
+    fetchActivityById,
+    getActivityProgress,
+    state,
+    submitAnswersAsync,
+  ]);
 
   return {
     activityName,
