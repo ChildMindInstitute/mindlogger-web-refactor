@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from 'axios';
 
-import { ActivitySuccessfullySubmitted } from './useAutoCompletionStateManager';
-import { AutoCompletion } from '../slice';
+import { ActivitySuccessfullySubmitted } from './hooks/useAutoCompletionStateManager';
+import { AutoCompletion } from './slice';
 
 import { appletModel } from '~/entities/applet';
 import { mapItemToRecord } from '~/entities/applet/model/mapper';
@@ -35,6 +35,12 @@ type CompleteActivityParams = {
   isLastActivity: boolean;
 };
 
+type ActivityIdsExtractorParams = {
+  isFlow: boolean;
+  currentActivityId: string;
+  flowActivityIds: string[] | null;
+};
+
 type Input = {
   completionRecord: AutoCompletion;
   interruptedProgress: appletModel.ActivityProgress;
@@ -64,7 +70,7 @@ export class CompletionContructService {
 
   private buildAnswer: (payload: BuildAnswerParams) => AnswerPayload;
 
-  private submitAnswers: (payload: AnswerPayload) => Promise<AxiosResponse<any, BaseError>>;
+  private submitAnswers: (payload: AnswerPayload) => Promise<SubmitResponse>;
 
   private activitySuccessfullySubmitted: (payload: ActivitySuccessfullySubmitted) => void;
 
@@ -81,6 +87,32 @@ export class CompletionContructService {
     this.submitAnswers = input.submitAnswers;
     this.fetchActivityById = input.fetchActivityById;
     this.activitySuccessfullySubmitted = input.activitySuccessfullySubmitted;
+  }
+
+  static extractActivityIdsToSubmitByParams(params: ActivityIdsExtractorParams): string[] {
+    if (!params.isFlow) {
+      return [params.currentActivityId];
+    }
+
+    if (!params.flowActivityIds) {
+      throw new Error(
+        '[CompletionContructService:extractActivityIdsToSubmitByParams] Flow activity ids are not defined',
+      );
+    }
+
+    const interruptedActivityId = params.currentActivityId;
+
+    const lastActivityId = params.flowActivityIds[params.flowActivityIds.length - 1];
+
+    const isInterruptedActivityLast = interruptedActivityId === lastActivityId;
+
+    const activitiesToSubmit = [interruptedActivityId];
+
+    if (!isInterruptedActivityLast) {
+      activitiesToSubmit.push(lastActivityId);
+    }
+
+    return activitiesToSubmit;
   }
 
   public async complete() {

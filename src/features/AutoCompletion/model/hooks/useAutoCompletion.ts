@@ -1,8 +1,8 @@
 import { useCallback, useContext, useMemo } from 'react';
 
-import { CompletionContructService } from './CompletionConstructService';
 import { useAutoCompletionRecord } from './useAutoCompletionRecord';
 import { useAutoCompletionStateManager } from './useAutoCompletionStateManager';
+import { CompletionContructService } from '../CompletionConstructService';
 
 import { useActivityByIdMutation } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
