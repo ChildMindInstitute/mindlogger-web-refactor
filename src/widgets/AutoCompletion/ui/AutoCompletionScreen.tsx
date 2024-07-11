@@ -11,7 +11,7 @@ import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { useCustomNavigation, useCustomTranslation, useOnceEffect } from '~/shared/utils';
 
-export const ProcessingScreen = () => {
+export const AutoCompletionScreen = () => {
   const { t } = useCustomTranslation();
 
   const navigator = useCustomNavigation();
@@ -28,7 +28,7 @@ export const ProcessingScreen = () => {
 
   const onFinish = useCallback(() => {
     if (!state) {
-      throw new Error('[ProcessingScreen:onFinish] State is not defined');
+      throw new Error('[AutoCompletionScreen:onFinish] State is not defined');
     }
 
     const canBeClosed =

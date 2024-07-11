@@ -46,8 +46,8 @@ const ROUTES = {
         flowId ? `flowId=${flowId}` : ''
       }`,
   },
-  publicAnswerProcessing: {
-    path: '/public/answer-processing',
+  publicAutoCompletion: {
+    path: '/public/auto-completion',
     navigateTo: ({
       appletId,
       eventId,
@@ -61,7 +61,7 @@ const ROUTES = {
       flowId: string | null;
       publicAppletKey: string | null;
     }) =>
-      `/public/answer-processing?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}${flowId ? `flowId=${flowId}` : ''}${publicAppletKey ? `publicAppletKey=${publicAppletKey}` : ''}`,
+      `${ROUTES.publicAutoCompletion.path}?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}${flowId ? `flowId=${flowId}` : ''}${publicAppletKey ? `publicAppletKey=${publicAppletKey}` : ''}`,
   },
 
   // Protected routes
@@ -104,8 +104,8 @@ const ROUTES = {
     path: '/protected/invite/declined',
   },
 
-  answerProcessing: {
-    path: '/protected/answer-processing',
+  autoCompletion: {
+    path: '/protected/auto-completion',
     navigateTo: ({
       appletId,
       eventId,
@@ -119,7 +119,7 @@ const ROUTES = {
       flowId: string | null;
       publicAppletKey: string | null;
     }) =>
-      `/protected/answer-processing?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}${flowId ? `&flowId=${flowId}` : ''}${publicAppletKey ? `&publicAppletKey=${publicAppletKey}` : ''}`,
+      `${ROUTES.autoCompletion.path}?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}${flowId ? `&flowId=${flowId}` : ''}${publicAppletKey ? `&publicAppletKey=${publicAppletKey}` : ''}`,
   },
 };
 

@@ -1,4 +1,4 @@
-import { ProcessingScreen } from './ProcessingScreen';
+import { AutoCompletionScreen } from './AutoCompletionScreen';
 
 import {
   SurveyContext,
@@ -16,7 +16,7 @@ type Props = {
   publicAppletKey: string | null;
 };
 
-function SurveyAnswerProcessingWidget(props: Props) {
+function SurveyAutoCompletionWidget(props: Props) {
   const { appletDTO, activityDTO, eventsDTO, isLoading, isError, error, respondentMeta } =
     useSurveyDataQuery({
       appletId: props.appletId,
@@ -44,9 +44,9 @@ function SurveyAnswerProcessingWidget(props: Props) {
         respondentMeta,
       })}
     >
-      <ProcessingScreen />
+      <AutoCompletionScreen />
     </SurveyContext.Provider>
   );
 }
 
-export default SurveyAnswerProcessingWidget;
+export default SurveyAutoCompletionWidget;

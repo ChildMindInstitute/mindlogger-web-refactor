@@ -51,8 +51,8 @@ export const SurveyWidget = (props: Props) => {
     };
 
     const screenToNavigate = props.publicAppletKey
-      ? ROUTES.publicAnswerProcessing.navigateTo(navigateToProps)
-      : ROUTES.answerProcessing.navigateTo(navigateToProps);
+      ? ROUTES.publicAutoCompletion.navigateTo(navigateToProps)
+      : ROUTES.autoCompletion.navigateTo(navigateToProps);
 
     return navigator.navigate(screenToNavigate);
   }, [closeTimesUpModal, navigator, props]);

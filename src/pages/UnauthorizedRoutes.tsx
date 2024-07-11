@@ -4,7 +4,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import ForgotPasswordPage from './ForgotPassword';
 import LoginPage from './Login';
-import PublicSurveyAnswerProcessing from './PublicSurveyAnswerProcessing';
+import PublicAutoCompletion from './PublicAutoCompletion';
 import SignupPage from './Signup';
 
 import Layout from '~/abstract/ui/AppLayout';
@@ -24,7 +24,7 @@ function UnauthorizedRoutes() {
   return (
     <Routes>
       <Route path={ROUTES.publicSurvey.path} element={<PublicSurvey />} />
-      <Route path={ROUTES.publicAnswerProcessing.path} element={<PublicSurveyAnswerProcessing />} />
+      <Route path={ROUTES.publicAutoCompletion.path} element={<PublicAutoCompletion />} />
 
       <Route element={<Layout header={<Header />} footer={<Footer />} />}>
         <Route path={ROUTES.appletDetails.path} element={<AppletDetailsPage />} />
