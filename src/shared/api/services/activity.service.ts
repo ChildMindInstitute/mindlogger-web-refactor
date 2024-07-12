@@ -18,7 +18,7 @@ function activityService() {
       return axiosService.get<SuccessResponseActivityById>(`/public/activities/${id}`);
     },
     publicSaveAnswers(payload: AnswerPayload) {
-      return axiosService.post(`/public/answers`, payload);
+      return axiosService.post<CompletedEntitiesDTOSuccessResponse>(`/public/answers`, payload);
     },
 
     getCompletedEntities(payload: GetCompletedEntitiesPayload) {
