@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useContext } from 'react';
 
 import { useAutoCompletionRecord } from './useAutoCompletionRecord';
 import { useAutoCompletionStateManager } from './useAutoCompletionStateManager';
@@ -18,20 +18,14 @@ export const useAutoCompletion = () => {
 
   const prevFetchedActivity = usePrevious(data?.data.result);
 
-  const activityName = useMemo(() => {
-    // The latest fetched activity name
-    if (data?.data?.result?.name) {
-      return data?.data?.result?.name;
-    }
+  // The latest fetched activity name
+  // If the latest fetched activity name is not available, return the previous fetched activity name
+  // If no activity name is available, return the current activity name
+  const latestActivityName = data?.data?.result?.name;
+  const prevActivityName = prevFetchedActivity?.name;
+  const currentActivityName = context.activity.name;
 
-    // If the latest fetched activity name is not available, return the previous fetched activity name
-    if (prevFetchedActivity?.name) {
-      return prevFetchedActivity?.name;
-    }
-
-    // If no activity name is available, return the current activity name
-    return context.activity.name;
-  }, [context.activity.name, data?.data?.result?.name, prevFetchedActivity?.name]);
+  const activityName = latestActivityName ?? prevActivityName ?? currentActivityName;
 
   const state = useAutoCompletionRecord({ entityId: context.entityId, eventId: context.eventId });
 
