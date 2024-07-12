@@ -83,7 +83,7 @@ export default class AnswersConstructService {
     this.isFlowCompleted = input.isFlowCompleted;
   }
 
-  public build(): AnswerPayload {
+  public construct(): AnswerPayload {
     const answers: Answers = mapToAnswers(this.items);
 
     const answersDictionary = this.buildAnswersDictionary(answers);

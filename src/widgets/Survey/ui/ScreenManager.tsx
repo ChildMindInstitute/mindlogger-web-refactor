@@ -8,7 +8,6 @@ import { useEntityTimer } from '../model/hooks';
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
-import { CompletionContructService } from '~/features/AutoCompletion/model';
 import { SurveyContext } from '~/features/PassSurvey';
 import { useAppSelector } from '~/shared/utils';
 
@@ -29,12 +28,11 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
   const { saveAutoCompletion } = AutoCompletionModel.useAutoCompletionStateManager();
 
   const onEntityTimerFinish = useCallback(() => {
-    const activitiesToSubmit: string[] =
-      CompletionContructService.extractActivityIdsToSubmitByParams({
-        isFlow: !!context.flow,
-        currentActivityId: context.activityId,
-        flowActivityIds: context.flow?.activityIds ?? null,
-      });
+    const activitiesToSubmit: string[] = AutoCompletionModel.extractActivityIdsToSubmitByParams({
+      isFlow: !!context.flow,
+      currentActivityId: context.activityId,
+      flowActivityIds: context.flow?.activityIds ?? null,
+    });
 
     saveAutoCompletion({
       entityId: context.entityId,

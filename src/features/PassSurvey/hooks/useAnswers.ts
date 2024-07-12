@@ -67,7 +67,7 @@ export const useAnswer = () => {
         isFlowCompleted: params.isFlowCompleted,
       });
 
-      const answer = answerConstructService.build();
+      const answer = answerConstructService.construct();
 
       const isIntegrationsEnabled = context.integrations !== undefined;
 

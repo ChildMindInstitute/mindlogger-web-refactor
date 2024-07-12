@@ -1,6 +1,7 @@
 import { useCallback, useContext } from 'react';
 
 import { ProgressBar } from './ProgressBar';
+import { useAutoCompletion } from '../lib';
 
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
@@ -24,15 +25,16 @@ export const AutoCompletionScreen = () => {
 
   const { removeAutoCompletion } = AutoCompletionModel.useAutoCompletionStateManager();
 
-  const { state, startEntityCompletion, activityName } = AutoCompletionModel.useAutoCompletion();
+  const { completionState, startEntityCompletion, activityName } = useAutoCompletion();
 
   const onFinish = useCallback(() => {
-    if (!state) {
+    if (!completionState) {
       throw new Error('[AutoCompletionScreen:onFinish] State is not defined');
     }
 
     const canBeClosed =
-      state.activityIdsToSubmit.length === state.successfullySubmittedActivityIds.length;
+      completionState.activityIdsToSubmit.length ===
+      completionState.successfullySubmittedActivityIds.length;
 
     if (!canBeClosed) {
       return addWarningBanner(t('answerProcessingScreen.processInProgress'));
@@ -59,6 +61,7 @@ export const AutoCompletionScreen = () => {
     });
   }, [
     addWarningBanner,
+    completionState,
     context.appletId,
     context.entityId,
     context.eventId,
@@ -66,7 +69,6 @@ export const AutoCompletionScreen = () => {
     entityCompleted,
     navigator,
     removeAutoCompletion,
-    state,
     t,
   ]);
 
@@ -106,13 +108,14 @@ export const AutoCompletionScreen = () => {
             bgcolor={Theme.colors.light.primary012}
             borderRadius="12px"
           >
-            {state && (
+            {completionState && (
               <ProgressBar
                 activityName={activityName}
-                currentActivityIndex={state.successfullySubmittedActivityIds.length}
-                activitiesCount={state.activityIdsToSubmit.length}
+                currentActivityIndex={completionState.successfullySubmittedActivityIds.length}
+                activitiesCount={completionState.activityIdsToSubmit.length}
                 isCompleted={
-                  state.activityIdsToSubmit.length === state.successfullySubmittedActivityIds.length
+                  completionState.activityIdsToSubmit.length ===
+                  completionState.successfullySubmittedActivityIds.length
                 }
               />
             )}
