@@ -10,7 +10,7 @@ import { SurveyContext, SurveyLayout, SurveyManageButtons } from '~/features/Pas
 import { ROUTES, Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { useCustomNavigation, useCustomTranslation, useOnceEffect } from '~/shared/utils';
+import { useCustomNavigation, useCustomTranslation } from '~/shared/utils';
 
 export const AutoCompletionScreen = () => {
   const { t } = useCustomTranslation();
@@ -25,7 +25,7 @@ export const AutoCompletionScreen = () => {
 
   const { removeAutoCompletion } = AutoCompletionModel.useAutoCompletionStateManager();
 
-  const { completionState, startEntityCompletion, activityName } = useAutoCompletion();
+  const { completionState, activityName } = useAutoCompletion();
 
   const onFinish = useCallback(() => {
     if (!completionState) {
@@ -71,10 +71,6 @@ export const AutoCompletionScreen = () => {
     removeAutoCompletion,
     t,
   ]);
-
-  useOnceEffect(() => {
-    startEntityCompletion();
-  });
 
   return (
     <SurveyLayout

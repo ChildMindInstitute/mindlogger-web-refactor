@@ -5,6 +5,7 @@ import { mapItemToRecord } from '~/entities/applet/model/mapper';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import { SurveyContext, useAnswer, useSubmitAnswersMutations } from '~/features/PassSurvey';
 import { ActivityApiProxyService, ActivityDTO, AnswerPayload } from '~/shared/api';
+import { useOnceEffect } from '~/shared/utils';
 
 type Item = appletModel.ItemRecord;
 
@@ -187,9 +188,12 @@ export const useAutoCompletion = () => {
     }
   }, [completeEmptyActivity, completeInterruptedActivity, completionState, context.activityId]);
 
+  useOnceEffect(() => {
+    startEntityCompletion();
+  });
+
   return {
     activityName,
     completionState,
-    startEntityCompletion,
   };
 };
