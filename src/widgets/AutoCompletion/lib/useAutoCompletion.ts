@@ -1,10 +1,11 @@
 import { useCallback, useContext, useState } from 'react';
 
+import { fetchActivityById } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { mapItemToRecord } from '~/entities/applet/model/mapper';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import { SurveyContext, useAnswer, useSubmitAnswersMutations } from '~/features/PassSurvey';
-import { ActivityApiProxyService, ActivityDTO, AnswerPayload } from '~/shared/api';
+import { AnswerPayload } from '~/shared/api';
 import { useOnceEffect } from '~/shared/utils';
 
 type Item = appletModel.ItemRecord;
@@ -49,46 +50,25 @@ export const useAutoCompletion = () => {
     [completionState],
   );
 
-  const fetchActivityById = useCallback(
-    async (id: string): Promise<ActivityDTO> => {
-      let activityDTO: ActivityDTO | undefined;
-
-      try {
-        const response = await ActivityApiProxyService.getActivityById(id, {
-          isPublic: !!context.publicAppletKey,
-        });
-
-        activityDTO = response.data.result;
-      } catch (error) {
-        console.error(error);
-        throw new Error(
-          `[CompletionContructService:getActivityById] Error while fetching activity by ID: ${id}`,
-        );
-      }
-
-      setActivityName(activityDTO.name);
-      return activityDTO;
-    },
-    [context.publicAppletKey],
-  );
-
   const completeActivity = useCallback(
     async (params: CompleteActivityParams): Promise<boolean> => {
-      const answerPayload: AnswerPayload = buildAnswer({
-        entityId: context.entityId,
-        event: context.event,
-        appletId: context.appletId,
-        appletVersion: context.appletVersion,
-        encryption: context.encryption,
-        flow: context.flow,
-        publicAppletKey: context.publicAppletKey,
-        activityId: params.activityId,
-        items: params.items,
-        userEvents: params.userEvents,
-        isFlowCompleted: params.isLastActivity,
-      });
+      const buildAnswerForEntity: () => AnswerPayload = () => {
+        return buildAnswer({
+          entityId: context.entityId,
+          event: context.event,
+          appletId: context.appletId,
+          appletVersion: context.appletVersion,
+          encryption: context.encryption,
+          flow: context.flow,
+          publicAppletKey: context.publicAppletKey,
+          activityId: params.activityId,
+          items: params.items,
+          userEvents: params.userEvents,
+          isFlowCompleted: params.isLastActivity,
+        });
+      };
 
-      const response = await submitAnswersAsync(answerPayload);
+      const response = await submitAnswersAsync(buildAnswerForEntity());
 
       const isSuccessful = response.status === 201;
 
@@ -124,7 +104,12 @@ export const useAutoCompletion = () => {
 
   const completeEmptyActivity = useCallback(
     async (activityId: string) => {
-      const activityDTO = await fetchActivityById(activityId);
+      const activityDTO = await fetchActivityById({
+        activityId,
+        isPublic: !!context.publicAppletKey,
+      });
+
+      setActivityName(activityDTO.name);
 
       const items = activityDTO.items.map(mapItemToRecord);
 
