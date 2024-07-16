@@ -1,21 +1,11 @@
 import { useCallback, useContext, useState } from 'react';
 
-import { fetchActivityById } from '~/entities/activity';
+import { EntityCompletionService } from '../model/EntityCompletionService';
+
 import { appletModel } from '~/entities/applet';
-import { mapItemToRecord } from '~/entities/applet/model/mapper';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
-import { SurveyContext, useAnswer, useSubmitAnswersMutations } from '~/features/PassSurvey';
-import { AnswerPayload } from '~/shared/api';
+import { SurveyContext, useAnswerBuilder, useSubmitAnswersMutations } from '~/features/PassSurvey';
 import { useOnceEffect } from '~/shared/utils';
-
-type Item = appletModel.ItemRecord;
-
-type CompleteActivityParams = {
-  activityId: string;
-  items: Item[];
-  userEvents: appletModel.UserEvent[];
-  isLastActivity: boolean;
-};
 
 export const useAutoCompletion = () => {
   const context = useContext(SurveyContext);
@@ -31,44 +21,29 @@ export const useAutoCompletion = () => {
 
   const { getActivityProgress } = appletModel.hooks.useActivityProgress();
 
-  const { buildAnswer } = useAnswer();
+  const answerBuilder = useAnswerBuilder();
 
   const { submitAnswersAsync } = useSubmitAnswersMutations({
     isPublic: !!context.publicAppletKey,
   });
 
-  const isLastActivity = useCallback(
-    (activityId: string) => {
-      if (!completionState) {
-        throw new Error('[useAutoCompletion:isLastActivity] AutoCompletion state is not defined');
-      }
-
-      const lastIndex = completionState.activityIdsToSubmit.length - 1;
-
-      return completionState.activityIdsToSubmit[lastIndex] === activityId;
-    },
-    [completionState],
-  );
-
   const completeActivity = useCallback(
-    async (params: CompleteActivityParams): Promise<boolean> => {
-      const buildAnswerForEntity: () => AnswerPayload = () => {
-        return buildAnswer({
-          entityId: context.entityId,
-          event: context.event,
-          appletId: context.appletId,
-          appletVersion: context.appletVersion,
-          encryption: context.encryption,
-          flow: context.flow,
-          publicAppletKey: context.publicAppletKey,
-          activityId: params.activityId,
-          items: params.items,
-          userEvents: params.userEvents,
-          isFlowCompleted: params.isLastActivity,
-        });
-      };
+    async (activityId: string): Promise<boolean> => {
+      const entityCompletionService = new EntityCompletionService({
+        interruptedActivityId: context.activityId,
+        isPublic: !!context.publicAppletKey,
+        activityIdsToSubmit: completionState?.activityIdsToSubmit || [],
+        activityProgress: getActivityProgress({
+          activityId: context.activityId,
+          eventId: context.eventId,
+        }),
+        setActivityName,
+        answerBuilder,
+      });
 
-      const response = await submitAnswersAsync(buildAnswerForEntity());
+      const answerPayload = await entityCompletionService.complete(activityId);
+
+      const response = await submitAnswersAsync(answerPayload);
 
       const isSuccessful = response.status === 201;
 
@@ -77,7 +52,7 @@ export const useAutoCompletion = () => {
         activitySuccessfullySubmitted({
           entityId: context.entityId,
           eventId: context.eventId,
-          activityId: params.activityId,
+          activityId,
         });
       }
 
@@ -89,63 +64,16 @@ export const useAutoCompletion = () => {
     },
     [
       activitySuccessfullySubmitted,
-      buildAnswer,
-      context.appletId,
-      context.appletVersion,
-      context.encryption,
+      answerBuilder,
+      completionState?.activityIdsToSubmit,
+      context.activityId,
       context.entityId,
-      context.event,
       context.eventId,
-      context.flow,
       context.publicAppletKey,
+      getActivityProgress,
       submitAnswersAsync,
     ],
   );
-
-  const completeEmptyActivity = useCallback(
-    async (activityId: string) => {
-      const activityDTO = await fetchActivityById({
-        activityId,
-        isPublic: !!context.publicAppletKey,
-      });
-
-      setActivityName(activityDTO.name);
-
-      const items = activityDTO.items.map(mapItemToRecord);
-
-      const isCompleted = await completeActivity({
-        activityId,
-        items,
-        userEvents: [],
-        isLastActivity: isLastActivity(activityId),
-      });
-
-      return isCompleted;
-    },
-    [completeActivity, fetchActivityById, isLastActivity],
-  );
-
-  const completeInterruptedActivity = useCallback(async () => {
-    const activityProgress = getActivityProgress({
-      activityId: context.activityId,
-      eventId: context.eventId,
-    });
-
-    if (!activityProgress) {
-      throw new Error(
-        `[useAutoCompletion:startEntityCompletion] Activity progress is not found for activityId: ${context.activityId} and eventId: ${context.eventId}`,
-      );
-    }
-
-    const isCompleted = await completeActivity({
-      activityId: context.activityId,
-      items: activityProgress.items,
-      userEvents: activityProgress.userEvents,
-      isLastActivity: isLastActivity(context.activityId),
-    });
-
-    return isCompleted;
-  }, [completeActivity, context.activityId, context.eventId, getActivityProgress, isLastActivity]);
 
   const startEntityCompletion = useCallback(async () => {
     if (!completionState) {
@@ -162,16 +90,10 @@ export const useAutoCompletion = () => {
       return;
     }
 
-    const interruptedActivityId = context.activityId;
-
     for (const activityId of completionState.activityIdsToSubmit) {
-      if (activityId === interruptedActivityId) {
-        await completeInterruptedActivity();
-      } else {
-        await completeEmptyActivity(activityId);
-      }
+      await completeActivity(activityId);
     }
-  }, [completeEmptyActivity, completeInterruptedActivity, completionState, context.activityId]);
+  }, [completeActivity, completionState]);
 
   useOnceEffect(() => {
     startEntityCompletion();

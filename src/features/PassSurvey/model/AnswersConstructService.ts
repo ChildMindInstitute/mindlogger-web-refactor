@@ -16,6 +16,10 @@ import {
 } from '~/shared/api';
 import { encryption, formatToDtoDate, formatToDtoTime } from '~/shared/utils';
 
+interface ICompletionConstructService {
+  construct: () => AnswerPayload;
+}
+
 type ItemRecord = appletModel.ItemRecord;
 
 type UserEvents = appletModel.UserEvent[];
@@ -46,7 +50,7 @@ type Input = {
   isFlowCompleted?: boolean;
 };
 
-export default class AnswersConstructService {
+export default class AnswersConstructService implements ICompletionConstructService {
   private appletId: string;
 
   private appletVersion: string;

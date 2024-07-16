@@ -11,7 +11,7 @@ import {
   SurveyContext,
   SurveyLayout,
   SurveyManageButtons,
-  useAnswer,
+  useAnswerBuilder,
   useItemTimer,
   useSubmitAnswersMutations,
   useSummaryData,
@@ -166,20 +166,13 @@ const PassingScreen = () => {
     isPublic: !!context.publicAppletKey,
   });
 
-  const { buildAnswer } = useAnswer();
+  const answerBuilder = useAnswerBuilder();
 
   const onSubmit = () => {
     const doneEvent = saveUserEventByType('DONE', item);
 
-    const answer = buildAnswer({
-      entityId: context.entityId,
+    const answer = answerBuilder.build({
       activityId: context.activityId,
-      appletId: context.appletId,
-      appletVersion: context.appletVersion,
-      encryption: context.encryption,
-      flow: context.flow,
-      publicAppletKey: context.publicAppletKey,
-      event: context.event,
       userEvents: activityProgress.userEvents.concat(doneEvent),
       items: activityProgress.items,
     });

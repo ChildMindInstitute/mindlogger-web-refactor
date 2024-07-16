@@ -9,26 +9,25 @@ import { useAppSelector } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
 export type BuildAnswerParams = {
-  event: ScheduleEventDto;
-
-  entityId: string;
   activityId: string;
-  appletId: string;
-  appletVersion: string;
-
-  encryption: EncryptionDTO | null;
-
-  flow: ActivityFlowDTO | null;
-  publicAppletKey: string | null;
-
   items: appletModel.ItemRecord[];
-
   userEvents: appletModel.UserEvent[];
 
+  event?: ScheduleEventDto;
+  entityId?: string;
+  appletId?: string;
+  appletVersion?: string;
   isFlowCompleted?: boolean;
+  publicAppletKey?: string | null;
+  encryption?: EncryptionDTO | null;
+  flow?: ActivityFlowDTO | null;
 };
 
-export const useAnswer = () => {
+export interface AnswerBuilder {
+  build: (params: BuildAnswerParams) => AnswerPayload;
+}
+
+export const useAnswerBuilder = (): AnswerBuilder => {
   const context = useContext(SurveyContext);
 
   const consents = useAppSelector(appletModel.selectors.selectConsents);
@@ -43,13 +42,15 @@ export const useAnswer = () => {
 
   const { featureFlags } = useFeatureFlags();
 
-  const buildAnswer = useCallback(
+  const build = useCallback(
     (params: BuildAnswerParams): AnswerPayload => {
       if (!groupProgress) {
         throw new Error('[useAnswer:buildAnswer] Group progress is not found');
       }
 
-      if (!params.encryption) {
+      const encryption = params.encryption ?? context.encryption;
+
+      if (!encryption) {
         throw new Error('[useAnswer:buildAnswer] Encryption is not found');
       }
 
@@ -57,13 +58,13 @@ export const useAnswer = () => {
         groupProgress,
         userEvents: params.userEvents,
         items: params.items,
-        event: params.event,
+        event: params.event ?? context.event,
         activityId: params.activityId,
-        appletId: params.appletId,
-        appletVersion: params.appletVersion,
-        flow: params.flow,
-        encryption: params.encryption,
-        publicAppletKey: params.publicAppletKey,
+        appletId: params.appletId ?? context.appletId,
+        appletVersion: params.appletVersion ?? context.appletVersion,
+        flow: params.flow ?? context.flow,
+        encryption,
+        publicAppletKey: params.publicAppletKey ?? context.publicAppletKey,
         isFlowCompleted: params.isFlowCompleted,
       });
 
@@ -88,15 +89,20 @@ export const useAnswer = () => {
       return answer;
     },
     [
-      consents,
-      context.appletId,
-      context.integrations,
-      featureFlags.enableMultiInformant,
       groupProgress,
+      context.event,
+      context.appletId,
+      context.appletVersion,
+      context.flow,
+      context.encryption,
+      context.publicAppletKey,
+      context.integrations,
+      consents,
+      featureFlags.enableMultiInformant,
       getMultiInformantState,
       isInMultiInformantFlow,
     ],
   );
 
-  return { buildAnswer };
+  return { build };
 };
