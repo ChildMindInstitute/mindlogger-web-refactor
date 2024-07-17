@@ -51,7 +51,6 @@ export const useAutoCompletion = () => {
           activityId: context.activityId,
           eventId: context.eventId,
         }),
-        setActivityName,
         answerBuilder,
       },
       {

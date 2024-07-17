@@ -21,7 +21,6 @@ type Input = {
   activityIdsToSubmit: string[];
   activityProgress: appletModel.ActivityProgress | null;
 
-  setActivityName: (name: string) => void;
   answerBuilder: AnswerBuilder;
 };
 
