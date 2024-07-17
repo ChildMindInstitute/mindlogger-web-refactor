@@ -6,8 +6,8 @@ import { AxiosError } from 'axios';
 import { useValidateMultiInformantAssessmentQuery } from '~/entities/answer';
 import { useAppletByIdQuery } from '~/entities/applet';
 import { useSubjectQuery } from '~/entities/subject';
+import { useGetMySubjectQuery } from '~/entities/subject/api/useGetMySubjectQuery';
 import { useUserState } from '~/entities/user/model/hooks';
-import { useWorkspaceAppletRespondent } from '~/entities/workspace';
 import {
   TakeNowParams,
   TakeNowValidatedState,
@@ -23,7 +23,8 @@ export const useTakeNowValidation = ({
   respondentId,
   multiInformantAssessmentId,
 }: TakeNowParams): TakeNowValidatedState => {
-  const [workspaceId, setWorkspaceId] = useState<string | null>();
+  const [fetchSourceSubject, setFetchSourceSubject] = useState<boolean>();
+  const [fetchTargetSubject, setFetchTargetSubject] = useState<boolean>();
 
   const {
     isError: isValidationError,
@@ -37,25 +38,25 @@ export const useTakeNowValidation = ({
   });
 
   const {
-    isError: isSourceSubjectError,
+    isError: isMySubjectError,
+    data: mySubjectData,
+    isLoading: isLoadingMySubject,
+  } = useGetMySubjectQuery(appletId);
+
+  const {
     data: sourceSubjectData,
     error: sourceSubjectError,
     isLoading: isLoadingSourceSubject,
-  } = useSubjectQuery(sourceSubjectId);
+  } = useSubjectQuery(sourceSubjectId, {
+    enabled: fetchSourceSubject,
+  });
 
   const {
-    isError: isTargetSubjectError,
     data: targetSubjectData,
     error: targetSubjectError,
     isLoading: isLoadingTargetSubject,
-  } = useSubjectQuery(targetSubjectId);
-
-  const {
-    isError: isRespondentError,
-    data: respondentData,
-    isLoading: isLoadingRespondent,
-  } = useWorkspaceAppletRespondent(workspaceId ?? '', appletId, respondentId, {
-    enabled: !!workspaceId,
+  } = useSubjectQuery(targetSubjectId, {
+    enabled: fetchTargetSubject,
   });
 
   const {
@@ -65,11 +66,16 @@ export const useTakeNowValidation = ({
   } = useAppletByIdQuery({ isPublic: false, appletId });
 
   useEffect(() => {
-    if (!workspaceId && !isLoadingApplet && appletData) {
-      const localWorkspaceId = appletData?.data.result.ownerId;
-      setWorkspaceId(localWorkspaceId || null);
+    if (mySubjectData?.data?.result) {
+      const { id: currentUserSubjectId } = mySubjectData.data.result;
+
+      setFetchSourceSubject(currentUserSubjectId !== sourceSubjectId);
+
+      setFetchTargetSubject(
+        currentUserSubjectId !== targetSubjectId && sourceSubjectId !== targetSubjectId,
+      );
     }
-  }, [appletData, isLoadingApplet, workspaceId]);
+  }, [mySubjectData, sourceSubjectId, targetSubjectId]);
 
   const { t } = useCustomTranslation();
   const { user } = useUserState();
@@ -165,69 +171,11 @@ export const useTakeNowValidation = ({
     });
   }
 
-  if (isLoadingTargetSubject || isLoadingSourceSubject) {
+  if (isLoadingMySubject) {
     return loadingState;
   }
 
-  const subjectPermissionError =
-    (isTargetSubjectError &&
-      targetSubjectError &&
-      'status' in targetSubjectError.response &&
-      targetSubjectError.response.status === 403) ||
-    (isSourceSubjectError &&
-      sourceSubjectError &&
-      'status' in sourceSubjectError.response &&
-      sourceSubjectError.response.status === 403);
-
-  if (subjectPermissionError) {
-    // The logged-in user doesn't have permission to fetch the subject details,
-    // so they probably don't have permission to perform the activity
-    return errorState({
-      type: 'invalidRespondent',
-      error: t('takeNow.invalidRespondent'),
-    });
-  }
-
-  if (
-    isTargetSubjectError ||
-    !targetSubjectData?.data?.result ||
-    targetSubjectData.data.result.appletId !== appletId ||
-    isSourceSubjectError ||
-    !sourceSubjectData?.data?.result ||
-    sourceSubjectData.data.result.appletId !== appletId
-  ) {
-    return errorState({
-      type: 'invalidSubject',
-      error: t('takeNow.invalidSubject'),
-    });
-  }
-
-  const { nickname: targetSubjectNickname, secretUserId: targetSecretUserId } =
-    targetSubjectData.data.result;
-
-  const { nickname: sourceSubjectNickname, secretUserId: sourceSecretUserId } =
-    sourceSubjectData.data.result;
-
-  // At this point we have the subject, applet, and activity data
-  // We can't fetch the workspace roles before we have the applet data
-  // because that's where we get the workspace ID
-
-  if (workspaceId === undefined) {
-    return loadingState;
-  }
-
-  if (workspaceId === null) {
-    return errorState({
-      type: 'common_loading_error',
-      error: t('common.loadingError'),
-    });
-  }
-
-  if (isLoadingRespondent) {
-    return loadingState;
-  }
-
-  if (isRespondentError || !respondentData || !respondentData?.data?.result) {
+  if (isMySubjectError || !mySubjectData || !mySubjectData?.data?.result) {
     // If we're unable to fetch the subject ID for the current user, we can't start the multi-informant flow
     // eslint-disable-next-line no-console
     console.error('Unable to fetch subject ID for current user');
@@ -235,10 +183,79 @@ export const useTakeNowValidation = ({
   }
 
   const {
-    subjectId: currentUserSubjectId,
+    id: currentUserSubjectId,
     nickname: currentUserSubjectNickname,
     secretUserId: currentUserSecretUserId,
-  } = respondentData.data.result;
+  } = mySubjectData.data.result;
+
+  if (
+    fetchSourceSubject === undefined ||
+    isLoadingSourceSubject ||
+    fetchTargetSubject === undefined ||
+    isLoadingTargetSubject
+  ) {
+    return loadingState;
+  }
+
+  let sourceSubjectNickname: string | null;
+  let targetSubjectNickname: string | null;
+  let sourceSecretUserId: string;
+  let targetSecretUserId: string;
+
+  if (fetchSourceSubject === false) {
+    sourceSubjectNickname = currentUserSubjectNickname;
+    sourceSecretUserId = currentUserSecretUserId;
+  } else if (
+    sourceSubjectError &&
+    'status' in sourceSubjectError.response &&
+    sourceSubjectError.response.status === 403
+  ) {
+    return errorState({
+      type: 'invalidRespondent',
+      error: t('takeNow.invalidRespondent'),
+    });
+  } else if (
+    !sourceSubjectData?.data?.result ||
+    sourceSubjectData.data.result.appletId !== appletId
+  ) {
+    return errorState({
+      type: 'invalidSubject',
+      error: t('takeNow.invalidSubject'),
+    });
+  } else {
+    sourceSubjectNickname = sourceSubjectData.data.result.nickname;
+    sourceSecretUserId = sourceSubjectData.data.result.secretUserId;
+  }
+
+  if (fetchTargetSubject === false) {
+    if (currentUserSubjectId === targetSubjectId) {
+      targetSubjectNickname = currentUserSubjectNickname;
+      targetSecretUserId = currentUserSecretUserId;
+    } else {
+      targetSubjectNickname = sourceSubjectNickname;
+      targetSecretUserId = sourceSecretUserId;
+    }
+  } else if (
+    targetSubjectError &&
+    'status' in targetSubjectError.response &&
+    targetSubjectError.response.status === 403
+  ) {
+    return errorState({
+      type: 'invalidRespondent',
+      error: t('takeNow.invalidRespondent'),
+    });
+  } else if (
+    !targetSubjectData?.data?.result ||
+    targetSubjectData.data.result.appletId !== appletId
+  ) {
+    return errorState({
+      type: 'invalidSubject',
+      error: t('takeNow.invalidSubject'),
+    });
+  } else {
+    targetSubjectNickname = targetSubjectData.data.result.nickname;
+    targetSecretUserId = targetSubjectData.data.result.secretUserId;
+  }
 
   // Finally, determine if this is an activity or activity flow for analytics.
   const { activities, activityFlows } = appletData.data.result;
