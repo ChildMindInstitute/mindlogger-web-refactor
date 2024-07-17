@@ -27,9 +27,23 @@ export const useAutoCompletion = () => {
     isPublic: !!context.publicAppletKey,
   });
 
-  const completeActivity = useCallback(
-    async (activityId: string): Promise<boolean> => {
-      const entityCompletionService = new EntityCompletionService({
+  const startEntityCompletion = useCallback(async () => {
+    if (!completionState) {
+      throw new Error(
+        '[useAutoCompletion:startEntityCompletion] AutoCompletion state is not defined',
+      );
+    }
+
+    const isCompleted =
+      completionState.activityIdsToSubmit.length ===
+      completionState.successfullySubmittedActivityIds.length;
+
+    if (isCompleted) {
+      return;
+    }
+
+    const entityCompletionService = new EntityCompletionService(
+      {
         interruptedActivityId: context.activityId,
         isPublic: !!context.publicAppletKey,
         activityIdsToSubmit: completionState?.activityIdsToSubmit || [],
@@ -39,8 +53,15 @@ export const useAutoCompletion = () => {
         }),
         setActivityName,
         answerBuilder,
-      });
+      },
+      {
+        onActivityFetched: (activity) => {
+          setActivityName(activity.name);
+        },
+      },
+    );
 
+    for (const activityId of completionState.activityIdsToSubmit) {
       const answerPayload = await entityCompletionService.complete(activityId);
 
       const response = await submitAnswersAsync(answerPayload);
@@ -59,41 +80,18 @@ export const useAutoCompletion = () => {
       if (!isSuccessful) {
         // Here we can handle the error and re-send the correct answer if needed
       }
-
-      return isSuccessful;
-    },
-    [
-      activitySuccessfullySubmitted,
-      answerBuilder,
-      completionState?.activityIdsToSubmit,
-      context.activityId,
-      context.entityId,
-      context.eventId,
-      context.publicAppletKey,
-      getActivityProgress,
-      submitAnswersAsync,
-    ],
-  );
-
-  const startEntityCompletion = useCallback(async () => {
-    if (!completionState) {
-      throw new Error(
-        '[useAutoCompletion:startEntityCompletion] AutoCompletion state is not defined',
-      );
     }
-
-    const isCompleted =
-      completionState.activityIdsToSubmit.length ===
-      completionState.successfullySubmittedActivityIds.length;
-
-    if (isCompleted) {
-      return;
-    }
-
-    for (const activityId of completionState.activityIdsToSubmit) {
-      await completeActivity(activityId);
-    }
-  }, [completeActivity, completionState]);
+  }, [
+    activitySuccessfullySubmitted,
+    answerBuilder,
+    completionState,
+    context.activityId,
+    context.entityId,
+    context.eventId,
+    context.publicAppletKey,
+    getActivityProgress,
+    submitAnswersAsync,
+  ]);
 
   useOnceEffect(() => {
     startEntityCompletion();

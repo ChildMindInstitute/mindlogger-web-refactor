@@ -2,7 +2,7 @@ import { fetchActivityById } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { mapItemToRecord } from '~/entities/applet/model/mapper';
 import { AnswerBuilder } from '~/features/PassSurvey';
-import { AnswerPayload } from '~/shared/api';
+import { ActivityDTO, AnswerPayload } from '~/shared/api';
 
 interface IEntityCompletionService {
   complete: (activityId: string) => Promise<AnswerPayload>;
@@ -25,6 +25,10 @@ type Input = {
   answerBuilder: AnswerBuilder;
 };
 
+type Handlers = {
+  onActivityFetched: (activity: ActivityDTO) => void;
+};
+
 export class EntityCompletionService implements IEntityCompletionService {
   private isPublic: boolean;
 
@@ -34,17 +38,17 @@ export class EntityCompletionService implements IEntityCompletionService {
 
   private activityProgress: appletModel.ActivityProgress | null;
 
-  private setActivityName: (name: string) => void;
-
   private answerBuilder: AnswerBuilder;
 
-  constructor(input: Input) {
-    this.setActivityName = input.setActivityName;
+  private handlers: Handlers;
+
+  constructor(input: Input, handlers: Handlers) {
     this.answerBuilder = input.answerBuilder;
     this.interruptedActivityId = input.interruptedActivityId;
     this.isPublic = input.isPublic;
     this.activityIdsToSubmit = input.activityIdsToSubmit;
     this.activityProgress = input.activityProgress;
+    this.handlers = handlers;
   }
 
   public async complete(activityId: string) {
@@ -61,7 +65,9 @@ export class EntityCompletionService implements IEntityCompletionService {
       isPublic: this.isPublic,
     });
 
-    this.setActivityName(activityDTO.name);
+    if (this.handlers.onActivityFetched) {
+      this.handlers.onActivityFetched(activityDTO);
+    }
 
     const items = activityDTO.items.map(mapItemToRecord);
 
