@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { appletModel } from '~/entities/applet';
 import { useLogoutMutation, userModel } from '~/entities/user';
+import { AutoCompletionModel } from '~/features/AutoCompletion';
 import ROUTES from '~/shared/constants/routes';
 import { Mixpanel, secureTokensStorage, useCustomNavigation } from '~/shared/utils';
 import { FeatureFlags } from '~/shared/utils/featureFlags';
@@ -16,6 +17,7 @@ export const useLogout = (): UseLogoutReturn => {
 
   const { clearUser } = userModel.hooks.useUserState();
   const { clearStore } = appletModel.hooks.useClearStore();
+  const { clearAutoCompletionState } = AutoCompletionModel.useAutoCompletionStateManager();
 
   const { mutate: logoutMutation, isLoading } = useLogoutMutation();
 
@@ -28,6 +30,7 @@ export const useLogout = (): UseLogoutReturn => {
 
     clearUser();
     clearStore();
+    clearAutoCompletionState();
     secureTokensStorage.clearTokens();
     userModel.secureUserPrivateKeyStorage.clearUserPrivateKey();
 
@@ -35,7 +38,7 @@ export const useLogout = (): UseLogoutReturn => {
     Mixpanel.logout();
     FeatureFlags.logout();
     return navigator.navigate(ROUTES.login.path);
-  }, [clearUser, logoutMutation, navigator, clearStore]);
+  }, [clearUser, clearStore, clearAutoCompletionState, navigator, logoutMutation]);
 
   return {
     logout,

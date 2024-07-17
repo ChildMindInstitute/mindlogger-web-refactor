@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 
 import { SurveyContext } from '../lib';
 import AnswersConstructService from '../model/AnswersConstructService';
@@ -8,98 +8,101 @@ import { ActivityFlowDTO, AnswerPayload, EncryptionDTO, ScheduleEventDto } from 
 import { useAppSelector } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
-type BuildAnswerParams = {
-  event: ScheduleEventDto;
-
-  entityId: string;
+export type BuildAnswerParams = {
   activityId: string;
-  appletId: string;
-  appletVersion: string;
+  items: appletModel.ItemRecord[];
+  userEvents: appletModel.UserEvent[];
 
-  encryption: EncryptionDTO | null;
-
-  flow: ActivityFlowDTO | null;
-  publicAppletKey: string | null;
-
-  userDoneEvent?: appletModel.UserEvent;
+  event?: ScheduleEventDto;
+  entityId?: string;
+  appletId?: string;
+  appletVersion?: string;
+  isFlowCompleted?: boolean;
+  publicAppletKey?: string | null;
+  encryption?: EncryptionDTO | null;
+  flow?: ActivityFlowDTO | null;
 };
 
-export const useAnswer = () => {
+export interface AnswerBuilder {
+  build: (params: BuildAnswerParams) => AnswerPayload;
+}
+
+export const useAnswerBuilder = (): AnswerBuilder => {
   const context = useContext(SurveyContext);
 
   const consents = useAppSelector(appletModel.selectors.selectConsents);
 
-  const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
-
-  const { getActivityProgress } = appletModel.hooks.useActivityProgress();
+  const groupProgress = appletModel.hooks.useGroupProgressRecord({
+    entityId: context.entityId,
+    eventId: context.eventId,
+  });
 
   const { getMultiInformantState, isInMultiInformantFlow } =
     appletModel.hooks.useMultiInformantState();
 
   const { featureFlags } = useFeatureFlags();
 
-  const buildAnswer = (params: BuildAnswerParams): AnswerPayload => {
-    const groupProgress = getGroupProgress({
-      entityId: params.entityId,
-      eventId: params.event.id,
-    });
-
-    const activityProgress = getActivityProgress({
-      activityId: params.activityId,
-      eventId: params.event.id,
-    });
-
-    if (!groupProgress) {
-      throw new Error('[useAnswer] Group progress is not found');
-    }
-
-    if (!activityProgress) {
-      throw new Error('[useAnswer] Activity progress is not found');
-    }
-
-    if (!params.encryption) {
-      throw new Error('[useAnswer] Encryption is not found');
-    }
-
-    let userEvents = activityProgress.userEvents;
-
-    if (params.userDoneEvent) {
-      userEvents = [...userEvents, params.userDoneEvent];
-    }
-
-    const answerConstructService = new AnswersConstructService({
-      groupProgress,
-      userEvents,
-      items: activityProgress.items,
-      event: params.event,
-      activityId: params.activityId,
-      appletId: params.appletId,
-      appletVersion: params.appletVersion,
-      flow: params.flow,
-      encryption: params.encryption,
-      publicAppletKey: params.publicAppletKey,
-    });
-
-    const answer = answerConstructService.build();
-
-    const isIntegrationsEnabled = context.integrations !== undefined;
-
-    const appletConsents = consents?.[context.appletId] ?? null;
-
-    if (isIntegrationsEnabled) {
-      answer.consentToShare = appletConsents?.shareToPublic ?? false;
-    }
-
-    if (featureFlags.enableMultiInformant) {
-      const multiInformantState = getMultiInformantState();
-      if (isInMultiInformantFlow()) {
-        answer.sourceSubjectId = multiInformantState?.sourceSubject?.id;
-        answer.targetSubjectId = multiInformantState?.targetSubject?.id;
+  const build = useCallback(
+    (params: BuildAnswerParams): AnswerPayload => {
+      if (!groupProgress) {
+        throw new Error('[useAnswer:buildAnswer] Group progress is not found');
       }
-    }
 
-    return answer;
-  };
+      const encryption = params.encryption ?? context.encryption;
 
-  return { buildAnswer };
+      if (!encryption) {
+        throw new Error('[useAnswer:buildAnswer] Encryption is not found');
+      }
+
+      const answerConstructService = new AnswersConstructService({
+        groupProgress,
+        userEvents: params.userEvents,
+        items: params.items,
+        event: params.event ?? context.event,
+        activityId: params.activityId,
+        appletId: params.appletId ?? context.appletId,
+        appletVersion: params.appletVersion ?? context.appletVersion,
+        flow: params.flow ?? context.flow,
+        encryption,
+        publicAppletKey: params.publicAppletKey ?? context.publicAppletKey,
+        isFlowCompleted: params.isFlowCompleted,
+      });
+
+      const answer = answerConstructService.construct();
+
+      const isIntegrationsEnabled = context.integrations !== undefined;
+
+      const appletConsents = consents?.[context.appletId] ?? null;
+
+      if (isIntegrationsEnabled) {
+        answer.consentToShare = appletConsents?.shareToPublic ?? false;
+      }
+
+      if (featureFlags.enableMultiInformant) {
+        const multiInformantState = getMultiInformantState();
+        if (isInMultiInformantFlow()) {
+          answer.sourceSubjectId = multiInformantState?.sourceSubject?.id;
+          answer.targetSubjectId = multiInformantState?.targetSubject?.id;
+        }
+      }
+
+      return answer;
+    },
+    [
+      groupProgress,
+      context.event,
+      context.appletId,
+      context.appletVersion,
+      context.flow,
+      context.encryption,
+      context.publicAppletKey,
+      context.integrations,
+      consents,
+      featureFlags.enableMultiInformant,
+      getMultiInformantState,
+      isInMultiInformantFlow,
+    ],
+  );
+
+  return { build };
 };

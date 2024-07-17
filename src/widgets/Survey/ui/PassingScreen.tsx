@@ -11,7 +11,7 @@ import {
   SurveyContext,
   SurveyLayout,
   SurveyManageButtons,
-  useAnswer,
+  useAnswerBuilder,
   useItemTimer,
   useSubmitAnswersMutations,
   useSummaryData,
@@ -36,7 +36,12 @@ const PassingScreen = () => {
     ),
   );
 
-  const { getGroupProgress, saveSummaryDataInContext } = appletModel.hooks.useGroupProgressState();
+  const groupProgress = appletModel.hooks.useGroupProgressRecord({
+    entityId: context.entityId,
+    eventId: context.eventId,
+  });
+
+  const { saveSummaryDataInContext } = appletModel.hooks.useGroupProgressStateManager();
 
   const completedEntities = useAppSelector(appletModel.selectors.completedEntitiesSelector);
 
@@ -90,11 +95,6 @@ const PassingScreen = () => {
 
   const onSubmitSuccess = () => {
     const isSummaryScreenOn = context.activity.scoresAndReports?.showScoreSummary ?? false;
-
-    const groupProgress = getGroupProgress({
-      entityId: context.entityId,
-      eventId: context.eventId,
-    });
 
     if (!groupProgress) {
       throw new Error('[obSubmitSuccess] GroupProgress is not defined');
@@ -166,21 +166,15 @@ const PassingScreen = () => {
     isPublic: !!context.publicAppletKey,
   });
 
-  const { buildAnswer } = useAnswer();
+  const answerBuilder = useAnswerBuilder();
 
   const onSubmit = () => {
     const doneEvent = saveUserEventByType('DONE', item);
 
-    const answer = buildAnswer({
-      entityId: context.entityId,
+    const answer = answerBuilder.build({
       activityId: context.activityId,
-      appletId: context.appletId,
-      appletVersion: context.appletVersion,
-      encryption: context.encryption,
-      flow: context.flow,
-      publicAppletKey: context.publicAppletKey,
-      event: context.event,
-      userDoneEvent: doneEvent,
+      userEvents: activityProgress.userEvents.concat(doneEvent),
+      items: activityProgress.items,
     });
 
     return submitAnswers(answer);
@@ -288,6 +282,7 @@ const PassingScreen = () => {
       <SurveyLayout
         progress={progress}
         isSaveAndExitButtonShown={true}
+        entityTimer={context.event?.timers?.timer ?? undefined}
         footerActions={
           <SurveyManageButtons
             timerSettings={!isSubmitModalOpen ? timerSettings : undefined}

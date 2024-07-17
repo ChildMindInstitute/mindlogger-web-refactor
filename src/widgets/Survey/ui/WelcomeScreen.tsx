@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 
 import { ActivityMetaData } from './ActivityMetaData';
 
@@ -21,14 +21,12 @@ const WelcomeScreen = () => {
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
-  const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
+  const groupProgress = appletModel.hooks.useGroupProgressRecord({
+    entityId: context.entityId,
+    eventId: context.eventId,
+  });
 
-  const startAssessment = () => {
-    const groupProgress = getGroupProgress({
-      entityId: context.entityId,
-      eventId: context.eventId,
-    });
-
+  const startAssessment = useCallback(() => {
     const isGroupDefined = !!groupProgress;
 
     const isGroupStarted = isGroupDefined && groupProgress.startAt && !groupProgress.endAt;
@@ -42,12 +40,22 @@ const WelcomeScreen = () => {
     }
 
     return setInitialProgress({ activity: context.activity, eventId: context.eventId });
-  };
+  }, [
+    context.activity,
+    context.activityId,
+    context.eventId,
+    context.flow,
+    groupProgress,
+    setInitialProgress,
+    startActivity,
+    startFlow,
+  ]);
 
   return (
     <SurveyLayout
       progress={0}
       isSaveAndExitButtonShown={true}
+      entityTimer={context.event?.timers?.timer ?? undefined}
       footerActions={
         <StartSurveyButton
           width={greaterThanSM ? '375px' : '335px'}
@@ -81,10 +89,7 @@ const WelcomeScreen = () => {
         >
           <ActivityMetaData
             activityLength={context.activity.items.length}
-            groupInProgress={getGroupProgress({
-              entityId: context.entityId,
-              eventId: context.eventId,
-            })}
+            groupInProgress={groupProgress}
           />
         </Text>
         <Text

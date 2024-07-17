@@ -12,7 +12,10 @@ type Props = {
 export const useEntityTimer = ({ onFinish }: Props) => {
   const context = useContext(SurveyContext);
 
-  const { getGroupProgress } = appletModel.hooks.useGroupProgressState();
+  const groupProgress = appletModel.hooks.useGroupProgressRecord({
+    entityId: context.entityId,
+    eventId: context.eventId,
+  });
 
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(
@@ -28,12 +31,6 @@ export const useEntityTimer = ({ onFinish }: Props) => {
   finishRef.current = onFinish;
 
   useEffect(() => {
-    console.log('[useEntityTimer] useEffect');
-    const groupProgress = getGroupProgress({
-      entityId: context.entityId,
-      eventId: context.eventId,
-    });
-
     const isSummaryScreenOpen = activityProgress?.isSummaryScreenOpen ?? false;
 
     const timerSettings = context.event.timers.timer;
@@ -80,7 +77,7 @@ export const useEntityTimer = ({ onFinish }: Props) => {
     context.entityId,
     context.event.timers.timer,
     context.eventId,
-    getGroupProgress,
+    groupProgress,
     onFinish,
     resetTimer,
     setTimer,

@@ -16,6 +16,10 @@ import {
 } from '~/shared/api';
 import { encryption, formatToDtoDate, formatToDtoTime } from '~/shared/utils';
 
+interface ICompletionConstructService {
+  construct: () => AnswerPayload;
+}
+
 type ItemRecord = appletModel.ItemRecord;
 
 type UserEvents = appletModel.UserEvent[];
@@ -42,9 +46,11 @@ type Input = {
   userEvents: UserEvents;
 
   publicAppletKey: string | null;
+
+  isFlowCompleted?: boolean;
 };
 
-export default class AnswersConstructService {
+export default class AnswersConstructService implements ICompletionConstructService {
   private appletId: string;
 
   private appletVersion: string;
@@ -65,6 +71,8 @@ export default class AnswersConstructService {
 
   private userEvents: UserEvents;
 
+  private isFlowCompleted: boolean | undefined; // We can enforce this to be defined if needed
+
   constructor(input: Input) {
     this.activityId = input.activityId;
     this.event = input.event;
@@ -76,9 +84,10 @@ export default class AnswersConstructService {
     this.appletVersion = input.appletVersion;
     this.items = input.items;
     this.userEvents = input.userEvents;
+    this.isFlowCompleted = input.isFlowCompleted;
   }
 
-  public build(): AnswerPayload {
+  public construct(): AnswerPayload {
     const answers: Answers = mapToAnswers(this.items);
 
     const answersDictionary = this.buildAnswersDictionary(answers);
@@ -207,6 +216,11 @@ export default class AnswersConstructService {
   }
 
   private isSurveyCompleted(): boolean {
+    // We use this flag to enforce the completion of the flow
+    if (this.isFlowCompleted !== undefined) {
+      return this.isFlowCompleted;
+    }
+
     if (this.groupProgress.type === ActivityPipelineType.Regular) {
       return true;
     }

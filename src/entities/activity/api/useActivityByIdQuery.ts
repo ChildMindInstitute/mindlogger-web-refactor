@@ -1,6 +1,6 @@
-import { QueryOptions, ReturnAwaited, activityService, useBaseQuery } from '~/shared/api';
+import { ActivityApiProxyService, QueryOptions, ReturnAwaited, useBaseQuery } from '~/shared/api';
 
-type FetchFn = typeof activityService.getById;
+type FetchFn = typeof ActivityApiProxyService.getActivityById;
 type Options<TData> = QueryOptions<FetchFn, TData>;
 
 type Params = {
@@ -14,10 +14,7 @@ export const useActivityByIdQuery = <TData = ReturnAwaited<FetchFn>>(
 ) => {
   return useBaseQuery(
     ['activityById', params],
-    () =>
-      params.isPublic
-        ? activityService.getPublicById({ activityId: params.activityId })
-        : activityService.getById({ activityId: params.activityId }),
+    () => ActivityApiProxyService.getActivityById(params.activityId, { isPublic: params.isPublic }),
     options,
   );
 };

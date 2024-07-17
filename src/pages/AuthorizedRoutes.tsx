@@ -4,11 +4,11 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import AppletDetailsPage from './AppletDetailsPage';
 import AppletListPage from './AppletListPage';
+import AutoCompletion from './AutoCompletion';
 import ProfilePage from './Profile';
-import PublicSurveyAnswerProcessing from './PublicSurveyAnswerProcessing';
+import PublicAutoCompletion from './PublicAutoCompletion';
 import SettingsPage from './Settings';
 import SurveyPage from './Survey';
-import SurveyAnswerProcessing from './SurveyAnswerProcessing';
 
 import Layout from '~/abstract/ui/AppLayout';
 import ROUTES from '~/shared/constants/routes';
@@ -35,11 +35,8 @@ function AuthorizedRoutes({ refreshToken }: Props) {
           <Route path={ROUTES.survey.path} element={<SurveyPage />} />
           <Route path={ROUTES.publicSurvey.path} element={<PublicSurvey />} />
 
-          <Route path={ROUTES.answerProcessing.path} element={<SurveyAnswerProcessing />} />
-          <Route
-            path={ROUTES.publicAnswerProcessing.path}
-            element={<PublicSurveyAnswerProcessing />}
-          />
+          <Route path={ROUTES.autoCompletion.path} element={<AutoCompletion />} />
+          <Route path={ROUTES.publicAutoCompletion.path} element={<PublicAutoCompletion />} />
 
           <Route element={<Layout header={<Header />} footer={<Footer />} />}>
             <Route path={ROUTES.appletList.path} element={<AppletListPage />} />

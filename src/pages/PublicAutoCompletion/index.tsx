@@ -1,28 +1,29 @@
 import { useSearchParams } from 'react-router-dom';
 
-import { SurveyAnswerProcessingWidget } from '~/widgets/SurveyAnswerProcessing';
+import { AutoCompletionWidget } from '~/widgets/AutoCompletion';
 
-function SurveyAnswerProcessing() {
+function PublicAutoCompletion() {
   const [searchParams] = useSearchParams();
 
   const appletId = searchParams.get('appletId');
   const activityId = searchParams.get('activityId');
   const eventId = searchParams.get('eventId');
   const flowId = searchParams.get('flowId');
+  const publicAppletKey = searchParams.get('publicAppletKey');
 
   if (!appletId || !activityId || !eventId) {
     return <div>Invalid URL</div>;
   }
 
   return (
-    <SurveyAnswerProcessingWidget
+    <AutoCompletionWidget
       appletId={appletId}
       activityId={activityId}
       eventId={eventId}
       flowId={flowId}
-      publicAppletKey={null}
+      publicAppletKey={publicAppletKey}
     />
   );
 }
 
-export default SurveyAnswerProcessing;
+export default PublicAutoCompletion;

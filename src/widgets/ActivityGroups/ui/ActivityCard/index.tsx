@@ -14,6 +14,7 @@ import { useEntityCardDetails } from '../../model/hooks';
 import { getProgressId, openStoreLink } from '~/abstract/lib';
 import { ActivityListItem } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
+import { useAutoCompletionRecord } from '~/features/AutoCompletion/model';
 import { useStartSurvey } from '~/features/PassSurvey';
 import Box from '~/shared/ui/Box';
 import {
@@ -54,6 +55,11 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(state, activityEventId),
   );
+
+  const autoCompletionRecord = useAutoCompletionRecord({
+    entityId: activityListItem.flowId ?? activityListItem.activityId,
+    eventId: activityListItem.eventId,
+  });
 
   const step = activityProgress?.step || 0;
 
@@ -192,6 +198,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
           onStartClick={() => onStartActivity(false)}
           activityName={title}
           isDisabled={isDisabled}
+          isAutoCompletionRecordDefined={!!autoCompletionRecord}
         />
       </Box>
     </ActivityCardBase>

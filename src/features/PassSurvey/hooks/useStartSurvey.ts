@@ -37,7 +37,7 @@ export const useStartSurvey = (props: Props) => {
   const appletId = props.applet.id;
   const flows = props.applet.activityFlows;
 
-  const { removeGroupProgress } = appletModel.hooks.useGroupProgressState();
+  const { removeGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 

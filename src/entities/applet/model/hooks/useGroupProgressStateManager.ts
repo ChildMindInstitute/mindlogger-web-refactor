@@ -23,7 +23,7 @@ type Return = {
   flowUpdated: (props: InProgressFlow) => void;
 };
 
-export const useGroupProgressState = (): Return => {
+export const useGroupProgressStateManager = (): Return => {
   const dispatch = useAppDispatch();
   const groupProgresses = useAppSelector(groupProgressSelector);
 
