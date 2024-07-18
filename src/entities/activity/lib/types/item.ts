@@ -130,6 +130,7 @@ export type CheckboxItemConfig = ButtonsConfig &
     setAlerts: boolean;
     addTooltip: boolean;
     setPalette: boolean;
+    portraitLayout: boolean | null;
   };
 
 export type CheckboxValues = {
@@ -163,6 +164,7 @@ export type RadioItemConfig = ButtonsConfig &
     addTooltip: boolean;
     setPalette: boolean;
     autoAdvance: boolean;
+    portraitLayout: boolean | null;
   };
 
 export type RadioValues = {
