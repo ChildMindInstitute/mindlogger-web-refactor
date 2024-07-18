@@ -3,6 +3,7 @@ import { RenderOptions } from '@testing-library/react';
 import persistReducer from 'redux-persist/es/persistReducer';
 import persistStore from 'redux-persist/es/persistStore';
 import storage from 'redux-persist/lib/storage';
+import sessionStorage from 'redux-persist/lib/storage/session';
 
 import { appletModel } from '~/entities/applet';
 import { bannerModel } from '~/entities/banner';
@@ -13,12 +14,18 @@ import { RootState } from '~/shared/utils';
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['banners'],
+};
+
+const bannerPersistConfig = {
+  key: 'banners',
+  storage: sessionStorage,
 };
 
 export const rootReducer = combineReducers({
   user: userModel.reducer,
   applets: appletModel.reducer,
-  banners: bannerModel.reducer,
+  banners: persistReducer(bannerPersistConfig, bannerModel.reducer),
   autoCompletion: AutoCompletionModel.reducer,
 });
 
