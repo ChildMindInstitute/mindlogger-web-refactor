@@ -11,6 +11,7 @@ type Return = {
   getMultiInformantState: () => MultiInformantState;
   isInMultiInformantFlow: () => boolean;
   initiateTakeNow: (payload: MultiInformantPayload) => void;
+  updateMultiInformantState: (payload: Partial<MultiInformantPayload>) => void;
   resetMultiInformantState: () => void;
   ensureMultiInformantStateExists: () => void;
 };
@@ -32,6 +33,13 @@ export const useMultiInformantState = (): Return => {
     [dispatch],
   );
 
+  const updateMultiInformantState = useCallback(
+    (payload: Partial<MultiInformantPayload>) => {
+      dispatch(actions.updateMultiInformantState(payload));
+    },
+    [dispatch],
+  );
+
   const resetMultiInformantState = useCallback(() => {
     dispatch(actions.resetMultiInformantState());
   }, [dispatch]);
@@ -44,6 +52,7 @@ export const useMultiInformantState = (): Return => {
     getMultiInformantState,
     isInMultiInformantFlow,
     initiateTakeNow,
+    updateMultiInformantState,
     resetMultiInformantState,
     ensureMultiInformantStateExists,
   };

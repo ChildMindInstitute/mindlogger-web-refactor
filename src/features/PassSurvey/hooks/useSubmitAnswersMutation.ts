@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess }: Props) => {
-  const { isInMultiInformantFlow, getMultiInformantState } =
+  const { isInMultiInformantFlow, getMultiInformantState, updateMultiInformantState } =
     appletModel.hooks.useMultiInformantState();
 
   const onSuccess = (_: AxiosResponse, variables: AnswerPayload) => {
@@ -28,9 +28,15 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess }: Props) 
     if (isInMultiInformantFlow()) {
       analyticsPayload[MixpanelProps.Feature] = 'Multi-informant';
 
-      const { multiInformantAssessmentId } = getMultiInformantState();
+      const { multiInformantAssessmentId, submitId } = getMultiInformantState();
       if (multiInformantAssessmentId) {
         analyticsPayload[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
+      }
+
+      if (submitId === null) {
+        updateMultiInformantState({
+          submitId: variables.submitId,
+        });
       }
     }
 

@@ -12,4 +12,5 @@ export type MultiInformantState = {
   activityId?: string | null;
   activityFlowId?: string | null;
   multiInformantAssessmentId?: string | null;
+  submitId?: string | null;
 };
