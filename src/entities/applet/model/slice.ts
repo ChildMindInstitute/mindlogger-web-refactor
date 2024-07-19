@@ -308,6 +308,13 @@ const appletsSlice = createSlice({
       state.multiInformantState = action.payload;
     },
 
+    updateMultiInformantState: (state, action: PayloadAction<Partial<MultiInformantPayload>>) => {
+      state.multiInformantState = {
+        ...state.multiInformantState,
+        ...action.payload,
+      };
+    },
+
     ensureMultiInformantStateExists: (state) => {
       if (!state.multiInformantState) {
         state.multiInformantState = {};

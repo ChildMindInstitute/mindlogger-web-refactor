@@ -16,12 +16,14 @@ export const TakeNowSuccessModal = ({
   multiInformantAssessmentId,
   activityId,
   activityFlowId,
+  submitId,
 }: TakeNowSuccessModalProps) => {
   const { t } = useCustomTranslation();
 
   const handleReturnToAdminAppClick = () => {
     const analyticsPayload: MixpanelPayload = {
       [MixpanelProps.AppletId]: appletId,
+      [MixpanelProps.SubmitId]: submitId,
     };
 
     if (activityId) {
