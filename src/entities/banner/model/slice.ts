@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { BannerPayload } from './types';
 
-type BannersStore = {
+export type BannersStore = {
   banners: Array<BannerPayload>;
 };
 
