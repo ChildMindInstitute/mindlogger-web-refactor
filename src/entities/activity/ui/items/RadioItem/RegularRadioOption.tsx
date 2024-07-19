@@ -25,7 +25,7 @@ type Props = {
   replaceText: (value: string) => string;
 };
 
-export const RadioItemOption = (props: Props) => {
+export const RegularRadioOption = (props: Props) => {
   const onHandleChange = () => {
     return props.onChange(String(props.value));
   };
