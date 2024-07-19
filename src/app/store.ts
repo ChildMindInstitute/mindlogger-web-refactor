@@ -1,11 +1,13 @@
-import { PreloadedState, combineReducers, configureStore } from '@reduxjs/toolkit';
+import { PreloadedState, combineReducers, configureStore, Reducer } from '@reduxjs/toolkit';
 import { RenderOptions } from '@testing-library/react';
 import persistReducer from 'redux-persist/es/persistReducer';
 import persistStore from 'redux-persist/es/persistStore';
 import storage from 'redux-persist/lib/storage';
+import sessionStorage from 'redux-persist/lib/storage/session';
 
 import { appletModel } from '~/entities/applet';
 import { bannerModel } from '~/entities/banner';
+import { BannersStore } from '~/entities/banner/model';
 import { userModel } from '~/entities/user';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import { RootState } from '~/shared/utils';
@@ -13,12 +15,21 @@ import { RootState } from '~/shared/utils';
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['banners'],
+};
+
+const bannerPersistConfig = {
+  key: 'banners',
+  storage: sessionStorage,
 };
 
 export const rootReducer = combineReducers({
   user: userModel.reducer,
   applets: appletModel.reducer,
-  banners: bannerModel.reducer,
+  banners: persistReducer(
+    bannerPersistConfig,
+    bannerModel.reducer,
+  ) as unknown as Reducer<BannersStore>,
   autoCompletion: AutoCompletionModel.reducer,
 });
 

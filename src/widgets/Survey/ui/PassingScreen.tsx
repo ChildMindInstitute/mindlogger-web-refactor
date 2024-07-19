@@ -143,7 +143,7 @@ const PassingScreen = () => {
     if (isFlowGroup && !isLastActivity) {
       addSuccessBanner(t('toast.next_activity'));
     } else {
-      addSuccessBanner(t('toast.answers_submitted'));
+      addSuccessBanner({ children: t('toast.answers_submitted'), duration: null });
     }
 
     if (isFlowGroup && context.flow) {
