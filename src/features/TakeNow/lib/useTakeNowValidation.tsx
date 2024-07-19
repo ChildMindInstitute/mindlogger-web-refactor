@@ -277,6 +277,7 @@ export const useTakeNowValidation = ({
       activityId,
       activityFlowId,
       multiInformantAssessmentId,
+      submitId: null,
     },
   };
 };
