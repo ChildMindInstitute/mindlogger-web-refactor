@@ -7,8 +7,6 @@ import { Markdown } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 
-import './style.css';
-
 interface CardItemProps extends PropsWithChildren {
   watermark?: string;
   isInvalid?: boolean;
