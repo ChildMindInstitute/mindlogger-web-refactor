@@ -44,7 +44,7 @@ export const RegularGrid = ({
                 name={itemId}
                 value={option.value}
                 label={option.text}
-                onChange={onValueChange}
+                onChange={() => onValueChange(String(option.value))}
                 description={option.tooltip}
                 image={option.image}
                 disabled={isDisabled}
@@ -65,7 +65,7 @@ export const RegularGrid = ({
                 name={itemId}
                 value={option.value}
                 label={option.text}
-                onChange={onValueChange}
+                onChange={() => onValueChange(String(option.value))}
                 description={option.tooltip}
                 image={option.image}
                 disabled={isDisabled}

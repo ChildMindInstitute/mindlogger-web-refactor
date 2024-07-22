@@ -22,7 +22,7 @@ type Props = {
   defaultChecked?: boolean;
   color: string | null;
 
-  onChange: (value: string) => void;
+  onChange: () => void;
   replaceText: (value: string) => string;
 };
 
@@ -56,7 +56,7 @@ export const PortraitRadioOption = (props: Props) => {
   return (
     <SelectBaseBox
       color={props.color}
-      onHandleChange={() => props.onChange(String(props.value))}
+      onHandleChange={props.onChange}
       checked={props.defaultChecked}
       padding="8px 8px"
       sx={{ minHeight: '188px', width: '148px', alignItems: !hasImage ? 'center' : undefined }}

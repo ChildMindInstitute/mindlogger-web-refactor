@@ -21,15 +21,11 @@ type Props = {
   defaultChecked?: boolean;
   color: string | null;
 
-  onChange: (value: string) => void;
+  onChange: () => void;
   replaceText: (value: string) => string;
 };
 
 export const RegularRadioOption = (props: Props) => {
-  const onHandleChange = () => {
-    return props.onChange(String(props.value));
-  };
-
   const tooltipText = useMemo(() => {
     if (props.description) {
       return props.replaceText(props.description);
@@ -45,7 +41,7 @@ export const RegularRadioOption = (props: Props) => {
   return (
     <SelectBaseBox
       color={props.color}
-      onHandleChange={onHandleChange}
+      onHandleChange={props.onChange}
       checked={props.defaultChecked}
     >
       <RadioOption
