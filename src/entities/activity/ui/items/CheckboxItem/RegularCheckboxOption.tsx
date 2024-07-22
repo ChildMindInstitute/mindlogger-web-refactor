@@ -25,11 +25,7 @@ type Props = {
   replaceText: (value: string) => string;
 };
 
-export const CheckboxItemOption = (props: Props) => {
-  const onHandleChange = () => {
-    return props.onChange(String(props.value));
-  };
-
+export const RegularCheckboxOption = (props: Props) => {
   const tooltipText = useMemo(() => {
     if (props.description) {
       return props.replaceText(props.description);
@@ -45,7 +41,7 @@ export const CheckboxItemOption = (props: Props) => {
   return (
     <SelectBaseBox
       color={props.color}
-      onHandleChange={onHandleChange}
+      onHandleChange={() => props.onChange(String(props.value))}
       checked={props.defaultChecked}
     >
       <CheckboxItem

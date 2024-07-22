@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
+import { Box } from '~/shared/ui';
 import {
-  Box,
+  CheckboxItem,
   CustomTooltip,
-  RadioOption,
   SelectBaseBox,
   SelectBaseImage,
   SelectBaseText,
@@ -26,7 +26,7 @@ type Props = {
   replaceText: (value: string) => string;
 };
 
-export const PortraitRadioOption = (props: Props) => {
+export const PortraitCheckboxOption = (props: Props) => {
   const tooltipText = useMemo(() => {
     if (props.description) {
       return props.replaceText(props.description);
@@ -74,7 +74,7 @@ export const PortraitRadioOption = (props: Props) => {
           maxHeight="84px"
           gap="6px"
         >
-          <RadioOption
+          <CheckboxItem
             id={props.id}
             name={props.name}
             value={props.value}
