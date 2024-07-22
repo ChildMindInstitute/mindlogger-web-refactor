@@ -32,7 +32,7 @@ export const PortraitGrid = (props: Props) => {
               name={itemId}
               value={option.value}
               label={option.text}
-              onChange={(value: string) => onValueChange(value, isNoneAbove)}
+              onChange={() => onValueChange(String(option.value), isNoneAbove)}
               description={option.tooltip}
               image={option.image}
               disabled={isDisabled}

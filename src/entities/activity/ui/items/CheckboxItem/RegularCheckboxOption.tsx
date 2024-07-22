@@ -21,7 +21,7 @@ type Props = {
   defaultChecked?: boolean;
   color: string | null;
 
-  onChange: (value: string) => void;
+  onChange: () => void;
   replaceText: (value: string) => string;
 };
 
@@ -41,7 +41,7 @@ export const RegularCheckboxOption = (props: Props) => {
   return (
     <SelectBaseBox
       color={props.color}
-      onHandleChange={() => props.onChange(String(props.value))}
+      onHandleChange={props.onChange}
       checked={props.defaultChecked}
     >
       <CheckboxItem
