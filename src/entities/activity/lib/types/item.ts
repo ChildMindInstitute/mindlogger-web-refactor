@@ -13,6 +13,7 @@ export type Answer =
 
 export type ActivityItemType =
   | 'text'
+  | 'paragraphText'
   | 'singleSelect'
   | 'multiSelect'
   | 'message'
@@ -101,6 +102,13 @@ export type EmptyResponseValues = null;
 
 export interface TextItem extends ActivityItemBase {
   responseType: 'text';
+  config: TextItemConfig;
+  responseValues: EmptyResponseValues;
+  answer: DefaultAnswer;
+}
+
+export interface ParagraphTextItem extends ActivityItemBase {
+  responseType: 'paragraphText';
   config: TextItemConfig;
   responseValues: EmptyResponseValues;
   answer: DefaultAnswer;

@@ -4,6 +4,7 @@ import { DateItem } from './DateItem';
 import { MatrixCheckboxItem } from './Matrix/MatrixMultiSelectItem';
 import { MatrixRadioItem } from './Matrix/MatrixSingleSelectItem';
 import { SliderRows } from './Matrix/Slider';
+import { ParagraphTextItem } from './ParagraphTextItem';
 import { RadioItem } from './RadioItem';
 import { SelectorItem } from './SelectorItem';
 import { SliderItem } from './SliderItem';
@@ -38,6 +39,15 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
         />
       );
 
+    case 'paragraphText':
+      return (
+        <ParagraphTextItem
+          item={item}
+          value={item.answer[0]}
+          onValueChange={onValueChange}
+          isDisabled={isDisabled}
+        />
+      );
     case 'multiSelect':
       return (
         <CheckboxItem

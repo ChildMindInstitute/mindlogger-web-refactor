@@ -17,6 +17,7 @@ import {
   SliderRowsItem,
   SplashScreenItem,
   TextItem,
+  ParagraphTextItem,
   TimeItem,
   TimeRangeItem,
 } from '~/entities/activity/lib';
@@ -63,6 +64,7 @@ export type UserEvent = {
 
 export type ItemRecord =
   | TextItem
+  | ParagraphTextItem
   | CheckboxItem
   | RadioItem
   | SliderItem
