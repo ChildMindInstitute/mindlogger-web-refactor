@@ -8,7 +8,6 @@ import { AppletDetailsContext } from '../lib';
 import { useActivityGroups, useEntitiesSync, useIntegrationsSync } from '../model/hooks';
 
 import AppletDefaultIcon from '~/assets/AppletDefaultIcon.svg';
-import { SharedContentConsent } from '~/entities/activity';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
 import { BootstrapModal } from '~/shared/ui';
 import { AvatarBase } from '~/shared/ui';
@@ -83,7 +82,7 @@ export const ActivityGroupList = () => {
       </Box>
 
       <Box>
-        <SharedContentConsent appletId={applet.id} />
+        {/* <SharedContentConsent appletId={applet.id} /> */}
 
         {groups
           .filter((g) => g.activities.length)
