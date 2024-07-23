@@ -82,6 +82,8 @@ export const ActivityGroupList = () => {
       </Box>
 
       <Box>
+        {/* The consent to share content is temporarly hidden due to UI changes. */}
+        {/* Need to clarify with BA`s or something. If the component is no need anymore the component/slice/other business logic related to this feature should be removed */}
         {/* <SharedContentConsent appletId={applet.id} /> */}
 
         {groups
