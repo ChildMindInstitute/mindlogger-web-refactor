@@ -5,3 +5,4 @@ export * from './getRandomInt';
 export * from './splitList';
 export * from './getInitials';
 export * from './delay';
+export * from './cutString';

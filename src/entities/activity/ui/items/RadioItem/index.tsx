@@ -1,14 +1,12 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
-import RadioGroup from '@mui/material/RadioGroup';
-
-import { RadioItemOption } from './RadioItemOption';
+import { PortraitGrid } from './PortraitGrid';
+import { RegularGrid } from './RegularGrid';
 import { RadioItem as RadioItemType } from '../../../lib';
 
-import { Box } from '~/shared/ui';
-import { randomizeArray, splitList, useCustomMediaQuery } from '~/shared/utils';
+import { randomizeArray } from '~/shared/utils';
 
-type RadioItemProps = {
+type Props = {
   item: RadioItemType;
   value: string;
 
@@ -17,14 +15,8 @@ type RadioItemProps = {
   isDisabled: boolean;
 };
 
-export const RadioItem = ({
-  item,
-  value,
-  onValueChange,
-  isDisabled,
-  replaceText,
-}: RadioItemProps) => {
-  const { lessThanSM } = useCustomMediaQuery();
+export const RadioItem = (props: Props) => {
+  const { item, value, onValueChange, replaceText, isDisabled } = props;
 
   const options = useMemo(() => {
     if (item.config.randomizeOptions) {
@@ -34,59 +26,36 @@ export const RadioItem = ({
     return item.responseValues.options.filter((x) => !x.isHidden);
   }, [item?.config?.randomizeOptions, item?.responseValues?.options]);
 
-  const [evenColumn, oddColumn] = useMemo(() => {
-    return splitList(options);
-  }, [options]);
+  const onHandleValueChange = useCallback(
+    (value: string) => {
+      return onValueChange([value]);
+    },
+    [onValueChange],
+  );
 
-  const onHandleValueChange = (value: string) => {
-    return onValueChange([value]);
-  };
+  const isPortraitMode = item.config.portraitLayout;
+
+  if (isPortraitMode) {
+    return (
+      <PortraitGrid
+        itemId={item.id}
+        value={value}
+        options={options}
+        onValueChange={onHandleValueChange}
+        replaceText={replaceText}
+        isDisabled={isDisabled}
+      />
+    );
+  }
 
   return (
-    <RadioGroup name={`${item.id}-radio`}>
-      <Box display="flex" flex={1} gap="16px" flexDirection={lessThanSM ? 'column' : 'row'}>
-        <Box display="flex" flex={1} gap="16px" flexDirection="column">
-          {evenColumn.map((option) => {
-            return (
-              <RadioItemOption
-                key={option.id}
-                id={option.id}
-                name={item.id}
-                value={option.value}
-                label={option.text}
-                onChange={onHandleValueChange}
-                description={option.tooltip}
-                image={option.image}
-                disabled={isDisabled}
-                defaultChecked={String(option.value) === value}
-                color={option.color}
-                replaceText={replaceText}
-              />
-            );
-          })}
-        </Box>
-
-        <Box display="flex" flex={1} gap="16px" flexDirection="column">
-          {oddColumn.map((option) => {
-            return (
-              <RadioItemOption
-                key={option.id}
-                id={option.id}
-                name={item.id}
-                value={option.value}
-                label={option.text}
-                onChange={onHandleValueChange}
-                description={option.tooltip}
-                image={option.image}
-                disabled={isDisabled}
-                defaultChecked={String(option.value) === value}
-                color={option.color}
-                replaceText={replaceText}
-              />
-            );
-          })}
-        </Box>
-      </Box>
-    </RadioGroup>
+    <RegularGrid
+      itemId={item.id}
+      value={value}
+      options={options}
+      onValueChange={onHandleValueChange}
+      replaceText={replaceText}
+      isDisabled={isDisabled}
+    />
   );
 };

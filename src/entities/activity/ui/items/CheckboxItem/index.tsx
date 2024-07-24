@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
-import { CheckboxItemOption } from './CheckboxItemOption';
+import { PortraitGrid } from './PortraitGrid';
+import { RegularGrid } from './RegularGrid';
 import { CheckboxItem as CheckboxItemType } from '../../../lib/types/item';
 
-import { Box } from '~/shared/ui';
-import { randomizeArray, splitList, useCustomMediaQuery } from '~/shared/utils';
+import { randomizeArray } from '~/shared/utils';
 
 type Props = {
   item: CheckboxItemType;
@@ -16,7 +16,7 @@ type Props = {
 };
 
 export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceText }: Props) => {
-  const { lessThanSM } = useCustomMediaQuery();
+  const isPortraitMode = item.config.portraitLayout;
 
   const options = useMemo(() => {
     if (item.config.randomizeOptions) {
@@ -29,10 +29,6 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
   const noneAboveOptionChecked = options.some(
     (x) => x.isNoneAbove && values.includes(String(x.value)),
   );
-
-  const [evenColumn, oddColumn] = useMemo(() => {
-    return splitList(options);
-  }, [options]);
 
   const onHandleValueChange = (value: string, isNoneAbove: boolean) => {
     const preparedValues = [...values];
@@ -60,55 +56,27 @@ export const CheckboxItem = ({ item, values, onValueChange, isDisabled, replaceT
     onValueChange(preparedValues);
   };
 
+  if (isPortraitMode) {
+    return (
+      <PortraitGrid
+        options={options}
+        itemId={item.id}
+        onValueChange={onHandleValueChange}
+        replaceText={replaceText}
+        isDisabled={isDisabled}
+        values={values}
+      />
+    );
+  }
+
   return (
-    <Box display="flex" flex={1} gap="16px" flexDirection={lessThanSM ? 'column' : 'row'}>
-      <Box display="flex" flex={1} gap="16px" flexDirection="column">
-        {evenColumn.map((option) => {
-          const isChecked = values.includes(String(option.value));
-          const isNoneAbove = option.isNoneAbove;
-
-          return (
-            <CheckboxItemOption
-              key={option.id}
-              id={option.id}
-              name={item.id}
-              value={option.value}
-              label={option.text}
-              onChange={(value: string) => onHandleValueChange(value, isNoneAbove)}
-              description={option.tooltip}
-              image={option.image}
-              disabled={isDisabled}
-              defaultChecked={isChecked}
-              color={option.color}
-              replaceText={replaceText}
-            />
-          );
-        })}
-      </Box>
-
-      <Box display="flex" flex={1} gap="16px" flexDirection="column">
-        {oddColumn.map((option) => {
-          const isChecked = values.includes(String(option.value));
-          const isNoneAbove = option.isNoneAbove;
-
-          return (
-            <CheckboxItemOption
-              key={option.id}
-              id={option.id}
-              name={item.id}
-              value={option.value}
-              label={option.text}
-              onChange={(value: string) => onHandleValueChange(value, isNoneAbove)}
-              description={option.tooltip}
-              image={option.image}
-              disabled={isDisabled}
-              defaultChecked={isChecked}
-              color={option.color}
-              replaceText={replaceText}
-            />
-          );
-        })}
-      </Box>
-    </Box>
+    <RegularGrid
+      options={options}
+      onValueChange={onHandleValueChange}
+      itemId={item.id}
+      replaceText={replaceText}
+      isDisabled={isDisabled}
+      values={values}
+    />
   );
 };
