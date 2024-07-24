@@ -59,7 +59,7 @@ export const PortraitRadioOption = (props: Props) => {
       onHandleChange={props.onChange}
       checked={props.defaultChecked}
       padding="8px 8px"
-      sx={{ minHeight: '188px', width: '148px', alignItems: !hasImage ? 'center' : undefined }}
+      sx={{ minHeight: '188px', alignItems: !hasImage ? 'center' : undefined }}
     >
       <Box display="flex" flex={1} flexDirection="column" gap="12px" alignItems="center">
         {props.image && (

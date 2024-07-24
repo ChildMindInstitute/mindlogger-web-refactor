@@ -4,7 +4,6 @@ import { PortraitCheckboxOption } from './PortraitCheckboxOption';
 import { CheckboxItem } from '../../../lib/types';
 
 import Box from '~/shared/ui/Box';
-import { useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {
   options: CheckboxItem['responseValues']['options'];
@@ -19,19 +18,9 @@ type Props = {
 export const PortraitGrid = (props: Props) => {
   const { itemId, options, onValueChange, isDisabled, replaceText, values } = props;
 
-  const { lessThanSM } = useCustomMediaQuery();
-
   return (
-    <RadioGroup name={`${itemId}-radio portait-mode`}>
-      <Box
-        display="flex"
-        flex="1"
-        gap="16px"
-        justifyContent="flex-start"
-        flexWrap="wrap"
-        width={lessThanSM ? '320px' : undefined}
-        alignSelf={lessThanSM ? 'center' : undefined}
-      >
+    <RadioGroup name={`${itemId}-radio portait-mode`} sx={{ display: 'block' }}>
+      <Box display="grid" gridTemplateColumns="repeat(auto-fill, 148px)" gap="16px">
         {options.map((option) => {
           const isChecked = values.includes(String(option.value));
           const isNoneAbove = option.isNoneAbove;

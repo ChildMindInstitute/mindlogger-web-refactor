@@ -4,7 +4,6 @@ import { PortraitRadioOption } from './PortraitRadioOption';
 import { RadioItem } from '../../../lib';
 
 import Box from '~/shared/ui/Box';
-import { useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {
   options: RadioItem['responseValues']['options'];
@@ -19,19 +18,9 @@ type Props = {
 export const PortraitGrid = (props: Props) => {
   const { itemId, options, onValueChange, isDisabled, replaceText, value } = props;
 
-  const { lessThanSM } = useCustomMediaQuery();
-
   return (
-    <RadioGroup name={`${itemId}-radio portait-mode`}>
-      <Box
-        display="flex"
-        flex="1"
-        gap="16px"
-        justifyContent="flex-start"
-        flexWrap="wrap"
-        width={lessThanSM ? '320px' : undefined}
-        alignSelf={lessThanSM ? 'center' : undefined}
-      >
+    <RadioGroup name={`${itemId}-radio portait-mode`} sx={{ display: 'block' }}>
+      <Box display="grid" gridTemplateColumns="repeat(auto-fill, 148px)" gap="16px">
         {options.map((option) => (
           <PortraitRadioOption
             key={option.id}
