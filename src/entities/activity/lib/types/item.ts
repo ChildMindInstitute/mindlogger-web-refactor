@@ -107,14 +107,23 @@ export interface TextItem extends ActivityItemBase {
   answer: DefaultAnswer;
 }
 
+export type TextItemConfig = ButtonsConfig & {
+  maxResponseLength: number; // default 300
+  correctAnswerRequired: boolean; // default false
+  correctAnswer: string; // default ""
+  numericalResponseRequired: boolean; // default false
+  responseDataIdentifier: boolean; // default false
+  responseRequired: boolean; // default false
+};
+
 export interface ParagraphTextItem extends ActivityItemBase {
   responseType: 'paragraphText';
-  config: TextItemConfig;
+  config: ParagraphItemConfig;
   responseValues: EmptyResponseValues;
   answer: DefaultAnswer;
 }
 
-export type TextItemConfig = ButtonsConfig & {
+export type ParagraphItemConfig = ButtonsConfig & {
   maxResponseLength: number; // default 300
   correctAnswerRequired: boolean; // default false
   correctAnswer: string; // default ""

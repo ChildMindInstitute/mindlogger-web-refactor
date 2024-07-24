@@ -2,14 +2,19 @@ import { ParagraphTextItem as ParagraphItemType } from '../../lib';
 
 import { TextItem as BaseTextItem } from '~/shared/ui';
 
-type TextItemProps = {
+type ParagraphItemProps = {
   item: ParagraphItemType;
   value: string;
   onValueChange: (value: string[]) => void;
   isDisabled: boolean;
 };
 
-export const ParagraphTextItem = ({ item, value, onValueChange, isDisabled }: TextItemProps) => {
+export const ParagraphTextItem = ({
+  item,
+  value,
+  onValueChange,
+  isDisabled,
+}: ParagraphItemProps) => {
   const { maxResponseLength } = item.config;
 
   const onHandleValueChange = (value: string) => {
@@ -29,7 +34,7 @@ export const ParagraphTextItem = ({ item, value, onValueChange, isDisabled }: Te
       value={value}
       onValueChange={onHandleValueChange}
       disabled={isDisabled}
-      isLarge={true}
+      multiline={true}
     />
   );
 };

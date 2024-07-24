@@ -4,10 +4,10 @@ type Props = {
   value: string | undefined;
   onValueChange: (value: string) => void;
   disabled: boolean;
-  isLarge?: boolean;
+  multiline?: boolean;
 };
 
-export const TextItem = ({ value = '', onValueChange, disabled, isLarge }: Props) => {
+export const TextItem = ({ value = '', onValueChange, disabled, multiline }: Props) => {
   return (
     <BaseTextInput
       fullWidth
@@ -15,9 +15,9 @@ export const TextItem = ({ value = '', onValueChange, disabled, isLarge }: Props
       value={value}
       onChange={(e) => onValueChange(e.target.value)}
       disabled={disabled}
-      multiline={isLarge}
-      minRows={isLarge ? 5 : 1}
-      maxRows={isLarge ? 10 : 1}
+      multiline={multiline}
+      minRows={multiline ? 5 : 1}
+      maxRows={multiline ? 10 : 1}
     />
   );
 };
