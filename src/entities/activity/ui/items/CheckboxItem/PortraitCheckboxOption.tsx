@@ -8,7 +8,6 @@ import {
   SelectBaseImage,
   SelectBaseText,
 } from '~/shared/ui';
-import { cutString } from '~/shared/utils';
 
 type Props = {
   id: string;
@@ -38,18 +37,6 @@ export const PortraitCheckboxOption = (props: Props) => {
   const labelText = useMemo(() => {
     return props.replaceText(props.label);
   }, [props]);
-
-  const cutTheTextBasedOnOptionParams = (text: string) => {
-    if (props.image && !tooltipText) {
-      return cutString(text, 21);
-    }
-
-    if (props.image && tooltipText) {
-      return cutString(text, 12);
-    }
-
-    return cutString(text, 25);
-  };
 
   const hasImage = !!props.image;
 
@@ -82,7 +69,7 @@ export const PortraitCheckboxOption = (props: Props) => {
             defaultChecked={props.defaultChecked}
           />
 
-          <SelectBaseText text={cutTheTextBasedOnOptionParams(labelText)} />
+          <SelectBaseText text={labelText} />
 
           {tooltipText ? (
             <CustomTooltip markdown={tooltipText} />
