@@ -281,6 +281,13 @@ function convertToMatrixSingleSelectAnswer(item: SingleSelectionRowsItem) {
 }
 
 function convertToSliderRowsAnswer(item: SliderRowsItem) {
+  if (item.answer.length === 0) {
+    return {
+      answer: null,
+      itemId: item.id,
+    };
+  }
+
   return {
     answer: {
       value: item.answer,
