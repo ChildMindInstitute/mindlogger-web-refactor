@@ -75,6 +75,7 @@ export interface ActivityItemBase {
 
 export type Config =
   | TextItemConfig
+  | ParagraphItemConfig
   | CheckboxItemConfig
   | RadioItemConfig
   | SliderItemConfig
@@ -125,9 +126,6 @@ export interface ParagraphTextItem extends ActivityItemBase {
 
 export type ParagraphItemConfig = ButtonsConfig & {
   maxResponseLength: number; // default 300
-  correctAnswerRequired: boolean; // default false
-  correctAnswer: string; // default ""
-  numericalResponseRequired: boolean; // default false
   responseDataIdentifier: boolean; // default false
   responseRequired: boolean; // default false
 };
