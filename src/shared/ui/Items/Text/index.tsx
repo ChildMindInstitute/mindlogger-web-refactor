@@ -4,7 +4,7 @@ type Props = {
   value: string | undefined;
   onValueChange: (value: string) => void;
   disabled: boolean;
-  multiline?: boolean;
+  isMultiline?: boolean;
   maxCharacters?: number;
 };
 
@@ -12,12 +12,12 @@ export const TextItem = ({
   value = '',
   onValueChange,
   disabled,
-  multiline,
+  isMultiline,
   maxCharacters,
 }: Props) => {
   const numCharacters = value.length;
   const handleOnChange = (value: string) => {
-    if (multiline && maxCharacters && value.length > maxCharacters) {
+    if (isMultiline && maxCharacters && value.length > maxCharacters) {
       return;
     }
 
@@ -31,11 +31,11 @@ export const TextItem = ({
         value={value}
         onChange={(e) => handleOnChange(e.target.value)}
         disabled={disabled}
-        multiline={multiline}
-        minRows={multiline ? 5 : 1}
-        maxRows={multiline ? 12 : 1}
+        multiline={isMultiline}
+        minRows={isMultiline ? 5 : 1}
+        maxRows={isMultiline ? 12 : 1}
         sx={
-          multiline
+          isMultiline
             ? {
                 borderRadius: '12px',
                 '& .MuiInputBase-input': {
@@ -54,7 +54,7 @@ export const TextItem = ({
             : null
         }
       />
-      {multiline ? (
+      {isMultiline ? (
         <Box
           display="flex"
           justifyContent="flex-end" // Align the character count box to the right

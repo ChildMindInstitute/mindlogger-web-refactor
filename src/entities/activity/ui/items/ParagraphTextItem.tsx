@@ -34,7 +34,7 @@ export const ParagraphTextItem = ({
       value={value}
       onValueChange={onHandleValueChange}
       disabled={isDisabled}
-      multiline={true}
+      isMultiline={true}
       maxCharacters={maxResponseLength}
     />
   );
