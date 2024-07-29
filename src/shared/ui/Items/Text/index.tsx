@@ -34,21 +34,25 @@ export const TextItem = ({
         multiline={multiline}
         minRows={multiline ? 5 : 1}
         maxRows={multiline ? 12 : 1}
-        sx={{
-          borderRadius: '12px',
-          '& .MuiInputBase-input': {
-            '&::-webkit-scrollbar': {
-              width: '4px',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: '#C2C7CF',
-              borderRadius: '100px',
-            },
-          },
-          '& .MuiInputBase-root': {
-            paddingRight: '2px', // Remove padding inside the input
-          },
-        }}
+        sx={
+          multiline
+            ? {
+                borderRadius: '12px',
+                '& .MuiInputBase-input': {
+                  '&::-webkit-scrollbar': {
+                    width: '4px',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#C2C7CF',
+                    borderRadius: '100px',
+                  },
+                },
+                '& .MuiInputBase-root': {
+                  paddingRight: '2px', // Remove padding inside the input
+                },
+              }
+            : null
+        }
       />
       {multiline ? (
         <Box
