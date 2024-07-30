@@ -12,7 +12,6 @@ import { TakeNowSuccessModal } from '~/features/TakeNow/ui/TakeNowSuccessModal';
 import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
 import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
-import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
 type PublicAppletDetails = {
   isPublic: true;
@@ -51,8 +50,6 @@ export const ActivityGroups = (props: Props) => {
     select: (data) => data.data.result,
   });
 
-  const { featureFlags } = useFeatureFlags();
-
   const {
     isInMultiInformantFlow,
     getMultiInformantState,
@@ -62,23 +59,21 @@ export const ActivityGroups = (props: Props) => {
 
   useOnceEffect(() => {
     ensureMultiInformantStateExists();
-    if (featureFlags.enableMultiInformant) {
-      if (isInMultiInformantFlow() && !props.startActivityOrFlow) {
-        resetMultiInformantState();
-      }
+    if (isInMultiInformantFlow() && !props.startActivityOrFlow) {
+      resetMultiInformantState();
+    }
 
-      // We rely on location state to evaluate whether to show the modal so that it only displays
-      // after the activity is complete (and not when it's paused). See useEntityComplete hook.
-      if (location.state?.showTakeNowSuccessModal && !takeNowSuccessModalState.isOpen) {
-        navigate(window.location.pathname, {
-          state: {
-            ...location.state,
-            showTakeNowSuccessModal: undefined,
-          } as unknown,
-          replace: true,
-        });
-        setTakeNowSuccessModalState({ isOpen: true, ...getMultiInformantState() });
-      }
+    // We rely on location state to evaluate whether to show the modal so that it only displays
+    // after the activity is complete (and not when it's paused). See useEntityComplete hook.
+    if (location.state?.showTakeNowSuccessModal && !takeNowSuccessModalState.isOpen) {
+      navigate(window.location.pathname, {
+        state: {
+          ...location.state,
+          showTakeNowSuccessModal: undefined,
+        } as unknown,
+        replace: true,
+      });
+      setTakeNowSuccessModalState({ isOpen: true, ...getMultiInformantState() });
     }
   });
 

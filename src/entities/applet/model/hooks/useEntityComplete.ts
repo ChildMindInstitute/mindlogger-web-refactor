@@ -7,7 +7,6 @@ import { appletModel } from '~/entities/applet';
 import { ActivityFlowDTO } from '~/shared/api';
 import ROUTES from '~/shared/constants/routes';
 import { useCustomNavigation } from '~/shared/utils';
-import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
 type CompletionType = 'regular' | 'autoCompletion';
 
@@ -28,8 +27,6 @@ type CompleteOptions = {
 
 export const useEntityComplete = (props: Props) => {
   const navigator = useCustomNavigation();
-
-  const { featureFlags } = useFeatureFlags();
 
   const { isInMultiInformantFlow } = appletModel.hooks.useMultiInformantState();
 
@@ -61,7 +58,7 @@ export const useEntityComplete = (props: Props) => {
         replace: true,
       };
 
-      if (featureFlags.enableMultiInformant && isInMultiInformantFlow()) {
+      if (isInMultiInformantFlow()) {
         navigateOptions.state = { showTakeNowSuccessModal: true };
       }
 
@@ -69,7 +66,6 @@ export const useEntityComplete = (props: Props) => {
     },
     [
       entityCompleted,
-      featureFlags.enableMultiInformant,
       isInMultiInformantFlow,
       navigator,
       props.activityId,

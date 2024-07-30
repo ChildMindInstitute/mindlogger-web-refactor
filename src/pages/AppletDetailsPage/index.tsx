@@ -2,7 +2,6 @@ import { useLocation, useParams } from 'react-router-dom';
 
 import ValidateTakeNowParams from '~/features/TakeNow/ui/ValidateTakeNowParams';
 import { useCustomTranslation } from '~/shared/utils';
-import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 import { ActivityGroups } from '~/widgets/ActivityGroups';
 import { AuthorizationGuard } from '~/widgets/AuthorizationGuard';
 import { LoginWithRedirect } from '~/widgets/LoginWithRedirect';
@@ -11,7 +10,6 @@ function AppletDetailsPage() {
   const { appletId } = useParams();
   const location = useLocation();
   const { t } = useCustomTranslation();
-  const { featureFlags } = useFeatureFlags();
 
   const queryParams = new URLSearchParams(location.search);
   const startActivityOrFlow = queryParams.get('startActivityOrFlow');
@@ -24,13 +22,7 @@ function AppletDetailsPage() {
     return <div>{t('wrondLinkParametrError')}</div>;
   }
 
-  if (
-    !startActivityOrFlow ||
-    !sourceSubjectId ||
-    !targetSubjectId ||
-    !respondentId ||
-    !featureFlags.enableMultiInformant
-  ) {
+  if (!startActivityOrFlow || !sourceSubjectId || !targetSubjectId || !respondentId) {
     return (
       <AuthorizationGuard fallback={<LoginWithRedirect />}>
         <ActivityGroups isPublic={false} appletId={appletId} />

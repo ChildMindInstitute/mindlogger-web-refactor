@@ -5,7 +5,6 @@ import AnswersConstructService from '../model/AnswersConstructService';
 
 import { appletModel } from '~/entities/applet';
 import { ActivityFlowDTO, AnswerPayload, EncryptionDTO, ScheduleEventDto } from '~/shared/api';
-import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
 export type BuildAnswerParams = {
   activityId: string;
@@ -36,8 +35,6 @@ export const useAnswerBuilder = (): AnswerBuilder => {
 
   const { getMultiInformantState, isInMultiInformantFlow } =
     appletModel.hooks.useMultiInformantState();
-
-  const { featureFlags } = useFeatureFlags();
 
   const build = useCallback(
     (params: BuildAnswerParams): AnswerPayload => {
@@ -74,12 +71,10 @@ export const useAnswerBuilder = (): AnswerBuilder => {
         answer.consentToShare = true;
       }
 
-      if (featureFlags.enableMultiInformant) {
-        const multiInformantState = getMultiInformantState();
-        if (isInMultiInformantFlow()) {
-          answer.sourceSubjectId = multiInformantState?.sourceSubject?.id;
-          answer.targetSubjectId = multiInformantState?.targetSubject?.id;
-        }
+      const multiInformantState = getMultiInformantState();
+      if (isInMultiInformantFlow()) {
+        answer.sourceSubjectId = multiInformantState?.sourceSubject?.id;
+        answer.targetSubjectId = multiInformantState?.targetSubject?.id;
       }
 
       return answer;
@@ -93,7 +88,6 @@ export const useAnswerBuilder = (): AnswerBuilder => {
       context.encryption,
       context.publicAppletKey,
       context.integrations,
-      featureFlags.enableMultiInformant,
       getMultiInformantState,
       isInMultiInformantFlow,
     ],
