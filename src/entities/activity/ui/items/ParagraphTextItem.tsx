@@ -49,7 +49,7 @@ export const ParagraphTextItem = ({
         color="#72777F"
         mr={2}
       >
-        {`${numCharacters}/${maxResponseLength} ${t('charactersCount')}`}
+        {`${t('charactersCount', { numCharacters, maxCharacters: maxResponseLength })}`}
       </Box>
     </Box>
   );
