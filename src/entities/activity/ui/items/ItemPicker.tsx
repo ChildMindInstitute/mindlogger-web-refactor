@@ -43,11 +43,12 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
       return (
         <ParagraphTextItem
           item={item}
-          value={item.answer[0]}
+          value={item?.answer?.[0]}
           onValueChange={onValueChange}
           isDisabled={isDisabled}
         />
       );
+
     case 'multiSelect':
       return (
         <CheckboxItem

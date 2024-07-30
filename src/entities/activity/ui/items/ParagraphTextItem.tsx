@@ -1,6 +1,7 @@
 import { ParagraphTextItem as ParagraphItemType } from '../../lib';
 
 import { TextItem as BaseTextItem, Box } from '~/shared/ui';
+import { useCustomTranslation } from '~/shared/utils';
 
 type ParagraphItemProps = {
   item: ParagraphItemType;
@@ -17,6 +18,7 @@ export const ParagraphTextItem = ({
 }: ParagraphItemProps) => {
   const { maxResponseLength } = item.config;
   const numCharacters = value?.length || 0;
+  const { t } = useCustomTranslation();
 
   const onHandleValueChange = (value: string) => {
     if (value.length > maxResponseLength) {
@@ -46,7 +48,9 @@ export const ParagraphTextItem = ({
         fontSize="small"
         color="#72777F"
         mr={2}
-      >{`${numCharacters}/${maxResponseLength} characters`}</Box>
+      >
+        {`${numCharacters}/${maxResponseLength} ${t('charactersCount')}`}
+      </Box>
     </Box>
   );
 };
