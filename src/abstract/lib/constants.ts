@@ -4,6 +4,7 @@ export const GOOGLEPLAY_LINK =
 
 export const supportableResponseTypes = [
   'text',
+  'paragraphText',
   'singleSelect',
   'multiSelect',
   'slider',

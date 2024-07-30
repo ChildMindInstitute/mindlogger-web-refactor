@@ -4,6 +4,7 @@ import {
   DateItem,
   MessageItem,
   MultiSelectionRowsItem,
+  ParagraphTextItem,
   RadioItem,
   SelectorItem,
   SingleSelectionRowsItem,
@@ -24,6 +25,7 @@ import {
   MessageAnswerPayload,
   MultiSelectAnswerPayload,
   NumberSelectAnswerPayload,
+  ParagraphAnswerPayload,
   SingleSelectAnswerPayload,
   SliderAnswerPayload,
   TextAnswerPayload,
@@ -39,6 +41,9 @@ export function mapToAnswers(
     switch (item.responseType) {
       case 'text':
         return convertToTextAnswer(item);
+
+      case 'paragraphText':
+        return convertToParagraphTextAnswer(item);
 
       case 'singleSelect':
         return convertToSingleSelectAnswer(item);
@@ -85,6 +90,20 @@ export function mapToAnswers(
 }
 
 function convertToTextAnswer(item: TextItem): ItemAnswer<TextAnswerPayload> {
+  if (!item.answer[0]) {
+    return {
+      answer: null,
+      itemId: item.id,
+    };
+  }
+
+  return {
+    answer: item.answer[0],
+    itemId: item.id,
+  };
+}
+
+function convertToParagraphTextAnswer(item: ParagraphTextItem): ItemAnswer<ParagraphAnswerPayload> {
   if (!item.answer[0]) {
     return {
       answer: null,

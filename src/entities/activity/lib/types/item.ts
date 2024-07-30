@@ -13,6 +13,7 @@ export type Answer =
 
 export type ActivityItemType =
   | 'text'
+  | 'paragraphText'
   | 'singleSelect'
   | 'multiSelect'
   | 'message'
@@ -74,6 +75,7 @@ export interface ActivityItemBase {
 
 export type Config =
   | TextItemConfig
+  | ParagraphItemConfig
   | CheckboxItemConfig
   | RadioItemConfig
   | SliderItemConfig
@@ -111,6 +113,19 @@ export type TextItemConfig = ButtonsConfig & {
   correctAnswerRequired: boolean; // default false
   correctAnswer: string; // default ""
   numericalResponseRequired: boolean; // default false
+  responseDataIdentifier: boolean; // default false
+  responseRequired: boolean; // default false
+};
+
+export interface ParagraphTextItem extends ActivityItemBase {
+  responseType: 'paragraphText';
+  config: ParagraphItemConfig;
+  responseValues: EmptyResponseValues;
+  answer: DefaultAnswer;
+}
+
+export type ParagraphItemConfig = ButtonsConfig & {
+  maxResponseLength: number; // default 300
   responseDataIdentifier: boolean; // default false
   responseRequired: boolean; // default false
 };

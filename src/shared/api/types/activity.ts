@@ -146,6 +146,8 @@ export type EmptyAnswerPayload = null;
 
 export type TextAnswerPayload = string;
 
+export type ParagraphAnswerPayload = string;
+
 export type MultiSelectAnswerPayload = {
   value: Array<number>;
   text: string | null;
