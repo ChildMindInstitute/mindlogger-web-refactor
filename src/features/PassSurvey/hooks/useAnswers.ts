@@ -5,7 +5,6 @@ import AnswersConstructService from '../model/AnswersConstructService';
 
 import { appletModel } from '~/entities/applet';
 import { ActivityFlowDTO, AnswerPayload, EncryptionDTO, ScheduleEventDto } from '~/shared/api';
-import { useAppSelector } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
 export type BuildAnswerParams = {
@@ -29,8 +28,6 @@ export interface AnswerBuilder {
 
 export const useAnswerBuilder = (): AnswerBuilder => {
   const context = useContext(SurveyContext);
-
-  const consents = useAppSelector(appletModel.selectors.selectConsents);
 
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
@@ -70,12 +67,11 @@ export const useAnswerBuilder = (): AnswerBuilder => {
 
       const answer = answerConstructService.construct();
 
-      const isIntegrationsEnabled = context.integrations !== undefined;
-
-      const appletConsents = consents?.[context.appletId] ?? null;
+      const isIntegrationsEnabled =
+        context.integrations !== undefined && context.integrations !== null;
 
       if (isIntegrationsEnabled) {
-        answer.consentToShare = appletConsents?.shareToPublic ?? false;
+        answer.consentToShare = true;
       }
 
       if (featureFlags.enableMultiInformant) {
@@ -97,7 +93,6 @@ export const useAnswerBuilder = (): AnswerBuilder => {
       context.encryption,
       context.publicAppletKey,
       context.integrations,
-      consents,
       featureFlags.enableMultiInformant,
       getMultiInformantState,
       isInMultiInformantFlow,

@@ -1,5 +1,7 @@
 import { PropsWithChildren } from 'react';
 
+import { SxProps } from '@mui/material';
+
 import { Theme } from '~/shared/constants';
 import { Box } from '~/shared/ui';
 
@@ -16,6 +18,8 @@ type Props = PropsWithChildren<{
   color: string | null;
   checked?: boolean | undefined;
   onHandleChange: () => void;
+
+  sx?: SxProps;
 }>;
 
 export const SelectBaseBox = (props: Props) => {
@@ -48,6 +52,7 @@ export const SelectBaseBox = (props: Props) => {
       onClick={props.onHandleChange}
       data-testid={`select-box ${props.color ? `bgcolor-${props.color}` : ''}`}
       sx={{
+        ...(props.sx ?? {}),
         transition: 'background-color 0.2s ease-in-out',
         cursor: 'pointer',
         '&:hover': {

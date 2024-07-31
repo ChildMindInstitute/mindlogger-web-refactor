@@ -14,7 +14,14 @@ export const SelectBaseText = (props: Props) => {
       fontWeight="400"
       lineHeight="28px"
       testid="select-text"
-      sx={{ cursor: 'pointer', lineBreak: 'anywhere' }}
+      sx={{
+        cursor: 'pointer',
+        lineBreak: 'anywhere',
+        display: '-webkit-box',
+        '-webkit-line-clamp': '3',
+        '-webkit-box-orient': 'vertical',
+        overflow: 'hidden',
+      }}
     >
       {props.text}
     </Text>

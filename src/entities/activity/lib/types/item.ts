@@ -13,6 +13,7 @@ export type Answer =
 
 export type ActivityItemType =
   | 'text'
+  | 'paragraphText'
   | 'singleSelect'
   | 'multiSelect'
   | 'message'
@@ -74,6 +75,7 @@ export interface ActivityItemBase {
 
 export type Config =
   | TextItemConfig
+  | ParagraphItemConfig
   | CheckboxItemConfig
   | RadioItemConfig
   | SliderItemConfig
@@ -115,6 +117,19 @@ export type TextItemConfig = ButtonsConfig & {
   responseRequired: boolean; // default false
 };
 
+export interface ParagraphTextItem extends ActivityItemBase {
+  responseType: 'paragraphText';
+  config: ParagraphItemConfig;
+  responseValues: EmptyResponseValues;
+  answer: DefaultAnswer;
+}
+
+export type ParagraphItemConfig = ButtonsConfig & {
+  maxResponseLength: number; // default 300
+  responseDataIdentifier: boolean; // default false
+  responseRequired: boolean; // default false
+};
+
 export interface CheckboxItem extends ActivityItemBase {
   responseType: 'multiSelect';
   config: CheckboxItemConfig;
@@ -130,6 +145,7 @@ export type CheckboxItemConfig = ButtonsConfig &
     setAlerts: boolean;
     addTooltip: boolean;
     setPalette: boolean;
+    portraitLayout: boolean | null;
   };
 
 export type CheckboxValues = {
@@ -163,6 +179,7 @@ export type RadioItemConfig = ButtonsConfig &
     addTooltip: boolean;
     setPalette: boolean;
     autoAdvance: boolean;
+    portraitLayout: boolean | null;
   };
 
 export type RadioValues = {

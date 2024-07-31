@@ -8,7 +8,6 @@ import { AppletDetailsContext } from '../lib';
 import { useActivityGroups, useEntitiesSync, useIntegrationsSync } from '../model/hooks';
 
 import AppletDefaultIcon from '~/assets/AppletDefaultIcon.svg';
-import { SharedContentConsent } from '~/entities/activity';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
 import { BootstrapModal } from '~/shared/ui';
 import { AvatarBase } from '~/shared/ui';
@@ -83,7 +82,9 @@ export const ActivityGroupList = () => {
       </Box>
 
       <Box>
-        <SharedContentConsent appletId={applet.id} />
+        {/* The consent to share content is temporarly hidden due to UI changes. */}
+        {/* Need to clarify with BA`s or something. If the component is no need anymore the component/slice/other business logic related to this feature should be removed */}
+        {/* <SharedContentConsent appletId={applet.id} /> */}
 
         {groups
           .filter((g) => g.activities.length)

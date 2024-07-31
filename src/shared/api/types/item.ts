@@ -117,6 +117,7 @@ export type CheckboxItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   setAlerts: boolean;
   addTooltip: boolean;
   setPalette: boolean;
+  portraitLayout: boolean | null;
 };
 
 export type CheckboxItemResponseValuesDTO = {
@@ -150,6 +151,7 @@ export type RadioItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   addTooltip: boolean;
   setPalette: boolean;
   autoAdvance: boolean;
+  portraitLayout: boolean | null;
 };
 
 export type RadioItemResponseValuesDTO = {
