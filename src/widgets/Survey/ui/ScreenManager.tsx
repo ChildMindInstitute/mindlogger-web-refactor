@@ -27,7 +27,7 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
 
   const { saveAutoCompletion } = AutoCompletionModel.useAutoCompletionStateManager();
 
-  const onEntityTimerFinish = useCallback(() => {
+  const onTimerFinish = useCallback(() => {
     const activitiesToSubmit: string[] = AutoCompletionModel.extractActivityIdsToSubmitByParams({
       isFlow: !!context.flow,
       currentActivityId: context.activityId,
@@ -54,7 +54,7 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
   ]);
 
   useEntityTimer({
-    onFinish: onEntityTimerFinish,
+    onFinish: onTimerFinish,
   });
 
   const items = activityProgress?.items ?? [];
@@ -71,5 +71,5 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
     return <SummaryScreen />;
   }
 
-  return <PassingScreen />;
+  return <PassingScreen onTimerFinish={onTimerFinish} />;
 };

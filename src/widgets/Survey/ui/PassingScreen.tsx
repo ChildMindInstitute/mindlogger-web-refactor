@@ -7,6 +7,7 @@ import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } fr
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
+import { useIdleTimer } from '~/features/IdleTimer';
 import {
   SurveyContext,
   SurveyLayout,
@@ -20,7 +21,11 @@ import { MuiModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation, useModal, usePrevious } from '~/shared/utils';
 
-const PassingScreen = () => {
+type Props = {
+  onTimerFinish: () => void;
+};
+
+const PassingScreen = (props: Props) => {
   const { t } = useCustomTranslation();
 
   const [isSubmitModalOpen, openSubmitModal, closeSubmitModal] = useModal();
@@ -275,6 +280,15 @@ const PassingScreen = () => {
     eventId: context.eventId,
     isSubmitModalOpen,
     onTimerEnd: hasNextStep ? onNext : openSubmitModal,
+  });
+
+  useIdleTimer({
+    time: null, // Value should be provided from event DTO
+    onFinish: () => {
+      if (props.onTimerFinish) {
+        props.onTimerFinish();
+      }
+    },
   });
 
   return (
