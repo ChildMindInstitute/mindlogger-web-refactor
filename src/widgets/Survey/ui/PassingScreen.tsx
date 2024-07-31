@@ -283,7 +283,7 @@ const PassingScreen = (props: Props) => {
   });
 
   useIdleTimer({
-    time: null, // Value should be provided from event DTO
+    time: context.event.timers.idleTimer, // Value should be provided from event DTO, if null - timer will not work
     onFinish: () => {
       if (props.onTimerFinish) {
         props.onTimerFinish();
