@@ -9,13 +9,11 @@ import { useMultiInformantState } from '~/entities/applet/model/hooks';
 import { MultiInformantTooltipText } from '~/features/TakeNow/ui/MultiInformantTooltipText';
 import { Theme } from '~/shared/constants';
 import { useCustomTranslation } from '~/shared/utils';
-import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 
 export const MultiInformantTooltip = () => {
   const { t } = useCustomTranslation();
   const { getMultiInformantState, isInMultiInformantFlow } = useMultiInformantState();
-  const { featureFlags } = useFeatureFlags();
-  if (!isInMultiInformantFlow() || !featureFlags.enableMultiInformant) {
+  if (!isInMultiInformantFlow()) {
     return null;
   }
 
