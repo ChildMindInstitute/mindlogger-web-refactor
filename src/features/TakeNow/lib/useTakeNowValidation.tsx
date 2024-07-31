@@ -45,7 +45,7 @@ export const useTakeNowValidation = ({
   const {
     data: sourceSubjectData,
     error: sourceSubjectError,
-    isLoading: isLoadingSourceSubject,
+    isFetching: isLoadingSourceSubject,
   } = useSubjectQuery(sourceSubjectId, {
     enabled: fetchSourceSubject === true,
   });
@@ -53,7 +53,7 @@ export const useTakeNowValidation = ({
   const {
     data: targetSubjectData,
     error: targetSubjectError,
-    isLoading: isLoadingTargetSubject,
+    isFetching: isLoadingTargetSubject,
   } = useSubjectQuery(targetSubjectId, {
     enabled: fetchTargetSubject === true,
   });
