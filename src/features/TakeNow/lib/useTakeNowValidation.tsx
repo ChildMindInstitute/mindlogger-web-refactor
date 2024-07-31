@@ -202,7 +202,7 @@ export const useTakeNowValidation = ({
   let sourceSecretUserId: string;
   let targetSecretUserId: string;
 
-  if (fetchSourceSubject === false) {
+  if (!fetchSourceSubject) {
     sourceSubjectNickname = currentUserSubjectNickname;
     sourceSecretUserId = currentUserSecretUserId;
   } else if (
@@ -227,7 +227,7 @@ export const useTakeNowValidation = ({
     sourceSecretUserId = sourceSubjectData.data.result.secretUserId;
   }
 
-  if (fetchTargetSubject === false) {
+  if (!fetchTargetSubject) {
     if (currentUserSubjectId === targetSubjectId) {
       targetSubjectNickname = currentUserSubjectNickname;
       targetSecretUserId = currentUserSecretUserId;
