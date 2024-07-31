@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 
 import { AxiosError } from 'axios';
@@ -48,7 +47,7 @@ export const useTakeNowValidation = ({
     error: sourceSubjectError,
     isLoading: isLoadingSourceSubject,
   } = useSubjectQuery(sourceSubjectId, {
-    enabled: fetchSourceSubject,
+    enabled: fetchSourceSubject === true,
   });
 
   const {
@@ -56,7 +55,7 @@ export const useTakeNowValidation = ({
     error: targetSubjectError,
     isLoading: isLoadingTargetSubject,
   } = useSubjectQuery(targetSubjectId, {
-    enabled: fetchTargetSubject,
+    enabled: fetchTargetSubject === true,
   });
 
   const {
@@ -116,6 +115,7 @@ export const useTakeNowValidation = ({
         error: t('takeNow.invalidApplet'),
       });
     } else if (validationError.response?.status === 422) {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       const axiosError = validationError as AxiosError<any, any>;
       const param = axiosError.response?.data?.result?.[0]?.path?.[1] as string | undefined;
 
