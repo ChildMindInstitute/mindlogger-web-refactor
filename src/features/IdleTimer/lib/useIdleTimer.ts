@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { getMsFromHours, getMsFromMinutes, HourMinute } from '~/shared/utils';
 import useTimer from '~/shared/utils/useTimer';
 
+// Events that we consider as activity
 export const events = ['click', 'keypress', 'keydown', 'mousemove', 'mousedown', 'touchstart'];
 
 type Props = {
@@ -25,7 +26,7 @@ export const useIdleTimer = (props: Props) => {
     }
   }, [props, resetTimer]);
 
-  const activityEventsListener = useCallback(
+  const start = useCallback(
     (idleTimerName?: string) => {
       if (!props.time) {
         return;
@@ -44,6 +45,6 @@ export const useIdleTimer = (props: Props) => {
   );
 
   return {
-    activityEventsListener,
+    start,
   };
 };

@@ -288,7 +288,7 @@ const PassingScreen = (props: Props) => {
     onTimerEnd: hasNextStep ? onNext : openSubmitModal,
   });
 
-  const { activityEventsListener } = useIdleTimer({
+  const IdleTimer = useIdleTimer({
     time: context.event.timers.idleTimer, // Value should be provided from event DTO, if null - timer will not work
     onFinish: () => {
       if (props.onTimerFinish) {
@@ -297,16 +297,18 @@ const PassingScreen = (props: Props) => {
     },
   });
 
+  // This effect is responsible for starting the timer when the user is inactive
   useEffect(() => {
     if (!context?.event?.timers?.idleTimer) {
       return;
     }
 
+    // If current entity already has record in the AutoCompletion state, we don't need to launch the Idle Timer logic
     if (autoCompletionState) {
       return;
     }
 
-    const listener = () => activityEventsListener('SurveyIdleTracker');
+    const listener = () => IdleTimer.start('SurveyIdleTracker');
 
     events.forEach((item) => {
       window.addEventListener(item, listener);
@@ -317,7 +319,7 @@ const PassingScreen = (props: Props) => {
         window.removeEventListener(item, listener);
       });
     };
-  }, [activityEventsListener, autoCompletionState, context?.event?.timers?.idleTimer]);
+  }, [IdleTimer, autoCompletionState, context?.event?.timers?.idleTimer]);
 
   return (
     <>

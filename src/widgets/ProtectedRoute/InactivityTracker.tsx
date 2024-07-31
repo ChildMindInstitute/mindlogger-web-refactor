@@ -8,7 +8,7 @@ export type InactivityTrackerProps = PropsWithChildren<unknown>;
 export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   const { logout } = useLogout();
 
-  const { activityEventsListener } = useIdleTimer({
+  const IdleTimer = useIdleTimer({
     time: {
       hours: 0,
       minutes: 15,
@@ -17,7 +17,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   });
 
   useEffect(() => {
-    const listener = () => activityEventsListener('InactivityTracker');
+    const listener = () => IdleTimer.start('InactivityTracker');
 
     events.forEach((item) => {
       window.addEventListener(item, listener);
@@ -28,7 +28,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
         window.removeEventListener(item, listener);
       });
     };
-  }, [activityEventsListener]);
+  }, [IdleTimer]);
 
   return children as JSX.Element;
 };
