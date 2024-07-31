@@ -1,11 +1,12 @@
 import { useCallback, useEffect } from 'react';
 
+import { getMsFromHours, getMsFromMinutes, HourMinute } from '~/shared/utils';
 import useTimer from '~/shared/utils/useTimer';
 
 export const events = ['click', 'keypress', 'keydown', 'mousemove', 'mousedown', 'touchstart'];
 
 type Props = {
-  time: number | null; // MS
+  time: HourMinute | null;
   onFinish: () => void;
 };
 
@@ -29,8 +30,11 @@ export const useIdleTimer = (props: Props) => {
       return;
     }
 
+    const duration: number =
+      getMsFromHours(props.time.hours) + getMsFromMinutes(props.time.minutes);
+
     setTimer({
-      time: props.time,
+      time: duration,
       onComplete: onTimerExpire,
       timerName: 'InactivityTracker',
     });
