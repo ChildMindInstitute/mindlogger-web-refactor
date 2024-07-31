@@ -31,8 +31,6 @@ export const useIdleTimer = (props: Props) => {
         return;
       }
 
-      console.info(`[${idleTimerName}] Inactivity detected. Setting timer...`);
-
       const duration: number =
         getMsFromHours(props.time.hours) + getMsFromMinutes(props.time.minutes);
 
