@@ -1,5 +1,6 @@
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useContext, useEffect, useMemo } from 'react';
 
+import { AutoCompletionModel } from '../../../features/AutoCompletion';
 import { validateBeforeMoveForward } from '../model';
 import { useAutoForward, useSurveyState } from '../model/hooks';
 
@@ -7,7 +8,7 @@ import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } fr
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
-import { useIdleTimer } from '~/features/IdleTimer';
+import { useIdleTimer, events } from '~/features/IdleTimer';
 import {
   SurveyContext,
   SurveyLayout,
@@ -42,6 +43,11 @@ const PassingScreen = (props: Props) => {
   );
 
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
+    entityId: context.entityId,
+    eventId: context.eventId,
+  });
+
+  const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: context.entityId,
     eventId: context.eventId,
   });
@@ -282,7 +288,7 @@ const PassingScreen = (props: Props) => {
     onTimerEnd: hasNextStep ? onNext : openSubmitModal,
   });
 
-  useIdleTimer({
+  const { activityEventsListener } = useIdleTimer({
     time: context.event.timers.idleTimer, // Value should be provided from event DTO, if null - timer will not work
     onFinish: () => {
       if (props.onTimerFinish) {
@@ -290,6 +296,28 @@ const PassingScreen = (props: Props) => {
       }
     },
   });
+
+  useEffect(() => {
+    if (!context?.event?.timers?.idleTimer) {
+      return;
+    }
+
+    if (autoCompletionState) {
+      return;
+    }
+
+    const listener = () => activityEventsListener('SurveyIdleTracker');
+
+    events.forEach((item) => {
+      window.addEventListener(item, listener);
+    });
+
+    return () => {
+      events.forEach((item) => {
+        window.removeEventListener(item, listener);
+      });
+    };
+  }, [activityEventsListener, autoCompletionState, context?.event?.timers?.idleTimer]);
 
   return (
     <>

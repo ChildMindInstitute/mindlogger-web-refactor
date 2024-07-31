@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 
 import { getMsFromHours, getMsFromMinutes, HourMinute } from '~/shared/utils';
 import useTimer from '~/shared/utils/useTimer';
@@ -25,36 +25,25 @@ export const useIdleTimer = (props: Props) => {
     }
   }, [props, resetTimer]);
 
-  const activityEventsListener = useCallback(() => {
-    if (!props.time) {
-      return;
-    }
+  const activityEventsListener = useCallback(
+    (idleTimerName?: string) => {
+      if (!props.time) {
+        return;
+      }
 
-    const duration: number =
-      getMsFromHours(props.time.hours) + getMsFromMinutes(props.time.minutes);
+      console.info(`[${idleTimerName}] Inactivity detected. Setting timer...`);
 
-    setTimer({
-      time: duration,
-      onComplete: onTimerExpire,
-      timerName: 'InactivityTracker',
-    });
-  }, [setTimer, props.time, onTimerExpire]);
+      const duration: number =
+        getMsFromHours(props.time.hours) + getMsFromMinutes(props.time.minutes);
 
-  useEffect(() => {
-    if (!props.time) {
-      return;
-    }
-
-    events.forEach((item) => {
-      window.addEventListener(item, activityEventsListener);
-    });
-
-    return () => {
-      events.forEach((item) => {
-        window.removeEventListener(item, activityEventsListener);
+      setTimer({
+        time: duration,
+        onComplete: onTimerExpire,
+        timerName: idleTimerName,
       });
-    };
-  }, [activityEventsListener, props.time]);
+    },
+    [setTimer, props.time, onTimerExpire],
+  );
 
   return {
     activityEventsListener,
