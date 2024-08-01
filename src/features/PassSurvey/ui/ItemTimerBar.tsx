@@ -25,7 +25,7 @@ export const ItemTimerBar = ({ time, progress, duration }: Props) => {
   };
 
   return (
-    <Box width="100%" position="absolute" top={1} left={0} overflow="hidden">
+    <Box width="100%" position="absolute" top={1} left={0} overflow="hidden" data-testid="activity-item-timer">
       <Box
         bgcolor={lessThan10Seconds ? Theme.colors.light.error : Theme.colors.light.primary}
         height="2px"
