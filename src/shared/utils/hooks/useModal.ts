@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react';
 
 type Return = [boolean, () => void, () => void];
 
-export const useModal = (): Return => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+export const useModal = (initialValue: boolean = false): Return => {
+  const [isOpen, setIsOpen] = useState<boolean>(initialValue);
 
   const openModal = useCallback(() => {
     setIsOpen(true);

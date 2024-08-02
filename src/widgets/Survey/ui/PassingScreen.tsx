@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useContext, useEffect, useMemo } from 'react';
 
 import { validateBeforeMoveForward } from '../model';
 import { useAutoForward, useSurveyState } from '../model/hooks';
@@ -7,6 +7,7 @@ import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } fr
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
+import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
   SurveyContext,
   SurveyLayout,
@@ -16,11 +17,17 @@ import {
   useSubmitAnswersMutations,
   useSummaryData,
 } from '~/features/PassSurvey';
+import { interactionEvents } from '~/shared/constants';
 import { MuiModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation, useModal, usePrevious } from '~/shared/utils';
+import { useIdleTimer } from '~/widgets/InactivityTracker';
 
-const PassingScreen = () => {
+type Props = {
+  onTimerFinish: () => void;
+};
+
+const PassingScreen = (props: Props) => {
   const { t } = useCustomTranslation();
 
   const [isSubmitModalOpen, openSubmitModal, closeSubmitModal] = useModal();
@@ -37,6 +44,11 @@ const PassingScreen = () => {
   );
 
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
+    entityId: context.entityId,
+    eventId: context.eventId,
+  });
+
+  const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: context.entityId,
     eventId: context.eventId,
   });
@@ -276,6 +288,40 @@ const PassingScreen = () => {
     isSubmitModalOpen,
     onTimerEnd: hasNextStep ? onNext : openSubmitModal,
   });
+
+  const IdleTimer = useIdleTimer({
+    onFinish: () => {
+      if (props.onTimerFinish) {
+        props.onTimerFinish();
+      }
+    },
+    events: interactionEvents,
+    timerName: 'idleTimer',
+  });
+
+  // This effect is responsible for starting the timer when the user is inactive
+  useEffect(() => {
+    const idleTimer = context?.event?.timers?.idleTimer;
+
+    if (!idleTimer) {
+      return;
+    }
+
+    // If current entity already has record in the AutoCompletion state, we don't need to launch the Idle Timer logic
+    if (autoCompletionState) {
+      return;
+    }
+
+    const listener = IdleTimer.createListener({
+      time: idleTimer,
+    });
+
+    IdleTimer.start(listener);
+
+    return () => {
+      IdleTimer.stop(listener);
+    };
+  }, [IdleTimer, autoCompletionState, context?.event?.timers?.idleTimer]);
 
   return (
     <>

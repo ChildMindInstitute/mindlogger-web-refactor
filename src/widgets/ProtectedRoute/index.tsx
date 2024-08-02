@@ -1,8 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
-import { InactivityTracker } from './InactivityTracker';
-
 import ROUTES from '~/shared/constants/routes';
+import { InactivityTracker } from '~/widgets/InactivityTracker/InactivityTracker';
 
 export interface ProtectedRouteProps {
   redirectUrl?: string;

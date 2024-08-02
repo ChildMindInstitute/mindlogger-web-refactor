@@ -5,6 +5,7 @@ import LoadingScreen from './LoadingScreen';
 import { ScreenManager } from './ScreenManager';
 
 import { useBanners } from '~/entities/banner/model';
+import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
   SurveyContext,
   mapRawDataToSurveyContext,
@@ -32,7 +33,19 @@ export const SurveyWidget = (props: Props) => {
 
   const { removeAllBanners } = useBanners();
 
-  const [isTimesUpModalOpen, openTimesUpModal, closeTimesUpModal] = useModal();
+  const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
+    entityId: props.flowId ?? props.activityId,
+    eventId: props.eventId,
+  });
+
+  const isTimesUpModalModalByDefault: boolean =
+    !!autoCompletionState &&
+    autoCompletionState.activityIdsToSubmit.length !==
+      autoCompletionState.successfullySubmittedActivityIds.length;
+
+  const [isTimesUpModalOpen, openTimesUpModal, closeTimesUpModal] = useModal(
+    isTimesUpModalModalByDefault,
+  );
 
   // Remove any stale banners on mount
   useOnceEffect(() => removeAllBanners());
