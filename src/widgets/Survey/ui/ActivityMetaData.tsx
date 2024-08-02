@@ -1,18 +1,15 @@
-import Typography from '@mui/material/Typography';
-
-import { ActivityPipelineType, GroupProgress } from '~/abstract/lib';
-import { Box } from '~/shared/ui';
+import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 import { useCustomTranslation } from '~/shared/utils';
 
 type Props = {
+  isFlow: boolean;
   activityLength: number;
-  groupInProgress: GroupProgress | null;
+  activityOrderInFlow: number | null;
 };
 
-export const ActivityMetaData = ({ groupInProgress, activityLength }: Props) => {
+export const ActivityMetaData = ({ activityLength, isFlow, activityOrderInFlow }: Props) => {
   const { t } = useCustomTranslation();
-
-  const isFlow = groupInProgress?.type === ActivityPipelineType.Flow;
 
   const isActivitiesMoreThanOne = activityLength > 1;
 
@@ -20,23 +17,23 @@ export const ActivityMetaData = ({ groupInProgress, activityLength }: Props) => 
     ? t('question_count_plural', { length: activityLength })
     : t('question_count_singular', { length: activityLength });
 
-  if (!isFlow) {
+  if (!isFlow && !activityOrderInFlow) {
     return <>{activityLengthLabel}</>;
   }
 
   return (
     <Box data-testid="flow-welcome-screen-metadata">
-      <Typography
+      <Text
         variant="body1"
         component="span"
-        data-testid="metadata-activity-serial-number"
-      >{`Activity ${groupInProgress.pipelineActivityOrder + 1} `}</Typography>
+        testid="metadata-activity-serial-number"
+      >{`Activity ${activityOrderInFlow} `}</Text>
       &bull;
-      <Typography
+      <Text
         variant="body1"
         component="span"
-        data-testid="metadata-activity-length"
-      >{` ${activityLengthLabel}`}</Typography>
+        testid="metadata-activity-length"
+      >{` ${activityLengthLabel}`}</Text>
     </Box>
   );
 };
