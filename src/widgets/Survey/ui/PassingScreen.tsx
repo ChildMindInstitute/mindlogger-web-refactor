@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useMemo } from 'react';
 
 import { AutoCompletionModel } from '../../../features/AutoCompletion';
+import { events } from '../../../shared/constants';
 import { validateBeforeMoveForward } from '../model';
 import { useAutoForward, useSurveyState } from '../model/hooks';
 
@@ -8,7 +9,6 @@ import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } fr
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
-import { useIdleTimer, events } from '~/features/IdleTimer';
 import {
   SurveyContext,
   SurveyLayout,
@@ -21,6 +21,7 @@ import {
 import { MuiModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation, useModal, usePrevious } from '~/shared/utils';
+import { useIdleTimer } from '~/widgets/InactivityTracker';
 
 type Props = {
   onTimerFinish: () => void;
@@ -289,17 +290,20 @@ const PassingScreen = (props: Props) => {
   });
 
   const IdleTimer = useIdleTimer({
-    time: context.event.timers.idleTimer, // Value should be provided from event DTO, if null - timer will not work
     onFinish: () => {
       if (props.onTimerFinish) {
         props.onTimerFinish();
       }
     },
+    events,
+    timerName: 'idleTimer',
   });
 
   // This effect is responsible for starting the timer when the user is inactive
   useEffect(() => {
-    if (!context?.event?.timers?.idleTimer) {
+    const idleTimer = context?.event?.timers?.idleTimer;
+
+    if (!idleTimer) {
       return;
     }
 
@@ -308,16 +312,14 @@ const PassingScreen = (props: Props) => {
       return;
     }
 
-    const listener = () => IdleTimer.start('SurveyIdleTracker');
-
-    events.forEach((item) => {
-      window.addEventListener(item, listener);
+    const listener = IdleTimer.createListener({
+      time: idleTimer,
     });
 
+    IdleTimer.start(listener);
+
     return () => {
-      events.forEach((item) => {
-        window.removeEventListener(item, listener);
-      });
+      IdleTimer.stop(listener);
     };
   }, [IdleTimer, autoCompletionState, context?.event?.timers?.idleTimer]);
 

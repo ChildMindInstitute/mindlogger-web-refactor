@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext } from 'react';
 
 import PassingScreen from './PassingScreen';
 import SummaryScreen from './SummaryScreen';
@@ -25,10 +25,6 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
     ),
   );
 
-  const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
-    entityId: context.entityId,
-    eventId: context.eventId,
-  });
   const { saveAutoCompletion } = AutoCompletionModel.useAutoCompletionStateManager();
 
   const onTimerFinish = useCallback(() => {
@@ -60,23 +56,6 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
   useEntityTimer({
     onFinish: onTimerFinish,
   });
-
-  useEffect(() => {
-    if (!autoCompletionState) {
-      return;
-    }
-
-    if (
-      autoCompletionState.activityIdsToSubmit.length ===
-      autoCompletionState.successfullySubmittedActivityIds.length
-    ) {
-      return;
-    }
-
-    if (openTimesUpModal) {
-      openTimesUpModal();
-    }
-  }, [autoCompletionState, openTimesUpModal]);
 
   const items = activityProgress?.items ?? [];
 

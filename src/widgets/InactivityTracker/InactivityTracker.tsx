@@ -1,7 +1,9 @@
 import { PropsWithChildren, useEffect } from 'react';
 
-import { useIdleTimer, events } from '~/features/IdleTimer';
+import { useIdleTimer } from './lib/useIdleTimer';
+
 import { useLogout } from '~/features/Logout';
+import { events } from '~/shared/constants';
 
 export type InactivityTrackerProps = PropsWithChildren<unknown>;
 
@@ -9,26 +11,25 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   const { logout } = useLogout();
 
   const IdleTimer = useIdleTimer({
-    time: {
-      hours: 0,
-      minutes: 15,
-    },
     onFinish: logout,
+    events,
+    timerName: 'InactivityTracker',
   });
 
   useEffect(() => {
-    const listener = () => IdleTimer.start('InactivityTracker');
-
-    events.forEach((item) => {
-      window.addEventListener(item, listener);
+    const listener = IdleTimer.createListener({
+      time: { hours: 0, minutes: 15 },
     });
 
+    IdleTimer.start(listener);
+
     return () => {
-      events.forEach((item) => {
-        window.removeEventListener(item, listener);
-      });
+      IdleTimer.stop(listener);
     };
-  }, [IdleTimer]);
+
+    // Should only run once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return children as JSX.Element;
 };
