@@ -3,7 +3,7 @@ import { PropsWithChildren, useEffect } from 'react';
 import { useIdleTimer } from './lib/useIdleTimer';
 
 import { useLogout } from '~/features/Logout';
-import { events } from '~/shared/constants';
+import { interactionEvents } from '~/shared/constants';
 
 export type InactivityTrackerProps = PropsWithChildren<unknown>;
 
@@ -12,7 +12,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
 
   const IdleTimer = useIdleTimer({
     onFinish: logout,
-    events,
+    events: interactionEvents,
     timerName: 'InactivityTracker',
   });
 

@@ -1,7 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo } from 'react';
 
-import { AutoCompletionModel } from '../../../features/AutoCompletion';
-import { events } from '../../../shared/constants';
 import { validateBeforeMoveForward } from '../model';
 import { useAutoForward, useSurveyState } from '../model/hooks';
 
@@ -9,6 +7,7 @@ import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } fr
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
+import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
   SurveyContext,
   SurveyLayout,
@@ -18,6 +17,7 @@ import {
   useSubmitAnswersMutations,
   useSummaryData,
 } from '~/features/PassSurvey';
+import { interactionEvents } from '~/shared/constants';
 import { MuiModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation, useModal, usePrevious } from '~/shared/utils';
@@ -295,7 +295,7 @@ const PassingScreen = (props: Props) => {
         props.onTimerFinish();
       }
     },
-    events,
+    events: interactionEvents,
     timerName: 'idleTimer',
   });
 
