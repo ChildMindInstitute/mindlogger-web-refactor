@@ -2,6 +2,7 @@ import { useCallback, useContext } from 'react';
 
 import { ActivityMetaData } from './ActivityMetaData';
 
+import { ActivityPipelineType } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { StartSurveyButton, SurveyContext, SurveyLayout } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
@@ -20,6 +21,8 @@ const WelcomeScreen = () => {
   const { startActivity, startFlow } = appletModel.hooks.useEntityStart();
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
+
+  const isFlow = !!context.flow;
 
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
@@ -50,6 +53,19 @@ const WelcomeScreen = () => {
     startActivity,
     startFlow,
   ]);
+
+  const calculateActivityOrder = (): number | null => {
+    if (!isFlow) {
+      return null;
+    }
+
+    if (groupProgress?.type === ActivityPipelineType.Flow) {
+      return groupProgress.pipelineActivityOrder + 1;
+    }
+
+    // If we dont have group progress yet, we assume that this is the first activity
+    return 1;
+  };
 
   return (
     <SurveyLayout
@@ -88,8 +104,9 @@ const WelcomeScreen = () => {
           sx={{ marginTop: '24px' }}
         >
           <ActivityMetaData
+            isFlow={isFlow}
             activityLength={context.activity.items.length}
-            groupInProgress={groupProgress}
+            activityOrderInFlow={calculateActivityOrder()}
           />
         </Text>
         <Text
