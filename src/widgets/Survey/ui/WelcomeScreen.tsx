@@ -69,11 +69,6 @@ const WelcomeScreen = () => {
     return 1;
   };
 
-  //   {activityName} is a Timed Activity.
-
-  // You will have {minutes} minutes {seconds} seconds to complete it.
-  // Your work will be auto-submitted when time runs out.
-
   return (
     <SurveyLayout
       progress={0}
