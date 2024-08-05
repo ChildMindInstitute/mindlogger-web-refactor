@@ -24,6 +24,8 @@ const WelcomeScreen = () => {
 
   const isFlow = !!context.flow;
 
+  const isTimedActivity = !!context.event?.timers?.timer;
+
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
     eventId: context.eventId,
@@ -67,6 +69,11 @@ const WelcomeScreen = () => {
     return 1;
   };
 
+  //   {activityName} is a Timed Activity.
+
+  // You will have {minutes} minutes {seconds} seconds to complete it.
+  // Your work will be auto-submitted when time runs out.
+
   return (
     <SurveyLayout
       progress={0}
@@ -76,7 +83,7 @@ const WelcomeScreen = () => {
         <StartSurveyButton
           width={greaterThanSM ? '375px' : '335px'}
           onClick={startAssessment}
-          text={t('start')}
+          text={isTimedActivity ? t('startTimedActivity') : t('start')}
         />
       }
     >
@@ -109,16 +116,23 @@ const WelcomeScreen = () => {
             activityOrderInFlow={calculateActivityOrder()}
           />
         </Text>
-        <Text
-          variant="body1"
-          fontSize="18px"
-          fontWeight="700"
-          color={Theme.colors.light.onSurface}
-          margin="16px 0px"
-          testid="flow-welcome-screen-title"
-        >
-          {context.activity.name}
-        </Text>
+        <Box display="flex" alignItems="center" gap="6px">
+          <Text
+            variant="body1"
+            fontSize="18px"
+            fontWeight="700"
+            color={Theme.colors.light.onSurface}
+            margin="16px 0px"
+            testid="flow-welcome-screen-title"
+          >
+            {context.activity.name}
+          </Text>
+          {isTimedActivity && (
+            <Text fontSize="18px" variant="body1">
+              {t('timedActivityTitle', { activityName: context.activity.name })}
+            </Text>
+          )}
+        </Box>
 
         <Text
           variant="body1"
@@ -130,6 +144,20 @@ const WelcomeScreen = () => {
         >
           {context.activity.description}
         </Text>
+
+        {isTimedActivity && (
+          <Box textAlign="center" marginTop="16px">
+            <Text variant="body1" fontSize="18px">
+              {t('youWillHaveToCompleteIt', {
+                hours: context.event.timers.timer?.hours,
+                minutes: context.event.timers.timer?.minutes,
+              })}
+            </Text>
+            <Text variant="body1" fontSize="18px">
+              {t('yourWorkWillBeSubmitted')}
+            </Text>
+          </Box>
+        )}
       </Box>
     </SurveyLayout>
   );
