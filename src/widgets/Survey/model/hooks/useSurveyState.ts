@@ -1,16 +1,17 @@
 import { useMemo } from 'react';
 
 import { appletModel } from '~/entities/applet';
+import { PassSurveyModel } from '~/features/PassSurvey';
 
 export const useSurveyState = (activityProgress: appletModel.ActivityProgress) => {
   const items = useMemo(() => activityProgress?.items ?? [], [activityProgress.items]);
 
   const visibleItems = items.filter((x) => !x.isHidden);
 
-  const processedItems = appletModel.conditionalLogicBuilder.process(visibleItems);
+  const processedItems = PassSurveyModel.conditionalLogicBuilder.process(visibleItems);
 
   const conditionallyHiddenItemIds =
-    appletModel.conditionalLogicBuilder.getConditionallyHiddenItemIds();
+    PassSurveyModel.conditionalLogicBuilder.getConditionallyHiddenItemIds();
 
   const step = activityProgress?.step ?? 0;
 
