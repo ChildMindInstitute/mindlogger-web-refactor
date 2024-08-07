@@ -37,7 +37,7 @@ export const AutoCompletionScreen = () => {
       completionState.successfullySubmittedActivityIds.length;
 
     if (!canBeClosed) {
-      return addWarningBanner(t('answerProcessingScreen.processInProgress'));
+      return addWarningBanner(t('autoCompletion.processInProgress'));
     }
 
     removeAutoCompletion({
