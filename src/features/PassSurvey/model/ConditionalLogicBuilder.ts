@@ -7,22 +7,32 @@ type Item = appletModel.ItemRecord;
 
 export type ItemMapByName = Record<string, Item>;
 
-class ConditionalLogicBuilder {
+type ProcessResult = {
+  visibleItems: Item[];
+  hiddenItemIds: Set<string>;
+};
+
+interface IConditionalLogicFilter {
+  filter: (items: Item[]) => ProcessResult;
+}
+
+class ConditionalLogicFilter implements IConditionalLogicFilter {
   private hiddenOrSkippedItemNames: Set<string> = new Set();
   private hiddenOrSkippedItemIds: Set<string> = new Set();
 
-  public process(items: Item[]): Item[] {
-    return items.filter((item, index, array) => {
+  public filter(items: Item[]): ProcessResult {
+    const visibleItems = items.filter((item, index, array) => {
       const isItemVisible = this.conditionalLogicFilter(item, index, array);
 
       this.handleItemVisibility(item, isItemVisible);
 
       return isItemVisible;
     });
-  }
 
-  public getConditionallyHiddenItemIds() {
-    return this.hiddenOrSkippedItemIds;
+    return {
+      visibleItems,
+      hiddenItemIds: this.hiddenOrSkippedItemIds,
+    };
   }
 
   private handleItemVisibility(item: Item, isVisible: boolean) {
@@ -97,4 +107,4 @@ class ConditionalLogicBuilder {
   }
 }
 
-export const conditionalLogicBuilder = new ConditionalLogicBuilder();
+export const conditionalLogicFilter = new ConditionalLogicFilter();
