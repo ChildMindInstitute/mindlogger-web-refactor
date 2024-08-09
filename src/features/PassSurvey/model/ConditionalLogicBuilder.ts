@@ -2,6 +2,7 @@ import { ConditionalLogicValidator } from './ConditionalLogicValidator';
 
 import { appletModel } from '~/entities/applet/';
 import { Condition } from '~/shared/api';
+import { IFilter } from '~/shared/utils';
 
 type Item = appletModel.ItemRecord;
 
@@ -12,11 +13,7 @@ type ProcessResult = {
   hiddenItemIds: Set<string>;
 };
 
-interface IConditionalLogicFilter {
-  filter: (items: Item[]) => ProcessResult;
-}
-
-class ConditionalLogicFilter implements IConditionalLogicFilter {
+class ConditionalLogicFilter implements IFilter<Item, ProcessResult> {
   private hiddenOrSkippedItemNames: Set<string> = new Set();
   private hiddenOrSkippedItemIds: Set<string> = new Set();
 

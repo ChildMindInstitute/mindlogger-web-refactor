@@ -5,3 +5,4 @@ export * from './multilang';
 export * from './dateTime';
 export * from './valueLabel';
 export * from './common';
+export * from './filter';
