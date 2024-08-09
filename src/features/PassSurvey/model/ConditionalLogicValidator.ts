@@ -79,32 +79,74 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   }
 
   private validateEqual(rule: EqualCondition, item: ItemRecord): boolean {
-    return rule.payload.value === Number(item.answer[0]);
+    switch (item.responseType) {
+      case 'slider':
+      case 'numberSelect':
+        return rule.payload.value === Number(item.answer[0]);
+
+      default:
+        return true;
+    }
   }
 
   private validateNotEqual(rule: NotEqualCondition, item: ItemRecord): boolean {
-    return rule.payload.value !== Number(item.answer[0]);
+    switch (item.responseType) {
+      case 'slider':
+      case 'numberSelect':
+        return rule.payload.value !== Number(item.answer[0]);
+
+      default:
+        return true;
+    }
   }
 
   private validateGreaterThan(rule: GreaterThanCondition, item: ItemRecord): boolean {
-    return rule.payload.value < Number(item.answer[0]);
+    switch (item.responseType) {
+      case 'slider':
+      case 'numberSelect':
+        return rule.payload.value < Number(item.answer[0]);
+
+      default:
+        return true;
+    }
   }
 
   private validateLessThan(rule: LessThanCondition, item: ItemRecord): boolean {
-    return rule.payload.value > Number(item.answer[0]);
+    switch (item.responseType) {
+      case 'slider':
+      case 'numberSelect':
+        return rule.payload.value > Number(item.answer[0]);
+
+      default:
+        return true;
+    }
   }
 
   private validateBetween(rule: BetweenCondition, item: ItemRecord): boolean {
-    return (
-      Number(item.answer[0]) > rule.payload.minValue &&
-      Number(item.answer[0]) < rule.payload.maxValue
-    );
+    switch (item.responseType) {
+      case 'slider':
+      case 'numberSelect':
+        return (
+          Number(item.answer[0]) > rule.payload.minValue &&
+          Number(item.answer[0]) < rule.payload.maxValue
+        );
+
+      default:
+        return true;
+    }
   }
 
   private validateOutsideOf(rule: OutsideOfCondition, item: ItemRecord): boolean {
-    return (
-      Number(item.answer[0]) < rule.payload.minValue ||
-      Number(item.answer[0]) > rule.payload.maxValue
-    );
+    switch (item.responseType) {
+      case 'slider':
+      case 'numberSelect':
+        return (
+          Number(item.answer[0]) < rule.payload.minValue ||
+          Number(item.answer[0]) > rule.payload.maxValue
+        );
+
+      default:
+        return true;
+    }
   }
 }
