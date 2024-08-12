@@ -69,7 +69,7 @@ export type GreaterThanCondition = {
   itemName: string;
   type: 'GREATER_THAN';
   payload: {
-    value: number;
+    value: number | string;
   };
 };
 
@@ -77,7 +77,7 @@ export type LessThanCondition = {
   itemName: string;
   type: 'LESS_THAN';
   payload: {
-    value: number;
+    value: number | string;
   };
 };
 
@@ -85,7 +85,7 @@ export type EqualCondition = {
   itemName: string;
   type: 'EQUAL';
   payload: {
-    value: number;
+    value: number | string;
   };
 };
 
@@ -93,7 +93,7 @@ export type NotEqualCondition = {
   itemName: string;
   type: 'NOT_EQUAL';
   payload: {
-    value: number;
+    value: number | string;
   };
 };
 
@@ -101,8 +101,8 @@ export type BetweenCondition = {
   itemName: string;
   type: 'BETWEEN';
   payload: {
-    minValue: number;
-    maxValue: number;
+    minValue: number | string;
+    maxValue: number | string;
   };
 };
 
@@ -110,7 +110,7 @@ export type OutsideOfCondition = {
   itemName: string;
   type: 'OUTSIDE_OF';
   payload: {
-    minValue: number;
-    maxValue: number;
+    minValue: number | string;
+    maxValue: number | string;
   };
 };
