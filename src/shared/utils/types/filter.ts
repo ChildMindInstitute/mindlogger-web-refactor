@@ -1,3 +1,3 @@
-export interface IFilter<ItemProp, Result> {
-  filter: (items: ItemProp[]) => Result;
+export interface IFilter<TItem, TResult = TItem[]> {
+  filter: (items: TItem[]) => TResult;
 }
