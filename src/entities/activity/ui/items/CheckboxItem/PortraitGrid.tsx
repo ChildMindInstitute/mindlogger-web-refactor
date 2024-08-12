@@ -20,7 +20,12 @@ export const PortraitGrid = (props: Props) => {
 
   return (
     <RadioGroup name={`${itemId}-radio portait-mode`} sx={{ display: 'block' }}>
-      <Box display="grid" gridTemplateColumns="repeat(auto-fill, 148px)" gap="16px">
+      <Box
+        display="grid"
+        gridTemplateColumns="repeat(auto-fit, 148px)"
+        gap="16px"
+        justifyContent="center"
+      >
         {options.map((option) => {
           const isChecked = values.includes(String(option.value));
           const isNoneAbove = option.isNoneAbove;
