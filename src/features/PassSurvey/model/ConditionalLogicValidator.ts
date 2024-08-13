@@ -1,6 +1,7 @@
-import { ItemRecord } from '../../../entities/applet/model/types';
+import { isSameDay } from 'date-fns';
 
 import { DefaultAnswer } from '~/entities/activity';
+import { ItemRecord } from '~/entities/applet/model/types';
 import {
   BetweenCondition,
   Condition,
@@ -14,6 +15,7 @@ import {
   NotIncludesOptionCondition,
   OutsideOfCondition,
 } from '~/shared/api';
+import { isFirstDateEarlier, isFirstDateLater } from '~/shared/utils';
 
 interface IConditionalLogicValidator {
   validate: () => boolean;
@@ -82,7 +84,10 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
     switch (item.responseType) {
       case 'slider':
       case 'numberSelect':
-        return rule.payload.value === Number(item.answer[0]);
+        return Number(rule.payload.value) === Number(item.answer[0]);
+
+      case 'date':
+        return isSameDay(new Date(item.answer[0]), new Date(rule.payload.value));
 
       default:
         return true;
@@ -93,7 +98,10 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
     switch (item.responseType) {
       case 'slider':
       case 'numberSelect':
-        return rule.payload.value !== Number(item.answer[0]);
+        return Number(rule.payload.value) !== Number(item.answer[0]);
+
+      case 'date':
+        return !isSameDay(new Date(item.answer[0]), new Date(rule.payload.value));
 
       default:
         return true;
@@ -104,7 +112,10 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
     switch (item.responseType) {
       case 'slider':
       case 'numberSelect':
-        return rule.payload.value < Number(item.answer[0]);
+        return Number(rule.payload.value) < Number(item.answer[0]);
+
+      case 'date':
+        return isFirstDateLater(new Date(item.answer[0]), new Date(rule.payload.value));
 
       default:
         return true;
@@ -115,7 +126,10 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
     switch (item.responseType) {
       case 'slider':
       case 'numberSelect':
-        return rule.payload.value > Number(item.answer[0]);
+        return Number(rule.payload.value) > Number(item.answer[0]);
+
+      case 'date':
+        return isFirstDateEarlier(new Date(item.answer[0]), new Date(rule.payload.value));
 
       default:
         return true;
@@ -127,8 +141,14 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
       case 'slider':
       case 'numberSelect':
         return (
-          Number(item.answer[0]) > rule.payload.minValue &&
-          Number(item.answer[0]) < rule.payload.maxValue
+          Number(item.answer[0]) > Number(rule.payload.minValue) &&
+          Number(item.answer[0]) < Number(rule.payload.maxValue)
+        );
+
+      case 'date':
+        return (
+          isFirstDateLater(new Date(item.answer[0]), new Date(rule.payload.minValue)) &&
+          isFirstDateEarlier(new Date(item.answer[0]), new Date(rule.payload.maxValue))
         );
 
       default:
@@ -141,8 +161,14 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
       case 'slider':
       case 'numberSelect':
         return (
-          Number(item.answer[0]) < rule.payload.minValue ||
-          Number(item.answer[0]) > rule.payload.maxValue
+          Number(item.answer[0]) < Number(rule.payload.minValue) ||
+          Number(item.answer[0]) > Number(rule.payload.maxValue)
+        );
+
+      case 'date':
+        return (
+          isFirstDateEarlier(new Date(item.answer[0]), new Date(rule.payload.minValue)) ||
+          isFirstDateLater(new Date(item.answer[0]), new Date(rule.payload.maxValue))
         );
 
       default:
