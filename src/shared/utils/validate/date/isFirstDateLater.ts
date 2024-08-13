@@ -13,8 +13,12 @@ import { compareAsc } from 'date-fns';
  * @returns {boolean} - `true` if the first date is later than the second date, otherwise `false`.
  */
 export const isFirstDateLater = (firstDate: Date, secondDate: Date): boolean => {
-  const dateOnly1 = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate());
-  const dateOnly2 = new Date(secondDate.getFullYear(), secondDate.getMonth(), secondDate.getDate());
+  const startOfDay1 = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate());
+  const startOfDay2 = new Date(
+    secondDate.getFullYear(),
+    secondDate.getMonth(),
+    secondDate.getDate(),
+  );
 
-  return compareAsc(dateOnly1, dateOnly2) === 1;
+  return compareAsc(startOfDay1, startOfDay2) === 1;
 };
