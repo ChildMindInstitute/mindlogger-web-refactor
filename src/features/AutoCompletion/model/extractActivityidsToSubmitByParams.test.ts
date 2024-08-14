@@ -89,4 +89,30 @@ describe('extractActivityIdsToSubmitByParams', () => {
 
     expect(result).toEqual(['activity3']);
   });
+
+  it('should return an array with the current activity id and the last activity id if isInterruptedActivityLast is false', () => {
+    const params = {
+      isFlow: true,
+      interruptedActivityId: 'activity2',
+      flowActivityIds: ['activity1', 'activity2', 'activity3'],
+      interruptedActivityProgress: mockActivityProgress,
+    };
+
+    const result = extractActivityIdsToSubmitByParams(params);
+
+    expect(result).toEqual(['activity2', 'activity3']);
+  });
+
+  it('should return an array with the last activity id if the interrupted activity progress is empty', () => {
+    const params = {
+      isFlow: true,
+      interruptedActivityId: 'activity2',
+      flowActivityIds: ['activity1', 'activity2', 'activity3'],
+      interruptedActivityProgress: null,
+    };
+
+    const result = extractActivityIdsToSubmitByParams(params);
+
+    expect(result).toEqual(['activity3']);
+  });
 });
