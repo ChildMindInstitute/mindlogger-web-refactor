@@ -35,9 +35,18 @@ export const useEntityTimer = ({ onFinish }: Props) => {
 
     const timerSettings = context.event.timers.timer;
 
-    const entityStartedAt = groupProgress?.startAt ?? null;
+    if (!groupProgress || !timerSettings || isSummaryScreenOpen) {
+      return;
+    }
 
-    if (!groupProgress || !entityStartedAt || !timerSettings || isSummaryScreenOpen) {
+    const entityStartedAt = groupProgress.startAt;
+    const entityEndedAt = groupProgress.endAt;
+
+    if (!entityStartedAt) {
+      return;
+    }
+
+    if (entityEndedAt) {
       return;
     }
 
