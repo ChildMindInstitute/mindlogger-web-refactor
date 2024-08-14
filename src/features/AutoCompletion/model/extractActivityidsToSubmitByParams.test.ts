@@ -48,4 +48,16 @@ describe('extractActivityIdsToSubmitByParams', () => {
 
     expect(result).toEqual(['activity3']);
   });
+
+  it('should return an array with the current activity id and the last activity id if isInterruptedActivityLast is false', () => {
+    const params = {
+      isFlow: true,
+      currentActivityId: 'activity2',
+      flowActivityIds: ['activity1', 'activity2', 'activity3'],
+    };
+
+    const result = extractActivityIdsToSubmitByParams(params);
+
+    expect(result).toEqual(['activity2', 'activity3']);
+  });
 });

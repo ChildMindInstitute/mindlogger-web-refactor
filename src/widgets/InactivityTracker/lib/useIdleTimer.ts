@@ -5,43 +5,25 @@ import useTimer from '~/shared/utils/useTimer';
 
 type Props = {
   timerName?: string;
-  onFinish: () => void;
   events: string[];
 };
 
-type CreateListenerProps = {
-  time: HourMinute;
-};
-
 export const useIdleTimer = (props: Props) => {
-  const { resetTimer, setTimer } = useTimer();
-
-  const onTimerExpire = useCallback(() => {
-    // Listener clean up. Removes the existing event listener from the window
-    props.events.forEach((eventName) => {
-      window.removeEventListener(eventName, resetTimer);
-    });
-
-    // Execute onComplete function
-    if (props.onFinish) {
-      props.onFinish();
-    }
-  }, [props, resetTimer]);
+  const { setTimer, resetTimer } = useTimer();
 
   const createListener = useCallback(
-    (input: CreateListenerProps) => {
+    (time: HourMinute, onFinish: () => void) => {
       return () => {
-        const duration: number =
-          getMsFromHours(input.time.hours) + getMsFromMinutes(input.time.minutes);
+        const duration: number = getMsFromHours(time.hours) + getMsFromMinutes(time.minutes);
 
         setTimer({
           time: duration,
-          onComplete: onTimerExpire,
           timerName: props.timerName,
+          onComplete: onFinish,
         });
       };
     },
-    [props.timerName, setTimer, onTimerExpire],
+    [props.timerName, setTimer],
   );
 
   const start = useCallback(
@@ -59,11 +41,13 @@ export const useIdleTimer = (props: Props) => {
     (listener: () => void) => {
       console.info(`[${props.timerName}] Idle timer has been removed`);
 
+      resetTimer();
+
       props.events.forEach((eventName) => {
         window.removeEventListener(eventName, listener);
       });
     },
-    [props.events, props.timerName],
+    [props.events, props.timerName, resetTimer],
   );
 
   return {
