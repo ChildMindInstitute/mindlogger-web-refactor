@@ -30,8 +30,9 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
   const onTimerFinish = useCallback(() => {
     const activitiesToSubmit: string[] = AutoCompletionModel.extractActivityIdsToSubmitByParams({
       isFlow: !!context.flow,
-      currentActivityId: context.activityId,
+      interruptedActivityId: context.activityId,
       flowActivityIds: context.flow?.activityIds ?? null,
+      interruptedActivityProgress: activityProgress ?? null,
     });
 
     saveAutoCompletion({
@@ -45,6 +46,7 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
 
     return openTimesUpModal();
   }, [
+    activityProgress,
     context.activityId,
     context.entityId,
     context.eventId,
