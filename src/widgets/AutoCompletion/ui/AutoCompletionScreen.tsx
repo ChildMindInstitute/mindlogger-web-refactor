@@ -23,6 +23,8 @@ export const AutoCompletionScreen = () => {
 
   const { entityCompleted } = appletModel.hooks.useGroupProgressStateManager();
 
+  const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
+
   const { removeAutoCompletion } = AutoCompletionModel.useAutoCompletionStateManager();
 
   const { completionState, activityName } = useAutoCompletion();
@@ -50,6 +52,11 @@ export const AutoCompletionScreen = () => {
       eventId: context.eventId,
     });
 
+    removeActivityProgress({
+      activityId: context.activityId,
+      eventId: context.eventId,
+    });
+
     if (context.publicAppletKey) {
       return navigator.navigate(ROUTES.publicJoin.navigateTo(context.publicAppletKey), {
         replace: true,
@@ -62,12 +69,14 @@ export const AutoCompletionScreen = () => {
   }, [
     addWarningBanner,
     completionState,
+    context.activityId,
     context.appletId,
     context.entityId,
     context.eventId,
     context.publicAppletKey,
     entityCompleted,
     navigator,
+    removeActivityProgress,
     removeAutoCompletion,
     t,
   ]);

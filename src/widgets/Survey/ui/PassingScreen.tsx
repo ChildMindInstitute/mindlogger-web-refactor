@@ -290,11 +290,6 @@ const PassingScreen = (props: Props) => {
   });
 
   const IdleTimer = useIdleTimer({
-    onFinish: () => {
-      if (props.onTimerFinish) {
-        props.onTimerFinish();
-      }
-    },
     events: interactionEvents,
     timerName: 'idleTimer',
   });
@@ -312,16 +307,14 @@ const PassingScreen = (props: Props) => {
       return;
     }
 
-    const listener = IdleTimer.createListener({
-      time: idleTimer,
-    });
+    const listener = IdleTimer.createListener(idleTimer, props.onTimerFinish);
 
     IdleTimer.start(listener);
 
     return () => {
       IdleTimer.stop(listener);
     };
-  }, [IdleTimer, autoCompletionState, context?.event?.timers?.idleTimer]);
+  }, [IdleTimer, autoCompletionState, context.event?.timers?.idleTimer, props.onTimerFinish]);
 
   return (
     <>
