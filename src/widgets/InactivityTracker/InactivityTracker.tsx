@@ -11,15 +11,14 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
   const { logout } = useLogout();
 
   const IdleTimer = useIdleTimer({
-    onFinish: logout,
     events: interactionEvents,
     timerName: 'InactivityTracker',
   });
 
   useEffect(() => {
-    const listener = IdleTimer.createListener({
-      time: { hours: 0, minutes: 15 },
-    });
+    const time = { hours: 0, minutes: 15 };
+
+    const listener = IdleTimer.createListener(time, logout);
 
     IdleTimer.start(listener);
 
