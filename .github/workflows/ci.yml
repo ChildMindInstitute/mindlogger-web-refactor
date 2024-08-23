@@ -27,9 +27,9 @@ jobs:
 
       - uses: wearerequired/lint-action@v2
         with:
-          eslint: 'eslint .'
+          eslint: true
           prettier: true
-          prettier_extensions: mjs,js,jsx,mts,ts,tsx
+          prettier_extensions: js,jsx,ts,tsx
           continue_on_error: false
   tests:
     runs-on: ubuntu-latest
