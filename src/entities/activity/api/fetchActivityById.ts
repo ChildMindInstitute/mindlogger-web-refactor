@@ -15,8 +15,9 @@ export const fetchActivityById = async ({ activityId, isPublic }: Props): Promis
 
     activityDTO = response.data.result;
   } catch (error) {
-    console.error(error);
-    throw new Error(`[fetchActivityById.ts] Error while fetching activity by ID: ${activityId}`);
+    throw new Error(
+      `[fetchActivityById.ts] Error while fetching activity by ID: ${activityId}. Error: ${error}`,
+    );
   }
 
   return activityDTO;

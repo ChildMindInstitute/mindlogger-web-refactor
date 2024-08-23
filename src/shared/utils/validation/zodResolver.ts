@@ -66,6 +66,7 @@ const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
         schemaOptions,
       );
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       options.shouldUseNativeValidation && validateFieldsNatively({}, options);
 
       return {

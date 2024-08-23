@@ -93,7 +93,7 @@ export const useAutoCompletion = () => {
   ]);
 
   useOnceEffect(() => {
-    startEntityCompletion();
+    void startEntityCompletion();
   });
 
   return {

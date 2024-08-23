@@ -1,5 +1,5 @@
 import { canItemHaveAnswer } from '../lib';
-import { AnswerAlerts } from '../lib/types';
+import { AnswerAlert, AnswerAlerts } from '../lib/types';
 
 import {
   CheckboxItem,
@@ -97,12 +97,11 @@ class AlertsExtractor {
     stackedRadioItem.responseValues.dataMatrix.forEach((row, rowIndex) => {
       row.options.forEach((option) => {
         stackedRadioAnswer.forEach((itemAnswer, answerIndex) => {
-          if (rowIndex === answerIndex && itemAnswer === option.optionId) {
-            option.alert &&
-              alerts.push({
-                activityItemId: stackedRadioItem.id,
-                message: option.alert,
-              });
+          if (rowIndex === answerIndex && itemAnswer === option.optionId && option.alert) {
+            alerts.push({
+              activityItemId: stackedRadioItem.id,
+              message: option.alert,
+            });
           }
         });
       });
@@ -207,8 +206,7 @@ class AlertsExtractor {
 
         return null;
       })
-      .filter((x) => x !== null)
-      .map((x) => x!);
+      .filter((x): x is AnswerAlert => x !== null);
 
     return alerts;
   }
@@ -216,7 +214,8 @@ class AlertsExtractor {
   public extractForSummary(items: appletModel.ItemRecord[]): AnswerAlerts {
     try {
       return this.extractInternal(items);
-    } catch (error) {
+    } catch (e) {
+      console.error('[Error occurred]', e);
       return [
         {
           message: '[Error occurred]',
