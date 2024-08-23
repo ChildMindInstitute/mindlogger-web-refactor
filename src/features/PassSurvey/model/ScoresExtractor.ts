@@ -49,6 +49,7 @@ class ScoresExtractor {
           result.push(score);
         }
       } catch (error) {
+        console.error('[ScoresExtractor:extract]', error);
         result.push({
           name: '[Error occurred]',
           value: 0,

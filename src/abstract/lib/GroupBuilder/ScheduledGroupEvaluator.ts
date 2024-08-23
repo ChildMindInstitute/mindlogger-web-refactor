@@ -45,7 +45,9 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
       }
 
       if (!isSpreadToNextDay) {
-        !isCompletedToday && result.push(eventEntity);
+        if (!isCompletedToday) {
+          result.push(eventEntity);
+        }
         continue;
       }
 
@@ -60,7 +62,9 @@ export class ScheduledGroupEvaluator implements IEvaluator<EventEntity> {
         (periodicity === PeriodicityType.Weekdays && isMonday);
 
       if (doSimpleSpreadCheck) {
-        !isCompletedToday && result.push(eventEntity);
+        if (!isCompletedToday) {
+          result.push(eventEntity);
+        }
         continue;
       }
 
