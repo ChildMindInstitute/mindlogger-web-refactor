@@ -25,11 +25,8 @@ jobs:
 
       - run: yarn install --frozen-lockfile
 
-      - uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          prettier: true
-          continue_on_error: false
+      - name: Linting
+        run: yarn lint
   tests:
     runs-on: ubuntu-latest
     steps:
