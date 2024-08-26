@@ -1,16 +1,26 @@
+import { isSameDay } from 'date-fns';
+
+import { isFirstDateEarlier, isFirstDateLater } from '../../../shared/utils';
+
 import { ItemRecord } from '~/entities/applet/model/types';
 import {
   BetweenCondition,
+  BetweenDatesCondition,
   Condition,
   EqualCondition,
+  EqualToDateCondition,
   EqualToOptionCondition,
   GreaterThanCondition,
+  GreaterThanDateCondition,
   IncludesOptionCondition,
   LessThanCondition,
+  LessThanDateCondition,
   NotEqualCondition,
+  NotEqualToDateCondition,
   NotEqualToOptionCondition,
   NotIncludesOptionCondition,
   OutsideOfCondition,
+  OutsideOfDatesCondition,
 } from '~/shared/api';
 
 interface IConditionalLogicValidator {
@@ -54,6 +64,24 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
       case 'OUTSIDE_OF':
         return this.validateOutsideOf(this.rule, this.item);
+
+      case 'GREATER_THAN_DATE':
+        return this.validateGreaterThanDate(this.rule, this.item);
+
+      case 'LESS_THAN_DATE':
+        return this.validateLessThanDate(this.rule, this.item);
+
+      case 'EQUAL_TO_DATE':
+        return this.validateEqualToDate(this.rule, this.item);
+
+      case 'NOT_EQUAL_TO_DATE':
+        return this.validateNotEqualToDate(this.rule, this.item);
+
+      case 'BETWEEN_DATES':
+        return this.validateBetweenDates(this.rule, this.item);
+
+      case 'OUTSIDE_OF_DATES':
+        return this.validateOutsideOfDates(this.rule, this.item);
 
       default:
         return true;
@@ -140,6 +168,60 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
       return (
         Number(item.answer[0]) < rule.payload.minValue &&
         Number(item.answer[0]) > rule.payload.maxValue
+      );
+    }
+
+    return true;
+  }
+
+  private validateGreaterThanDate(rule: GreaterThanDateCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'date') {
+      return isFirstDateEarlier(new Date(rule.payload.date), new Date(item.answer[0]));
+    }
+
+    return true;
+  }
+
+  private validateLessThanDate(rule: LessThanDateCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'date') {
+      return isFirstDateLater(new Date(rule.payload.date), new Date(item.answer[0]));
+    }
+
+    return true;
+  }
+
+  private validateEqualToDate(rule: EqualToDateCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'date') {
+      return isSameDay(new Date(rule.payload.date), new Date(item.answer[0]));
+    }
+
+    return true;
+  }
+
+  private validateNotEqualToDate(rule: NotEqualToDateCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'date') {
+      return !isSameDay(new Date(rule.payload.date), new Date(item.answer[0]));
+    }
+
+    return true;
+  }
+
+  private validateBetweenDates(rule: BetweenDatesCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'date') {
+      return (
+        isFirstDateEarlier(new Date(rule.payload.minDate), new Date(item.answer[0])) &&
+        isFirstDateLater(new Date(rule.payload.maxDate), new Date(item.answer[0]))
+      );
+    }
+
+    return true;
+  }
+
+  private validateOutsideOfDates(rule: OutsideOfDatesCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'date') {
+      return (
+        isFirstDateLater(new Date(rule.payload.minDate), new Date(item.answer[0])) ||
+        isFirstDateEarlier(new Date(rule.payload.maxDate), new Date(item.answer[0]))
       );
     }
 
