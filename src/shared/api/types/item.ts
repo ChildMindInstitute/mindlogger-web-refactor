@@ -1,4 +1,4 @@
-import { ConditionalLogic } from './conditionalLogiс';
+import { ConditionalLogic } from './conditionalLogic';
 
 export type ItemResponseTypeDTO =
   | 'text'

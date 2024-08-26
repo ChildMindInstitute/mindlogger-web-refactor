@@ -1,5 +1,5 @@
 import { BaseSuccessResponse } from './base';
-import { ScoreConditionalLogic } from './conditionalLogiс';
+import { ScoreConditionalLogic } from './conditionalLogic';
 import {
   AudioPlayerItemDTO,
   CheckboxItemDTO,
