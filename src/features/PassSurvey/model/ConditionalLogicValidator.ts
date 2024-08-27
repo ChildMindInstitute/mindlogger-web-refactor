@@ -4,26 +4,32 @@ import { ItemRecord } from '~/entities/applet/model/types';
 import {
   BetweenCondition,
   BetweenDatesCondition,
+  BetweenTimeRangeCondition,
   BetweenTimesCondition,
   Condition,
   EqualCondition,
   EqualToDateCondition,
   EqualToOptionCondition,
   EqualToTimeCondition,
+  EqualToTimeRangeCondition,
   GreaterThanCondition,
   GreaterThanDateCondition,
   GreaterThanTimeCondition,
+  GreaterThanTimeRangeCondition,
   IncludesOptionCondition,
   LessThanCondition,
   LessThanDateCondition,
   LessThanTimeCondition,
+  LessThanTimeRangeCondition,
   NotEqualCondition,
   NotEqualToDateCondition,
   NotEqualToOptionCondition,
   NotEqualToTimeCondition,
+  NotEqualToTimeRangeCondition,
   NotIncludesOptionCondition,
   OutsideOfCondition,
   OutsideOfDatesCondition,
+  OutsideOfTimeRangeCondition,
   OutsideOfTimesCondition,
 } from '~/shared/api';
 import {
@@ -112,6 +118,24 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
       case 'OUTSIDE_OF_TIMES':
         return this.validateOutsideOfTimes(this.rule, this.item);
+
+      case 'GREATER_THAN_TIME_RANGE':
+        return this.validateGreaterThanTimeRange(this.rule, this.item);
+
+      case 'LESS_THAN_TIME_RANGE':
+        return this.validateLessThanTimeRange(this.rule, this.item);
+
+      case 'EQUAL_TO_TIME_RANGE':
+        return this.validateEqualToTimeRange(this.rule, this.item);
+
+      case 'NOT_EQUAL_TO_TIME_RANGE':
+        return this.validateNotEqualToTimeRange(this.rule, this.item);
+
+      case 'BETWEEN_TIME_RANGE':
+        return this.validateBetweenTimeRange(this.rule, this.item);
+
+      case 'OUTSIDE_OF_TIME_RANGE':
+        return this.validateOutsideOfTimeRange(this.rule, this.item);
 
       default:
         return true;
@@ -306,6 +330,78 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
       return (
         isFirstTimeLater(rule.payload.minTime, dateToHourMinute(new Date(item.answer[0]))) ||
         isFirstTimeEarlier(rule.payload.maxTime, dateToHourMinute(new Date(item.answer[0])))
+      );
+    }
+
+    return true;
+  }
+
+  private validateGreaterThanTimeRange(
+    rule: GreaterThanTimeRangeCondition,
+    item: ItemRecord,
+  ): boolean {
+    if (item.responseType === 'timeRange') {
+      const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+
+      return isFirstTimeLater(dateToHourMinute(new Date(timeToValidate)), rule.payload.time);
+    }
+
+    return true;
+  }
+
+  private validateLessThanTimeRange(rule: LessThanTimeRangeCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'timeRange') {
+      const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+
+      return !isFirstTimeEarlier(dateToHourMinute(new Date(timeToValidate)), rule.payload.time);
+    }
+
+    return true;
+  }
+
+  private validateEqualToTimeRange(rule: EqualToTimeRangeCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'timeRange') {
+      const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+
+      return isTimesEqual(rule.payload.time, dateToHourMinute(new Date(timeToValidate)));
+    }
+
+    return true;
+  }
+
+  private validateNotEqualToTimeRange(
+    rule: NotEqualToTimeRangeCondition,
+    item: ItemRecord,
+  ): boolean {
+    if (item.responseType === 'timeRange') {
+      const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+
+      return !isTimesEqual(rule.payload.time, dateToHourMinute(new Date(timeToValidate)));
+    }
+
+    return true;
+  }
+
+  private validateBetweenTimeRange(rule: BetweenTimeRangeCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'timeRange') {
+      const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+
+      return (
+        isFirstTimeEarlier(rule.payload.minTime, dateToHourMinute(new Date(timeToValidate))) &&
+        isFirstTimeLater(rule.payload.maxTime, dateToHourMinute(new Date(timeToValidate)))
+      );
+    }
+
+    return true;
+  }
+
+  private validateOutsideOfTimeRange(rule: OutsideOfTimeRangeCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'timeRange') {
+      const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+
+      return (
+        isFirstTimeLater(rule.payload.minTime, dateToHourMinute(new Date(timeToValidate))) ||
+        isFirstTimeEarlier(rule.payload.maxTime, dateToHourMinute(new Date(timeToValidate)))
       );
     }
 
