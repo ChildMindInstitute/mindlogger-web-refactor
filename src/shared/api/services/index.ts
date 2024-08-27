@@ -8,3 +8,4 @@ export { default as eventsService } from './events.service';
 export { default as subjectService } from './subject.service';
 export { default as answerService } from './answer.service';
 export { default as workspaceService } from './workspace.service';
+export { default as assignmentService } from './assignment.service';

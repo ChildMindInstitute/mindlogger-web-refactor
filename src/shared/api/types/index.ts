@@ -6,3 +6,4 @@ export * from './activity';
 export * from './events';
 export * from './item';
 export * from './conditionalLogic';
+export * from './assignment';

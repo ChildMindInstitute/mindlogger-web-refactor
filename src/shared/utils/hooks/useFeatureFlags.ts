@@ -15,6 +15,7 @@ export const useFeatureFlags = () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     keys.forEach((key) => (features[key] = flags[FeatureFlagsKeys[key]]));
 
+    features.enableActivityAssign = false;
     return features;
   };
 
