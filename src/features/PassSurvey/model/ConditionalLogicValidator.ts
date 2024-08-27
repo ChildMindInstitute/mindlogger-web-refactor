@@ -4,31 +4,37 @@ import { ItemRecord } from '~/entities/applet/model/types';
 import {
   BetweenCondition,
   BetweenDatesCondition,
+  BetweenSliderRowsCondition,
   BetweenTimeRangeCondition,
   BetweenTimesCondition,
   Condition,
   EqualCondition,
   EqualToDateCondition,
   EqualToOptionCondition,
+  EqualToSliderRowsCondition,
   EqualToTimeCondition,
   EqualToTimeRangeCondition,
   GreaterThanCondition,
   GreaterThanDateCondition,
+  GreaterThanSliderRowsCondition,
   GreaterThanTimeCondition,
   GreaterThanTimeRangeCondition,
   IncludesOptionCondition,
   LessThanCondition,
   LessThanDateCondition,
+  LessThanSliderRowsCondition,
   LessThanTimeCondition,
   LessThanTimeRangeCondition,
   NotEqualCondition,
   NotEqualToDateCondition,
   NotEqualToOptionCondition,
+  NotEqualToSliderRowsCondition,
   NotEqualToTimeCondition,
   NotEqualToTimeRangeCondition,
   NotIncludesOptionCondition,
   OutsideOfCondition,
   OutsideOfDatesCondition,
+  OutsideOfSliderRowsCondition,
   OutsideOfTimeRangeCondition,
   OutsideOfTimesCondition,
 } from '~/shared/api';
@@ -137,6 +143,24 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
       case 'OUTSIDE_OF_TIME_RANGE':
         return this.validateOutsideOfTimeRange(this.rule, this.item);
 
+      case 'GREATER_THAN_SLIDER_ROWS':
+        return this.validateGreaterThanSliderRows(this.rule, this.item);
+
+      case 'LESS_THAN_SLIDER_ROWS':
+        return this.validateLessThanSliderRows(this.rule, this.item);
+
+      case 'EQUAL_TO_SLIDER_ROWS':
+        return this.validateEqualToSliderRows(this.rule, this.item);
+
+      case 'NOT_EQUAL_TO_SLIDER_ROWS':
+        return this.validateNotEqualToSliderRows(this.rule, this.item);
+
+      case 'BETWEEN_SLIDER_ROWS':
+        return this.validateBetweenSliderRows(this.rule, this.item);
+
+      case 'OUTSIDE_OF_SLIDER_ROWS':
+        return this.validateOutsideOfSliderRows(this.rule, this.item);
+
       default:
         return true;
     }
@@ -220,7 +244,7 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateOutsideOf(rule: OutsideOfCondition, item: ItemRecord): boolean {
     if (item.responseType === 'slider' || item.responseType === 'numberSelect') {
       return (
-        Number(item.answer[0]) < rule.payload.minValue &&
+        Number(item.answer[0]) < rule.payload.minValue ||
         Number(item.answer[0]) > rule.payload.maxValue
       );
     }
@@ -402,6 +426,69 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
       return (
         isFirstTimeLater(rule.payload.minTime, dateToHourMinute(new Date(timeToValidate))) ||
         isFirstTimeEarlier(rule.payload.maxTime, dateToHourMinute(new Date(timeToValidate)))
+      );
+    }
+
+    return true;
+  }
+
+  private validateGreaterThanSliderRows(
+    rule: GreaterThanSliderRowsCondition,
+    item: ItemRecord,
+  ): boolean {
+    if (item.responseType === 'sliderRows') {
+      return rule.payload.value < Number(item.answer[rule.payload.rowIndex]);
+    }
+
+    return true;
+  }
+
+  private validateLessThanSliderRows(rule: LessThanSliderRowsCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'sliderRows') {
+      return rule.payload.value > Number(item.answer[rule.payload.rowIndex]);
+    }
+
+    return true;
+  }
+
+  private validateEqualToSliderRows(rule: EqualToSliderRowsCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'sliderRows') {
+      return rule.payload.value === Number(item.answer[rule.payload.rowIndex]);
+    }
+
+    return true;
+  }
+
+  private validateNotEqualToSliderRows(
+    rule: NotEqualToSliderRowsCondition,
+    item: ItemRecord,
+  ): boolean {
+    if (item.responseType === 'sliderRows') {
+      return rule.payload.value !== Number(item.answer[rule.payload.rowIndex]);
+    }
+
+    return true;
+  }
+
+  private validateBetweenSliderRows(rule: BetweenSliderRowsCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'sliderRows') {
+      return (
+        Number(item.answer[rule.payload.rowIndex]) > rule.payload.minValue &&
+        Number(item.answer[rule.payload.rowIndex]) < rule.payload.maxValue
+      );
+    }
+
+    return true;
+  }
+
+  private validateOutsideOfSliderRows(
+    rule: OutsideOfSliderRowsCondition,
+    item: ItemRecord,
+  ): boolean {
+    if (item.responseType === 'sliderRows') {
+      return (
+        Number(item.answer[rule.payload.rowIndex]) < rule.payload.minValue ||
+        Number(item.answer[rule.payload.rowIndex]) > rule.payload.maxValue
       );
     }
 
