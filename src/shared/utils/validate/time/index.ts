@@ -1,3 +1,3 @@
-export * from './isEqual';
+export * from './isTimesEqual';
 export * from './isFirstTimeEarlier';
 export * from './isFirstTimeLater';

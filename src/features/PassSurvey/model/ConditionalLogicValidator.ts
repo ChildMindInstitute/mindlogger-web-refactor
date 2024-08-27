@@ -1,27 +1,39 @@
 import { isSameDay } from 'date-fns';
 
-import { isFirstDateEarlier, isFirstDateLater } from '../../../shared/utils';
-
 import { ItemRecord } from '~/entities/applet/model/types';
 import {
   BetweenCondition,
   BetweenDatesCondition,
+  BetweenTimesCondition,
   Condition,
   EqualCondition,
   EqualToDateCondition,
   EqualToOptionCondition,
+  EqualToTimeCondition,
   GreaterThanCondition,
   GreaterThanDateCondition,
+  GreaterThanTimeCondition,
   IncludesOptionCondition,
   LessThanCondition,
   LessThanDateCondition,
+  LessThanTimeCondition,
   NotEqualCondition,
   NotEqualToDateCondition,
   NotEqualToOptionCondition,
+  NotEqualToTimeCondition,
   NotIncludesOptionCondition,
   OutsideOfCondition,
   OutsideOfDatesCondition,
+  OutsideOfTimesCondition,
 } from '~/shared/api';
+import {
+  dateToHourMinute,
+  isFirstDateEarlier,
+  isFirstDateLater,
+  isFirstTimeEarlier,
+  isFirstTimeLater,
+  isTimesEqual,
+} from '~/shared/utils';
 
 interface IConditionalLogicValidator {
   validate: () => boolean;
@@ -82,6 +94,24 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
       case 'OUTSIDE_OF_DATES':
         return this.validateOutsideOfDates(this.rule, this.item);
+
+      case 'GREATER_THAN_TIME':
+        return this.validateGreaterThanTime(this.rule, this.item);
+
+      case 'LESS_THAN_TIME':
+        return this.validateLessThanTime(this.rule, this.item);
+
+      case 'EQUAL_TO_TIME':
+        return this.validateEqualToTime(this.rule, this.item);
+
+      case 'NOT_EQUAL_TO_TIME':
+        return this.validateNotEqualToTime(this.rule, this.item);
+
+      case 'BETWEEN_TIMES':
+        return this.validateBetweenTimes(this.rule, this.item);
+
+      case 'OUTSIDE_OF_TIMES':
+        return this.validateOutsideOfTimes(this.rule, this.item);
 
       default:
         return true;
@@ -222,6 +252,60 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
       return (
         isFirstDateLater(new Date(rule.payload.minDate), new Date(item.answer[0])) ||
         isFirstDateEarlier(new Date(rule.payload.maxDate), new Date(item.answer[0]))
+      );
+    }
+
+    return true;
+  }
+
+  private validateGreaterThanTime(rule: GreaterThanTimeCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'time') {
+      return isFirstTimeLater(dateToHourMinute(new Date(item.answer[0])), rule.payload.time);
+    }
+
+    return true;
+  }
+
+  private validateLessThanTime(rule: LessThanTimeCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'time') {
+      return isFirstTimeEarlier(dateToHourMinute(new Date(item.answer[0])), rule.payload.time);
+    }
+
+    return true;
+  }
+
+  private validateEqualToTime(rule: EqualToTimeCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'time') {
+      return isTimesEqual(rule.payload.time, dateToHourMinute(new Date(item.answer[0])));
+    }
+
+    return true;
+  }
+
+  private validateNotEqualToTime(rule: NotEqualToTimeCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'time') {
+      return !isTimesEqual(rule.payload.time, dateToHourMinute(new Date(item.answer[0])));
+    }
+
+    return true;
+  }
+
+  private validateBetweenTimes(rule: BetweenTimesCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'time') {
+      return (
+        isFirstTimeEarlier(rule.payload.minTime, dateToHourMinute(new Date(item.answer[0]))) &&
+        isFirstTimeLater(rule.payload.maxTime, dateToHourMinute(new Date(item.answer[0])))
+      );
+    }
+
+    return true;
+  }
+
+  private validateOutsideOfTimes(rule: OutsideOfTimesCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'time') {
+      return (
+        isFirstTimeLater(rule.payload.minTime, dateToHourMinute(new Date(item.answer[0]))) ||
+        isFirstTimeEarlier(rule.payload.maxTime, dateToHourMinute(new Date(item.answer[0])))
       );
     }
 

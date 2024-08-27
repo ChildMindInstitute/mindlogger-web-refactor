@@ -19,6 +19,6 @@ import { HourMinute } from '~/shared/utils';
  *
  * console.log(isEqual(time1, time2)); // false
  */
-export const isEqual = (timeA: HourMinute, timeB: HourMinute): boolean => {
+export const isTimesEqual = (timeA: HourMinute, timeB: HourMinute): boolean => {
   return timeA.hours === timeB.hours && timeA.minutes === timeB.minutes;
 };
