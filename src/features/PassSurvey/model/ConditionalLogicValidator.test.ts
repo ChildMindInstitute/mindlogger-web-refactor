@@ -9,6 +9,8 @@ import {
   TimeItem,
   TimeRangeItem,
   SliderRowsItem,
+  SingleSelectionRowsItem,
+  MultiSelectionRowsItem,
 } from '~/entities/activity';
 import {
   EqualToOptionCondition,
@@ -45,6 +47,10 @@ import {
   NotEqualToSliderRowsCondition,
   BetweenSliderRowsCondition,
   OutsideOfSliderRowsCondition,
+  EqualToRowOptionCondition,
+  NotEqualToRowOptionCondition,
+  IncludesRowOptionCondition,
+  NotIncludesRowOptionCondition,
 } from '~/shared/api';
 
 describe('ConditionalLogicValidator', () => {
@@ -2517,6 +2523,134 @@ describe('ConditionalLogicValidator', () => {
       responseType: 'sliderRows',
       answer: [10],
     } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate EQUAL_TO_ROW_OPTION correctly -> the row option is equal', () => {
+    const condition: EqualToRowOptionCondition = {
+      itemName: 'random-item-name',
+      type: 'EQUAL_TO_ROW_OPTION',
+      payload: { rowIndex: 0, optionValue: 'option1' },
+    };
+
+    const item = {
+      responseType: 'singleSelectRows',
+      answer: ['option1'],
+    } as SingleSelectionRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(true);
+  });
+
+  it('should validate EQUAL_TO_ROW_OPTION correctly -> the row option is not equal', () => {
+    const condition: EqualToRowOptionCondition = {
+      itemName: 'random-item-name',
+      type: 'EQUAL_TO_ROW_OPTION',
+      payload: { rowIndex: 0, optionValue: 'option1' },
+    };
+
+    const item = {
+      responseType: 'singleSelectRows',
+      answer: ['option2'],
+    } as SingleSelectionRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate NOT_EQUAL_TO_ROW_OPTION correctly -> the row option is not equal', () => {
+    const condition: NotEqualToRowOptionCondition = {
+      itemName: 'random-item-name',
+      type: 'NOT_EQUAL_TO_ROW_OPTION',
+      payload: { rowIndex: 0, optionValue: 'option1' },
+    };
+
+    const item = {
+      responseType: 'singleSelectRows',
+      answer: ['option2'],
+    } as SingleSelectionRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(true);
+  });
+
+  it('should validate NOT_EQUAL_TO_ROW_OPTION correctly -> the row option is equal', () => {
+    const condition: NotEqualToRowOptionCondition = {
+      itemName: 'random-item-name',
+      type: 'NOT_EQUAL_TO_ROW_OPTION',
+      payload: { rowIndex: 0, optionValue: 'option1' },
+    };
+
+    const item = {
+      responseType: 'singleSelectRows',
+      answer: ['option1'],
+    } as SingleSelectionRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate INCLUDES_ROW_OPTION correctly -> the row option is included', () => {
+    const condition: IncludesRowOptionCondition = {
+      itemName: 'random-item-name',
+      type: 'INCLUDES_ROW_OPTION',
+      payload: { rowIndex: 0, optionValue: 'option1' },
+    };
+
+    const item = {
+      responseType: 'multiSelectRows',
+      answer: [['option1']],
+    } as MultiSelectionRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(true);
+  });
+
+  it('should validate INCLUDES_ROW_OPTION correctly -> the row option is not included', () => {
+    const condition: IncludesRowOptionCondition = {
+      itemName: 'random-item-name',
+      type: 'INCLUDES_ROW_OPTION',
+      payload: { rowIndex: 0, optionValue: 'option1' },
+    };
+
+    const item = {
+      responseType: 'multiSelectRows',
+      answer: [['option2']],
+    } as MultiSelectionRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate NOT_INCLUDES_ROW_OPTION correctly -> the row option is not included', () => {
+    const condition: NotIncludesRowOptionCondition = {
+      itemName: 'random-item-name',
+      type: 'NOT_INCLUDES_ROW_OPTION',
+      payload: { rowIndex: 0, optionValue: 'option1' },
+    };
+
+    const item = {
+      responseType: 'multiSelectRows',
+      answer: [['option2']],
+    } as MultiSelectionRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(true);
+  });
+
+  it('should validate NOT_INCLUDES_ROW_OPTION correctly -> the row option is included', () => {
+    const condition: NotIncludesRowOptionCondition = {
+      itemName: 'random-item-name',
+      type: 'NOT_INCLUDES_ROW_OPTION',
+      payload: { rowIndex: 0, optionValue: 'option1' },
+    };
+
+    const item = {
+      responseType: 'multiSelectRows',
+      answer: [['option1']],
+    } as MultiSelectionRowsItem;
 
     const validator = new ConditionalLogicValidator(item, condition);
     expect(validator.validate()).toBe(false);
