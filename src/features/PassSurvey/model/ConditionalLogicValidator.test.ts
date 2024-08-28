@@ -8,6 +8,7 @@ import {
   SliderItem,
   TimeItem,
   TimeRangeItem,
+  SliderRowsItem,
 } from '~/entities/activity';
 import {
   EqualToOptionCondition,
@@ -38,6 +39,12 @@ import {
   NotEqualToTimeRangeCondition,
   BetweenTimeRangeCondition,
   OutsideOfTimeRangeCondition,
+  GreaterThanSliderRowsCondition,
+  LessThanSliderRowsCondition,
+  EqualToSliderRowsCondition,
+  NotEqualToSliderRowsCondition,
+  BetweenSliderRowsCondition,
+  OutsideOfSliderRowsCondition,
 } from '~/shared/api';
 
 describe('ConditionalLogicValidator', () => {
@@ -2222,6 +2229,294 @@ describe('ConditionalLogicValidator', () => {
         'Wed Aug 28 2024 11:00:00 GMT+0200 (Central European Summer Time)',
       ],
     } as TimeRangeItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate GREATER_THAN_SLIDER_ROWS correctly -> the slider rows are greater', () => {
+    const condition: GreaterThanSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'GREATER_THAN_SLIDER_ROWS',
+      payload: { rowIndex: 0, value: 5 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [6],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(true);
+  });
+
+  it('should validate GREATER_THAN_SLIDER_ROWS correctly -> the slider rows are equal', () => {
+    const condition: GreaterThanSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'GREATER_THAN_SLIDER_ROWS',
+      payload: { rowIndex: 0, value: 5 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [5],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate GREATER_THAN_SLIDER_ROWS correctly -> the slider rows are less', () => {
+    const condition: GreaterThanSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'GREATER_THAN_SLIDER_ROWS',
+      payload: { rowIndex: 0, value: 5 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [4],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate LESS_THAN_SLIDER_ROWS correctly -> the slider rows are less', () => {
+    const condition: LessThanSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'LESS_THAN_SLIDER_ROWS',
+      payload: { rowIndex: 0, value: 5 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [4],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(true);
+  });
+
+  it('should validate LESS_THAN_SLIDER_ROWS correctly -> the slider rows are equal', () => {
+    const condition: LessThanSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'LESS_THAN_SLIDER_ROWS',
+      payload: { rowIndex: 0, value: 5 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [5],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate LESS_THAN_SLIDER_ROWS correctly -> the slider rows are greater', () => {
+    const condition: LessThanSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'LESS_THAN_SLIDER_ROWS',
+      payload: { rowIndex: 0, value: 5 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [6],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate EQUAL_TO_SLIDER_ROWS correctly -> the slider rows are equal', () => {
+    const condition: EqualToSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'EQUAL_TO_SLIDER_ROWS',
+      payload: { rowIndex: 0, value: 5 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [5],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(true);
+  });
+
+  it('should validate EQUAL_TO_SLIDER_ROWS correctly -> the slider rows are not equal', () => {
+    const condition: EqualToSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'EQUAL_TO_SLIDER_ROWS',
+      payload: { rowIndex: 0, value: 5 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [4],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate NOT_EQUAL_TO_SLIDER_ROWS correctly -> the slider rows are not equal', () => {
+    const condition: NotEqualToSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'NOT_EQUAL_TO_SLIDER_ROWS',
+      payload: { rowIndex: 0, value: 5 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [4],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(true);
+  });
+
+  it('should validate NOT_EQUAL_TO_SLIDER_ROWS correctly -> the slider rows are equal', () => {
+    const condition: NotEqualToSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'NOT_EQUAL_TO_SLIDER_ROWS',
+      payload: { rowIndex: 0, value: 5 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [5],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate BETWEEN_SLIDER_ROWS correctly -> the slider rows are between', () => {
+    const condition: BetweenSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'BETWEEN_SLIDER_ROWS',
+      payload: { rowIndex: 0, minValue: 5, maxValue: 10 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [6],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(true);
+  });
+
+  it('should validate BETWEEN_SLIDER_ROWS correctly -> the slider rows are not between', () => {
+    const condition: BetweenSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'BETWEEN_SLIDER_ROWS',
+      payload: { rowIndex: 0, minValue: 5, maxValue: 10 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [4],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate BETWEEN_SLIDER_ROWS correctly -> the slider rows are equal to minValue', () => {
+    const condition: BetweenSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'BETWEEN_SLIDER_ROWS',
+      payload: { rowIndex: 0, minValue: 5, maxValue: 10 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [5],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate BETWEEN_SLIDER_ROWS correctly -> the slider rows are equal to maxValue', () => {
+    const condition: BetweenSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'BETWEEN_SLIDER_ROWS',
+      payload: { rowIndex: 0, minValue: 5, maxValue: 10 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [10],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate OUTSIDE_OF_SLIDER_ROWS correctly -> the slider rows are outside', () => {
+    const condition: OutsideOfSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'OUTSIDE_OF_SLIDER_ROWS',
+      payload: { rowIndex: 0, minValue: 5, maxValue: 10 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [4],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(true);
+  });
+
+  it('should validate OUTSIDE_OF_SLIDER_ROWS correctly -> the slider rows are not outside', () => {
+    const condition: OutsideOfSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'OUTSIDE_OF_SLIDER_ROWS',
+      payload: { rowIndex: 0, minValue: 5, maxValue: 10 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [6],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate OUTSIDE_OF_SLIDER_ROWS correctly -> the slider rows are equal to minValue', () => {
+    const condition: OutsideOfSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'OUTSIDE_OF_SLIDER_ROWS',
+      payload: { rowIndex: 0, minValue: 5, maxValue: 10 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [5],
+    } as SliderRowsItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate OUTSIDE_OF_SLIDER_ROWS correctly -> the slider rows are equal to maxValue', () => {
+    const condition: OutsideOfSliderRowsCondition = {
+      itemName: 'random-item-name',
+      type: 'OUTSIDE_OF_SLIDER_ROWS',
+      payload: { rowIndex: 0, minValue: 5, maxValue: 10 },
+    };
+
+    const item = {
+      responseType: 'sliderRows',
+      answer: [10],
+    } as SliderRowsItem;
 
     const validator = new ConditionalLogicValidator(item, condition);
     expect(validator.validate()).toBe(false);
