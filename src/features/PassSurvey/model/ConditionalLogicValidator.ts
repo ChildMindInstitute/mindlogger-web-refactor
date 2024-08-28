@@ -358,7 +358,10 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
     if (item.responseType === 'time') {
       const time = dateToHourMinute(new Date(item.answer[0]));
 
-      return isFirstTimeEarlier(rule.payload.minTime, time) && isFirstTimeLater(rule.payload.maxTime, time);
+      return (
+        isFirstTimeEarlier(rule.payload.minTime, time) &&
+        isFirstTimeLater(rule.payload.maxTime, time)
+      );
     }
 
     return true;
@@ -368,7 +371,10 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
     if (item.responseType === 'time') {
       const time = dateToHourMinute(new Date(item.answer[0]));
 
-      return isFirstTimeLater(rule.payload.minTime, time) || isFirstTimeEarlier(rule.payload.maxTime, time);
+      return (
+        isFirstTimeLater(rule.payload.minTime, time) ||
+        isFirstTimeEarlier(rule.payload.maxTime, time)
+      );
     }
 
     return true;
