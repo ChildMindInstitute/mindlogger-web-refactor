@@ -11,6 +11,7 @@ import {
   EqualCondition,
   EqualToDateCondition,
   EqualToOptionCondition,
+  EqualToRowOptionCondition,
   EqualToSliderRowsCondition,
   EqualToTimeCondition,
   EqualToTimeRangeCondition,
@@ -28,6 +29,7 @@ import {
   NotEqualCondition,
   NotEqualToDateCondition,
   NotEqualToOptionCondition,
+  NotEqualToRowOptionCondition,
   NotEqualToSliderRowsCondition,
   NotEqualToTimeCondition,
   NotEqualToTimeRangeCondition,
@@ -160,6 +162,12 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
       case 'OUTSIDE_OF_SLIDER_ROWS':
         return this.validateOutsideOfSliderRows(this.rule, this.item);
+
+      case 'EQUAL_TO_ROW_OPTION':
+        return this.validateEqualToRowOption(this.rule, this.item);
+
+      case 'NOT_EQUAL_TO_ROW_OPTION':
+        return this.validateNotEqualToRowOption(this.rule, this.item);
 
       default:
         return true;
@@ -490,6 +498,25 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
         Number(item.answer[rule.payload.rowIndex]) < rule.payload.minValue ||
         Number(item.answer[rule.payload.rowIndex]) > rule.payload.maxValue
       );
+    }
+
+    return true;
+  }
+
+  private validateEqualToRowOption(rule: EqualToRowOptionCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'singleSelectRows') {
+      return rule.payload.optionValue === item.answer[rule.payload.rowIndex];
+    }
+
+    return true;
+  }
+
+  private validateNotEqualToRowOption(
+    rule: NotEqualToRowOptionCondition,
+    item: ItemRecord,
+  ): boolean {
+    if (item.responseType === 'singleSelectRows') {
+      return rule.payload.optionValue !== item.answer[rule.payload.rowIndex];
     }
 
     return true;
