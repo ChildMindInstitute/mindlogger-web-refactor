@@ -52,9 +52,9 @@ export class ListItemsFactory {
     item.image = activity.image;
   }
 
-  private createListItem(eventActivity: EventEntity) {
-    const { entity, event } = eventActivity;
-    const { pipelineType } = eventActivity.entity;
+  private createListItem(eventEntity: EventEntity) {
+    const { entity, event } = eventEntity;
+    const { pipelineType } = eventEntity.entity;
     const isFlow = pipelineType === ActivityPipelineType.Flow;
 
     const item: ActivityListItem = {
@@ -76,17 +76,17 @@ export class ListItemsFactory {
     };
 
     if (isFlow) {
-      this.populateActivityFlowFields(item, eventActivity);
+      this.populateActivityFlowFields(item, eventEntity);
     }
     return item;
   }
 
-  public createAvailableItem(eventActivity: EventEntity): ActivityListItem {
-    const item = this.createListItem(eventActivity);
+  public createAvailableItem(eventEntity: EventEntity): ActivityListItem {
+    const item = this.createListItem(eventEntity);
 
     item.status = ActivityStatus.Available;
 
-    const { event } = eventActivity;
+    const { event } = eventEntity;
 
     if (event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess) {
       const isSpread = this.utility.isSpreadToNextDay(event);
@@ -116,12 +116,12 @@ export class ListItemsFactory {
     return item;
   }
 
-  public createScheduledItem(eventActivity: EventEntity): ActivityListItem {
-    const item = this.createListItem(eventActivity);
+  public createScheduledItem(eventEntity: EventEntity): ActivityListItem {
+    const item = this.createListItem(eventEntity);
 
     item.status = ActivityStatus.Scheduled;
 
-    const { event } = eventActivity;
+    const { event } = eventEntity;
 
     const from = this.utility.getNow();
 
@@ -153,12 +153,12 @@ export class ListItemsFactory {
     return item;
   }
 
-  public createProgressItem(eventActivity: EventEntity): ActivityListItem {
-    const item = this.createListItem(eventActivity);
+  public createProgressItem(eventEntity: EventEntity): ActivityListItem {
+    const item = this.createListItem(eventEntity);
 
     item.status = ActivityStatus.InProgress;
 
-    const { event } = eventActivity;
+    const { event } = eventEntity;
 
     if (event.availability.availabilityType === AvailabilityLabelType.ScheduledAccess) {
       const isSpread = this.utility.isSpreadToNextDay(event);
@@ -181,7 +181,7 @@ export class ListItemsFactory {
     item.isTimerSet = !!event.timers?.timer;
 
     if (item.isTimerSet) {
-      const timeLeft = this.utility.getTimeToComplete(eventActivity);
+      const timeLeft = this.utility.getTimeToComplete(eventEntity);
       item.timeLeftToComplete = timeLeft;
 
       if (timeLeft === null) {

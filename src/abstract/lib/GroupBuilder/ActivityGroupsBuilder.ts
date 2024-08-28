@@ -32,13 +32,13 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     this.utility = new GroupUtility(inputParams);
   }
 
-  public buildInProgress(eventsActivities: Array<EventEntity>): ActivityListGroup {
-    const filtered = eventsActivities.filter((x) => this.utility.isInProgress(x));
+  public buildInProgress(eventEntities: Array<EventEntity>): ActivityListGroup {
+    const filtered = eventEntities.filter((x) => this.utility.isInProgress(x));
 
     const activityItems: Array<ActivityListItem> = [];
 
-    for (const eventActivity of filtered) {
-      const item = this.itemsFactory.createProgressItem(eventActivity);
+    for (const eventEntity of filtered) {
+      const item = this.itemsFactory.createProgressItem(eventEntity);
 
       activityItems.push(item);
     }
@@ -52,13 +52,13 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     return result;
   }
 
-  public buildAvailable(eventsEntities: Array<EventEntity>): ActivityListGroup {
-    const filtered = this.availableEvaluator.evaluate(eventsEntities);
+  public buildAvailable(eventEntities: Array<EventEntity>): ActivityListGroup {
+    const filtered = this.availableEvaluator.evaluate(eventEntities);
 
     const activityItems: Array<ActivityListItem> = [];
 
-    for (const eventActivity of filtered) {
-      const item = this.itemsFactory.createAvailableItem(eventActivity);
+    for (const eventEntity of filtered) {
+      const item = this.itemsFactory.createAvailableItem(eventEntity);
 
       activityItems.push(item);
     }
@@ -72,13 +72,13 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
     return result;
   }
 
-  public buildScheduled(eventsEntities: Array<EventEntity>): ActivityListGroup {
-    const filtered = this.scheduledEvaluator.evaluate(eventsEntities);
+  public buildScheduled(eventEntities: Array<EventEntity>): ActivityListGroup {
+    const filtered = this.scheduledEvaluator.evaluate(eventEntities);
 
     const activityItems: Array<ActivityListItem> = [];
 
-    for (const eventActivity of filtered) {
-      const item = this.itemsFactory.createScheduledItem(eventActivity);
+    for (const eventEntity of filtered) {
+      const item = this.itemsFactory.createScheduledItem(eventEntity);
 
       activityItems.push(item);
     }
