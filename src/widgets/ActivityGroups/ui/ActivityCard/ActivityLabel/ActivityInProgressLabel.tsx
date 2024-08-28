@@ -23,7 +23,7 @@ export const ActivityInProgressLabel = (props: Props) => {
     >
       <ActivityLabelTypography
         text={t('countOfCompletedQuestions', {
-          length: props.activityLength,
+          count: props.activityLength,
           countOfCompletedQuestions: props.countOfCompletedQuestions,
         })}
         color={Theme.colors.light.onSurface}

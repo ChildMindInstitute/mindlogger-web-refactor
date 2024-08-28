@@ -7,7 +7,14 @@ type Props = {
 
 export const ActivityLabelTypography = ({ text, color }: Props) => {
   return (
-    <Text color={color} fontSize="14px" fontWeight="400" lineHeight="20px" letterSpacing="0.1px">
+    <Text
+      color={color}
+      fontSize="14px"
+      fontWeight="400"
+      lineHeight="20px"
+      letterSpacing="0.1px"
+      sx={{ whiteSpace: 'nowrap' }}
+    >
       {text}
     </Text>
   );

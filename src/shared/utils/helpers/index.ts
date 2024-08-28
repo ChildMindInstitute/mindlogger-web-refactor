@@ -6,3 +6,4 @@ export * from './splitList';
 export * from './getInitials';
 export * from './delay';
 export * from './cutString';
+export * from './getSubjectName';

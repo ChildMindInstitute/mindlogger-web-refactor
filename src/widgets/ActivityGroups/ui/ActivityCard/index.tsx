@@ -26,6 +26,7 @@ import {
   MixpanelPayload,
   useOnceLayoutEffect,
 } from '~/shared/utils';
+import { TargetSubjectLabel } from '~/widgets/TargetSubjectLabel';
 
 type Props = {
   activityListItem: ActivityListItem;
@@ -177,15 +178,21 @@ export const ActivityCard = ({ activityListItem }: Props) => {
             />
           )}
 
-          <ActivityLabel
-            isFlow={isFlow && showActivityFlowBudget}
-            activityLength={activityLength ?? 0}
-            isSupportedActivity={isEntitySupported}
-            isActivityInProgress={isInProgress}
-            countOfCompletedQuestions={countOfCompletedQuestions}
-            countOfCompletedActivities={countOfCompletedActivities}
-            numberOfActivitiesInFlow={numberOfActivitiesInFlow}
-          />
+          <Box display="flex" gap="8px" flexWrap="wrap">
+            <ActivityLabel
+              isFlow={isFlow && showActivityFlowBudget}
+              activityLength={activityLength ?? 0}
+              isSupportedActivity={isEntitySupported}
+              isActivityInProgress={isInProgress}
+              countOfCompletedQuestions={countOfCompletedQuestions}
+              countOfCompletedActivities={countOfCompletedActivities}
+              numberOfActivitiesInFlow={numberOfActivitiesInFlow}
+            />
+
+            {!!activityListItem.targetSubject && (
+              <TargetSubjectLabel subject={activityListItem.targetSubject} />
+            )}
+          </Box>
 
           {description && <ActivityCardDescription description={description} isFlow={isFlow} />}
 

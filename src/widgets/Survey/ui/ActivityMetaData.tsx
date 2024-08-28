@@ -11,11 +11,7 @@ type Props = {
 export const ActivityMetaData = ({ activityLength, isFlow, activityOrderInFlow }: Props) => {
   const { t } = useCustomTranslation();
 
-  const isActivitiesMoreThanOne = activityLength > 1;
-
-  const activityLengthLabel = isActivitiesMoreThanOne
-    ? t('question_count_plural', { length: activityLength })
-    : t('question_count_singular', { length: activityLength });
+  const activityLengthLabel = t('questionCount', { count: activityLength });
 
   if (!isFlow && !activityOrderInFlow) {
     return <>{activityLengthLabel}</>;
