@@ -356,10 +356,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
   private validateBetweenTimes(rule: BetweenTimesCondition, item: ItemRecord): boolean {
     if (item.responseType === 'time') {
-      return (
-        isFirstTimeEarlier(rule.payload.minTime, dateToHourMinute(new Date(item.answer[0]))) &&
-        isFirstTimeLater(rule.payload.maxTime, dateToHourMinute(new Date(item.answer[0])))
-      );
+      const time = dateToHourMinute(new Date(item.answer[0]));
+
+      return isFirstTimeEarlier(rule.payload.minTime, time) && isFirstTimeLater(rule.payload.maxTime, time);
     }
 
     return true;
@@ -367,10 +366,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
   private validateOutsideOfTimes(rule: OutsideOfTimesCondition, item: ItemRecord): boolean {
     if (item.responseType === 'time') {
-      return (
-        isFirstTimeLater(rule.payload.minTime, dateToHourMinute(new Date(item.answer[0]))) ||
-        isFirstTimeEarlier(rule.payload.maxTime, dateToHourMinute(new Date(item.answer[0])))
-      );
+      const time = dateToHourMinute(new Date(item.answer[0]));
+
+      return isFirstTimeLater(rule.payload.minTime, time) || isFirstTimeEarlier(rule.payload.maxTime, time);
     }
 
     return true;
