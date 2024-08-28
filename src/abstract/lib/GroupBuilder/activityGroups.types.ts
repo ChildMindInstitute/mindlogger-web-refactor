@@ -1,6 +1,7 @@
 import { ActivityPipelineType } from '~/abstract/lib';
 import { ActivityType } from '~/abstract/lib/GroupBuilder';
 import { ScheduleEvent } from '~/entities/event';
+import { SubjectDTO } from '~/shared/api/types/subject';
 
 export type EntityBase = {
   id: string;
@@ -9,6 +10,7 @@ export type EntityBase = {
   image: string | null;
   isHidden: boolean;
   order: number;
+  autoAssign: boolean;
 };
 
 export type Activity = EntityBase & {
@@ -27,6 +29,8 @@ export type Entity = Activity | ActivityFlow;
 export type EventEntity = {
   entity: Entity;
   event: ScheduleEvent;
+  /** Target subject of assignment if not self-report, else undefined */
+  targetSubject?: SubjectDTO;
 };
 
 export type EntityType = 'regular' | 'flow';

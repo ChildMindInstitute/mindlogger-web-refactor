@@ -57,7 +57,7 @@ export const ActivityGroups = (props: Props) => {
   const {
     isError: isAssignmentsError,
     isLoading: isAssignmentsLoading,
-    data: assignments = [],
+    data: assignments,
   } = useMyAssignmentsQuery(isAssignmentsEnabled ? props.appletId : undefined, {
     select: (data) => data.data.result.assignments,
     enabled: isAssignmentsEnabled,

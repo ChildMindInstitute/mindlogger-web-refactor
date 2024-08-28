@@ -5,7 +5,8 @@ import { AppletBaseDTO, AppletEventsResponse, MyAssignmentsDTO } from '~/shared/
 type AppletDetailsContextProps = {
   applet: AppletBaseDTO;
   events: AppletEventsResponse;
-  assignments: MyAssignmentsDTO['assignments'];
+  /** Activity assignments array - undefined if activity assign is disabled */
+  assignments?: MyAssignmentsDTO['assignments'];
 };
 
 type Public = {

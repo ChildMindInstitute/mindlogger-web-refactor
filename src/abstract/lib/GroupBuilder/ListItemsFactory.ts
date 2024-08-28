@@ -53,7 +53,7 @@ export class ListItemsFactory {
   }
 
   private createListItem(eventEntity: EventEntity) {
-    const { entity, event } = eventEntity;
+    const { entity, event, targetSubject } = eventEntity;
     const { pipelineType } = eventEntity.entity;
     const isFlow = pipelineType === ActivityPipelineType.Flow;
 
@@ -61,6 +61,7 @@ export class ListItemsFactory {
       activityId: isFlow ? '' : entity.id,
       flowId: isFlow ? entity.id : null,
       eventId: event.id,
+      targetSubject,
       name: isFlow ? '' : entity.name,
       description: isFlow ? '' : entity.description,
       type: isFlow ? ActivityType.NotDefined : (entity as Activity).type,

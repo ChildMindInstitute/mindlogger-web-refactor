@@ -4,11 +4,12 @@ import { ActivityBaseDTO, ActivityFlowDTO } from '~/shared/api';
 
 export const mapActivitiesFromDto = (dtos: ActivityBaseDTO[]): Activity[] => {
   return dtos.map((dto) => ({
-    id: dto.id,
+    autoAssign: dto.autoAssign,
     description: dto.description,
+    id: dto.id,
     image: dto.image,
-    name: dto.name,
     isHidden: dto.isHidden,
+    name: dto.name,
     order: dto.order,
     pipelineType: ActivityPipelineType.Regular,
     type: ActivityType.NotDefined,
@@ -18,13 +19,14 @@ export const mapActivitiesFromDto = (dtos: ActivityBaseDTO[]): Activity[] => {
 export const mapActivityFlowsFromDto = (dtos: ActivityFlowDTO[]): ActivityFlow[] => {
   return dtos.map((dto) => ({
     activityIds: dto.activityIds,
+    autoAssign: dto.autoAssign,
     description: dto.description,
     hideBadge: dto.hideBadge,
-    order: dto.order,
     id: dto.id,
-    name: dto.name,
-    isHidden: dto.isHidden,
-    pipelineType: ActivityPipelineType.Flow,
     image: null,
+    isHidden: dto.isHidden,
+    name: dto.name,
+    order: dto.order,
+    pipelineType: ActivityPipelineType.Flow,
   }));
 };

@@ -1,10 +1,12 @@
 import { AvailabilityLabelType } from '~/entities/event';
+import { SubjectDTO } from '~/shared/api/types/subject';
 import { HourMinute } from '~/shared/utils';
 
 export type ActivityListItem = {
   activityId: string;
   flowId: string | null;
   eventId: string;
+  targetSubject?: SubjectDTO;
 
   name: string;
   description: string;
