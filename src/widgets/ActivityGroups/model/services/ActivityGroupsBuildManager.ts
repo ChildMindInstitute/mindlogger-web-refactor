@@ -48,11 +48,9 @@ const createActivityGroupsBuildManager = () => {
 
   const process = (params: ProcessParams): BuildResult => {
     const activities: Activity[] = mapActivitiesFromDto(params.activities);
-
     const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(params.flows);
 
     const eventsResponse = params.events;
-
     const events: ScheduleEvent[] = EventModel.mapEventsFromDto(eventsResponse.events);
 
     const idToEntity = buildIdToEntityMap(activities, activityFlows);
@@ -62,30 +60,29 @@ const createActivityGroupsBuildManager = () => {
       progress: params.entityProgress,
     });
 
-    let entityEvents = events
-      .map<EventEntity>((event) => ({
-        entity: idToEntity[event.entityId],
-        event,
-      }))
-      // @todo - remove after fix on BE
-      .filter((entityEvent) => !!entityEvent.entity);
-
+    let eventEntities: EventEntity[] = [];
     const calculator = EventModel.ScheduledDateCalculator;
 
-    for (const eventActivity of entityEvents) {
-      const date = calculator.calculate(eventActivity.event);
-      eventActivity.event.scheduledAt = date;
+    for (const event of events) {
+      const entity = idToEntity[event.entityId];
+      if (!entity || entity.isHidden) continue;
+
+      event.scheduledAt = calculator.calculate(event);
+      if (!event.scheduledAt) continue;
+
+      const eventEntity: EventEntity = {
+        entity,
+        event,
+      };
+
+      eventEntities.push(eventEntity);
     }
 
-    entityEvents = entityEvents.filter((x) => x.event.scheduledAt);
+    eventEntities = sort(eventEntities);
 
-    entityEvents = entityEvents.filter((x) => !x.entity.isHidden);
-
-    entityEvents = sort(entityEvents);
-
-    const groupAvailable = builder.buildAvailable(entityEvents);
-    const groupInProgress = builder.buildInProgress(entityEvents);
-    const groupScheduled = builder.buildScheduled(entityEvents);
+    const groupAvailable = builder.buildAvailable(eventEntities);
+    const groupInProgress = builder.buildInProgress(eventEntities);
+    const groupScheduled = builder.buildScheduled(eventEntities);
 
     return {
       groups: [groupInProgress, groupAvailable, groupScheduled],
