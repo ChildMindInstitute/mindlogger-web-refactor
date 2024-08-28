@@ -21,6 +21,7 @@ import {
   GreaterThanTimeCondition,
   GreaterThanTimeRangeCondition,
   IncludesOptionCondition,
+  IncludesRowOptionCondition,
   LessThanCondition,
   LessThanDateCondition,
   LessThanSliderRowsCondition,
@@ -34,6 +35,7 @@ import {
   NotEqualToTimeCondition,
   NotEqualToTimeRangeCondition,
   NotIncludesOptionCondition,
+  NotIncludesRowOptionCondition,
   OutsideOfCondition,
   OutsideOfDatesCondition,
   OutsideOfSliderRowsCondition,
@@ -168,6 +170,12 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
       case 'NOT_EQUAL_TO_ROW_OPTION':
         return this.validateNotEqualToRowOption(this.rule, this.item);
+
+      case 'INCLUDES_ROW_OPTION':
+        return this.validateIncludesRowOption(this.rule, this.item);
+
+      case 'NOT_INCLUDES_ROW_OPTION':
+        return this.validateNotIncludesRowOption(this.rule, this.item);
 
       default:
         return true;
@@ -517,6 +525,25 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   ): boolean {
     if (item.responseType === 'singleSelectRows') {
       return rule.payload.optionValue !== item.answer[rule.payload.rowIndex];
+    }
+
+    return true;
+  }
+
+  private validateIncludesRowOption(rule: IncludesRowOptionCondition, item: ItemRecord): boolean {
+    if (item.responseType === 'multiSelectRows') {
+      return item.answer[rule.payload.rowIndex].includes(rule.payload.optionValue);
+    }
+
+    return true;
+  }
+
+  private validateNotIncludesRowOption(
+    rule: NotIncludesRowOptionCondition,
+    item: ItemRecord,
+  ): boolean {
+    if (item.responseType === 'multiSelectRows') {
+      return !item.answer[rule.payload.rowIndex].includes(rule.payload.optionValue);
     }
 
     return true;
