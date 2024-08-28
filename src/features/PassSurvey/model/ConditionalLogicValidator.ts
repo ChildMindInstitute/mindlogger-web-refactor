@@ -387,7 +387,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
 
-      return isFirstTimeLater(dateToHourMinute(new Date(timeToValidate)), rule.payload.time);
+      const time = dateToHourMinute(new Date(timeToValidate));
+
+      return isFirstTimeLater(time, rule.payload.time);
     }
 
     return true;
@@ -397,7 +399,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
 
-      return !isFirstTimeEarlier(dateToHourMinute(new Date(timeToValidate)), rule.payload.time);
+      const time = dateToHourMinute(new Date(timeToValidate));
+
+      return isFirstTimeEarlier(time, rule.payload.time);
     }
 
     return true;
@@ -407,7 +411,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
 
-      return isTimesEqual(rule.payload.time, dateToHourMinute(new Date(timeToValidate)));
+      const time = dateToHourMinute(new Date(timeToValidate));
+
+      return isTimesEqual(rule.payload.time, time);
     }
 
     return true;
@@ -420,7 +426,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
 
-      return !isTimesEqual(rule.payload.time, dateToHourMinute(new Date(timeToValidate)));
+      const time = dateToHourMinute(new Date(timeToValidate));
+
+      return !isTimesEqual(rule.payload.time, time);
     }
 
     return true;
