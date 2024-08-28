@@ -37,6 +37,7 @@ import {
   EqualToTimeRangeCondition,
   NotEqualToTimeRangeCondition,
   BetweenTimeRangeCondition,
+  OutsideOfTimeRangeCondition,
 } from '~/shared/api';
 
 describe('ConditionalLogicValidator', () => {
@@ -2026,6 +2027,190 @@ describe('ConditionalLogicValidator', () => {
       payload: {
         fieldName: 'to',
         minTime: { hours: 10, minutes: 30 },
+        maxTime: { hours: 11, minutes: 0 },
+      },
+    };
+
+    const item = {
+      responseType: 'timeRange',
+      answer: [
+        'Wed Aug 28 2024 10:30:00 GMT+0200 (Central European Summer Time)',
+        'Wed Aug 28 2024 11:00:00 GMT+0200 (Central European Summer Time)',
+      ],
+    } as TimeRangeItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the from time range is outside', () => {
+    const condition: OutsideOfTimeRangeCondition = {
+      itemName: 'random-item-name',
+      type: 'OUTSIDE_OF_TIME_RANGE',
+      payload: {
+        fieldName: 'from',
+        minTime: { hours: 10, minutes: 0 },
+        maxTime: { hours: 11, minutes: 0 },
+      },
+    };
+
+    const item = {
+      responseType: 'timeRange',
+      answer: [
+        'Wed Aug 28 2024 09:30:00 GMT+0200 (Central European Summer Time)',
+        'Wed Aug 28 2024 10:30:00 GMT+0200 (Central European Summer Time)',
+      ],
+    } as TimeRangeItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(true);
+  });
+
+  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the from time range is not outside', () => {
+    const condition: OutsideOfTimeRangeCondition = {
+      itemName: 'random-item-name',
+      type: 'OUTSIDE_OF_TIME_RANGE',
+      payload: {
+        fieldName: 'from',
+        minTime: { hours: 10, minutes: 0 },
+        maxTime: { hours: 11, minutes: 0 },
+      },
+    };
+
+    const item = {
+      responseType: 'timeRange',
+      answer: [
+        'Wed Aug 28 2024 10:30:00 GMT+0200 (Central European Summer Time)',
+        'Wed Aug 28 2024 11:30:00 GMT+0200 (Central European Summer Time)',
+      ],
+    } as TimeRangeItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the from time range is equal to minTime', () => {
+    const condition: OutsideOfTimeRangeCondition = {
+      itemName: 'random-item-name',
+      type: 'OUTSIDE_OF_TIME_RANGE',
+      payload: {
+        fieldName: 'from',
+        minTime: { hours: 10, minutes: 0 },
+        maxTime: { hours: 11, minutes: 0 },
+      },
+    };
+
+    const item = {
+      responseType: 'timeRange',
+      answer: [
+        'Wed Aug 28 2024 10:00:00 GMT+0200 (Central European Summer Time)',
+        'Wed Aug 28 2024 11:30:00 GMT+0200 (Central European Summer Time)',
+      ],
+    } as TimeRangeItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the from time range is equal to maxTime', () => {
+    const condition: OutsideOfTimeRangeCondition = {
+      itemName: 'random-item-name',
+      type: 'OUTSIDE_OF_TIME_RANGE',
+      payload: {
+        fieldName: 'from',
+        minTime: { hours: 10, minutes: 0 },
+        maxTime: { hours: 11, minutes: 0 },
+      },
+    };
+
+    const item = {
+      responseType: 'timeRange',
+      answer: [
+        'Wed Aug 28 2024 11:00:00 GMT+0200 (Central European Summer Time)',
+        'Wed Aug 28 2024 11:30:00 GMT+0200 (Central European Summer Time)',
+      ],
+    } as TimeRangeItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the to time range is outside', () => {
+    const condition: OutsideOfTimeRangeCondition = {
+      itemName: 'random-item-name',
+      type: 'OUTSIDE_OF_TIME_RANGE',
+      payload: {
+        fieldName: 'to',
+        minTime: { hours: 10, minutes: 0 },
+        maxTime: { hours: 11, minutes: 0 },
+      },
+    };
+
+    const item = {
+      responseType: 'timeRange',
+      answer: [
+        'Wed Aug 28 2024 10:30:00 GMT+0200 (Central European Summer Time)',
+        'Wed Aug 28 2024 11:30:00 GMT+0200 (Central European Summer Time)',
+      ],
+    } as TimeRangeItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(true);
+  });
+
+  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the to time range is not outside', () => {
+    const condition: OutsideOfTimeRangeCondition = {
+      itemName: 'random-item-name',
+      type: 'OUTSIDE_OF_TIME_RANGE',
+      payload: {
+        fieldName: 'to',
+        minTime: { hours: 10, minutes: 0 },
+        maxTime: { hours: 11, minutes: 0 },
+      },
+    };
+
+    const item = {
+      responseType: 'timeRange',
+      answer: [
+        'Wed Aug 28 2024 10:30:00 GMT+0200 (Central European Summer Time)',
+        'Wed Aug 28 2024 11:00:00 GMT+0200 (Central European Summer Time)',
+      ],
+    } as TimeRangeItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the to time range is equal to minTime', () => {
+    const condition: OutsideOfTimeRangeCondition = {
+      itemName: 'random-item-name',
+      type: 'OUTSIDE_OF_TIME_RANGE',
+      payload: {
+        fieldName: 'to',
+        minTime: { hours: 10, minutes: 0 },
+        maxTime: { hours: 11, minutes: 0 },
+      },
+    };
+
+    const item = {
+      responseType: 'timeRange',
+      answer: [
+        'Wed Aug 28 2024 10:00:00 GMT+0200 (Central European Summer Time)',
+        'Wed Aug 28 2024 10:30:00 GMT+0200 (Central European Summer Time)',
+      ],
+    } as TimeRangeItem;
+
+    const validator = new ConditionalLogicValidator(item, condition);
+    expect(validator.validate()).toBe(false);
+  });
+
+  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the to time range is equal to maxTime', () => {
+    const condition: OutsideOfTimeRangeCondition = {
+      itemName: 'random-item-name',
+      type: 'OUTSIDE_OF_TIME_RANGE',
+      payload: {
+        fieldName: 'to',
+        minTime: { hours: 10, minutes: 0 },
         maxTime: { hours: 11, minutes: 0 },
       },
     };
