@@ -17,4 +17,5 @@ export const supportableResponseTypes = [
   'multiSelectRows',
   'singleSelectRows',
   'sliderRows',
+  'phrasalTemplate',
 ];
