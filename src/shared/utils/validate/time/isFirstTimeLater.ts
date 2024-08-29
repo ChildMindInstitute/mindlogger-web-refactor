@@ -1,3 +1,4 @@
+import { MINUTES_IN_HOUR } from '~/shared/constants';
 import { HourMinute } from '~/shared/utils';
 
 /**
@@ -26,13 +27,7 @@ import { HourMinute } from '~/shared/utils';
  * console.log(isFirstTimeLater(time1, time2)); // true
  */
 export const isFirstTimeLater = (timeA: HourMinute, timeB: HourMinute): boolean => {
-  if (timeA.hours > timeB.hours) {
-    return true;
-  }
-
-  if (timeA.hours === timeB.hours) {
-    return timeA.minutes > timeB.minutes;
-  }
-
-  return false;
+  return (
+    timeA.hours * MINUTES_IN_HOUR + timeA.minutes > timeB.hours * MINUTES_IN_HOUR + timeB.minutes
+  );
 };
