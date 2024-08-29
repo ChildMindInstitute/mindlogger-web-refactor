@@ -19,3 +19,17 @@ export const supportableResponseTypes = [
   'sliderRows',
   'phrasalTemplate',
 ];
+
+export const phrasalTemplateCompatibleResponseTypes = [
+  'date',
+  'multiSelect',
+  'numberSelect',
+  'singleSelect',
+  'slider',
+  'text',
+  'time',
+  'timeRange',
+  'multiSelectRows',
+  'singleSelectRows',
+  'sliderRows',
+];
