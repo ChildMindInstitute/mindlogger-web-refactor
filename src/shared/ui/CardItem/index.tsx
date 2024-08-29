@@ -11,7 +11,7 @@ interface CardItemProps extends PropsWithChildren {
   watermark?: string;
   isInvalid?: boolean;
   isOptional?: boolean;
-  markdown: string;
+  markdown?: string | null;
   testId?: string;
 }
 
@@ -23,9 +23,11 @@ export const CardItem = ({ children, markdown, isOptional, testId }: CardItemPro
   const context = useContext(SurveyContext);
 
   const processedMarkdown = useMemo(() => {
-    if (!context.targetSubject) return markdown;
-
-    return insertAfterMedia(markdown, '<div id="target-subject"></div>');
+    if (markdown !== null && markdown !== undefined) {
+      if (!context.targetSubject) return markdown;
+      return insertAfterMedia(markdown, '<div id="target-subject"></div>');
+    }
+    return markdown;
   }, [markdown, context.targetSubject]);
 
   return (
@@ -38,31 +40,33 @@ export const CardItem = ({ children, markdown, isOptional, testId }: CardItemPro
       gap="48px"
       sx={{ fontFamily: 'Atkinson', fontWeight: '400', fontSize: '18px', lineHeight: '28px' }}
     >
-      <Box>
-        <Markdown
-          markdown={processedMarkdown}
-          components={{
-            div: (props) =>
-              props.id === 'target-subject' ? (
-                <TargetSubjectLine subject={context.targetSubject} />
-              ) : (
-                <div {...props} />
-              ),
-          }}
-        />
-        {isOptional && (
-          <Text
-            variant="body1"
-            color={Theme.colors.light.outline}
-            testid="optional-item-label"
-            fontWeight="400"
-            fontSize="18px"
-            lineHeight="28px"
-          >
-            {`(${t('optional')})`}
-          </Text>
-        )}
-      </Box>
+      {processedMarkdown ? (
+        <Box>
+          <Markdown
+            markdown={processedMarkdown}
+            components={{
+              div: (props) =>
+                props.id === 'target-subject' ? (
+                  <TargetSubjectLine subject={context.targetSubject} />
+                ) : (
+                  <div {...props} />
+                ),
+            }}
+          />
+          {isOptional && (
+            <Text
+              variant="body1"
+              color={Theme.colors.light.outline}
+              testid="optional-item-label"
+              fontWeight="400"
+              fontSize="18px"
+              lineHeight="28px"
+            >
+              {`(${t('optional')})`}
+            </Text>
+          )}
+        </Box>
+      ) : null}
       <Box>{children}</Box>
     </Box>
   );
