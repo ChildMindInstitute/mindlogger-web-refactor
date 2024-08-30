@@ -177,7 +177,6 @@ export const useTakeNowValidation = ({
 
   if (isMySubjectError || !mySubjectData || !mySubjectData?.data?.result) {
     // If we're unable to fetch the subject ID for the current user, we can't start the multi-informant flow
-    // eslint-disable-next-line no-console
     console.error('Unable to fetch subject ID for current user');
     return errorState(null);
   }

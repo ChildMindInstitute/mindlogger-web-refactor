@@ -79,7 +79,7 @@ function ValidateTakeNowParams({
         }),
       );
     }
-  }, [error, addErrorBanner]);
+  }, [error, addErrorBanner, logout, navigate]);
 
   if (isLoading) {
     return <Loader />;
