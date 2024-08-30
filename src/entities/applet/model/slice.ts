@@ -60,60 +60,63 @@ const appletsSlice = createSlice({
       return initialState;
     },
 
-    removeActivityProgress: (state, action: PayloadAction<RemoveActivityProgressPayload>) => {
-      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+    removeActivityProgress: (state, { payload }: PayloadAction<RemoveActivityProgressPayload>) => {
+      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
 
       delete state.progress[id];
     },
 
-    saveGroupProgress: (state, action: PayloadAction<SaveGroupProgressPayload>) => {
-      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+    saveGroupProgress: (state, { payload }: PayloadAction<SaveGroupProgressPayload>) => {
+      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
 
       const groupProgress = state.groupProgress[id] ?? {};
 
       const updatedProgress = {
         ...groupProgress,
-        ...action.payload.progressPayload,
+        ...payload.progressPayload,
       };
 
       state.groupProgress[id] = updatedProgress;
     },
 
-    removeGroupProgress: (state, action: PayloadAction<RemoveGroupProgressPayload>) => {
-      const id = getProgressId(action.payload.entityId, action.payload.eventId);
+    removeGroupProgress: (state, { payload }: PayloadAction<RemoveGroupProgressPayload>) => {
+      const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
 
       delete state.groupProgress[id];
     },
 
-    saveSummaryDataInGroupContext: (state, action: PayloadAction<SaveSummaryDataInContext>) => {
-      const id = getProgressId(action.payload.entityId, action.payload.eventId);
+    saveSummaryDataInGroupContext: (
+      state,
+      { payload }: PayloadAction<SaveSummaryDataInContext>,
+    ) => {
+      const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
 
       const groupProgress = state.groupProgress[id] ?? {};
 
       const groupContext = groupProgress.context ?? {};
 
-      groupContext.summaryData[action.payload.activityId] = action.payload.summaryData;
+      groupContext.summaryData[payload.activityId] = payload.summaryData;
     },
 
-    saveActivityProgress: (state, action: PayloadAction<SaveActivityProgressPayload>) => {
-      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+    saveActivityProgress: (state, { payload }: PayloadAction<SaveActivityProgressPayload>) => {
+      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
 
-      state.progress[id] = action.payload.progress;
+      state.progress[id] = payload.progress;
     },
 
     changeSummaryScreenVisibility: (
       state,
-      action: PayloadAction<ChangeSummaryScreenVisibilityPayload>,
+      { payload }: PayloadAction<ChangeSummaryScreenVisibilityPayload>,
     ) => {
-      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
 
       const activityProgress = state.progress[id];
 
-      activityProgress.isSummaryScreenOpen = action.payload.isSummaryScreenOpen;
+      activityProgress.isSummaryScreenOpen = payload.isSummaryScreenOpen;
     },
 
-    setItemTimerStatus: (state, action: PayloadAction<SetItemTimerPayload>) => {
-      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+    setItemTimerStatus: (state, { payload }: PayloadAction<SetItemTimerPayload>) => {
+      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
 
       const progress = state.progress[id];
 
@@ -121,31 +124,31 @@ const appletsSlice = createSlice({
         progress.itemTimer = {};
       }
 
-      progress.itemTimer[action.payload.itemId] = action.payload.timerStatus;
+      progress.itemTimer[payload.itemId] = payload.timerStatus;
     },
 
-    removeItemTimerStatus: (state, action: PayloadAction<ItemTimerTickPayload>) => {
-      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+    removeItemTimerStatus: (state, { payload }: PayloadAction<ItemTimerTickPayload>) => {
+      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
 
       const progress = state.progress[id];
 
       if (!progress) return state;
 
-      const timer = progress.itemTimer[action.payload.itemId];
+      const timer = progress.itemTimer[payload.itemId];
 
       if (timer) {
-        delete progress.itemTimer[action.payload.itemId];
+        delete progress.itemTimer[payload.itemId];
       }
     },
 
-    itemTimerTick: (state, action: PayloadAction<ItemTimerTickPayload>) => {
-      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+    itemTimerTick: (state, { payload }: PayloadAction<ItemTimerTickPayload>) => {
+      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
 
       const progress = state.progress[id];
 
       if (!progress) return state;
 
-      const timer = progress.itemTimer[action.payload.itemId];
+      const timer = progress.itemTimer[payload.itemId];
 
       if (!timer) return state;
 
@@ -154,21 +157,21 @@ const appletsSlice = createSlice({
       }
     },
 
-    saveItemAnswer: (state, action: PayloadAction<SaveItemAnswerPayload>) => {
-      const id = getProgressId(action.payload.entityId, action.payload.eventId);
+    saveItemAnswer: (state, { payload }: PayloadAction<SaveItemAnswerPayload>) => {
+      const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
       const activityProgress = state.progress[id];
 
       if (!activityProgress) {
         return state;
       }
 
-      const itemIndex = activityProgress.items.findIndex(({ id }) => id === action.payload.itemId);
+      const itemIndex = activityProgress.items.findIndex(({ id }) => id === payload.itemId);
 
       if (itemIndex === -1) {
         return state;
       }
 
-      activityProgress.items[itemIndex].answer = action.payload.answer;
+      activityProgress.items[itemIndex].answer = payload.answer;
     },
 
     /**
@@ -177,66 +180,66 @@ const appletsSlice = createSlice({
      * @param action
      * @returns
      */
-    saveAdditionalText: (state, action: PayloadAction<SaveItemAdditionalTextPayload>) => {
-      const id = getProgressId(action.payload.entityId, action.payload.eventId);
+    saveAdditionalText: (state, { payload }: PayloadAction<SaveItemAdditionalTextPayload>) => {
+      const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
       const activityProgress = state.progress[id];
 
       if (!activityProgress) {
         return state;
       }
 
-      const itemIndex = activityProgress.items.findIndex(({ id }) => id === action.payload.itemId);
+      const itemIndex = activityProgress.items.findIndex(({ id }) => id === payload.itemId);
 
       if (itemIndex === -1) {
         return state;
       }
 
-      activityProgress.items[itemIndex].additionalText = action.payload.additionalText;
+      activityProgress.items[itemIndex].additionalText = payload.additionalText;
     },
 
-    saveUserEvent: (state, action: PayloadAction<SaveUserEventPayload>) => {
-      const id = getProgressId(action.payload.entityId, action.payload.eventId);
+    saveUserEvent: (state, { payload }: PayloadAction<SaveUserEventPayload>) => {
+      const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
       const activityProgress = state.progress[id];
 
       if (!activityProgress) {
         return state;
       }
 
-      activityProgress.userEvents.push(action.payload.userEvent);
+      activityProgress.userEvents.push(payload.userEvent);
     },
-    updateUserEventByIndex: (state, action: PayloadAction<UpdateUserEventByIndexPayload>) => {
-      const id = getProgressId(action.payload.entityId, action.payload.eventId);
+    updateUserEventByIndex: (state, { payload }: PayloadAction<UpdateUserEventByIndexPayload>) => {
+      const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
       const activityProgress = state.progress[id];
 
       if (!activityProgress) {
         return state;
       }
 
-      if (!activityProgress.userEvents[action.payload.userEventIndex]) {
+      if (!activityProgress.userEvents[payload.userEventIndex]) {
         return state;
       }
 
-      activityProgress.userEvents[action.payload.userEventIndex] = action.payload.userEvent;
+      activityProgress.userEvents[payload.userEventIndex] = payload.userEvent;
     },
 
-    incrementStep: (state, action: PayloadAction<UpdateStepPayload>) => {
-      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+    incrementStep: (state, { payload }: PayloadAction<UpdateStepPayload>) => {
+      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
 
       const activityProgress = state.progress[id];
 
       activityProgress.step += 1;
     },
 
-    decrementStep: (state, action: PayloadAction<UpdateStepPayload>) => {
-      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+    decrementStep: (state, { payload }: PayloadAction<UpdateStepPayload>) => {
+      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
 
       const activityProgress = state.progress[id];
 
       activityProgress.step -= 1;
     },
 
-    activityStarted: (state, action: PayloadAction<InProgressActivity>) => {
-      const id = getProgressId(action.payload.activityId, action.payload.eventId);
+    activityStarted: (state, { payload }: PayloadAction<InProgressActivity>) => {
+      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
 
       const activityEvent: GroupProgress = {
         type: ActivityPipelineType.Regular,
@@ -250,17 +253,17 @@ const appletsSlice = createSlice({
       state.groupProgress[id] = activityEvent;
     },
 
-    flowStarted: (state, action: PayloadAction<InProgressFlow>) => {
-      const id = getProgressId(action.payload.flowId, action.payload.eventId);
+    flowStarted: (state, { payload }: PayloadAction<InProgressFlow>) => {
+      const id = getProgressId(payload.flowId, payload.eventId, payload.targetSubjectId);
 
       const flowEvent: GroupProgress = {
         type: ActivityPipelineType.Flow,
-        currentActivityId: action.payload.activityId,
+        currentActivityId: payload.activityId,
         startAt: new Date().getTime(),
         currentActivityStartAt: new Date().getTime(),
         endAt: null,
         executionGroupKey: uuidV4(),
-        pipelineActivityOrder: action.payload.pipelineActivityOrder,
+        pipelineActivityOrder: payload.pipelineActivityOrder,
         context: {
           summaryData: {},
         },
@@ -269,18 +272,18 @@ const appletsSlice = createSlice({
       state.groupProgress[id] = flowEvent;
     },
 
-    flowUpdated: (state, action: PayloadAction<InProgressFlow>) => {
-      const id = getProgressId(action.payload.flowId, action.payload.eventId);
+    flowUpdated: (state, { payload }: PayloadAction<InProgressFlow>) => {
+      const id = getProgressId(payload.flowId, payload.eventId, payload.targetSubjectId);
 
       const groupProgress = state.groupProgress[id] as FlowProgress;
 
-      groupProgress.currentActivityId = action.payload.activityId;
-      groupProgress.pipelineActivityOrder = action.payload.pipelineActivityOrder;
+      groupProgress.currentActivityId = payload.activityId;
+      groupProgress.pipelineActivityOrder = payload.pipelineActivityOrder;
       groupProgress.currentActivityStartAt = new Date().getTime();
     },
 
-    entityCompleted: (state, action: PayloadAction<InProgressEntity>) => {
-      const id = getProgressId(action.payload.entityId, action.payload.eventId);
+    entityCompleted: (state, { payload }: PayloadAction<InProgressEntity>) => {
+      const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
 
       state.groupProgress[id].endAt = new Date().getTime();
 
@@ -290,18 +293,18 @@ const appletsSlice = createSlice({
 
       const now = new Date().getTime();
 
-      completedEntities[action.payload.entityId] = now;
+      completedEntities[payload.entityId] = now;
 
-      if (!completions[action.payload.entityId]) {
-        completions[action.payload.entityId] = {};
+      if (!completions[payload.entityId]) {
+        completions[payload.entityId] = {};
       }
 
-      const entityCompletions = completions[action.payload.entityId];
+      const entityCompletions = completions[payload.entityId];
 
-      if (!entityCompletions[action.payload.eventId]) {
-        entityCompletions[action.payload.eventId] = [];
+      if (!entityCompletions[payload.eventId]) {
+        entityCompletions[payload.eventId] = [];
       }
-      entityCompletions[action.payload.eventId].push(now);
+      entityCompletions[payload.eventId].push(now);
     },
 
     initiateTakeNow: (state, action: PayloadAction<MultiInformantPayload>) => {

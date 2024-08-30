@@ -51,7 +51,11 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     applet: context.applet,
   });
 
-  const activityEventId = getProgressId(activityListItem.activityId, activityListItem.eventId);
+  const activityEventId = getProgressId(
+    activityListItem.activityId,
+    activityListItem.eventId,
+    activityListItem.targetSubject?.id,
+  );
 
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(state, activityEventId),
@@ -60,6 +64,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   const autoCompletionRecord = useAutoCompletionRecord({
     entityId: activityListItem.flowId ?? activityListItem.activityId,
     eventId: activityListItem.eventId,
+    targetSubjectId: activityListItem.targetSubject?.id ?? null,
   });
 
   const step = activityProgress?.step || 0;
@@ -101,6 +106,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     return startSurvey({
       activityId: activityListItem.activityId,
       eventId: activityListItem.eventId,
+      targetSubjectId: activityListItem.targetSubject?.id ?? null,
       status: activityListItem.status,
       flowId: activityListItem.flowId,
       shouldRestart,

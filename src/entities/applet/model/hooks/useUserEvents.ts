@@ -12,12 +12,13 @@ import { useAppDispatch, useAppSelector } from '~/shared/utils';
 type Props = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 };
 
 export const useUserEvents = (props: Props) => {
   const dispatch = useAppDispatch();
 
-  const progressId = getProgressId(props.activityId, props.eventId);
+  const progressId = getProgressId(props.activityId, props.eventId, props.targetSubjectId);
 
   const activityProgress = useAppSelector((state) => selectActivityProgress(state, progressId));
 
@@ -35,6 +36,7 @@ export const useUserEvents = (props: Props) => {
         actions.saveUserEvent({
           entityId: props.activityId,
           eventId: props.eventId,
+          targetSubjectId: props.targetSubjectId,
           itemId: item.id,
           userEvent: newUserEvent,
         }),
@@ -42,7 +44,7 @@ export const useUserEvents = (props: Props) => {
 
       return newUserEvent;
     },
-    [dispatch, props.activityId, props.eventId],
+    [dispatch, props.activityId, props.eventId, props.targetSubjectId],
   );
 
   const saveSetAnswerUserEvent = useCallback(
@@ -65,6 +67,7 @@ export const useUserEvents = (props: Props) => {
             actions.updateUserEventByIndex({
               entityId: props.activityId,
               eventId: props.eventId,
+              targetSubjectId: props.targetSubjectId,
               userEventIndex: userEvents.length - 1,
               userEvent: {
                 type: 'SET_ANSWER',
@@ -83,6 +86,7 @@ export const useUserEvents = (props: Props) => {
         actions.saveUserEvent({
           entityId: props.activityId,
           eventId: props.eventId,
+          targetSubjectId: props.targetSubjectId,
           itemId: item.id,
           userEvent: {
             type: 'SET_ANSWER',
@@ -93,7 +97,7 @@ export const useUserEvents = (props: Props) => {
         }),
       );
     },
-    [activityProgress, dispatch, props.activityId, props.eventId],
+    [activityProgress, dispatch, props.activityId, props.eventId, props.targetSubjectId],
   );
 
   const saveSetAdditionalTextUserEvent = useCallback(
@@ -128,6 +132,7 @@ export const useUserEvents = (props: Props) => {
             actions.updateUserEventByIndex({
               entityId: props.activityId,
               eventId: props.eventId,
+              targetSubjectId: props.targetSubjectId,
               userEventIndex: userEvents.length - 1,
               userEvent: {
                 type: 'SET_ANSWER',
@@ -148,6 +153,7 @@ export const useUserEvents = (props: Props) => {
         actions.saveUserEvent({
           entityId: props.activityId,
           eventId: props.eventId,
+          targetSubjectId: props.targetSubjectId,
           itemId: item.id,
           userEvent: {
             type: 'SET_ANSWER',
@@ -158,7 +164,7 @@ export const useUserEvents = (props: Props) => {
         }),
       );
     },
-    [activityProgress, dispatch, props.activityId, props.eventId],
+    [activityProgress, dispatch, props.activityId, props.eventId, props.targetSubjectId],
   );
 
   return { saveUserEventByType, saveSetAnswerUserEvent, saveSetAdditionalTextUserEvent };

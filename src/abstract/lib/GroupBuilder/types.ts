@@ -6,7 +6,7 @@ export type ActivityListItem = {
   activityId: string;
   flowId: string | null;
   eventId: string;
-  targetSubject?: SubjectDTO;
+  targetSubject: SubjectDTO | null;
 
   name: string;
   description: string;

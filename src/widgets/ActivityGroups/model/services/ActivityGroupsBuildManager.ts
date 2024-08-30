@@ -24,7 +24,7 @@ type BuildResult = {
 type ProcessParams = {
   activities: ActivityBaseDTO[];
   flows: ActivityFlowDTO[];
-  assignments: HydratedAssignmentDTO[] | undefined;
+  assignments: HydratedAssignmentDTO[] | null;
   events: AppletEventsResponse;
   entityProgress: GroupProgressState;
 };
@@ -116,7 +116,7 @@ const createActivityGroupsBuildManager = () => {
 
         // Add auto-assignment if enabled for this activity/flow
         if (entity.autoAssign) {
-          eventEntities.push({ entity, event });
+          eventEntities.push({ entity, event, targetSubject: null });
         }
 
         // Add any additional assignments (without duplicating possible auto-assignment)
@@ -124,13 +124,18 @@ const createActivityGroupsBuildManager = () => {
           const isSelfAssign = respondentSubject.id === targetSubject.id;
           if (entity.autoAssign && isSelfAssign) continue;
 
-          eventEntities.push(isSelfAssign ? { entity, event } : { entity, event, targetSubject });
+          eventEntities.push({
+            entity,
+            event,
+            targetSubject: isSelfAssign ? null : targetSubject,
+          });
         }
       } else {
         // Assignments disabled
         eventEntities.push({
           entity,
           event,
+          targetSubject: null,
         });
       }
     }

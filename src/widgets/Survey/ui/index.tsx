@@ -21,12 +21,13 @@ type Props = {
   appletId: string;
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 
   flowId: string | null;
 };
 
 export const SurveyWidget = (props: Props) => {
-  const { publicAppletKey, appletId, activityId, eventId, flowId } = props;
+  const { publicAppletKey, appletId, activityId, eventId, flowId, targetSubjectId } = props;
 
   const { t } = useCustomTranslation();
   const navigator = useCustomNavigation();
@@ -36,6 +37,7 @@ export const SurveyWidget = (props: Props) => {
   const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: props.flowId ?? props.activityId,
     eventId: props.eventId,
+    targetSubjectId,
   });
 
   const isTimesUpModalModalByDefault: boolean =
@@ -60,6 +62,7 @@ export const SurveyWidget = (props: Props) => {
       activityId,
       flowId,
       eventId,
+      targetSubjectId,
       publicAppletKey,
     };
 
@@ -68,10 +71,18 @@ export const SurveyWidget = (props: Props) => {
       : ROUTES.autoCompletion.navigateTo(navigateToProps);
 
     return navigator.navigate(screenToNavigate);
-  }, [closeTimesUpModal, navigator, props]);
+  }, [closeTimesUpModal, navigator, props, targetSubjectId]);
 
-  const { activityDTO, appletDTO, eventsDTO, respondentMeta, isLoading, isError, error } =
-    useSurveyDataQuery({ publicAppletKey, appletId, activityId });
+  const {
+    activityDTO,
+    appletDTO,
+    eventsDTO,
+    respondentMeta,
+    targetSubject,
+    isLoading,
+    isError,
+    error,
+  } = useSurveyDataQuery({ publicAppletKey, appletId, activityId, targetSubjectId });
 
   if (isLoading) {
     return <LoadingScreen publicAppletKey={publicAppletKey} appletId={appletId} />;
@@ -108,6 +119,7 @@ export const SurveyWidget = (props: Props) => {
         respondentMeta,
         currentEventId: eventId,
         flowId,
+        targetSubject,
         publicAppletKey,
       })}
     >

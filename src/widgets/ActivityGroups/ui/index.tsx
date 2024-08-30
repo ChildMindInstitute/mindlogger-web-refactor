@@ -13,7 +13,7 @@ import { TakeNowSuccessModal } from '~/features/TakeNow/ui/TakeNowSuccessModal';
 import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
 import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
-import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
+import { useFeatureFlags } from '~/shared/utils/hooks';
 
 type PublicAppletDetails = {
   isPublic: true;
@@ -57,7 +57,7 @@ export const ActivityGroups = (props: Props) => {
   const {
     isError: isAssignmentsError,
     isLoading: isAssignmentsLoading,
-    data: assignments,
+    data: assignments = null,
   } = useMyAssignmentsQuery(isAssignmentsEnabled ? props.appletId : undefined, {
     select: (data) => data.data.result.assignments,
     enabled: isAssignmentsEnabled,

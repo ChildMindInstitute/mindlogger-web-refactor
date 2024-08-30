@@ -1,6 +1,9 @@
+import { UseQueryResult } from '@tanstack/react-query';
+
 import { useActivityByIdQuery } from '~/entities/activity';
 import { useAppletByIdQuery } from '~/entities/applet';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
+import { useSubjectQuery } from '~/entities/subject';
 import {
   ActivityDTO,
   AppletDTO,
@@ -8,12 +11,15 @@ import {
   BaseError,
   RespondentMetaDTO,
 } from '~/shared/api';
+import { SubjectDTO } from '~/shared/api/types/subject';
+import { useFeatureFlags } from '~/shared/utils';
 
 type Return = {
   appletDTO: AppletDTO | null;
   respondentMeta?: RespondentMetaDTO;
   activityDTO: ActivityDTO | null;
   eventsDTO: AppletEventsResponse | null;
+  targetSubject: SubjectDTO | null;
   isError: boolean;
   isLoading: boolean;
   error: BaseError | null;
@@ -23,10 +29,13 @@ type Props = {
   publicAppletKey: string | null;
   appletId: string;
   activityId: string;
+  targetSubjectId: string | null;
 };
 
 export const useSurveyDataQuery = (props: Props): Return => {
-  const { appletId, activityId, publicAppletKey } = props;
+  const { appletId, activityId, publicAppletKey, targetSubjectId } = props;
+  const { featureFlags } = useFeatureFlags();
+  const isAssignmentsEnabled = !!featureFlags?.enableActivityAssign && !!targetSubjectId;
 
   const {
     data: appletById,
@@ -58,13 +67,26 @@ export const useSurveyDataQuery = (props: Props): Return => {
     { select: (data) => data?.data?.result },
   );
 
+  const subjectQueryResult = useSubjectQuery(targetSubjectId, {
+    select: (data) => data.data.result,
+    enabled: isAssignmentsEnabled,
+  });
+
+  const {
+    data: targetSubject,
+    isError: isSubjectError,
+    isLoading: isSubjectLoading,
+    error: subjectError,
+  } = isAssignmentsEnabled ? subjectQueryResult : ({} as UseQueryResult<SubjectDTO, BaseError>);
+
   return {
     appletDTO: appletById?.result ?? null,
     respondentMeta: appletById?.respondentMeta,
     activityDTO: activityById ?? null,
     eventsDTO: eventsByIdData ?? null,
-    isError: isAppletError || isActivityError || isEventsError,
-    isLoading: isAppletLoading || isActivityLoading || isEventsLoading,
-    error: appletError ?? activityError ?? eventsError,
+    targetSubject: targetSubject ?? null,
+    isError: isAppletError || isActivityError || isEventsError || isSubjectError,
+    isLoading: isAppletLoading || isActivityLoading || isEventsLoading || isSubjectLoading,
+    error: appletError ?? activityError ?? eventsError ?? subjectError,
   };
 };

@@ -12,11 +12,13 @@ import { useAppDispatch, useAppSelector } from '~/shared/utils';
 type SaveProgressProps = {
   activity: ActivityDTO;
   eventId: string;
+  targetSubjectId: string | null;
 };
 
 type DefaultProps = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 };
 
 export const useActivityProgress = () => {
@@ -26,7 +28,10 @@ export const useActivityProgress = () => {
 
   const getActivityProgress = useCallback(
     (props: DefaultProps): ActivityProgress | null => {
-      const progress = activitiesProgressState[getProgressId(props.activityId, props.eventId)];
+      const progress =
+        activitiesProgressState[
+          getProgressId(props.activityId, props.eventId, props.targetSubjectId)
+        ];
 
       return progress ?? null;
     },
@@ -61,6 +66,7 @@ export const useActivityProgress = () => {
         actions.saveActivityProgress({
           activityId: props.activity.id,
           eventId: props.eventId,
+          targetSubjectId: props.targetSubjectId,
           progress: {
             items: preparedActivityItemProgressRecords,
             step: initialStep,
@@ -81,6 +87,7 @@ export const useActivityProgress = () => {
         actions.changeSummaryScreenVisibility({
           activityId: props.activityId,
           eventId: props.eventId,
+          targetSubjectId: props.targetSubjectId,
           isSummaryScreenOpen: true,
         }),
       );
@@ -94,6 +101,7 @@ export const useActivityProgress = () => {
         actions.changeSummaryScreenVisibility({
           activityId: props.activityId,
           eventId: props.eventId,
+          targetSubjectId: props.targetSubjectId,
           isSummaryScreenOpen: false,
         }),
       );

@@ -29,8 +29,8 @@ export type Entity = Activity | ActivityFlow;
 export type EventEntity = {
   entity: Entity;
   event: ScheduleEvent;
-  /** Target subject of assignment if not self-report, else undefined */
-  targetSubject?: SubjectDTO;
+  /** Target subject of assignment if not self-report, else null */
+  targetSubject: SubjectDTO | null;
 };
 
 export type EntityType = 'regular' | 'flow';

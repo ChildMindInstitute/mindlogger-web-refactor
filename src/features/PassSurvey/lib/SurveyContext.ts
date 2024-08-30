@@ -7,6 +7,7 @@ import {
   RespondentMetaDTO,
   ScheduleEventDto,
 } from '~/shared/api';
+import { SubjectDTO } from '~/shared/api/types/subject';
 
 export type SurveyContext = {
   appletId: string;
@@ -15,6 +16,7 @@ export type SurveyContext = {
 
   activityId: string;
   eventId: string;
+  targetSubject: SubjectDTO | null;
 
   entityId: string;
 

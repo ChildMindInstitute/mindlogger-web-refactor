@@ -118,7 +118,10 @@ export class GroupUtility {
   }
 
   public getProgressRecord(eventEntity: EventEntity): GroupProgress | null {
-    const record = this.progress[getProgressId(eventEntity.entity.id, eventEntity.event.id)];
+    const record =
+      this.progress[
+        getProgressId(eventEntity.entity.id, eventEntity.event.id, eventEntity.targetSubject?.id)
+      ];
     return record ?? null;
   }
 

@@ -21,6 +21,7 @@ function PublicAutoCompletion() {
       activityId={activityId}
       eventId={eventId}
       flowId={flowId}
+      targetSubjectId={null}
       publicAppletKey={publicAppletKey}
     />
   );

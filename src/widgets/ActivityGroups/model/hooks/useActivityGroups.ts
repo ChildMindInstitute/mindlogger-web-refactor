@@ -8,7 +8,7 @@ import { useAppSelector } from '~/shared/utils';
 type Props = {
   applet: AppletBaseDTO;
   events: AppletEventsResponse;
-  assignments?: HydratedAssignmentDTO[];
+  assignments: HydratedAssignmentDTO[] | null;
 };
 
 type Return = {

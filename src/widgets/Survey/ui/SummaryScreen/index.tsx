@@ -27,13 +27,14 @@ const SummaryScreen = () => {
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(
       state,
-      getProgressId(context.activityId, context.eventId),
+      getProgressId(context.activityId, context.eventId, context.targetSubject?.id),
     ),
   );
 
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
     eventId: context.eventId,
     activityId: context.activityId,
+    targetSubjectId: context.targetSubject?.id ?? null,
     publicAppletKey: context.publicAppletKey,
     flowId: context.flow?.id ?? null,
     appletId: context.appletId,
@@ -47,6 +48,7 @@ const SummaryScreen = () => {
   const { summaryData } = useSummaryData({
     activityId: context.activityId,
     eventId: context.eventId,
+    targetSubjectId: context.targetSubject?.id ?? null,
     activityName: context.activity.name,
     scoresAndReports: activityProgress.scoreSettings,
     flowId: context.flow?.id ?? null,

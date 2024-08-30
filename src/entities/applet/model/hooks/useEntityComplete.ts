@@ -13,6 +13,7 @@ type CompletionType = 'regular' | 'autoCompletion';
 type Props = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 
   flowId: string | null;
   publicAppletKey: string | null;
@@ -40,6 +41,7 @@ export const useEntityComplete = (props: Props) => {
       entityCompleted({
         entityId: props.flowId ? props.flowId : props.activityId,
         eventId: props.eventId,
+        targetSubjectId: props.targetSubjectId,
       });
 
       const isAutoCompletion = completionType === 'autoCompletion';
@@ -73,6 +75,7 @@ export const useEntityComplete = (props: Props) => {
       props.eventId,
       props.flowId,
       props.publicAppletKey,
+      props.targetSubjectId,
     ],
   );
 
@@ -97,13 +100,21 @@ export const useEntityComplete = (props: Props) => {
           appletId: props.appletId,
           activityId,
           eventId: props.eventId,
+          targetSubjectId: props.targetSubjectId,
           entityType: 'flow',
           flowId: props.flowId,
         }),
         { replace: true },
       );
     },
-    [navigator, props.appletId, props.eventId, props.flowId, props.publicAppletKey],
+    [
+      navigator,
+      props.appletId,
+      props.eventId,
+      props.flowId,
+      props.publicAppletKey,
+      props.targetSubjectId,
+    ],
   );
 
   const completeFlow = useCallback(
@@ -113,6 +124,7 @@ export const useEntityComplete = (props: Props) => {
       const groupProgress = getGroupProgress({
         entityId: props.flowId ? props.flowId : props.activityId,
         eventId: props.eventId,
+        targetSubjectId: props.targetSubjectId,
       });
 
       if (!groupProgress) {
@@ -137,10 +149,15 @@ export const useEntityComplete = (props: Props) => {
         activityId: nextActivityId ? nextActivityId : props.flow.activityIds[0],
         flowId: props.flow.id,
         eventId: props.eventId,
+        targetSubjectId: props.targetSubjectId,
         pipelineActivityOrder: nextActivityId ? currentPipelineActivityOrder + 1 : 0,
       });
 
-      removeActivityProgress({ activityId: props.activityId, eventId: props.eventId });
+      removeActivityProgress({
+        activityId: props.activityId,
+        eventId: props.eventId,
+        targetSubjectId: props.targetSubjectId,
+      });
 
       if (nextActivityId && !isAutoCompletion) {
         return redirectToNextActivity(nextActivityId);
@@ -158,6 +175,7 @@ export const useEntityComplete = (props: Props) => {
       props.eventId,
       props.flow,
       props.flowId,
+      props.targetSubjectId,
       redirectToNextActivity,
       removeActivityProgress,
     ],
@@ -165,11 +183,21 @@ export const useEntityComplete = (props: Props) => {
 
   const completeActivity = useCallback(
     (input?: CompleteOptions) => {
-      removeActivityProgress({ activityId: props.activityId, eventId: props.eventId });
+      removeActivityProgress({
+        activityId: props.activityId,
+        eventId: props.eventId,
+        targetSubjectId: props.targetSubjectId,
+      });
 
       return completeEntityAndRedirect(input?.type || 'regular');
     },
-    [completeEntityAndRedirect, props.activityId, props.eventId, removeActivityProgress],
+    [
+      completeEntityAndRedirect,
+      props.activityId,
+      props.eventId,
+      props.targetSubjectId,
+      removeActivityProgress,
+    ],
   );
 
   return {
