@@ -29,6 +29,12 @@ function isAnswerShouldBeNumeric(item: appletModel.ItemRecord) {
   return false;
 }
 
+function isAnswerTooLarge(item: appletModel.ItemRecord) {
+  if (item.responseType === 'paragraphText' && item.config.maxResponseLength) {
+    return item.answer?.[0]?.length > item.config.maxResponseLength ?? true;
+  }
+}
+
 function isAnswerEmpty(item: appletModel.ItemRecord): boolean {
   if (item.responseType === 'timeRange') {
     const fromTime = Date.parse(item.answer[0]);
@@ -113,6 +119,7 @@ export function validateBeforeMoveForward({
 
   const shouldBeEmpty = isAnswerShouldBeEmpty(item);
   const isEmpty = isAnswerEmpty(item);
+  const isTooLarge = isAnswerTooLarge(item);
 
   if (!shouldBeEmpty && !isEmpty) {
     showWarning('pleaseAnswerTheQuestion');
@@ -130,6 +137,11 @@ export function validateBeforeMoveForward({
 
   if (isNumericOnly) {
     showWarning('onlyNumbersAllowed');
+    return false;
+  }
+
+  if (isTooLarge) {
+    showWarning('answerTooLarge');
     return false;
   }
 
