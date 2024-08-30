@@ -50,6 +50,7 @@ const getActivity = (): Entity => {
     order: 0,
     type: ActivityType.NotDefined,
     image: null,
+    autoAssign: true,
   };
   return result;
 };
@@ -98,6 +99,7 @@ const getExpectedItem = (): ActivityListItem => {
     timeLeftToComplete: null,
     isInActivityFlow: false,
     image: null,
+    targetSubject: null,
   };
   return expectedItem;
 };
@@ -152,6 +154,7 @@ const getScheduledEventEntity = (settings: {
         timer: null,
       },
     },
+    targetSubject: null,
   };
   return result;
 };
@@ -175,6 +178,7 @@ const getAlwaysAvailableEventEntity = (settings: { scheduledAt: Date }): EventEn
         timer: null,
       },
     },
+    targetSubject: null,
   };
 
   return result;
@@ -903,8 +907,6 @@ describe('ActivityGroupsBuilder', () => {
         progress,
       };
 
-      let builder = createActivityGroupsBuilder(input);
-
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
         startDate: subDays(startOfDay(scheduledAt), 2),
@@ -929,7 +931,7 @@ describe('ActivityGroupsBuilder', () => {
         progress,
       };
 
-      builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const now = addMinutes(scheduledAt, 10);
 
@@ -939,17 +941,8 @@ describe('ActivityGroupsBuilder', () => {
       expect(result).toEqual(expectedResult);
     });
 
-    it('5Should not return group-item for scheduled event and periodicity is Weekly and allowAccessBeforeFromTime is false when started yesterday, but not completed yet', () => {
+    it('Should not return group-item for scheduled event and periodicity is Weekly and allowAccessBeforeFromTime is false when started yesterday, but not completed yet', () => {
       const scheduledAt = new Date(2023, 8, 1, 15, 0, 0);
-
-      let progress: GroupProgressState = getEmptyProgress();
-
-      let input: GroupsBuildContext = {
-        allAppletActivities: [],
-        progress,
-      };
-
-      let builder = createActivityGroupsBuilder(input);
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -968,14 +961,14 @@ describe('ActivityGroupsBuilder', () => {
         activities: [],
       };
 
-      progress = getProgress(subDays(scheduledAt, 1), null);
+      const progress = getProgress(subDays(scheduledAt, 1), null);
 
-      input = {
+      const input = {
         allAppletActivities: [],
         progress,
       };
 
-      builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input);
 
       const now = addMinutes(scheduledAt, 10);
 
@@ -1108,8 +1101,6 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = subMonths(now, 3);
       eventEntity.event.availability.endDate = subMonths(now, 2);
 
-      let result = builder.buildAvailable([eventEntity]);
-
       const expectedItem = getExpectedAvailableItem();
       expectedItem.availableTo = new Date(startOfDay(scheduledAt));
       expectedItem.availableTo.setHours(16);
@@ -1121,7 +1112,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [],
       };
 
-      result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable([eventEntity]);
       expect(result).toEqual(expectedEmptyResult);
     });
 
@@ -1154,8 +1145,6 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = subMonths(now, 2);
       eventEntity.event.availability.endDate = addMonths(now, 2);
 
-      let result = builder.buildAvailable([eventEntity]);
-
       const expectedItem = getExpectedAvailableItem();
       expectedItem.availableTo = new Date(startOfDay(scheduledAt));
       expectedItem.availableTo.setHours(16);
@@ -1170,7 +1159,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [expectedItem],
       };
 
-      result = builder.buildAvailable([eventEntity]);
+      const result = builder.buildAvailable([eventEntity]);
 
       expect(result).toEqual(expectedResult);
     });
@@ -1375,8 +1364,6 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = addMonths(now, 2);
       eventEntity.event.availability.endDate = addMonths(now, 3);
 
-      let result = builder.buildScheduled([eventEntity]);
-
       const expectedItem: ActivityListItem = getExpectedScheduledItem();
       expectedItem.availableFrom = startOfDay(scheduledAt);
       expectedItem.availableFrom.setHours(15);
@@ -1390,7 +1377,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [expectedItem],
       };
 
-      result = builder.buildScheduled([eventEntity]);
+      const result = builder.buildScheduled([eventEntity]);
 
       expect(result).toEqual(expectedEmptyResult);
     });
@@ -1424,8 +1411,6 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = subMonths(now, 3);
       eventEntity.event.availability.endDate = subMonths(now, 2);
 
-      let result = builder.buildScheduled([eventEntity]);
-
       const expectedItem: ActivityListItem = getExpectedScheduledItem();
       expectedItem.availableFrom = startOfDay(scheduledAt);
       expectedItem.availableFrom.setHours(15);
@@ -1439,7 +1424,7 @@ describe('ActivityGroupsBuilder', () => {
         activities: [expectedItem],
       };
 
-      result = builder.buildScheduled([eventEntity]);
+      const result = builder.buildScheduled([eventEntity]);
 
       expect(result).toEqual(expectedEmptyResult);
     });
@@ -1471,8 +1456,6 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.timeFrom = { hours: 15, minutes: 0 };
       eventEntity.event.availability.timeTo = { hours: 16, minutes: 30 };
 
-      let result = builder.buildScheduled([eventEntity]);
-
       const expectedItem: ActivityListItem = getExpectedScheduledItem();
       expectedItem.availableFrom = startOfDay(scheduledAt);
       expectedItem.availableFrom.setHours(15);
@@ -1500,7 +1483,7 @@ describe('ActivityGroupsBuilder', () => {
       eventEntity.event.availability.startDate = subMonths(now, 2);
       eventEntity.event.availability.endDate = addMonths(now, 2);
 
-      result = builder.buildScheduled([eventEntity]);
+      const result = builder.buildScheduled([eventEntity]);
       expect(result).toEqual(expectedResult);
     });
 
@@ -1611,6 +1594,7 @@ describe('ActivityGroupsBuilder', () => {
             type: ActivityType.NotDefined,
             order: 0,
             image: null,
+            autoAssign: true,
           },
           {
             description: 'test-description-2',
@@ -1621,6 +1605,7 @@ describe('ActivityGroupsBuilder', () => {
             type: ActivityType.NotDefined,
             order: 1,
             image: null,
+            autoAssign: true,
           },
         ],
         progress,
@@ -1638,6 +1623,7 @@ describe('ActivityGroupsBuilder', () => {
         isHidden: false,
         order: 0,
         image: null,
+        autoAssign: true,
       };
 
       const eventEntity: EventEntity = {
@@ -1656,6 +1642,7 @@ describe('ActivityGroupsBuilder', () => {
             timer: null,
           },
         },
+        targetSubject: null,
       };
 
       let result = builder.buildInProgress([eventEntity]);
@@ -1684,6 +1671,7 @@ describe('ActivityGroupsBuilder', () => {
               numberOfActivitiesInFlow: 2,
               activityPositionInFlow: 1,
             },
+            targetSubject: null,
           },
         ],
         name: 'additional.in_progress',
@@ -1725,6 +1713,7 @@ describe('ActivityGroupsBuilder', () => {
               numberOfActivitiesInFlow: 2,
               activityPositionInFlow: 2,
             },
+            targetSubject: null,
           },
         ],
         name: 'additional.in_progress',

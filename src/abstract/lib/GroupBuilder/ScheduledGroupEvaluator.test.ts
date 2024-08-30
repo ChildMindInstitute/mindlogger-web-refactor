@@ -43,6 +43,7 @@ const getActivity = (): Entity => {
     order: 0,
     type: ActivityType.NotDefined,
     image: null,
+    autoAssign: true,
   };
   return result;
 };
@@ -103,6 +104,7 @@ const getScheduledEventEntity = (settings: {
         timer: null,
       },
     },
+    targetSubject: null,
   };
 
   return result;
