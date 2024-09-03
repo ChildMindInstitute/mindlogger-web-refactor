@@ -15,6 +15,7 @@ export const Banner = ({
   onClose,
   hasCloseButton = !!onClose,
   severity = 'success',
+  ...rest
 }: BannerProps) => {
   const [isHovering, setIsHovering] = useState(false);
   const isWindowFocused = useWindowFocus();
@@ -39,6 +40,7 @@ export const Banner = ({
       onMouseLeave={() => setIsHovering(false)}
       severity={severity}
       data-testid={`${severity}-banner`}
+      {...rest}
     >
       <Text>{typeof children === 'string' ? <Markdown markdown={children} /> : children}</Text>
     </Alert>
