@@ -28,7 +28,7 @@ export const TargetSubjectLabel = ({ subject }: Props) => {
         whiteSpace: 'nowrap',
       }}
     >
-      <Avatar src={SubjectIcon} sx={{ width: '18px', height: '18px' }} />
+      <Avatar src={SubjectIcon} sx={{ width: '18px', height: '18px', borderRadius: 0 }} />
       <Text
         color={Theme.colors.light.onSurface}
         fontSize="14px"

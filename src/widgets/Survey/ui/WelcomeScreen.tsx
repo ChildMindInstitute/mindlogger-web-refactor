@@ -1,20 +1,26 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
+
+import { Avatar } from '@mui/material';
 
 import { ActivityMetaData } from './ActivityMetaData';
 
 import { ActivityPipelineType } from '~/abstract/lib';
+import SubjectIcon from '~/assets/subject-icon.svg';
 import { appletModel } from '~/entities/applet';
+import { useBanners } from '~/entities/banner/model';
 import { StartSurveyButton, SurveyContext, SurveyLayout } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import { AvatarBase } from '~/shared/ui/Avatar';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
+import { getSubjectName, useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 
 const WelcomeScreen = () => {
   const { greaterThanSM } = useCustomMediaQuery();
 
   const { t } = useCustomTranslation();
+
+  const { addWarningBanner, removeWarningBanner } = useBanners();
 
   const context = useContext(SurveyContext);
 
@@ -74,6 +80,25 @@ const WelcomeScreen = () => {
     // If we dont have group progress yet, we assume that this is the first activity
     return 1;
   };
+
+  useEffect(() => {
+    if (context.targetSubject) {
+      addWarningBanner({
+        children: t('targetSubjectBanner', { name: getSubjectName(context.targetSubject) }),
+        duration: null,
+        hasCloseButton: false,
+        iconMapping: {
+          warning: (
+            <Avatar src={SubjectIcon} sx={{ width: '32px', height: '32px', borderRadius: 0 }} />
+          ),
+        },
+      });
+
+      return () => {
+        removeWarningBanner();
+      };
+    }
+  }, [addWarningBanner, context.targetSubject, removeWarningBanner, t]);
 
   return (
     <SurveyLayout
