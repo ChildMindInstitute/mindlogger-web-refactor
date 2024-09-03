@@ -17,7 +17,9 @@ type TextItemProps = {
 
 export const TextItem = ({ item, value, onValueChange, isDisabled }: TextItemProps) => {
   const { maxResponseLength } = item.config;
-  const [hasError, setHasError] = useState(false);
+  const [hasError, setHasError] = useState(
+    maxResponseLength > 0 && value.length > maxResponseLength,
+  );
 
   const numCharacters = value?.length || 0;
 
@@ -51,7 +53,7 @@ export const TextItem = ({ item, value, onValueChange, isDisabled }: TextItemPro
         color={hasError ? `${Theme.colors.light.error}` : Theme.colors.light.outline}
         mr={2}
       >
-        {`${t('charactersCount', { numCharacters, maxCharacters: maxResponseLength })}`}
+        {t('charactersCount', { numCharacters, maxCharacters: maxResponseLength })}
       </Box>
     </Box>
   );

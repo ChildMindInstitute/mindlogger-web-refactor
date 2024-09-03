@@ -35,13 +35,14 @@ export const TextItem = ({ value = '', onValueChange, disabled, isMultiline, has
                 },
               },
               '& .MuiInputBase-root': {
-                paddingRight: '2px', // Reduce padding inside the input
+                height: '350px',
+                paddingRight: '2px',
                 ...(hasError ? { border: `2px  solid ${Theme.colors.light.error}` } : {}),
                 borderWidth: '2px',
-                borderRadius: '20px',
+                borderRadius: '12px',
               },
               '& .MuiOutlinedInput-notchedOutline': {
-                border: hasError ? 'none' : `2px solid ${Theme.colors.light.outline}`,
+                border: hasError ? 'none' : `2px solid ${Theme.colors.light.surfaceVariant}`,
               },
             }
           : null
