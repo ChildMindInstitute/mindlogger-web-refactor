@@ -26,9 +26,7 @@ export const TextItem = ({ item, value, onValueChange, isDisabled }: TextItemPro
   const { t } = useCustomTranslation();
 
   const onHandleValueChange = (value: string) => {
-    if (value.length > maxResponseLength) {
-      setHasError(true);
-    }
+    setHasError(value.length > maxResponseLength);
 
     if (value.length === 0) {
       return onValueChange([]);

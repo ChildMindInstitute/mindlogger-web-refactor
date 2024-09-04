@@ -27,6 +27,8 @@ export const TextItem = ({ value = '', onValueChange, disabled, isMultiline, has
         isMultiline
           ? {
               '& .MuiInputBase-input': {
+                height: '100%',
+                maxHeight: '350px',
                 '&::-webkit-scrollbar': {
                   width: '4px',
                 },
@@ -35,9 +37,9 @@ export const TextItem = ({ value = '', onValueChange, disabled, isMultiline, has
                 },
               },
               '& .MuiInputBase-root': {
-                height: '350px',
+                height: '100%',
                 paddingRight: '2px',
-                ...(hasError ? { border: `2px  solid ${Theme.colors.light.error}` } : {}),
+                ...(hasError ? { border: `2px solid ${Theme.colors.light.error}` } : {}),
                 borderWidth: '2px',
                 borderRadius: '12px',
               },
