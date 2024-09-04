@@ -14,7 +14,10 @@ export const insertAfterMedia = (markdown: string, inserted: string) => {
   let i: number;
   for (i = 0; i < lines.length; i++) {
     const lineWithoutMedia = lines[i]
-      .replaceAll(/^:::\s+hljs-\S+|:::$|<(img|video|audio)[^>]+>|!\[[^\]]*\]\([^)]*\)/gi, '')
+      .replaceAll(
+        /^:::\s+hljs-\S+|:::$|<img[^>]+>|<video[^>]+>.*<\/video>|<audio[^>]+>.*<\/audio>|!\[[^\]]*\]\([^)]*\)/gi,
+        '',
+      )
       .trim();
     if (lineWithoutMedia) break;
   }
