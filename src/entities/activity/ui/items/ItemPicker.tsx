@@ -5,6 +5,7 @@ import { MatrixCheckboxItem } from './Matrix/MatrixMultiSelectItem';
 import { MatrixRadioItem } from './Matrix/MatrixSingleSelectItem';
 import { SliderRows } from './Matrix/Slider';
 import { ParagraphTextItem } from './ParagraphTextItem';
+import { PhrasalTemplateItem } from './PhrasalTemplateItem';
 import { RadioItem } from './RadioItem';
 import { SelectorItem } from './SelectorItem';
 import { SliderItem } from './SliderItem';
@@ -128,6 +129,9 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
 
     case 'sliderRows':
       return <SliderRows item={item} values={item.answer} onValueChange={onValueChange} />;
+
+    case 'phrasalTemplate':
+      return <PhrasalTemplateItem item={item} replaceText={replaceText} />;
 
     default:
       return <></>;

@@ -1,8 +1,8 @@
 import { phrasalTemplateCompatibleResponseTypes } from '~/abstract/lib/constants';
 import { ActivityItemType } from '~/entities/activity/lib';
-import { ActivityProgress } from '~/entities/applet/model';
+import { ItemRecord } from '~/entities/applet/model';
 
-export type ActivityPhrasalDataGenericContext = {
+type ActivityPhrasalDataGenericContext = {
   itemResponseType: ActivityItemType;
 };
 
@@ -11,7 +11,7 @@ export type ActivityPhrasalDataSliderRowContext = ActivityPhrasalDataGenericCont
   maxValues: number[];
 };
 
-export type ActivityPhrasalBaseData<
+type ActivityPhrasalBaseData<
   TType extends string,
   TValue,
   TContext extends ActivityPhrasalDataGenericContext = ActivityPhrasalDataGenericContext,
@@ -21,42 +21,37 @@ export type ActivityPhrasalBaseData<
   context: TContext;
 };
 
-export type ActivityPhrasalArrayFieldData = ActivityPhrasalBaseData<'array', string[]>;
+type ActivityPhrasalArrayFieldData = ActivityPhrasalBaseData<'array', string[]>;
 
-export type ActivityPhrasalItemizedArrayValue = Record<number, string[]>;
+type ActivityPhrasalItemizedArrayValue = Record<number, string[]>;
 
-export type ActivityPhrasalIndexedArrayFieldData = ActivityPhrasalBaseData<
+type ActivityPhrasalIndexedArrayFieldData = ActivityPhrasalBaseData<
   'indexed-array',
   ActivityPhrasalItemizedArrayValue
 >;
 
-export type ActivityPhrasalIndexedMatrixValue = {
+type ActivityPhrasalIndexedMatrixValue = {
   label: string;
   values: string[];
 };
 
-export type ActivityPhrasalMatrixValue = {
+type ActivityPhrasalMatrixValue = {
   byRow: ActivityPhrasalIndexedMatrixValue[];
   byColumn: ActivityPhrasalIndexedMatrixValue[];
 };
 
-export type ActivityPhrasalMatrixFieldData = ActivityPhrasalBaseData<
-  'matrix',
-  ActivityPhrasalMatrixValue
->;
+type ActivityPhrasalMatrixFieldData = ActivityPhrasalBaseData<'matrix', ActivityPhrasalMatrixValue>;
 
-export type ActivityPhrasalData =
+type ActivityPhrasalData =
   | ActivityPhrasalArrayFieldData
   | ActivityPhrasalIndexedArrayFieldData
   | ActivityPhrasalMatrixFieldData;
 
 export type ActivitiesPhrasalData = Record<string, ActivityPhrasalData>;
 
-export const extractActivitiesPhrasalData = (
-  activityProgress: ActivityProgress,
-): ActivitiesPhrasalData => {
+export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhrasalData => {
   const data: Record<string, ActivityPhrasalData> = {};
-  for (const item of activityProgress.items) {
+  for (const item of items) {
     if (!phrasalTemplateCompatibleResponseTypes.includes(item.responseType)) {
       continue;
     }
