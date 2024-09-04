@@ -19,7 +19,7 @@ export const TargetSubjectLabel = ({ subject }: Props) => {
     <Box
       data-testid="subject-label"
       sx={{
-        display: 'flex',
+        display: 'inline-flex',
         alignItems: 'center',
         padding: '4px 8px',
         borderRadius: '8px',

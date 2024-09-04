@@ -32,6 +32,8 @@ const SurveyLayout = (props: Props) => {
         title={props.title}
       />
 
+      <Banners />
+
       <Box
         id="assessment-content-container"
         display="flex"
@@ -39,7 +41,6 @@ const SurveyLayout = (props: Props) => {
         flexDirection="column"
         overflow="scroll"
       >
-        <Banners />
         <Box display="flex" flex={1} justifyContent="center">
           {props.children}
         </Box>
