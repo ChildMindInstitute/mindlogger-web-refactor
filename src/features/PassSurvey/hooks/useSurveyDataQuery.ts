@@ -2,8 +2,8 @@ import { UseQueryResult } from '@tanstack/react-query';
 
 import { useActivityByIdQuery } from '~/entities/activity';
 import { useAppletByIdQuery } from '~/entities/applet';
+import { useMyAssignmentsQuery } from '~/entities/assignment';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
-import { useSubjectQuery } from '~/entities/subject';
 import {
   ActivityDTO,
   AppletDTO,
@@ -35,7 +35,8 @@ type Props = {
 export const useSurveyDataQuery = (props: Props): Return => {
   const { appletId, activityId, publicAppletKey, targetSubjectId } = props;
   const { featureFlags } = useFeatureFlags();
-  const isAssignmentsEnabled = !!featureFlags?.enableActivityAssign && !!targetSubjectId;
+  const isAssignmentsEnabled =
+    !!featureFlags?.enableActivityAssign && !!appletId && !!targetSubjectId;
 
   const {
     data: appletById,
@@ -44,7 +45,7 @@ export const useSurveyDataQuery = (props: Props): Return => {
     error: appletError,
   } = useAppletByIdQuery(
     publicAppletKey ? { isPublic: true, publicAppletKey } : { isPublic: false, appletId },
-    { select: (data) => data?.data },
+    { select: ({ data }) => data },
   );
 
   const {
@@ -54,7 +55,7 @@ export const useSurveyDataQuery = (props: Props): Return => {
     error: activityError,
   } = useActivityByIdQuery(
     { isPublic: !!publicAppletKey, activityId },
-    { select: (data) => data?.data?.result },
+    { select: ({ data }) => data.result },
   );
 
   const {
@@ -64,20 +65,27 @@ export const useSurveyDataQuery = (props: Props): Return => {
     error: eventsError,
   } = useEventsbyAppletIdQuery(
     publicAppletKey ? { isPublic: true, publicAppletKey } : { isPublic: false, appletId },
-    { select: (data) => data?.data?.result },
+    { select: ({ data }) => data.result },
   );
 
-  const subjectQueryResult = useSubjectQuery(targetSubjectId, {
-    select: (data) => data.data.result,
-    enabled: isAssignmentsEnabled,
-  });
+  // Details of targetSubject are only guaranteed available from /users/me/assignments endpoint
+  // (Unprivileged users do not have access to the /subjects endpoint directly)
+  const assignmentsResult = useMyAssignmentsQuery(
+    isAssignmentsEnabled ? props.appletId : undefined,
+    {
+      select: ({ data }) =>
+        data.result.assignments.find(({ targetSubject: { id } }) => id === targetSubjectId)
+          ?.targetSubject,
+      enabled: isAssignmentsEnabled,
+    },
+  );
 
   const {
     data: targetSubject,
     isError: isSubjectError,
     isLoading: isSubjectLoading,
     error: subjectError,
-  } = isAssignmentsEnabled ? subjectQueryResult : ({} as UseQueryResult<SubjectDTO, BaseError>);
+  } = isAssignmentsEnabled ? assignmentsResult : ({} as UseQueryResult<SubjectDTO, BaseError>);
 
   return {
     appletDTO: appletById?.result ?? null,
