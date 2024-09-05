@@ -26,6 +26,7 @@ import {
   MixpanelPayload,
   useOnceLayoutEffect,
 } from '~/shared/utils';
+import { TargetSubjectLabel } from '~/widgets/TargetSubjectLabel';
 
 type Props = {
   activityListItem: ActivityListItem;
@@ -50,7 +51,11 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     applet: context.applet,
   });
 
-  const activityEventId = getProgressId(activityListItem.activityId, activityListItem.eventId);
+  const activityEventId = getProgressId(
+    activityListItem.activityId,
+    activityListItem.eventId,
+    activityListItem.targetSubject?.id,
+  );
 
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(state, activityEventId),
@@ -59,6 +64,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   const autoCompletionRecord = useAutoCompletionRecord({
     entityId: activityListItem.flowId ?? activityListItem.activityId,
     eventId: activityListItem.eventId,
+    targetSubjectId: activityListItem.targetSubject?.id ?? null,
   });
 
   const step = activityProgress?.step || 0;
@@ -100,6 +106,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     return startSurvey({
       activityId: activityListItem.activityId,
       eventId: activityListItem.eventId,
+      targetSubjectId: activityListItem.targetSubject?.id ?? null,
       status: activityListItem.status,
       flowId: activityListItem.flowId,
       shouldRestart,
@@ -177,15 +184,21 @@ export const ActivityCard = ({ activityListItem }: Props) => {
             />
           )}
 
-          <ActivityLabel
-            isFlow={isFlow && showActivityFlowBudget}
-            activityLength={activityLength ?? 0}
-            isSupportedActivity={isEntitySupported}
-            isActivityInProgress={isInProgress}
-            countOfCompletedQuestions={countOfCompletedQuestions}
-            countOfCompletedActivities={countOfCompletedActivities}
-            numberOfActivitiesInFlow={numberOfActivitiesInFlow}
-          />
+          <Box display="flex" gap="8px" flexWrap="wrap">
+            <ActivityLabel
+              isFlow={isFlow && showActivityFlowBudget}
+              activityLength={activityLength ?? 0}
+              isSupportedActivity={isEntitySupported}
+              isActivityInProgress={isInProgress}
+              countOfCompletedQuestions={countOfCompletedQuestions}
+              countOfCompletedActivities={countOfCompletedActivities}
+              numberOfActivitiesInFlow={numberOfActivitiesInFlow}
+            />
+
+            {!!activityListItem.targetSubject && (
+              <TargetSubjectLabel subject={activityListItem.targetSubject} />
+            )}
+          </Box>
 
           {description && <ActivityCardDescription description={description} isFlow={isFlow} />}
 

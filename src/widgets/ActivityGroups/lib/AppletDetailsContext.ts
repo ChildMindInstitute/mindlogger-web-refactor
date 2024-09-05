@@ -1,10 +1,12 @@
 import { createContext } from 'react';
 
-import { AppletBaseDTO, AppletEventsResponse } from '~/shared/api';
+import { AppletBaseDTO, AppletEventsResponse, MyAssignmentsDTO } from '~/shared/api';
 
 type AppletDetailsContextProps = {
   applet: AppletBaseDTO;
   events: AppletEventsResponse;
+  /** Activity assignments array - null if activity assign is disabled */
+  assignments: MyAssignmentsDTO['assignments'] | null;
 };
 
 type Public = {

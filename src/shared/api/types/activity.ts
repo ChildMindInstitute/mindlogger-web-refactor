@@ -222,6 +222,7 @@ export type CompletedEntityDTO = {
   id: string;
   answerId: string;
   submitId: string;
+  targetSubjectId: string | null;
   scheduledEventId: string;
   localEndDate: string;
   localEndTime: string;

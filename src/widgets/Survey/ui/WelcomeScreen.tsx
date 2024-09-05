@@ -23,12 +23,13 @@ const WelcomeScreen = () => {
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
   const isFlow = !!context.flow;
-
   const isTimedActivity = !!context.event?.timers?.timer;
+  const targetSubjectId = context.targetSubject?.id ?? null;
 
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
     eventId: context.eventId,
+    targetSubjectId,
   });
 
   const startAssessment = useCallback(() => {
@@ -37,19 +38,24 @@ const WelcomeScreen = () => {
     const isGroupStarted = isGroupDefined && groupProgress.startAt && !groupProgress.endAt;
 
     if (context.flow && !isGroupStarted) {
-      startFlow(context.eventId, context.flow);
+      startFlow(context.eventId, context.flow, targetSubjectId);
     }
 
     if (!context.flow) {
-      startActivity(context.activityId, context.eventId);
+      startActivity(context.activityId, context.eventId, targetSubjectId);
     }
 
-    return setInitialProgress({ activity: context.activity, eventId: context.eventId });
+    return setInitialProgress({
+      activity: context.activity,
+      eventId: context.eventId,
+      targetSubjectId,
+    });
   }, [
     context.activity,
     context.activityId,
     context.eventId,
     context.flow,
+    targetSubjectId,
     groupProgress,
     setInitialProgress,
     startActivity,

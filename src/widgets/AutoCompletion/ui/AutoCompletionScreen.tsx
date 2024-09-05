@@ -45,16 +45,19 @@ export const AutoCompletionScreen = () => {
     removeAutoCompletion({
       entityId: context.entityId,
       eventId: context.eventId,
+      targetSubjectId: context.targetSubject?.id ?? null,
     });
 
     entityCompleted({
       entityId: context.entityId,
       eventId: context.eventId,
+      targetSubjectId: context.targetSubject?.id ?? null,
     });
 
     removeActivityProgress({
       activityId: context.activityId,
       eventId: context.eventId,
+      targetSubjectId: context.targetSubject?.id ?? null,
     });
 
     if (context.publicAppletKey) {
@@ -74,6 +77,7 @@ export const AutoCompletionScreen = () => {
     context.entityId,
     context.eventId,
     context.publicAppletKey,
+    context.targetSubject?.id,
     entityCompleted,
     navigator,
     removeActivityProgress,

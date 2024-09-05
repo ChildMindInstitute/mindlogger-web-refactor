@@ -77,6 +77,7 @@ export type ActivityBaseDTO = {
   order: number;
   containsResponseTypes: Array<ItemResponseTypeDTO>;
   itemCount: number;
+  autoAssign: boolean;
 };
 
 type Integration = 'loris';
@@ -105,6 +106,7 @@ export type ActivityFlowDTO = {
   order: number;
   isHidden: boolean;
   activityIds: Array<string>;
+  autoAssign: boolean;
 };
 
 export type EventAvailabilityDto = {

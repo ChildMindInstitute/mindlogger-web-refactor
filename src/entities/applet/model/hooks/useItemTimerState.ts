@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '~/shared/utils';
 type Props = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   itemId: string;
 };
 
@@ -24,11 +25,16 @@ type InitializeTimerProps = {
   duration: number;
 };
 
-export const useItemTimerState = ({ activityId, eventId, itemId }: Props): Return => {
+export const useItemTimerState = ({
+  activityId,
+  eventId,
+  targetSubjectId,
+  itemId,
+}: Props): Return => {
   const dispatch = useAppDispatch();
 
   const timerSettingsState = useAppSelector((state) =>
-    selectActivityProgress(state, getProgressId(activityId, eventId)),
+    selectActivityProgress(state, getProgressId(activityId, eventId, targetSubjectId)),
   );
 
   const timerSettings = timerSettingsState?.itemTimer[itemId] ?? null;
@@ -39,6 +45,7 @@ export const useItemTimerState = ({ activityId, eventId, itemId }: Props): Retur
         actions.setItemTimerStatus({
           activityId,
           eventId,
+          targetSubjectId,
           itemId,
           timerStatus: {
             duration,
@@ -47,7 +54,7 @@ export const useItemTimerState = ({ activityId, eventId, itemId }: Props): Retur
         }),
       );
     },
-    [activityId, dispatch, eventId, itemId],
+    [activityId, dispatch, eventId, itemId, targetSubjectId],
   );
 
   const removeTimer = useCallback(() => {
@@ -55,20 +62,22 @@ export const useItemTimerState = ({ activityId, eventId, itemId }: Props): Retur
       actions.removeItemTimerStatus({
         activityId,
         eventId,
+        targetSubjectId,
         itemId,
       }),
     );
-  }, [activityId, dispatch, eventId, itemId]);
+  }, [activityId, dispatch, eventId, itemId, targetSubjectId]);
 
   const timerTick = useCallback(() => {
     return dispatch(
       actions.itemTimerTick({
         activityId,
         eventId,
+        targetSubjectId,
         itemId,
       }),
     );
-  }, [activityId, dispatch, eventId, itemId]);
+  }, [activityId, dispatch, eventId, itemId, targetSubjectId]);
 
   return {
     timerSettings,

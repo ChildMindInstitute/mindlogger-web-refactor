@@ -8,9 +8,10 @@ import { useAppDispatch } from '~/shared/utils';
 type Props = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 };
 
-export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
+export const useSaveItemAnswer = ({ activityId, eventId, targetSubjectId }: Props) => {
   const dispatch = useAppDispatch();
 
   const saveItemAnswer = useCallback(
@@ -19,12 +20,13 @@ export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
         actions.saveItemAnswer({
           entityId: activityId,
           eventId,
+          targetSubjectId,
           itemId,
           answer,
         }),
       );
     },
-    [dispatch, activityId, eventId],
+    [dispatch, activityId, eventId, targetSubjectId],
   );
 
   const saveItemAdditionalText = useCallback(
@@ -33,12 +35,13 @@ export const useSaveItemAnswer = ({ activityId, eventId }: Props) => {
         actions.saveAdditionalText({
           entityId: activityId,
           eventId,
+          targetSubjectId,
           itemId,
           additionalText,
         }),
       );
     },
-    [dispatch, activityId, eventId],
+    [dispatch, activityId, eventId, targetSubjectId],
   );
 
   const removeItemAnswer = useCallback(

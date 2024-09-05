@@ -2,29 +2,29 @@ import { ActivityGroupsBuildManager } from '../services/ActivityGroupsBuildManag
 
 import { ActivityListGroup } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
-import { AppletBaseDTO, AppletEventsResponse } from '~/shared/api';
+import { AppletBaseDTO, AppletEventsResponse, HydratedAssignmentDTO } from '~/shared/api';
 import { useAppSelector } from '~/shared/utils';
 
 type Props = {
   applet: AppletBaseDTO;
   events: AppletEventsResponse;
+  assignments: HydratedAssignmentDTO[] | null;
 };
 
 type Return = {
   groups: ActivityListGroup[];
 };
 
-export const useActivityGroups = ({ applet, events }: Props): Return => {
+export const useActivityGroups = ({ applet, events, assignments }: Props): Return => {
   const groupsInProgress = useAppSelector(appletModel.selectors.groupProgressSelector);
 
-  const groupsResult = ActivityGroupsBuildManager.process({
+  const { groups } = ActivityGroupsBuildManager.process({
     activities: applet.activities,
     flows: applet.activityFlows,
     events,
+    assignments,
     entityProgress: groupsInProgress,
   });
 
-  return {
-    groups: groupsResult.groups,
-  };
+  return { groups };
 };

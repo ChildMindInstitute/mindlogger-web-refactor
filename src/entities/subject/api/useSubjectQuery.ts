@@ -4,12 +4,12 @@ type FetchFn = typeof subjectService.getSubjectById;
 type Options<TData> = QueryOptions<FetchFn, TData>;
 
 export const useSubjectQuery = <TData = ReturnAwaited<FetchFn>>(
-  subjectId: string,
+  subjectId: string | null,
   options?: Options<TData>,
 ) => {
   return useBaseQuery(
     ['subjectDetails', { subjectId }],
-    () => subjectService.getSubjectById({ subjectId }),
+    () => subjectService.getSubjectById({ subjectId: String(subjectId) }),
     options,
   );
 };

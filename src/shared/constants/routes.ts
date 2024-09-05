@@ -86,16 +86,21 @@ const ROUTES = {
       entityType,
       eventId,
       flowId,
+      targetSubjectId,
     }: {
       appletId: string;
       activityId: string;
       eventId: string;
       entityType: 'regular' | 'flow';
       flowId: string | null;
-    }) =>
-      `/protected/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}?${
-        flowId ? `flowId=${flowId}` : ''
-      }`,
+      targetSubjectId: string | null;
+    }) => {
+      const params = new URLSearchParams();
+      if (flowId) params.append('flowId', flowId);
+      if (targetSubjectId) params.append('targetSubjectId', targetSubjectId);
+
+      return `/protected/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}?${params.toString()}`;
+    },
   },
   invitationAccept: {
     path: '/protected/invite/accepted',
@@ -112,14 +117,25 @@ const ROUTES = {
       activityId,
       flowId,
       publicAppletKey,
+      targetSubjectId,
     }: {
       appletId: string;
       activityId: string;
       eventId: string;
       flowId: string | null;
       publicAppletKey: string | null;
-    }) =>
-      `${ROUTES.autoCompletion.path}?appletId=${appletId}&eventId=${eventId}&activityId=${activityId}${flowId ? `&flowId=${flowId}` : ''}${publicAppletKey ? `&publicAppletKey=${publicAppletKey}` : ''}`,
+      targetSubjectId: string | null;
+    }) => {
+      const params = new URLSearchParams();
+      params.append('appletId', appletId);
+      params.append('eventId', eventId);
+      params.append('activityId', activityId);
+      if (flowId) params.append('flowId', flowId);
+      if (publicAppletKey) params.append('publicAppletKey', publicAppletKey);
+      if (targetSubjectId) params.append('targetSubjectId', targetSubjectId);
+
+      return `${ROUTES.autoCompletion.path}?${params.toString()}`;
+    },
   },
 };
 

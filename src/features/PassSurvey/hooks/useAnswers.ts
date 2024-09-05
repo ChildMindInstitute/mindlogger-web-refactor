@@ -31,6 +31,7 @@ export const useAnswerBuilder = (): AnswerBuilder => {
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
     eventId: context.eventId,
+    targetSubjectId: context.targetSubject?.id ?? null,
   });
 
   const { getMultiInformantState, isInMultiInformantFlow } =
@@ -73,21 +74,26 @@ export const useAnswerBuilder = (): AnswerBuilder => {
 
       const multiInformantState = getMultiInformantState();
       if (isInMultiInformantFlow()) {
+        // Take Now flow
         answer.sourceSubjectId = multiInformantState?.sourceSubject?.id;
         answer.targetSubjectId = multiInformantState?.targetSubject?.id;
+      } else if (context.targetSubject) {
+        // Activity assignment
+        answer.targetSubjectId = context.targetSubject.id;
       }
 
       return answer;
     },
     [
       groupProgress,
+      context.encryption,
       context.event,
       context.appletId,
       context.appletVersion,
       context.flow,
-      context.encryption,
       context.publicAppletKey,
       context.integrations,
+      context.targetSubject,
       getMultiInformantState,
       isInMultiInformantFlow,
     ],

@@ -118,18 +118,21 @@ export type ProgressState = Record<ProgressId, ActivityProgress>;
 export type SaveActivityProgressPayload = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   progress: ActivityProgress;
 };
 
 export type ChangeSummaryScreenVisibilityPayload = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   isSummaryScreenOpen: boolean;
 };
 
 export type SetItemTimerPayload = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   itemId: string;
   timerStatus: ItemTimerProgress;
 };
@@ -137,28 +140,33 @@ export type SetItemTimerPayload = {
 export type ItemTimerTickPayload = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   itemId: string;
 };
 
 export type RemoveActivityProgressPayload = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 };
 
 export type RemoveGroupProgressPayload = {
   entityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 };
 
 export type SaveGroupProgressPayload = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   progressPayload: GroupProgress;
 };
 
 export type SaveSummaryDataInContext = {
   entityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 
   activityId: string;
   summaryData: FlowSummaryData;
@@ -167,6 +175,7 @@ export type SaveSummaryDataInContext = {
 export type SaveItemAnswerPayload = {
   entityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   itemId: string;
   answer: Answer;
 };
@@ -174,6 +183,7 @@ export type SaveItemAnswerPayload = {
 export type SaveItemAdditionalTextPayload = {
   entityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   itemId: string;
   additionalText: string;
 };
@@ -181,11 +191,13 @@ export type SaveItemAdditionalTextPayload = {
 export type UpdateStepPayload = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 };
 
 export type SaveUserEventPayload = {
   entityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   itemId: string;
   userEvent: UserEvent;
 };
@@ -193,6 +205,7 @@ export type SaveUserEventPayload = {
 export type UpdateUserEventByIndexPayload = {
   entityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   userEventIndex: number;
   userEvent: UserEvent;
 };
@@ -208,17 +221,20 @@ export type CompletedEventEntities = Record<string, EventCompletions>;
 export type InProgressEntity = {
   entityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 };
 
 export type InProgressActivity = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 };
 
 export type InProgressFlow = {
   flowId: string;
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   pipelineActivityOrder: number;
 };
 

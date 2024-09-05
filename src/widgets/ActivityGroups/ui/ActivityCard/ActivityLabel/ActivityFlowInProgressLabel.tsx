@@ -30,7 +30,7 @@ export const ActivityFlowInProgressLabel = (props: Props) => {
       <Avatar src={DocumentsIcon} sx={{ width: '18px', height: '18px' }} />
       <ActivityLabelTypography
         text={t('countOfCompletedActivities', {
-          length: props.activityFlowLength,
+          count: props.activityFlowLength,
           countOfCompletedActivities: props.countOfCompletedActivities,
         })}
         color={Theme.colors.light.onSurface}

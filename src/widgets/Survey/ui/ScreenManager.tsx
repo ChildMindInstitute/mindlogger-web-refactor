@@ -21,7 +21,7 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(
       state,
-      getProgressId(context.activityId, context.eventId),
+      getProgressId(context.activityId, context.eventId, context.targetSubject?.id),
     ),
   );
 
@@ -38,6 +38,7 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
     saveAutoCompletion({
       entityId: context.entityId,
       eventId: context.eventId,
+      targetSubjectId: context.targetSubject?.id ?? null,
       autoCompletion: {
         activityIdsToSubmit: activitiesToSubmit,
         successfullySubmittedActivityIds: [],
@@ -51,6 +52,7 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
     context.entityId,
     context.eventId,
     context.flow,
+    context.targetSubject?.id,
     openTimesUpModal,
     saveAutoCompletion,
   ]);
