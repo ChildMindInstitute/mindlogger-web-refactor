@@ -88,39 +88,36 @@ describe('Action Plan', () => {
     });
 
     it('should extract data from `date` activity type', () => {
-      const data = extractActivitiesPhrasalData([
-        newDateItem('item', ['Fri Sep 06 2024 00:00:00 GMT-0700 (Pacific Daylight Time)']),
-      ]);
+      const date = new Date('Fri Sep 06 2024 00:00:00 GMT-0700 (Pacific Daylight Time)');
+      const data = extractActivitiesPhrasalData([newDateItem('item', [date.toString()])]);
 
       expect(data).toHaveProperty('item');
       expect(data.item).toHaveProperty('type', 'array');
-      expect(data.item).toHaveProperty('values.0', '2024-09-06');
+      expect(data.item).toHaveProperty('values.0', date.toLocaleDateString());
       expect(data.item).toHaveProperty('context.itemResponseType', 'date');
     });
 
     it('should extract data from `time` activity type', () => {
-      const data = extractActivitiesPhrasalData([
-        newTimeItem('item', ['Wed Sep 04 2024 00:05:00 GMT-0700 (Pacific Daylight Time)']),
-      ]);
+      const date = new Date('Wed Sep 04 2024 00:05:00 GMT-0700 (Pacific Daylight Time)');
+      const data = extractActivitiesPhrasalData([newTimeItem('item', [date.toString()])]);
 
       expect(data).toHaveProperty('item');
       expect(data.item).toHaveProperty('type', 'array');
-      expect(data.item).toHaveProperty('values.0', expect.stringContaining('12:05:00'));
+      expect(data.item).toHaveProperty('values.0', date.toLocaleTimeString());
       expect(data.item).toHaveProperty('context.itemResponseType', 'time');
     });
 
     it('should extract data from `timeRange` activity type', () => {
+      const date1 = new Date('Wed Sep 04 2024 00:05:00 GMT-0700 (Pacific Daylight Time)');
+      const date2 = new Date('Wed Sep 04 2024 00:15:00 GMT-0700 (Pacific Daylight Time)');
       const data = extractActivitiesPhrasalData([
-        newTimeRangeItem('item', [
-          'Wed Sep 04 2024 00:05:00 GMT-0700 (Pacific Daylight Time)',
-          'Wed Sep 04 2024 00:15:00 GMT-0700 (Pacific Daylight Time)',
-        ]),
+        newTimeRangeItem('item', [date1.toString(), date2.toString()]),
       ]);
 
       expect(data).toHaveProperty('item');
       expect(data.item).toHaveProperty('type', 'array');
-      expect(data.item).toHaveProperty('values.0', expect.stringContaining('12:05:00'));
-      expect(data.item).toHaveProperty('values.1', expect.stringContaining('12:15:00'));
+      expect(data.item).toHaveProperty('values.0', date1.toLocaleTimeString());
+      expect(data.item).toHaveProperty('values.1', date2.toLocaleTimeString());
       expect(data.item).toHaveProperty('context.itemResponseType', 'timeRange');
     });
 
