@@ -7,8 +7,8 @@ import { LaunchDarkyFlagsMap, FeatureFlag, FeatureFlagType } from '../types/feat
 
 // The `NoInfer` generic is not available in the version of TypeScript used by
 // this repo. So we have to just put a homemade version here.
-// eslint-disable-next-line unused-imports/no-unused-vars
-type NoInfer<T> = intrinsic;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type NoInfer<T> = [T][T extends any ? 0 : never];
 
 /**
  * Internal wrapper for LaunchDarkly's hooks and flags.
