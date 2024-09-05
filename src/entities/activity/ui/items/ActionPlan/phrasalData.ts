@@ -108,7 +108,7 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
             label: row.rowName,
             values:
               item.answer[rowIndex]?.filter<string>(
-                (value) => value !== null && value !== undefined,
+                (value): value is string => value !== null && value !== undefined,
               ) || [],
           };
         },
