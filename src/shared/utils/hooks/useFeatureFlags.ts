@@ -5,6 +5,11 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { LaunchDarkyFlagsMap, FeatureFlag, FeatureFlagType } from '../types/featureFlags';
 
+// The `NoInfer` generic is not available in the version of TypeScript used by
+// this repo. So we have to just put a homemade version here.
+// eslint-disable-next-line unused-imports/no-unused-vars
+type NoInfer<T> = intrinsic;
+
 /**
  * Internal wrapper for LaunchDarkly's hooks and flags.
  */
