@@ -112,7 +112,7 @@ export const ResponseSegment = ({ phrasalData, field }: ResponseSegmentProps) =>
     // This also shouldn't happen. But including a `else` here allows all
     // previous branches to have explicitly defined condition, so it's more
     // clear this way.
-    throw new Error(`Invalie phrasal data type: ${fieldPhrasalDataType}`);
+    throw new Error(`Invalid phrasal data type: ${fieldPhrasalDataType}`);
   }
 
   return (
