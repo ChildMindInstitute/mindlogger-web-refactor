@@ -147,7 +147,10 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   useOnceLayoutEffect(() => {
     if (
       context.startActivityOrFlow &&
-      // TODO: Remove `!activityListItem.targetSubject` check once Take Now is refactored in
+      // TODO: This `!activityListItem.targetSubject` check is added to ensure that Take Now is
+      // only triggered once, on the singular self-report instance of ActivityCard. However, this
+      // causes Take Now to fail when there is no self-report card, which is a possible scenario
+      // with the introduction of MI assignments. Remove this check when Take Now is refactored in
       // https://mindlogger.atlassian.net/browse/M2-7796
       !activityListItem.targetSubject &&
       ((!isFlow && context.startActivityOrFlow === activityListItem.activityId) ||

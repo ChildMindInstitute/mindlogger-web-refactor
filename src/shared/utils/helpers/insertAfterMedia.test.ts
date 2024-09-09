@@ -1,7 +1,7 @@
 import { insertAfterMedia } from './insertAfterMedia';
 
 describe('insertAfterMedia', () => {
-  it('should insert the string after the first line containing content that does not contain solely media', () => {
+  it('should insert the string before the first line containing content that does not contain solely media', () => {
     const markdown = `![Image](image.jpg)
 <img src="image.jpg" alt="Image">
 <video src="video.mp4"></video>
