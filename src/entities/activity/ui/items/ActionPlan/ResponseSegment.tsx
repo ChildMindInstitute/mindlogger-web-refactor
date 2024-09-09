@@ -30,9 +30,10 @@ const joinWithComma: FieldValuesJoiner = (values) => values.join(', ');
 type ResponseSegmentProps = {
   phrasalData: ActivitiesPhrasalData;
   field: PhrasalTemplateItemResponseField;
+  leadingSpace?: boolean;
 };
 
-export const ResponseSegment = ({ phrasalData, field }: ResponseSegmentProps) => {
+export const ResponseSegment = ({ phrasalData, field, leadingSpace }: ResponseSegmentProps) => {
   const { t } = useActionPlanTranslation();
   const listPadding = useXScaledDimension(40);
 
@@ -132,7 +133,10 @@ export const ResponseSegment = ({ phrasalData, field }: ResponseSegmentProps) =>
           </Box>
         </>
       ) : (
-        <>&nbsp;{joinSentenceWords(words)}&nbsp;</>
+        <>
+          {leadingSpace ? ' ' : ''}
+          {joinSentenceWords(words)}
+        </>
       )}
     </Text>
   );

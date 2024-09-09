@@ -6,7 +6,7 @@ import { useXScaledDimension, useYScaledDimension } from './hooks';
 import { ActivitiesPhrasalData } from './phrasalData';
 import { ResponseSegment } from './ResponseSegment';
 import { TextSegment } from './TextSegment';
-import { PhrasalTemplatePhrase } from '../../../lib';
+import { PhrasalTemplatePhrase, PhrasalTemplateField } from '../../../lib';
 
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
@@ -28,16 +28,29 @@ export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
   const fontSize = useXScaledDimension(16);
   const lineHeight = useYScaledDimension(24);
 
-  const components = phrase.fields.reduce((acc, field) => {
-    if (field.type === 'sentence') {
-      acc.push(<TextSegment text={field.text} />);
-    } else if (field.type === 'item_response') {
-      acc.push(<ResponseSegment phrasalData={phrasalData} field={field} />);
-    } else if (field.type === 'line_break') {
-      acc.push(<br />);
-    }
-    return acc;
-  }, [] as React.ReactNode[]);
+  const { components } = phrase.fields.reduce(
+    (acc, field, fieldIndex) => {
+      const isLineStart = fieldIndex === 0 || acc.prevField?.type === 'line_break';
+      const leadingSpace = !isLineStart;
+
+      if (field.type === 'sentence') {
+        acc.components.push(<TextSegment text={field.text} leadingSpace={leadingSpace} />);
+      } else if (field.type === 'item_response') {
+        acc.components.push(
+          <ResponseSegment phrasalData={phrasalData} field={field} leadingSpace={leadingSpace} />,
+        );
+      } else if (field.type === 'line_break') {
+        acc.components.push(<br />);
+      }
+
+      acc.prevField = field;
+      return acc;
+    },
+    { components: [], prevField: undefined } as {
+      components: React.ReactNode[];
+      prevField?: PhrasalTemplateField;
+    },
+  );
 
   return (
     <Box display="flex" gap={`${gap}px`} minHeight={minHeight}>
