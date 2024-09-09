@@ -147,6 +147,9 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   useOnceLayoutEffect(() => {
     if (
       context.startActivityOrFlow &&
+      // TODO: Remove `!activityListItem.targetSubject` check once Take Now is refactored in
+      // https://mindlogger.atlassian.net/browse/M2-7796
+      !activityListItem.targetSubject &&
       ((!isFlow && context.startActivityOrFlow === activityListItem.activityId) ||
         (isFlow && context.startActivityOrFlow === activityListItem.flowId))
     ) {

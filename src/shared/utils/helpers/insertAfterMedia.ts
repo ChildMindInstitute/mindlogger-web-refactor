@@ -24,10 +24,10 @@ export const insertAfterMedia = (markdown: string, inserted: string) => {
 
   if (i === lines.length) {
     // Append string to bottom if no lines containing non-media content were found
-    lines.push(inserted);
+    lines.push(`\n${inserted}`);
   } else {
     // Else insert string before line containing non-media content
-    lines.splice(i, 0, inserted);
+    lines.splice(i, 0, `\n${inserted}\n`);
   }
 
   return lines.join('\n');

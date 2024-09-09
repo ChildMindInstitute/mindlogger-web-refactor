@@ -16,7 +16,9 @@ This line also does not contain media.`;
 <img src="image.jpg" alt="Image">
 <video src="video.mp4"></video>
 <audio src="audio.mp3"></audio>
+
 Inserted string
+
 This line does not contain media.
 This line also does not contain media.`);
   });
@@ -34,6 +36,7 @@ This line also does not contain media.`);
 <img src="image.jpg" alt="Image">
 <video src="video.mp4"></video>
 <audio src="audio.mp3"></audio>
+
 Inserted string`);
   });
 
@@ -52,7 +55,9 @@ This line does not contain media.`;
 <img src="image.jpg" alt="Image">
 <video src="video.mp4"></video>
 <audio src="audio.mp3"></audio>
+
 Inserted string
+
 ![Image](image.jpg) This line contains text and media.
 This line does not contain media.`);
   });
@@ -78,8 +83,34 @@ This line also does not contain media.`;
 <audio src="audio.mp3"></audio>
 :::
 ::: hljs-center <img src="image.jpg" alt="Image"> :::
+
 Inserted string
+
 ::: hljs-right This line does not contain media. :::
+This line also does not contain media.`);
+  });
+
+  it('should preserve adjacent paragraphs when inserted', () => {
+    const markdown = `![Image](image.jpg)
+
+This line does not contain media.
+
+<video src="video.mp4"></video>
+
+This line also does not contain media.`;
+    const inserted = 'Inserted string';
+
+    const result = insertAfterMedia(markdown, inserted);
+
+    expect(result).toBe(`![Image](image.jpg)
+
+
+Inserted string
+
+This line does not contain media.
+
+<video src="video.mp4"></video>
+
 This line also does not contain media.`);
   });
 });
