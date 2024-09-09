@@ -38,13 +38,10 @@ const theme = createTheme({
             }),
           }),
           '.MuiAlert-action': {
+            marginLeft: 0,
             marginRight: 0,
             paddingTop: 0,
             alignItems: 'center',
-            '.MuiIconButton-root': {
-              padding: theme.spacing(1),
-              margin: theme.spacing(0.4),
-            },
           },
           '.MuiAlert-icon': {
             marginLeft: 'auto',
@@ -52,6 +49,7 @@ const theme = createTheme({
           '.MuiAlert-message': {
             padding: 0,
             maxWidth: theme.spacing(80),
+            marginRight: 'auto',
           },
           a: {
             textDecoration: 'underline',

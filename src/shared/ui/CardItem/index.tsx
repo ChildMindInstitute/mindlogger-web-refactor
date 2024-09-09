@@ -1,11 +1,11 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useContext, useMemo } from 'react';
 
-import { Theme } from '../../constants';
-import { useCustomMediaQuery, useCustomTranslation } from '../../utils';
+import { TargetSubjectLine } from './TargetSubjectLine';
 
-import { Markdown } from '~/shared/ui';
-import Box from '~/shared/ui/Box';
-import Text from '~/shared/ui/Text';
+import { SurveyContext } from '~/features/PassSurvey';
+import { Theme } from '~/shared/constants';
+import { Box, Markdown, Text } from '~/shared/ui';
+import { insertAfterMedia, useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 
 interface CardItemProps extends PropsWithChildren {
   watermark?: string;
@@ -20,6 +20,14 @@ export const CardItem = ({ children, markdown, isOptional, testId }: CardItemPro
 
   const { t } = useCustomTranslation();
 
+  const context = useContext(SurveyContext);
+
+  const processedMarkdown = useMemo(() => {
+    if (!context.targetSubject) return markdown;
+
+    return insertAfterMedia(markdown, '<div id="target-subject"></div>');
+  }, [markdown, context.targetSubject]);
+
   return (
     <Box
       data-testid={testId || 'active-item'}
@@ -31,7 +39,17 @@ export const CardItem = ({ children, markdown, isOptional, testId }: CardItemPro
       sx={{ fontFamily: 'Atkinson', fontWeight: '400', fontSize: '18px', lineHeight: '28px' }}
     >
       <Box>
-        <Markdown markdown={markdown} />
+        <Markdown
+          markdown={processedMarkdown}
+          components={{
+            div: (props) =>
+              props.id === 'target-subject' ? (
+                <TargetSubjectLine subject={context.targetSubject} />
+              ) : (
+                <div {...props} />
+              ),
+          }}
+        />
         {isOptional && (
           <Text
             variant="body1"

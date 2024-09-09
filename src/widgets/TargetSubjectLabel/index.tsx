@@ -19,7 +19,7 @@ export const TargetSubjectLabel = ({ subject }: Props) => {
     <Box
       data-testid="subject-label"
       sx={{
-        display: 'flex',
+        display: 'inline-flex',
         alignItems: 'center',
         padding: '4px 8px',
         borderRadius: '8px',
@@ -28,7 +28,7 @@ export const TargetSubjectLabel = ({ subject }: Props) => {
         whiteSpace: 'nowrap',
       }}
     >
-      <Avatar src={SubjectIcon} sx={{ width: '18px', height: '18px' }} />
+      <Avatar src={SubjectIcon} sx={{ width: '18px', height: '18px', borderRadius: 0 }} />
       <Text
         color={Theme.colors.light.onSurface}
         fontSize="14px"
