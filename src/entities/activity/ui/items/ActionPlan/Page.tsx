@@ -58,6 +58,8 @@ export const Page = ({
     >
       <Title>{appletTitle}</Title>
       <Box
+        position="relative"
+        display="grid"
         paddingTop={`${scaledTopPadding}px`}
         paddingRight={`${scaledRightPadding}px`}
         paddingBottom={`${scaledBottomPadding}px`}
@@ -95,6 +97,9 @@ export const Page = ({
           flexDirection="row"
           alignItems="center"
           justifyContent="center"
+          position="absolute"
+          bottom="0"
+          justifySelf="center"
           sx={{ margin: '10px 0' }}
         >
           <img src={footerLogo} alt={t('credit') || ''} />
