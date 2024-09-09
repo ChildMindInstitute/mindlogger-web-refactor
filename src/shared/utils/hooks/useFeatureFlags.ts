@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
-import { LDFlagValue } from 'launchdarkly-react-client-sdk';
-import { useFlags } from 'launchdarkly-react-client-sdk';
+import { LDFlagValue, useFlags } from 'launchdarkly-react-client-sdk';
 
 import { LaunchDarkyFlagsMap, FeatureFlag, FeatureFlagType } from '../types/featureFlags';
 
