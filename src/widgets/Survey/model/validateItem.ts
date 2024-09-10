@@ -30,9 +30,14 @@ function isAnswerShouldBeNumeric(item: appletModel.ItemRecord) {
 }
 
 function isAnswerTooLarge(item: appletModel.ItemRecord) {
-  if (item.responseType === 'paragraphText' && item.config.maxResponseLength) {
-    return item.answer?.[0]?.length > item.config.maxResponseLength ?? true;
+  if (
+    !['paragraphText', 'text'].includes(item.responseType) ||
+    !('maxResponseLength' in item.config) ||
+    typeof item.answer[0] !== 'string'
+  ) {
+    return false;
   }
+  return item.answer[0].length > item.config.maxResponseLength ?? true;
 }
 
 function isAnswerEmpty(item: appletModel.ItemRecord): boolean {

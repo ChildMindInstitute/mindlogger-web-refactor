@@ -18,7 +18,7 @@ type TextItemProps = {
 export const TextItem = ({ item, value, onValueChange, isDisabled }: TextItemProps) => {
   const { maxResponseLength } = item.config;
   const [hasError, setHasError] = useState(
-    maxResponseLength > 0 && value.length > maxResponseLength,
+    maxResponseLength > 0 && value?.length > maxResponseLength,
   );
 
   const numCharacters = value?.length || 0;
