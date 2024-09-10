@@ -2,7 +2,7 @@ import React from 'react';
 
 import Avatar from '@mui/material/Avatar';
 
-import { useXScaledDimension, useYScaledDimension } from './hooks';
+import { usePageMaxLineCount, useXScaledDimension, useYScaledDimension } from './hooks';
 import { ActivitiesPhrasalData } from './phrasalData';
 import { ResponseSegment } from './ResponseSegment';
 import { TextSegment } from './TextSegment';
@@ -20,13 +20,12 @@ export type PhraseProps = {
 export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
   const gap = useXScaledDimension(24);
   const minHeight = useXScaledDimension(72);
-
   const imageWidth = useXScaledDimension(67);
   const imageHeight = useXScaledDimension(66);
   const imagePadding = useXScaledDimension(2);
-
   const fontSize = useXScaledDimension(16);
   const lineHeight = useYScaledDimension(24);
+  const maxLineCount = usePageMaxLineCount();
 
   const { components } = phrase.fields.reduce(
     (acc, field, fieldIndex) => {
@@ -78,7 +77,19 @@ export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
           )}
         </Box>
       )}
-      <Box fontSize={`${fontSize}px`} lineHeight={`${lineHeight}px`}>
+      <Box
+        fontSize={`${fontSize}px`}
+        lineHeight={`${lineHeight}px`}
+        display="-webkit-inline-box"
+        maxHeight="100%"
+        overflow="hidden"
+        sx={{
+          lineClamp: `${maxLineCount}`,
+          '-webkit-line-clamp': `${maxLineCount}`,
+          boxOrient: 'vertical',
+          '-webkit-box-orient': 'vertical',
+        }}
+      >
         {React.Children.toArray(components)}
       </Box>
     </Box>

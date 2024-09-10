@@ -28,6 +28,14 @@ export const usePageMaxHeight = () => {
   return 2504;
 };
 
+export const usePageMaxLineCount = () => {
+  // This number: 99, corresponds to the number of lines of plain text that can
+  // fit into a card of at most 2504px height. If the max height is adjusted,
+  // and/or if the text element's styling is adjusted, then this number would
+  // also need to be adjusted as well.
+  return 99;
+};
+
 export const useXScaledDimension = (dimension: number) => {
   const pageWidth = usePageWidth();
   return (pageWidth / PageDimension.maxWidth) * dimension;

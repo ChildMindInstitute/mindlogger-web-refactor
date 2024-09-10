@@ -81,47 +81,64 @@ export const Document = forwardRef<HTMLDivElement, DocumentProps>(
 
         const pageHeight = await measureComponentHeight(availableWidth, curPage);
         if (pageHeight <= pageMaxHeight) {
+          // If the rendered page fits into the maximum allowed page height,
+          // then stop rendering.
           return [curPage, []];
-        } else {
-          if (pagePhrases.length <= 1) {
-            const pagePhrase = pagePhrases[0];
-            const pagePhraseFields = pagePhrase.fields;
-
-            const splits: [IdentifiblePhrasalTemplatePhrase, IdentifiblePhrasalTemplatePhrase] = [
-              {
-                id: pagePhrase.id,
-                image: pagePhrase.image,
-                fields: pagePhraseFields.slice(0, pagePhraseFields.length - 1),
-              },
-              {
-                id: pagePhrase.id,
-                image: pagePhrase.image,
-                fields: pagePhraseFields.slice(pagePhraseFields.length - 1),
-              },
-            ];
-
-            const [newPage, newPageRestPhrases] = await renderPage([splits[0]]);
-            const leftoverPhrases = [...newPageRestPhrases, splits[1]];
-            return [newPage, leftoverPhrases];
-          } else {
-            const newPagePhrases = pagePhrases.slice(0, pagePhrases.length - 1);
-            const curPageRestPhrases = pagePhrases.slice(pagePhrases.length - 1);
-            const [newPage, newPageRestPhrases] = await renderPage(newPagePhrases);
-            const leftoverPhrases = [...newPageRestPhrases, ...curPageRestPhrases];
-
-            const recombinedLeftoverPhrases = leftoverPhrases.reduce((acc, phrase) => {
-              const existingPhrase = acc.find(({ id }) => id === phrase.id);
-              if (existingPhrase) {
-                existingPhrase.fields = [...existingPhrase.fields, ...phrase.fields];
-              } else {
-                acc.push(phrase);
-              }
-              return acc;
-            }, [] as IdentifiblePhrasalTemplatePhrase[]);
-
-            return [newPage, recombinedLeftoverPhrases];
-          }
         }
+
+        if (pagePhrases.length <= 1) {
+          const pagePhrase = pagePhrases[0];
+          const pagePhraseFields = pagePhrase.fields;
+
+          if (pagePhraseFields.length <= 1) {
+            // If the rendered page does not fit into the maximum allowed page
+            // height, and there is only 1 phrase for the page, but that phrase
+            // has on 1 field (this means there is nothing left to split), then
+            // stop rendering.
+            return [curPage, []];
+          }
+
+          // If the rendered page does not fit into the maximum allowed page
+          // height, and there is only 1 phrase for the page, and that phrase
+          // has more than 1 field, then split the fields into multiple phrases
+          // with the same ID and re-render.
+          const splits: [IdentifiblePhrasalTemplatePhrase, IdentifiblePhrasalTemplatePhrase] = [
+            {
+              id: pagePhrase.id,
+              image: pagePhrase.image,
+              fields: pagePhraseFields.slice(0, pagePhraseFields.length - 1),
+            },
+            {
+              id: pagePhrase.id,
+              image: pagePhrase.image,
+              fields: pagePhraseFields.slice(pagePhraseFields.length - 1),
+            },
+          ];
+
+          const [newPage, newPageRestPhrases] = await renderPage([splits[0]]);
+          const leftoverPhrases = [...newPageRestPhrases, splits[1]];
+          return [newPage, leftoverPhrases];
+        }
+
+        // If the rendered page does not fit into the maximum allowed page
+        // height, and the page has more than 1 phrase, then split the phrases
+        // and re-render.
+        const newPagePhrases = pagePhrases.slice(0, pagePhrases.length - 1);
+        const curPageRestPhrases = pagePhrases.slice(pagePhrases.length - 1);
+        const [newPage, newPageRestPhrases] = await renderPage(newPagePhrases);
+        const leftoverPhrases = [...newPageRestPhrases, ...curPageRestPhrases];
+
+        const recombinedLeftoverPhrases = leftoverPhrases.reduce((acc, phrase) => {
+          const existingPhrase = acc.find(({ id }) => id === phrase.id);
+          if (existingPhrase) {
+            existingPhrase.fields = [...existingPhrase.fields, ...phrase.fields];
+          } else {
+            acc.push(phrase);
+          }
+          return acc;
+        }, [] as IdentifiblePhrasalTemplatePhrase[]);
+
+        return [newPage, recombinedLeftoverPhrases];
       };
 
       const _renderPages = async (_pagePhrases: IdentifiblePhrasalTemplatePhrase[]) => {

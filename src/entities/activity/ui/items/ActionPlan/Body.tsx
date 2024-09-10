@@ -8,7 +8,7 @@ export const Body = ({ children }: PropsWithChildren) => {
   const gap = useXScaledDimension(32);
 
   return (
-    <Box display="flex" flexDirection="column" gap={`${gap}px`}>
+    <Box display="flex" flexDirection="column" gap={`${gap}px`} overflow="hidden">
       {children}
     </Box>
   );

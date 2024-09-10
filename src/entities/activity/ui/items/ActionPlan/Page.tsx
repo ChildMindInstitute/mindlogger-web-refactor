@@ -53,14 +53,14 @@ export const Page = ({
       <Title>{appletTitle}</Title>
       <Box
         position="relative"
-        display="grid"
+        display="flex"
         paddingTop={`${scaledTopPadding}px`}
         paddingRight={`${scaledRightPadding}px`}
         paddingBottom={`${scaledBottomPadding}px`}
         paddingLeft={`${scaledLeftPadding}px`}
         // TODO: Implement truncation
         maxHeight={`${pageMaxHeight}px`}
-        overflow="hidden"
+        // overflow="hidden"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -91,8 +91,8 @@ export const Page = ({
           flexDirection="column"
           gap="24px"
           width="100%"
-          height="100%"
-          sx={{ overflow: 'hidden' }}
+          height="auto"
+          overflow="hidden"
           zIndex={2}
         >
           <Header>
@@ -112,9 +112,10 @@ export const Page = ({
           alignItems="center"
           justifyContent="center"
           position="absolute"
+          left="0"
           bottom="0"
-          justifySelf="center"
-          sx={{ margin: '10px 0' }}
+          width="100%"
+          sx={{ margin: '10px auto', zIndex: 2 }}
         >
           <img src={footerLogo} alt={t('credit') || ''} />
         </Box>
