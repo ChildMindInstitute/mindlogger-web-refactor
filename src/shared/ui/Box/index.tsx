@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+
 import MUIBox, { BoxProps } from '@mui/material/Box';
 
 /**
@@ -10,8 +12,10 @@ import MUIBox, { BoxProps } from '@mui/material/Box';
  * )
  */
 
-function Box(props: BoxProps) {
+const Box = forwardRef<HTMLDivElement, BoxProps>((props: BoxProps) => {
   return <MUIBox {...props} />;
-}
+});
+
+Box.displayName = 'Box';
 
 export default Box;

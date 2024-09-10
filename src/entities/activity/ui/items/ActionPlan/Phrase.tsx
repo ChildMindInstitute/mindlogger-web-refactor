@@ -31,13 +31,12 @@ export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
   const { components } = phrase.fields.reduce(
     (acc, field, fieldIndex) => {
       const isLineStart = fieldIndex === 0 || acc.prevField?.type === 'line_break';
-      const leadingSpace = !isLineStart;
 
       if (field.type === 'sentence') {
-        acc.components.push(<TextSegment text={field.text} leadingSpace={leadingSpace} />);
+        acc.components.push(<TextSegment text={field.text} isAtStart={isLineStart} />);
       } else if (field.type === 'item_response') {
         acc.components.push(
-          <ResponseSegment phrasalData={phrasalData} field={field} leadingSpace={leadingSpace} />,
+          <ResponseSegment phrasalData={phrasalData} field={field} isAtStart={isLineStart} />,
         );
       } else if (field.type === 'line_break') {
         acc.components.push(<br />);

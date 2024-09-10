@@ -30,10 +30,10 @@ const joinWithComma: FieldValuesJoiner = (values) => values.join(', ');
 type ResponseSegmentProps = {
   phrasalData: ActivitiesPhrasalData;
   field: PhrasalTemplateItemResponseField;
-  leadingSpace?: boolean;
+  isAtStart?: boolean;
 };
 
-export const ResponseSegment = ({ phrasalData, field, leadingSpace }: ResponseSegmentProps) => {
+export const ResponseSegment = ({ phrasalData, field, isAtStart }: ResponseSegmentProps) => {
   const { t } = useActionPlanTranslation();
   const listPadding = useXScaledDimension(40);
 
@@ -122,11 +122,17 @@ export const ResponseSegment = ({ phrasalData, field, leadingSpace }: ResponseSe
       fieldDisplayMode === 'bullet_list_option_row' ||
       fieldDisplayMode === 'bullet_list_text_row' ? (
         <>
-          <span>
-            &nbsp;
-            <br />
-          </span>
-          <Box component="ul" paddingLeft={`${listPadding}px`}>
+          {isAtStart ? null : (
+            <span>
+              &nbsp;
+              <br />
+            </span>
+          )}
+          <Box
+            component="ul"
+            marginTop={isAtStart ? `0px` : undefined}
+            paddingLeft={`${listPadding}px`}
+          >
             {words.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
@@ -134,7 +140,7 @@ export const ResponseSegment = ({ phrasalData, field, leadingSpace }: ResponseSe
         </>
       ) : (
         <>
-          {leadingSpace ? ' ' : ''}
+          {isAtStart ? '' : ' '}
           {joinSentenceWords(words)}
         </>
       )}

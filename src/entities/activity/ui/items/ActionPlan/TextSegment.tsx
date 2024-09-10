@@ -1,11 +1,11 @@
 import Text from '~/shared/ui/Text';
 
-type TextSegmentProps = { text: string; leadingSpace?: boolean };
+type TextSegmentProps = { text: string; isAtStart?: boolean };
 
-export const TextSegment = ({ text, leadingSpace }: TextSegmentProps) => {
+export const TextSegment = ({ text, isAtStart }: TextSegmentProps) => {
   return (
     <Text component="span" fontSize="inherit" lineHeight="inherit">
-      {leadingSpace ? ' ' : ''}
+      {isAtStart ? '' : ' '}
       {text}
     </Text>
   );

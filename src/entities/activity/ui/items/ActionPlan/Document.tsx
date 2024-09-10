@@ -1,12 +1,12 @@
 import React, { forwardRef, useEffect, useState, useContext, useMemo, useCallback } from 'react';
 
 import { Box } from '@mui/material';
+import { v4 as uuidV4 } from 'uuid';
 
 import { DocumentContext } from './DocumentContext';
-import { useAvailableBodyHeight, useAvailableBodyWidth } from './hooks';
+import { useAvailableBodyWidth, usePageMaxHeight } from './hooks';
 import { Page } from './Page';
 import { extractActivitiesPhrasalData } from './phrasalData';
-import { Phrase } from './Phrase';
 
 import { getProgressId } from '~/abstract/lib';
 import { PhrasalTemplatePhrase } from '~/entities/activity/lib';
@@ -21,9 +21,27 @@ type DocumentProps = {
   phrasalTemplateCardTitle: string;
 };
 
+type IdentifiblePhrasalTemplatePhrase = PhrasalTemplatePhrase & { id: string };
+
 export const Document = forwardRef<HTMLDivElement, DocumentProps>(
   ({ appletTitle, phrases, phrasalTemplateCardTitle }, ref) => {
     const context = useContext(SurveyContext);
+
+    const noImage = useMemo(
+      () => phrases.filter((phrase) => !!phrase.image).length <= 0,
+      [phrases],
+    );
+
+    const identifiblePhrases = useMemo(
+      () =>
+        phrases.map<IdentifiblePhrasalTemplatePhrase>((phrase) => {
+          return {
+            ...phrase,
+            id: uuidV4(),
+          };
+        }),
+      [phrases],
+    );
 
     const activityProgress = useAppSelector((state) =>
       appletModel.selectors.selectActivityProgress(
@@ -37,64 +55,95 @@ export const Document = forwardRef<HTMLDivElement, DocumentProps>(
       [activityProgress],
     );
 
-    const noImage = phrases.filter((phrase) => !!phrase.image).length <= 0;
+    const availableWidth = useAvailableBodyWidth();
+    const pageMaxHeight = usePageMaxHeight();
     const [pages, setPages] = useState<React.ReactNode[]>([]);
-    const availableHeight = useAvailableBodyHeight(phrasalTemplateCardTitle);
-    const availableWidth: number = (useAvailableBodyWidth as () => number)();
-    const gap = 32;
 
     const renderPages = useCallback(async () => {
-      let runningHeight = 0;
-      let pagePhrases: PhrasalTemplatePhrase[] = [];
-      const _pages: React.ReactNode[] = [];
+      const renderedPages: React.ReactNode[] = [];
 
-      for (const phrase of phrases) {
-        const height = await measureComponentHeight(availableWidth, () => (
-          <Phrase phrase={phrase} phrasalData={activitiesPhrasalData} noImage={noImage} />
-        ));
-        const pageNumber = _pages.length + 1;
+      const renderPage = async (
+        pagePhrases: IdentifiblePhrasalTemplatePhrase[],
+      ): Promise<[React.ReactNode, IdentifiblePhrasalTemplatePhrase[]]> => {
+        const curPageNumber = renderedPages.length + 1;
 
-        if (runningHeight + height <= availableHeight) {
-          runningHeight += height + gap;
-          pagePhrases.push(phrase);
-        } else {
-          _pages.push(
-            <Page
-              key={`page-${pageNumber}`}
-              pageNumber={pageNumber}
-              appletTitle={appletTitle}
-              phrasalTemplateCardTitle={phrasalTemplateCardTitle}
-              phrases={pagePhrases}
-              phrasalData={activitiesPhrasalData}
-            />,
-          );
-          runningHeight = height + gap;
-          pagePhrases = [phrase];
-        }
-      }
-
-      if (pagePhrases.length > 0) {
-        _pages.push(
+        const curPage = (
           <Page
-            key={`page-${_pages.length + 1}`}
-            pageNumber={_pages.length + 1}
+            key={`page-${curPageNumber}`}
+            pageNumber={curPageNumber}
             appletTitle={appletTitle}
             phrasalTemplateCardTitle={phrasalTemplateCardTitle}
             phrases={pagePhrases}
             phrasalData={activitiesPhrasalData}
-          />,
+            noImage={noImage}
+          />
         );
-      }
 
-      setPages(_pages);
+        const pageHeight = await measureComponentHeight(availableWidth, curPage);
+        if (pageHeight <= pageMaxHeight) {
+          return [curPage, []];
+        } else {
+          if (pagePhrases.length <= 1) {
+            const pagePhrase = pagePhrases[0];
+            const pagePhraseFields = pagePhrase.fields;
+
+            const splits: [IdentifiblePhrasalTemplatePhrase, IdentifiblePhrasalTemplatePhrase] = [
+              {
+                id: pagePhrase.id,
+                image: pagePhrase.image,
+                fields: pagePhraseFields.slice(0, pagePhraseFields.length - 1),
+              },
+              {
+                id: pagePhrase.id,
+                image: pagePhrase.image,
+                fields: pagePhraseFields.slice(pagePhraseFields.length - 1),
+              },
+            ];
+
+            const [newPage, newPageRestPhrases] = await renderPage([splits[0]]);
+            const leftoverPhrases = [...newPageRestPhrases, splits[1]];
+            return [newPage, leftoverPhrases];
+          } else {
+            const newPagePhrases = pagePhrases.slice(0, pagePhrases.length - 1);
+            const curPageRestPhrases = pagePhrases.slice(pagePhrases.length - 1);
+            const [newPage, newPageRestPhrases] = await renderPage(newPagePhrases);
+            const leftoverPhrases = [...newPageRestPhrases, ...curPageRestPhrases];
+
+            const recombinedLeftoverPhrases = leftoverPhrases.reduce((acc, phrase) => {
+              const existingPhrase = acc.find(({ id }) => id === phrase.id);
+              if (existingPhrase) {
+                existingPhrase.fields = [...existingPhrase.fields, ...phrase.fields];
+              } else {
+                acc.push(phrase);
+              }
+              return acc;
+            }, [] as IdentifiblePhrasalTemplatePhrase[]);
+
+            return [newPage, recombinedLeftoverPhrases];
+          }
+        }
+      };
+
+      const _renderPages = async (_pagePhrases: IdentifiblePhrasalTemplatePhrase[]) => {
+        const [renderedPage, leftoverPhrases] = await renderPage(_pagePhrases);
+        renderedPages.push(renderedPage);
+
+        if (leftoverPhrases.length > 0) {
+          await _renderPages(leftoverPhrases);
+        }
+      };
+
+      await _renderPages(identifiblePhrases);
+
+      setPages(renderedPages);
     }, [
-      noImage,
-      appletTitle,
-      phrasalTemplateCardTitle,
-      phrases,
       activitiesPhrasalData,
+      appletTitle,
       availableWidth,
-      availableHeight,
+      pageMaxHeight,
+      phrasalTemplateCardTitle,
+      identifiblePhrases,
+      noImage,
     ]);
 
     useEffect(() => {
