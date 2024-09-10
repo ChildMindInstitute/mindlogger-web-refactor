@@ -25,7 +25,7 @@ export const usePageWidth = () => {
 };
 
 export const usePageMaxHeight = () => {
-  return 512;
+  return 2504;
 };
 
 export const useXScaledDimension = (dimension: number) => {
