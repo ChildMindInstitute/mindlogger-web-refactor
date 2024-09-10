@@ -5,4 +5,5 @@ export * from './applet';
 export * from './activity';
 export * from './events';
 export * from './item';
-export * from './conditionalLogiс';
+export * from './conditionalLogic';
+export * from './assignment';

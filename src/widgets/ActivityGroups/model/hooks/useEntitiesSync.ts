@@ -21,16 +21,19 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
 
       const entityId = entity.id;
       const eventId = entity.scheduledEventId;
+      const targetSubjectId = entity.targetSubjectId;
 
       const groupProgress = getGroupProgress({
         entityId,
         eventId,
+        targetSubjectId,
       });
 
       if (!groupProgress) {
         return saveGroupProgress({
           activityId: entityId,
           eventId,
+          targetSubjectId,
           progressPayload: {
             type: ActivityPipelineType.Regular,
             startAt: null,
@@ -52,6 +55,7 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
         return saveGroupProgress({
           activityId: entityId,
           eventId,
+          targetSubjectId,
           progressPayload: {
             ...groupProgress,
             endAt: new Date(endAtDate).getTime(),

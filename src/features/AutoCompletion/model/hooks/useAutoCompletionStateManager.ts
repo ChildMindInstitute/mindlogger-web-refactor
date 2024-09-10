@@ -7,6 +7,7 @@ import { useAppDispatch } from '~/shared/utils';
 export type ActivitySuccessfullySubmitted = {
   entityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 
   activityId: string;
 };
@@ -26,7 +27,7 @@ export const useAutoCompletionStateManager = () => {
   );
 
   const removeAutoCompletion = useCallback(
-    (payload: { entityId: string; eventId: string }) => {
+    (payload: { entityId: string; eventId: string; targetSubjectId: string | null }) => {
       dispatch(actions.removeAutoCompletion(payload));
     },
     [dispatch],

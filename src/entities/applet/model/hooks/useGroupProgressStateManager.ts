@@ -33,7 +33,10 @@ export const useGroupProgressStateManager = (): Return => {
         return null;
       }
 
-      return groupProgresses[getProgressId(params.entityId, params.eventId)] ?? null;
+      return (
+        groupProgresses[getProgressId(params.entityId, params.eventId, params.targetSubjectId)] ??
+        null
+      );
     },
     [groupProgresses],
   );

@@ -29,7 +29,7 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
   const group = useAppSelector((state) =>
     appletModel.selectors.selectGroupProgress(
       state,
-      getProgressId(context.entityId, context.eventId),
+      getProgressId(context.entityId, context.eventId, context.targetSubject?.id),
     ),
   );
 

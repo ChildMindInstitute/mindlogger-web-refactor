@@ -11,6 +11,7 @@ const ONE_SEC = 1000;
 type Props = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   item: appletModel.ItemRecord;
   isSubmitModalOpen: boolean;
   onTimerEnd: () => void;
@@ -27,6 +28,7 @@ export const useItemTimer = ({
   onTimerEnd,
   activityId,
   eventId,
+  targetSubjectId,
   isSubmitModalOpen,
 }: Props): TimerSettings => {
   const prevItem = usePrevious(item);
@@ -35,6 +37,7 @@ export const useItemTimer = ({
     appletModel.hooks.useItemTimerState({
       activityId,
       eventId,
+      targetSubjectId,
       itemId: item.id,
     });
 

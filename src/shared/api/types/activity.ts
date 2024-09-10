@@ -1,5 +1,5 @@
 import { BaseSuccessResponse } from './base';
-import { ScoreConditionalLogic } from './conditionalLogiс';
+import { ScoreConditionalLogic } from './conditionalLogic';
 import {
   AudioPlayerItemDTO,
   CheckboxItemDTO,
@@ -222,6 +222,7 @@ export type CompletedEntityDTO = {
   id: string;
   answerId: string;
   submitId: string;
+  targetSubjectId: string | null;
   scheduledEventId: string;
   localEndDate: string;
   localEndTime: string;

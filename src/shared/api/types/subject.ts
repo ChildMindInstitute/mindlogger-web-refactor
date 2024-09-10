@@ -16,6 +16,8 @@ export type SubjectDTO = {
   lastSeen: string | null;
   id: string;
   userId: string | null;
+  firstName: string;
+  lastName: string;
 };
 
 export type GetSubjectSuccessResponse = BaseSuccessResponse<SubjectDTO>;

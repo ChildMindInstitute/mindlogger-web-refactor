@@ -12,6 +12,9 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
   const env = loadEnv(mode, process.cwd(), '');
 
   const baseConfig: UserConfig = {
+    optimizeDeps: {
+      exclude: ['vite']
+    },
     define: {
       global: 'globalThis',
       'process.env': {

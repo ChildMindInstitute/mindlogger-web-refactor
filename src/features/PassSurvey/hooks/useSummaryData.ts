@@ -12,6 +12,7 @@ type Props = {
   activityName: string;
   eventId: string;
   flowId: string | null;
+  targetSubjectId: string | null;
 
   scoresAndReports?: ScoreAndReports;
 };
@@ -36,9 +37,10 @@ export const useSummaryData = (props: Props) => {
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: props.flowId ? props.flowId : props.activityId,
     eventId: props.eventId,
+    targetSubjectId: props.targetSubjectId,
   });
 
-  const progressId = getProgressId(props.activityId, props.eventId);
+  const progressId = getProgressId(props.activityId, props.eventId, props.targetSubjectId);
 
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(state, progressId),

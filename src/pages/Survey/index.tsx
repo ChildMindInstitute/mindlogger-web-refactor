@@ -12,12 +12,8 @@ function SurveyPage() {
   const [searchParams] = useSearchParams();
 
   const isFlow = entityType === 'flow';
-
-  let flowId: string | null = null;
-
-  if (isFlow) {
-    flowId = searchParams.get('flowId');
-  }
+  const flowId = isFlow ? searchParams.get('flowId') : null;
+  const targetSubjectId = searchParams.get('targetSubjectId');
 
   if (!appletId || !activityId || !eventId) {
     return <div>{t('wrondLinkParametrError')}</div>;
@@ -30,6 +26,7 @@ function SurveyPage() {
         activityId={activityId}
         eventId={eventId}
         flowId={flowId}
+        targetSubjectId={targetSubjectId}
         publicAppletKey={null}
       />
     </Box>

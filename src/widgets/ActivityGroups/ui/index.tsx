@@ -6,12 +6,14 @@ import { ActivityGroupList } from './ActivityGroupList';
 import { AppletDetailsContext } from '../lib';
 
 import { appletModel, useAppletBaseInfoByIdQuery } from '~/entities/applet';
+import { useMyAssignmentsQuery } from '~/entities/assignment';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
 import { TakeNowSuccessModalProps } from '~/features/TakeNow/lib/types';
 import { TakeNowSuccessModal } from '~/features/TakeNow/ui/TakeNowSuccessModal';
 import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
 import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
+import { useFeatureFlags } from '~/shared/utils/hooks';
 
 type PublicAppletDetails = {
   isPublic: true;
@@ -35,6 +37,8 @@ export const ActivityGroups = (props: Props) => {
     useState<TakeNowSuccessModalProps>({
       isOpen: false,
     });
+  const { featureFlags } = useFeatureFlags();
+  const isAssignmentsEnabled = !!featureFlags.enableActivityAssign && !props.isPublic;
 
   const {
     isError: isAppletError,
@@ -48,6 +52,15 @@ export const ActivityGroups = (props: Props) => {
     data: events,
   } = useEventsbyAppletIdQuery(props, {
     select: (data) => data.data.result,
+  });
+
+  const {
+    isError: isAssignmentsError,
+    isLoading: isAssignmentsLoading,
+    data: assignments = null,
+  } = useMyAssignmentsQuery(isAssignmentsEnabled ? props.appletId : undefined, {
+    select: (data) => data.data.result.assignments,
+    enabled: isAssignmentsEnabled,
   });
 
   const {
@@ -77,11 +90,11 @@ export const ActivityGroups = (props: Props) => {
     }
   });
 
-  if (isAppletLoading || isEventsLoading) {
+  if (isAppletLoading || isEventsLoading || (isAssignmentsEnabled && isAssignmentsLoading)) {
     return <Loader />;
   }
 
-  if (isEventsError || isAppletError) {
+  if (isEventsError || isAppletError || (isAssignmentsEnabled && isAssignmentsError)) {
     return (
       <Box display="flex" width="100%" height="100%" justifyContent="center" alignItems="center">
         <span>{t('additional.invalid_public_url')}</span>
@@ -90,7 +103,7 @@ export const ActivityGroups = (props: Props) => {
   }
 
   return (
-    <AppletDetailsContext.Provider value={{ ...props, applet, events }}>
+    <AppletDetailsContext.Provider value={{ ...props, applet, events, assignments }}>
       <ActivityGroupList />
       <TakeNowSuccessModal
         onClose={() => setTakeNowSuccessModalState({ isOpen: false })}

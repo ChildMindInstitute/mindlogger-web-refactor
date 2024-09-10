@@ -10,7 +10,12 @@ import {
   createActivityGroupsBuilder,
 } from '~/abstract/lib/GroupBuilder';
 import { EventModel, ScheduleEvent } from '~/entities/event';
-import { ActivityBaseDTO, ActivityFlowDTO, AppletEventsResponse } from '~/shared/api';
+import {
+  ActivityBaseDTO,
+  ActivityFlowDTO,
+  AppletEventsResponse,
+  HydratedAssignmentDTO,
+} from '~/shared/api';
 
 type BuildResult = {
   groups: ActivityListGroup[];
@@ -19,6 +24,7 @@ type BuildResult = {
 type ProcessParams = {
   activities: ActivityBaseDTO[];
   flows: ActivityFlowDTO[];
+  assignments: HydratedAssignmentDTO[] | null;
   events: AppletEventsResponse;
   entityProgress: GroupProgressState;
 };
@@ -34,58 +40,111 @@ const createActivityGroupsBuildManager = () => {
     }, {});
   };
 
+  const buildIdToAssignmentsMap = (
+    assignments: HydratedAssignmentDTO[],
+  ): Record<string, HydratedAssignmentDTO[]> => {
+    return assignments.reduce<Record<string, HydratedAssignmentDTO[]>>((acc, current) => {
+      const key = current.activityFlowId ?? current.activityId;
+      if (acc[key]) {
+        acc[key].push(current);
+      } else {
+        acc[key] = [current];
+      }
+      return acc;
+    }, {});
+  };
+
   const sort = (eventEntities: EventEntity[]) => {
-    let flows = eventEntities.filter((x) => x.entity.pipelineType === ActivityPipelineType.Flow);
-    let activities = eventEntities.filter(
-      (x) => x.entity.pipelineType === ActivityPipelineType.Regular,
-    );
+    eventEntities.sort((a: EventEntity, b: EventEntity) => {
+      const aIsFlow = a.entity.pipelineType === ActivityPipelineType.Flow;
+      const bIsFlow = b.entity.pipelineType === ActivityPipelineType.Flow;
 
-    flows = flows.sort((a, b) => a.entity.order - b.entity.order);
-    activities = activities.sort((a, b) => a.entity.order - b.entity.order);
+      // Order flows first
+      if (aIsFlow && !bIsFlow) {
+        return -1;
+      } else if (!aIsFlow && bIsFlow) {
+        return 1;
+      }
 
-    return [...flows, ...activities];
+      // Then order by entity order
+      const orderDiff = a.entity.order - b.entity.order;
+      if (orderDiff !== 0) return orderDiff;
+
+      // Then order self-reports first
+      if (!a.targetSubject) {
+        return -1;
+      } else if (!b.targetSubject) {
+        return 1;
+      }
+
+      // Then order by target subject first name
+      const firstNameDiff = a.targetSubject.firstName.localeCompare(b.targetSubject.firstName);
+      if (firstNameDiff !== 0) return firstNameDiff;
+
+      // Then order by target subject last name
+      return a.targetSubject.lastName.localeCompare(b.targetSubject.lastName);
+    });
   };
 
   const process = (params: ProcessParams): BuildResult => {
     const activities: Activity[] = mapActivitiesFromDto(params.activities);
-
     const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(params.flows);
 
     const eventsResponse = params.events;
-
     const events: ScheduleEvent[] = EventModel.mapEventsFromDto(eventsResponse.events);
 
     const idToEntity = buildIdToEntityMap(activities, activityFlows);
+    const idToAssignments = params.assignments ? buildIdToAssignmentsMap(params.assignments) : {};
 
     const builder = createActivityGroupsBuilder({
       allAppletActivities: activities,
       progress: params.entityProgress,
     });
 
-    let entityEvents = events
-      .map<EventEntity>((event) => ({
-        entity: idToEntity[event.entityId],
-        event,
-      }))
-      // @todo - remove after fix on BE
-      .filter((entityEvent) => !!entityEvent.entity);
-
+    const eventEntities: EventEntity[] = [];
     const calculator = EventModel.ScheduledDateCalculator;
 
-    for (const eventActivity of entityEvents) {
-      const date = calculator.calculate(eventActivity.event);
-      eventActivity.event.scheduledAt = date;
+    for (const event of events) {
+      const entity = idToEntity[event.entityId];
+      if (!entity || entity.isHidden) continue;
+
+      event.scheduledAt = calculator.calculate(event);
+      if (!event.scheduledAt) continue;
+
+      if (params.assignments) {
+        const assignments = idToAssignments[entity.id] ?? [];
+
+        // Add auto-assignment if enabled for this activity/flow
+        if (entity.autoAssign) {
+          eventEntities.push({ entity, event, targetSubject: null });
+        }
+
+        // Add any additional assignments (without duplicating possible auto-assignment)
+        for (const { respondentSubject, targetSubject } of assignments) {
+          const isSelfAssign = respondentSubject.id === targetSubject.id;
+          if (entity.autoAssign && isSelfAssign) continue;
+
+          eventEntities.push({
+            entity,
+            event,
+            targetSubject: isSelfAssign ? null : targetSubject,
+          });
+        }
+      } else {
+        // Assignments disabled
+        eventEntities.push({
+          entity,
+          event,
+          targetSubject: null,
+        });
+      }
     }
 
-    entityEvents = entityEvents.filter((x) => x.event.scheduledAt);
+    sort(eventEntities);
 
-    entityEvents = entityEvents.filter((x) => !x.entity.isHidden);
-
-    entityEvents = sort(entityEvents);
-
-    const groupAvailable = builder.buildAvailable(entityEvents);
-    const groupInProgress = builder.buildInProgress(entityEvents);
-    const groupScheduled = builder.buildScheduled(entityEvents);
+    const groupAvailable = builder.buildAvailable(eventEntities);
+    const groupInProgress = builder.buildInProgress(eventEntities);
+    const groupScheduled = builder.buildScheduled(eventEntities);
 
     return {
       groups: [groupInProgress, groupAvailable, groupScheduled],

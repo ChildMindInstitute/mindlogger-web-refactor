@@ -9,6 +9,7 @@ function AutoCompletion() {
   const activityId = searchParams.get('activityId');
   const eventId = searchParams.get('eventId');
   const flowId = searchParams.get('flowId');
+  const targetSubjectId = searchParams.get('targetSubjectId');
 
   if (!appletId || !activityId || !eventId) {
     return <div>Invalid URL</div>;
@@ -20,6 +21,7 @@ function AutoCompletion() {
       activityId={activityId}
       eventId={eventId}
       flowId={flowId}
+      targetSubjectId={targetSubjectId}
       publicAppletKey={null}
     />
   );

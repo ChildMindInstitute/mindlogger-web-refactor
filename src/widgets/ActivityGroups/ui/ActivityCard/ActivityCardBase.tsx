@@ -16,7 +16,7 @@ export const ActivityCardBase = (props: Props) => {
       sx={{
         backgroundColor: Theme.colors.light.surface,
         padding: '24px',
-        marginBottom: '36px',
+        marginBottom: '16px',
         border: `1px solid ${Theme.colors.light.surfaceVariant}`,
         borderRadius: '16px',
         minWidth: '343px',

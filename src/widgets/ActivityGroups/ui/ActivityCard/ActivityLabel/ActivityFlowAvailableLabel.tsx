@@ -28,9 +28,7 @@ export const ActivityFlowAvailableLabel = ({ activityFlowLength }: Props) => {
     >
       <Avatar src={DocumentsIcon} sx={{ width: '18px', height: '18px' }} />
       <ActivityLabelTypography
-        text={t('activityFlowLength', {
-          length: activityFlowLength,
-        })}
+        text={t('activityFlowLength', { count: activityFlowLength })}
         color={Theme.colors.light.onPrimaryContainer}
       />
     </Box>

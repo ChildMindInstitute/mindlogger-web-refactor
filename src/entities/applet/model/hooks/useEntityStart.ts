@@ -9,16 +9,24 @@ export const useEntityStart = () => {
   const dispatch = useAppDispatch();
   const groupProgress = useAppSelector(groupProgressSelector);
 
-  const getProgress = (entityId: string, eventId: string): GroupProgress =>
-    groupProgress[getProgressId(entityId, eventId)];
+  const getProgress = (
+    entityId: string,
+    eventId: string,
+    targetSubjectId: string | null,
+  ): GroupProgress => groupProgress[getProgressId(entityId, eventId, targetSubjectId)];
 
   const isInProgress = (payload: GroupProgress): boolean => payload && !payload.endAt;
 
-  function activityStarted(activityId: string, eventId: string): void {
+  function activityStarted(
+    activityId: string,
+    eventId: string,
+    targetSubjectId: string | null,
+  ): void {
     dispatch(
       actions.activityStarted({
         activityId,
         eventId,
+        targetSubjectId,
       }),
     );
   }
@@ -27,6 +35,7 @@ export const useEntityStart = () => {
     flowId: string,
     activityId: string,
     eventId: string,
+    targetSubjectId: string | null,
     pipelineActivityOrder: number,
   ): void {
     dispatch(
@@ -34,25 +43,30 @@ export const useEntityStart = () => {
         flowId,
         activityId,
         eventId,
+        targetSubjectId,
         pipelineActivityOrder,
       }),
     );
   }
 
-  function startActivity(activityId: string, eventId: string): void {
-    const isActivityInProgress = isInProgress(getProgress(activityId, eventId));
+  function startActivity(
+    activityId: string,
+    eventId: string,
+    targetSubjectId: string | null,
+  ): void {
+    const isActivityInProgress = isInProgress(getProgress(activityId, eventId, targetSubjectId));
 
     if (isActivityInProgress) {
       return;
     }
 
-    return activityStarted(activityId, eventId);
+    return activityStarted(activityId, eventId, targetSubjectId);
   }
 
-  function startFlow(eventId: string, flow: ActivityFlowDTO): void {
+  function startFlow(eventId: string, flow: ActivityFlowDTO, targetSubjectId: string | null): void {
     const flowId = flow.id;
 
-    const isFlowInProgress = isInProgress(getProgress(flowId, eventId));
+    const isFlowInProgress = isInProgress(getProgress(flowId, eventId, targetSubjectId));
 
     if (isFlowInProgress) {
       return;
@@ -68,7 +82,7 @@ export const useEntityStart = () => {
 
     const firstActivityId: string = flowActivities[0];
 
-    return flowStarted(flowId, firstActivityId, eventId, 0);
+    return flowStarted(flowId, firstActivityId, eventId, targetSubjectId, 0);
   }
 
   return { startActivity, startFlow };

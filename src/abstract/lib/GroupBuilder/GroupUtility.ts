@@ -45,11 +45,11 @@ export class GroupUtility {
   }
 
   private getAllowedTimeInterval(
-    eventActivity: EventEntity,
+    eventEntity: EventEntity,
     scheduledWhen: 'today' | 'yesterday',
     isAccessBeforeStartTime = false,
   ): DatesFromTo {
-    const { event } = eventActivity;
+    const { event } = eventEntity;
 
     if (event.availability.timeFrom === null) {
       throw new Error('[getAllowedTimeInterval] timeFrom is null');
@@ -117,19 +117,22 @@ export class GroupUtility {
     return isEqual(this.getYesterday(), startOfDay(date));
   }
 
-  public getProgressRecord(eventActivity: EventEntity): GroupProgress | null {
-    const record = this.progress[getProgressId(eventActivity.entity.id, eventActivity.event.id)];
+  public getProgressRecord(eventEntity: EventEntity): GroupProgress | null {
+    const record =
+      this.progress[
+        getProgressId(eventEntity.entity.id, eventEntity.event.id, eventEntity.targetSubject?.id)
+      ];
     return record ?? null;
   }
 
-  public getCompletedAt(eventActivity: EventEntity): Date | null {
-    const progressRecord = this.getProgressRecord(eventActivity);
+  public getCompletedAt(eventEntity: EventEntity): Date | null {
+    const progressRecord = this.getProgressRecord(eventEntity);
 
     return progressRecord?.endAt ? new Date(progressRecord.endAt) : null;
   }
 
-  public isInProgress(eventActivity: EventEntity): boolean {
-    const record = this.getProgressRecord(eventActivity);
+  public isInProgress(eventEntity: EventEntity): boolean {
+    const record = this.getProgressRecord(eventEntity);
     if (!record) {
       return false;
     }
@@ -210,17 +213,17 @@ export class GroupUtility {
   }
 
   public isCompletedInAllowedTimeInterval(
-    eventActivity: EventEntity,
+    eventEntity: EventEntity,
     scheduledWhen: 'today' | 'yesterday',
     isAccessBeforeStartTime = false,
   ): boolean {
     const { from: allowedFrom, to: allowedTo } = this.getAllowedTimeInterval(
-      eventActivity,
+      eventEntity,
       scheduledWhen,
       isAccessBeforeStartTime,
     );
 
-    const completedAt = this.getCompletedAt(eventActivity);
+    const completedAt = this.getCompletedAt(eventEntity);
 
     if (!completedAt) {
       return false;
@@ -276,19 +279,19 @@ export class GroupUtility {
     return false;
   }
 
-  public isCompletedToday(eventActivity: EventEntity): boolean {
-    const date = this.getCompletedAt(eventActivity);
+  public isCompletedToday(eventEntity: EventEntity): boolean {
+    const date = this.getCompletedAt(eventEntity);
 
     return !!date && this.isToday(date);
   }
 
   public isInAllowedTimeInterval(
-    eventActivity: EventEntity,
+    eventEntity: EventEntity,
     scheduledWhen: 'today' | 'yesterday',
     isAccessBeforeStartTime = false,
   ): boolean {
     const { from: allowedFrom, to: allowedTo } = this.getAllowedTimeInterval(
-      eventActivity,
+      eventEntity,
       scheduledWhen,
       isAccessBeforeStartTime,
     );
@@ -302,15 +305,15 @@ export class GroupUtility {
     }
   }
 
-  public getTimeToComplete(eventActivity: EventEntity): HourMinute | null {
-    const { event } = eventActivity;
+  public getTimeToComplete(eventEntity: EventEntity): HourMinute | null {
+    const { event } = eventEntity;
     const timer = event.timers.timer;
 
     if (timer === null) {
       throw new Error('[getTimeToComplete] Timer is null');
     }
 
-    const startedTime = this.getStartedAt(eventActivity);
+    const startedTime = this.getStartedAt(eventEntity);
 
     const activityDuration: number = getMsFromHours(timer.hours) + getMsFromMinutes(timer.minutes);
 

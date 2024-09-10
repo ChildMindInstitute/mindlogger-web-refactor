@@ -21,15 +21,22 @@ jobs:
             ~/node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - run: yarn install --frozen-lockfile
+      - name: Remove .yarnrc file to avoid conflicts
+        run: rm -rf .yarnrc
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Prepare and activate Yarn version 1.22.22
+        run: corepack prepare yarn@1.22.22 --activate
+      
+      - name: Verify Yarn version
+        run: yarn --version
+      
+      - name: Install dependencies with frozen lockfile
+        run: yarn install --frozen-lockfile
 
-      - uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          eslint_extensions: mjs,js,jsx,mts,ts,tsx
-          prettier: true
-          prettier_extensions: mjs,js,jsx,mts,ts,tsx
-          continue_on_error: false
+      - run: yarn eslint src
   tests:
     runs-on: ubuntu-latest
     steps:
@@ -39,7 +46,19 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install deps
+      - name: Remove .yarnrc file to avoid conflicts
+        run: rm -rf .yarnrc
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Prepare and activate Yarn version 1.22.22
+        run: corepack prepare yarn@1.22.22 --activate
+      
+      - name: Verify Yarn version
+        run: yarn --version
+      
+      - name: Install dependencies with frozen lockfile
         run: yarn install --frozen-lockfile
 
       - uses: actions/cache@v4

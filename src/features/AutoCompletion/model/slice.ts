@@ -5,6 +5,7 @@ import { getProgressId } from '~/abstract/lib';
 type DefaultProps = {
   entityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 };
 
 export type SetAutoCompletionPayload = DefaultProps & {
@@ -32,8 +33,8 @@ const slice = createSlice({
     },
 
     setAutoCompletion(state, action: PayloadAction<SetAutoCompletionPayload>) {
-      const { entityId, eventId, autoCompletion } = action.payload;
-      const progressId = getProgressId(entityId, eventId);
+      const { entityId, eventId, targetSubjectId, autoCompletion } = action.payload;
+      const progressId = getProgressId(entityId, eventId, targetSubjectId);
 
       const record = state[progressId];
 
@@ -43,8 +44,8 @@ const slice = createSlice({
     },
 
     removeAutoCompletion(state, action: PayloadAction<DefaultProps>) {
-      const { entityId, eventId } = action.payload;
-      const progressId = getProgressId(entityId, eventId);
+      const { entityId, eventId, targetSubjectId } = action.payload;
+      const progressId = getProgressId(entityId, eventId, targetSubjectId);
 
       delete state[progressId];
     },
@@ -53,8 +54,8 @@ const slice = createSlice({
       state,
       action: PayloadAction<DefaultProps & { activityId: string }>,
     ) {
-      const { entityId, eventId, activityId } = action.payload;
-      const progressId = getProgressId(entityId, eventId);
+      const { entityId, eventId, activityId, targetSubjectId } = action.payload;
+      const progressId = getProgressId(entityId, eventId, targetSubjectId);
 
       state[progressId].successfullySubmittedActivityIds.push(activityId);
     },

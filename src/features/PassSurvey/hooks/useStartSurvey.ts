@@ -13,6 +13,7 @@ import {
 type NavigateToEntityProps = {
   flowId: string | null;
   activityId: string;
+  targetSubjectId: string | null;
   entityType: EntityType;
   eventId: string;
 };
@@ -20,6 +21,7 @@ type NavigateToEntityProps = {
 type OnActivityCardClickProps = {
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
   flowId: string | null;
   status: ActivityStatus;
   shouldRestart: boolean;
@@ -45,7 +47,7 @@ export const useStartSurvey = (props: Props) => {
     appletModel.hooks.useMultiInformantState();
 
   function navigateToEntity(params: NavigateToEntityProps) {
-    const { activityId, flowId, eventId, entityType } = params;
+    const { activityId, flowId, eventId, targetSubjectId, entityType } = params;
 
     if (props.isPublic && props.publicAppletKey) {
       return navigator.navigate(
@@ -65,13 +67,20 @@ export const useStartSurvey = (props: Props) => {
         appletId,
         activityId,
         eventId,
+        targetSubjectId,
         entityType,
         flowId,
       }),
     );
   }
 
-  function startSurvey({ activityId, flowId, eventId, shouldRestart }: OnActivityCardClickProps) {
+  function startSurvey({
+    activityId,
+    flowId,
+    eventId,
+    targetSubjectId,
+    shouldRestart,
+  }: OnActivityCardClickProps) {
     const analyticsPayload: MixpanelPayload = {
       [MixpanelProps.AppletId]: props.applet.id,
       [MixpanelProps.ActivityId]: activityId,
@@ -103,8 +112,8 @@ export const useStartSurvey = (props: Props) => {
       }
 
       if (shouldRestart) {
-        removeActivityProgress({ activityId, eventId });
-        removeGroupProgress({ entityId: flowId, eventId });
+        removeActivityProgress({ activityId, eventId, targetSubjectId });
+        removeGroupProgress({ entityId: flowId, eventId, targetSubjectId });
       }
 
       const activityIdToNavigate = shouldRestart ? firstActivityId : activityId;
@@ -114,12 +123,13 @@ export const useStartSurvey = (props: Props) => {
         entityType: 'flow',
         eventId,
         flowId,
+        targetSubjectId,
       });
     }
 
     if (shouldRestart) {
-      removeActivityProgress({ activityId, eventId });
-      removeGroupProgress({ entityId: activityId, eventId });
+      removeActivityProgress({ activityId, eventId, targetSubjectId });
+      removeGroupProgress({ entityId: activityId, eventId, targetSubjectId });
     }
 
     return navigateToEntity({
@@ -127,6 +137,7 @@ export const useStartSurvey = (props: Props) => {
       entityType: 'regular',
       eventId,
       flowId: null,
+      targetSubjectId,
     });
   }
 

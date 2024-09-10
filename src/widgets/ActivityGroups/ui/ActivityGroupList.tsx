@@ -9,8 +9,7 @@ import { useActivityGroups, useEntitiesSync, useIntegrationsSync } from '../mode
 
 import AppletDefaultIcon from '~/assets/AppletDefaultIcon.svg';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
-import { BootstrapModal } from '~/shared/ui';
-import { AvatarBase } from '~/shared/ui';
+import { AvatarBase, BootstrapModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
 import Text from '~/shared/ui/Text';
@@ -19,7 +18,7 @@ import { formatToDtoDate, useCustomTranslation } from '~/shared/utils';
 export const ActivityGroupList = () => {
   const { t } = useCustomTranslation();
 
-  const { applet, events, isPublic } = useContext(AppletDetailsContext);
+  const { applet, events, assignments, isPublic } = useContext(AppletDetailsContext);
 
   useIntegrationsSync({ appletDetails: applet });
 
@@ -38,7 +37,7 @@ export const ActivityGroupList = () => {
   const isAppletAboutExist = Boolean(applet?.about);
   const isAppletImageExist = Boolean(applet?.image);
 
-  const { groups } = useActivityGroups({ applet, events });
+  const { groups } = useActivityGroups({ applet, events, assignments });
 
   const onCardAboutClick = () => {
     if (!isAppletAboutExist) return;

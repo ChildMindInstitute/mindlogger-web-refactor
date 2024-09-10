@@ -1,8 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit';
 
+import { GroupProgressId } from '~/abstract/lib';
 import { RootState } from '~/shared/utils';
 
-const selectEntityId = (_: unknown, entityId: string) => entityId;
+const selectGroupProgressId = (_: unknown, groupProgressId: GroupProgressId) => groupProgressId;
 
 export const appletsSelector = (state: RootState) => state.applets;
 
@@ -12,8 +13,8 @@ export const groupProgressSelector = createSelector(
 );
 
 export const selectGroupProgress = createSelector(
-  [groupProgressSelector, selectEntityId],
-  (groupProgress, entityId) => groupProgress[entityId],
+  [groupProgressSelector, selectGroupProgressId],
+  (groupProgress, groupProgressId) => groupProgress[groupProgressId],
 );
 
 export const activityProgressSelector = createSelector(
@@ -22,7 +23,7 @@ export const activityProgressSelector = createSelector(
 );
 
 export const selectActivityProgress = createSelector(
-  [activityProgressSelector, selectEntityId],
+  [activityProgressSelector, selectGroupProgressId],
   (progress, entityId) => progress[entityId],
 );
 

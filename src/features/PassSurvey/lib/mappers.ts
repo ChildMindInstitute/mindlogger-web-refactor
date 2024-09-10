@@ -7,12 +7,14 @@ import {
   AppletEventsResponse,
   RespondentMetaDTO,
 } from '~/shared/api';
+import { SubjectDTO } from '~/shared/api/types/subject';
 
 type Props = {
   appletDTO: AppletDTO | null;
   eventsDTO: AppletEventsResponse | null;
   respondentMeta?: RespondentMetaDTO;
   activityDTO: ActivityDTO | null;
+  targetSubject: SubjectDTO | null;
 
   currentEventId: string;
   flowId: string | null;
@@ -20,7 +22,7 @@ type Props = {
 };
 
 export const mapRawDataToSurveyContext = (props: Props): SurveyContext => {
-  const { appletDTO, eventsDTO, activityDTO, currentEventId, flowId } = props;
+  const { appletDTO, eventsDTO, activityDTO, currentEventId, flowId, targetSubject } = props;
 
   if (!appletDTO || !eventsDTO || !activityDTO) {
     throw new Error('[MapRawDataToSurveyContext] Missing required data');
@@ -51,6 +53,7 @@ export const mapRawDataToSurveyContext = (props: Props): SurveyContext => {
 
     activity: activityDTO,
     event,
+    targetSubject,
     respondentMeta: props.respondentMeta,
 
     encryption: appletDTO.encryption,

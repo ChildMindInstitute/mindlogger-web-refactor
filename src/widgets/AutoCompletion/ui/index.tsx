@@ -11,18 +11,28 @@ type Props = {
   appletId: string;
   activityId: string;
   eventId: string;
+  targetSubjectId: string | null;
 
   flowId: string | null;
   publicAppletKey: string | null;
 };
 
 function SurveyAutoCompletionWidget(props: Props) {
-  const { appletDTO, activityDTO, eventsDTO, isLoading, isError, error, respondentMeta } =
-    useSurveyDataQuery({
-      appletId: props.appletId,
-      activityId: props.activityId,
-      publicAppletKey: props.publicAppletKey,
-    });
+  const {
+    appletDTO,
+    respondentMeta,
+    activityDTO,
+    eventsDTO,
+    targetSubject,
+    isError,
+    isLoading,
+    error,
+  } = useSurveyDataQuery({
+    appletId: props.appletId,
+    activityId: props.activityId,
+    publicAppletKey: props.publicAppletKey,
+    targetSubjectId: props.targetSubjectId,
+  });
 
   if (isLoading) {
     return <Loader />;
@@ -40,6 +50,7 @@ function SurveyAutoCompletionWidget(props: Props) {
         eventsDTO,
         currentEventId: props.eventId,
         flowId: props.flowId,
+        targetSubject,
         publicAppletKey: props.publicAppletKey,
         respondentMeta,
       })}

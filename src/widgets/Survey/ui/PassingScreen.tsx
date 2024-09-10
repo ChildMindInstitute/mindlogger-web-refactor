@@ -36,21 +36,25 @@ const PassingScreen = (props: Props) => {
 
   const context = useContext(SurveyContext);
 
+  const targetSubjectId = context.targetSubject?.id ?? null;
+
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(
       state,
-      getProgressId(context.activityId, context.eventId),
+      getProgressId(context.activityId, context.eventId, context.targetSubject?.id),
     ),
   );
 
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
     eventId: context.eventId,
+    targetSubjectId,
   });
 
   const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: context.entityId,
     eventId: context.eventId,
+    targetSubjectId,
   });
 
   const { saveSummaryDataInContext } = appletModel.hooks.useGroupProgressStateManager();
@@ -66,18 +70,21 @@ const PassingScreen = (props: Props) => {
     appletModel.hooks.useUserEvents({
       activityId: context.activityId,
       eventId: context.eventId,
+      targetSubjectId,
     });
 
   const { saveItemAnswer, saveItemAdditionalText, removeItemAnswer } =
     appletModel.hooks.useSaveItemAnswer({
       activityId: context.activityId,
       eventId: context.eventId,
+      targetSubjectId,
     });
 
   const { getSummaryForCurrentActivity } = useSummaryData({
     activityId: context.activityId,
     activityName: context.activity.name,
     eventId: context.eventId,
+    targetSubjectId,
     scoresAndReports: context.activity.scoresAndReports,
     flowId: null,
   });
@@ -92,6 +99,7 @@ const PassingScreen = (props: Props) => {
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
     activityId: context.activityId,
     eventId: context.eventId,
+    targetSubjectId,
     publicAppletKey: context.publicAppletKey,
     flowId: context.flow?.id ?? null,
     appletId: context.appletId,
@@ -141,6 +149,7 @@ const PassingScreen = (props: Props) => {
         saveSummaryDataInContext({
           entityId: context.entityId,
           eventId: context.eventId,
+          targetSubjectId,
 
           activityId: context.activityId,
           summaryData: summaryDataContext,
@@ -160,14 +169,22 @@ const PassingScreen = (props: Props) => {
 
     if (isFlowGroup && context.flow) {
       if (isLastActivity && hasAnySummaryScreenResults) {
-        return openSummaryScreen({ activityId: context.activityId, eventId: context.eventId });
+        return openSummaryScreen({
+          activityId: context.activityId,
+          eventId: context.eventId,
+          targetSubjectId,
+        });
       }
 
       return completeFlow();
     }
 
     if (isSummaryScreenOn && isSummaryDataExist) {
-      return openSummaryScreen({ activityId: context.activityId, eventId: context.eventId });
+      return openSummaryScreen({
+        activityId: context.activityId,
+        eventId: context.eventId,
+        targetSubjectId,
+      });
     }
 
     return completeActivity();
@@ -202,13 +219,18 @@ const PassingScreen = (props: Props) => {
       saveUserEventByType('NEXT', item);
     }
 
-    return incrementStep({ activityId: context.activityId, eventId: context.eventId });
+    return incrementStep({
+      activityId: context.activityId,
+      eventId: context.eventId,
+      targetSubjectId,
+    });
   }, [
     item,
     context.activity.isSkippable,
     context.activityId,
     context.eventId,
     incrementStep,
+    targetSubjectId,
     saveUserEventByType,
   ]);
 
@@ -219,8 +241,20 @@ const PassingScreen = (props: Props) => {
       return;
     }
 
-    return decrementStep({ activityId: context.activityId, eventId: context.eventId });
-  }, [context.activityId, context.eventId, decrementStep, hasPrevStep, item, saveUserEventByType]);
+    return decrementStep({
+      activityId: context.activityId,
+      eventId: context.eventId,
+      targetSubjectId,
+    });
+  }, [
+    context.activityId,
+    context.eventId,
+    decrementStep,
+    hasPrevStep,
+    item,
+    saveUserEventByType,
+    targetSubjectId,
+  ]);
 
   const onMoveForward = useCallback(() => {
     if (!item) {
@@ -285,6 +319,7 @@ const PassingScreen = (props: Props) => {
     item,
     activityId: context.activityId,
     eventId: context.eventId,
+    targetSubjectId,
     isSubmitModalOpen,
     onTimerEnd: hasNextStep ? onNext : openSubmitModal,
   });
