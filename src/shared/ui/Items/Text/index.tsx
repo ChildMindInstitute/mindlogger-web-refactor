@@ -22,7 +22,7 @@ export const TextItem = ({ value = '', onValueChange, disabled, isMultiline, has
       disabled={disabled}
       multiline={isMultiline}
       minRows={isMultiline ? 5 : 1}
-      maxRows={isMultiline ? 12 : 1}
+      maxRows={isMultiline ? 21 : 1}
       sx={
         isMultiline
           ? {

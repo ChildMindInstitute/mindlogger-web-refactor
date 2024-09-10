@@ -37,7 +37,7 @@ function isAnswerTooLarge(item: appletModel.ItemRecord) {
   ) {
     return false;
   }
-  return item.answer[0].length > item.config.maxResponseLength ?? true;
+  return item.answer[0].length > item.config.maxResponseLength;
 }
 
 function isAnswerEmpty(item: appletModel.ItemRecord): boolean {
