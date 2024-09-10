@@ -24,6 +24,10 @@ export const usePageWidth = () => {
   return Math.min(windowWidth - PageDimension.padding, PageDimension.maxWidth);
 };
 
+export const usePageMinHeight = () => {
+  return 275;
+};
+
 export const usePageMaxHeight = () => {
   return 2504;
 };

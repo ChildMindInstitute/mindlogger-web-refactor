@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { Body } from './Body';
 import { DocumentContext } from './DocumentContext';
 import { Header } from './Header';
-import { usePageWidth, usePageMaxHeight, useXScaledDimension } from './hooks';
+import { usePageWidth, usePageMaxHeight, useXScaledDimension, usePageMinHeight } from './hooks';
 import { ActivitiesPhrasalData } from './phrasalData';
 import { Phrase } from './Phrase';
 import { Title } from './Title';
@@ -34,6 +34,7 @@ export const Page = ({
   const { totalPages } = useContext(DocumentContext);
   const { t } = useActionPlanTranslation();
   const pageWidth = usePageWidth();
+  const pageMinHeight = usePageMinHeight();
   const pageMaxHeight = usePageMaxHeight();
   const scaledPadding = useXScaledDimension(16);
   const scaledTopPadding = useXScaledDimension(28);
@@ -58,9 +59,8 @@ export const Page = ({
         paddingRight={`${scaledRightPadding}px`}
         paddingBottom={`${scaledBottomPadding}px`}
         paddingLeft={`${scaledLeftPadding}px`}
-        // TODO: Implement truncation
+        minHeight={`${pageMinHeight}px`}
         maxHeight={`${pageMaxHeight}px`}
-        // overflow="hidden"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
