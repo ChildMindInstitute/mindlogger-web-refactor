@@ -2,11 +2,25 @@ import { useMemo } from 'react';
 
 import { appletModel } from '~/entities/applet';
 import { PassSurveyModel } from '~/features/PassSurvey';
+import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
+import { FeatureFlag } from '~/shared/utils/types/featureFlags';
 
 export const useSurveyState = (activityProgress: appletModel.ActivityProgress) => {
+  const { featureFlag } = useFeatureFlags();
+
   const items = useMemo(() => activityProgress?.items ?? [], [activityProgress.items]);
 
-  const availableItems = items.filter((x) => !x.isHidden);
+  const availableItems = items.filter((item) => {
+    if (item.isHidden) {
+      return false;
+    }
+
+    if (item.responseType === 'phrasalTemplate') {
+      return featureFlag(FeatureFlag.EnablePhrasalTemplate, false);
+    }
+
+    return true;
+  });
 
   const { visibleItems, hiddenItemIds } =
     PassSurveyModel.conditionalLogicFilter.filter(availableItems);

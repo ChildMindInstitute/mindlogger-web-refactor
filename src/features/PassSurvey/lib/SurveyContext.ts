@@ -11,6 +11,7 @@ import { SubjectDTO } from '~/shared/api/types/subject';
 
 export type SurveyContext = {
   appletId: string;
+  appletDisplayName: string;
   appletVersion: string;
   watermark: string;
 

@@ -20,6 +20,7 @@ import {
   ParagraphTextItem,
   TimeItem,
   TimeRangeItem,
+  PhrasalTemplateItem,
 } from '~/entities/activity/lib';
 import { ScoreAndReports } from '~/shared/api';
 import { DayMonthYearDTO, HourMinuteDTO } from '~/shared/utils';
@@ -77,7 +78,8 @@ export type ItemRecord =
   | AudioPlayerItem
   | MultiSelectionRowsItem
   | SingleSelectionRowsItem
-  | SliderRowsItem;
+  | SliderRowsItem
+  | PhrasalTemplateItem;
 
 export type ItemWithAdditionalResponse = Extract<
   ItemRecord,

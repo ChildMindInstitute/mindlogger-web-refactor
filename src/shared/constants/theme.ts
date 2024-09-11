@@ -10,6 +10,7 @@ export const Theme = {
       primary008: 'rgba(0, 103, 160, 0.08)',
       primary012: 'rgba(0, 103, 160, 0.12)',
       primary95: '#E8F2FF',
+      primaryFixed: '#CEE5FF',
       secondary: '#51606F',
       secondaryContainer: '#D5E4F7',
       secondaryContainerHover: '#C5D4E7',

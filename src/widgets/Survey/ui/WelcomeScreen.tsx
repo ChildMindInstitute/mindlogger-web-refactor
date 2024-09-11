@@ -130,6 +130,10 @@ const WelcomeScreen = () => {
         />
 
         <Text
+          // Must use `<div />` here because `<ActivityMetaData />` renders
+          // bunch of `div`s, but `<Text />`'s default component is a `<p />`,
+          // which can not contain `<div />`.
+          component="div"
           variant="body1"
           fontSize="18px"
           fontWeight="400"

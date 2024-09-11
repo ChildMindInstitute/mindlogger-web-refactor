@@ -47,7 +47,7 @@ export const ActivityCardItem = ({
   return (
     <SliderAnimation step={step} prevStep={prevStep ?? step}>
       <CardItem
-        markdown={questionText}
+        markdown={item.responseType === 'phrasalTemplate' ? null : questionText}
         watermark={watermark}
         isOptional={!isOptionalFlagHidden && (item.config.skippableItem || allowToSkipAllItems)}
         testId="active-item"

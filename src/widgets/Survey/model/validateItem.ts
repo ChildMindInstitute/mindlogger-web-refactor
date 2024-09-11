@@ -104,7 +104,8 @@ export function validateBeforeMoveForward({
   showWarning,
   hideWarning,
 }: ValidateItemProps): boolean {
-  const isSkippable = item.config.skippableItem || activity.isSkippable;
+  const isSkippable =
+    item.config.skippableItem || item.responseType === 'phrasalTemplate' || activity.isSkippable;
 
   if (isSkippable) {
     hideWarning();

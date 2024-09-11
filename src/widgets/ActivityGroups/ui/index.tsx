@@ -14,6 +14,7 @@ import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
 import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks';
+import { FeatureFlag } from '~/shared/utils/types/featureFlags';
 
 type PublicAppletDetails = {
   isPublic: true;
@@ -37,8 +38,9 @@ export const ActivityGroups = (props: Props) => {
     useState<TakeNowSuccessModalProps>({
       isOpen: false,
     });
-  const { featureFlags } = useFeatureFlags();
-  const isAssignmentsEnabled = !!featureFlags.enableActivityAssign && !props.isPublic;
+  const { featureFlag } = useFeatureFlags();
+  const isAssignmentsEnabled =
+    featureFlag(FeatureFlag.EnableActivityAssign, false) && !props.isPublic;
 
   const {
     isError: isAppletError,

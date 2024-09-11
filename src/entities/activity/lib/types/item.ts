@@ -32,7 +32,8 @@ export type ActivityItemType =
   | 'audio'
   | 'audioPlayer'
   | 'unsupportable'
-  | 'splashScreen';
+  | 'splashScreen'
+  | 'phrasalTemplate';
 
 export type ButtonsConfig = {
   removeBackButton: boolean;
@@ -97,9 +98,56 @@ export type ResponseValues =
   | SelectorValues
   | AudioPlayerItemValues
   | MultiSelectionRowsItemResponseValues
-  | SliderRowsItemResponseValues;
+  | SliderRowsItemResponseValues
+  | PhrasalTemplateValues;
 
 export type EmptyResponseValues = null;
+
+export interface PhrasalTemplateItem extends ActivityItemBase {
+  responseType: 'phrasalTemplate';
+  config: never;
+  responseValues: PhrasalTemplateValues;
+  answer: DefaultAnswer;
+}
+
+export type PhrasalTemplateValues = {
+  cardTitle: string;
+  phrases: PhrasalTemplatePhrase[];
+};
+
+export type PhrasalTemplatePhrase = {
+  fields: PhrasalTemplateField[];
+  image: string | null;
+};
+
+export type PhrasalTemplateField =
+  | PhrasalTemplateSentenceField
+  | PhrasalTemplateItemResponseField
+  | PhrasalTemplateLineBreakField;
+
+export type PhrasalTemplateSentenceField = {
+  type: 'sentence';
+  text: string;
+};
+
+export type PhrasalTemplateItemResponseField = {
+  type: 'item_response';
+  itemIndex: number;
+  itemName: string;
+  displayMode: PhrasalTemplateItemResponseFieldDisplayMode;
+};
+
+export type PhrasalTemplateLineBreakField = {
+  type: 'line_break';
+};
+
+export type PhrasalTemplateItemResponseFieldDisplayMode =
+  | 'sentence'
+  | 'sentence_option_row'
+  | 'sentence_row_option'
+  | 'bullet_list'
+  | 'bullet_list_option_row'
+  | 'bullet_list_text_row';
 
 export interface TextItem extends ActivityItemBase {
   responseType: 'text';

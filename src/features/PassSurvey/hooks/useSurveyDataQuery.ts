@@ -13,6 +13,7 @@ import {
 } from '~/shared/api';
 import { SubjectDTO } from '~/shared/api/types/subject';
 import { useFeatureFlags } from '~/shared/utils';
+import { FeatureFlag } from '~/shared/utils/types/featureFlags';
 
 type Return = {
   appletDTO: AppletDTO | null;
@@ -34,9 +35,10 @@ type Props = {
 
 export const useSurveyDataQuery = (props: Props): Return => {
   const { appletId, activityId, publicAppletKey, targetSubjectId } = props;
-  const { featureFlags } = useFeatureFlags();
+  const { featureFlag } = useFeatureFlags();
+
   const isAssignmentsEnabled =
-    !!featureFlags?.enableActivityAssign && !!appletId && !!targetSubjectId;
+    featureFlag(FeatureFlag.EnableActivityAssign, false) && !!appletId && !!targetSubjectId;
 
   const {
     data: appletById,
