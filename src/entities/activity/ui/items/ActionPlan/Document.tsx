@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { v4 as uuidV4 } from 'uuid';
 
 import { DocumentContext } from './DocumentContext';
-import { useAvailableBodyWidth, usePageMaxHeight } from './hooks';
+import { useAvailableBodyWidth, useCorrelatedPageMaxHeightLineCount } from './hooks';
 import { Page } from './Page';
 import { extractActivitiesPhrasalData } from './phrasalData';
 
@@ -46,7 +46,7 @@ export const Document = forwardRef<HTMLDivElement, DocumentProps>(
     const activityProgress = useAppSelector((state) =>
       appletModel.selectors.selectActivityProgress(
         state,
-        getProgressId(context.activityId, context.eventId),
+        getProgressId(context.activityId, context.eventId, context.targetSubject?.id),
       ),
     );
 
@@ -56,7 +56,8 @@ export const Document = forwardRef<HTMLDivElement, DocumentProps>(
     );
 
     const availableWidth = useAvailableBodyWidth();
-    const pageMaxHeight = usePageMaxHeight();
+    const correlatedPageMaxHeightLineCount = useCorrelatedPageMaxHeightLineCount();
+    const pageMaxHeight = correlatedPageMaxHeightLineCount.maxHeight;
     const [pages, setPages] = useState<React.ReactNode[]>([]);
 
     const renderPages = useCallback(async () => {

@@ -9,9 +9,9 @@ export const Header = ({ children }: { children: string }) => {
   return (
     <Text
       fontSize={`${headerFontSize}px`}
-      fontWeight="400"
+      fontWeight="700"
       lineHeight="28px"
-      color={Theme.colors.light.onSurfaceVariant}
+      color={Theme.colors.light.onSurface}
     >
       {children}
     </Text>

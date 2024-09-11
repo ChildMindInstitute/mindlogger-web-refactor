@@ -2,12 +2,16 @@ import React from 'react';
 
 import Avatar from '@mui/material/Avatar';
 
-import { usePageMaxLineCount, useXScaledDimension, useYScaledDimension } from './hooks';
+import {
+  useCorrelatedPageMaxHeightLineCount,
+  useXScaledDimension,
+  useYScaledDimension,
+} from './hooks';
 import { ActivitiesPhrasalData } from './phrasalData';
 import { ResponseSegment } from './ResponseSegment';
 import { TextSegment } from './TextSegment';
-import { PhrasalTemplatePhrase, PhrasalTemplateField } from '../../../lib';
 
+import { PhrasalTemplatePhrase, PhrasalTemplateField } from '~/entities/activity';
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 
@@ -25,7 +29,8 @@ export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
   const imagePadding = useXScaledDimension(2);
   const fontSize = useXScaledDimension(16);
   const lineHeight = useYScaledDimension(24);
-  const maxLineCount = usePageMaxLineCount();
+  const correlatedPageMaxHeightLineCount = useCorrelatedPageMaxHeightLineCount();
+  const maxLineCount = correlatedPageMaxHeightLineCount.lineCount;
 
   const { components } = phrase.fields.reduce(
     (acc, field, fieldIndex) => {

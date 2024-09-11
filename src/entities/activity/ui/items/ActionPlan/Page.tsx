@@ -3,7 +3,12 @@ import { useContext } from 'react';
 import { Body } from './Body';
 import { DocumentContext } from './DocumentContext';
 import { Header } from './Header';
-import { usePageWidth, usePageMaxHeight, useXScaledDimension, usePageMinHeight } from './hooks';
+import {
+  usePageWidth,
+  useCorrelatedPageMaxHeightLineCount,
+  useXScaledDimension,
+  usePageMinHeight,
+} from './hooks';
 import { ActivitiesPhrasalData } from './phrasalData';
 import { Phrase } from './Phrase';
 import { StretchySvg } from './StretchySvg';
@@ -36,12 +41,17 @@ export const Page = ({
   const { t } = useActionPlanTranslation();
   const pageWidth = usePageWidth();
   const pageMinHeight = usePageMinHeight();
-  const pageMaxHeight = usePageMaxHeight();
+  const correlatedPageMaxHeightLineCount = useCorrelatedPageMaxHeightLineCount();
+  const pageMaxHeight = correlatedPageMaxHeightLineCount.maxHeight;
   const scaledPadding = useXScaledDimension(16);
-  const scaledTopPadding = useXScaledDimension(28);
+  const scaledTopPadding = useXScaledDimension(40);
   const scaledRightPadding = useXScaledDimension(40);
-  const scaledBottomPadding = useXScaledDimension(40);
+  const scaledBottomPadding = useXScaledDimension(80);
   const scaledLeftPadding = useXScaledDimension(36.5);
+  const scaledHeaderGap = useXScaledDimension(32);
+  const scaledFooterWidth = useXScaledDimension(113);
+  const scaledFooterHeight = useXScaledDimension(16);
+  const scaledFooterOffset = useXScaledDimension(25);
 
   return (
     <Box
@@ -118,7 +128,7 @@ export const Page = ({
           position="relative"
           display="flex"
           flexDirection="column"
-          gap="24px"
+          gap={`${scaledHeaderGap}px`}
           width="100%"
           height="auto"
           overflow="hidden"
@@ -144,9 +154,14 @@ export const Page = ({
           left="0"
           bottom="0"
           width="100%"
-          sx={{ margin: '15px auto', zIndex: 2 }}
+          sx={{ margin: `0 auto ${scaledFooterOffset}px auto`, zIndex: 2 }}
         >
-          <img src={footerLogo} alt={t('credit') || ''} />
+          <img
+            src={footerLogo}
+            alt={t('credit') || ''}
+            width={scaledFooterWidth}
+            height={scaledFooterHeight}
+          />
         </Box>
       </Box>
     </Box>

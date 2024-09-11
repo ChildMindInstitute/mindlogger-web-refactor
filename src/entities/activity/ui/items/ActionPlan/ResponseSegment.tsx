@@ -1,7 +1,7 @@
 import { useXScaledDimension } from './hooks';
 import { ActivitiesPhrasalData, ActivityPhrasalDataSliderRowContext } from './phrasalData';
-import { PhrasalTemplateItemResponseField } from '../../../lib';
 
+import { PhrasalTemplateItemResponseField } from '~/entities/activity';
 import { useActionPlanTranslation } from '~/entities/activity/lib/useActionPlanTranslation';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
