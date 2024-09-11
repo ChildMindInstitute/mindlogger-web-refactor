@@ -6,6 +6,7 @@ import { Header } from './Header';
 import { usePageWidth, usePageMaxHeight, useXScaledDimension, usePageMinHeight } from './hooks';
 import { ActivitiesPhrasalData } from './phrasalData';
 import { Phrase } from './Phrase';
+import { StretchySvg } from './StretchySvg';
 import { Title } from './Title';
 
 import footerLogo from '~/assets/mindlogger-action-plan-footer-logo.svg';
@@ -62,29 +63,57 @@ export const Page = ({
         minHeight={`${pageMinHeight}px`}
         maxHeight={`${pageMaxHeight}px`}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="580"
-          height="100%"
-          viewBox="0 0 580 760"
-          preserveAspectRatio="none"
-          fill="none"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'fill',
-            zIndex: 1,
-          }}
-        >
-          <path
-            d="M71.5 0L9.5 29.2502L1.5 75.1427V180.04L9.5 310.657L1.5 462.96L9.5 500.783L1.5 552.223V703.013L46 741.34L158 760L271 752.435L388.5 760H479.5L527 732.263L545.5 721.672L564.5 710.073L573.5 628.374L564.5 500.783L580 298.553L573.5 153.311V29.2502L527 0H452.5H348.5L188 8.06901L71.5 0Z"
-            fill="#FCFCFF"
-          />
-          <path d="M580 760L554 677.5L502.5 718L580 760Z" fill="#FCFCFF" />
-        </svg>
+        <Box position="absolute" top={1} left={-1} right={0} height={25} zIndex={1}>
+          <StretchySvg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100%"
+            height="100%"
+            viewBox="0 0 612 25"
+            fill="none"
+          >
+            <path
+              d="M478 4L390 9L260.5 4H109L39 6.24658L20 24.5H592.5L571.5 6.71461L478 4Z"
+              fill="#FCFCFF"
+            />
+          </StretchySvg>
+        </Box>
+        <Box position="absolute" top={25} left={0} right={0} bottom={64} zIndex={1}>
+          <StretchySvg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100%"
+            height="100%"
+            viewBox="0 0 612 234"
+            fill="none"
+          >
+            <path
+              d="M598.5 83.2626L591.994 29.1325V0H19L14 38.5287L27.5069 87.7735L19.5 144.535L27.5069 158.631L19.5 177.802V234H584.988L598.5 208.373V158.631L589 120.888L598.5 83.2626Z"
+              fill="#FCFCFF"
+            />
+          </StretchySvg>
+        </Box>
+        <Box position="absolute" left={2.5} right={-2} bottom={0} height={64} zIndex={1}>
+          <StretchySvg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100%"
+            height="100%"
+            viewBox="0 0 612 64"
+            fill="none"
+          >
+            <g clipPath="url(#clip0_1105_7)">
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M580.079 18.0243L582.721 0.0402002L583.902 -8H17V22.5528L61.5 42.008L173.5 56L286.5 50.3276L404 56H495L539.545 36.4951L595.5 56L580.079 18.0243Z"
+                fill="#FCFCFF"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_1105_7">
+                <rect width="612" height="64" fill="white" />
+              </clipPath>
+            </defs>
+          </StretchySvg>
+        </Box>
         <Box
           position="relative"
           display="flex"
@@ -115,7 +144,7 @@ export const Page = ({
           left="0"
           bottom="0"
           width="100%"
-          sx={{ margin: '10px auto', zIndex: 2 }}
+          sx={{ margin: '15px auto', zIndex: 2 }}
         >
           <img src={footerLogo} alt={t('credit') || ''} />
         </Box>
