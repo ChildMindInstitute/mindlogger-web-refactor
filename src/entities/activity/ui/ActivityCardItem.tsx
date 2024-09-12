@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
 import { AdditionalTextResponse } from './AdditionalTextResponse';
-import { Answer, hasAdditionalResponse, requiresAdditionalResponse } from '../lib';
 import { ItemPicker } from './items/ItemPicker';
+import { Answer, hasAdditionalResponse, requiresAdditionalResponse } from '../lib';
 
 import { appletModel } from '~/entities/applet';
 import { SliderAnimation } from '~/shared/animations';

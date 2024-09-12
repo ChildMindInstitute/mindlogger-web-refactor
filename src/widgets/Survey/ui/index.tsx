@@ -94,7 +94,7 @@ export const SurveyWidget = (props: Props) => {
         publicAppletKey={publicAppletKey}
         appletId={appletId}
         errorLabel={
-          publicAppletKey ? t('additional.invalid_public_url') : (error?.evaluatedMessage ?? '')
+          publicAppletKey ? t('additional.invalid_public_url') : error?.evaluatedMessage ?? ''
         }
       />
     );
