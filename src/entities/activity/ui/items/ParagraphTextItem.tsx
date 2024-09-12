@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import { ParagraphTextItem as ParagraphItemType } from '../../lib';
 
+import { Theme } from '~/shared/constants';
 import { TextItem as BaseTextItem, Box } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
@@ -18,12 +21,11 @@ export const ParagraphTextItem = ({
 }: ParagraphItemProps) => {
   const { maxResponseLength } = item.config;
   const numCharacters = value?.length || 0;
+  const [hasError, setHasError] = useState(numCharacters > maxResponseLength);
   const { t } = useCustomTranslation();
 
   const onHandleValueChange = (value: string) => {
-    if (value.length > maxResponseLength) {
-      return;
-    }
+    setHasError(value.length > maxResponseLength);
 
     if (value.length === 0) {
       return onValueChange([]);
@@ -39,14 +41,14 @@ export const ParagraphTextItem = ({
         onValueChange={onHandleValueChange}
         disabled={isDisabled}
         isMultiline={true}
-        maxCharacters={maxResponseLength}
+        hasError={hasError}
       />
       <Box
         display="flex"
         justifyContent="flex-end"
         alignItems="center"
         fontSize="small"
-        color="#72777F"
+        color={hasError ? Theme.colors.light.error : Theme.colors.light.outline}
         mr={2}
       >
         {`${t('charactersCount', { numCharacters, maxCharacters: maxResponseLength })}`}

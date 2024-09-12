@@ -1,3 +1,4 @@
+import { Theme } from '~/shared/constants';
 import { BaseTextInput } from '~/shared/ui';
 
 type Props = {
@@ -5,21 +6,11 @@ type Props = {
   onValueChange: (value: string) => void;
   disabled: boolean;
   isMultiline?: boolean;
-  maxCharacters?: number;
+  hasError?: boolean;
 };
 
-export const TextItem = ({
-  value = '',
-  onValueChange,
-  disabled,
-  isMultiline,
-  maxCharacters,
-}: Props) => {
+export const TextItem = ({ value = '', onValueChange, disabled, isMultiline, hasError }: Props) => {
   const handleOnChange = (value: string) => {
-    if (isMultiline && maxCharacters && value.length > maxCharacters) {
-      return;
-    }
-
     onValueChange(value);
   };
   return (
@@ -31,22 +22,29 @@ export const TextItem = ({
       disabled={disabled}
       multiline={isMultiline}
       minRows={isMultiline ? 5 : 1}
-      maxRows={isMultiline ? 12 : 1}
+      maxRows={isMultiline ? 21 : 1}
       sx={
         isMultiline
           ? {
-              borderRadius: '12px',
               '& .MuiInputBase-input': {
+                height: '100%',
+                maxHeight: '350px',
                 '&::-webkit-scrollbar': {
                   width: '4px',
                 },
                 '&::-webkit-scrollbar-thumb': {
                   backgroundColor: '#C2C7CF',
-                  borderRadius: '100px',
                 },
               },
               '& .MuiInputBase-root': {
-                paddingRight: '2px', // Remove padding inside the input
+                height: '100%',
+                paddingRight: '2px',
+                ...(hasError ? { border: `2px solid ${Theme.colors.light.error}` } : {}),
+                borderWidth: '2px',
+                borderRadius: '12px',
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                border: hasError ? 'none' : `2px solid ${Theme.colors.light.surfaceVariant}`,
               },
             }
           : null
