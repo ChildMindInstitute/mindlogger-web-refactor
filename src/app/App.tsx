@@ -15,7 +15,7 @@ import './index.css';
 
 const setUp = () => {
   Mixpanel.init();
-  i18nManager.initialize();
+  void i18nManager.initialize();
 };
 
 setUp();

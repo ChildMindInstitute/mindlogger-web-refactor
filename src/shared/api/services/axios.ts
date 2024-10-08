@@ -32,6 +32,7 @@ axiosService.interceptors.request.use(
     return config;
   },
   (error) => {
+    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     return Promise.reject(error);
   },
 );
@@ -64,6 +65,7 @@ axiosService.interceptors.response.use(
         config.headers.Authorization = `${data.result.tokenType} ${data.result.accessToken}`;
       } catch (e) {
         eventEmitter.emit('onLogout');
+        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         await Promise.reject(e);
       }
 

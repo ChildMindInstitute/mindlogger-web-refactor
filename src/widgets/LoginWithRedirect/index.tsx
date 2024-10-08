@@ -21,7 +21,7 @@ export const LoginWithRedirect = ({ redirectTo }: LoginWithRedirectProps) => {
   useEffect(() => {
     const backRedirectPath = redirectTo || `${location.pathname}${location.search}`;
     navigate(ROUTES.login.path, { state: { backRedirectPath } });
-  }, [navigate, redirectTo]);
+  }, [location.pathname, location.search, navigate, redirectTo]);
 
   return null;
 };
