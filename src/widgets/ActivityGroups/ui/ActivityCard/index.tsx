@@ -24,7 +24,6 @@ import {
   useAppSelector,
   useCustomMediaQuery,
   MixpanelPayload,
-  useOnceLayoutEffect,
 } from '~/shared/utils';
 import { TargetSubjectLabel } from '~/widgets/TargetSubjectLabel';
 
@@ -107,7 +106,6 @@ export const ActivityCard = ({ activityListItem }: Props) => {
       activityId: activityListItem.activityId,
       eventId: activityListItem.eventId,
       targetSubjectId: activityListItem.targetSubject?.id ?? null,
-      status: activityListItem.status,
       flowId: activityListItem.flowId,
       shouldRestart,
     });
@@ -142,24 +140,6 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
     Mixpanel.track(MixpanelEvents.ActivityResumed, analyticsPayload);
   };
-
-  // Start activity on mount if doing Take Now on this activity.
-  useOnceLayoutEffect(() => {
-    if (
-      context.startActivityOrFlow &&
-      // TODO: This `!activityListItem.targetSubject` check is added to ensure that Take Now is
-      // only triggered once, on the singular self-report instance of ActivityCard. However, this
-      // causes Take Now to fail when there is no self-report card, which is a possible scenario
-      // with the introduction of MI assignments. Remove this check when Take Now is refactored in
-      // https://mindlogger.atlassian.net/browse/M2-7796
-      !activityListItem.targetSubject &&
-      ((!isFlow && context.startActivityOrFlow === activityListItem.activityId) ||
-        (isFlow && context.startActivityOrFlow === activityListItem.flowId))
-    ) {
-      // Pass `true` to ensure activity doesn't resume from a previous progress state.
-      onStartActivity(true);
-    }
-  });
 
   return (
     <ActivityCardBase isDisabled={isDisabled} isFlow={isFlow}>
