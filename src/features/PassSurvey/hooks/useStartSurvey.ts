@@ -51,7 +51,7 @@ export const useStartSurvey = (props: Props) => {
 
     const { activityId, flowId, eventId, targetSubjectId, entityType } = params;
 
-    if (props.isPublic && props.publicAppletKey && appletId) {
+    if (props.isPublic && props.publicAppletKey) {
       return navigator.navigate(
         ROUTES.publicSurvey.navigateTo({
           appletId,

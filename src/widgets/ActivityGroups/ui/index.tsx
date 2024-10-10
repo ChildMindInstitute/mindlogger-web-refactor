@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ActivityGroupList } from './ActivityGroupList';
 import { AppletDetailsContext } from '../lib';
+import { useTakeNowRedirect } from '../model/hooks/useTakeNowRedirect';
 
 import { appletModel, useAppletBaseInfoByIdQuery } from '~/entities/applet';
 import { useMyAssignmentsQuery } from '~/entities/assignment';
@@ -20,17 +21,20 @@ type PublicAppletDetails = {
   isPublic: true;
   startActivityOrFlow?: string | null;
   publicAppletKey: string;
+  appletId?: undefined;
 };
 
 type PrivateAppletDetails = {
   isPublic: false;
   startActivityOrFlow?: string | null;
   appletId: string;
+  publicAppletKey?: undefined;
 };
 
 type Props = PublicAppletDetails | PrivateAppletDetails;
 
 export const ActivityGroups = (props: Props) => {
+  const { appletId, isPublic, publicAppletKey, startActivityOrFlow } = props;
   const { t } = useCustomTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,8 +43,7 @@ export const ActivityGroups = (props: Props) => {
       isOpen: false,
     });
   const { featureFlag } = useFeatureFlags();
-  const isAssignmentsEnabled =
-    featureFlag(FeatureFlag.EnableActivityAssign, false) && !props.isPublic;
+  const isAssignmentsEnabled = featureFlag(FeatureFlag.EnableActivityAssign, false) && !isPublic;
 
   const {
     isError: isAppletError,
@@ -60,7 +63,7 @@ export const ActivityGroups = (props: Props) => {
     isError: isAssignmentsError,
     isLoading: isAssignmentsLoading,
     data: assignments = null,
-  } = useMyAssignmentsQuery(isAssignmentsEnabled ? props.appletId : undefined, {
+  } = useMyAssignmentsQuery(isAssignmentsEnabled ? appletId : undefined, {
     select: (data) => data.data.result.assignments,
     enabled: isAssignmentsEnabled,
   });
@@ -74,7 +77,8 @@ export const ActivityGroups = (props: Props) => {
 
   useOnceEffect(() => {
     ensureMultiInformantStateExists();
-    if (isInMultiInformantFlow() && !props.startActivityOrFlow) {
+
+    if (isInMultiInformantFlow() && !startActivityOrFlow) {
       resetMultiInformantState();
     }
 
@@ -90,6 +94,15 @@ export const ActivityGroups = (props: Props) => {
       });
       setTakeNowSuccessModalState({ isOpen: true, ...getMultiInformantState() });
     }
+  });
+
+  useTakeNowRedirect({
+    activityOrFlowId: startActivityOrFlow,
+    applet,
+    assignments,
+    events: events?.events,
+    isPublic,
+    publicAppletKey,
   });
 
   if (isAppletLoading || isEventsLoading || (isAssignmentsEnabled && isAssignmentsLoading)) {
