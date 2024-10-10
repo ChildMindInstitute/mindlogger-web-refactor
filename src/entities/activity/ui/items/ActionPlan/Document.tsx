@@ -21,7 +21,7 @@ type DocumentProps = {
   phrasalTemplateCardTitle: string;
 };
 
-type IdentifiblePhrasalTemplatePhrase = PhrasalTemplatePhrase & { id: string };
+type IdentifiablePhrasalTemplatePhrase = PhrasalTemplatePhrase & { id: string };
 
 export const Document = forwardRef<HTMLDivElement, DocumentProps>(
   ({ appletTitle, phrases, phrasalTemplateCardTitle }, ref) => {
@@ -32,9 +32,9 @@ export const Document = forwardRef<HTMLDivElement, DocumentProps>(
       [phrases],
     );
 
-    const identifiblePhrases = useMemo(
+    const identifiablePhrases = useMemo(
       () =>
-        phrases.map<IdentifiblePhrasalTemplatePhrase>((phrase) => {
+        phrases.map<IdentifiablePhrasalTemplatePhrase>((phrase) => {
           return {
             ...phrase,
             id: uuidV4(),
@@ -64,8 +64,8 @@ export const Document = forwardRef<HTMLDivElement, DocumentProps>(
       const renderedPages: React.ReactNode[] = [];
 
       const renderPage = async (
-        pagePhrases: IdentifiblePhrasalTemplatePhrase[],
-      ): Promise<[React.ReactNode, IdentifiblePhrasalTemplatePhrase[]]> => {
+        pagePhrases: IdentifiablePhrasalTemplatePhrase[],
+      ): Promise<[React.ReactNode, IdentifiablePhrasalTemplatePhrase[]]> => {
         const curPageNumber = renderedPages.length + 1;
 
         const curPage = (
@@ -103,7 +103,7 @@ export const Document = forwardRef<HTMLDivElement, DocumentProps>(
           // height, and there is only 1 phrase for the page, and that phrase
           // has more than 1 field, then split the fields into multiple phrases
           // with the same ID and re-render.
-          const splits: [IdentifiblePhrasalTemplatePhrase, IdentifiblePhrasalTemplatePhrase] = [
+          const splits: [IdentifiablePhrasalTemplatePhrase, IdentifiablePhrasalTemplatePhrase] = [
             {
               id: pagePhrase.id,
               image: pagePhrase.image,
@@ -137,12 +137,12 @@ export const Document = forwardRef<HTMLDivElement, DocumentProps>(
             acc.push(phrase);
           }
           return acc;
-        }, [] as IdentifiblePhrasalTemplatePhrase[]);
+        }, [] as IdentifiablePhrasalTemplatePhrase[]);
 
         return [newPage, recombinedLeftoverPhrases];
       };
 
-      const _renderPages = async (_pagePhrases: IdentifiblePhrasalTemplatePhrase[]) => {
+      const _renderPages = async (_pagePhrases: IdentifiablePhrasalTemplatePhrase[]) => {
         const [renderedPage, leftoverPhrases] = await renderPage(_pagePhrases);
         renderedPages.push(renderedPage);
 
@@ -151,7 +151,7 @@ export const Document = forwardRef<HTMLDivElement, DocumentProps>(
         }
       };
 
-      await _renderPages(identifiblePhrases);
+      await _renderPages(identifiablePhrases);
 
       setPages(renderedPages);
     }, [
@@ -160,7 +160,7 @@ export const Document = forwardRef<HTMLDivElement, DocumentProps>(
       availableWidth,
       pageMaxHeight,
       phrasalTemplateCardTitle,
-      identifiblePhrases,
+      identifiablePhrases,
       noImage,
     ]);
 
