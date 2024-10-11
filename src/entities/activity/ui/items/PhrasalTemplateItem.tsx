@@ -1,7 +1,8 @@
-import { useMemo, useContext, useCallback, createRef, useState } from 'react';
+import { useMemo, useContext, useCallback, useRef, useState } from 'react';
 
 import { Avatar, Button } from '@mui/material';
-import html2canvas from 'html2canvas';
+import { isMobile } from 'react-device-detect';
+import { v4 as uuidV4 } from 'uuid';
 
 import { Document as ActionPlanDocument } from './ActionPlan/Document';
 import { usePhrasalTemplateTranslation } from '../../lib/usePhrasalTemplateTranslation';
@@ -9,6 +10,7 @@ import { usePhrasalTemplateTranslation } from '../../lib/usePhrasalTemplateTrans
 import downloadIconLight from '~/assets/download-icon-light.svg';
 import downloadIconDark from '~/assets/download-icon.svg';
 import { PhrasalTemplateItem as PhrasalTemplateItemType } from '~/entities/activity/lib';
+import { downloadPhrasalTemplateItem } from '~/entities/activity/lib/downloadPhrasalTemplateItem';
 import { SurveyContext } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import { Markdown } from '~/shared/ui';
@@ -21,29 +23,29 @@ type PhrasalTemplateItemProps = {
 
 export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemProps) => {
   const { appletDisplayName } = useContext(SurveyContext);
+  const phrasalTemplateCardTitle = item.responseValues.cardTitle;
   const [downloadIcon, setDownloadIcon] = useState(downloadIconDark);
   const questionText = useMemo(() => replaceText(item.question), [item.question, replaceText]);
-  const ref = createRef<HTMLDivElement>();
+  const documentIdRef = useRef<string>(uuidV4());
   const { t } = usePhrasalTemplateTranslation();
 
   const handleDownloadImage = useCallback(async () => {
-    if (!ref.current) {
-      return;
-    }
+    const now = new Date();
+    const filename = [
+      appletDisplayName,
+      phrasalTemplateCardTitle,
+      String(now.getMonth() + 1).padStart(2, '0'),
+      String(now.getDate()).padStart(2, '0'),
+      now.getFullYear(),
+    ].join('_');
 
-    const element = ref.current;
-    const canvas = await html2canvas(element, { useCORS: true });
-
-    const data = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-
-    link.href = data;
-    link.download = `${t('filename', { appletName: appletDisplayName })}.png`;
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }, [ref, t, appletDisplayName]);
+    await downloadPhrasalTemplateItem({
+      documentId: documentIdRef.current,
+      filename,
+      share: isMobile,
+      single: false,
+    });
+  }, [appletDisplayName, phrasalTemplateCardTitle]);
 
   return (
     <Box gap="24px" display={'flex'} flexDirection={'column'} alignItems="center">
@@ -99,9 +101,9 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
         {t('download')}
       </Button>
       <ActionPlanDocument
-        ref={ref}
+        documentId={documentIdRef.current}
         appletTitle={appletDisplayName}
-        phrasalTemplateCardTitle={item.responseValues.cardTitle}
+        phrasalTemplateCardTitle={phrasalTemplateCardTitle}
         phrases={item.responseValues.phrases}
       />
     </Box>

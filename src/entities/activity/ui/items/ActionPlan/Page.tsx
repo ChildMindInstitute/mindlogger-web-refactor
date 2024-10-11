@@ -21,6 +21,7 @@ import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 
 type PageProps = {
+  documentId: string;
   pageNumber: number;
   phrases: PhrasalTemplatePhrase[];
   phrasalData: ActivitiesPhrasalData;
@@ -30,6 +31,7 @@ type PageProps = {
 };
 
 export const Page = ({
+  documentId,
   appletTitle,
   phrasalTemplateCardTitle,
   phrases,
@@ -55,6 +57,8 @@ export const Page = ({
 
   return (
     <Box
+      data-phrasal-template-page={true}
+      data-phrasal-template-document-id={documentId}
       sx={{
         width: `${pageWidth}px`,
         padding: `0 ${scaledPadding}px ${scaledPadding}px`,
