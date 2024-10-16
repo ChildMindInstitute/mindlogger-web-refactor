@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 
 import { openStoreLink } from '~/abstract/lib';
 import { isSupportedActivity } from '~/entities/activity';
-import { appletModel } from '~/entities/applet';
 import { useStartSurvey } from '~/features/PassSurvey';
 import { AppletBaseDTO, AppletEventsResponse, HydratedAssignmentDTO } from '~/shared/api';
 
@@ -22,7 +21,6 @@ export function useTakeNowRedirect({
   publicAppletKey?: string | null;
 }) {
   const { startSurvey } = useStartSurvey({ applet, isPublic, publicAppletKey });
-  const { getMultiInformantState } = appletModel.hooks.useMultiInformantState();
 
   const handleTakeNowRedirect = useMemo(
     () =>
@@ -31,20 +29,18 @@ export function useTakeNowRedirect({
         eventId,
         flowId = null,
         isSupported = true,
-        targetSubjectId = null,
       }: {
         activityId: string;
         eventId: string;
         flowId?: string | null;
         isSupported?: boolean;
-        targetSubjectId?: string | null;
       }) => {
         if (!isSupported) {
           openStoreLink();
           return;
         }
 
-        startSurvey({ activityId, eventId, flowId, shouldRestart: true, targetSubjectId });
+        startSurvey({ activityId, eventId, flowId, shouldRestart: true, targetSubjectId: null });
       },
     [startSurvey],
   );
@@ -53,7 +49,6 @@ export function useTakeNowRedirect({
     const activity = applet.activities.find(({ id }) => id === activityOrFlowId);
     const flow = applet.activityFlows.find(({ id }) => id === activityOrFlowId);
     const event = events.find(({ entityId }) => entityId === (activity?.id || flow?.id));
-    const { targetSubject } = getMultiInformantState();
 
     if (!event) {
       return;
@@ -64,7 +59,6 @@ export function useTakeNowRedirect({
         activityId: activity.id,
         isSupported: isSupportedActivity(activity.containsResponseTypes),
         eventId: event.id,
-        targetSubjectId: targetSubject?.id,
       });
     }
 
@@ -80,7 +74,6 @@ export function useTakeNowRedirect({
         ),
         eventId: event.id,
         flowId: flow.id,
-        targetSubjectId: targetSubject?.id,
       });
     }
   }
