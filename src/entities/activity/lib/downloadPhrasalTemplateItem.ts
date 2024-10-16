@@ -100,10 +100,13 @@ export const downloadPhrasalTemplateItem: CardImageDownloader = async (options) 
 
       document.body.appendChild(downloadLink);
       downloadLink.click();
+
+      // Add some delay before removing the link so Safari wouldn't end up skipping items.
+      await new Promise((resolve) => setTimeout(resolve, 500));
       document.body.removeChild(downloadLink);
 
       if (dataUriIndex < dataUris.length - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 1));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
     }
   }
