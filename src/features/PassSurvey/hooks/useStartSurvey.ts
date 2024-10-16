@@ -1,4 +1,4 @@
-import { ActivityStatus, EntityType } from '~/abstract/lib/GroupBuilder';
+import { EntityType } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
 import { AppletBaseDTO } from '~/shared/api';
 import ROUTES from '~/shared/constants/routes';
@@ -23,21 +23,19 @@ type OnActivityCardClickProps = {
   eventId: string;
   targetSubjectId: string | null;
   flowId: string | null;
-  status: ActivityStatus;
   shouldRestart: boolean;
 };
 
 type Props = {
-  applet: AppletBaseDTO;
+  applet?: AppletBaseDTO;
   isPublic: boolean;
   publicAppletKey: string | null;
 };
 
 export const useStartSurvey = (props: Props) => {
   const navigator = useCustomNavigation();
-
-  const appletId = props.applet.id;
-  const flows = props.applet.activityFlows;
+  const appletId = props.applet?.id;
+  const flows = props.applet?.activityFlows;
 
   const { removeGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
@@ -47,6 +45,10 @@ export const useStartSurvey = (props: Props) => {
     appletModel.hooks.useMultiInformantState();
 
   function navigateToEntity(params: NavigateToEntityProps) {
+    if (!appletId) {
+      return;
+    }
+
     const { activityId, flowId, eventId, targetSubjectId, entityType } = params;
 
     if (props.isPublic && props.publicAppletKey) {
@@ -82,7 +84,7 @@ export const useStartSurvey = (props: Props) => {
     shouldRestart,
   }: OnActivityCardClickProps) {
     const analyticsPayload: MixpanelPayload = {
-      [MixpanelProps.AppletId]: props.applet.id,
+      [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.ActivityId]: activityId,
     };
 
@@ -102,7 +104,7 @@ export const useStartSurvey = (props: Props) => {
     Mixpanel.track(MixpanelEvents.AssessmentStarted, analyticsPayload);
 
     if (flowId) {
-      const flow = flows.find((x) => x.id === flowId);
+      const flow = flows?.find((x) => x.id === flowId);
       const firstActivityId: string | null = flow?.activityIds[0] ?? null;
 
       if (!firstActivityId) {
