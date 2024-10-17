@@ -1,9 +1,11 @@
 import { Theme } from '~/shared/constants';
 import { Box } from '~/shared/ui';
 import { Text } from '~/shared/ui';
-import { useCustomMediaQuery } from '~/shared/utils';
+import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
 
 export default function Footer() {
+  const { t } = useCustomTranslation({ keyPrefix: 'footer' });
+
   const buildVersion = import.meta.env.VITE_BUILD_VERSION;
 
   const { greaterThanMD } = useCustomMediaQuery();
@@ -22,7 +24,7 @@ export default function Footer() {
       <Box display="flex" alignItems="center" textAlign="center" marginY={3} gap={2}>
         {greaterThanMD && (
           <span>
-            Mindlogger is a product of the{' '}
+            {t('product')}{' '}
             <a href="https://childmind.org" target="_blank" rel="noreferrer">
               Child Mind Institute
             </a>{' '}
@@ -30,10 +32,10 @@ export default function Footer() {
           </span>
         )}
         <a href="https://mindlogger.org/terms" target="_blank" rel="noreferrer">
-          Terms of Service
+          {t('termsOfService')}
         </a>
         <a href="https://help.mindlogger.org/" target="_blank" rel="noreferrer">
-          Support
+          {t('support')}
         </a>
         {buildVersion && (
           <Text variant="body1" color={Theme.colors.light.outlineVariant}>

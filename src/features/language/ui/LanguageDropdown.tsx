@@ -43,7 +43,10 @@ const LanguageDropdown = (props: Props) => {
   return (
     <div data-testid="header-language-dropdown">
       <BaseDropdown
-        title={language === SupportableLanguage.English ? t('english') : t('french')}
+        title={
+          preparedLanguageOptions.filter((e) => (e.key as SupportableLanguage) === language)[0]
+            .value
+        }
         options={preparedLanguageOptions}
       />
     </div>

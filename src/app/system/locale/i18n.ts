@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
+import elResources from '~/i18n/el/translation.json';
 import enResources from '~/i18n/en/translation.json';
 import frResources from '~/i18n/fr/translation.json';
 
@@ -15,8 +16,9 @@ const i18nManager = {
         resources: {
           en: enResources,
           fr: frResources,
+          el: elResources,
         },
-        supportedLngs: ['en', 'fr'],
+        supportedLngs: ['en', 'fr', 'el'],
         interpolation: {
           escapeValue: false,
         },
