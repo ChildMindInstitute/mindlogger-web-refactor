@@ -1,6 +1,7 @@
 import { useMemo, useContext, useCallback, useRef, useState } from 'react';
 
 import { Avatar, Button } from '@mui/material';
+import { format as formatDate } from 'date-fns';
 import { isMobile } from 'react-device-detect';
 import { v4 as uuidV4 } from 'uuid';
 
@@ -29,23 +30,20 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
   const documentIdRef = useRef<string>(uuidV4());
   const { t } = usePhrasalTemplateTranslation();
 
-  const handleDownloadImage = useCallback(async () => {
-    const now = new Date();
-    const filename = [
-      appletDisplayName,
-      phrasalTemplateCardTitle,
-      String(now.getMonth() + 1).padStart(2, '0'),
-      String(now.getDate()).padStart(2, '0'),
-      now.getFullYear(),
-    ].join('_');
-
-    await downloadPhrasalTemplateItem({
-      documentId: documentIdRef.current,
-      filename,
-      share: isMobile,
-      single: false,
-    });
-  }, [appletDisplayName, phrasalTemplateCardTitle]);
+  const handleDownloadImage = useCallback(
+    async () =>
+      await downloadPhrasalTemplateItem({
+        documentId: documentIdRef.current,
+        filename: [
+          appletDisplayName,
+          phrasalTemplateCardTitle,
+          formatDate(new Date(), 'MM_dd_yyyy'),
+        ].join('_'),
+        share: isMobile,
+        single: false,
+      }),
+    [appletDisplayName, phrasalTemplateCardTitle],
+  );
 
   return (
     <Box gap="24px" display={'flex'} flexDirection={'column'} alignItems="center">
