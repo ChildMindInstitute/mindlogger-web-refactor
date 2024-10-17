@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import { Body } from './Body';
-import { DocumentContext } from './DocumentContext';
+import { DocumentContext } from './Document.type';
 import { Header } from './Header';
 import {
   usePageWidth,
@@ -75,7 +75,7 @@ export const Page = ({
         paddingBottom={`${scaledBottomPadding}px`}
         paddingLeft={`${scaledLeftPadding}px`}
         minHeight={`${pageMinHeight}px`}
-        maxHeight={`${pageMaxHeight}px`}
+        // maxHeight={`${pageMaxHeight}px`}
       >
         <Box position="absolute" top={1} left={-1} right={0} height={25} zIndex={1}>
           <StretchySvg
