@@ -1,27 +1,21 @@
-import React from 'react';
+import React, { ComponentProps, useMemo } from 'react';
 
 import Avatar from '@mui/material/Avatar';
 
-import {
-  useCorrelatedPageMaxHeightLineCount,
-  useXScaledDimension,
-  useYScaledDimension,
-} from './hooks';
-import { ActivitiesPhrasalData } from './phrasalData';
+import { useXScaledDimension, useYScaledDimension } from './hooks';
 import { ResponseSegment } from './ResponseSegment';
 import { TextSegment } from './TextSegment';
 
-import { PhrasalTemplatePhrase, PhrasalTemplateField } from '~/entities/activity';
+import { PageData } from '~/entities/activity/ui/items/ActionPlan/pageComponent';
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 
 export type PhraseProps = {
-  phrase: PhrasalTemplatePhrase;
-  phrasalData: ActivitiesPhrasalData;
-  noImage: boolean;
+  phraseId: string;
+  pageData: PageData;
 };
 
-export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
+export const Phrase = ({ phraseId, pageData }: PhraseProps) => {
   const gap = useXScaledDimension(24);
   const minHeight = useXScaledDimension(72);
   const imageWidth = useXScaledDimension(67);
@@ -29,35 +23,49 @@ export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
   const imagePadding = useXScaledDimension(2);
   const fontSize = useXScaledDimension(16);
   const lineHeight = useYScaledDimension(24);
-  const correlatedPageMaxHeightLineCount = useCorrelatedPageMaxHeightLineCount();
-  const maxLineCount = correlatedPageMaxHeightLineCount.lineCount;
 
-  const { components } = phrase.fields.reduce(
-    (acc, field, fieldIndex) => {
-      const isLineStart = fieldIndex === 0 || acc.prevField?.type === 'line_break';
-
-      if (field.type === 'sentence') {
-        acc.components.push(<TextSegment text={field.text} isAtStart={isLineStart} />);
-      } else if (field.type === 'item_response') {
-        acc.components.push(
-          <ResponseSegment phrasalData={phrasalData} field={field} isAtStart={isLineStart} />,
-        );
-      } else if (field.type === 'line_break') {
-        acc.components.push(<br />);
-      }
-
-      acc.prevField = field;
-      return acc;
-    },
-    { components: [], prevField: undefined } as {
-      components: React.ReactNode[];
-      prevField?: PhrasalTemplateField;
-    },
+  const phraseComponents = useMemo(
+    () => pageData.components.filter((component) => component.phraseId === phraseId),
+    [pageData, phraseId],
   );
+
+  const renderedComponents = useMemo(() => {
+    const rendered: React.ReactNode[] = [];
+
+    phraseComponents.forEach((component) => {
+      const componentType = component.componentType;
+      if (componentType === 'sentence') {
+        rendered.push(<TextSegment text={component.text} isAtStart={component.isAtStart} />);
+      } else if (componentType === 'item_response') {
+        let itemResponse: ComponentProps<typeof ResponseSegment>['itemResponse'];
+        if (component.itemResponseType === 'list') {
+          itemResponse = {
+            itemResponseType: 'list',
+            items: component.items,
+          };
+        } else {
+          itemResponse = {
+            itemResponseType: 'text',
+            text: component.text,
+          };
+        }
+
+        rendered.push(
+          <ResponseSegment itemResponse={itemResponse} isAtStart={component.isAtStart} />,
+        );
+      } else if (componentType === 'line_break') {
+        rendered.push(<br />);
+      }
+    });
+
+    return rendered;
+  }, [phraseComponents]);
+
+  const imageUrl = pageData.imageUrlByPhraseId[phraseId];
 
   return (
     <Box display="flex" gap={`${gap}px`} minHeight={minHeight}>
-      {!noImage && (
+      {pageData.hasImage && (
         <Box
           display="flex"
           justifyContent="center"
@@ -67,9 +75,9 @@ export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
             height: imageHeight,
           }}
         >
-          {phrase.image && (
+          {imageUrl && (
             <Avatar
-              src={phrase.image}
+              src={imageUrl}
               variant="square"
               sx={{
                 width: imageWidth,
@@ -82,20 +90,8 @@ export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
           )}
         </Box>
       )}
-      <Box
-        fontSize={`${fontSize}px`}
-        lineHeight={`${lineHeight}px`}
-        display="-webkit-inline-box"
-        maxHeight="100%"
-        overflow="hidden"
-        sx={{
-          lineClamp: `${maxLineCount}`,
-          '-webkit-line-clamp': `${maxLineCount}`,
-          boxOrient: 'vertical',
-          '-webkit-box-orient': 'vertical',
-        }}
-      >
-        {React.Children.toArray(components)}
+      <Box fontSize={`${fontSize}px`} lineHeight={`${lineHeight}px`}>
+        {React.Children.toArray(renderedComponents)}
       </Box>
     </Box>
   );

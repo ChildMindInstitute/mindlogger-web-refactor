@@ -1,50 +1,38 @@
 import { useContext } from 'react';
 
 import { Body } from './Body';
-import { DocumentContext } from './DocumentContext';
+import { DocumentContext } from './Document.type';
 import { Header } from './Header';
-import {
-  usePageWidth,
-  useCorrelatedPageMaxHeightLineCount,
-  useXScaledDimension,
-  usePageMinHeight,
-} from './hooks';
-import { ActivitiesPhrasalData } from './phrasalData';
+import { usePageWidth, useXScaledDimension, usePageMinHeight } from './hooks';
 import { Phrase } from './Phrase';
 import { StretchySvg } from './StretchySvg';
 import { Title } from './Title';
 
 import footerLogo from '~/assets/mindlogger-action-plan-footer-logo.svg';
-import { PhrasalTemplatePhrase } from '~/entities/activity/lib';
 import { useActionPlanTranslation } from '~/entities/activity/lib/useActionPlanTranslation';
+import { PageData } from '~/entities/activity/ui/items/ActionPlan/pageComponent';
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 
 type PageProps = {
   documentId: string;
   pageNumber: number;
-  phrases: PhrasalTemplatePhrase[];
-  phrasalData: ActivitiesPhrasalData;
   appletTitle: string;
   phrasalTemplateCardTitle: string;
-  noImage: boolean;
+  pageData: PageData;
 };
 
 export const Page = ({
   documentId,
   appletTitle,
   phrasalTemplateCardTitle,
-  phrases,
-  phrasalData,
   pageNumber,
-  noImage,
+  pageData,
 }: PageProps) => {
   const { totalPages } = useContext(DocumentContext);
   const { t } = useActionPlanTranslation();
   const pageWidth = usePageWidth();
   const pageMinHeight = usePageMinHeight();
-  const correlatedPageMaxHeightLineCount = useCorrelatedPageMaxHeightLineCount();
-  const pageMaxHeight = correlatedPageMaxHeightLineCount.maxHeight;
   const scaledPadding = useXScaledDimension(16);
   const scaledTopPadding = useXScaledDimension(40);
   const scaledRightPadding = useXScaledDimension(40);
@@ -75,7 +63,6 @@ export const Page = ({
         paddingBottom={`${scaledBottomPadding}px`}
         paddingLeft={`${scaledLeftPadding}px`}
         minHeight={`${pageMinHeight}px`}
-        maxHeight={`${pageMaxHeight}px`}
       >
         <Box position="absolute" top={1} left={-1} right={0} height={25} zIndex={1}>
           <StretchySvg
@@ -144,8 +131,8 @@ export const Page = ({
               : phrasalTemplateCardTitle}
           </Header>
           <Body>
-            {phrases.map((phrase, index) => (
-              <Phrase key={index} phrase={phrase} phrasalData={phrasalData} noImage={noImage} />
+            {pageData.orderedPhraseIds.map((phraseId) => (
+              <Phrase key={phraseId} phraseId={phraseId} pageData={pageData} />
             ))}
           </Body>
         </Box>
