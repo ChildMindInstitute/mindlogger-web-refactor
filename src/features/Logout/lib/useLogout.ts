@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { useLocation } from 'react-router-dom';
+
 import { appletModel } from '~/entities/applet';
 import { useLogoutMutation, userModel } from '~/entities/user';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
@@ -14,6 +16,7 @@ type UseLogoutReturn = {
 
 export const useLogout = (): UseLogoutReturn => {
   const navigator = useCustomNavigation();
+  const location = useLocation();
 
   const { clearUser } = userModel.hooks.useUserState();
   const { clearStore } = appletModel.hooks.useClearStore();
@@ -37,8 +40,18 @@ export const useLogout = (): UseLogoutReturn => {
     Mixpanel.track('logout');
     Mixpanel.logout();
     FeatureFlags.logout();
-    return navigator.navigate(ROUTES.login.path);
-  }, [clearUser, clearStore, clearAutoCompletionState, navigator, logoutMutation]);
+
+    const backRedirectPath = `${location.pathname}${location.search}`;
+    return navigator.navigate(ROUTES.login.path, { state: { backRedirectPath } });
+  }, [
+    clearUser,
+    clearStore,
+    clearAutoCompletionState,
+    location.pathname,
+    location.search,
+    navigator,
+    logoutMutation,
+  ]);
 
   return {
     logout,

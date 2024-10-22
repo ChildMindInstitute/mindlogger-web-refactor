@@ -48,10 +48,10 @@ function AuthorizedRoutes({ refreshToken }: Props) {
             <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
             <Route path={ROUTES.publicJoin.path} element={<PublicAppletDetailsPage />} />
             <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
-
-            <Route path="*" element={<Navigate to={ROUTES.appletList.path} />} />
           </Route>
         </Route>
+
+        <Route path="*" element={<Navigate to={ROUTES.appletList.path} />} />
       </Routes>
     </LogoutTracker>
   );
