@@ -72,11 +72,13 @@ function ValidateTakeNowParams({
         navigate(ROUTES.appletList.path);
       }
 
-      setTimeout(() =>
-        addErrorBanner({
-          children: error.error,
-          duration,
-        }),
+      setTimeout(
+        () =>
+          addErrorBanner({
+            children: error.error,
+            duration,
+          }),
+        500,
       );
     }
   }, [error, addErrorBanner]);
