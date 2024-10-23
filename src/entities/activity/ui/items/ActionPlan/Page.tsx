@@ -1,21 +1,15 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 
 import { Body } from './Body';
-import { DocumentContext } from './DocumentContext';
+import { DocumentContext, DocumentData, PageComponent } from './Document.type';
 import { Header } from './Header';
-import {
-  usePageWidth,
-  useCorrelatedPageMaxHeightLineCount,
-  useXScaledDimension,
-  usePageMinHeight,
-} from './hooks';
-import { ActivitiesPhrasalData } from './phrasalData';
+import { usePageWidth, useXScaledDimension, usePageMinHeight } from './hooks';
+import { getPagePhraseIds } from './pageComponent';
 import { Phrase } from './Phrase';
 import { StretchySvg } from './StretchySvg';
 import { Title } from './Title';
 
 import footerLogo from '~/assets/mindlogger-action-plan-footer-logo.svg';
-import { PhrasalTemplatePhrase } from '~/entities/activity/lib';
 import { useActionPlanTranslation } from '~/entities/activity/lib/useActionPlanTranslation';
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
@@ -23,28 +17,24 @@ import Box from '~/shared/ui/Box';
 type PageProps = {
   documentId: string;
   pageNumber: number;
-  phrases: PhrasalTemplatePhrase[];
-  phrasalData: ActivitiesPhrasalData;
   appletTitle: string;
   phrasalTemplateCardTitle: string;
-  noImage: boolean;
+  documentData: DocumentData;
+  pageComponents: PageComponent[];
 };
 
 export const Page = ({
   documentId,
   appletTitle,
   phrasalTemplateCardTitle,
-  phrases,
-  phrasalData,
   pageNumber,
-  noImage,
+  documentData,
+  pageComponents,
 }: PageProps) => {
   const { totalPages } = useContext(DocumentContext);
   const { t } = useActionPlanTranslation();
   const pageWidth = usePageWidth();
   const pageMinHeight = usePageMinHeight();
-  const correlatedPageMaxHeightLineCount = useCorrelatedPageMaxHeightLineCount();
-  const pageMaxHeight = correlatedPageMaxHeightLineCount.maxHeight;
   const scaledPadding = useXScaledDimension(16);
   const scaledTopPadding = useXScaledDimension(40);
   const scaledRightPadding = useXScaledDimension(40);
@@ -54,6 +44,28 @@ export const Page = ({
   const scaledFooterWidth = useXScaledDimension(113);
   const scaledFooterHeight = useXScaledDimension(16);
   const scaledFooterOffset = useXScaledDimension(25);
+
+  const [phraseIds, firstPhraseId, lastPhraseId] = useMemo(() => {
+    const ids = getPagePhraseIds(pageComponents);
+    const firstId = ids[0];
+    const lastId = ids[ids.length - 1];
+    return [ids, firstId, lastId] as const;
+  }, [pageComponents]);
+
+  const renderedPhrases = useMemo(
+    () =>
+      phraseIds.map((phraseId) => (
+        <Phrase
+          key={phraseId}
+          phraseId={phraseId}
+          documentData={documentData}
+          pageComponents={pageComponents}
+          isFirstOnPage={phraseId === firstPhraseId}
+          isLastOnPage={phraseId === lastPhraseId}
+        />
+      )),
+    [documentData, firstPhraseId, lastPhraseId, pageComponents, phraseIds],
+  );
 
   return (
     <Box
@@ -75,7 +87,6 @@ export const Page = ({
         paddingBottom={`${scaledBottomPadding}px`}
         paddingLeft={`${scaledLeftPadding}px`}
         minHeight={`${pageMinHeight}px`}
-        maxHeight={`${pageMaxHeight}px`}
       >
         <Box position="absolute" top={1} left={-1} right={0} height={25} zIndex={1}>
           <StretchySvg
@@ -143,11 +154,7 @@ export const Page = ({
               ? `${phrasalTemplateCardTitle} (${pageNumber}/${totalPages})`
               : phrasalTemplateCardTitle}
           </Header>
-          <Body>
-            {phrases.map((phrase, index) => (
-              <Phrase key={index} phrase={phrase} phrasalData={phrasalData} noImage={noImage} />
-            ))}
-          </Body>
+          <Body>{renderedPhrases}</Body>
         </Box>
         <Box
           display="flex"

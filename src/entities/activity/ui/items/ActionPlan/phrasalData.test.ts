@@ -103,7 +103,10 @@ describe('Action Plan', () => {
 
       expect(data).toHaveProperty('item');
       expect(data.item).toHaveProperty('type', 'array');
-      expect(data.item).toHaveProperty('values.0', date.toLocaleTimeString());
+      expect(data.item).toHaveProperty(
+        'values.0',
+        date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      );
       expect(data.item).toHaveProperty('context.itemResponseType', 'time');
     });
 
@@ -116,8 +119,14 @@ describe('Action Plan', () => {
 
       expect(data).toHaveProperty('item');
       expect(data.item).toHaveProperty('type', 'array');
-      expect(data.item).toHaveProperty('values.0', date1.toLocaleTimeString());
-      expect(data.item).toHaveProperty('values.1', date2.toLocaleTimeString());
+      expect(data.item).toHaveProperty(
+        'values.0',
+        date1.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      );
+      expect(data.item).toHaveProperty(
+        'values.1',
+        date2.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      );
       expect(data.item).toHaveProperty('context.itemResponseType', 'timeRange');
     });
 
