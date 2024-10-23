@@ -5,6 +5,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import AppletDetailsPage from './AppletDetailsPage';
 import AppletListPage from './AppletListPage';
 import AutoCompletion from './AutoCompletion';
+import LoginPage from './Login';
 import ProfilePage from './Profile';
 import PublicAutoCompletion from './PublicAutoCompletion';
 import SettingsPage from './Settings';
@@ -48,10 +49,10 @@ function AuthorizedRoutes({ refreshToken }: Props) {
             <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
             <Route path={ROUTES.publicJoin.path} element={<PublicAppletDetailsPage />} />
             <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
-
-            <Route path="*" element={<Navigate to={ROUTES.appletList.path} />} />
           </Route>
         </Route>
+        <Route path={ROUTES.login.path} element={<LoginPage />} />
+        <Route path="*" element={<Navigate to={ROUTES.appletList.path} />} />
       </Routes>
     </LogoutTracker>
   );
