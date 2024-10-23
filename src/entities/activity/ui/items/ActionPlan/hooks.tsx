@@ -28,20 +28,12 @@ export const usePageMinHeight = () => {
   return 275;
 };
 
-export const useCorrelatedPageMaxHeightLineCount = (): { maxHeight: number; lineCount: number } => {
+export const usePageMaxHeight = () => {
   // Use these for local development/testing when a shorter card would be
   // easier to work with:
-  // return { maxHeight: 512, lineCount: 14 };
+  // return 512;
 
-  return {
-    maxHeight: 2504,
-
-    // This number: 97, corresponds to the number of lines of plain text that
-    // can fit into a card of at most 2504px height. If the max height is
-    // adjusted, and/or if the text element's styling is adjusted, then this
-    // number would also need to be adjusted as well.
-    lineCount: 97,
-  };
+  return 2504;
 };
 
 export const useXScaledDimension = (dimension: number) => {
