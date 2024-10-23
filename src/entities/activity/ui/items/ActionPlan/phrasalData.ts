@@ -81,7 +81,7 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
         values: item.answer
           .map((value) => new Date(value))
           .filter((value) => !!value)
-          .map((value) => value.toLocaleTimeString()),
+          .map((value) => value.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
         context: fieldDataContext,
       };
       fieldData = dateFieldData;
