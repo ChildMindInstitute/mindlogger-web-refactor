@@ -32,4 +32,5 @@ export const phrasalTemplateCompatibleResponseTypes = [
   'multiSelectRows',
   'singleSelectRows',
   'sliderRows',
+  'paragraphText',
 ];
