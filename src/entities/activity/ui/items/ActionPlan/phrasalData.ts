@@ -84,7 +84,8 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
     } else if (
       item.responseType === 'numberSelect' ||
       item.responseType === 'slider' ||
-      item.responseType === 'text'
+      item.responseType === 'text' ||
+      item.responseType === 'paragraphText'
     ) {
       const dateFieldData: ActivityPhrasalArrayFieldData = {
         type: 'array',
