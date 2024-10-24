@@ -1,11 +1,12 @@
 import { UseQueryResult } from '@tanstack/react-query';
 
 import { useActivityByIdQuery } from '~/entities/activity';
-import { useAppletByIdQuery } from '~/entities/applet';
+import { useAppletBaseInfoByIdQuery, useAppletByIdQuery } from '~/entities/applet';
 import { useMyAssignmentsQuery } from '~/entities/assignment';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
 import {
   ActivityDTO,
+  AppletBaseDTO,
   AppletDTO,
   AppletEventsResponse,
   BaseError,
@@ -17,6 +18,7 @@ import { FeatureFlag } from '~/shared/utils/types/featureFlags';
 
 type Return = {
   appletDTO: AppletDTO | null;
+  appletBaseDTO: AppletBaseDTO | null;
   respondentMeta?: RespondentMetaDTO;
   activityDTO: ActivityDTO | null;
   eventsDTO: AppletEventsResponse | null;
@@ -48,6 +50,16 @@ export const useSurveyDataQuery = (props: Props): Return => {
   } = useAppletByIdQuery(
     publicAppletKey ? { isPublic: true, publicAppletKey } : { isPublic: false, appletId },
     { select: ({ data }) => data },
+  );
+
+  const {
+    data: appletBaseInfo,
+    isError: isAppletBaseInfoError,
+    isLoading: isAppletBaseInfoLoading,
+    error: appletBaseInfoError,
+  } = useAppletBaseInfoByIdQuery(
+    publicAppletKey ? { isPublic: true, publicAppletKey } : { isPublic: false, appletId },
+    { select: ({ data }) => data.result },
   );
 
   const {
@@ -91,12 +103,19 @@ export const useSurveyDataQuery = (props: Props): Return => {
 
   return {
     appletDTO: appletById?.result ?? null,
+    appletBaseDTO: appletBaseInfo ?? null,
     respondentMeta: appletById?.respondentMeta,
     activityDTO: activityById ?? null,
     eventsDTO: eventsByIdData ?? null,
     targetSubject: targetSubject ?? null,
-    isError: isAppletError || isActivityError || isEventsError || isSubjectError,
-    isLoading: isAppletLoading || isActivityLoading || isEventsLoading || isSubjectLoading,
-    error: appletError ?? activityError ?? eventsError ?? subjectError,
+    isError:
+      isAppletError || isAppletBaseInfoError || isActivityError || isEventsError || isSubjectError,
+    isLoading:
+      isAppletLoading ||
+      isAppletBaseInfoLoading ||
+      isActivityLoading ||
+      isEventsLoading ||
+      isSubjectLoading,
+    error: appletError ?? appletBaseInfoError ?? activityError ?? eventsError ?? subjectError,
   };
 };

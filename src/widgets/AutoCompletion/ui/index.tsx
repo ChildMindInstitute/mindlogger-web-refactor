@@ -20,6 +20,7 @@ type Props = {
 function SurveyAutoCompletionWidget(props: Props) {
   const {
     appletDTO,
+    appletBaseDTO,
     respondentMeta,
     activityDTO,
     eventsDTO,
@@ -46,6 +47,7 @@ function SurveyAutoCompletionWidget(props: Props) {
     <SurveyContext.Provider
       value={mapRawDataToSurveyContext({
         appletDTO,
+        appletBaseDTO,
         activityDTO,
         eventsDTO,
         currentEventId: props.eventId,
