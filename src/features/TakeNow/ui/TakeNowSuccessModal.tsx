@@ -1,7 +1,12 @@
+import { useContext } from 'react';
+
 import { TakeNowSuccessModalProps } from '../lib/types';
 
+import { SurveyContext } from '~/features/PassSurvey';
 import { MuiModal } from '~/shared/ui';
 import {
+  addFeatureToAnalyticsPayload,
+  getSurveyAnalyticsPayload,
   Mixpanel,
   MixpanelEvents,
   MixpanelPayload,
@@ -12,27 +17,21 @@ import {
 export const TakeNowSuccessModal = ({
   isOpen,
   onClose,
-  appletId,
   multiInformantAssessmentId,
   activityId,
   activityFlowId,
   submitId,
 }: TakeNowSuccessModalProps) => {
   const { t } = useCustomTranslation();
+  const { applet } = useContext(SurveyContext);
 
   const handleReturnToAdminAppClick = () => {
     const analyticsPayload: MixpanelPayload = {
-      [MixpanelProps.AppletId]: appletId,
+      ...getSurveyAnalyticsPayload({ applet, activityId, flowId: activityFlowId }),
       [MixpanelProps.SubmitId]: submitId,
     };
 
-    if (activityId) {
-      analyticsPayload[MixpanelProps.ActivityId] = activityId;
-    } else if (activityFlowId) {
-      analyticsPayload[MixpanelProps.ActivityFlowId] = activityFlowId;
-    }
-
-    analyticsPayload[MixpanelProps.Feature] = 'Multi-informant';
+    addFeatureToAnalyticsPayload(analyticsPayload, 'Multi-informant');
 
     if (multiInformantAssessmentId) {
       analyticsPayload[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;

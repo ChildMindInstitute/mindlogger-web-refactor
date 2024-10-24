@@ -5,6 +5,7 @@ export enum MixpanelProps {
   ActivityId = 'Activity ID',
   ActivityFlowId = 'Activity Flow ID',
   MultiInformantAssessmentId = 'Multi-informant Assessment ID',
+  ItemTypes = 'Item Types',
 }
 
 export type MixpanelPayload = Partial<Record<MixpanelProps, unknown>>;
