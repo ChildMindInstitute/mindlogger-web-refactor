@@ -3,6 +3,7 @@ import { createContext } from 'react';
 import {
   ActivityDTO,
   ActivityFlowDTO,
+  AppletBaseDTO,
   AppletDTO,
   RespondentMetaDTO,
   ScheduleEventDto,
@@ -10,6 +11,7 @@ import {
 import { SubjectDTO } from '~/shared/api/types/subject';
 
 export type SurveyContext = {
+  applet: AppletBaseDTO;
   appletId: string;
   appletDisplayName: string;
   appletVersion: string;

@@ -2,13 +2,8 @@ import { EntityType } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
 import { AppletBaseDTO } from '~/shared/api';
 import ROUTES from '~/shared/constants/routes';
-import {
-  MixpanelEvents,
-  MixpanelPayload,
-  MixpanelProps,
-  Mixpanel,
-  useCustomNavigation,
-} from '~/shared/utils';
+import { MixpanelEvents, MixpanelProps, Mixpanel, useCustomNavigation } from '~/shared/utils';
+import { addFeatureToAnalyticsPayload, getSurveyAnalyticsPayload } from '~/shared/utils/analytics';
 
 type NavigateToEntityProps = {
   flowId: string | null;
@@ -32,10 +27,10 @@ type Props = {
   publicAppletKey: string | null;
 };
 
-export const useStartSurvey = (props: Props) => {
+export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => {
   const navigator = useCustomNavigation();
-  const appletId = props.applet?.id;
-  const flows = props.applet?.activityFlows;
+  const appletId = applet?.id;
+  const flows = applet?.activityFlows;
 
   const { removeGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
@@ -51,14 +46,14 @@ export const useStartSurvey = (props: Props) => {
 
     const { activityId, flowId, eventId, targetSubjectId, entityType } = params;
 
-    if (props.isPublic && props.publicAppletKey) {
+    if (isPublic && publicAppletKey) {
       return navigator.navigate(
         ROUTES.publicSurvey.navigateTo({
           appletId,
           activityId,
           eventId,
           entityType,
-          publicAppletKey: props.publicAppletKey,
+          publicAppletKey,
           flowId,
         }),
       );
@@ -83,17 +78,12 @@ export const useStartSurvey = (props: Props) => {
     targetSubjectId,
     shouldRestart,
   }: OnActivityCardClickProps) {
-    const analyticsPayload: MixpanelPayload = {
-      [MixpanelProps.AppletId]: appletId,
-      [MixpanelProps.ActivityId]: activityId,
-    };
+    if (!applet) return;
 
-    if (flowId) {
-      analyticsPayload[MixpanelProps.ActivityFlowId] = flowId;
-    }
+    const analyticsPayload = getSurveyAnalyticsPayload({ applet, activityId, flowId });
 
     if (isInMultiInformantFlow()) {
-      analyticsPayload[MixpanelProps.Feature] = 'Multi-informant';
+      addFeatureToAnalyticsPayload(analyticsPayload, 'Multi-informant');
 
       const { multiInformantAssessmentId } = getMultiInformantState();
       if (multiInformantAssessmentId) {

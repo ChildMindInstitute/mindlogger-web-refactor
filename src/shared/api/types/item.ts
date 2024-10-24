@@ -1,24 +1,26 @@
 import { ConditionalLogic } from './conditionalLogic';
 
 export type ItemResponseTypeDTO =
-  | 'text'
-  | 'singleSelect'
-  | 'multiSelect'
-  | 'message'
-  | 'slider'
-  | 'numberSelect'
-  | 'timeRange'
-  | 'geolocation'
-  | 'drawing'
-  | 'photo'
-  | 'video'
-  | 'date'
-  | 'sliderRows'
-  | 'singleSelectRows'
-  | 'multiSelectRows'
   | 'audio'
   | 'audioPlayer'
-  | 'time';
+  | 'date'
+  | 'drawing'
+  | 'geolocation'
+  | 'message'
+  | 'multiSelect'
+  | 'multiSelectRows'
+  | 'numberSelect'
+  | 'paragraphText'
+  | 'photo'
+  | 'phrasalTemplate'
+  | 'singleSelect'
+  | 'singleSelectRows'
+  | 'slider'
+  | 'sliderRows'
+  | 'text'
+  | 'time'
+  | 'timeRange'
+  | 'video';
 
 export interface ItemDetailsBaseDTO {
   id: string;

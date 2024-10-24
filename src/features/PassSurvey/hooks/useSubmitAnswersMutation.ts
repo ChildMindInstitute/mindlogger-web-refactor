@@ -1,9 +1,20 @@
+import { useContext } from 'react';
+
 import { AxiosResponse } from 'axios';
+
+import { SurveyContext } from '..';
 
 import { usePublicSaveAnswerMutation, useSaveAnswerMutation } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { AnswerPayload } from '~/shared/api';
-import { MixpanelEvents, MixpanelPayload, MixpanelProps, Mixpanel } from '~/shared/utils';
+import {
+  MixpanelEvents,
+  MixpanelPayload,
+  MixpanelProps,
+  Mixpanel,
+  addFeatureToAnalyticsPayload,
+  getSurveyAnalyticsPayload,
+} from '~/shared/utils';
 
 type Props = {
   isPublic: boolean;
@@ -14,19 +25,20 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess }: Props) 
   const { isInMultiInformantFlow, getMultiInformantState, updateMultiInformantState } =
     appletModel.hooks.useMultiInformantState();
 
+  const { applet } = useContext(SurveyContext);
+
   const onSuccess = (_: AxiosResponse, variables: AnswerPayload) => {
     const analyticsPayload: MixpanelPayload = {
-      [MixpanelProps.AppletId]: variables.appletId,
+      ...getSurveyAnalyticsPayload({
+        applet,
+        activityId: variables.activityId,
+        flowId: variables.flowId,
+      }),
       [MixpanelProps.SubmitId]: variables.submitId,
-      [MixpanelProps.ActivityId]: variables.activityId,
     };
 
-    if (variables.flowId) {
-      analyticsPayload[MixpanelProps.ActivityFlowId] = variables.flowId;
-    }
-
     if (isInMultiInformantFlow()) {
-      analyticsPayload[MixpanelProps.Feature] = 'Multi-informant';
+      addFeatureToAnalyticsPayload(analyticsPayload, 'Multi-informant');
 
       const { multiInformantAssessmentId, submitId } = getMultiInformantState();
       if (multiInformantAssessmentId) {
@@ -42,7 +54,7 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess }: Props) 
 
     Mixpanel.track(MixpanelEvents.AssessmentCompleted, analyticsPayload);
 
-    return onSubmitSuccess && onSubmitSuccess(variables);
+    return onSubmitSuccess?.(variables);
   };
 
   const {

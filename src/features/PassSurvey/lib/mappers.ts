@@ -3,6 +3,7 @@ import { SurveyContext } from './SurveyContext';
 import {
   ActivityDTO,
   ActivityFlowDTO,
+  AppletBaseDTO,
   AppletDTO,
   AppletEventsResponse,
   RespondentMetaDTO,
@@ -11,6 +12,7 @@ import { SubjectDTO } from '~/shared/api/types/subject';
 
 type Props = {
   appletDTO: AppletDTO | null;
+  appletBaseDTO: AppletBaseDTO | null;
   eventsDTO: AppletEventsResponse | null;
   respondentMeta?: RespondentMetaDTO;
   activityDTO: ActivityDTO | null;
@@ -21,10 +23,18 @@ type Props = {
   publicAppletKey: string | null;
 };
 
-export const mapRawDataToSurveyContext = (props: Props): SurveyContext => {
-  const { appletDTO, eventsDTO, activityDTO, currentEventId, flowId, targetSubject } = props;
-
-  if (!appletDTO || !eventsDTO || !activityDTO) {
+export const mapRawDataToSurveyContext = ({
+  appletDTO,
+  appletBaseDTO,
+  eventsDTO,
+  activityDTO,
+  currentEventId,
+  flowId,
+  publicAppletKey,
+  targetSubject,
+  respondentMeta,
+}: Props): SurveyContext => {
+  if (!appletDTO || !appletBaseDTO || !eventsDTO || !activityDTO) {
     throw new Error('[MapRawDataToSurveyContext] Missing required data');
   }
 
@@ -37,10 +47,11 @@ export const mapRawDataToSurveyContext = (props: Props): SurveyContext => {
   let flow: ActivityFlowDTO | null = null;
 
   if (flowId) {
-    flow = appletDTO.activityFlows.find((f) => f.id === flowId) ?? null;
+    flow = appletBaseDTO.activityFlows.find((f) => f.id === flowId) ?? null;
   }
 
   return {
+    applet: appletBaseDTO,
     appletId: appletDTO.id,
     appletDisplayName: appletDTO.displayName,
     watermark: appletDTO.watermark,
@@ -50,12 +61,12 @@ export const mapRawDataToSurveyContext = (props: Props): SurveyContext => {
 
     entityId: flowId ?? activityDTO.id,
 
-    publicAppletKey: props.publicAppletKey,
+    publicAppletKey,
 
     activity: activityDTO,
     event,
     targetSubject,
-    respondentMeta: props.respondentMeta,
+    respondentMeta,
 
     encryption: appletDTO.encryption,
     appletVersion: appletDTO.version,
