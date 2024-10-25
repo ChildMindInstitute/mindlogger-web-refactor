@@ -42,6 +42,11 @@ class ScoresExtractor {
     const result: Array<ScoreRecord> = [];
 
     for (const scoreSettings of settings) {
+      if (scoreSettings.type === 'score' && scoreSettings.scoringType === 'score') {
+        // Skip report scores that are not configured as raw scores
+        continue;
+      }
+
       try {
         const score: ScoreRecord | null = this.extractInternal(items, scoreSettings);
 
