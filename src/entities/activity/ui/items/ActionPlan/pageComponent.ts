@@ -42,6 +42,16 @@ const sliderValueTransformer =
 const joinWithComma: FieldValueItemsJoiner = (values) => values.join(', ');
 const joinWithDash: FieldValueItemsJoiner = (values) => values.join(' - ');
 
+/**
+ * Transform phrasal data object into more render-friendly data structures. This purpose of this
+ * transformation is to make the render component's code simpler: Instead of having individual
+ * render component dealing with the complexities of phrasal data structure, we just deal with them
+ * once at a centralized place. This way, render components can be code is a much more declarative
+ * manner.
+ * @param t Translation function
+ * @param phrasalData Phrasal data object
+ * @param phrases Phrasal template objects
+ */
 export const buildPageComponents = (
   t: TFunction,
   phrasalData: ActivitiesPhrasalData,
@@ -190,6 +200,15 @@ export const getPagePhraseIds = (components: PageComponent[]) =>
     [] as string[],
   );
 
+/**
+ * Generate a flattened list of component-content indices to be used by the binary search based
+ * truncation algorithm. Instead of having to perform binary search on multiple levels of the data
+ * structure, this flattened list allows binary search to be performed on only a single level. This
+ * greatly simplifies the implementation of the truncation algorithm. And the related function
+ * `deepDivideComponents` is then used to divide the data structure at a
+ * particular component-content index.
+ * @param components The list of page components to generate indices from.
+ */
 export const getFlatComponentIndices = (components: PageComponent[]): FlatComponentIndex[] =>
   components
     .map<FlatComponentIndex[]>((component, componentIndex) => {
@@ -223,6 +242,15 @@ const divideTextItems = (items: string[], inclusiveEnd: number): [string[], stri
   ['…', ...items.slice(inclusiveEnd + 1)],
 ];
 
+/**
+ * Deeply divide a given list of page components at the given component-content index. When a
+ * component is divided at content level, connective `…` are added to both ends of the resulting
+ * splits.
+ * @param components The list of page components to divide.
+ * @param flatIndices The list of component-content indices to choose a division point from.
+ * @param inclusivePivot The index element at which a component-content index will be selected to
+ * perform division at. The chosen component-content index will be used in a inclusive manner.
+ */
 export const deepDivideComponents = (
   components: PageComponent[],
   flatIndices: FlatComponentIndex[],
