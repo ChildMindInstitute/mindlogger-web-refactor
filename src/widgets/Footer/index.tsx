@@ -31,11 +31,11 @@ export default function Footer() {
             &#169; 2024
           </span>
         )}
-        <a href="https://mindlogger.org/privacy-policy" target="_blank" rel="noreferrer">
-          {t('privacy')}
-        </a>
         <a href="https://mindlogger.org/terms" target="_blank" rel="noreferrer">
           {t('termsOfService')}
+        </a>
+        <a href="https://mindlogger.org/privacy-policy" target="_blank" rel="noreferrer">
+          {t('privacy')}
         </a>
         <a href="https://help.mindlogger.org/" target="_blank" rel="noreferrer">
           {t('support')}
