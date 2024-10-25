@@ -219,8 +219,8 @@ const divideComponents = (
 ];
 
 const divideTextItems = (items: string[], inclusiveEnd: number): [string[], string[]] => [
-  [...items.slice(0, inclusiveEnd + 1), '...'],
-  ['...', ...items.slice(inclusiveEnd + 1)],
+  [...items.slice(0, inclusiveEnd + 1), '…'],
+  ['…', ...items.slice(inclusiveEnd + 1)],
 ];
 
 export const deepDivideComponents = (
