@@ -35,7 +35,7 @@ export default function Footer() {
           {t('privacy')}
         </a>
         <a href="https://mindlogger.org/terms" target="_blank" rel="noreferrer">
-          {t('terms')}
+          {t('termsOfService')}
         </a>
         <a href="https://help.mindlogger.org/" target="_blank" rel="noreferrer">
           {t('support')}
