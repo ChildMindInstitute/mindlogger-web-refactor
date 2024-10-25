@@ -79,7 +79,7 @@ export const Phrase = ({
         }
         rendered.push(<ResponseSegment itemResponse={itemResponse} isAtStart={isAtStart} />);
       } else if (componentType === 'line_break') {
-        rendered.push(<br />);
+        rendered.push(<Box component="hr" sx={{ m: 0, height: 32, border: 'none' }} />);
       }
 
       previousComponentType = componentType;
