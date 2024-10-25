@@ -2,6 +2,7 @@
 import { phrasalTemplateCompatibleResponseTypes } from '~/abstract/lib/constants';
 import { ActivityItemType } from '~/entities/activity/lib';
 import { ItemRecord } from '~/entities/applet/model';
+import { formatToDtoTime } from '~/shared/utils';
 
 type ActivityPhrasalDataGenericContext = {
   itemResponseType: ActivityItemType;
@@ -81,7 +82,7 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
         values: item.answer
           .map((value) => new Date(value))
           .filter((value) => !!value)
-          .map((value) => value.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
+          .map((value) => formatToDtoTime(value)),
         context: fieldDataContext,
       };
       fieldData = dateFieldData;

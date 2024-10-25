@@ -1,6 +1,7 @@
 import { extractActivitiesPhrasalData } from './phrasalData';
 
 import { ItemRecord } from '~/entities/applet/model';
+import { formatToDtoTime } from '~/shared/utils';
 
 describe('Action Plan', () => {
   describe('extractActivitiesPhrasalData', () => {
@@ -103,10 +104,7 @@ describe('Action Plan', () => {
 
       expect(data).toHaveProperty('item');
       expect(data.item).toHaveProperty('type', 'array');
-      expect(data.item).toHaveProperty(
-        'values.0',
-        date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      );
+      expect(data.item).toHaveProperty('values.0', formatToDtoTime(date));
       expect(data.item).toHaveProperty('context.itemResponseType', 'time');
     });
 
@@ -119,14 +117,8 @@ describe('Action Plan', () => {
 
       expect(data).toHaveProperty('item');
       expect(data.item).toHaveProperty('type', 'array');
-      expect(data.item).toHaveProperty(
-        'values.0',
-        date1.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      );
-      expect(data.item).toHaveProperty(
-        'values.1',
-        date2.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      );
+      expect(data.item).toHaveProperty('values.0', formatToDtoTime(date1));
+      expect(data.item).toHaveProperty('values.1', formatToDtoTime(date2));
       expect(data.item).toHaveProperty('context.itemResponseType', 'timeRange');
     });
 
