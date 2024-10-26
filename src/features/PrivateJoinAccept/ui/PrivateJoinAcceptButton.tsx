@@ -5,7 +5,7 @@ import { useAcceptPrivateInviteMutation, useInvitationTranslation } from '~/enti
 import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
 import { BaseButton } from '~/shared/ui';
-import { MixpanelEvents, MixpanelProps, Mixpanel } from '~/shared/utils';
+import { MixpanelEventType, MixpanelProps, Mixpanel } from '~/shared/utils';
 
 interface PrivateJoinAcceptButtonProps {
   invitationKey: string;
@@ -23,7 +23,8 @@ export const PrivateJoinAcceptButton = ({
   const { mutate: acceptPrivateInvite, isLoading } = useAcceptPrivateInviteMutation({
     onSuccess() {
       addSuccessBanner(t('invitationAccepted'));
-      Mixpanel.track(MixpanelEvents.InvitationAccepted, {
+      Mixpanel.track({
+        action: MixpanelEventType.InvitationAccepted,
         [MixpanelProps.AppletId]: appletId,
       });
       return navigate(ROUTES.appletList.path);
