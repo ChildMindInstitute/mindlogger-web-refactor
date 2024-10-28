@@ -7,7 +7,6 @@ import {
   MixpanelProps,
   ReportDownloadClickedEvent,
   ReportGeneratedEvent,
-  ReturnToAdminAppEvent,
   SaveAndExitClickedEvent,
   WithFeature,
 } from './mixpanel.types';
@@ -29,7 +28,6 @@ export const addSurveyPropsToEvent = <
     | AssessmentStartedEvent
     | ReportDownloadClickedEvent
     | ReportGeneratedEvent
-    | ReturnToAdminAppEvent
     | SaveAndExitClickedEvent,
 >(
   event: T,

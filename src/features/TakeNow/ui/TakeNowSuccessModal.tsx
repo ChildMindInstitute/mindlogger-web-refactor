@@ -6,7 +6,6 @@ import { SurveyContext } from '~/features/PassSurvey';
 import { MuiModal } from '~/shared/ui';
 import {
   addFeatureToEvent,
-  addSurveyPropsToEvent,
   Mixpanel,
   MixpanelEventType,
   MixpanelFeature,
@@ -27,13 +26,18 @@ export const TakeNowSuccessModal = ({
   const { applet } = useContext(SurveyContext);
 
   const handleReturnToAdminAppClick = () => {
-    const event: ReturnToAdminAppEvent = addSurveyPropsToEvent(
-      {
-        action: MixpanelEventType.ReturnToAdminApp,
-        [MixpanelProps.SubmitId]: submitId,
-      },
-      { applet, activityId, flowId: activityFlowId },
-    );
+    const event: ReturnToAdminAppEvent = {
+      action: MixpanelEventType.ReturnToAdminApp,
+      [MixpanelProps.SubmitId]: submitId,
+      [MixpanelProps.AppletId]: applet.id,
+    };
+
+    if (activityId) {
+      event[MixpanelProps.ActivityId] = activityId;
+    }
+    if (activityFlowId) {
+      event[MixpanelProps.ActivityFlowId] = activityFlowId;
+    }
 
     addFeatureToEvent(event, MixpanelFeature.MultiInformant);
 
