@@ -3,11 +3,11 @@ import { appletModel } from '~/entities/applet';
 import { AppletBaseDTO } from '~/shared/api';
 import ROUTES from '~/shared/constants/routes';
 import {
-  MixpanelEvents,
-  MixpanelPayload,
+  MixpanelEventType,
   MixpanelProps,
   Mixpanel,
   useCustomNavigation,
+  AssessmentStartedEvent,
 } from '~/shared/utils';
 
 type NavigateToEntityProps = {
@@ -83,25 +83,26 @@ export const useStartSurvey = (props: Props) => {
     targetSubjectId,
     shouldRestart,
   }: OnActivityCardClickProps) {
-    const analyticsPayload: MixpanelPayload = {
+    const event: AssessmentStartedEvent = {
+      action: MixpanelEventType.AssessmentStarted,
       [MixpanelProps.AppletId]: appletId,
       [MixpanelProps.ActivityId]: activityId,
     };
 
     if (flowId) {
-      analyticsPayload[MixpanelProps.ActivityFlowId] = flowId;
+      event[MixpanelProps.ActivityFlowId] = flowId;
     }
 
     if (isInMultiInformantFlow()) {
-      analyticsPayload[MixpanelProps.Feature] = 'Multi-informant';
+      event[MixpanelProps.Feature] = 'Multi-informant';
 
       const { multiInformantAssessmentId } = getMultiInformantState();
       if (multiInformantAssessmentId) {
-        analyticsPayload[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
+        event[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
       }
     }
 
-    Mixpanel.track(MixpanelEvents.AssessmentStarted, analyticsPayload);
+    Mixpanel.track(event);
 
     if (flowId) {
       const flow = flows?.find((x) => x.id === flowId);
