@@ -2,8 +2,11 @@ import { TakeNowSuccessModalProps } from '../lib/types';
 
 import { MuiModal } from '~/shared/ui';
 import {
+  addFeatureToEvent,
+  addSurveyPropsToEvent,
   Mixpanel,
   MixpanelEventType,
+  MixpanelFeature,
   MixpanelProps,
   ReturnToAdminAppEvent,
   useCustomTranslation,
@@ -12,7 +15,6 @@ import {
 export const TakeNowSuccessModal = ({
   isOpen,
   onClose,
-  appletId,
   multiInformantAssessmentId,
   activityId,
   activityFlowId,
@@ -21,19 +23,20 @@ export const TakeNowSuccessModal = ({
   const { t } = useCustomTranslation();
 
   const handleReturnToAdminAppClick = () => {
-    const event: ReturnToAdminAppEvent = {
-      action: MixpanelEventType.ReturnToAdminApp,
-      [MixpanelProps.AppletId]: appletId,
-      [MixpanelProps.SubmitId]: submitId,
-    };
+    const event: ReturnToAdminAppEvent = addSurveyPropsToEvent(
+      {
+        action: MixpanelEventType.ReturnToAdminApp,
+        [MixpanelProps.SubmitId]: submitId,
+      },
+      {
+        // TODO: Add applet from SurveyContext when available in next commit
+        // applet,
+        activityId,
+        flowId: activityFlowId,
+      },
+    );
 
-    if (activityId) {
-      event[MixpanelProps.ActivityId] = activityId;
-    } else if (activityFlowId) {
-      event[MixpanelProps.ActivityFlowId] = activityFlowId;
-    }
-
-    event[MixpanelProps.Feature] = 'Multi-informant';
+    addFeatureToEvent(event, MixpanelFeature.MultiInformant);
 
     if (multiInformantAssessmentId) {
       event[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;

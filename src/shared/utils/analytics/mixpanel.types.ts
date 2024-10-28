@@ -1,3 +1,5 @@
+import { ItemResponseTypeDTO } from '~/shared/api';
+
 export enum MixpanelProps {
   Feature = 'Feature',
   AppletId = 'Applet ID',
@@ -5,6 +7,12 @@ export enum MixpanelProps {
   ActivityId = 'Activity ID',
   ActivityFlowId = 'Activity Flow ID',
   MultiInformantAssessmentId = 'Multi-informant Assessment ID',
+  ItemTypes = 'Item Types',
+}
+
+export enum MixpanelFeature {
+  MultiInformant = 'Multi-informant',
+  SSI = 'SSI',
 }
 
 export enum MixpanelEventType {
@@ -26,6 +34,10 @@ export enum MixpanelEventType {
 
 type WithAppletId<T> = T & { [MixpanelProps.AppletId]?: string | null };
 
+export type WithFeature<T = object> = T & {
+  [MixpanelProps.Feature]?: MixpanelFeature[];
+};
+
 export type AppletClickEvent = WithAppletId<{
   action: MixpanelEventType.AppletClick;
 }>;
@@ -34,47 +46,60 @@ export type TransferOwnershipAcceptedEvent = WithAppletId<{
   action: MixpanelEventType.TransferOwnershipAccepted;
 }>;
 
-export type AssessmentCompletedEvent = WithAppletId<{
-  action: MixpanelEventType.AssessmentCompleted;
-  [MixpanelProps.SubmitId]: string;
-  [MixpanelProps.ActivityId]?: string;
-  [MixpanelProps.ActivityFlowId]?: string;
-  [MixpanelProps.Feature]?: 'Multi-informant';
-  [MixpanelProps.MultiInformantAssessmentId]?: string;
-}>;
+export type AssessmentCompletedEvent = WithFeature<
+  WithAppletId<{
+    action: MixpanelEventType.AssessmentCompleted;
+    [MixpanelProps.SubmitId]: string;
+    [MixpanelProps.ActivityId]?: string;
+    [MixpanelProps.ActivityFlowId]?: string;
+    [MixpanelProps.MultiInformantAssessmentId]?: string;
+  }>
+>;
 
-export type AssessmentStartedEvent = WithAppletId<{
-  action: MixpanelEventType.AssessmentStarted;
-  [MixpanelProps.ActivityId]?: string;
-  [MixpanelProps.ActivityFlowId]?: string;
-  [MixpanelProps.Feature]?: 'Multi-informant';
-  [MixpanelProps.MultiInformantAssessmentId]?: string;
-}>;
+export type AssessmentStartedEvent = WithFeature<
+  WithAppletId<{
+    action: MixpanelEventType.AssessmentStarted;
+    [MixpanelProps.ActivityId]?: string;
+    [MixpanelProps.ActivityFlowId]?: string;
+    [MixpanelProps.MultiInformantAssessmentId]?: string;
+    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+  }>
+>;
 
 export type InvitationAcceptedEvent = WithAppletId<{
   action: MixpanelEventType.InvitationAccepted;
 }>;
 
-export type ActivityRestartedEvent = WithAppletId<{
-  action: MixpanelEventType.ActivityRestarted;
-  [MixpanelProps.ActivityId]?: string;
-  [MixpanelProps.ActivityFlowId]?: string | null;
-}>;
+export type ActivityRestartedEvent = WithFeature<
+  WithAppletId<{
+    action: MixpanelEventType.ActivityRestarted;
+    [MixpanelProps.ActivityId]?: string;
+    [MixpanelProps.ActivityFlowId]?: string | null;
+    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+  }>
+>;
 
-export type ActivityResumedEvent = WithAppletId<{
-  action: MixpanelEventType.ActivityResumed;
-  [MixpanelProps.ActivityId]?: string;
-  [MixpanelProps.ActivityFlowId]?: string | null;
-}>;
+export type ActivityResumedEvent = WithFeature<
+  WithAppletId<{
+    action: MixpanelEventType.ActivityResumed;
+    [MixpanelProps.ActivityId]?: string;
+    [MixpanelProps.ActivityFlowId]?: string | null;
+    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+  }>
+>;
 
-export type ReturnToAdminAppEvent = WithAppletId<{
-  action: MixpanelEventType.ReturnToAdminApp;
-  [MixpanelProps.SubmitId]?: string | null;
-  [MixpanelProps.ActivityId]?: string;
-  [MixpanelProps.ActivityFlowId]?: string;
-  [MixpanelProps.Feature]?: 'Multi-informant';
-  [MixpanelProps.MultiInformantAssessmentId]?: string;
-}>;
+export type ReturnToAdminAppEvent = WithFeature<
+  WithFeature<
+    WithAppletId<{
+      action: MixpanelEventType.ReturnToAdminApp;
+      [MixpanelProps.SubmitId]?: string | null;
+      [MixpanelProps.ActivityId]?: string;
+      [MixpanelProps.ActivityFlowId]?: string;
+      [MixpanelProps.MultiInformantAssessmentId]?: string;
+      [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+    }>
+  >
+>;
 
 export type LoginSuccessfulEvent = {
   action: MixpanelEventType.LoginSuccessful;
