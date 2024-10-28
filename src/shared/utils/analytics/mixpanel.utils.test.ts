@@ -1,42 +1,48 @@
-import { MixpanelPayload, MixpanelProps } from './mixpanel.types';
-import { addFeatureToAnalyticsPayload, getSurveyAnalyticsPayload } from './mixpanel.utils';
+import {
+  ActivityRestartedEvent,
+  MixpanelEventType,
+  MixpanelFeature,
+  MixpanelProps,
+  WithFeature,
+} from './mixpanel.types';
+import { addFeatureToEvent, addSurveyPropsToEvent } from './mixpanel.utils';
 
 import { AppletBaseDTO } from '~/shared/api';
 
-describe('addFeatureToAnalyticsPayload', () => {
-  it('should add a feature to an empty payload', () => {
-    const payload: MixpanelPayload = {};
-    const feature = 'newFeature';
+describe('addFeatureToEvent', () => {
+  it('should add a feature to an empty event', () => {
+    const event: WithFeature = {};
+    const feature = MixpanelFeature.MultiInformant;
 
-    addFeatureToAnalyticsPayload(payload, feature);
+    addFeatureToEvent(event, feature);
 
-    expect(payload[MixpanelProps.Feature]).toEqual([feature]);
+    expect(event[MixpanelProps.Feature]).toEqual([feature]);
   });
 
-  it('should add a feature to an existing payload', () => {
-    const payload: MixpanelPayload = {
-      [MixpanelProps.Feature]: ['existingFeature'],
+  it('should add a feature to an existing event', () => {
+    const event: WithFeature = {
+      [MixpanelProps.Feature]: [MixpanelFeature.SSI],
     };
-    const feature = 'newFeature';
+    const feature = MixpanelFeature.MultiInformant;
 
-    addFeatureToAnalyticsPayload(payload, feature);
+    addFeatureToEvent(event, feature);
 
-    expect(payload[MixpanelProps.Feature]).toEqual(['existingFeature', 'newFeature']);
+    expect(event[MixpanelProps.Feature]).toEqual([MixpanelFeature.SSI, feature]);
   });
 
   it('should handle undefined features array', () => {
-    const payload: MixpanelPayload = {
+    const event: WithFeature = {
       [MixpanelProps.Feature]: undefined,
     };
-    const feature = 'newFeature';
+    const feature = MixpanelFeature.MultiInformant;
 
-    addFeatureToAnalyticsPayload(payload, feature);
+    addFeatureToEvent(event, feature);
 
-    expect(payload[MixpanelProps.Feature]).toEqual([feature]);
+    expect(event[MixpanelProps.Feature]).toEqual([feature]);
   });
 });
 
-describe('getSurveyAnalyticsPayload', () => {
+describe('addSurveyPropsToEvent', () => {
   const applet: AppletBaseDTO = {
     id: 'appletId',
     activities: [
@@ -47,41 +53,59 @@ describe('getSurveyAnalyticsPayload', () => {
     ],
   } as AppletBaseDTO;
 
-  it('should create payload with applet id', () => {
-    const payload = getSurveyAnalyticsPayload({ applet });
+  it('should create event with applet id', () => {
+    const event: ActivityRestartedEvent = addSurveyPropsToEvent(
+      { action: MixpanelEventType.ActivityRestarted },
+      { applet },
+    );
 
-    expect(payload[MixpanelProps.AppletId]).toBe(applet.id);
-    expect(payload).not.toHaveProperty(MixpanelProps.ActivityId);
-    expect(payload).not.toHaveProperty(MixpanelProps.ActivityFlowId);
+    expect(event[MixpanelProps.AppletId]).toBe(applet.id);
+    expect(event).not.toHaveProperty(MixpanelProps.ActivityId);
+    expect(event).not.toHaveProperty(MixpanelProps.ActivityFlowId);
   });
 
   it('should include activityId if provided', () => {
-    const payload = getSurveyAnalyticsPayload({ applet, activityId: 'activityId' });
+    const event: ActivityRestartedEvent = addSurveyPropsToEvent(
+      { action: MixpanelEventType.ActivityRestarted },
+      { applet, activityId: 'activityId' },
+    );
 
-    expect(payload[MixpanelProps.ActivityId]).toBe('activityId');
+    expect(event[MixpanelProps.ActivityId]).toBe('activityId');
   });
 
   it('should include flowId if provided', () => {
-    const payload = getSurveyAnalyticsPayload({ applet, flowId: 'flowId' });
+    const event: ActivityRestartedEvent = addSurveyPropsToEvent(
+      { action: MixpanelEventType.ActivityRestarted },
+      { applet, flowId: 'flowId' },
+    );
 
-    expect(payload[MixpanelProps.ActivityFlowId]).toBe('flowId');
+    expect(event[MixpanelProps.ActivityFlowId]).toBe('flowId');
   });
 
-  it('should add item types to payload', () => {
-    const payload = getSurveyAnalyticsPayload({ applet, activityId: 'activityId' });
+  it('should add item types to event', () => {
+    const event: ActivityRestartedEvent = addSurveyPropsToEvent(
+      { action: MixpanelEventType.ActivityRestarted },
+      { applet, activityId: 'activityId' },
+    );
 
-    expect(payload[MixpanelProps.ItemTypes]).toEqual(['text', 'phrasalTemplate']);
+    expect(event[MixpanelProps.ItemTypes]).toEqual(['text', 'phrasalTemplate']);
   });
 
   it('should add SSI feature if phrasalTemplate is present', () => {
-    const payload = getSurveyAnalyticsPayload({ applet, activityId: 'activityId' });
+    const event: ActivityRestartedEvent = addSurveyPropsToEvent(
+      { action: MixpanelEventType.ActivityRestarted },
+      { applet, activityId: 'activityId' },
+    );
 
-    expect(payload[MixpanelProps.Feature]).toContain('SSI');
+    expect(event[MixpanelProps.Feature]).toContain('SSI');
   });
 
-  it('should return payload without item types if activity is not found', () => {
-    const payload = getSurveyAnalyticsPayload({ applet, activityId: 'nonExistentActivityId' });
+  it('should return event without item types if activity is not found', () => {
+    const event: ActivityRestartedEvent = addSurveyPropsToEvent(
+      { action: MixpanelEventType.ActivityRestarted },
+      { applet, activityId: 'nonExistentActivityId' },
+    );
 
-    expect(payload).not.toHaveProperty(MixpanelProps.ItemTypes);
+    expect(event).not.toHaveProperty(MixpanelProps.ItemTypes);
   });
 });
