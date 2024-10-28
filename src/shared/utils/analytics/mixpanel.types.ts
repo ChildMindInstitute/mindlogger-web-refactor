@@ -53,6 +53,7 @@ export type AssessmentCompletedEvent = WithFeature<
     [MixpanelProps.ActivityId]?: string;
     [MixpanelProps.ActivityFlowId]?: string;
     [MixpanelProps.MultiInformantAssessmentId]?: string;
+    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
   }>
 >;
 

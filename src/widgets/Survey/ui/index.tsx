@@ -76,6 +76,7 @@ export const SurveyWidget = (props: Props) => {
   const {
     activityDTO,
     appletDTO,
+    appletBaseDTO,
     eventsDTO,
     respondentMeta,
     targetSubject,
@@ -115,6 +116,7 @@ export const SurveyWidget = (props: Props) => {
       value={mapRawDataToSurveyContext({
         activityDTO,
         appletDTO,
+        appletBaseDTO,
         eventsDTO,
         respondentMeta,
         currentEventId: eventId,

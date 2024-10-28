@@ -1,5 +1,8 @@
+import { useContext } from 'react';
+
 import { TakeNowSuccessModalProps } from '../lib/types';
 
+import { SurveyContext } from '~/features/PassSurvey';
 import { MuiModal } from '~/shared/ui';
 import {
   addFeatureToEvent,
@@ -21,6 +24,7 @@ export const TakeNowSuccessModal = ({
   submitId,
 }: TakeNowSuccessModalProps) => {
   const { t } = useCustomTranslation();
+  const { applet } = useContext(SurveyContext);
 
   const handleReturnToAdminAppClick = () => {
     const event: ReturnToAdminAppEvent = addSurveyPropsToEvent(
@@ -28,12 +32,7 @@ export const TakeNowSuccessModal = ({
         action: MixpanelEventType.ReturnToAdminApp,
         [MixpanelProps.SubmitId]: submitId,
       },
-      {
-        // TODO: Add applet from SurveyContext when available in next commit
-        // applet,
-        activityId,
-        flowId: activityFlowId,
-      },
+      { applet, activityId, flowId: activityFlowId },
     );
 
     addFeatureToEvent(event, MixpanelFeature.MultiInformant);

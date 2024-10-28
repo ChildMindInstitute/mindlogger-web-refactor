@@ -1,6 +1,7 @@
 import {
   ActivityRestartedEvent,
   ActivityResumedEvent,
+  AssessmentCompletedEvent,
   AssessmentStartedEvent,
   MixpanelFeature,
   MixpanelProps,
@@ -22,7 +23,8 @@ export const addSurveyPropsToEvent = <
     | AssessmentStartedEvent
     | ActivityRestartedEvent
     | ActivityResumedEvent
-    | ReturnToAdminAppEvent,
+    | ReturnToAdminAppEvent
+    | AssessmentCompletedEvent,
 >(
   event: T,
   {
@@ -30,12 +32,12 @@ export const addSurveyPropsToEvent = <
     activityId,
     flowId,
   }: {
-    applet?: AppletBaseDTO;
+    applet: AppletBaseDTO;
     activityId?: string | null;
     flowId?: string | null;
   },
 ) => {
-  event[MixpanelProps.AppletId] = applet?.id;
+  event[MixpanelProps.AppletId] = applet.id;
 
   if (activityId) {
     event[MixpanelProps.ActivityId] = activityId;
@@ -45,7 +47,7 @@ export const addSurveyPropsToEvent = <
   }
 
   // Add item types for this activity
-  const activity = applet?.activities.find((x) => x.id === activityId);
+  const activity = applet.activities.find((x) => x.id === activityId);
   if (!activity) return event;
 
   const { containsResponseTypes } = activity;
