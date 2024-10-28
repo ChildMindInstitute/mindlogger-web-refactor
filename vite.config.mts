@@ -29,6 +29,7 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
       },
     },
     test: {
+      globalSetup: './src/test/vitest.global-setup.ts',
       setupFiles: ['./src/test/vitest.setup.ts'],
       environment: 'jsdom',
       server: {
