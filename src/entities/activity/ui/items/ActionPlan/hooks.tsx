@@ -29,11 +29,11 @@ export const usePageMinHeight = () => {
 };
 
 export const usePageMaxHeight = () => {
-  // Use these for local development/testing when a shorter card would be
+  // Use these for local development/testing when shorter cards would be
   // easier to work with:
-  // return 512;
+  return useYScaledDimension(512);
 
-  return 2504;
+  // return useYScaledDimension(2504);
 };
 
 export const useXScaledDimension = (dimension: number) => {
