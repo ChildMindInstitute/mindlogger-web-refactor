@@ -16,20 +16,23 @@ export enum MixpanelFeature {
 }
 
 export enum MixpanelEventType {
+  ActivityRestarted = 'Activity Restart Button Pressed',
+  ActivityResumed = 'Activity Resume Button Pressed',
   AppletClick = 'Applet click',
-  TransferOwnershipAccepted = 'Transfer Ownership Accepted',
   AssessmentCompleted = 'Assessment completed',
   AssessmentStarted = 'Assessment Started',
   InvitationAccepted = 'Invitation Accepted',
-  ActivityRestarted = 'Activity Restart Button Pressed',
-  ActivityResumed = 'Activity Resume Button Pressed',
-  ReturnToAdminApp = 'Return to Admin App button clicked',
-  LoginSuccessful = 'Login Successful',
   LoginBtnClick = 'Login Button click',
-  Logout = 'logout',
-  SignupSuccessful = 'Signup Successful',
-  TransferOwnershipDeclined = 'Transfer Ownership Declined',
   LoginScreenCreateAccountBtnClick = 'Create account button on login screen click',
+  LoginSuccessful = 'Login Successful',
+  Logout = 'logout',
+  ReportDownloadClicked = 'Report Download Clicked',
+  ReportGenerated = 'Report Generated',
+  ReturnToAdminApp = 'Return to Admin App button clicked',
+  SaveAndExitClicked = 'Save & Exit Clicked',
+  SignupSuccessful = 'Signup Successful',
+  TransferOwnershipAccepted = 'Transfer Ownership Accepted',
+  TransferOwnershipDeclined = 'Transfer Ownership Declined',
 }
 
 type WithAppletId<T> = T & { [MixpanelProps.AppletId]?: string | null };
@@ -90,16 +93,14 @@ export type ActivityResumedEvent = WithFeature<
 >;
 
 export type ReturnToAdminAppEvent = WithFeature<
-  WithFeature<
-    WithAppletId<{
-      action: MixpanelEventType.ReturnToAdminApp;
-      [MixpanelProps.SubmitId]?: string | null;
-      [MixpanelProps.ActivityId]?: string;
-      [MixpanelProps.ActivityFlowId]?: string;
-      [MixpanelProps.MultiInformantAssessmentId]?: string;
-      [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
-    }>
-  >
+  WithAppletId<{
+    action: MixpanelEventType.ReturnToAdminApp;
+    [MixpanelProps.SubmitId]?: string | null;
+    [MixpanelProps.ActivityId]?: string;
+    [MixpanelProps.ActivityFlowId]?: string;
+    [MixpanelProps.MultiInformantAssessmentId]?: string;
+    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+  }>
 >;
 
 export type LoginSuccessfulEvent = {
@@ -113,6 +114,33 @@ export type LoginBtnClickEvent = {
 export type LogoutEvent = {
   action: MixpanelEventType.Logout;
 };
+
+export type ReportDownloadClickedEvent = WithFeature<
+  WithAppletId<{
+    action: MixpanelEventType.ReportDownloadClicked;
+    [MixpanelProps.ActivityId]?: string;
+    [MixpanelProps.ActivityFlowId]?: string;
+    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+  }>
+>;
+
+export type ReportGeneratedEvent = WithFeature<
+  WithAppletId<{
+    action: MixpanelEventType.ReportGenerated;
+    [MixpanelProps.ActivityId]?: string;
+    [MixpanelProps.ActivityFlowId]?: string;
+    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+  }>
+>;
+
+export type SaveAndExitClickedEvent = WithFeature<
+  WithAppletId<{
+    action: MixpanelEventType.SaveAndExitClicked;
+    [MixpanelProps.ActivityId]?: string;
+    [MixpanelProps.ActivityFlowId]?: string;
+    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+  }>
+>;
 
 export type SignupSuccessfulEvent = {
   action: MixpanelEventType.SignupSuccessful;
@@ -138,6 +166,9 @@ export type MixpanelEvent =
   | LoginSuccessfulEvent
   | LoginBtnClickEvent
   | LogoutEvent
+  | ReportDownloadClickedEvent
+  | ReportGeneratedEvent
+  | SaveAndExitClickedEvent
   | SignupSuccessfulEvent
   | TransferOwnershipDeclinedEvent
   | LoginScreenCreateAccountBtnClickEvent;

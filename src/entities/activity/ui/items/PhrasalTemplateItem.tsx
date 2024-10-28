@@ -16,6 +16,7 @@ import { SurveyContext } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import { Markdown } from '~/shared/ui';
 import { Box, Text } from '~/shared/ui';
+import { addSurveyPropsToEvent, Mixpanel, MixpanelEventType, useOnceEffect } from '~/shared/utils';
 
 type PhrasalTemplateItemProps = {
   item: PhrasalTemplateItemType;
@@ -29,20 +30,35 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
   const questionText = useMemo(() => replaceText(item.question), [item.question, replaceText]);
   const documentIdRef = useRef<string>(uuidV4());
   const { t } = usePhrasalTemplateTranslation();
+  const { applet, activityId, flow } = useContext(SurveyContext);
 
-  const handleDownloadImage = useCallback(
-    async () =>
-      await downloadPhrasalTemplateItem({
-        documentId: documentIdRef.current,
-        filename: [
-          appletDisplayName,
-          phrasalTemplateCardTitle,
-          formatDate(new Date(), 'MM_dd_yyyy'),
-        ].join('_'),
-        share: isMobile,
-        single: false,
-      }),
-    [appletDisplayName, phrasalTemplateCardTitle],
+  const handleDownloadImage = useCallback(async () => {
+    Mixpanel.track(
+      addSurveyPropsToEvent(
+        { action: MixpanelEventType.ReportDownloadClicked },
+        { applet, activityId, flowId: flow?.id },
+      ),
+    );
+
+    await downloadPhrasalTemplateItem({
+      documentId: documentIdRef.current,
+      filename: [
+        appletDisplayName,
+        phrasalTemplateCardTitle,
+        formatDate(new Date(), 'MM_dd_yyyy'),
+      ].join('_'),
+      share: isMobile,
+      single: false,
+    });
+  }, [activityId, applet, appletDisplayName, flow?.id, phrasalTemplateCardTitle]);
+
+  useOnceEffect(() =>
+    Mixpanel.track(
+      addSurveyPropsToEvent(
+        { action: MixpanelEventType.ReportGenerated },
+        { applet, activityId, flowId: flow?.id },
+      ),
+    ),
   );
 
   return (

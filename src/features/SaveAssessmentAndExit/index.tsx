@@ -1,8 +1,18 @@
+import { useContext } from 'react';
+
 import ButtonBase from '@mui/material/ButtonBase';
+
+import { SurveyContext } from '../PassSurvey';
 
 import { ROUTES, Theme } from '~/shared/constants';
 import Text from '~/shared/ui/Text';
-import { useCustomNavigation, useCustomTranslation } from '~/shared/utils';
+import {
+  addSurveyPropsToEvent,
+  Mixpanel,
+  MixpanelEventType,
+  useCustomNavigation,
+  useCustomTranslation,
+} from '~/shared/utils';
 
 type Props = {
   appletId: string;
@@ -11,10 +21,18 @@ type Props = {
 
 export const SaveAndExitButton = ({ appletId, publicAppletKey }: Props) => {
   const { t } = useCustomTranslation();
+  const { applet, activityId, flow } = useContext(SurveyContext);
 
   const navigator = useCustomNavigation();
 
   const onSaveAndExitClick = () => {
+    Mixpanel.track(
+      addSurveyPropsToEvent(
+        { action: MixpanelEventType.SaveAndExitClicked },
+        { applet, activityId, flowId: flow?.id },
+      ),
+    );
+
     return navigator.navigate(
       publicAppletKey
         ? ROUTES.publicJoin.navigateTo(publicAppletKey)

@@ -5,7 +5,10 @@ import {
   AssessmentStartedEvent,
   MixpanelFeature,
   MixpanelProps,
+  ReportDownloadClickedEvent,
+  ReportGeneratedEvent,
   ReturnToAdminAppEvent,
+  SaveAndExitClickedEvent,
   WithFeature,
 } from './mixpanel.types';
 
@@ -20,11 +23,14 @@ export const addFeatureToEvent = (event: WithFeature, feature: MixpanelFeature) 
 
 export const addSurveyPropsToEvent = <
   T extends
-    | AssessmentStartedEvent
     | ActivityRestartedEvent
     | ActivityResumedEvent
+    | AssessmentCompletedEvent
+    | AssessmentStartedEvent
+    | ReportDownloadClickedEvent
+    | ReportGeneratedEvent
     | ReturnToAdminAppEvent
-    | AssessmentCompletedEvent,
+    | SaveAndExitClickedEvent,
 >(
   event: T,
   {
