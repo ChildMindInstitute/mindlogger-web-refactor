@@ -16,7 +16,13 @@ import { SurveyContext } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import { Markdown } from '~/shared/ui';
 import { Box, Text } from '~/shared/ui';
-import { addSurveyPropsToEvent, Mixpanel, MixpanelEventType, useOnceEffect } from '~/shared/utils';
+import {
+  addSurveyPropsToEvent,
+  Mixpanel,
+  MixpanelEventType,
+  MixpanelProps,
+  useOnceEffect,
+} from '~/shared/utils';
 
 type PhrasalTemplateItemProps = {
   item: PhrasalTemplateItemType;
@@ -35,7 +41,10 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
   const handleDownloadImage = useCallback(async () => {
     Mixpanel.track(
       addSurveyPropsToEvent(
-        { action: MixpanelEventType.ReportDownloadClicked },
+        {
+          action: MixpanelEventType.ResponseReportDownloadClicked,
+          [MixpanelProps.ItemId]: item.id,
+        },
         { applet, activityId, flowId: flow?.id },
       ),
     );
@@ -50,12 +59,15 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
       share: isMobile,
       single: false,
     });
-  }, [activityId, applet, appletDisplayName, flow?.id, phrasalTemplateCardTitle]);
+  }, [activityId, applet, appletDisplayName, flow?.id, item.id, phrasalTemplateCardTitle]);
 
   useOnceEffect(() =>
     Mixpanel.track(
       addSurveyPropsToEvent(
-        { action: MixpanelEventType.ReportGenerated },
+        {
+          action: MixpanelEventType.ResponseReportGenerated,
+          [MixpanelProps.ItemId]: item.id,
+        },
         { applet, activityId, flowId: flow?.id },
       ),
     ),

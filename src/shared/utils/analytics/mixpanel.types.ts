@@ -1,13 +1,14 @@
 import { ItemResponseTypeDTO } from '~/shared/api';
 
 export enum MixpanelProps {
-  Feature = 'Feature',
-  AppletId = 'Applet ID',
-  SubmitId = 'Submit ID',
-  ActivityId = 'Activity ID',
   ActivityFlowId = 'Activity Flow ID',
-  MultiInformantAssessmentId = 'Multi-informant Assessment ID',
+  ActivityId = 'Activity ID',
+  AppletId = 'Applet ID',
+  Feature = 'Feature',
+  ItemId = 'Item ID',
   ItemTypes = 'Item Types',
+  MultiInformantAssessmentId = 'Multi-informant Assessment ID',
+  SubmitId = 'Submit ID',
 }
 
 export enum MixpanelFeature {
@@ -26,8 +27,8 @@ export enum MixpanelEventType {
   LoginScreenCreateAccountBtnClick = 'Create account button on login screen click',
   LoginSuccessful = 'Login Successful',
   Logout = 'logout',
-  ReportDownloadClicked = 'Report Download Clicked',
-  ReportGenerated = 'Report Generated',
+  ResponseReportDownloadClicked = 'Response Report Download Clicked',
+  ResponseReportGenerated = 'Response Report Generated',
   ReturnToAdminApp = 'Return to Admin App button clicked',
   SaveAndExitClicked = 'Save & Exit Clicked',
   SignupSuccessful = 'Signup Successful',
@@ -114,18 +115,20 @@ export type LogoutEvent = {
   action: MixpanelEventType.Logout;
 };
 
-export type ReportDownloadClickedEvent = WithFeature<
+export type ResponseReportDownloadClickedEvent = WithFeature<
   WithAppletId<{
-    action: MixpanelEventType.ReportDownloadClicked;
+    action: MixpanelEventType.ResponseReportDownloadClicked;
+    [MixpanelProps.ItemId]: string;
     [MixpanelProps.ActivityId]?: string;
     [MixpanelProps.ActivityFlowId]?: string;
     [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
   }>
 >;
 
-export type ReportGeneratedEvent = WithFeature<
+export type ResponseReportGeneratedEvent = WithFeature<
   WithAppletId<{
-    action: MixpanelEventType.ReportGenerated;
+    action: MixpanelEventType.ResponseReportGenerated;
+    [MixpanelProps.ItemId]: string;
     [MixpanelProps.ActivityId]?: string;
     [MixpanelProps.ActivityFlowId]?: string;
     [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
@@ -165,8 +168,8 @@ export type MixpanelEvent =
   | LoginSuccessfulEvent
   | LoginBtnClickEvent
   | LogoutEvent
-  | ReportDownloadClickedEvent
-  | ReportGeneratedEvent
+  | ResponseReportDownloadClickedEvent
+  | ResponseReportGeneratedEvent
   | SaveAndExitClickedEvent
   | SignupSuccessfulEvent
   | TransferOwnershipDeclinedEvent

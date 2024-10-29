@@ -5,8 +5,8 @@ import {
   AssessmentStartedEvent,
   MixpanelFeature,
   MixpanelProps,
-  ReportDownloadClickedEvent,
-  ReportGeneratedEvent,
+  ResponseReportDownloadClickedEvent,
+  ResponseReportGeneratedEvent,
   SaveAndExitClickedEvent,
   WithFeature,
 } from './mixpanel.types';
@@ -26,8 +26,8 @@ export const addSurveyPropsToEvent = <
     | ActivityResumedEvent
     | AssessmentCompletedEvent
     | AssessmentStartedEvent
-    | ReportDownloadClickedEvent
-    | ReportGeneratedEvent
+    | ResponseReportDownloadClickedEvent
+    | ResponseReportGeneratedEvent
     | SaveAndExitClickedEvent,
 >(
   event: T,
