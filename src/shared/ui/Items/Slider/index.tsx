@@ -68,7 +68,7 @@ export const SliderItemBase = (props: Props) => {
         size="medium"
         min={minValue}
         max={maxValue}
-        value={Number(value) ?? minValue}
+        value={value ? Number(value) : minValue}
         disabled={disabled}
         marks={showStickLabel ? marksAndLabelsList : true} // The settings behavior: If boolean, marks will be evenly spaced based on the value of step. If an array, it should contain objects with value and an optional label keys.
         step={continiusSlider ? 0.1 : defaultStep}

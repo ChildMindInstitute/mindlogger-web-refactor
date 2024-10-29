@@ -70,7 +70,7 @@ export const useEntityTimer = ({ onFinish }: Props) => {
 
     const durationLeft = entityDuration - alreadyElapsed;
 
-    console.log(`[useEntityTimer] Setting timer with durationLeft: ${durationLeft}ms`);
+    console.info(`[useEntityTimer] Setting timer with durationLeft: ${durationLeft}ms`);
     setTimer({
       time: durationLeft,
       onComplete: () => {
@@ -79,7 +79,7 @@ export const useEntityTimer = ({ onFinish }: Props) => {
     });
 
     return () => {
-      console.log('[useEntityTimer] Clearing timer');
+      console.info('[useEntityTimer] Clearing timer');
       resetTimer();
     };
   }, [

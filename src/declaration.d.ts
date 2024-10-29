@@ -1,7 +1,6 @@
 /// <reference types="redux-persist" />
 
 declare module 'redux-persist/integration/react' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   import { ReactNode } from 'react';
 
   import { Persistor } from 'redux-persist/es/types';

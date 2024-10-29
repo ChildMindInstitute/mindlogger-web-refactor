@@ -444,12 +444,11 @@ function convertMultiRowsToAlert(item: MultiSelectionRowsItem): Array<AlertDTO> 
           )?.text;
 
           columnAnswers.forEach((cellAnswer) => {
-            if (cellAnswer === optionText) {
-              option.alert &&
-                alerts.push({
-                  activityItemId: item.id,
-                  message: option.alert,
-                });
+            if (cellAnswer === optionText && option.alert) {
+              alerts.push({
+                activityItemId: item.id,
+                message: option.alert,
+              });
             }
           });
         });
@@ -467,12 +466,11 @@ function convertSingleRowsToAlert(item: SingleSelectionRowsItem): Array<AlertDTO
     item.responseValues.dataMatrix.forEach((row) => {
       row.options.forEach((option, optionIndex) => {
         item.answer.forEach((itemAnswer, answerIndex) => {
-          if (itemAnswer === option.optionId && optionIndex === answerIndex) {
-            option.alert &&
-              alerts.push({
-                activityItemId: item.id,
-                message: option.alert,
-              });
+          if (itemAnswer === option.optionId && optionIndex === answerIndex && option.alert) {
+            alerts.push({
+              activityItemId: item.id,
+              message: option.alert,
+            });
           }
         });
       });
