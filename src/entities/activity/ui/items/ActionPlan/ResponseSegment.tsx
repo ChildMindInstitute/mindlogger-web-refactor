@@ -65,6 +65,14 @@ export const ResponseSegment = ({ phrasalData, field, isAtStart }: ResponseSegme
     words = isAnswersSkipped(fieldPhrasalData.values)
       ? [t('questionSkipped')]
       : fieldPhrasalData.values.map(transformValue);
+  } else if (fieldPhrasalDataType === 'paragraph') {
+    words = isAnswersSkipped(fieldPhrasalData.values)
+      ? [t('questionSkipped')]
+      : fieldPhrasalData.values
+          .flatMap((value) => value.split(/\r?\n+/)) // Split each paragraph by newlines
+          .map((sentence) => sentence.trim()) // Trim whitespace around each sentence
+          .filter((sentence) => sentence.length > 0) // Filter out any empty strings
+          .map(transformValue); // Transform each sentence individually
   } else if (fieldPhrasalDataType === 'indexed-array') {
     const indexedAnswers = fieldPhrasalData.values[field.itemIndex] || [];
     words = isAnswersSkipped(indexedAnswers)
@@ -118,32 +126,52 @@ export const ResponseSegment = ({ phrasalData, field, isAtStart }: ResponseSegme
 
   return (
     <Text component="span" fontWeight="700" fontSize="inherit" lineHeight="inherit">
-      {fieldDisplayMode === 'bullet_list' ||
-      fieldDisplayMode === 'bullet_list_option_row' ||
-      fieldDisplayMode === 'bullet_list_text_row' ? (
-        <>
-          {isAtStart ? null : (
-            <span>
-              &nbsp;
-              <br />
-            </span>
-          )}
-          <Box
-            component="ul"
-            marginTop={isAtStart ? `0px` : undefined}
-            paddingLeft={`${listPadding}px`}
-          >
-            {words.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </Box>
-        </>
-      ) : (
-        <>
-          {isAtStart ? '' : ' '}
-          {joinSentenceWords(words)}
-        </>
-      )}
+      {(() => {
+        if (
+          fieldDisplayMode === 'bullet_list' ||
+          fieldDisplayMode === 'bullet_list_option_row' ||
+          fieldDisplayMode === 'bullet_list_text_row'
+        ) {
+          return (
+            <>
+              {isAtStart ? null : (
+                <span>
+                  &nbsp;
+                  <br />
+                </span>
+              )}
+              <Box
+                component="ul"
+                marginTop={isAtStart ? `0px` : undefined}
+                paddingLeft={`${listPadding}px`}
+              >
+                {words.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </Box>
+            </>
+          );
+        } else if (fieldPhrasalDataType === 'paragraph') {
+          return (
+            <>
+              {isAtStart ? '' : ' '}
+              {words.map((item, index) => (
+                <span key={index}>
+                  {item}
+                  {index < words.length - 1 && <br />}{' '}
+                </span>
+              ))}
+            </>
+          );
+        } else {
+          return (
+            <>
+              {isAtStart ? '' : ' '}
+              {joinSentenceWords(words)}
+            </>
+          );
+        }
+      })()}
     </Text>
   );
 };
