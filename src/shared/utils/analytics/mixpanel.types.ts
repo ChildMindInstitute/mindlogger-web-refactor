@@ -8,6 +8,7 @@ export enum MixpanelProps {
   ItemId = 'Item ID',
   ItemTypes = 'Item Types',
   MultiInformantAssessmentId = 'Multi-informant Assessment ID',
+  TotalResponseReports = 'Total Response Reports',
   SubmitId = 'Submit ID',
 }
 
@@ -122,6 +123,7 @@ export type ResponseReportDownloadClickedEvent = WithFeature<
     [MixpanelProps.ActivityId]?: string;
     [MixpanelProps.ActivityFlowId]?: string;
     [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+    [MixpanelProps.TotalResponseReports]: number;
   }>
 >;
 
@@ -132,6 +134,7 @@ export type ResponseReportGeneratedEvent = WithFeature<
     [MixpanelProps.ActivityId]?: string;
     [MixpanelProps.ActivityFlowId]?: string;
     [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+    [MixpanelProps.TotalResponseReports]: number;
   }>
 >;
 

@@ -6,6 +6,7 @@ import {
   DateItemDTO,
   MessageItemDTO,
   MultiSelectionRowsItemDTO,
+  PhrasalTemplateItemDTO,
   RadioItemDTO,
   SelectorItemDTO,
   SingleSelectionRowsItemDTO,
@@ -86,19 +87,20 @@ export type ReportSectionDTO = {
 };
 
 export type ActivityItemDetailsDTO =
-  | TextItemDTO
-  | CheckboxItemDTO
-  | RadioItemDTO
-  | SliderItemDTO
-  | SelectorItemDTO
-  | MessageItemDTO
-  | DateItemDTO
-  | TimeItemDTO
-  | TimeRangeItemDTO
   | AudioPlayerItemDTO
+  | CheckboxItemDTO
+  | DateItemDTO
+  | MessageItemDTO
   | MultiSelectionRowsItemDTO
+  | PhrasalTemplateItemDTO
+  | RadioItemDTO
+  | SelectorItemDTO
   | SingleSelectionRowsItemDTO
-  | SliderRowsItemDTO;
+  | SliderItemDTO
+  | SliderRowsItemDTO
+  | TextItemDTO
+  | TimeItemDTO
+  | TimeRangeItemDTO;
 
 export type AnswerPayload = {
   appletId: ID;

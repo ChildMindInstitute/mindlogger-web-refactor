@@ -30,13 +30,16 @@ type PhrasalTemplateItemProps = {
 };
 
 export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemProps) => {
-  const { appletDisplayName } = useContext(SurveyContext);
+  const { appletDisplayName, applet, activity, activityId, flow } = useContext(SurveyContext);
   const phrasalTemplateCardTitle = item.responseValues.cardTitle;
   const [downloadIcon, setDownloadIcon] = useState(downloadIconDark);
   const questionText = useMemo(() => replaceText(item.question), [item.question, replaceText]);
   const documentIdRef = useRef<string>(uuidV4());
   const { t } = usePhrasalTemplateTranslation();
-  const { applet, activityId, flow } = useContext(SurveyContext);
+
+  const phraseBuilderCount = activity.items.filter(
+    (i) => i.responseType === 'phrasalTemplate',
+  ).length;
 
   const handleDownloadImage = useCallback(async () => {
     Mixpanel.track(
@@ -44,6 +47,7 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
         {
           action: MixpanelEventType.ResponseReportDownloadClicked,
           [MixpanelProps.ItemId]: item.id,
+          [MixpanelProps.TotalResponseReports]: phraseBuilderCount,
         },
         { applet, activityId, flowId: flow?.id },
       ),
@@ -59,7 +63,15 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
       share: isMobile,
       single: false,
     });
-  }, [activityId, applet, appletDisplayName, flow?.id, item.id, phrasalTemplateCardTitle]);
+  }, [
+    activityId,
+    applet,
+    appletDisplayName,
+    flow?.id,
+    item.id,
+    phrasalTemplateCardTitle,
+    phraseBuilderCount,
+  ]);
 
   useOnceEffect(() =>
     Mixpanel.track(
@@ -67,6 +79,7 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
         {
           action: MixpanelEventType.ResponseReportGenerated,
           [MixpanelProps.ItemId]: item.id,
+          [MixpanelProps.TotalResponseReports]: phraseBuilderCount,
         },
         { applet, activityId, flowId: flow?.id },
       ),
