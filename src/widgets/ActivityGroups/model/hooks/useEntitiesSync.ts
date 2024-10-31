@@ -1,14 +1,17 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
+
+import { AppletDetailsContext } from '../../lib';
 
 import { ActivityPipelineType } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { CompletedEntitiesDTO, CompletedEntityDTO } from '~/shared/api';
 
 type FilterCompletedEntitiesProps = {
-  completedEntities: CompletedEntitiesDTO | undefined;
+  completedEntities?: CompletedEntitiesDTO;
 };
 
-export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
+export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesProps) => {
+  const { applet } = useContext(AppletDetailsContext);
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   const syncEntity = useCallback(
@@ -21,7 +24,9 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
 
       const entityId = entity.id;
       const eventId = entity.scheduledEventId;
-      const targetSubjectId = entity.targetSubjectId;
+      // Normalize targetSubjectId to null for self-reports
+      const targetSubjectId =
+        entity.targetSubjectId === applet.respondentMeta?.subjectId ? null : entity.targetSubjectId;
 
       const groupProgress = getGroupProgress({
         entityId,
@@ -63,19 +68,14 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
         });
       }
     },
-    [getGroupProgress, saveGroupProgress],
+    [applet.respondentMeta?.subjectId, getGroupProgress, saveGroupProgress],
   );
 
   useEffect(() => {
-    if (!props.completedEntities) {
+    if (!completedEntities) {
       return;
     }
 
-    const completedEntities = [
-      ...props.completedEntities.activities,
-      ...props.completedEntities.activityFlows,
-    ];
-
-    completedEntities.forEach(syncEntity);
-  }, [props.completedEntities, syncEntity]);
+    [...completedEntities.activities, ...completedEntities.activityFlows].forEach(syncEntity);
+  }, [completedEntities, syncEntity]);
 };
