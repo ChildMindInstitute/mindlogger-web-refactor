@@ -72,8 +72,8 @@ export const ResponseSegment = ({ phrasalData, field, isAtStart }: ResponseSegme
     words = isAnswersSkipped(fieldPhrasalData.values)
       ? [t('questionSkipped')]
       : fieldPhrasalData.values
-          .flatMap((value) => value.split(/\r?\n+/))
-          .map((sentence) => sentence.trim());
+          .flatMap((value) => value.split(/\r?\n/)) // Split each paragraph by newlines
+          .map(transformValue);
   } else if (fieldPhrasalDataType === 'indexed-array') {
     const indexedAnswers = fieldPhrasalData.values[field.itemIndex] || [];
     words = isAnswersSkipped(indexedAnswers)
