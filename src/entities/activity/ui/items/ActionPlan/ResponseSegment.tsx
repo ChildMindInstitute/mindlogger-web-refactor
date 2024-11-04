@@ -24,7 +24,7 @@ const isAnswersSkipped = (answers: string[]): boolean => {
 type FieldValueTransformer = (value: string) => string;
 const identity: FieldValueTransformer = (value) => value;
 
-type FieldValuesJoiner = (values: string[]) => string;
+type FieldValuesJoiner = (values: string[]) => string | JSX.Element[];
 const joinWithComma: FieldValuesJoiner = (values) => values.join(', ');
 
 type ResponseSegmentProps = {
@@ -58,6 +58,9 @@ export const ResponseSegment = ({ phrasalData, field, isAtStart }: ResponseSegme
     };
   } else if (fieldPhrasalData.context.itemResponseType === 'timeRange') {
     joinSentenceWords = (values) => values.join(' - ');
+  } else if (fieldPhrasalData.context.itemResponseType === 'paragraphText') {
+    joinSentenceWords = (values) =>
+      values.map((item, index) => <div key={index}>{item || ' '}</div>);
   }
 
   let words: string[];
@@ -69,10 +72,8 @@ export const ResponseSegment = ({ phrasalData, field, isAtStart }: ResponseSegme
     words = isAnswersSkipped(fieldPhrasalData.values)
       ? [t('questionSkipped')]
       : fieldPhrasalData.values
-          .flatMap((value) => value.split(/\r?\n+/)) // Split each paragraph by newlines
-          .map((sentence) => sentence.trim()) // Trim whitespace around each sentence
-          .filter((sentence) => sentence.length > 0) // Filter out any empty strings
-          .map(transformValue); // Transform each sentence individually
+          .flatMap((value) => value.split(/\r?\n+/))
+          .map((sentence) => sentence.trim());
   } else if (fieldPhrasalDataType === 'indexed-array') {
     const indexedAnswers = fieldPhrasalData.values[field.itemIndex] || [];
     words = isAnswersSkipped(indexedAnswers)
@@ -126,52 +127,32 @@ export const ResponseSegment = ({ phrasalData, field, isAtStart }: ResponseSegme
 
   return (
     <Text component="span" fontWeight="700" fontSize="inherit" lineHeight="inherit">
-      {(() => {
-        if (
-          fieldDisplayMode === 'bullet_list' ||
-          fieldDisplayMode === 'bullet_list_option_row' ||
-          fieldDisplayMode === 'bullet_list_text_row'
-        ) {
-          return (
-            <>
-              {isAtStart ? null : (
-                <span>
-                  &nbsp;
-                  <br />
-                </span>
-              )}
-              <Box
-                component="ul"
-                marginTop={isAtStart ? `0px` : undefined}
-                paddingLeft={`${listPadding}px`}
-              >
-                {words.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </Box>
-            </>
-          );
-        } else if (fieldPhrasalDataType === 'paragraph') {
-          return (
-            <>
-              {isAtStart ? '' : ' '}
-              {words.map((item, index) => (
-                <span key={index}>
-                  {item}
-                  {index < words.length - 1 && <br />}{' '}
-                </span>
-              ))}
-            </>
-          );
-        } else {
-          return (
-            <>
-              {isAtStart ? '' : ' '}
-              {joinSentenceWords(words)}
-            </>
-          );
-        }
-      })()}
+      {fieldDisplayMode === 'bullet_list' ||
+      fieldDisplayMode === 'bullet_list_option_row' ||
+      fieldDisplayMode === 'bullet_list_text_row' ? (
+        <>
+          {isAtStart ? null : (
+            <span>
+              &nbsp;
+              <br />
+            </span>
+          )}
+          <Box
+            component="ul"
+            marginTop={isAtStart ? `0px` : undefined}
+            paddingLeft={`${listPadding}px`}
+          >
+            {words.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </Box>
+        </>
+      ) : (
+        <>
+          {isAtStart ? '' : ' '}
+          {joinSentenceWords(words)}
+        </>
+      )}
     </Text>
   );
 };
