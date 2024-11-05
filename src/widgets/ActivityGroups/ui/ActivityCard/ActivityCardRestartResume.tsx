@@ -83,10 +83,10 @@ export const ActivityCardRestartResume = ({
               padding: '10px 10px',
               transition: 'all 0.2s',
               minWidth: '120px',
-              mt: 2,
+              mt: '20px',
             }}
           >
-            <img src={ActivityRestartIcon} alt="Activity Restart Icon" />
+            <img src={ActivityRestartIcon} alt={String(t('additional.restart'))} />
 
             <Text sx={{ marginLeft: 1 }} variant="body1" fontSize="16px">
               {t('additional.restart')}
