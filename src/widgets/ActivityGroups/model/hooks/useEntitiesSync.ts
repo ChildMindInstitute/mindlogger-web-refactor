@@ -16,11 +16,8 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
 
   const syncEntity = useCallback(
     (entity: CompletedEntityDTO) => {
-      const hoursMinutes = entity.localEndTime.split(':');
-      const endAtDate = new Date(entity.localEndDate).setHours(
-        Number(hoursMinutes[0]),
-        Number(hoursMinutes[1]),
-      );
+      const endAtDate = new Date(`${entity.localEndDate}T${entity.localEndTime}`);
+      const endAtTimestamp = endAtDate.getTime();
 
       const entityId = entity.id;
       const eventId = entity.scheduledEventId;
@@ -42,7 +39,7 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
           progressPayload: {
             type: ActivityPipelineType.Regular,
             startAt: null,
-            endAt: new Date(endAtDate).getTime(),
+            endAt: endAtTimestamp,
             context: {
               summaryData: {},
             },
@@ -51,7 +48,7 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
       }
 
       if (groupProgress.endAt) {
-        const isServerEndAtBigger = endAtDate > new Date(groupProgress.endAt).getTime();
+        const isServerEndAtBigger = endAtTimestamp > new Date(groupProgress.endAt).getTime();
 
         if (!isServerEndAtBigger) {
           return;
@@ -63,7 +60,7 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
           targetSubjectId,
           progressPayload: {
             ...groupProgress,
-            endAt: new Date(endAtDate).getTime(),
+            endAt: endAtTimestamp,
           },
         });
       }
