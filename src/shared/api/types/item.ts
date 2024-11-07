@@ -1,24 +1,28 @@
 import { ConditionalLogic } from './conditionalLogic';
 
+import { PhrasalTemplateValues } from '~/entities/activity';
+
 export type ItemResponseTypeDTO =
-  | 'text'
-  | 'singleSelect'
-  | 'multiSelect'
-  | 'message'
-  | 'slider'
-  | 'numberSelect'
-  | 'timeRange'
-  | 'geolocation'
-  | 'drawing'
-  | 'photo'
-  | 'video'
-  | 'date'
-  | 'sliderRows'
-  | 'singleSelectRows'
-  | 'multiSelectRows'
   | 'audio'
   | 'audioPlayer'
-  | 'time';
+  | 'date'
+  | 'drawing'
+  | 'geolocation'
+  | 'message'
+  | 'multiSelect'
+  | 'multiSelectRows'
+  | 'numberSelect'
+  | 'paragraphText'
+  | 'photo'
+  | 'phrasalTemplate'
+  | 'singleSelect'
+  | 'singleSelectRows'
+  | 'slider'
+  | 'sliderRows'
+  | 'text'
+  | 'time'
+  | 'timeRange'
+  | 'video';
 
 export interface ItemDetailsBaseDTO {
   id: string;
@@ -33,29 +37,31 @@ export interface ItemDetailsBaseDTO {
 }
 
 export type ConfigDTO =
-  | TextItemConfigDTO
-  | CheckboxItemConfigDTO
-  | RadioItemConfigDTO
-  | SliderItemConfigDTO
-  | SelectorItemConfigDTO
-  | MessageItemConfigDTO
-  | DateItemConfigDTO
-  | TimeItemConfigDTO
-  | TimeRangeItemConfigDTO
   | AudioPlayerItemConfigDTO
+  | CheckboxItemConfigDTO
+  | DateItemConfigDTO
+  | MessageItemConfigDTO
   | MultiSelectionRowsItemConfigDTO
+  | PhrasalTemplateConfigDTO
+  | RadioItemConfigDTO
+  | SelectorItemConfigDTO
   | SingleSelectionRowsItemConfigDTO
-  | SliderRowsItemConfigDTO;
+  | SliderItemConfigDTO
+  | SliderRowsItemConfigDTO
+  | TextItemConfigDTO
+  | TimeItemConfigDTO
+  | TimeRangeItemConfigDTO;
 
 export type ResponseValuesDTO =
-  | EmptyResponseValuesDTO
-  | CheckboxItemResponseValuesDTO
-  | RadioItemResponseValuesDTO
-  | SliderItemResponseValuesDTO
-  | SelectorItemResponseValues
   | AudioPlayerItemResponseValuesDTO
+  | CheckboxItemResponseValuesDTO
+  | EmptyResponseValuesDTO
   | MultiSelectionRowsItemResponseValuesDTO
+  | PhrasalTemplateValues
+  | RadioItemResponseValuesDTO
+  | SelectorItemResponseValues
   | SingleSelectionRowsItemResponseValuesDTO
+  | SliderItemResponseValuesDTO
   | SliderRowsItemResponseValuesDTO;
 
 type EmptyResponseValuesDTO = null;
@@ -134,6 +140,18 @@ export type CheckboxItemResponseValuesDTO = {
     isNoneAbove: boolean;
   }>;
 };
+
+export interface PhrasalTemplateItemDTO extends ItemDetailsBaseDTO {
+  responseType: 'phrasalTemplate';
+  config: PhrasalTemplateConfigDTO;
+  responseValues: PhrasalTemplateValues;
+}
+
+export interface PhrasalTemplateConfigDTO {
+  removeBackButton: boolean;
+  skippableItem: boolean;
+  type: string;
+}
 
 export interface RadioItemDTO extends ItemDetailsBaseDTO {
   responseType: 'singleSelect';

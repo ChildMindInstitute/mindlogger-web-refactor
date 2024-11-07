@@ -16,6 +16,13 @@ import { SurveyContext } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import { Markdown } from '~/shared/ui';
 import { Box, Text } from '~/shared/ui';
+import {
+  addSurveyPropsToEvent,
+  Mixpanel,
+  MixpanelEventType,
+  MixpanelProps,
+  useOnceEffect,
+} from '~/shared/utils';
 
 type PhrasalTemplateItemProps = {
   item: PhrasalTemplateItemType;
@@ -23,26 +30,60 @@ type PhrasalTemplateItemProps = {
 };
 
 export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemProps) => {
-  const { appletDisplayName } = useContext(SurveyContext);
+  const { appletDisplayName, applet, activity, activityId, flow } = useContext(SurveyContext);
   const phrasalTemplateCardTitle = item.responseValues.cardTitle;
   const [downloadIcon, setDownloadIcon] = useState(downloadIconDark);
   const questionText = useMemo(() => replaceText(item.question), [item.question, replaceText]);
   const documentIdRef = useRef<string>(uuidV4());
   const { t } = usePhrasalTemplateTranslation();
 
-  const handleDownloadImage = useCallback(
-    async () =>
-      await downloadPhrasalTemplateItem({
-        documentId: documentIdRef.current,
-        filename: [
-          appletDisplayName,
-          phrasalTemplateCardTitle,
-          formatDate(new Date(), 'MM_dd_yyyy'),
-        ].join('_'),
-        share: isMobile,
-        single: false,
-      }),
-    [appletDisplayName, phrasalTemplateCardTitle],
+  const phraseBuilderCount = activity.items.filter(
+    (i) => i.responseType === 'phrasalTemplate',
+  ).length;
+
+  const handleDownloadImage = useCallback(async () => {
+    Mixpanel.track(
+      addSurveyPropsToEvent(
+        {
+          action: MixpanelEventType.ResponseReportDownloadClicked,
+          [MixpanelProps.ItemId]: item.id,
+          [MixpanelProps.TotalResponseReports]: phraseBuilderCount,
+        },
+        { applet, activityId, flowId: flow?.id },
+      ),
+    );
+
+    await downloadPhrasalTemplateItem({
+      documentId: documentIdRef.current,
+      filename: [
+        appletDisplayName,
+        phrasalTemplateCardTitle,
+        formatDate(new Date(), 'MM_dd_yyyy'),
+      ].join('_'),
+      share: isMobile,
+      single: false,
+    });
+  }, [
+    activityId,
+    applet,
+    appletDisplayName,
+    flow?.id,
+    item.id,
+    phrasalTemplateCardTitle,
+    phraseBuilderCount,
+  ]);
+
+  useOnceEffect(() =>
+    Mixpanel.track(
+      addSurveyPropsToEvent(
+        {
+          action: MixpanelEventType.ResponseReportGenerated,
+          [MixpanelProps.ItemId]: item.id,
+          [MixpanelProps.TotalResponseReports]: phraseBuilderCount,
+        },
+        { applet, activityId, flowId: flow?.id },
+      ),
+    ),
   );
 
   return (

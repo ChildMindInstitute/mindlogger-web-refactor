@@ -20,11 +20,9 @@ import Box from '~/shared/ui/Box';
 import {
   MixpanelEventType,
   Mixpanel,
-  MixpanelProps,
   useAppSelector,
   useCustomMediaQuery,
-  ActivityRestartedEvent,
-  ActivityResumedEvent,
+  addSurveyPropsToEvent,
 } from '~/shared/utils';
 import { TargetSubjectLabel } from '~/widgets/TargetSubjectLabel';
 
@@ -115,33 +113,31 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   const restartActivity = () => {
     onStartActivity(true);
 
-    const event: ActivityRestartedEvent = {
-      action: MixpanelEventType.ActivityRestarted,
-      [MixpanelProps.AppletId]: context.applet.id,
-      [MixpanelProps.ActivityId]: activityListItem.activityId,
-    };
-
-    if (isFlow) {
-      event[MixpanelProps.ActivityFlowId] = activityListItem.flowId;
-    }
-
-    Mixpanel.track(event);
+    Mixpanel.track(
+      addSurveyPropsToEvent(
+        { action: MixpanelEventType.ActivityRestarted },
+        {
+          applet: context.applet,
+          activityId: activityListItem.activityId,
+          flowId: activityListItem.flowId,
+        },
+      ),
+    );
   };
 
   const resumeActivity = () => {
     onStartActivity(false);
 
-    const event: ActivityResumedEvent = {
-      action: MixpanelEventType.ActivityResumed,
-      [MixpanelProps.AppletId]: context.applet.id,
-      [MixpanelProps.ActivityId]: activityListItem.activityId,
-    };
-
-    if (isFlow) {
-      event[MixpanelProps.ActivityFlowId] = activityListItem.flowId;
-    }
-
-    Mixpanel.track(event);
+    Mixpanel.track(
+      addSurveyPropsToEvent(
+        { action: MixpanelEventType.ActivityResumed },
+        {
+          applet: context.applet,
+          activityId: activityListItem.activityId,
+          flowId: activityListItem.flowId,
+        },
+      ),
+    );
   };
 
   return (
