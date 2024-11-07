@@ -3,8 +3,10 @@ import { userModel } from '~/entities/user';
 import { Box } from '~/shared/ui';
 import { Text } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
+import { useCustomTranslation } from '~/shared/utils';
 
 export const AppletListWidget = () => {
+  const { t } = useCustomTranslation();
   const { user } = userModel.hooks.useUserState();
 
   const {
@@ -36,7 +38,7 @@ export const AppletListWidget = () => {
   if (isAppletsEmpty) {
     return (
       <Box display="flex" flex={1} alignItems="center" justifyContent="center">
-        <Text variant="body1">No applets</Text>
+        <Text variant="body1">{t('noApplets')}</Text>
       </Box>
     );
   }
