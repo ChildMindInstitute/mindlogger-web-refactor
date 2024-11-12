@@ -12,6 +12,7 @@ import {
   getMsFromHours,
   getMsFromMinutes,
   useAppSelector,
+  useCustomTranslation,
   useTimer,
 } from '~/shared/utils';
 
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export const EntityTimer = ({ entityTimerSettings }: Props) => {
+  const { t } = useCustomTranslation();
   const context = useContext(SurveyContext);
 
   const [varForDeps, forceUpdate] = useState({});
@@ -64,7 +66,7 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
       return '00:00';
     }
 
-    return `${formatTimerTime(timeToLeft)} remaining`;
+    return t('timeRemaining', { time: formatTimerTime(timeToLeft) });
   };
 
   const checkLessThan10Mins = (): boolean => {

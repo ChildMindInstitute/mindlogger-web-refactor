@@ -129,9 +129,9 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
         <Box display="flex" justifyContent="center">
           <CheckboxWithLabel id="terms" onChange={() => setTerms((prev) => !prev)}>
             <Text variant="body1">
-              I agree to the{' '}
+              {`${t('iAgreeTo')} `}
               <a href={TERMS_URL} target="_blank" rel="noreferrer">
-                Terms of Service
+                {t('termsOfService')}
               </a>
             </Text>
           </CheckboxWithLabel>
