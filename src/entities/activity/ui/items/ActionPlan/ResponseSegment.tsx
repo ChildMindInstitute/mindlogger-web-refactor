@@ -24,7 +24,7 @@ const isAnswersSkipped = (answers: string[]): boolean => {
 type FieldValueTransformer = (value: string) => string;
 const identity: FieldValueTransformer = (value) => value;
 
-type FieldValuesJoiner = (values: string[]) => string;
+type FieldValuesJoiner = (values: string[]) => string | JSX.Element[];
 const joinWithComma: FieldValuesJoiner = (values) => values.join(', ');
 
 type ResponseSegmentProps = {
@@ -58,6 +58,9 @@ export const ResponseSegment = ({ phrasalData, field, isAtStart }: ResponseSegme
     };
   } else if (fieldPhrasalData.context.itemResponseType === 'timeRange') {
     joinSentenceWords = (values) => values.join(' - ');
+  } else if (fieldPhrasalData.context.itemResponseType === 'paragraphText') {
+    joinSentenceWords = (values) =>
+      values.map((item, index) => <div key={index}>{item || ' '}</div>);
   }
 
   let words: string[];
@@ -65,6 +68,12 @@ export const ResponseSegment = ({ phrasalData, field, isAtStart }: ResponseSegme
     words = isAnswersSkipped(fieldPhrasalData.values)
       ? [t('questionSkipped')]
       : fieldPhrasalData.values.map(transformValue);
+  } else if (fieldPhrasalDataType === 'paragraph') {
+    words = isAnswersSkipped(fieldPhrasalData.values)
+      ? [t('questionSkipped')]
+      : fieldPhrasalData.values
+          .flatMap((value) => value.split(/\r?\n/)) // Split each paragraph by newlines
+          .map(transformValue);
   } else if (fieldPhrasalDataType === 'indexed-array') {
     const indexedAnswers = fieldPhrasalData.values[field.itemIndex] || [];
     words = isAnswersSkipped(indexedAnswers)
