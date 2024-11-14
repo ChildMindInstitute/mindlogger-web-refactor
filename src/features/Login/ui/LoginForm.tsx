@@ -6,9 +6,8 @@ import { LoginSchema, TLoginForm } from '../model/login.schema';
 import { useBanners } from '~/entities/banner/model';
 import { ILoginPayload, useLoginMutation, userModel } from '~/entities/user';
 import { ROUTES, Theme } from '~/shared/constants';
-import { Box, Text } from '~/shared/ui';
-import { BaseButton, BasicFormProvider, Input, PasswordIcon } from '~/shared/ui';
-import { Mixpanel, useCustomForm, usePasswordType } from '~/shared/utils';
+import { BaseButton, BasicFormProvider, Box, Input, PasswordIcon, Text } from '~/shared/ui';
+import { Mixpanel, MixpanelEventType, useCustomForm, usePasswordType } from '~/shared/utils';
 
 interface LoginFormProps {
   locationState?: Record<string, unknown>;
@@ -54,7 +53,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
   };
 
   const onLoginButtonClick = () => {
-    Mixpanel.track('Login Button click');
+    Mixpanel.track({ action: MixpanelEventType.LoginBtnClick });
   };
 
   return (

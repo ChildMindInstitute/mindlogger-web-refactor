@@ -4,7 +4,12 @@ import { appletModel } from '~/entities/applet';
 import { useLogoutMutation, userModel } from '~/entities/user';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import ROUTES from '~/shared/constants/routes';
-import { Mixpanel, secureTokensStorage, useCustomNavigation } from '~/shared/utils';
+import {
+  Mixpanel,
+  MixpanelEventType,
+  secureTokensStorage,
+  useCustomNavigation,
+} from '~/shared/utils';
 import { FeatureFlags } from '~/shared/utils/featureFlags';
 
 type UseLogoutReturn = {
@@ -34,7 +39,7 @@ export const useLogout = (): UseLogoutReturn => {
     secureTokensStorage.clearTokens();
     userModel.secureUserPrivateKeyStorage.clearUserPrivateKey();
 
-    Mixpanel.track('logout');
+    Mixpanel.track({ action: MixpanelEventType.Logout });
     Mixpanel.logout();
     FeatureFlags.logout();
     return navigator.navigate(ROUTES.login.path);

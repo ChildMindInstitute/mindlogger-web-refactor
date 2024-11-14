@@ -1,9 +1,21 @@
+import { useContext } from 'react';
+
 import { AxiosResponse } from 'axios';
+
+import { SurveyContext } from '..';
 
 import { usePublicSaveAnswerMutation, useSaveAnswerMutation } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { AnswerPayload } from '~/shared/api';
-import { MixpanelEvents, MixpanelPayload, MixpanelProps, Mixpanel } from '~/shared/utils';
+import {
+  MixpanelEventType,
+  MixpanelProps,
+  Mixpanel,
+  AssessmentCompletedEvent,
+  addSurveyPropsToEvent,
+  MixpanelFeature,
+  addFeatureToEvent,
+} from '~/shared/utils';
 
 type Props = {
   isPublic: boolean;
@@ -14,23 +26,23 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess }: Props) 
   const { isInMultiInformantFlow, getMultiInformantState, updateMultiInformantState } =
     appletModel.hooks.useMultiInformantState();
 
-  const onSuccess = (_: AxiosResponse, variables: AnswerPayload) => {
-    const analyticsPayload: MixpanelPayload = {
-      [MixpanelProps.AppletId]: variables.appletId,
-      [MixpanelProps.SubmitId]: variables.submitId,
-      [MixpanelProps.ActivityId]: variables.activityId,
-    };
+  const { applet } = useContext(SurveyContext);
 
-    if (variables.flowId) {
-      analyticsPayload[MixpanelProps.ActivityFlowId] = variables.flowId;
-    }
+  const onSuccess = (_: AxiosResponse, variables: AnswerPayload) => {
+    const event: AssessmentCompletedEvent = addSurveyPropsToEvent(
+      {
+        action: MixpanelEventType.AssessmentCompleted,
+        [MixpanelProps.SubmitId]: variables.submitId,
+      },
+      { applet, ...variables },
+    );
 
     if (isInMultiInformantFlow()) {
-      analyticsPayload[MixpanelProps.Feature] = 'Multi-informant';
+      addFeatureToEvent(event, MixpanelFeature.MultiInformant);
 
       const { multiInformantAssessmentId, submitId } = getMultiInformantState();
       if (multiInformantAssessmentId) {
-        analyticsPayload[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
+        event[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
       }
 
       if (submitId === null) {
@@ -40,9 +52,9 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess }: Props) 
       }
     }
 
-    Mixpanel.track(MixpanelEvents.AssessmentCompleted, analyticsPayload);
+    Mixpanel.track(event);
 
-    return onSubmitSuccess && onSubmitSuccess(variables);
+    return onSubmitSuccess?.(variables);
   };
 
   const {

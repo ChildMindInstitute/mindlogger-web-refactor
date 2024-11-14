@@ -1,4 +1,4 @@
-import { ConditionalLogic } from '~/shared/api';
+import { ConditionalLogic, PhrasalTemplateConfigDTO } from '~/shared/api';
 
 export type DefaultAnswer = Array<string>;
 export type MatrixMultiSelectAnswer = Array<Array<string | null>>;
@@ -75,20 +75,21 @@ export interface ActivityItemBase {
 }
 
 export type Config =
-  | TextItemConfig
-  | ParagraphItemConfig
-  | CheckboxItemConfig
-  | RadioItemConfig
-  | SliderItemConfig
-  | SelectorItemConfig
-  | SplashScreenItemConfig
-  | MessageItemConfig
-  | DateItemConfig
-  | TimeItemItemConfig
-  | TimeRangeItemConfig
   | AudioPlayerItemConfig
+  | CheckboxItemConfig
+  | DateItemConfig
+  | MessageItemConfig
   | MultiSelectionRowsItemConfig
-  | SliderRowsItemConfig;
+  | ParagraphItemConfig
+  | PhrasalTemplateItemConfig
+  | RadioItemConfig
+  | SelectorItemConfig
+  | SliderItemConfig
+  | SliderRowsItemConfig
+  | SplashScreenItemConfig
+  | TextItemConfig
+  | TimeItemItemConfig
+  | TimeRangeItemConfig;
 
 export type ResponseValues =
   | EmptyResponseValues
@@ -105,7 +106,7 @@ export type EmptyResponseValues = null;
 
 export interface PhrasalTemplateItem extends ActivityItemBase {
   responseType: 'phrasalTemplate';
-  config: never;
+  config: PhrasalTemplateConfigDTO;
   responseValues: PhrasalTemplateValues;
   answer: DefaultAnswer;
 }
@@ -177,6 +178,8 @@ export type ParagraphItemConfig = ButtonsConfig & {
   responseDataIdentifier: boolean; // default false
   responseRequired: boolean; // default false
 };
+
+export type PhrasalTemplateItemConfig = ButtonsConfig;
 
 export interface CheckboxItem extends ActivityItemBase {
   responseType: 'multiSelect';

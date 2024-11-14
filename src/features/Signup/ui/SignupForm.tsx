@@ -15,7 +15,7 @@ import {
   BaseButton,
   Text,
 } from '~/shared/ui';
-import { Mixpanel, useCustomForm, usePasswordType } from '~/shared/utils';
+import { Mixpanel, MixpanelEventType, useCustomForm, usePasswordType } from '~/shared/utils';
 
 interface SignupFormProps {
   locationState?: Record<string, unknown>;
@@ -60,7 +60,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
     onSuccess() {
       removeErrorBanner();
       addSuccessBanner(t('success'));
-      Mixpanel.track('Signup Successful');
+      Mixpanel.track({ action: MixpanelEventType.SignupSuccessful });
       const { email, password } = form.getValues();
 
       return login({ email, password });

@@ -4,7 +4,7 @@ import { PageMessage } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
 import Text from '~/shared/ui/Text';
-import { Mixpanel, useCustomTranslation } from '~/shared/utils';
+import { Mixpanel, MixpanelEventType, useCustomTranslation } from '~/shared/utils';
 
 type TransferOwnershipProps = {
   appletId: string;
@@ -18,7 +18,7 @@ export const TransferOwnershipDecline = ({ appletId, keyParam }: TransferOwnersh
     { appletId, key: keyParam },
     {
       onSuccess() {
-        Mixpanel.track('Transfer Ownership Declined');
+        Mixpanel.track({ action: MixpanelEventType.TransferOwnershipDeclined });
       },
     },
   );

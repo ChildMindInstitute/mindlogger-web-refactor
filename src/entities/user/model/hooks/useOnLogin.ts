@@ -2,7 +2,13 @@ import { useUserState } from './useUserState';
 import { secureUserPrivateKeyStorage } from '../secureUserPrivateKeyStorage';
 
 import ROUTES from '~/shared/constants/routes';
-import { Mixpanel, secureTokensStorage, useCustomNavigation, useEncryption } from '~/shared/utils';
+import {
+  Mixpanel,
+  MixpanelEventType,
+  secureTokensStorage,
+  useCustomNavigation,
+  useEncryption,
+} from '~/shared/utils';
 import { FeatureFlags } from '~/shared/utils/featureFlags';
 
 type Params = {
@@ -43,7 +49,7 @@ export const useOnLogin = (params: Params) => {
     if (params.backRedirectPath !== undefined) {
       navigate(params.backRedirectPath);
     } else {
-      Mixpanel.track('Login Successful');
+      Mixpanel.track({ action: MixpanelEventType.LoginSuccessful });
       Mixpanel.login(user.id);
 
       navigate(ROUTES.appletList.path);

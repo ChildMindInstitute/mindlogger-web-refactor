@@ -6,6 +6,7 @@ import {
   DateItemDTO,
   MessageItemDTO,
   MultiSelectionRowsItemDTO,
+  PhrasalTemplateItemDTO,
   RadioItemDTO,
   SelectorItemDTO,
   SingleSelectionRowsItemDTO,
@@ -57,6 +58,10 @@ export type ScoreAndReports = {
 
 export type ReportDTO = ReportScoreDTO | ReportSectionDTO;
 
+export const ScoreReportScoringType = ['score', 'raw_score'] as const;
+
+export type ScoreReportScoringType = (typeof ScoreReportScoringType)[number];
+
 export type ReportScoreDTO = {
   type: 'score';
   id: string;
@@ -66,6 +71,11 @@ export type ReportScoreDTO = {
   itemsPrint: string[]; // Name of items to print
   itemsScore: string[]; // Name of items to calculates
   conditionalLogic: Array<ScoreConditionalLogic>;
+
+  /** Whether to show raw score or T scores in the report */
+  scoringType: ScoreReportScoringType;
+  /** The name of a subscale to use for a lookup table, if `scoringType` is set to "score" */
+  subscaleName?: string;
 };
 
 export type ReportSectionDTO = {
@@ -77,19 +87,20 @@ export type ReportSectionDTO = {
 };
 
 export type ActivityItemDetailsDTO =
-  | TextItemDTO
-  | CheckboxItemDTO
-  | RadioItemDTO
-  | SliderItemDTO
-  | SelectorItemDTO
-  | MessageItemDTO
-  | DateItemDTO
-  | TimeItemDTO
-  | TimeRangeItemDTO
   | AudioPlayerItemDTO
+  | CheckboxItemDTO
+  | DateItemDTO
+  | MessageItemDTO
   | MultiSelectionRowsItemDTO
+  | PhrasalTemplateItemDTO
+  | RadioItemDTO
+  | SelectorItemDTO
   | SingleSelectionRowsItemDTO
-  | SliderRowsItemDTO;
+  | SliderItemDTO
+  | SliderRowsItemDTO
+  | TextItemDTO
+  | TimeItemDTO
+  | TimeRangeItemDTO;
 
 export type AnswerPayload = {
   appletId: ID;

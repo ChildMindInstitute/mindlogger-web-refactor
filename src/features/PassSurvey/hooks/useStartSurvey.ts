@@ -3,12 +3,17 @@ import { appletModel } from '~/entities/applet';
 import { AppletBaseDTO } from '~/shared/api';
 import ROUTES from '~/shared/constants/routes';
 import {
-  MixpanelEvents,
-  MixpanelPayload,
+  MixpanelEventType,
   MixpanelProps,
   Mixpanel,
   useCustomNavigation,
+  AssessmentStartedEvent,
 } from '~/shared/utils';
+import {
+  addFeatureToEvent,
+  addSurveyPropsToEvent,
+  MixpanelFeature,
+} from '~/shared/utils/analytics';
 
 type NavigateToEntityProps = {
   flowId: string | null;
@@ -32,10 +37,10 @@ type Props = {
   publicAppletKey: string | null;
 };
 
-export const useStartSurvey = (props: Props) => {
+export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => {
   const navigator = useCustomNavigation();
-  const appletId = props.applet?.id;
-  const flows = props.applet?.activityFlows;
+  const appletId = applet?.id;
+  const flows = applet?.activityFlows;
 
   const { removeGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
@@ -51,14 +56,14 @@ export const useStartSurvey = (props: Props) => {
 
     const { activityId, flowId, eventId, targetSubjectId, entityType } = params;
 
-    if (props.isPublic && props.publicAppletKey) {
+    if (isPublic && publicAppletKey) {
       return navigator.navigate(
         ROUTES.publicSurvey.navigateTo({
           appletId,
           activityId,
           eventId,
           entityType,
-          publicAppletKey: props.publicAppletKey,
+          publicAppletKey,
           flowId,
         }),
       );
@@ -83,25 +88,23 @@ export const useStartSurvey = (props: Props) => {
     targetSubjectId,
     shouldRestart,
   }: OnActivityCardClickProps) {
-    const analyticsPayload: MixpanelPayload = {
-      [MixpanelProps.AppletId]: appletId,
-      [MixpanelProps.ActivityId]: activityId,
-    };
+    if (!applet) return;
 
-    if (flowId) {
-      analyticsPayload[MixpanelProps.ActivityFlowId] = flowId;
-    }
+    const event: AssessmentStartedEvent = addSurveyPropsToEvent(
+      { action: MixpanelEventType.AssessmentStarted },
+      { applet, activityId, flowId },
+    );
 
     if (isInMultiInformantFlow()) {
-      analyticsPayload[MixpanelProps.Feature] = 'Multi-informant';
+      addFeatureToEvent(event, MixpanelFeature.MultiInformant);
 
       const { multiInformantAssessmentId } = getMultiInformantState();
       if (multiInformantAssessmentId) {
-        analyticsPayload[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
+        event[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
       }
     }
 
-    Mixpanel.track(MixpanelEvents.AssessmentStarted, analyticsPayload);
+    Mixpanel.track(event);
 
     if (flowId) {
       const flow = flows?.find((x) => x.id === flowId);

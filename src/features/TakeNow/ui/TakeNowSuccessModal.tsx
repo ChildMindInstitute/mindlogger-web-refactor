@@ -1,57 +1,59 @@
+import { useContext } from 'react';
+
 import { TakeNowSuccessModalProps } from '../lib/types';
 
+import { SurveyContext } from '~/features/PassSurvey';
 import { MuiModal } from '~/shared/ui';
 import {
+  addFeatureToEvent,
   Mixpanel,
-  MixpanelEvents,
-  MixpanelPayload,
+  MixpanelEventType,
+  MixpanelFeature,
   MixpanelProps,
+  ReturnToAdminAppEvent,
   useCustomTranslation,
 } from '~/shared/utils';
 
 export const TakeNowSuccessModal = ({
   isOpen,
   onClose,
-  appletId,
   multiInformantAssessmentId,
   activityId,
   activityFlowId,
   submitId,
 }: TakeNowSuccessModalProps) => {
   const { t } = useCustomTranslation();
+  const { applet } = useContext(SurveyContext);
 
   const handleReturnToAdminAppClick = () => {
-    const analyticsPayload: MixpanelPayload = {
-      [MixpanelProps.AppletId]: appletId,
+    const event: ReturnToAdminAppEvent = {
+      action: MixpanelEventType.ReturnToAdminApp,
       [MixpanelProps.SubmitId]: submitId,
+      [MixpanelProps.AppletId]: applet.id,
     };
 
     if (activityId) {
-      analyticsPayload[MixpanelProps.ActivityId] = activityId;
-    } else if (activityFlowId) {
-      analyticsPayload[MixpanelProps.ActivityFlowId] = activityFlowId;
+      event[MixpanelProps.ActivityId] = activityId;
+    }
+    if (activityFlowId) {
+      event[MixpanelProps.ActivityFlowId] = activityFlowId;
     }
 
-    analyticsPayload[MixpanelProps.Feature] = 'Multi-informant';
+    addFeatureToEvent(event, MixpanelFeature.MultiInformant);
 
     if (multiInformantAssessmentId) {
-      analyticsPayload[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
+      event[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
     }
 
-    Mixpanel.track(
-      MixpanelEvents.ReturnToAdminApp,
-      analyticsPayload,
-      { send_immediately: true },
-      () => {
-        onClose?.();
-        const targetWindow = window.opener as Window;
+    Mixpanel.track(event, { send_immediately: true }, () => {
+      onClose?.();
+      const targetWindow = window.opener as Window;
 
-        if (targetWindow) {
-          // Send message to the opening tab in the Admin App to close this tab (see its TakeNowModal component).
-          targetWindow.postMessage('close-me', import.meta.env.VITE_ADMIN_PANEL_HOST);
-        }
-      },
-    );
+      if (targetWindow) {
+        // Send message to the opening tab in the Admin App to close this tab (see its TakeNowModal component).
+        targetWindow.postMessage('close-me', import.meta.env.VITE_ADMIN_PANEL_HOST);
+      }
+    });
   };
 
   return (

@@ -18,12 +18,11 @@ import { useAutoCompletionRecord } from '~/features/AutoCompletion/model';
 import { useStartSurvey } from '~/features/PassSurvey';
 import Box from '~/shared/ui/Box';
 import {
-  MixpanelEvents,
+  MixpanelEventType,
   Mixpanel,
-  MixpanelProps,
   useAppSelector,
   useCustomMediaQuery,
-  MixpanelPayload,
+  addSurveyPropsToEvent,
 } from '~/shared/utils';
 import { TargetSubjectLabel } from '~/widgets/TargetSubjectLabel';
 
@@ -114,31 +113,31 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   const restartActivity = () => {
     onStartActivity(true);
 
-    const analyticsPayload: MixpanelPayload = {
-      [MixpanelProps.AppletId]: context.applet.id,
-      [MixpanelProps.ActivityId]: activityListItem.activityId,
-    };
-
-    if (isFlow) {
-      analyticsPayload[MixpanelProps.ActivityFlowId] = activityListItem.flowId;
-    }
-
-    Mixpanel.track(MixpanelEvents.ActivityRestarted, analyticsPayload);
+    Mixpanel.track(
+      addSurveyPropsToEvent(
+        { action: MixpanelEventType.ActivityRestarted },
+        {
+          applet: context.applet,
+          activityId: activityListItem.activityId,
+          flowId: activityListItem.flowId,
+        },
+      ),
+    );
   };
 
   const resumeActivity = () => {
     onStartActivity(false);
 
-    const analyticsPayload: MixpanelPayload = {
-      [MixpanelProps.AppletId]: context.applet.id,
-      [MixpanelProps.ActivityId]: activityListItem.activityId,
-    };
-
-    if (isFlow) {
-      analyticsPayload[MixpanelProps.ActivityFlowId] = activityListItem.flowId;
-    }
-
-    Mixpanel.track(MixpanelEvents.ActivityResumed, analyticsPayload);
+    Mixpanel.track(
+      addSurveyPropsToEvent(
+        { action: MixpanelEventType.ActivityResumed },
+        {
+          applet: context.applet,
+          activityId: activityListItem.activityId,
+          flowId: activityListItem.flowId,
+        },
+      ),
+    );
   };
 
   return (

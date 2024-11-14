@@ -7,7 +7,7 @@ import { LoginForm, useLoginTranslation } from '~/features/Login';
 import { ROUTES, Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { Mixpanel, useOnceEffect } from '~/shared/utils';
+import { Mixpanel, MixpanelEventType, useOnceEffect } from '~/shared/utils';
 
 const DownloadMobileLinks = lazy(() => import('~/widgets/DownloadMobileLinks'));
 
@@ -18,7 +18,7 @@ function LoginPage() {
   const { addSuccessBanner } = useBanners();
 
   const onCreateAccountClick = () => {
-    Mixpanel.track('Create account button on login screen click');
+    Mixpanel.track({ action: MixpanelEventType.LoginScreenCreateAccountBtnClick });
   };
 
   useOnceEffect(() => {
