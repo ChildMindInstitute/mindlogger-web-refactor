@@ -2,7 +2,6 @@ import { useContext } from 'react';
 
 import { TakeNowSuccessModalProps } from '../lib/types';
 
-import { SurveyContext } from '~/features/PassSurvey';
 import { MuiModal } from '~/shared/ui';
 import {
   addFeatureToEvent,
@@ -13,6 +12,7 @@ import {
   ReturnToAdminAppEvent,
   useCustomTranslation,
 } from '~/shared/utils';
+import { AppletDetailsContext } from '~/widgets/ActivityGroups/lib';
 
 export const TakeNowSuccessModal = ({
   isOpen,
@@ -23,7 +23,7 @@ export const TakeNowSuccessModal = ({
   submitId,
 }: TakeNowSuccessModalProps) => {
   const { t } = useCustomTranslation();
-  const { applet } = useContext(SurveyContext);
+  const { applet } = useContext(AppletDetailsContext);
 
   const handleReturnToAdminAppClick = () => {
     const event: ReturnToAdminAppEvent = {
