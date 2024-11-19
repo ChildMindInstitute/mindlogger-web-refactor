@@ -19,7 +19,7 @@ export const useTextVariablesReplacer = ({
 }: Props) => {
   const replaceTextVariables = (text: string) => {
     if (items && answers) {
-      const nickname = respondentMeta?.nickname;
+      const nickname = respondentMeta?.nickname ?? '';
 
       const replacer = new MarkdownVariableReplacer(items, answers, completedEntityTime, nickname);
       return replacer.process(text);
