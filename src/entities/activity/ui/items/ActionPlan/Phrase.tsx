@@ -42,7 +42,7 @@ export const Phrase = ({
             (isLastOnPage && componentIndex === pageComponents.length - 1)
           ) {
             // Remove leading and trailing line-break components.
-            if (component.componentType !== 'line_break') {
+            if (component.componentType !== 'line_break' && component.componentType !== 'newline') {
               acc.push(component);
             }
           } else {
@@ -60,7 +60,10 @@ export const Phrase = ({
     let previousComponentType: PageComponent['componentType'] | undefined;
     phraseComponents.forEach((component, componentIndex) => {
       const componentType = component.componentType;
-      const isAtStart = componentIndex === 0 || previousComponentType === 'line_break';
+      const isAtStart =
+        componentIndex === 0 ||
+        previousComponentType === 'line_break' ||
+        previousComponentType === 'newline';
 
       if (componentType === 'sentence') {
         rendered.push(<TextSegment text={component.text} isAtStart={isAtStart} />);
@@ -80,6 +83,8 @@ export const Phrase = ({
         rendered.push(<ResponseSegment itemResponse={itemResponse} isAtStart={isAtStart} />);
       } else if (componentType === 'line_break') {
         rendered.push(<Box component="hr" sx={{ m: 0, height: 32, border: 'none' }} />);
+      } else if (componentType === 'newline') {
+        rendered.push(<br />);
       }
 
       previousComponentType = componentType;

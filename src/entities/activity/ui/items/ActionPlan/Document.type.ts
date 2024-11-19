@@ -49,10 +49,19 @@ export type LineBreakPageComponent = BasePageComponent & {
   componentType: 'line_break';
 };
 
+/**
+ * Newline is a special component that is used to force a new line in the document, used when
+ * rendering the `paragraphText` item type.
+ */
+export type NewlinePageComponent = BasePageComponent & {
+  componentType: 'newline';
+};
+
 export type PageComponent =
   | SentencePageComponent
   | ItemResponsePageComponent
-  | LineBreakPageComponent;
+  | LineBreakPageComponent
+  | NewlinePageComponent;
 
 export type DocumentData = {
   imageUrlByPhraseId: Record<string, string>;

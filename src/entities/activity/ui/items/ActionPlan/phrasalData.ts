@@ -25,8 +25,6 @@ type ActivityPhrasalBaseData<
 
 type ActivityPhrasalArrayFieldData = ActivityPhrasalBaseData<'array', string[]>;
 
-type ActivityPhrasalParagraphFieldData = ActivityPhrasalBaseData<'paragraph', string[]>;
-
 type ActivityPhrasalItemizedArrayValue = Record<number, string[]>;
 
 type ActivityPhrasalIndexedArrayFieldData = ActivityPhrasalBaseData<
@@ -49,8 +47,7 @@ type ActivityPhrasalMatrixFieldData = ActivityPhrasalBaseData<'matrix', Activity
 type ActivityPhrasalData =
   | ActivityPhrasalArrayFieldData
   | ActivityPhrasalIndexedArrayFieldData
-  | ActivityPhrasalMatrixFieldData
-  | ActivityPhrasalParagraphFieldData;
+  | ActivityPhrasalMatrixFieldData;
 
 export type ActivitiesPhrasalData = Record<string, ActivityPhrasalData>;
 
@@ -77,7 +74,7 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
       };
       fieldData = dateFieldData;
     } else if (item.responseType === 'time' || item.responseType === 'timeRange') {
-      const dateFieldData: ActivityPhrasalArrayFieldData = {
+      const timeFieldData: ActivityPhrasalArrayFieldData = {
         type: 'array',
         values: item.answer
           .map((value) => new Date(value))
@@ -85,34 +82,28 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
           .map((value) => formatToDtoTime(value)),
         context: fieldDataContext,
       };
-      fieldData = dateFieldData;
+      fieldData = timeFieldData;
     } else if (
       item.responseType === 'numberSelect' ||
       item.responseType === 'slider' ||
-      item.responseType === 'text'
+      item.responseType === 'text' ||
+      item.responseType === 'paragraphText'
     ) {
-      const dateFieldData: ActivityPhrasalArrayFieldData = {
+      const textFieldData: ActivityPhrasalArrayFieldData = {
         type: 'array',
         values: item.answer.map((value) => `${value || ''}`),
         context: fieldDataContext,
       };
-      fieldData = dateFieldData;
-    } else if (item.responseType === 'paragraphText') {
-      const dateFieldData: ActivityPhrasalParagraphFieldData = {
-        type: 'paragraph',
-        values: item.answer.map((value) => value || ''),
-        context: fieldDataContext,
-      };
-      fieldData = dateFieldData;
+      fieldData = textFieldData;
     } else if (item.responseType === 'singleSelect' || item.responseType === 'multiSelect') {
-      const dateFieldData: ActivityPhrasalArrayFieldData = {
+      const selectFieldData: ActivityPhrasalArrayFieldData = {
         type: 'array',
         values: item.answer
           .map((value) => item.responseValues.options[parseInt(value, 10)]?.text)
           .filter((value) => !!value),
         context: fieldDataContext,
       };
-      fieldData = dateFieldData;
+      fieldData = selectFieldData;
     } else if (item.responseType === 'multiSelectRows') {
       const byRow = item.responseValues.rows.map<ActivityPhrasalIndexedMatrixValue>(
         (row, rowIndex) => {
@@ -143,12 +134,12 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
         },
       );
 
-      const dateFieldData: ActivityPhrasalMatrixFieldData = {
+      const selectFieldData: ActivityPhrasalMatrixFieldData = {
         type: 'matrix',
         values: { byRow, byColumn },
         context: fieldDataContext,
       };
-      fieldData = dateFieldData;
+      fieldData = selectFieldData;
     } else if (item.responseType === 'singleSelectRows') {
       const byRow = item.responseValues.rows.map<ActivityPhrasalIndexedMatrixValue>(
         (row, rowIndex) => {
@@ -171,17 +162,17 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
         },
       );
 
-      const dateFieldData: ActivityPhrasalMatrixFieldData = {
+      const selectFieldData: ActivityPhrasalMatrixFieldData = {
         type: 'matrix',
         values: { byRow, byColumn },
         context: fieldDataContext,
       };
-      fieldData = dateFieldData;
+      fieldData = selectFieldData;
     } else if (item.responseType === 'sliderRows') {
       (fieldDataContext as ActivityPhrasalDataSliderRowContext).maxValues =
         item.responseValues.rows.map(({ maxValue }) => maxValue);
 
-      const dateFieldData: ActivityPhrasalIndexedArrayFieldData = {
+      const sliderRowsFieldData: ActivityPhrasalIndexedArrayFieldData = {
         type: 'indexed-array',
         values: item.answer.reduce((acc, answerValue, answerIndex) => {
           acc[answerIndex] = [`${answerValue || ''}`];
@@ -189,7 +180,7 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
         }, {} as ActivityPhrasalItemizedArrayValue),
         context: fieldDataContext,
       };
-      fieldData = dateFieldData;
+      fieldData = sliderRowsFieldData;
     }
 
     if (fieldData) {

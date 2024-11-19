@@ -8,6 +8,7 @@ import {
   IdentifiablePhrasalTemplatePhrase,
   LineBreakPageComponent,
   ListItemResponsePageComponent,
+  NewlinePageComponent,
   PageComponent,
   SentencePageComponent,
   TextItemResponsePageComponent,
@@ -89,7 +90,7 @@ export const buildPageComponents = (
           }
 
           let valueItems: string[];
-          if (fieldPhrasalData.type === 'array') {
+          if (fieldPhrasalDataType === 'array') {
             valueItems = isAnswersSkipped(fieldPhrasalData.values)
               ? [t('questionSkipped')]
               : fieldPhrasalData.values.map(transformValue);
@@ -158,6 +159,28 @@ export const buildPageComponents = (
               items: valueItems,
             };
             components.push(component);
+          } else if (fieldPhrasalData.context.itemResponseType === 'paragraphText') {
+            valueItems
+              .flatMap((item) => item.split(/\r?\n/))
+              .forEach((text, index) => {
+                if (index > 0) {
+                  const component: NewlinePageComponent = {
+                    phraseIndex,
+                    phraseId: phrase.id,
+                    componentType: 'newline',
+                  };
+                  components.push(component);
+                }
+
+                const component: TextItemResponsePageComponent = {
+                  phraseIndex,
+                  phraseId: phrase.id,
+                  componentType: 'item_response',
+                  itemResponseType: 'text',
+                  text: text || ' ', // Preserve empty lines
+                };
+                components.push(component);
+              });
           } else {
             const component: TextItemResponsePageComponent = {
               phraseIndex,
@@ -317,7 +340,7 @@ export const deepDivideComponents = (
         }
       }
     } else {
-      // Line-break items don't have "content". So just divide at components level.
+      // Line-break and newline items don't have "content". So just divide at components level.
       return divideComponents(components, inclusiveComponentEnd);
     }
   }

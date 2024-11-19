@@ -149,6 +149,15 @@ describe('Action Plan', () => {
       expect(data.item).toHaveProperty('context.itemResponseType', 'text');
     });
 
+    it('should extract data from `paragraphText` activity type', () => {
+      const data = extractActivitiesPhrasalData([newTextItem('item', ['oh hai'])]);
+
+      expect(data).toHaveProperty('item');
+      expect(data.item).toHaveProperty('type', 'array');
+      expect(data.item).toHaveProperty('values.0', 'oh hai');
+      expect(data.item).toHaveProperty('context.itemResponseType', 'text');
+    });
+
     it('should extract data from `singleSelect` activity type', () => {
       const data = extractActivitiesPhrasalData([
         newSingleSelectItem('item', ['1'], ['one', 'two', 'three']),
