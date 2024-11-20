@@ -1,6 +1,7 @@
 import { extractActivitiesPhrasalData } from './phrasalData';
 
 import { ItemRecord } from '~/entities/applet/model';
+import { formatToDtoTime } from '~/shared/utils';
 
 describe('Action Plan', () => {
   describe('extractActivitiesPhrasalData', () => {
@@ -103,7 +104,7 @@ describe('Action Plan', () => {
 
       expect(data).toHaveProperty('item');
       expect(data.item).toHaveProperty('type', 'array');
-      expect(data.item).toHaveProperty('values.0', date.toLocaleTimeString());
+      expect(data.item).toHaveProperty('values.0', formatToDtoTime(date));
       expect(data.item).toHaveProperty('context.itemResponseType', 'time');
     });
 
@@ -116,8 +117,8 @@ describe('Action Plan', () => {
 
       expect(data).toHaveProperty('item');
       expect(data.item).toHaveProperty('type', 'array');
-      expect(data.item).toHaveProperty('values.0', date1.toLocaleTimeString());
-      expect(data.item).toHaveProperty('values.1', date2.toLocaleTimeString());
+      expect(data.item).toHaveProperty('values.0', formatToDtoTime(date1));
+      expect(data.item).toHaveProperty('values.1', formatToDtoTime(date2));
       expect(data.item).toHaveProperty('context.itemResponseType', 'timeRange');
     });
 
@@ -140,6 +141,15 @@ describe('Action Plan', () => {
     });
 
     it('should extract data from `text` activity type', () => {
+      const data = extractActivitiesPhrasalData([newTextItem('item', ['oh hai'])]);
+
+      expect(data).toHaveProperty('item');
+      expect(data.item).toHaveProperty('type', 'array');
+      expect(data.item).toHaveProperty('values.0', 'oh hai');
+      expect(data.item).toHaveProperty('context.itemResponseType', 'text');
+    });
+
+    it('should extract data from `paragraphText` activity type', () => {
       const data = extractActivitiesPhrasalData([newTextItem('item', ['oh hai'])]);
 
       expect(data).toHaveProperty('item');

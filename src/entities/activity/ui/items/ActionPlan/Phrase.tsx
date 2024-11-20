@@ -1,27 +1,30 @@
-import React from 'react';
+import React, { ComponentProps, useMemo } from 'react';
 
 import Avatar from '@mui/material/Avatar';
 
-import {
-  useCorrelatedPageMaxHeightLineCount,
-  useXScaledDimension,
-  useYScaledDimension,
-} from './hooks';
-import { ActivitiesPhrasalData } from './phrasalData';
+import { DocumentData, PageComponent } from './Document.type';
+import { useXScaledDimension, useYScaledDimension } from './hooks';
 import { ResponseSegment } from './ResponseSegment';
 import { TextSegment } from './TextSegment';
 
-import { PhrasalTemplatePhrase, PhrasalTemplateField } from '~/entities/activity';
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 
 export type PhraseProps = {
-  phrase: PhrasalTemplatePhrase;
-  phrasalData: ActivitiesPhrasalData;
-  noImage: boolean;
+  phraseId: string;
+  documentData: DocumentData;
+  pageComponents: PageComponent[];
+  isFirstOnPage: boolean;
+  isLastOnPage: boolean;
 };
 
-export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
+export const Phrase = ({
+  phraseId,
+  documentData,
+  pageComponents,
+  isFirstOnPage,
+  isLastOnPage,
+}: PhraseProps) => {
   const gap = useXScaledDimension(24);
   const minHeight = useXScaledDimension(72);
   const imageWidth = useXScaledDimension(67);
@@ -29,35 +32,72 @@ export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
   const imagePadding = useXScaledDimension(2);
   const fontSize = useXScaledDimension(16);
   const lineHeight = useYScaledDimension(24);
-  const correlatedPageMaxHeightLineCount = useCorrelatedPageMaxHeightLineCount();
-  const maxLineCount = correlatedPageMaxHeightLineCount.lineCount;
 
-  const { components } = phrase.fields.reduce(
-    (acc, field, fieldIndex) => {
-      const isLineStart = fieldIndex === 0 || acc.prevField?.type === 'line_break';
+  const phraseComponents = useMemo(
+    () =>
+      pageComponents.reduce((acc, component, componentIndex) => {
+        if (component.phraseId === phraseId) {
+          if (
+            (isFirstOnPage && componentIndex === 0) ||
+            (isLastOnPage && componentIndex === pageComponents.length - 1)
+          ) {
+            // Remove leading and trailing line-break components.
+            if (component.componentType !== 'line_break' && component.componentType !== 'newline') {
+              acc.push(component);
+            }
+          } else {
+            acc.push(component);
+          }
+        }
+        return acc;
+      }, [] as PageComponent[]),
+    [pageComponents, phraseId, isFirstOnPage, isLastOnPage],
+  );
 
-      if (field.type === 'sentence') {
-        acc.components.push(<TextSegment text={field.text} isAtStart={isLineStart} />);
-      } else if (field.type === 'item_response') {
-        acc.components.push(
-          <ResponseSegment phrasalData={phrasalData} field={field} isAtStart={isLineStart} />,
-        );
-      } else if (field.type === 'line_break') {
-        acc.components.push(<br />);
+  const renderedComponents = useMemo(() => {
+    const rendered: React.ReactNode[] = [];
+
+    let previousComponentType: PageComponent['componentType'] | undefined;
+    phraseComponents.forEach((component, componentIndex) => {
+      const componentType = component.componentType;
+      const isAtStart =
+        componentIndex === 0 ||
+        previousComponentType === 'line_break' ||
+        previousComponentType === 'newline';
+
+      if (componentType === 'sentence') {
+        rendered.push(<TextSegment text={component.text} isAtStart={isAtStart} />);
+      } else if (componentType === 'item_response') {
+        let itemResponse: ComponentProps<typeof ResponseSegment>['itemResponse'];
+        if (component.itemResponseType === 'list') {
+          itemResponse = {
+            itemResponseType: 'list',
+            items: component.items,
+          };
+        } else {
+          itemResponse = {
+            itemResponseType: 'text',
+            text: component.text,
+          };
+        }
+        rendered.push(<ResponseSegment itemResponse={itemResponse} isAtStart={isAtStart} />);
+      } else if (componentType === 'line_break') {
+        rendered.push(<Box component="hr" sx={{ m: 0, height: 32, border: 'none' }} />);
+      } else if (componentType === 'newline') {
+        rendered.push(<br />);
       }
 
-      acc.prevField = field;
-      return acc;
-    },
-    { components: [], prevField: undefined } as {
-      components: React.ReactNode[];
-      prevField?: PhrasalTemplateField;
-    },
-  );
+      previousComponentType = componentType;
+    });
+
+    return rendered;
+  }, [phraseComponents]);
+
+  const imageUrl = documentData.imageUrlByPhraseId[phraseId];
 
   return (
     <Box display="flex" gap={`${gap}px`} minHeight={minHeight}>
-      {!noImage && (
+      {documentData.hasImage && (
         <Box
           display="flex"
           justifyContent="center"
@@ -67,9 +107,9 @@ export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
             height: imageHeight,
           }}
         >
-          {phrase.image && (
+          {imageUrl && (
             <Avatar
-              src={phrase.image}
+              src={imageUrl}
               variant="square"
               sx={{
                 width: imageWidth,
@@ -82,20 +122,8 @@ export const Phrase = ({ phrase, phrasalData, noImage }: PhraseProps) => {
           )}
         </Box>
       )}
-      <Box
-        fontSize={`${fontSize}px`}
-        lineHeight={`${lineHeight}px`}
-        display="-webkit-inline-box"
-        maxHeight="100%"
-        overflow="hidden"
-        sx={{
-          lineClamp: `${maxLineCount}`,
-          '-webkit-line-clamp': `${maxLineCount}`,
-          boxOrient: 'vertical',
-          '-webkit-box-orient': 'vertical',
-        }}
-      >
-        {React.Children.toArray(components)}
+      <Box fontSize={`${fontSize}px`} lineHeight={`${lineHeight}px`}>
+        {React.Children.toArray(renderedComponents)}
       </Box>
     </Box>
   );
