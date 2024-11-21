@@ -47,7 +47,7 @@ export const useOnLogin = (params: Params) => {
     secureTokensStorage.setTokens(tokens);
 
     if (params.backRedirectPath !== undefined) {
-      navigate(params.backRedirectPath);
+      navigate(params.backRedirectPath, { replace: true });
     } else {
       Mixpanel.track({ action: MixpanelEventType.LoginSuccessful });
       Mixpanel.login(user.id);

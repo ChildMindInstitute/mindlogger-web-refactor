@@ -23,7 +23,7 @@ export const ActivityMetaData = ({ activityLength, isFlow, activityOrderInFlow }
         variant="body1"
         component="span"
         testid="metadata-activity-serial-number"
-      >{`Activity ${activityOrderInFlow} `}</Text>
+      >{`${t('activity')} ${activityOrderInFlow} `}</Text>
       &bull;
       <Text
         variant="body1"

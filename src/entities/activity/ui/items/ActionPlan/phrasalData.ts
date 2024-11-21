@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { phrasalTemplateCompatibleResponseTypes } from '~/abstract/lib/constants';
 import { ActivityItemType } from '~/entities/activity/lib';
 import { ItemRecord } from '~/entities/applet/model';
@@ -23,6 +24,8 @@ type ActivityPhrasalBaseData<
 
 type ActivityPhrasalArrayFieldData = ActivityPhrasalBaseData<'array', string[]>;
 
+type ActivityPhrasalParagraphFieldData = ActivityPhrasalBaseData<'paragraph', string[]>;
+
 type ActivityPhrasalItemizedArrayValue = Record<number, string[]>;
 
 type ActivityPhrasalIndexedArrayFieldData = ActivityPhrasalBaseData<
@@ -45,7 +48,8 @@ type ActivityPhrasalMatrixFieldData = ActivityPhrasalBaseData<'matrix', Activity
 type ActivityPhrasalData =
   | ActivityPhrasalArrayFieldData
   | ActivityPhrasalIndexedArrayFieldData
-  | ActivityPhrasalMatrixFieldData;
+  | ActivityPhrasalMatrixFieldData
+  | ActivityPhrasalParagraphFieldData;
 
 export type ActivitiesPhrasalData = Record<string, ActivityPhrasalData>;
 
@@ -89,6 +93,13 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
       const dateFieldData: ActivityPhrasalArrayFieldData = {
         type: 'array',
         values: item.answer.map((value) => `${value || ''}`),
+        context: fieldDataContext,
+      };
+      fieldData = dateFieldData;
+    } else if (item.responseType === 'paragraphText') {
+      const dateFieldData: ActivityPhrasalParagraphFieldData = {
+        type: 'paragraph',
+        values: item.answer.map((value) => value || ''),
         context: fieldDataContext,
       };
       fieldData = dateFieldData;

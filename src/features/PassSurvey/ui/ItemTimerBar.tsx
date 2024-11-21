@@ -1,7 +1,7 @@
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { convertMillisecondsToMinSec } from '~/shared/utils';
+import { convertMillisecondsToMinSec, useCustomTranslation } from '~/shared/utils';
 
 type Props = {
   duration: number; // seconds
@@ -10,6 +10,7 @@ type Props = {
 };
 
 export const ItemTimerBar = ({ time, progress, duration }: Props) => {
+  const { t } = useCustomTranslation();
   const getProgressBarShift = (progress: number) => {
     return progress - 100;
   };
@@ -70,7 +71,7 @@ export const ItemTimerBar = ({ time, progress, duration }: Props) => {
               },
             }}
           >
-            {`${convertMillisecondsToMinSec(timeMS)} remaining `}
+            {t('timeRemaining', { time: convertMillisecondsToMinSec(timeMS) })}
             <Box
               component="span"
               sx={{
@@ -78,7 +79,7 @@ export const ItemTimerBar = ({ time, progress, duration }: Props) => {
                 transition: '0.6s',
               }}
             >
-              for this item
+              {` ${t('forItem')}`}
             </Box>
           </Text>
         </Box>
