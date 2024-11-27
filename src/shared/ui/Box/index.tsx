@@ -12,8 +12,8 @@ import MUIBox, { BoxProps } from '@mui/material/Box';
  * )
  */
 
-const Box = forwardRef<HTMLDivElement, BoxProps>((props: BoxProps) => {
-  return <MUIBox {...props} />;
+const Box = forwardRef<HTMLDivElement, BoxProps>((props, ref) => {
+  return <MUIBox {...props} ref={ref} />;
 });
 
 Box.displayName = 'Box';
