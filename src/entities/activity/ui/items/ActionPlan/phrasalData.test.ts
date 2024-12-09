@@ -53,14 +53,14 @@ describe('Action Plan', () => {
         responseType: 'multiSelectRows',
         responseValues: {
           rows: options[0].map((option) => ({ rowName: option })),
-          options: options[1].map((option) => ({ text: option })),
+          options: options[1].map((option, index) => ({ id: `col:${index}`, text: option })),
         },
         answer,
       }) as never as ItemRecord;
 
     const newSingleSelectRowsItem = (
       name: string,
-      answer: string[],
+      answer: (string | null)[],
       options: [string[], string[]],
     ) =>
       ({
@@ -199,22 +199,12 @@ describe('Action Plan', () => {
 
       expect(data).toHaveProperty('item');
       expect(data.item).toHaveProperty('type', 'matrix');
-      expect(data.item).toHaveProperty('values.byRow.0.label', 'R1');
-      expect(data.item).toHaveProperty('values.byRow.0.values.0', 'C1');
-      expect(data.item).toHaveProperty('values.byRow.0.values.1', 'C2');
-      expect(data.item).toHaveProperty('values.byRow.1.label', 'R2');
-      expect(data.item).toHaveProperty('values.byRow.1.values.0', 'C2');
-      expect(data.item).toHaveProperty('values.byRow.2.label', 'R3');
-      expect(data.item).toHaveProperty('values.byRow.2.values.0', 'C2');
-      expect(data.item).toHaveProperty('values.byRow.2.values.1', 'C3');
-      expect(data.item).toHaveProperty('values.byColumn.0.label', 'C1');
-      expect(data.item).toHaveProperty('values.byColumn.0.values.0', 'R1');
-      expect(data.item).toHaveProperty('values.byColumn.1.label', 'C2');
-      expect(data.item).toHaveProperty('values.byColumn.1.values.0', 'R1');
-      expect(data.item).toHaveProperty('values.byColumn.1.values.1', 'R2');
-      expect(data.item).toHaveProperty('values.byColumn.1.values.2', 'R3');
-      expect(data.item).toHaveProperty('values.byColumn.2.label', 'C3');
-      expect(data.item).toHaveProperty('values.byColumn.2.values.0', 'R3');
+      expect(data.item).toHaveProperty('values.0.rowLabel', 'R1');
+      expect(data.item).toHaveProperty('values.0.columnLabels', ['C1', 'C2']);
+      expect(data.item).toHaveProperty('values.1.rowLabel', 'R2');
+      expect(data.item).toHaveProperty('values.1.columnLabels', ['C2']);
+      expect(data.item).toHaveProperty('values.2.rowLabel', 'R3');
+      expect(data.item).toHaveProperty('values.2.columnLabels', ['C2', 'C3']);
       expect(data.item).toHaveProperty('context.itemResponseType', 'multiSelectRows');
     });
 
@@ -232,18 +222,12 @@ describe('Action Plan', () => {
 
       expect(data).toHaveProperty('item');
       expect(data.item).toHaveProperty('type', 'matrix');
-      expect(data.item).toHaveProperty('values.byRow.0.label', 'R1');
-      expect(data.item).toHaveProperty('values.byRow.0.values.0', 'C3');
-      expect(data.item).toHaveProperty('values.byRow.1.label', 'R2');
-      expect(data.item).toHaveProperty('values.byRow.1.values.0', 'C1');
-      expect(data.item).toHaveProperty('values.byRow.2.label', 'R3');
-      expect(data.item).toHaveProperty('values.byRow.2.values.0', 'C2');
-      expect(data.item).toHaveProperty('values.byColumn.0.label', 'C1');
-      expect(data.item).toHaveProperty('values.byColumn.0.values.0', 'R2');
-      expect(data.item).toHaveProperty('values.byColumn.1.label', 'C2');
-      expect(data.item).toHaveProperty('values.byColumn.1.values.0', 'R3');
-      expect(data.item).toHaveProperty('values.byColumn.2.label', 'C3');
-      expect(data.item).toHaveProperty('values.byColumn.2.values.0', 'R1');
+      expect(data.item).toHaveProperty('values.0.rowLabel', 'R1');
+      expect(data.item).toHaveProperty('values.0.columnLabels', ['C3']);
+      expect(data.item).toHaveProperty('values.1.rowLabel', 'R2');
+      expect(data.item).toHaveProperty('values.1.columnLabels', ['C1']);
+      expect(data.item).toHaveProperty('values.2.rowLabel', 'R3');
+      expect(data.item).toHaveProperty('values.2.columnLabels', ['C2']);
       expect(data.item).toHaveProperty('context.itemResponseType', 'singleSelectRows');
     });
 
