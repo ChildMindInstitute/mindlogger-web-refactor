@@ -33,14 +33,11 @@ type ActivityPhrasalIndexedArrayFieldData = ActivityPhrasalBaseData<
 >;
 
 type ActivityPhrasalIndexedMatrixValue = {
-  label: string;
-  values: string[];
+  rowLabel: string;
+  columnLabels: string[];
 };
 
-type ActivityPhrasalMatrixValue = {
-  byRow: ActivityPhrasalIndexedMatrixValue[];
-  byColumn: ActivityPhrasalIndexedMatrixValue[];
-};
+type ActivityPhrasalMatrixValue = ActivityPhrasalIndexedMatrixValue[];
 
 type ActivityPhrasalMatrixFieldData = ActivityPhrasalBaseData<'matrix', ActivityPhrasalMatrixValue>;
 
@@ -104,70 +101,44 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
         context: fieldDataContext,
       };
       fieldData = selectFieldData;
-    } else if (item.responseType === 'multiSelectRows') {
-      const byRow = item.responseValues.rows.map<ActivityPhrasalIndexedMatrixValue>(
-        (row, rowIndex) => {
-          return {
-            label: row.rowName,
-            values:
-              item.answer[rowIndex]?.filter<string>(
-                (value): value is string => value !== null && value !== undefined,
-              ) || [],
-          };
-        },
-      );
+    } else if (
+      item.responseType === 'singleSelectRows' ||
+      item.responseType === 'multiSelectRows'
+    ) {
+      // Unifiy logic for both singleSelectRows and multiSelectRows item types:
+      // - for singleSelectRows, map each answer to an array of one element
+      // - for multiSelectRows, answers are tracked as the _label_ of the column rather than ID,
+      //   so we need to normalize to ID to align with singleSelectRows
+      const answers =
+        item.responseType === 'singleSelectRows'
+          ? item.answer.map((value) => [value])
+          : item.answer.map((values) =>
+              values.map(
+                (text) => item.responseValues.options.find((option) => option.text === text)?.id,
+              ),
+            );
 
-      const byColumn = item.responseValues.options.map<ActivityPhrasalIndexedMatrixValue>(
-        (option) => {
-          const answerIndices: number[] = [];
-          item.answer.forEach((values, answerIndex) => {
-            if (values.find((value) => value === option.text)) {
-              answerIndices.push(answerIndex);
-            }
+      const values: ActivityPhrasalIndexedMatrixValue[] = [];
+
+      answers.forEach((optionIds, rowIndex) => {
+        const optionValues = item.responseValues.options
+          .filter(({ id }) => optionIds.includes(id))
+          .map(({ text }) => text);
+
+        if (optionValues.length) {
+          values.push({
+            rowLabel: item.responseValues.rows[rowIndex].rowName,
+            columnLabels: optionValues,
           });
-          return {
-            label: option.text,
-            values: answerIndices.map(
-              (answerIndex) => item.responseValues.rows[answerIndex].rowName || '',
-            ),
-          };
-        },
-      );
+        }
+      });
 
-      const selectFieldData: ActivityPhrasalMatrixFieldData = {
+      const matrixFieldData: ActivityPhrasalMatrixFieldData = {
         type: 'matrix',
-        values: { byRow, byColumn },
+        values,
         context: fieldDataContext,
       };
-      fieldData = selectFieldData;
-    } else if (item.responseType === 'singleSelectRows') {
-      const byRow = item.responseValues.rows.map<ActivityPhrasalIndexedMatrixValue>(
-        (row, rowIndex) => {
-          return {
-            label: row.rowName,
-            values: [
-              item.responseValues.options.find((option) => option.id === item.answer[rowIndex])
-                ?.text || '',
-            ],
-          };
-        },
-      );
-
-      const byColumn = item.responseValues.options.map<ActivityPhrasalIndexedMatrixValue>(
-        (option) => {
-          return {
-            label: option.text,
-            values: [item.responseValues.rows[item.answer.indexOf(option.id)]?.rowName || ''],
-          };
-        },
-      );
-
-      const selectFieldData: ActivityPhrasalMatrixFieldData = {
-        type: 'matrix',
-        values: { byRow, byColumn },
-        context: fieldDataContext,
-      };
-      fieldData = selectFieldData;
+      fieldData = matrixFieldData;
     } else if (item.responseType === 'sliderRows') {
       (fieldDataContext as ActivityPhrasalDataSliderRowContext).maxValues =
         item.responseValues.rows.map(({ maxValue }) => maxValue);

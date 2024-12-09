@@ -100,44 +100,21 @@ export const buildPageComponents = (
               ? [t('questionSkipped')]
               : indexedAnswers.map(transformValue);
           } else if (fieldPhrasalDataType === 'matrix') {
-            // The admin UI actually allows matrix type items to have `sentence` as
-            // their display mode. So in this case, we're just going to assume the
-            // effective render order for the values to be "by row".
-            let renderByRowValues = true;
-            if (
-              field.displayMode === 'sentence_option_row' ||
-              field.displayMode === 'bullet_list_option_row'
-            ) {
-              renderByRowValues = false;
-            } else if (
+            const rowFirst =
               field.displayMode === 'sentence_row_option' ||
-              field.displayMode === 'bullet_list_text_row'
-            ) {
-              renderByRowValues = true;
+              field.displayMode === 'bullet_list_text_row';
+
+            valueItems = [];
+            for (const { rowLabel, columnLabels } of fieldPhrasalData.values) {
+              for (const columnLabel of columnLabels) {
+                valueItems.push(
+                  rowFirst ? `${rowLabel} ${columnLabel}` : `${columnLabel} ${rowLabel}`,
+                );
+              }
             }
 
-            if (renderByRowValues) {
-              valueItems = fieldPhrasalData.values.byRow
-                .map(({ label, values }) => {
-                  const transformedValues = isAnswersSkipped(values)
-                    ? [t('questionSkipped')]
-                    : values.map(transformValue);
-                  return transformedValues.map(
-                    (transformedValue) => `${label} ${transformedValue}`,
-                  );
-                })
-                .flat();
-            } else {
-              valueItems = fieldPhrasalData.values.byColumn
-                .map(({ label, values }) => {
-                  const transformedValues = isAnswersSkipped(values)
-                    ? [t('questionSkipped')]
-                    : values.map(transformValue);
-                  return transformedValues.map(
-                    (transformedValue) => `${label} ${transformedValue}`,
-                  );
-                })
-                .flat();
+            if (isAnswersSkipped(valueItems)) {
+              valueItems = [t('questionSkipped')];
             }
           } else {
             // This also shouldn't happen. But including a `else` here allows all
