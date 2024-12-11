@@ -8,6 +8,11 @@ type ActivityPhrasalDataGenericContext = {
   itemResponseType: ActivityItemType;
 };
 
+export type ActivityPhrasalDataSliderContext = ActivityPhrasalDataGenericContext & {
+  itemResponseType: 'slider';
+  maxValue: number;
+};
+
 export type ActivityPhrasalDataSliderRowContext = ActivityPhrasalDataGenericContext & {
   itemResponseType: 'sliderRows';
   maxValues: number[];
@@ -82,13 +87,12 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
       fieldData = timeFieldData;
     } else if (
       item.responseType === 'numberSelect' ||
-      item.responseType === 'slider' ||
       item.responseType === 'text' ||
       item.responseType === 'paragraphText'
     ) {
       const textFieldData: ActivityPhrasalArrayFieldData = {
         type: 'array',
-        values: item.answer.map((value) => `${value || ''}`),
+        values: item.answer.map((value) => `${value ?? ''}`),
         context: fieldDataContext,
       };
       fieldData = textFieldData;
@@ -139,6 +143,16 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
         context: fieldDataContext,
       };
       fieldData = matrixFieldData;
+    } else if (item.responseType === 'slider') {
+      (fieldDataContext as ActivityPhrasalDataSliderContext).maxValue =
+        item.responseValues.maxValue;
+
+      const sliderFieldData: ActivityPhrasalArrayFieldData = {
+        type: 'array',
+        values: item.answer.map((value) => `${value ?? ''}`),
+        context: fieldDataContext,
+      };
+      fieldData = sliderFieldData;
     } else if (item.responseType === 'sliderRows') {
       (fieldDataContext as ActivityPhrasalDataSliderRowContext).maxValues =
         item.responseValues.rows.map(({ maxValue }) => maxValue);
@@ -146,7 +160,7 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
       const sliderRowsFieldData: ActivityPhrasalIndexedArrayFieldData = {
         type: 'indexed-array',
         values: item.answer.reduce((acc, answerValue, answerIndex) => {
-          acc[answerIndex] = [`${answerValue || ''}`];
+          acc[answerIndex] = [`${answerValue ?? ''}`];
           return acc;
         }, {} as ActivityPhrasalItemizedArrayValue),
         context: fieldDataContext,

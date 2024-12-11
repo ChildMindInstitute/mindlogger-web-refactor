@@ -13,7 +13,11 @@ import {
   SentencePageComponent,
   TextItemResponsePageComponent,
 } from './Document.type';
-import { ActivitiesPhrasalData, ActivityPhrasalDataSliderRowContext } from './phrasalData';
+import {
+  ActivitiesPhrasalData,
+  ActivityPhrasalDataSliderContext,
+  ActivityPhrasalDataSliderRowContext,
+} from './phrasalData';
 
 const isAnswersSkipped = (answers: string[]): boolean => {
   if (!answers || answers.length <= 0) {
@@ -32,13 +36,12 @@ const isAnswersSkipped = (answers: string[]): boolean => {
 
 const identity: FieldValueTransformer = (value) => value;
 const sliderValueTransformer =
-  (
-    t: TFunction,
-    ctx: ActivityPhrasalDataSliderRowContext,
-    itemIndex: number,
-  ): FieldValueTransformer =>
+  (t: TFunction, maxValue: number): FieldValueTransformer =>
   (value) =>
-    t('sliderValue', { value, total: ctx.maxValues[itemIndex] });
+    t('sliderValue', {
+      value,
+      total: maxValue,
+    });
 
 const joinWithComma: FieldValueItemsJoiner = (values) => values.join(', ');
 const joinWithDash: FieldValueItemsJoiner = (values) => values.join(' - ');
@@ -79,11 +82,17 @@ export const buildPageComponents = (
         if (fieldPhrasalData) {
           let transformValue = identity;
           let joinValueItems = joinWithComma;
-          if (fieldPhrasalData.context.itemResponseType === 'sliderRows') {
+          if (fieldPhrasalData.context.itemResponseType === 'slider') {
             transformValue = sliderValueTransformer(
               t,
-              fieldPhrasalData.context as ActivityPhrasalDataSliderRowContext,
-              field.itemIndex,
+              (fieldPhrasalData.context as ActivityPhrasalDataSliderContext).maxValue,
+            );
+          } else if (fieldPhrasalData.context.itemResponseType === 'sliderRows') {
+            transformValue = sliderValueTransformer(
+              t,
+              (fieldPhrasalData.context as ActivityPhrasalDataSliderRowContext).maxValues[
+                field.itemIndex
+              ],
             );
           } else if (fieldPhrasalData.context.itemResponseType === 'timeRange') {
             joinValueItems = joinWithDash;

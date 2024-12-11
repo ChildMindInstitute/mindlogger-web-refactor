@@ -27,7 +27,6 @@ describe('Action Plan', () => {
     const newTimeItem = newSimpleItem('time');
     const newTimeRangeItem = newSimpleItem('timeRange');
     const newNumberSelectItem = newSimpleItem<number>('numberSelect');
-    const newSliderItem = newSimpleItem('slider');
     const newTextItem = newSimpleItem('text');
 
     const newSelectItem = (type: string) => (name: string, answer: string[], options: string[]) =>
@@ -70,6 +69,14 @@ describe('Action Plan', () => {
           rows: options[0].map((option) => ({ rowName: option })),
           options: options[1].map((option, index) => ({ id: `col:${index}`, text: option })),
         },
+        answer,
+      }) as never as ItemRecord;
+
+    const newSliderItem = (name: string, answer: string[], maxValue: number) =>
+      ({
+        name,
+        responseType: 'slider',
+        responseValues: { maxValue },
         answer,
       }) as never as ItemRecord;
 
@@ -132,12 +139,13 @@ describe('Action Plan', () => {
     });
 
     it('should extract data from `slider` activity type', () => {
-      const data = extractActivitiesPhrasalData([newSliderItem('item', ['6'])]);
+      const data = extractActivitiesPhrasalData([newSliderItem('item', ['6'], 10)]);
 
       expect(data).toHaveProperty('item');
       expect(data.item).toHaveProperty('type', 'array');
       expect(data.item).toHaveProperty('values.0', '6');
       expect(data.item).toHaveProperty('context.itemResponseType', 'slider');
+      expect(data.item).toHaveProperty('context.maxValue', 10);
     });
 
     it('should extract data from `text` activity type', () => {
