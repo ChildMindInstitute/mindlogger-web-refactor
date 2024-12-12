@@ -1,13 +1,16 @@
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 
-import Container from '@mui/material/Container';
+import { Container } from '@mui/material';
 import { subMonths } from 'date-fns';
 
 import { ActivityGroup } from './ActivityGroup';
+import { EmptyState } from './EmptyState';
 import { AppletDetailsContext } from '../lib';
 import { useActivityGroups, useEntitiesSync, useIntegrationsSync } from '../model/hooks';
 
+import { ActivityGroupType } from '~/abstract/lib/GroupBuilder';
 import AppletDefaultIcon from '~/assets/AppletDefaultIcon.svg';
+import ChecklistIcon from '~/assets/checklist-icon.svg';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
 import { AvatarBase, BootstrapModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
@@ -39,6 +42,27 @@ export const ActivityGroupList = () => {
 
   const { groups } = useActivityGroups({ applet, events, assignments });
 
+  const renderedGroups = useMemo(() => {
+    const hasActivities = groups.some((g) => g.activities.length);
+
+    if (hasActivities) {
+      // Only show the available group if there are no in-progress activities
+      const showAvailableGroup = !groups.some(
+        (g) => g.type === ActivityGroupType.InProgress && g.activities.length,
+      );
+
+      // Filter out empty groups, but show the available group based on above logic
+      return groups
+        .filter(
+          (g) =>
+            g.activities.length || (g.type === ActivityGroupType.Available && showAvailableGroup),
+        )
+        .map((g) => <ActivityGroup key={g.name} group={g} />);
+    } else {
+      return <EmptyState flex={1} icon={ChecklistIcon} description={t('noActivities')} />;
+    }
+  }, [groups, t]);
+
   const onCardAboutClick = () => {
     if (!isAppletAboutExist) return;
 
@@ -52,8 +76,8 @@ export const ActivityGroupList = () => {
   }
 
   return (
-    <Container sx={{ flex: '1' }}>
-      <Box display="flex" gap="16px" marginTop="24px" alignItems="center">
+    <Container sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}>
+      <Box display="flex" gap="16px" marginY="24px" alignItems="center">
         <AvatarBase
           src={isAppletImageExist ? applet.image : AppletDefaultIcon}
           name={applet.displayName}
@@ -80,16 +104,12 @@ export const ActivityGroupList = () => {
         </Text>
       </Box>
 
-      <Box>
+      <Box display="flex" flexDirection="column" flex={1} gap="48px">
         {/* The consent to share content is temporarly hidden due to UI changes. */}
         {/* Need to clarify with BA`s or something. If the component is no need anymore the component/slice/other business logic related to this feature should be removed */}
         {/* <SharedContentConsent appletId={applet.id} /> */}
 
-        {groups
-          .filter((g) => g.activities.length)
-          .map((g) => (
-            <ActivityGroup group={g} key={g.name} />
-          ))}
+        {renderedGroups}
       </Box>
       <BootstrapModal
         show={isAboutOpen}
