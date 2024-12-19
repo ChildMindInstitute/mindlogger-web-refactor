@@ -17,6 +17,8 @@ export const SelectBaseText = (props: Props) => {
       sx={{
         cursor: 'pointer',
         lineBreak: 'normal',
+        wordBreak: 'break-word',
+        hyphens: 'auto',
         display: '-webkit-box',
         overflow: 'hidden',
 
