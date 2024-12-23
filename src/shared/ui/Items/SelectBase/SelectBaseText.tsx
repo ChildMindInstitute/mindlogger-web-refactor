@@ -15,12 +15,10 @@ export const SelectBaseText = (props: Props) => {
       lineHeight="28px"
       testid="select-text"
       sx={{
+        wordBreak: 'break-word',
         cursor: 'pointer',
-        lineBreak: 'normal',
-        wordBreak: 'normal',
         hyphens: 'auto',
         display: '-webkit-box',
-        overflow: 'hidden',
 
         // Using kebab-case (i.e. `-webkit-some-things`) would cause warnings
         // in the JS console about kebab-case being not supported for CSS
