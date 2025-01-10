@@ -100,8 +100,12 @@ export const extractActivitiesPhrasalData = (items: ItemRecord[]): ActivitiesPhr
       const selectFieldData: ActivityPhrasalArrayFieldData = {
         type: 'array',
         values: item.answer
-          .map((value) => item.responseValues.options[parseInt(value, 10)]?.text)
-          .filter((value) => !!value),
+          .map(
+            (value) =>
+              item.responseValues.options.find((option) => option.value === parseInt(value, 10))
+                ?.text,
+          )
+          .filter((value): value is string => !!value),
         context: fieldDataContext,
       };
       fieldData = selectFieldData;
