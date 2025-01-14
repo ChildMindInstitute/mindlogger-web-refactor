@@ -15,9 +15,9 @@ export const SelectBaseText = (props: Props) => {
       lineHeight="28px"
       testid="select-text"
       sx={{
-        wordBreak: 'break-word',
+        wordBreak: 'none',
         cursor: 'pointer',
-        hyphens: 'auto',
+        hyphens: 'none',
         display: '-webkit-box',
 
         // Using kebab-case (i.e. `-webkit-some-things`) would cause warnings
