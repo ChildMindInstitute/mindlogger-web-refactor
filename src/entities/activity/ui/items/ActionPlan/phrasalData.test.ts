@@ -34,7 +34,7 @@ describe('Action Plan', () => {
         name,
         responseType: type,
         responseValues: {
-          options: options.map((option) => ({ text: option })),
+          options: options.map((option, value) => ({ text: option, value })),
         },
         answer,
       }) as never as ItemRecord;
