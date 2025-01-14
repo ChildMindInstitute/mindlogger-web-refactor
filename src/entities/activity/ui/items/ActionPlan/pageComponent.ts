@@ -13,7 +13,11 @@ import {
   SentencePageComponent,
   TextItemResponsePageComponent,
 } from './Document.type';
-import { ActivitiesPhrasalData, ActivityPhrasalDataSliderRowContext } from './phrasalData';
+import {
+  ActivitiesPhrasalData,
+  ActivityPhrasalDataSliderContext,
+  ActivityPhrasalDataSliderRowContext,
+} from './phrasalData';
 
 const isAnswersSkipped = (answers: string[]): boolean => {
   if (!answers || answers.length <= 0) {
@@ -32,13 +36,12 @@ const isAnswersSkipped = (answers: string[]): boolean => {
 
 const identity: FieldValueTransformer = (value) => value;
 const sliderValueTransformer =
-  (
-    t: TFunction,
-    ctx: ActivityPhrasalDataSliderRowContext,
-    itemIndex: number,
-  ): FieldValueTransformer =>
+  (t: TFunction, maxValue: number): FieldValueTransformer =>
   (value) =>
-    t('sliderValue', { value, total: ctx.maxValues[itemIndex] });
+    t('sliderValue', {
+      value,
+      total: maxValue,
+    });
 
 const joinWithComma: FieldValueItemsJoiner = (values) => values.join(', ');
 const joinWithDash: FieldValueItemsJoiner = (values) => values.join(' - ');
@@ -79,11 +82,17 @@ export const buildPageComponents = (
         if (fieldPhrasalData) {
           let transformValue = identity;
           let joinValueItems = joinWithComma;
-          if (fieldPhrasalData.context.itemResponseType === 'sliderRows') {
+          if (fieldPhrasalData.context.itemResponseType === 'slider') {
             transformValue = sliderValueTransformer(
               t,
-              fieldPhrasalData.context as ActivityPhrasalDataSliderRowContext,
-              field.itemIndex,
+              (fieldPhrasalData.context as ActivityPhrasalDataSliderContext).maxValue,
+            );
+          } else if (fieldPhrasalData.context.itemResponseType === 'sliderRows') {
+            transformValue = sliderValueTransformer(
+              t,
+              (fieldPhrasalData.context as ActivityPhrasalDataSliderRowContext).maxValues[
+                field.itemIndex
+              ],
             );
           } else if (fieldPhrasalData.context.itemResponseType === 'timeRange') {
             joinValueItems = joinWithDash;
@@ -100,44 +109,21 @@ export const buildPageComponents = (
               ? [t('questionSkipped')]
               : indexedAnswers.map(transformValue);
           } else if (fieldPhrasalDataType === 'matrix') {
-            // The admin UI actually allows matrix type items to have `sentence` as
-            // their display mode. So in this case, we're just going to assume the
-            // effective render order for the values to be "by row".
-            let renderByRowValues = true;
-            if (
-              field.displayMode === 'sentence_option_row' ||
-              field.displayMode === 'bullet_list_option_row'
-            ) {
-              renderByRowValues = false;
-            } else if (
+            const rowFirst =
               field.displayMode === 'sentence_row_option' ||
-              field.displayMode === 'bullet_list_text_row'
-            ) {
-              renderByRowValues = true;
+              field.displayMode === 'bullet_list_text_row';
+
+            valueItems = [];
+            for (const { rowLabel, columnLabels } of fieldPhrasalData.values) {
+              for (const columnLabel of columnLabels) {
+                valueItems.push(
+                  rowFirst ? `${rowLabel} ${columnLabel}` : `${columnLabel} ${rowLabel}`,
+                );
+              }
             }
 
-            if (renderByRowValues) {
-              valueItems = fieldPhrasalData.values.byRow
-                .map(({ label, values }) => {
-                  const transformedValues = isAnswersSkipped(values)
-                    ? [t('questionSkipped')]
-                    : values.map(transformValue);
-                  return transformedValues.map(
-                    (transformedValue) => `${label} ${transformedValue}`,
-                  );
-                })
-                .flat();
-            } else {
-              valueItems = fieldPhrasalData.values.byColumn
-                .map(({ label, values }) => {
-                  const transformedValues = isAnswersSkipped(values)
-                    ? [t('questionSkipped')]
-                    : values.map(transformValue);
-                  return transformedValues.map(
-                    (transformedValue) => `${label} ${transformedValue}`,
-                  );
-                })
-                .flat();
+            if (isAnswersSkipped(valueItems)) {
+              valueItems = [t('questionSkipped')];
             }
           } else {
             // This also shouldn't happen. But including a `else` here allows all
