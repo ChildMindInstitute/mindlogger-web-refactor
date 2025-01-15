@@ -1,11 +1,14 @@
 import { Theme } from '~/shared/constants';
 import Text from '~/shared/ui/Text';
+import { useCustomWordWrap } from '~/shared/utils/hooks/useCustomWordWrap';
 
 type Props = {
   text: string;
 };
 
 export const SelectBaseText = (props: Props) => {
+  const { processedWords } = useCustomWordWrap(props.text);
+
   return (
     <Text
       variant="body1"
@@ -17,7 +20,7 @@ export const SelectBaseText = (props: Props) => {
       sx={{
         wordBreak: 'none',
         cursor: 'pointer',
-        hyphens: 'none',
+        lineBreak: 'normal',
         display: '-webkit-box',
 
         // Using kebab-case (i.e. `-webkit-some-things`) would cause warnings
@@ -27,7 +30,18 @@ export const SelectBaseText = (props: Props) => {
         webkitBoxOrient: 'vertical',
       }}
     >
-      {props.text}
+      {processedWords.map(({ word, needsWrap, ref }, index) => {
+        if (needsWrap)
+          return (
+            <span ref={ref} style={{ wordBreak: 'break-word' }} key={index}>
+              {word.split('').map((letter: string, index) => (
+                <span key={index}>{letter}</span>
+              ))}
+            </span>
+          );
+
+        return `${word} `;
+      })}
     </Text>
   );
 };
