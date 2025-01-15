@@ -77,7 +77,6 @@ class Encryption {
     try {
       return decrypted.toString() + decipher.final('utf8');
     } catch (error) {
-      /* eslint-disable no-console */
       console.error('Decrypt data failed. Text:', text, 'key:', key, 'error:', error);
 
       return JSON.stringify([{ type: '', time: '', screen: '' }]);

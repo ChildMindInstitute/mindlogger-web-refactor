@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { phrasalTemplateCompatibleResponseTypes } from '~/abstract/lib/constants';
 import { ActivityItemType } from '~/entities/activity/lib';
 import { ItemRecord } from '~/entities/applet/model';
