@@ -17,7 +17,11 @@ export type GetPublicAppletActivityByIdPayload = {
   activityId: string;
 };
 
-export type RespondentMetaDTO = { nickname: string };
+export type RespondentMetaDTO = {
+  subjectId: string | null;
+  nickname: string | null;
+  tag: string | null;
+};
 
 // API Responses - Success
 export type AppletListSuccessResponse = BaseSuccessListResponse<AppletListDTO>;
@@ -66,6 +70,7 @@ export type AppletBaseDTO = {
   activityFlows: Array<ActivityFlowDTO>;
   encryption: EncryptionDTO | null;
   integrations?: Integration[];
+  respondentMeta?: RespondentMetaDTO;
 };
 
 export type ActivityBaseDTO = {

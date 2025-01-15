@@ -27,6 +27,7 @@ export const phrasalTemplateCompatibleResponseTypes = [
   'singleSelect',
   'slider',
   'text',
+  'paragraphText',
   'time',
   'timeRange',
   'multiSelectRows',

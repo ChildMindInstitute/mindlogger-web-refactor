@@ -85,6 +85,8 @@ export const SurveyWidget = (props: Props) => {
     error,
   } = useSurveyDataQuery({ publicAppletKey, appletId, activityId, targetSubjectId });
 
+  const responseError = error?.evaluatedMessage ?? '';
+
   if (isLoading) {
     return <LoadingScreen publicAppletKey={publicAppletKey} appletId={appletId} />;
   }
@@ -94,9 +96,7 @@ export const SurveyWidget = (props: Props) => {
       <ErrorScreen
         publicAppletKey={publicAppletKey}
         appletId={appletId}
-        errorLabel={
-          publicAppletKey ? t('additional.invalid_public_url') : error?.evaluatedMessage ?? ''
-        }
+        errorLabel={publicAppletKey ? t('additional.invalid_public_url') : responseError}
       />
     );
   }

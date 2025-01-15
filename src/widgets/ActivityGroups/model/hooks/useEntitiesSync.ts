@@ -1,27 +1,29 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
+
+import { AppletDetailsContext } from '../../lib';
 
 import { ActivityPipelineType } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { CompletedEntitiesDTO, CompletedEntityDTO } from '~/shared/api';
 
 type FilterCompletedEntitiesProps = {
-  completedEntities: CompletedEntitiesDTO | undefined;
+  completedEntities?: CompletedEntitiesDTO;
 };
 
-export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
+export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesProps) => {
+  const { applet } = useContext(AppletDetailsContext);
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   const syncEntity = useCallback(
     (entity: CompletedEntityDTO) => {
-      const hoursMinutes = entity.localEndTime.split(':');
-      const endAtDate = new Date(entity.localEndDate).setHours(
-        Number(hoursMinutes[0]),
-        Number(hoursMinutes[1]),
-      );
+      const endAtDate = new Date(`${entity.localEndDate}T${entity.localEndTime}`);
+      const endAtTimestamp = endAtDate.getTime();
 
       const entityId = entity.id;
       const eventId = entity.scheduledEventId;
-      const targetSubjectId = entity.targetSubjectId;
+      // Normalize targetSubjectId to null for self-reports
+      const targetSubjectId =
+        entity.targetSubjectId === applet.respondentMeta?.subjectId ? null : entity.targetSubjectId;
 
       const groupProgress = getGroupProgress({
         entityId,
@@ -37,7 +39,7 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
           progressPayload: {
             type: ActivityPipelineType.Regular,
             startAt: null,
-            endAt: new Date(endAtDate).getTime(),
+            endAt: endAtTimestamp,
             context: {
               summaryData: {},
             },
@@ -46,7 +48,7 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
       }
 
       if (groupProgress.endAt) {
-        const isServerEndAtBigger = endAtDate > new Date(groupProgress.endAt).getTime();
+        const isServerEndAtBigger = endAtTimestamp > new Date(groupProgress.endAt).getTime();
 
         if (!isServerEndAtBigger) {
           return;
@@ -58,24 +60,19 @@ export const useEntitiesSync = (props: FilterCompletedEntitiesProps) => {
           targetSubjectId,
           progressPayload: {
             ...groupProgress,
-            endAt: new Date(endAtDate).getTime(),
+            endAt: endAtTimestamp,
           },
         });
       }
     },
-    [getGroupProgress, saveGroupProgress],
+    [applet.respondentMeta?.subjectId, getGroupProgress, saveGroupProgress],
   );
 
   useEffect(() => {
-    if (!props.completedEntities) {
+    if (!completedEntities) {
       return;
     }
 
-    const completedEntities = [
-      ...props.completedEntities.activities,
-      ...props.completedEntities.activityFlows,
-    ];
-
-    completedEntities.forEach(syncEntity);
-  }, [props.completedEntities, syncEntity]);
+    [...completedEntities.activities, ...completedEntities.activityFlows].forEach(syncEntity);
+  }, [completedEntities, syncEntity]);
 };
