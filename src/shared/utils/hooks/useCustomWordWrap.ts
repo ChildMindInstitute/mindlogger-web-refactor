@@ -57,7 +57,7 @@ export const useCustomWordWrap = (text: string) => {
     }
   }, [resize]);
 
-  const processedWords = textAsArray.map((word: string, index) => {
+  const processedWords = textAsArray.map((word: string) => {
     if (word.length > 15)
       return {
         word,
