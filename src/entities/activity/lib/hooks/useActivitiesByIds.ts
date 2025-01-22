@@ -10,7 +10,6 @@ type Props = {
 
 export const useActivitiesByIds = ({ ids, enabled, isPublic }: Props) => {
   const queryResults = useActivitiesByIdsQuery({ ids, enabled, isPublic });
-  ids;
   const { isError, isLoading, data } = useMemo(() => {
     const isLoading = queryResults.some((item) => item.isLoading);
     const isError = queryResults.some((item) => item.isError);

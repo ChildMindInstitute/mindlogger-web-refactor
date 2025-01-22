@@ -66,7 +66,9 @@ const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
         schemaOptions,
       );
 
-      options.shouldUseNativeValidation && validateFieldsNatively({}, options);
+      if (options.shouldUseNativeValidation) {
+        validateFieldsNatively({}, options);
+      }
 
       return {
         errors: {} as FieldErrors,
