@@ -31,16 +31,13 @@ export const SelectBaseText = (props: Props) => {
       }}
     >
       {processedWords.map(({ word, needsWrap, ref }, index) => {
-        if (needsWrap)
-          return (
-            <span ref={ref} style={{ wordBreak: 'break-word' }} key={index}>
-              {word.split('').map((letter: string, index) => (
-                <span key={index}>{letter}</span>
-              ))}
-            </span>
-          );
-
-        return `${word} `;
+        return needsWrap ? (
+          <span ref={ref} style={{ wordBreak: 'break-word' }} key={index}>
+            {`${word} `}
+          </span>
+        ) : (
+          `${word} `
+        );
       })}
     </Text>
   );
