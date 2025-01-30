@@ -50,6 +50,7 @@ import {
   isFirstTimeLater,
   isTimesEqual,
   timeToHourMinute,
+  parseDateToMidnightUTC,
 } from '~/shared/utils';
 
 interface IConditionalLogicValidator {
@@ -271,7 +272,10 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
   private validateGreaterThanDate(rule: GreaterThanDateCondition, item: ItemRecord): boolean {
     if (item.responseType === 'date') {
-      return isFirstDateEarlier(new Date(rule.payload.date), new Date(item.answer[0]));
+      return isFirstDateEarlier(
+        parseDateToMidnightUTC(rule.payload.date),
+        new Date(item.answer[0]),
+      );
     }
 
     return true;
@@ -279,7 +283,7 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
   private validateLessThanDate(rule: LessThanDateCondition, item: ItemRecord): boolean {
     if (item.responseType === 'date') {
-      return isFirstDateLater(new Date(rule.payload.date), new Date(item.answer[0]));
+      return isFirstDateLater(parseDateToMidnightUTC(rule.payload.date), new Date(item.answer[0]));
     }
 
     return true;
@@ -287,7 +291,7 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
   private validateEqualToDate(rule: EqualToDateCondition, item: ItemRecord): boolean {
     if (item.responseType === 'date') {
-      return isSameDay(new Date(rule.payload.date), new Date(item.answer[0]));
+      return isSameDay(parseDateToMidnightUTC(rule.payload.date), new Date(item.answer[0]));
     }
 
     return true;
@@ -295,7 +299,7 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
   private validateNotEqualToDate(rule: NotEqualToDateCondition, item: ItemRecord): boolean {
     if (item.responseType === 'date') {
-      return !isSameDay(new Date(rule.payload.date), new Date(item.answer[0]));
+      return !isSameDay(parseDateToMidnightUTC(rule.payload.date), new Date(item.answer[0]));
     }
 
     return true;
@@ -304,8 +308,11 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateBetweenDates(rule: BetweenDatesCondition, item: ItemRecord): boolean {
     if (item.responseType === 'date') {
       return (
-        isFirstDateEarlier(new Date(rule.payload.minDate), new Date(item.answer[0])) &&
-        isFirstDateLater(new Date(rule.payload.maxDate), new Date(item.answer[0]))
+        isFirstDateEarlier(
+          parseDateToMidnightUTC(rule.payload.minDate),
+          new Date(item.answer[0]),
+        ) &&
+        isFirstDateLater(parseDateToMidnightUTC(rule.payload.maxDate), new Date(item.answer[0]))
       );
     }
 
@@ -315,8 +322,8 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateOutsideOfDates(rule: OutsideOfDatesCondition, item: ItemRecord): boolean {
     if (item.responseType === 'date') {
       return (
-        isFirstDateLater(new Date(rule.payload.minDate), new Date(item.answer[0])) ||
-        isFirstDateEarlier(new Date(rule.payload.maxDate), new Date(item.answer[0]))
+        isFirstDateLater(parseDateToMidnightUTC(rule.payload.minDate), new Date(item.answer[0])) ||
+        isFirstDateEarlier(parseDateToMidnightUTC(rule.payload.maxDate), new Date(item.answer[0]))
       );
     }
 
