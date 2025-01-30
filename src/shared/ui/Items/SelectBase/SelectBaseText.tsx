@@ -1,11 +1,14 @@
 import { Theme } from '~/shared/constants';
 import Text from '~/shared/ui/Text';
+import { useCustomWordWrap } from '~/shared/utils/hooks/useCustomWordWrap';
 
 type Props = {
   text: string;
 };
 
 export const SelectBaseText = (props: Props) => {
+  const { processedWords } = useCustomWordWrap(props.text);
+
   return (
     <Text
       variant="body1"
@@ -15,10 +18,10 @@ export const SelectBaseText = (props: Props) => {
       lineHeight="28px"
       testid="select-text"
       sx={{
+        wordBreak: 'none',
         cursor: 'pointer',
-        lineBreak: 'anywhere',
+        lineBreak: 'normal',
         display: '-webkit-box',
-        overflow: 'hidden',
 
         // Using kebab-case (i.e. `-webkit-some-things`) would cause warnings
         // in the JS console about kebab-case being not supported for CSS
@@ -27,7 +30,15 @@ export const SelectBaseText = (props: Props) => {
         webkitBoxOrient: 'vertical',
       }}
     >
-      {props.text}
+      {processedWords.map(({ word, needsWrap, ref }, index) => {
+        return needsWrap ? (
+          <span ref={ref} style={{ wordBreak: 'break-word' }} key={index}>
+            {`${word} `}
+          </span>
+        ) : (
+          `${word} `
+        );
+      })}
     </Text>
   );
 };
