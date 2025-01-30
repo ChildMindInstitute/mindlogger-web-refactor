@@ -317,7 +317,7 @@ export type NotEqualToTimeRangeCondition = {
 
 export type BetweenTimeRangeCondition = {
   itemName: string;
-  type: 'BETWEEN_TIME_RANGE';
+  type: 'BETWEEN_TIMES_RANGE';
   payload: {
     fieldName: 'from' | 'to';
     minTime: {
@@ -333,7 +333,7 @@ export type BetweenTimeRangeCondition = {
 
 export type OutsideOfTimeRangeCondition = {
   itemName: string;
-  type: 'OUTSIDE_OF_TIME_RANGE';
+  type: 'OUTSIDE_OF_TIMES_RANGE';
   payload: {
     fieldName: 'from' | 'to';
     minTime: {

@@ -141,10 +141,10 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
       case 'NOT_EQUAL_TO_TIME_RANGE':
         return this.validateNotEqualToTimeRange(this.rule, this.item);
 
-      case 'BETWEEN_TIME_RANGE':
+      case 'BETWEEN_TIMES_RANGE':
         return this.validateBetweenTimeRange(this.rule, this.item);
 
-      case 'OUTSIDE_OF_TIME_RANGE':
+      case 'OUTSIDE_OF_TIMES_RANGE':
         return this.validateOutsideOfTimeRange(this.rule, this.item);
 
       case 'GREATER_THAN_SLIDER_ROWS':
