@@ -394,6 +394,10 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   ): boolean {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+      if (!timeToValidate) {
+        // There is no selection yet
+        return false;
+      }
 
       const time = dateStringToHourMinuteRaw(timeToValidate);
 
@@ -406,6 +410,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateLessThanTimeRange(rule: LessThanTimeRangeCondition, item: ItemRecord): boolean {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+      if (!timeToValidate) {
+        return false;
+      }
 
       const time = dateStringToHourMinuteRaw(timeToValidate);
 
@@ -418,6 +425,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateEqualToTimeRange(rule: EqualToTimeRangeCondition, item: ItemRecord): boolean {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+      if (!timeToValidate) {
+        return false;
+      }
 
       const time = dateStringToHourMinuteRaw(timeToValidate);
 
@@ -433,6 +443,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   ): boolean {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+      if (!timeToValidate) {
+        return false;
+      }
 
       const time = dateStringToHourMinuteRaw(timeToValidate);
 
@@ -445,6 +458,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateBetweenTimeRange(rule: BetweenTimeRangeCondition, item: ItemRecord): boolean {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+      if (!timeToValidate) {
+        return false;
+      }
 
       const time = dateStringToHourMinuteRaw(timeToValidate);
 
@@ -460,6 +476,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateOutsideOfTimeRange(rule: OutsideOfTimeRangeCondition, item: ItemRecord): boolean {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+      if (!timeToValidate) {
+        return false;
+      }
 
       const time = dateStringToHourMinuteRaw(timeToValidate);
 
