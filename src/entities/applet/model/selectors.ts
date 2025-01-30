@@ -42,4 +42,9 @@ export const multiInformantStateSelector = createSelector(
   (state) => state.multiInformantState,
 );
 
+export const prolificParamsSelector = createSelector(
+  appletsSelector,
+  (state) => state.prolificParams,
+);
+
 export const selectConsents = createSelector(appletsSelector, (applets) => applets.consents);

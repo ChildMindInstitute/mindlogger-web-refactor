@@ -6,6 +6,7 @@ import { ItemAnswer, mapAlerts, mapToAnswers } from '../helpers';
 import { ActivityPipelineType, GroupProgress } from '~/abstract/lib';
 import { DefaultAnswer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
+import { ProlificUrlParamsPayload } from '~/entities/applet/model';
 import { userModel } from '~/entities/user';
 import {
   ActivityFlowDTO,
@@ -48,6 +49,8 @@ type Input = {
   publicAppletKey: string | null;
 
   isFlowCompleted?: boolean;
+
+  prolificParams?: ProlificUrlParamsPayload;
 };
 
 export default class AnswersConstructService implements ICompletionConstructService {
@@ -73,6 +76,8 @@ export default class AnswersConstructService implements ICompletionConstructServ
 
   private isFlowCompleted: boolean | undefined; // We can enforce this to be defined if needed
 
+  private prolificParams?: ProlificUrlParamsPayload;
+
   constructor(input: Input) {
     this.activityId = input.activityId;
     this.event = input.event;
@@ -85,6 +90,7 @@ export default class AnswersConstructService implements ICompletionConstructServ
     this.items = input.items;
     this.userEvents = input.userEvents;
     this.isFlowCompleted = input.isFlowCompleted;
+    this.prolificParams = input.prolificParams;
   }
 
   public construct(): AnswerPayload {
@@ -116,6 +122,7 @@ export default class AnswersConstructService implements ICompletionConstructServ
       version: this.appletVersion,
       createdAt: new Date().getTime(),
       isFlowCompleted: isSurveyCompleted,
+      prolificParams: this.prolificParams,
       answer: {
         answer: encryptedAnswers,
         itemIds: answersDictionary.itemIds,

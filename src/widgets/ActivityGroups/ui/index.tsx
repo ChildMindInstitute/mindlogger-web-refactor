@@ -1,12 +1,14 @@
 import { useState } from 'react';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { ActivityGroupList } from './ActivityGroupList';
 import { AppletDetailsContext } from '../lib';
 import { useTakeNowRedirect } from '../model/hooks/useTakeNowRedirect';
 
 import { appletModel, useAppletBaseInfoByIdQuery } from '~/entities/applet';
+import { useProlificIntegrationStateQuery } from '~/entities/applet/api/integrations/useProlificIntegrationEnabledQuery';
+import { useUpdateProlificParams } from '~/entities/applet/model/hooks/useSaveProlificParams';
 import { useMyAssignmentsQuery } from '~/entities/assignment';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
 import { TakeNowSuccessModalProps } from '~/features/TakeNow/lib/types';
@@ -33,6 +35,11 @@ type PrivateAppletDetails = {
 
 type Props = PublicAppletDetails | PrivateAppletDetails;
 
+type ProlificState = {
+  isError: boolean;
+  paramExists: boolean;
+};
+
 export const ActivityGroups = (props: Props) => {
   const { appletId, isPublic, publicAppletKey, startActivityOrFlow } = props;
   const { t } = useCustomTranslation();
@@ -44,6 +51,11 @@ export const ActivityGroups = (props: Props) => {
     });
   const { featureFlag } = useFeatureFlags();
   const isAssignmentsEnabled = featureFlag(FeatureFlag.EnableActivityAssign, false) && !isPublic;
+  const [searchParams] = useSearchParams();
+  const [prolificState, setProlificState] = useState<ProlificState>({
+    isError: false,
+    paramExists: false,
+  });
 
   const {
     isError: isAppletError,
@@ -75,6 +87,24 @@ export const ActivityGroups = (props: Props) => {
     ensureMultiInformantStateExists,
   } = appletModel.hooks.useMultiInformantState();
 
+  const { prolificPid, studyId, sessionId } = {
+    prolificPid: searchParams.get('PROLIFIC_PID'),
+    studyId: searchParams.get('STUDY_ID'),
+    sessionId: searchParams.get('SESSION_ID'),
+  };
+
+  const isFromProlific = !!(prolificPid || studyId || sessionId);
+  const hasValidProlificParams = !!(prolificPid && studyId && sessionId);
+
+  const { data: prolificIntegrationStateResponse } = useProlificIntegrationStateQuery(
+    { ...props, prolificStudyId: studyId },
+    {
+      enabled: prolificState.paramExists,
+    },
+  );
+
+  const { saveProlificParams, clearProlificParams } = useUpdateProlificParams();
+
   useOnceEffect(() => {
     ensureMultiInformantStateExists();
 
@@ -94,6 +124,17 @@ export const ActivityGroups = (props: Props) => {
       });
       setTakeNowSuccessModalState({ isOpen: true, ...getMultiInformantState() });
     }
+
+    if (isFromProlific && hasValidProlificParams) {
+      saveProlificParams({ prolificPid, studyId, sessionId });
+    } else {
+      clearProlificParams(); // Clear any prolificParams params from global state
+    }
+
+    setProlificState({
+      isError: !hasValidProlificParams,
+      paramExists: isFromProlific,
+    });
   });
 
   useTakeNowRedirect({
@@ -109,7 +150,13 @@ export const ActivityGroups = (props: Props) => {
     return <Loader />;
   }
 
-  if (isEventsError || isAppletError || (isAssignmentsEnabled && isAssignmentsError)) {
+  if (
+    isEventsError ||
+    isAppletError ||
+    (isAssignmentsEnabled && isAssignmentsError) ||
+    (prolificState.paramExists &&
+      (!prolificIntegrationStateResponse?.data.enabled || prolificState.isError))
+  ) {
     return (
       <Box display="flex" width="100%" height="100%" justifyContent="center" alignItems="center">
         <span>{t('additional.invalid_public_url')}</span>

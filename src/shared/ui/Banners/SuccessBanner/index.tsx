@@ -1,5 +1,5 @@
-import { Banner, BannerProps } from '../Banner';
 import { SUCCESS_BANNER_DURATION } from './lib/const';
+import { Banner, BannerProps } from '../Banner';
 
 export const SuccessBanner = ({ children, ...props }: BannerProps) => {
   return (

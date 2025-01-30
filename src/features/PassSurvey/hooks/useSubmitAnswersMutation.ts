@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import { SurveyContext } from '..';
 
@@ -20,9 +20,10 @@ import {
 type Props = {
   isPublic: boolean;
   onSubmitSuccess?: (variables: AnswerPayload) => void;
+  onSubmitError?: () => void;
 };
 
-export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess }: Props) => {
+export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitError }: Props) => {
   const { isInMultiInformantFlow, getMultiInformantState, updateMultiInformantState } =
     appletModel.hooks.useMultiInformantState();
 
@@ -71,6 +72,14 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess }: Props) 
     mutateAsync: publicSubmitAsync,
   } = usePublicSaveAnswerMutation({
     onSuccess,
+    onError: (error) => {
+      if (error instanceof AxiosError && error.response.status === 400) {
+        onSubmitError?.();
+        return;
+      }
+
+      throw error;
+    },
   });
 
   return {

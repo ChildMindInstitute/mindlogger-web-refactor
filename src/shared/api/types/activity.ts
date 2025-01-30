@@ -17,6 +17,8 @@ import {
   TimeRangeItemDTO,
 } from './item';
 
+import { ProlificUrlParamsPayload } from '~/entities/applet/model';
+
 export type ID = string;
 
 export interface GetCompletedEntitiesPayload {
@@ -133,6 +135,7 @@ export type AnswerPayload = {
   };
   sourceSubjectId?: ID | null;
   targetSubjectId?: ID | null;
+  prolificParams?: ProlificUrlParamsPayload;
 };
 
 export type AlertDTO = {
