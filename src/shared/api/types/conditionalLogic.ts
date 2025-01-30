@@ -260,10 +260,7 @@ export type GreaterThanTimeRangeCondition = {
   type: 'GREATER_THAN_TIME_RANGE';
   payload: {
     fieldName: 'from' | 'to';
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -272,10 +269,7 @@ export type LessThanTimeRangeCondition = {
   type: 'LESS_THAN_TIME_RANGE';
   payload: {
     fieldName: 'from' | 'to';
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -284,10 +278,7 @@ export type EqualToTimeRangeCondition = {
   type: 'EQUAL_TO_TIME_RANGE';
   payload: {
     fieldName: 'from' | 'to';
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -296,10 +287,7 @@ export type NotEqualToTimeRangeCondition = {
   type: 'NOT_EQUAL_TO_TIME_RANGE';
   payload: {
     fieldName: 'from' | 'to';
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
