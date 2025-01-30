@@ -197,10 +197,7 @@ export type GreaterThanTimeCondition = {
   itemName: string;
   type: 'GREATER_THAN_TIME';
   payload: {
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -208,10 +205,7 @@ export type LessThanTimeCondition = {
   itemName: string;
   type: 'LESS_THAN_TIME';
   payload: {
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -219,10 +213,7 @@ export type EqualToTimeCondition = {
   itemName: string;
   type: 'EQUAL_TO_TIME';
   payload: {
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -230,10 +221,7 @@ export type NotEqualToTimeCondition = {
   itemName: string;
   type: 'NOT_EQUAL_TO_TIME';
   payload: {
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
