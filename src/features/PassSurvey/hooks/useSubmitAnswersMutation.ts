@@ -76,9 +76,9 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitE
       if (error instanceof AxiosError && error.response.status === 400) {
         onSubmitError?.();
         return;
+      } else if (error instanceof Error) {
+        throw error;
       }
-
-      throw error;
     },
   });
 
