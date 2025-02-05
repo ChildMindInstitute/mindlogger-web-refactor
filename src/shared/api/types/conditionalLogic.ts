@@ -197,10 +197,7 @@ export type GreaterThanTimeCondition = {
   itemName: string;
   type: 'GREATER_THAN_TIME';
   payload: {
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -208,10 +205,7 @@ export type LessThanTimeCondition = {
   itemName: string;
   type: 'LESS_THAN_TIME';
   payload: {
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -219,10 +213,7 @@ export type EqualToTimeCondition = {
   itemName: string;
   type: 'EQUAL_TO_TIME';
   payload: {
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -230,10 +221,7 @@ export type NotEqualToTimeCondition = {
   itemName: string;
   type: 'NOT_EQUAL_TO_TIME';
   payload: {
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -272,10 +260,7 @@ export type GreaterThanTimeRangeCondition = {
   type: 'GREATER_THAN_TIME_RANGE';
   payload: {
     fieldName: 'from' | 'to';
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -284,10 +269,7 @@ export type LessThanTimeRangeCondition = {
   type: 'LESS_THAN_TIME_RANGE';
   payload: {
     fieldName: 'from' | 'to';
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -296,10 +278,7 @@ export type EqualToTimeRangeCondition = {
   type: 'EQUAL_TO_TIME_RANGE';
   payload: {
     fieldName: 'from' | 'to';
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
@@ -308,16 +287,13 @@ export type NotEqualToTimeRangeCondition = {
   type: 'NOT_EQUAL_TO_TIME_RANGE';
   payload: {
     fieldName: 'from' | 'to';
-    time: {
-      hours: number; // 0 - 23
-      minutes: number; // 0 - 59
-    };
+    time: string;
   };
 };
 
 export type BetweenTimeRangeCondition = {
   itemName: string;
-  type: 'BETWEEN_TIME_RANGE';
+  type: 'BETWEEN_TIMES_RANGE';
   payload: {
     fieldName: 'from' | 'to';
     minTime: {
@@ -333,7 +309,7 @@ export type BetweenTimeRangeCondition = {
 
 export type OutsideOfTimeRangeCondition = {
   itemName: string;
-  type: 'OUTSIDE_OF_TIME_RANGE';
+  type: 'OUTSIDE_OF_TIMES_RANGE';
   payload: {
     fieldName: 'from' | 'to';
     minTime: {

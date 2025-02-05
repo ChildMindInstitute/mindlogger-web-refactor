@@ -49,6 +49,8 @@ import {
   isFirstTimeEarlier,
   isFirstTimeLater,
   isTimesEqual,
+  timeToHourMinute,
+  parseDateToMidnightUTC,
 } from '~/shared/utils';
 
 interface IConditionalLogicValidator {
@@ -141,10 +143,10 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
       case 'NOT_EQUAL_TO_TIME_RANGE':
         return this.validateNotEqualToTimeRange(this.rule, this.item);
 
-      case 'BETWEEN_TIME_RANGE':
+      case 'BETWEEN_TIMES_RANGE':
         return this.validateBetweenTimeRange(this.rule, this.item);
 
-      case 'OUTSIDE_OF_TIME_RANGE':
+      case 'OUTSIDE_OF_TIMES_RANGE':
         return this.validateOutsideOfTimeRange(this.rule, this.item);
 
       case 'GREATER_THAN_SLIDER_ROWS':
@@ -270,7 +272,10 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
   private validateGreaterThanDate(rule: GreaterThanDateCondition, item: ItemRecord): boolean {
     if (item.responseType === 'date') {
-      return isFirstDateEarlier(new Date(rule.payload.date), new Date(item.answer[0]));
+      return isFirstDateEarlier(
+        parseDateToMidnightUTC(rule.payload.date),
+        new Date(item.answer[0]),
+      );
     }
 
     return true;
@@ -278,7 +283,7 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
   private validateLessThanDate(rule: LessThanDateCondition, item: ItemRecord): boolean {
     if (item.responseType === 'date') {
-      return isFirstDateLater(new Date(rule.payload.date), new Date(item.answer[0]));
+      return isFirstDateLater(parseDateToMidnightUTC(rule.payload.date), new Date(item.answer[0]));
     }
 
     return true;
@@ -286,7 +291,7 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
   private validateEqualToDate(rule: EqualToDateCondition, item: ItemRecord): boolean {
     if (item.responseType === 'date') {
-      return isSameDay(new Date(rule.payload.date), new Date(item.answer[0]));
+      return isSameDay(parseDateToMidnightUTC(rule.payload.date), new Date(item.answer[0]));
     }
 
     return true;
@@ -294,7 +299,7 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
 
   private validateNotEqualToDate(rule: NotEqualToDateCondition, item: ItemRecord): boolean {
     if (item.responseType === 'date') {
-      return !isSameDay(new Date(rule.payload.date), new Date(item.answer[0]));
+      return !isSameDay(parseDateToMidnightUTC(rule.payload.date), new Date(item.answer[0]));
     }
 
     return true;
@@ -303,8 +308,11 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateBetweenDates(rule: BetweenDatesCondition, item: ItemRecord): boolean {
     if (item.responseType === 'date') {
       return (
-        isFirstDateEarlier(new Date(rule.payload.minDate), new Date(item.answer[0])) &&
-        isFirstDateLater(new Date(rule.payload.maxDate), new Date(item.answer[0]))
+        isFirstDateEarlier(
+          parseDateToMidnightUTC(rule.payload.minDate),
+          new Date(item.answer[0]),
+        ) &&
+        isFirstDateLater(parseDateToMidnightUTC(rule.payload.maxDate), new Date(item.answer[0]))
       );
     }
 
@@ -314,8 +322,8 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateOutsideOfDates(rule: OutsideOfDatesCondition, item: ItemRecord): boolean {
     if (item.responseType === 'date') {
       return (
-        isFirstDateLater(new Date(rule.payload.minDate), new Date(item.answer[0])) ||
-        isFirstDateEarlier(new Date(rule.payload.maxDate), new Date(item.answer[0]))
+        isFirstDateLater(parseDateToMidnightUTC(rule.payload.minDate), new Date(item.answer[0])) ||
+        isFirstDateEarlier(parseDateToMidnightUTC(rule.payload.maxDate), new Date(item.answer[0]))
       );
     }
 
@@ -325,8 +333,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateGreaterThanTime(rule: GreaterThanTimeCondition, item: ItemRecord): boolean {
     if (item.responseType === 'time') {
       const time = dateStringToHourMinuteRaw(item.answer[0]);
+      const ruleTime = timeToHourMinute(rule.payload.time);
 
-      return isFirstTimeLater(time, rule.payload.time);
+      return isFirstTimeLater(time, ruleTime);
     }
 
     return true;
@@ -335,8 +344,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateLessThanTime(rule: LessThanTimeCondition, item: ItemRecord): boolean {
     if (item.responseType === 'time') {
       const time = dateStringToHourMinuteRaw(item.answer[0]);
+      const ruleTime = timeToHourMinute(rule.payload.time);
 
-      return isFirstTimeEarlier(time, rule.payload.time);
+      return isFirstTimeEarlier(time, ruleTime);
     }
 
     return true;
@@ -345,8 +355,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateEqualToTime(rule: EqualToTimeCondition, item: ItemRecord): boolean {
     if (item.responseType === 'time') {
       const time = dateStringToHourMinuteRaw(item.answer[0]);
+      const ruleTime = timeToHourMinute(rule.payload.time);
 
-      return isTimesEqual(rule.payload.time, time);
+      return isTimesEqual(ruleTime, time);
     }
 
     return true;
@@ -355,8 +366,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateNotEqualToTime(rule: NotEqualToTimeCondition, item: ItemRecord): boolean {
     if (item.responseType === 'time') {
       const time = dateStringToHourMinuteRaw(item.answer[0]);
+      const ruleTime = timeToHourMinute(rule.payload.time);
 
-      return !isTimesEqual(rule.payload.time, time);
+      return !isTimesEqual(ruleTime, time);
     }
 
     return true;
@@ -394,10 +406,15 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   ): boolean {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+      if (!timeToValidate) {
+        // There is no selection yet
+        return false;
+      }
 
       const time = dateStringToHourMinuteRaw(timeToValidate);
+      const ruleTime = timeToHourMinute(rule.payload.time);
 
-      return isFirstTimeLater(time, rule.payload.time);
+      return isFirstTimeLater(time, ruleTime);
     }
 
     return true;
@@ -406,10 +423,14 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateLessThanTimeRange(rule: LessThanTimeRangeCondition, item: ItemRecord): boolean {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+      if (!timeToValidate) {
+        return false;
+      }
 
       const time = dateStringToHourMinuteRaw(timeToValidate);
+      const ruleTime = timeToHourMinute(rule.payload.time);
 
-      return isFirstTimeEarlier(time, rule.payload.time);
+      return isFirstTimeEarlier(time, ruleTime);
     }
 
     return true;
@@ -418,10 +439,14 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateEqualToTimeRange(rule: EqualToTimeRangeCondition, item: ItemRecord): boolean {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+      if (!timeToValidate) {
+        return false;
+      }
 
       const time = dateStringToHourMinuteRaw(timeToValidate);
+      const ruleTime = timeToHourMinute(rule.payload.time);
 
-      return isTimesEqual(rule.payload.time, time);
+      return isTimesEqual(ruleTime, time);
     }
 
     return true;
@@ -433,10 +458,14 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   ): boolean {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+      if (!timeToValidate) {
+        return false;
+      }
 
       const time = dateStringToHourMinuteRaw(timeToValidate);
+      const ruleTime = timeToHourMinute(rule.payload.time);
 
-      return !isTimesEqual(rule.payload.time, time);
+      return !isTimesEqual(ruleTime, time);
     }
 
     return true;
@@ -445,6 +474,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateBetweenTimeRange(rule: BetweenTimeRangeCondition, item: ItemRecord): boolean {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+      if (!timeToValidate) {
+        return false;
+      }
 
       const time = dateStringToHourMinuteRaw(timeToValidate);
 
@@ -460,6 +492,9 @@ export class ConditionalLogicValidator implements IConditionalLogicValidator {
   private validateOutsideOfTimeRange(rule: OutsideOfTimeRangeCondition, item: ItemRecord): boolean {
     if (item.responseType === 'timeRange') {
       const timeToValidate = rule.payload.fieldName === 'from' ? item.answer[0] : item.answer[1];
+      if (!timeToValidate) {
+        return false;
+      }
 
       const time = dateStringToHourMinuteRaw(timeToValidate);
 
