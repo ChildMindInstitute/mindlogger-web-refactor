@@ -7,7 +7,7 @@ import { AppletDetailsContext } from '../lib';
 import { useTakeNowRedirect } from '../model/hooks/useTakeNowRedirect';
 
 import { appletModel, useAppletBaseInfoByIdQuery } from '~/entities/applet';
-import { useProlificIntegrationStateQuery } from '~/entities/applet/api/integrations/useProlificIntegrationEnabledQuery';
+import { useProlificStudyStateQuery } from '~/entities/applet/api/integrations/useProlificIntegrationEnabledQuery';
 import { useUpdateProlificParams } from '~/entities/applet/model/hooks/useSaveProlificParams';
 import { useMyAssignmentsQuery } from '~/entities/assignment';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
@@ -96,7 +96,7 @@ export const ActivityGroups = (props: Props) => {
   const isFromProlific = !!(prolificPid || studyId || sessionId);
   const hasValidProlificParams = !!(prolificPid && studyId && sessionId);
 
-  const { data: prolificIntegrationStateResponse } = useProlificIntegrationStateQuery(
+  const { data: prolificStudyStateResponse } = useProlificStudyStateQuery(
     { ...props, prolificStudyId: studyId },
     {
       enabled: prolificState.paramExists,
@@ -155,7 +155,7 @@ export const ActivityGroups = (props: Props) => {
     isAppletError ||
     (isAssignmentsEnabled && isAssignmentsError) ||
     (prolificState.paramExists &&
-      (!prolificIntegrationStateResponse?.data.enabled || prolificState.isError))
+      (!prolificStudyStateResponse?.data.accepted || prolificState.isError))
   ) {
     return (
       <Box display="flex" width="100%" height="100%" justifyContent="center" alignItems="center">

@@ -1,7 +1,7 @@
 import { axiosService } from '~/shared/api';
 
-type ProlificIntegrationResponse = {
-  enabled: boolean;
+type ProlificStudyValidationResponse = {
+  accepted: boolean;
 };
 
 type CompletionCodeAction = {
@@ -21,8 +21,8 @@ type ProlificCompletionCodeList = {
 
 const getProlificService = () => {
   return {
-    isProlificIntergrationEnabled: (appletId?: string, prolificStudyId?: string) =>
-      axiosService.get<ProlificIntegrationResponse>(
+    isProlificStudyValidated: (appletId?: string, prolificStudyId?: string) =>
+      axiosService.get<ProlificStudyValidationResponse>(
         `/integrations/prolific/applet/${appletId}/study_id/${prolificStudyId}`,
       ),
     getStudyCompletionCodes: (appletId: string, studyId: string) =>

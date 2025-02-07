@@ -1,6 +1,6 @@
 import { ProlificService, QueryOptions, ReturnAwaited, useBaseQuery } from '~/shared/api';
 
-type FetchFn = typeof ProlificService.isProlificIntergrationEnabled;
+type FetchFn = typeof ProlificService.isProlificStudyValidated;
 type Options<TData> = QueryOptions<FetchFn, TData>;
 
 type PublicParams = {
@@ -13,20 +13,20 @@ type PrivateParams = {
   appletId: string;
 };
 
-export const useProlificIntegrationStateQuery = <TData = ReturnAwaited<FetchFn>>(
+export const useProlificStudyStateQuery = <TData = ReturnAwaited<FetchFn>>(
   params: (PublicParams | PrivateParams) & { prolificStudyId: null | string },
   options?: Options<TData>,
 ) => {
   return useBaseQuery(
-    ['prolificIntegrationEnabled', params],
+    ['prolificStudyValidated', params],
     () => {
       if (params.isPublic) {
-        return ProlificService.isProlificIntergrationEnabled(
+        return ProlificService.isProlificStudyValidated(
           params.publicAppletKey,
           params.prolificStudyId ?? undefined,
         );
       }
-      return ProlificService.isProlificIntergrationEnabled(params.appletId);
+      return ProlificService.isProlificStudyValidated(params.appletId);
     },
     options,
   );
