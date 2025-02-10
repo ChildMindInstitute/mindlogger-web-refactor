@@ -13,10 +13,10 @@
 		"prettier:check": "prettier src --check",
 		"prettier:fix": "prettier src --write",
 		"prepare": "husky install",
-		"test:watch": "vitest",
-		"test": "vitest run",
-		"test:ui": "vitest --ui",
-		"coverage": "vitest run --coverage"
+		"test:watch": "TZ=UTC vitest",
+		"test": "TZ=UTC vitest run",
+		"test:ui": "TZ=UTC vitest --ui",
+		"coverage": "TZ=UTC vitest run --coverage"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.13.3",
