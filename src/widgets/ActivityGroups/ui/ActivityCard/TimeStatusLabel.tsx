@@ -1,5 +1,5 @@
 import Avatar from '@mui/material/Avatar';
-import { SxProps, Theme as MuiTheme } from '@mui/material/styles';
+import { Theme as MuiTheme, SxProps } from '@mui/material/styles';
 import { addDays, startOfDay } from 'date-fns';
 
 import { ActivityListItem, ActivityStatus } from '~/abstract/lib/GroupBuilder';
@@ -45,7 +45,6 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
   };
 
   const timeStatusLabelSx: SxProps<MuiTheme> = {
-    fontFamily: 'Atkinson',
     fontSize: '16px',
     fontStyle: 'normal',
     fontWeight: 400,

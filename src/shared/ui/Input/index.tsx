@@ -44,10 +44,8 @@ const Input = (props: IInputCommonProps) => {
   };
 
   return (
-    <FormControl error={!!error} sx={{ width: '100%', fontFamily: 'Atkinson' }} variant="outlined">
-      <InputLabel htmlFor={id} sx={{ fontFamily: 'Atkinson' }}>
-        {placeholder}
-      </InputLabel>
+    <FormControl error={!!error} sx={{ width: '100%' }} variant="outlined">
+      <InputLabel htmlFor={id}>{placeholder}</InputLabel>
       <OutlinedInput
         id={id}
         label={placeholder}
@@ -59,13 +57,9 @@ const Input = (props: IInputCommonProps) => {
         className={className}
         error={!!error}
         endAdornment={<InputAdornment position="end">{Icon}</InputAdornment>}
-        sx={{ backgroundColor: Theme.colors.light.onPrimary, fontFamily: 'Atkinson' }}
+        sx={{ backgroundColor: Theme.colors.light.onPrimary }}
       />
-      {error?.message && (
-        <FormHelperText id={id} sx={{ fontFamily: 'Atkinson' }}>
-          {t(error.message)}
-        </FormHelperText>
-      )}
+      {error?.message && <FormHelperText id={id}>{t(error.message)}</FormHelperText>}
     </FormControl>
   );
 };

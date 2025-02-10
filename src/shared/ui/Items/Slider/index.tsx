@@ -102,11 +102,9 @@ export const SliderItemBase = (props: Props) => {
           },
           '& .MuiSlider-markLabel': {
             opacity: showStickLabel ? 1 : 0,
-            fontFamily: 'Atkinson',
           },
           '& .MuiSlider-valueLabel': {
             color: Theme.colors.light.onPrimary,
-            fontFamily: 'Atkinson',
             fontSize: '22px',
             fontWeight: 700,
             lineHeight: '28px',

@@ -11,8 +11,7 @@ import { SxProps } from '@mui/material/styles';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 
 import { Theme } from '~/shared/constants';
-import { BaseButton } from '~/shared/ui';
-import { Box } from '~/shared/ui';
+import { BaseButton, Box } from '~/shared/ui';
 
 type Props = {
   isOpen: boolean;
@@ -101,7 +100,6 @@ export const MuiModal = (props: Props) => {
       {title && (
         <DialogTitle id="customized-dialog-title">
           <Typography
-            fontFamily="Atkinson"
             fontSize="22px"
             fontWeight={700}
             fontStyle="normal"
@@ -119,7 +117,6 @@ export const MuiModal = (props: Props) => {
       {label && (
         <DialogContent>
           <Typography
-            fontFamily="Atkinson"
             fontSize="16px"
             fontWeight={400}
             fontStyle="normal"
@@ -151,7 +148,6 @@ export const MuiModal = (props: Props) => {
                 }}
               >
                 <Typography
-                  fontFamily="Atkinson"
                   fontSize="14px"
                   fontWeight={400}
                   fontStyle="normal"
