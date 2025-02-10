@@ -15,6 +15,9 @@ const theme = createTheme({
       main: Theme.colors.light.secondary,
     },
   },
+  typography: {
+    fontFamily: '"Lato", "Atkinson", sans-serif',
+  },
   components: {
     MuiAlert: {
       styleOverrides: {
