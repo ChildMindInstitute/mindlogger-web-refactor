@@ -1,3 +1,5 @@
+import { ProlificUrlParamsPayload } from '~/entities/applet/model';
+
 const ROUTES = {
   // Public routes
   login: {
@@ -17,7 +19,8 @@ const ROUTES = {
   },
   publicJoin: {
     path: '/public/:joinLinkKey',
-    navigateTo: (joinLinkKey: string) => `/public/${joinLinkKey}`,
+    navigateTo: (joinLinkKey: string, prolificParams?: ProlificUrlParamsPayload) =>
+      `/public/${joinLinkKey}${prolificParams ? `?PROLIFIC_PID=${prolificParams.prolificPid}&STUDY_ID=${prolificParams.studyId}&SESSION_ID=${prolificParams.sessionId}` : ''}`,
   },
   privateJoin: {
     path: '/join/:joinLinkKey',
@@ -42,9 +45,7 @@ const ROUTES = {
       flowId: string | null;
       publicAppletKey: string;
     }) =>
-      `/public/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}/publicAppletKey/${publicAppletKey}?${
-        flowId ? `flowId=${flowId}` : ''
-      }`,
+      `/public/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}/publicAppletKey/${publicAppletKey}?${flowId ? `flowId=${flowId}` : ''}`,
   },
   publicAutoCompletion: {
     path: '/public/auto-completion',

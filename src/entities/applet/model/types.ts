@@ -212,6 +212,12 @@ export type UpdateUserEventByIndexPayload = {
   userEvent: UserEvent;
 };
 
+export type ProlificUrlParamsPayload = {
+  prolificPid: string;
+  studyId: string;
+  sessionId: string;
+};
+
 export type SupportableActivities = Record<string, boolean>;
 
 export type CompletedEntitiesState = Record<string, number>;

@@ -22,6 +22,7 @@ import {
   UpdateUserEventByIndexPayload,
   RemoveGroupProgressPayload,
   SaveSummaryDataInContext,
+  ProlificUrlParamsPayload,
 } from './types';
 
 import {
@@ -41,6 +42,7 @@ type InitialState = {
   completions: CompletedEventEntities;
   multiInformantState: MultiInformantState;
   consents: ActivityConsents;
+  prolificParams?: ProlificUrlParamsPayload;
 };
 
 const initialState: InitialState = {
@@ -370,6 +372,14 @@ const appletsSlice = createSlice({
       const currentValue = consents.shareMediaToPublic;
 
       consents.shareMediaToPublic = !currentValue;
+    },
+
+    saveProlificParams: (state, action: PayloadAction<ProlificUrlParamsPayload>) => {
+      state.prolificParams = action.payload;
+    },
+
+    clearProlificParams: (state) => {
+      state.prolificParams = undefined;
     },
   },
 });

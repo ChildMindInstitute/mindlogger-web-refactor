@@ -12,9 +12,9 @@ const useBaseQuery = <TQueryFnData, TError = BaseError, TData = TQueryFnData>(
   return useQuery(key, queryFn, {
     ...options,
     onError: (error: BaseError) => {
-      const errorRecords = error.response?.data?.result;
+      const errorRecords = error.response?.data?.result ?? [];
 
-      if (errorRecords?.length) {
+      if (errorRecords.length) {
         const firstRecord = errorRecords[0];
 
         error.evaluatedMessage = firstRecord.message;

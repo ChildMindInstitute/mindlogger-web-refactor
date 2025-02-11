@@ -1,12 +1,18 @@
 import { useCallback } from 'react';
 
+import { t } from 'i18next';
 import type { NavigateOptions } from 'react-router/dist/lib/context';
+
+import { useUpdateProlificParams } from './useSaveProlificParams';
 
 import { ActivityPipelineType } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
+import { useProlificCompletionCodeQuery } from '~/entities/applet/api/integrations/useProlificCompletionCodeQuery';
+import { prolificParamsSelector } from '~/entities/applet/model/selectors';
+import { useBanners } from '~/entities/banner/model';
 import { ActivityFlowDTO } from '~/shared/api';
 import ROUTES from '~/shared/constants/routes';
-import { useCustomNavigation } from '~/shared/utils';
+import { useAppSelector, useCustomNavigation } from '~/shared/utils';
 
 type CompletionType = 'regular' | 'autoCompletion';
 
@@ -36,6 +42,22 @@ export const useEntityComplete = (props: Props) => {
   const { entityCompleted, flowUpdated, getGroupProgress } =
     appletModel.hooks.useGroupProgressStateManager();
 
+  const prolificParams = useAppSelector(prolificParamsSelector);
+  const { data: completionCodesReponse, isError: isCompletionCodesReponseError } =
+    useProlificCompletionCodeQuery(
+      {
+        appletId: props.appletId,
+        studyId: prolificParams?.studyId ?? '',
+      },
+      {
+        enabled: !!prolificParams,
+      },
+    );
+
+  const { addErrorBanner } = useBanners();
+
+  const { clearProlificParams } = useUpdateProlificParams();
+
   const completeEntityAndRedirect = useCallback(
     (completionType: CompletionType) => {
       entityCompleted({
@@ -48,6 +70,30 @@ export const useEntityComplete = (props: Props) => {
 
       if (isAutoCompletion) {
         return;
+      }
+
+      if (prolificParams && props.publicAppletKey) {
+        if (!isCompletionCodesReponseError && completionCodesReponse) {
+          clearProlificParams(); // Resetting redux state after completion
+
+          const { completionCodes } = completionCodesReponse.data;
+          for (const code of completionCodes) {
+            if (code.codeType === 'COMPLETED') {
+              window.location.replace(
+                `https://app.prolific.com/submissions/complete?cc=${code.code}`,
+              );
+              return;
+            }
+          }
+
+          addErrorBanner({ children: t('prolific.nocode'), duration: null });
+          return navigator.navigate(
+            ROUTES.publicJoin.navigateTo(props.publicAppletKey, prolificParams),
+            {
+              replace: true,
+            },
+          );
+        }
       }
 
       if (props.publicAppletKey) {
@@ -70,6 +116,11 @@ export const useEntityComplete = (props: Props) => {
       entityCompleted,
       isInMultiInformantFlow,
       navigator,
+      prolificParams,
+      completionCodesReponse,
+      isCompletionCodesReponseError,
+      clearProlificParams,
+      addErrorBanner,
       props.activityId,
       props.appletId,
       props.eventId,
