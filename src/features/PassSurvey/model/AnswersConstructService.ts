@@ -4,7 +4,6 @@ import { v4 as uuid } from 'uuid';
 import { ItemAnswer, mapAlerts, mapToAnswers } from '../helpers';
 
 import { ActivityPipelineType, GroupProgress } from '~/abstract/lib';
-import { DefaultAnswer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { userModel } from '~/entities/user';
 import {
@@ -201,18 +200,30 @@ export default class AnswersConstructService implements ICompletionConstructServ
   }
 
   private getDataIdentifier(items: ItemRecord[]): string | null {
-    const firstResponseDataIdentifier = items.find((item) => {
-      if (item.responseType === 'text') {
-        return item.config.responseDataIdentifier;
+    const item = items.find((item) => {
+      if (
+        (item.responseType === 'text' || item.responseType === 'singleSelect') &&
+        item.config.responseDataIdentifier
+      ) {
+        return item;
       }
-      return false;
+      return undefined;
     });
 
-    if (!firstResponseDataIdentifier) {
+    if (!item) {
       return null;
     }
 
-    return (firstResponseDataIdentifier.answer as DefaultAnswer)[0];
+    let identifier: string | null = null;
+
+    if (item.responseType === 'text') {
+      identifier = item.answer[0];
+    } else if (item.responseType === 'singleSelect') {
+      const optionIndex = Number(item.answer[0]);
+      identifier = item.responseValues.options[optionIndex].text;
+    }
+
+    return identifier;
   }
 
   private isSurveyCompleted(): boolean {
