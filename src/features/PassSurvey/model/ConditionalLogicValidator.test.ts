@@ -1227,10 +1227,7 @@ describe('ConditionalLogicValidator', () => {
   });
 
   it('should validate EQUAL_TO_TIME correctly -> the times match', () => {
-    const time = {
-      hours: 10,
-      minutes: 30,
-    };
+    const time = '10:30';
 
     const condition: EqualToTimeCondition = {
       itemName: 'random-item-name',
@@ -1248,10 +1245,7 @@ describe('ConditionalLogicValidator', () => {
   });
 
   it('should validate EQUAL_TO_TIME correctly -> the times don`t match', () => {
-    const time = {
-      hours: 10,
-      minutes: 30,
-    };
+    const time = '10:30';
 
     const condition: EqualToTimeCondition = {
       itemName: 'random-item-name',
@@ -1269,10 +1263,7 @@ describe('ConditionalLogicValidator', () => {
   });
 
   it('should validate NOT_EQUAL_TO_TIME correctly -> the times don`t match', () => {
-    const time = {
-      hours: 10,
-      minutes: 30,
-    };
+    const time = '10:30';
 
     const condition: NotEqualToTimeCondition = {
       itemName: 'random-item-name',
@@ -1290,10 +1281,7 @@ describe('ConditionalLogicValidator', () => {
   });
 
   it('should validate NOT_EQUAL_TO_TIME correctly -> the times match', () => {
-    const time = {
-      hours: 10,
-      minutes: 30,
-    };
+    const time = '10:30';
 
     const condition: NotEqualToTimeCondition = {
       itemName: 'random-item-name',
@@ -1311,10 +1299,7 @@ describe('ConditionalLogicValidator', () => {
   });
 
   it('should validate GREATER_THAN_TIME correctly -> the time is greater', () => {
-    const time = {
-      hours: 10,
-      minutes: 30,
-    };
+    const time = '10:30';
 
     const condition: GreaterThanTimeCondition = {
       itemName: 'random-item-name',
@@ -1332,10 +1317,7 @@ describe('ConditionalLogicValidator', () => {
   });
 
   it('should validate GREATER_THAN_TIME correctly -> the time is equal', () => {
-    const time = {
-      hours: 10,
-      minutes: 30,
-    };
+    const time = '10:30';
 
     const condition: GreaterThanTimeCondition = {
       itemName: 'random-item-name',
@@ -1353,10 +1335,7 @@ describe('ConditionalLogicValidator', () => {
   });
 
   it('should validate GREATER_THAN_TIME correctly -> the time is less', () => {
-    const time = {
-      hours: 10,
-      minutes: 30,
-    };
+    const time = '10:30';
 
     const condition: GreaterThanTimeCondition = {
       itemName: 'random-item-name',
@@ -1374,10 +1353,7 @@ describe('ConditionalLogicValidator', () => {
   });
 
   it('should validate LESS_THAN_TIME correctly -> the time is less', () => {
-    const time = {
-      hours: 10,
-      minutes: 30,
-    };
+    const time = '10:30';
 
     const condition: LessThanTimeCondition = {
       itemName: 'random-item-name',
@@ -1395,10 +1371,7 @@ describe('ConditionalLogicValidator', () => {
   });
 
   it('should validate LESS_THAN_TIME correctly -> the time is equal', () => {
-    const time = {
-      hours: 10,
-      minutes: 30,
-    };
+    const time = '10:30';
 
     const condition: LessThanTimeCondition = {
       itemName: 'random-item-name',
@@ -1416,10 +1389,7 @@ describe('ConditionalLogicValidator', () => {
   });
 
   it('should validate LESS_THAN_TIME correctly -> the time is greater', () => {
-    const time = {
-      hours: 10,
-      minutes: 30,
-    };
+    const time = '10:30';
 
     const condition: LessThanTimeCondition = {
       itemName: 'random-item-name',
@@ -1570,7 +1540,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'EQUAL_TO_TIME_RANGE',
       payload: {
         fieldName: 'from',
-        time: { hours: 10, minutes: 0 },
+        time: '10:00',
       },
     };
 
@@ -1592,7 +1562,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'EQUAL_TO_TIME_RANGE',
       payload: {
         fieldName: 'from',
-        time: { hours: 10, minutes: 0 },
+        time: '10:00',
       },
     };
 
@@ -1614,7 +1584,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'EQUAL_TO_TIME_RANGE',
       payload: {
         fieldName: 'to',
-        time: { hours: 11, minutes: 0 },
+        time: '11:00',
       },
     };
 
@@ -1636,7 +1606,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'EQUAL_TO_TIME_RANGE',
       payload: {
         fieldName: 'to',
-        time: { hours: 11, minutes: 0 },
+        time: '11:00',
       },
     };
 
@@ -1658,7 +1628,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'NOT_EQUAL_TO_TIME_RANGE',
       payload: {
         fieldName: 'from',
-        time: { hours: 10, minutes: 0 },
+        time: '10:00',
       },
     };
 
@@ -1680,7 +1650,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'NOT_EQUAL_TO_TIME_RANGE',
       payload: {
         fieldName: 'from',
-        time: { hours: 10, minutes: 0 },
+        time: '10:00',
       },
     };
 
@@ -1702,7 +1672,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'NOT_EQUAL_TO_TIME_RANGE',
       payload: {
         fieldName: 'to',
-        time: { hours: 11, minutes: 0 },
+        time: '11:00',
       },
     };
 
@@ -1724,7 +1694,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'NOT_EQUAL_TO_TIME_RANGE',
       payload: {
         fieldName: 'to',
-        time: { hours: 11, minutes: 0 },
+        time: '11:00',
       },
     };
 
@@ -1746,7 +1716,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'GREATER_THAN_TIME_RANGE',
       payload: {
         fieldName: 'from',
-        time: { hours: 10, minutes: 0 },
+        time: '10:00',
       },
     };
 
@@ -1768,7 +1738,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'GREATER_THAN_TIME_RANGE',
       payload: {
         fieldName: 'from',
-        time: { hours: 10, minutes: 0 },
+        time: '10:00',
       },
     };
 
@@ -1790,7 +1760,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'GREATER_THAN_TIME_RANGE',
       payload: {
         fieldName: 'from',
-        time: { hours: 10, minutes: 0 },
+        time: '10:00',
       },
     };
 
@@ -1812,7 +1782,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'LESS_THAN_TIME_RANGE',
       payload: {
         fieldName: 'to',
-        time: { hours: 11, minutes: 0 },
+        time: '11:00',
       },
     };
 
@@ -1834,7 +1804,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'LESS_THAN_TIME_RANGE',
       payload: {
         fieldName: 'to',
-        time: { hours: 11, minutes: 0 },
+        time: '11:00',
       },
     };
 
@@ -1856,7 +1826,7 @@ describe('ConditionalLogicValidator', () => {
       type: 'LESS_THAN_TIME_RANGE',
       payload: {
         fieldName: 'to',
-        time: { hours: 11, minutes: 0 },
+        time: '11:00',
       },
     };
 
@@ -1872,10 +1842,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(false);
   });
 
-  it('should validate BETWEEN_TIME_RANGES correctly -> the time range is between', () => {
+  it('should validate BETWEEN_TIMES_RANGES correctly -> the time range is between', () => {
     const condition: BetweenTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'BETWEEN_TIME_RANGE',
+      type: 'BETWEEN_TIMES_RANGE',
       payload: {
         fieldName: 'from',
         minTime: { hours: 10, minutes: 0 },
@@ -1895,10 +1865,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(true);
   });
 
-  it('should validate BETWEEN_TIME_RANGES correctly -> the time range is not between', () => {
+  it('should validate BETWEEN_TIMES_RANGES correctly -> the time range is not between', () => {
     const condition: BetweenTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'BETWEEN_TIME_RANGE',
+      type: 'BETWEEN_TIMES_RANGE',
       payload: {
         fieldName: 'from',
         minTime: { hours: 10, minutes: 0 },
@@ -1918,10 +1888,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(false);
   });
 
-  it('should validate BETWEEN_TIME_RANGES correctly -> the time range is equal to minTime', () => {
+  it('should validate BETWEEN_TIMES_RANGES correctly -> the time range is equal to minTime', () => {
     const condition: BetweenTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'BETWEEN_TIME_RANGE',
+      type: 'BETWEEN_TIMES_RANGE',
       payload: {
         fieldName: 'from',
         minTime: { hours: 10, minutes: 0 },
@@ -1941,10 +1911,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(false);
   });
 
-  it('should validate BETWEEN_TIME_RANGES correctly -> the time range is equal to maxTime', () => {
+  it('should validate BETWEEN_TIMES_RANGES correctly -> the time range is equal to maxTime', () => {
     const condition: BetweenTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'BETWEEN_TIME_RANGE',
+      type: 'BETWEEN_TIMES_RANGE',
       payload: {
         fieldName: 'from',
         minTime: { hours: 10, minutes: 0 },
@@ -1964,10 +1934,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(false);
   });
 
-  it('should validate BETWEEN_TIME_RANGES correctly -> the to time range is between', () => {
+  it('should validate BETWEEN_TIMES_RANGES correctly -> the to time range is between', () => {
     const condition: BetweenTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'BETWEEN_TIME_RANGE',
+      type: 'BETWEEN_TIMES_RANGE',
       payload: {
         fieldName: 'to',
         minTime: { hours: 10, minutes: 0 },
@@ -1987,10 +1957,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(true);
   });
 
-  it('should validate BETWEEN_TIME_RANGES correctly -> the to time range is not between', () => {
+  it('should validate BETWEEN_TIMES_RANGES correctly -> the to time range is not between', () => {
     const condition: BetweenTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'BETWEEN_TIME_RANGE',
+      type: 'BETWEEN_TIMES_RANGE',
       payload: {
         fieldName: 'to',
         minTime: { hours: 10, minutes: 0 },
@@ -2010,10 +1980,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(false);
   });
 
-  it('should validate BETWEEN_TIME_RANGES correctly -> the to time range is equal to minTime', () => {
+  it('should validate BETWEEN_TIMES_RANGES correctly -> the to time range is equal to minTime', () => {
     const condition: BetweenTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'BETWEEN_TIME_RANGE',
+      type: 'BETWEEN_TIMES_RANGE',
       payload: {
         fieldName: 'to',
         minTime: { hours: 10, minutes: 30 },
@@ -2033,10 +2003,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(false);
   });
 
-  it('should validate BETWEEN_TIME_RANGES correctly -> the to time range is equal to maxTime', () => {
+  it('should validate BETWEEN_TIMES_RANGES correctly -> the to time range is equal to maxTime', () => {
     const condition: BetweenTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'BETWEEN_TIME_RANGE',
+      type: 'BETWEEN_TIMES_RANGE',
       payload: {
         fieldName: 'to',
         minTime: { hours: 10, minutes: 30 },
@@ -2056,10 +2026,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(false);
   });
 
-  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the from time range is outside', () => {
+  it('should validate OUTSIDE_OF_TIMES_RANGES correctly -> the from time range is outside', () => {
     const condition: OutsideOfTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'OUTSIDE_OF_TIME_RANGE',
+      type: 'OUTSIDE_OF_TIMES_RANGE',
       payload: {
         fieldName: 'from',
         minTime: { hours: 10, minutes: 0 },
@@ -2079,10 +2049,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(true);
   });
 
-  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the from time range is not outside', () => {
+  it('should validate OUTSIDE_OF_TIMES_RANGES correctly -> the from time range is not outside', () => {
     const condition: OutsideOfTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'OUTSIDE_OF_TIME_RANGE',
+      type: 'OUTSIDE_OF_TIMES_RANGE',
       payload: {
         fieldName: 'from',
         minTime: { hours: 10, minutes: 0 },
@@ -2102,10 +2072,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(false);
   });
 
-  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the from time range is equal to minTime', () => {
+  it('should validate OUTSIDE_OF_TIMES_RANGES correctly -> the from time range is equal to minTime', () => {
     const condition: OutsideOfTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'OUTSIDE_OF_TIME_RANGE',
+      type: 'OUTSIDE_OF_TIMES_RANGE',
       payload: {
         fieldName: 'from',
         minTime: { hours: 10, minutes: 0 },
@@ -2125,10 +2095,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(false);
   });
 
-  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the from time range is equal to maxTime', () => {
+  it('should validate OUTSIDE_OF_TIMES_RANGES correctly -> the from time range is equal to maxTime', () => {
     const condition: OutsideOfTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'OUTSIDE_OF_TIME_RANGE',
+      type: 'OUTSIDE_OF_TIMES_RANGE',
       payload: {
         fieldName: 'from',
         minTime: { hours: 10, minutes: 0 },
@@ -2148,10 +2118,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(false);
   });
 
-  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the to time range is outside', () => {
+  it('should validate OUTSIDE_OF_TIMES_RANGES correctly -> the to time range is outside', () => {
     const condition: OutsideOfTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'OUTSIDE_OF_TIME_RANGE',
+      type: 'OUTSIDE_OF_TIMES_RANGE',
       payload: {
         fieldName: 'to',
         minTime: { hours: 10, minutes: 0 },
@@ -2171,10 +2141,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(true);
   });
 
-  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the to time range is not outside', () => {
+  it('should validate OUTSIDE_OF_TIMES_RANGES correctly -> the to time range is not outside', () => {
     const condition: OutsideOfTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'OUTSIDE_OF_TIME_RANGE',
+      type: 'OUTSIDE_OF_TIMES_RANGE',
       payload: {
         fieldName: 'to',
         minTime: { hours: 10, minutes: 0 },
@@ -2194,10 +2164,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(false);
   });
 
-  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the to time range is equal to minTime', () => {
+  it('should validate OUTSIDE_OF_TIMES_RANGES correctly -> the to time range is equal to minTime', () => {
     const condition: OutsideOfTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'OUTSIDE_OF_TIME_RANGE',
+      type: 'OUTSIDE_OF_TIMES_RANGE',
       payload: {
         fieldName: 'to',
         minTime: { hours: 10, minutes: 0 },
@@ -2217,10 +2187,10 @@ describe('ConditionalLogicValidator', () => {
     expect(validator.validate()).toBe(false);
   });
 
-  it('should validate OUTSIDE_OF_TIME_RANGES correctly -> the to time range is equal to maxTime', () => {
+  it('should validate OUTSIDE_OF_TIMES_RANGES correctly -> the to time range is equal to maxTime', () => {
     const condition: OutsideOfTimeRangeCondition = {
       itemName: 'random-item-name',
-      type: 'OUTSIDE_OF_TIME_RANGE',
+      type: 'OUTSIDE_OF_TIMES_RANGE',
       payload: {
         fieldName: 'to',
         minTime: { hours: 10, minutes: 0 },

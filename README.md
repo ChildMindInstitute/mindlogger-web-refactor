@@ -15,7 +15,7 @@ Running the app:
 
 ### 1. Prerequisites
 
-- NodeJS `18` or higher, recommend using `asdf` or `nvm` to manage local node version
+- NodeJS `20.11.0` or higher, recommend using `asdf` or `nvm` to manage local node version
 - Yarn 1.x
 - [Backend](https://github.com/ChildMindInstitute/mindlogger-backend-refactor) project running locally or accessible in a test environment
   - If running locally, ensure that `http://localhost:5173` has been added to the BE's `CORS__ALLOW_ORIGINS` environment variable
