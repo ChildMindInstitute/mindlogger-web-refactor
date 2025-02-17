@@ -19,6 +19,10 @@ type ProlificCompletionCodeList = {
   completionCodes: ProlificCompletionCode[];
 };
 
+type ProlificPublicUser = {
+  exists: boolean;
+};
+
 const getProlificService = () => {
   return {
     isProlificStudyValidated: (appletId?: string, prolificStudyId?: string) =>
@@ -28,6 +32,10 @@ const getProlificService = () => {
     getStudyCompletionCodes: (appletId: string, studyId: string) =>
       axiosService.get<ProlificCompletionCodeList>(
         `/integrations/prolific/applet/${appletId}/completion_codes/${studyId}`,
+      ),
+    prolificUserExists: (prolificPid: string, studyId: string) =>
+      axiosService.get<ProlificPublicUser>(
+        `/integrations/prolific/pid/${prolificPid}/study_id/${studyId}`,
       ),
   };
 };
