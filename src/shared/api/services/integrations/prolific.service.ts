@@ -35,7 +35,7 @@ const getProlificService = () => {
       ),
     prolificUserExists: (prolificPid: string, studyId: string) =>
       axiosService.get<ProlificPublicUser>(
-        `/integrations/prolific/pid/${prolificPid}/study_id/${studyId}`,
+        `/integrations/prolific/applet/pid/${prolificPid}/study_id/${studyId}`,
       ),
   };
 };
