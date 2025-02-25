@@ -136,6 +136,7 @@ export type AnswerPayload = {
   sourceSubjectId?: ID | null;
   targetSubjectId?: ID | null;
   prolificParams?: ProlificUrlParamsPayload;
+  eventHistoryId?: string | null;
 };
 
 export type AlertDTO = {
