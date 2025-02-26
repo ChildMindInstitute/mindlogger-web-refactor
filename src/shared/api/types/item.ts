@@ -170,6 +170,7 @@ export type RadioItemConfigDTO = AdditionalResponseOptionConfigDTO & {
   setPalette: boolean;
   autoAdvance: boolean;
   portraitLayout: boolean | null;
+  responseDataIdentifier: boolean;
 };
 
 export type RadioItemResponseValuesDTO = {

@@ -231,6 +231,7 @@ export type RadioItemConfig = ButtonsConfig &
     setPalette: boolean;
     autoAdvance: boolean;
     portraitLayout: boolean | null;
+    responseDataIdentifier: boolean;
   };
 
 export type RadioValues = {
