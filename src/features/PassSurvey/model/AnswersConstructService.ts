@@ -135,6 +135,7 @@ export default class AnswersConstructService implements ICompletionConstructServ
         width: window.innerWidth,
         height: window.innerHeight,
       },
+      ...(this.event.version && { eventHistoryId: `${this.event.id}_${this.event.version}` }),
     };
   }
 

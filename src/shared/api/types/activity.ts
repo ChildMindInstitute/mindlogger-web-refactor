@@ -133,6 +133,7 @@ export type AnswerPayload = {
   };
   sourceSubjectId?: ID | null;
   targetSubjectId?: ID | null;
+  eventHistoryId?: string | null;
 };
 
 export type AlertDTO = {
