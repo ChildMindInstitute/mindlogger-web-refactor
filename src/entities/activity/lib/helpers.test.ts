@@ -141,6 +141,7 @@ describe('Activity helpers', () => {
             addTooltip: false,
             setPalette: false,
             autoAdvance: false,
+            responseDataIdentifier: false,
             additionalResponseOption: {
               textInputOption: false,
               textInputRequired: false,
@@ -164,6 +165,7 @@ describe('Activity helpers', () => {
             addTooltip: false,
             setPalette: false,
             autoAdvance: false,
+            responseDataIdentifier: false,
             additionalResponseOption: {
               textInputOption: true,
               textInputRequired: false,
@@ -207,6 +209,7 @@ describe('Activity helpers', () => {
             addTooltip: false,
             setPalette: false,
             autoAdvance: false,
+            responseDataIdentifier: false,
             additionalResponseOption: {
               textInputOption: true,
               textInputRequired: false,
@@ -230,6 +233,7 @@ describe('Activity helpers', () => {
             addTooltip: false,
             setPalette: false,
             autoAdvance: false,
+            responseDataIdentifier: false,
             additionalResponseOption: {
               textInputOption: true,
               textInputRequired: true,
