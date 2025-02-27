@@ -4,6 +4,7 @@ import { SurveyContext } from '../lib';
 import AnswersConstructService from '../model/AnswersConstructService';
 
 import { appletModel } from '~/entities/applet';
+import { ProlificUrlParamsPayload as ProlificUrlParams } from '~/entities/applet/model';
 import { ActivityFlowDTO, AnswerPayload, EncryptionDTO, ScheduleEventDto } from '~/shared/api';
 
 export type BuildAnswerParams = {
@@ -19,6 +20,8 @@ export type BuildAnswerParams = {
   publicAppletKey?: string | null;
   encryption?: EncryptionDTO | null;
   flow?: ActivityFlowDTO | null;
+
+  prolificParams?: ProlificUrlParams;
 };
 
 export interface AnswerBuilder {
@@ -61,6 +64,7 @@ export const useAnswerBuilder = (): AnswerBuilder => {
         encryption,
         publicAppletKey: params.publicAppletKey ?? context.publicAppletKey,
         isFlowCompleted: params.isFlowCompleted,
+        prolificParams: params.prolificParams,
       });
 
       const answer = answerConstructService.construct();

@@ -4,12 +4,14 @@ import ButtonBase from '@mui/material/ButtonBase';
 
 import { SurveyContext } from '../PassSurvey';
 
+import { prolificParamsSelector } from '~/entities/applet/model/selectors';
 import { ROUTES, Theme } from '~/shared/constants';
 import Text from '~/shared/ui/Text';
 import {
   addSurveyPropsToEvent,
   Mixpanel,
   MixpanelEventType,
+  useAppSelector,
   useCustomNavigation,
   useCustomTranslation,
 } from '~/shared/utils';
@@ -24,6 +26,7 @@ export const SaveAndExitButton = ({ appletId, publicAppletKey }: Props) => {
   const { applet, activityId, flow } = useContext(SurveyContext);
 
   const navigator = useCustomNavigation();
+  const prolificParams = useAppSelector(prolificParamsSelector);
 
   const onSaveAndExitClick = () => {
     Mixpanel.track(
@@ -35,7 +38,7 @@ export const SaveAndExitButton = ({ appletId, publicAppletKey }: Props) => {
 
     return navigator.navigate(
       publicAppletKey
-        ? ROUTES.publicJoin.navigateTo(publicAppletKey)
+        ? ROUTES.publicJoin.navigateTo(publicAppletKey, prolificParams)
         : ROUTES.appletDetails.navigateTo(appletId),
     );
   };
