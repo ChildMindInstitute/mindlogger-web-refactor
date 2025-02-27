@@ -56,7 +56,6 @@ function Text({
   return (
     <Typography
       variant={variant}
-      fontFamily="Atkinson"
       fontSize={fontSize}
       fontWeight={fontWeight}
       data-testid={testid}

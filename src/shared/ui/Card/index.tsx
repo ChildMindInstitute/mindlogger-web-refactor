@@ -51,7 +51,6 @@ export const CustomCard = ({ id, title, description, imageSrc, onClick }: CardPr
             color="white"
             data-testid="custom-card-image-replacement"
             bgcolor="rgb(119, 119, 119)"
-            fontFamily="Atkinson"
           >
             {getFirstLetters(title)}
           </Box>

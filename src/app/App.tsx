@@ -10,6 +10,7 @@ import { Mixpanel } from '~/shared/utils';
 import { FeatureFlags } from '~/shared/utils/featureFlags';
 
 import '~/assets/fonts/Atkinson/atkinson.css';
+import '~/assets/fonts/Lato/lato.css';
 
 import './index.css';
 

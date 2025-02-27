@@ -91,7 +91,6 @@ export const ActivityGroupList = () => {
           onClick={onCardAboutClick}
           testid="applet-name"
           sx={{
-            fontFamily: 'Atkinson',
             fontSize: '22px',
             fontWeight: 400,
             lineHeight: '28px',
