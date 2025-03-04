@@ -226,8 +226,10 @@ export default class AnswersConstructService implements ICompletionConstructServ
     if (item.responseType === 'text') {
       identifier = item.answer[0];
     } else if (item.responseType === 'singleSelect') {
-      const optionIndex = Number(item.answer[0]);
-      identifier = item.responseValues.options[optionIndex].text;
+      const option = item.responseValues.options.find(
+        ({ value }) => value === Number(item.answer[0]),
+      );
+      identifier = option?.text ?? null;
     }
 
     return identifier;
