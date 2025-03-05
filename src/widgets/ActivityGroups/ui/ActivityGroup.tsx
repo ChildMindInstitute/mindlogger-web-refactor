@@ -22,7 +22,6 @@ export const ActivityGroup = ({ group: { name, activities } }: Props) => {
         color={Theme.colors.light.onSurface}
         sx={{
           marginBottom: '16px',
-          fontFamily: 'Atkinson',
           fontSize: '22px',
           fontStyle: 'normal',
           fontWeight: 700,

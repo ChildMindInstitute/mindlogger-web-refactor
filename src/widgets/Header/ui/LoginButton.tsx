@@ -22,7 +22,7 @@ const LoginButton = ({ toggleMenuOpen }: Props) => {
     <Button
       variant="text"
       onClick={onLoginButtonClickHandler}
-      sx={{ color: 'rgba(255, 255, 255, 0.55)', textTransform: 'none', fontFamily: 'Atkinson' }}
+      sx={{ color: 'rgba(255, 255, 255, 0.55)', textTransform: 'none' }}
     >
       {t('logIn')}
     </Button>

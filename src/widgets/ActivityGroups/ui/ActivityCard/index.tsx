@@ -1,4 +1,6 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
+
+import { t } from 'i18next';
 
 import { ActivityCardBase } from './ActivityCardBase';
 import { ActivityCardDescription } from './ActivityCardDescription';
@@ -14,6 +16,9 @@ import { useEntityCardDetails } from '../../model/hooks';
 import { getProgressId, openStoreLink } from '~/abstract/lib';
 import { ActivityListItem } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
+import { useProlificUserExistsQuery } from '~/entities/applet/api/integrations/useProlificUserExistsQuery';
+import { prolificParamsSelector } from '~/entities/applet/model/selectors';
+import { useBanners } from '~/entities/banner/model';
 import { useAutoCompletionRecord } from '~/features/AutoCompletion/model';
 import { useStartSurvey } from '~/features/PassSurvey';
 import Box from '~/shared/ui/Box';
@@ -94,8 +99,34 @@ export const ActivityCard = ({ activityListItem }: Props) => {
 
   const flowProgress = (countOfCompletedActivities / numberOfActivitiesInFlow) * 100;
 
+  const { addErrorBanner } = useBanners();
+
+  const prolificParams = useAppSelector(prolificParamsSelector);
+  const { data: prolificUser } = useProlificUserExistsQuery(
+    {
+      studyId: prolificParams?.studyId ?? '',
+      prolificPid: prolificParams?.prolificPid ?? '',
+    },
+    {
+      enabled: !!prolificParams,
+    },
+  );
+
+  const prolificUserExists = useCallback(() => {
+    if (!prolificParams) {
+      return false;
+    }
+
+    return !!prolificUser?.data?.exists;
+  }, [prolificUser, prolificParams]);
+
   const onStartActivity = (shouldRestart: boolean) => {
     if (isDisabled) return;
+
+    if (prolificUserExists()) {
+      addErrorBanner(t('prolific.alreadyAnswered'));
+      return;
+    }
 
     if (!isEntitySupported) {
       return openStoreLink();

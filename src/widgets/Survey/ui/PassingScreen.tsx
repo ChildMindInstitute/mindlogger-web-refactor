@@ -6,6 +6,7 @@ import { useAutoForward, useSurveyState } from '../model/hooks';
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
+import { prolificParamsSelector } from '~/entities/applet/model/selectors';
 import { useBanners } from '~/entities/banner/model';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
@@ -32,7 +33,7 @@ const PassingScreen = (props: Props) => {
 
   const [isSubmitModalOpen, openSubmitModal, closeSubmitModal] = useModal();
 
-  const { addWarningBanner, addSuccessBanner, removeWarningBanner } = useBanners();
+  const { addWarningBanner, addSuccessBanner, removeWarningBanner, addErrorBanner } = useBanners();
 
   const context = useContext(SurveyContext);
 
@@ -44,6 +45,8 @@ const PassingScreen = (props: Props) => {
       getProgressId(context.activityId, context.eventId, context.targetSubject?.id),
     ),
   );
+
+  const prolificParams = useAppSelector(prolificParamsSelector);
 
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
@@ -190,8 +193,14 @@ const PassingScreen = (props: Props) => {
     return completeActivity();
   };
 
+  const onSubmitError = () => {
+    closeSubmitModal();
+    addErrorBanner(t('prolific.alreadyAnswered'));
+  };
+
   const { submitAnswers, isLoading } = useSubmitAnswersMutations({
     onSubmitSuccess,
+    onSubmitError,
     isPublic: !!context.publicAppletKey,
   });
 
@@ -204,6 +213,7 @@ const PassingScreen = (props: Props) => {
       activityId: context.activityId,
       userEvents: activityProgress.userEvents.concat(doneEvent),
       items: activityProgress.items,
+      prolificParams,
     });
 
     return submitAnswers(answer);
