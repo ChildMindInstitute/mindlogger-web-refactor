@@ -134,6 +134,7 @@ export type ScheduleEventDto = {
     timer: HourMinute | null;
     idleTimer: HourMinute | null;
   };
+  version?: string | null;
 };
 
 export type AppletEventsResponse = {
