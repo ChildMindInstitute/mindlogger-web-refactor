@@ -39,7 +39,7 @@ if (isDev || isProduction) {
     env: import.meta.env.VITE_ENV,
     // Specify a version number to identify the deployed version of your application in Datadog
     version: import.meta.env.VITE_DD_VERSION as string,
-    sessionSampleRate: 100,
+    sessionSampleRate: 10,
     sessionReplaySampleRate: 0,
     defaultPrivacyLevel: 'mask',
     trackResources: true,
