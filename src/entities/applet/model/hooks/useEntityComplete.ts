@@ -85,15 +85,15 @@ export const useEntityComplete = (props: Props) => {
               return;
             }
           }
-
-          addErrorBanner({ children: t('prolific.nocode'), duration: null });
-          return navigator.navigate(
-            ROUTES.publicJoin.navigateTo(props.publicAppletKey, prolificParams),
-            {
-              replace: true,
-            },
-          );
         }
+
+        addErrorBanner({ children: t('prolific.nocode'), duration: null });
+        return navigator.navigate(
+          ROUTES.publicJoin.navigateTo(props.publicAppletKey, prolificParams),
+          {
+            replace: true,
+          },
+        );
       }
 
       if (props.publicAppletKey) {
