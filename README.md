@@ -88,18 +88,22 @@ See the documentation on [Vitest](https://vitest.dev/guide/) for more informatio
 
 ## Environment Variables
 
-| Key | Required | Default value | Description |
-| - | - | - | - |
-| `NODE_ENV` | yes | `development` | Node environment (`development` or `production`) |
-| `VITE_ENV` | yes | `dev` | Server environment (`dev`, `stage`, or `prod`) |
+| Key | Required | Default value            | Description |
+| - | - |--------------------------| - |
+| `NODE_ENV` | yes | `development`            | Node environment (`development` or `production`) |
+| `VITE_ENV` | yes | `dev`                    | Server environment (`dev`, `stage`, or `prod`) |
 | `VITE_API_HOST` | yes | `http://localhost:8000/` | MindLogger Backend API base URL |
 | `VITE_ADMIN_PANEL_HOST` | no | `http://localhost:3000/` | MindLogger Admin URL |
-| `VITE_SECURE_LOCAL_STORAGE_HASH_KEY` | yes | `ML_SECURE` | Secure local storage hash key |
-| `VITE_SECURE_LOCAL_STORAGE_PREFIX` | yes | `ML_SECURE` | Secure local storage prefix |
-| `VITE_IV_LENGTH` | yes | `16` | Encryption initialization vector length |
-| `VITE_BUILD_VERSION` | yes | `dev-build` | Build version |
-| `VITE_MIXPANEL_TOKEN` | yes | null | Mixpanel client ID, refer to Confluence for correct environment key |
-| `VITE_LAUNCHDARKLY_CLIENT_ID` | yes | null | LaunchDarkly client ID, refer to Confluence for correct environment key |
+| `VITE_SECURE_LOCAL_STORAGE_HASH_KEY` | yes | `ML_SECURE`              | Secure local storage hash key |
+| `VITE_SECURE_LOCAL_STORAGE_PREFIX` | yes | `ML_SECURE`              | Secure local storage prefix |
+| `VITE_IV_LENGTH` | yes | `16`                     | Encryption initialization vector length |
+| `VITE_BUILD_VERSION` | yes | `dev-build`              | Build version |
+| `VITE_MIXPANEL_TOKEN` | yes | null                     | Mixpanel client ID, refer to Confluence for correct environment key |
+| `VITE_LAUNCHDARKLY_CLIENT_ID` | yes | null                     | LaunchDarkly client ID, refer to Confluence for correct environment key |
+| `VITE_DD_APP_ID`              | no       | ""                       | DataDog RUM App ID                                  |
+| `VITE_DD_CLIENT_TOKEN`        | no       | ""                       | DataDog RUM Client token                            |                                          
+| `VITE_DD_VERSION`             | no       | local                    | Current admin panel version                         |
+| `VITE_DD_TRACING_URLS`        | no       | ""                       | Comma separated URL prefixes that Datadog is allowed to trace. |  
 
 ## License
 
