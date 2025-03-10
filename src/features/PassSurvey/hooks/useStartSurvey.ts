@@ -1,5 +1,6 @@
 import { EntityType } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
+import { prolificParamsSelector } from '~/entities/applet/model/selectors';
 import { AppletBaseDTO } from '~/shared/api';
 import ROUTES from '~/shared/constants/routes';
 import {
@@ -8,11 +9,13 @@ import {
   Mixpanel,
   useCustomNavigation,
   AssessmentStartedEvent,
+  useAppSelector,
 } from '~/shared/utils';
 import {
   addFeatureToEvent,
   addSurveyPropsToEvent,
   MixpanelFeature,
+  WithProlific,
 } from '~/shared/utils/analytics';
 
 type NavigateToEntityProps = {
@@ -45,6 +48,8 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
   const { removeGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
+
+  const prolificParams = useAppSelector(prolificParamsSelector);
 
   const { isInMultiInformantFlow, getMultiInformantState } =
     appletModel.hooks.useMultiInformantState();
@@ -90,10 +95,19 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
   }: OnActivityCardClickProps) {
     if (!applet) return;
 
-    const event: AssessmentStartedEvent = addSurveyPropsToEvent(
+    const event: WithProlific<AssessmentStartedEvent> = addSurveyPropsToEvent(
       { action: MixpanelEventType.AssessmentStarted },
-      { applet, activityId, flowId },
+      {
+        applet,
+        activityId,
+        flowId,
+      },
     );
+
+    if (prolificParams) {
+      event[MixpanelProps.ProlificPid] = prolificParams.prolificPid;
+      event[MixpanelProps.ProlificStudyId] = prolificParams.studyId;
+    }
 
     if (isInMultiInformantFlow()) {
       addFeatureToEvent(event, MixpanelFeature.MultiInformant);
