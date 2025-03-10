@@ -79,10 +79,16 @@ export const useEntityComplete = (props: Props) => {
           const { completionCodes } = completionCodesReponse.data;
           for (const code of completionCodes) {
             if (code.codeType === 'COMPLETED') {
-              window.location.replace(
+              navigator.navigate(
+                ROUTES.publicJoin.navigateTo(props.publicAppletKey, prolificParams),
+                {
+                  replace: true,
+                },
+              );
+
+              return window.location.replace(
                 `https://app.prolific.com/submissions/complete?cc=${code.code}`,
               );
-              return;
             }
           }
 
