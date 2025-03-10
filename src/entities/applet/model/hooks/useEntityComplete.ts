@@ -79,10 +79,9 @@ export const useEntityComplete = (props: Props) => {
           const { completionCodes } = completionCodesReponse.data;
           for (const code of completionCodes) {
             if (code.codeType === 'COMPLETED') {
-              window.location.replace(
+              return window.location.replace(
                 `https://app.prolific.com/submissions/complete?cc=${code.code}`,
               );
-              return;
             }
           }
 
@@ -234,11 +233,13 @@ export const useEntityComplete = (props: Props) => {
 
   const completeActivity = useCallback(
     (input?: CompleteOptions) => {
-      removeActivityProgress({
-        activityId: props.activityId,
-        eventId: props.eventId,
-        targetSubjectId: props.targetSubjectId,
-      });
+      if (!prolificParams) {
+        removeActivityProgress({
+          activityId: props.activityId,
+          eventId: props.eventId,
+          targetSubjectId: props.targetSubjectId,
+        });
+      }
 
       return completeEntityAndRedirect(input?.type || 'regular');
     },
@@ -248,6 +249,7 @@ export const useEntityComplete = (props: Props) => {
       props.eventId,
       props.targetSubjectId,
       removeActivityProgress,
+      prolificParams,
     ],
   );
 
