@@ -16,7 +16,9 @@ SentryInit({
   tracesSampleRate: 1.0,
 
   tracePropagationTargets: import.meta.env.VITE_SENTRY_TRACE_PROPAGATION_TARGETS
-    ? (JSON.parse(import.meta.env.VITE_SENTRY_TRACE_PROPAGATION_TARGETS) as Array<string>)
+    ? (JSON.parse(
+        import.meta.env.VITE_SENTRY_TRACE_PROPAGATION_TARGETS.replace(/'/g, '"'),
+      ) as Array<string>)
     : [],
 
   // Capture Replay for 10% of all sessions,
