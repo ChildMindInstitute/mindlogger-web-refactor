@@ -12,6 +12,11 @@ interface ImportMetaEnv {
 
   readonly VITE_SENTRY_DSN: string;
   readonly VITE_SENTRY_TRACE_PROPAGATION_TARGETS: string; // List of domains Array<string>
+
+  readonly VITE_DD_CLIENT_TOKEN: string | undefined;
+  readonly VITE_DD_APP_ID: string | undefined;
+  readonly VITE_DD_VERSION: string | undefined;
+  readonly VITE_DD_TRACING_URLS: string | undefined;
 }
 
 interface ImportMeta {
