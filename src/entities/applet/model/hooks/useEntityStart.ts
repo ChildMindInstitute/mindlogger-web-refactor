@@ -2,7 +2,7 @@ import { groupProgressSelector } from '../selectors';
 import { actions } from '../slice';
 
 import { GroupProgress, getProgressId } from '~/abstract/lib';
-import { ActivityFlowDTO } from '~/shared/api';
+import { ActivityFlowDTO, ScheduleEventDto } from '~/shared/api';
 import { useAppDispatch, useAppSelector } from '~/shared/utils';
 
 export const useEntityStart = () => {
@@ -13,19 +13,20 @@ export const useEntityStart = () => {
     entityId: string,
     eventId: string,
     targetSubjectId: string | null,
-  ): GroupProgress => groupProgress[getProgressId(entityId, eventId, targetSubjectId)];
+  ): GroupProgress | undefined => groupProgress[getProgressId(entityId, eventId, targetSubjectId)];
 
-  const isInProgress = (payload: GroupProgress): boolean => payload && !payload.endAt;
+  const isInProgress = (payload: GroupProgress | undefined): boolean =>
+    payload ? !payload.endAt : false;
 
   function activityStarted(
     activityId: string,
-    eventId: string,
+    event: ScheduleEventDto,
     targetSubjectId: string | null,
   ): void {
     dispatch(
       actions.activityStarted({
         activityId,
-        eventId,
+        event,
         targetSubjectId,
       }),
     );
@@ -34,7 +35,7 @@ export const useEntityStart = () => {
   function flowStarted(
     flowId: string,
     activityId: string,
-    eventId: string,
+    event: ScheduleEventDto,
     targetSubjectId: string | null,
     pipelineActivityOrder: number,
   ): void {
@@ -42,7 +43,7 @@ export const useEntityStart = () => {
       actions.flowStarted({
         flowId,
         activityId,
-        eventId,
+        event,
         targetSubjectId,
         pipelineActivityOrder,
       }),
@@ -51,30 +52,34 @@ export const useEntityStart = () => {
 
   function startActivity(
     activityId: string,
-    eventId: string,
+    event: ScheduleEventDto,
     targetSubjectId: string | null,
   ): void {
-    const isActivityInProgress = isInProgress(getProgress(activityId, eventId, targetSubjectId));
+    const groupProgress = getProgress(activityId, event.id, targetSubjectId);
 
-    if (isActivityInProgress) {
+    if (isInProgress(groupProgress)) {
       return;
     }
 
-    return activityStarted(activityId, eventId, targetSubjectId);
+    return activityStarted(activityId, event, targetSubjectId);
   }
 
-  function startFlow(eventId: string, flow: ActivityFlowDTO, targetSubjectId: string | null): void {
+  function startFlow(
+    event: ScheduleEventDto,
+    flow: ActivityFlowDTO,
+    targetSubjectId: string | null,
+  ): void {
     const flowId = flow.id;
 
-    const isFlowInProgress = isInProgress(getProgress(flowId, eventId, targetSubjectId));
+    const groupProgress = getProgress(flowId, event.id, targetSubjectId);
 
-    if (isFlowInProgress) {
+    if (isInProgress(groupProgress)) {
       return;
     }
 
-    const flowActivities: string[] | null = flow?.activityIds ?? null;
+    const flowActivities = flow.activityIds;
 
-    if (!flowActivities) {
+    if (flowActivities.length === 0) {
       throw new Error(
         `[useStartEntity:startFlow] Flow with id ${flowId} does not have any activities`,
       );
@@ -82,7 +87,7 @@ export const useEntityStart = () => {
 
     const firstActivityId: string = flowActivities[0];
 
-    return flowStarted(flowId, firstActivityId, eventId, targetSubjectId, 0);
+    return flowStarted(flowId, firstActivityId, event, targetSubjectId, 0);
   }
 
   return { startActivity, startFlow };

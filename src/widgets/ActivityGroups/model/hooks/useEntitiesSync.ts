@@ -11,7 +11,7 @@ type FilterCompletedEntitiesProps = {
 };
 
 export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesProps) => {
-  const { applet } = useContext(AppletDetailsContext);
+  const { applet, events } = useContext(AppletDetailsContext);
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   const syncEntity = useCallback(
@@ -32,6 +32,8 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
       });
 
       if (!groupProgress) {
+        const event = events.events.find(({ id }) => id === eventId) ?? null;
+
         return saveGroupProgress({
           activityId: entityId,
           eventId,
@@ -43,11 +45,10 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
             context: {
               summaryData: {},
             },
+            event,
           },
         });
-      }
-
-      if (groupProgress.endAt) {
+      } else if (groupProgress.endAt) {
         const isServerEndAtBigger = endAtTimestamp > new Date(groupProgress.endAt).getTime();
 
         if (!isServerEndAtBigger) {
@@ -65,7 +66,7 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
         });
       }
     },
-    [applet.respondentMeta?.subjectId, getGroupProgress, saveGroupProgress],
+    [applet.respondentMeta?.subjectId, events.events, getGroupProgress, saveGroupProgress],
   );
 
   useEffect(() => {

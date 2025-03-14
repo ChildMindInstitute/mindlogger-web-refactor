@@ -6,7 +6,6 @@ import {
   CompletedEntitiesState,
   CompletedEventEntities,
   ItemTimerTickPayload,
-  InProgressActivity,
   InProgressEntity,
   InProgressFlow,
   MultiInformantPayload,
@@ -23,6 +22,8 @@ import {
   RemoveGroupProgressPayload,
   SaveSummaryDataInContext,
   ProlificUrlParamsPayload,
+  ActivityStartedPayload,
+  FlowStartedPayload,
 } from './types';
 
 import {
@@ -240,8 +241,8 @@ const appletsSlice = createSlice({
       activityProgress.step -= 1;
     },
 
-    activityStarted: (state, { payload }: PayloadAction<InProgressActivity>) => {
-      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
+    activityStarted: (state, { payload }: PayloadAction<ActivityStartedPayload>) => {
+      const id = getProgressId(payload.activityId, payload.event.id, payload.targetSubjectId);
 
       const activityEvent: GroupProgress = {
         type: ActivityPipelineType.Regular,
@@ -250,13 +251,14 @@ const appletsSlice = createSlice({
         context: {
           summaryData: {},
         },
+        event: payload.event,
       };
 
       state.groupProgress[id] = activityEvent;
     },
 
-    flowStarted: (state, { payload }: PayloadAction<InProgressFlow>) => {
-      const id = getProgressId(payload.flowId, payload.eventId, payload.targetSubjectId);
+    flowStarted: (state, { payload }: PayloadAction<FlowStartedPayload>) => {
+      const id = getProgressId(payload.flowId, payload.event.id, payload.targetSubjectId);
 
       const flowEvent: GroupProgress = {
         type: ActivityPipelineType.Flow,
@@ -269,6 +271,7 @@ const appletsSlice = createSlice({
         context: {
           summaryData: {},
         },
+        event: payload.event,
       };
 
       state.groupProgress[id] = flowEvent;

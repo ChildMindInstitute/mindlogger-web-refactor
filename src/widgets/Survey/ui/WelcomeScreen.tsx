@@ -29,7 +29,6 @@ const WelcomeScreen = () => {
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
   const isFlow = !!context.flow;
-  const isTimedActivity = !!context.event?.timers?.timer;
   const targetSubjectId = context.targetSubject?.id ?? null;
 
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
@@ -38,28 +37,30 @@ const WelcomeScreen = () => {
     targetSubjectId,
   });
 
+  const isTimedActivity = !!groupProgress?.event?.timers?.timer;
+
   const startAssessment = useCallback(() => {
     const isGroupDefined = !!groupProgress;
 
     const isGroupStarted = isGroupDefined && groupProgress.startAt && !groupProgress.endAt;
 
     if (context.flow && !isGroupStarted) {
-      startFlow(context.eventId, context.flow, targetSubjectId);
+      startFlow(context.event, context.flow, targetSubjectId);
     }
 
     if (!context.flow) {
-      startActivity(context.activityId, context.eventId, targetSubjectId);
+      startActivity(context.activityId, context.event, targetSubjectId);
     }
 
     return setInitialProgress({
       activity: context.activity,
-      eventId: context.eventId,
+      eventId: context.event.id,
       targetSubjectId,
     });
   }, [
     context.activity,
     context.activityId,
-    context.eventId,
+    context.event,
     context.flow,
     targetSubjectId,
     groupProgress,
@@ -104,7 +105,7 @@ const WelcomeScreen = () => {
     <SurveyLayout
       progress={0}
       isSaveAndExitButtonShown={true}
-      entityTimer={context.event?.timers?.timer ?? undefined}
+      entityTimer={groupProgress?.event?.timers.timer ?? undefined}
       footerActions={
         <StartSurveyButton
           width={greaterThanSM ? '375px' : '335px'}
@@ -179,8 +180,8 @@ const WelcomeScreen = () => {
           <Box textAlign="center" marginTop="16px">
             <Text variant="body1" fontSize="18px">
               {t('youWillHaveToCompleteIt', {
-                hours: context.event.timers.timer?.hours,
-                minutes: context.event.timers.timer?.minutes,
+                hours: groupProgress.event?.timers.timer?.hours,
+                minutes: groupProgress.event?.timers.timer?.minutes,
               })}
             </Text>
             <Text variant="body1" fontSize="18px">
