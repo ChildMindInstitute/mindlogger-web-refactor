@@ -45,8 +45,10 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitE
     );
 
     if (prolificParams) {
-      assessmentCompletedEvent[MixpanelProps.ProlificPid] = prolificParams.prolificPid;
-      assessmentCompletedEvent[MixpanelProps.ProlificStudyId] = prolificParams.studyId;
+      addFeatureToEvent(assessmentCompletedEvent, MixpanelFeature.Prolific);
+
+      assessmentCompletedEvent[MixpanelProps.StudyUserId] = prolificParams.prolificPid;
+      assessmentCompletedEvent[MixpanelProps.StudyReference] = prolificParams.studyId;
     }
 
     if (isInMultiInformantFlow()) {
@@ -68,12 +70,14 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitE
     Mixpanel.track(assessmentCompletedEvent);
 
     if (prolificParams) {
+      addFeatureToEvent(assessmentCompletedEvent, MixpanelFeature.Prolific);
+
       const signupEvent: WithProlific<SignupSuccessfulEvent> = {
         action: MixpanelEventType.SignupSuccessful,
       };
 
-      signupEvent[MixpanelProps.ProlificPid] = prolificParams.prolificPid;
-      signupEvent[MixpanelProps.ProlificStudyId] = prolificParams.studyId;
+      signupEvent[MixpanelProps.StudyUserId] = prolificParams.prolificPid;
+      signupEvent[MixpanelProps.StudyReference] = prolificParams.studyId;
 
       Mixpanel.track(signupEvent);
     }

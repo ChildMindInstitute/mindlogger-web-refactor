@@ -105,8 +105,10 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
     );
 
     if (prolificParams) {
-      event[MixpanelProps.ProlificPid] = prolificParams.prolificPid;
-      event[MixpanelProps.ProlificStudyId] = prolificParams.studyId;
+      addFeatureToEvent(event, MixpanelFeature.Prolific);
+
+      event[MixpanelProps.StudyUserId] = prolificParams.prolificPid;
+      event[MixpanelProps.StudyReference] = prolificParams.studyId;
     }
 
     if (isInMultiInformantFlow()) {
