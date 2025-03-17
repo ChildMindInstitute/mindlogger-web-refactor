@@ -44,12 +44,14 @@ const WelcomeScreen = () => {
 
     const isGroupStarted = isGroupDefined && groupProgress.startAt && !groupProgress.endAt;
 
+    const event = groupProgress?.event ?? context.event;
+
     if (context.flow && !isGroupStarted) {
-      startFlow(context.event, context.flow, targetSubjectId);
+      startFlow(event, context.flow, targetSubjectId);
     }
 
     if (!context.flow) {
-      startActivity(context.activityId, context.event, targetSubjectId);
+      startActivity(context.activityId, event, targetSubjectId);
     }
 
     return setInitialProgress({

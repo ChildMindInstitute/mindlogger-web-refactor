@@ -50,7 +50,7 @@ export type ActivityOrFlowProgress = {
   event: ScheduleEventDto | null;
 } & (FlowProgress | ActivityProgress);
 
-type EventProgressTimestampState = {
+export type EventProgressTimestampState = {
   startAt: number | null;
   endAt: number | null;
 };

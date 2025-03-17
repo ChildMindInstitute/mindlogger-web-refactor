@@ -35,7 +35,7 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
         const event = events.events.find(({ id }) => id === eventId) ?? null;
 
         return saveGroupProgress({
-          activityId: entityId,
+          entityId,
           eventId,
           targetSubjectId,
           progressPayload: {
@@ -56,7 +56,7 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
         }
 
         return saveGroupProgress({
-          activityId: entityId,
+          entityId,
           eventId,
           targetSubjectId,
           progressPayload: {

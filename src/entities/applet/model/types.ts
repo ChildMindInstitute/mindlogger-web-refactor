@@ -159,7 +159,7 @@ export type RemoveGroupProgressPayload = {
 };
 
 export type SaveGroupProgressPayload = {
-  activityId: string;
+  entityId: string;
   eventId: string;
   targetSubjectId: string | null;
   progressPayload: GroupProgress;
@@ -253,5 +253,12 @@ export type ActivityStartedPayload = {
 export type FlowStartedPayload = {
   event: ScheduleEventDto;
 } & Omit<InProgressFlow, 'eventId'>;
+
+export type FlowRestartedPayload = {
+  flowId: string;
+  eventId: string;
+  targetSubjectId: string | null;
+  activityId: string;
+};
 
 export type MultiInformantPayload = Required<MultiInformantState>;
