@@ -43,14 +43,14 @@ export const useEntityComplete = (props: Props) => {
     appletModel.hooks.useGroupProgressStateManager();
 
   const prolificParams = useAppSelector(prolificParamsSelector);
-  const { data: completionCodesReponse, isError: isCompletionCodesReponseError } =
+  const { isError: isCompletionCodesReponseError, refetch: fetchCompletionCodes } =
     useProlificCompletionCodeQuery(
       {
         appletId: props.appletId,
         studyId: prolificParams?.studyId ?? '',
       },
       {
-        enabled: !!prolificParams,
+        enabled: false,
       },
     );
 
@@ -59,7 +59,7 @@ export const useEntityComplete = (props: Props) => {
   const { clearProlificParams } = useUpdateProlificParams();
 
   const completeEntityAndRedirect = useCallback(
-    (completionType: CompletionType) => {
+    async (completionType: CompletionType) => {
       entityCompleted({
         entityId: props.flowId ? props.flowId : props.activityId,
         eventId: props.eventId,
@@ -73,6 +73,7 @@ export const useEntityComplete = (props: Props) => {
       }
 
       if (prolificParams && props.publicAppletKey) {
+        const { data: completionCodesReponse } = await fetchCompletionCodes();
         if (!isCompletionCodesReponseError && completionCodesReponse) {
           clearProlificParams(); // Resetting redux state after completion
 
@@ -117,7 +118,7 @@ export const useEntityComplete = (props: Props) => {
       isInMultiInformantFlow,
       navigator,
       prolificParams,
-      completionCodesReponse,
+      fetchCompletionCodes,
       isCompletionCodesReponseError,
       clearProlificParams,
       addErrorBanner,
