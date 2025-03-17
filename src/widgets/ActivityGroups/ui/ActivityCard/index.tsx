@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react';
+import { useContext } from 'react';
 
 import { t } from 'i18next';
 
@@ -16,6 +16,7 @@ import { useEntityCardDetails } from '../../model/hooks';
 import { getProgressId, openStoreLink } from '~/abstract/lib';
 import { ActivityListItem } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
+import { useProlificStudyStateQuery } from '~/entities/applet/api/integrations/useProlificIntegrationEnabledQuery';
 import { useProlificUserExistsQuery } from '~/entities/applet/api/integrations/useProlificUserExistsQuery';
 import { prolificParamsSelector } from '~/entities/applet/model/selectors';
 import { useBanners } from '~/entities/banner/model';
@@ -111,23 +112,51 @@ export const ActivityCard = ({ activityListItem }: Props) => {
       enabled: !!prolificParams,
     },
   );
+  const { refetch: refetchProlificStudyState } = useProlificStudyStateQuery(
+    context.isPublic
+      ? {
+          isPublic: true,
+          publicAppletKey: context.publicAppletKey,
+          prolificStudyId: prolificParams?.studyId ?? null,
+        }
+      : {
+          isPublic: false,
+          appletId: context.applet?.id,
+          prolificStudyId: prolificParams?.studyId ?? null,
+        },
+    {
+      enabled: !!prolificParams,
+    },
+  );
 
-  const prolificUserExists = useCallback(() => {
-    if (!prolificParams) {
+  const prolificValidated = async () => {
+    const { data: updatedProlificStydy } = await refetchProlificStudyState();
+    const isValidStudy = !!updatedProlificStydy?.data?.accepted;
+    if (!isValidStudy) {
+      addErrorBanner(t('prolific.invalid'));
       return false;
     }
 
-    return !!prolificUser?.data?.exists;
-  }, [prolificUser, prolificParams]);
+    const userExists = !!prolificUser?.data?.exists;
+    if (userExists) {
+      addErrorBanner(t('prolific.alreadyAnswered'));
+      return false;
+    }
 
-  const onStartActivity = (shouldRestart: boolean) => {
+    return true;
+  };
+
+  const onStartActivity = async () => {
     if (isDisabled) return;
 
-    if (prolificUserExists()) {
-      addErrorBanner(t('prolific.alreadyAnswered'));
+    if (prolificParams && !(await prolificValidated())) {
       return;
     }
 
+    startActivity(false);
+  };
+
+  const startActivity = (shouldRestart: boolean) => {
     if (!isEntitySupported) {
       return openStoreLink();
     }
@@ -142,7 +171,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   };
 
   const restartActivity = () => {
-    onStartActivity(true);
+    startActivity(true);
 
     Mixpanel.track(
       addSurveyPropsToEvent(
@@ -157,7 +186,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   };
 
   const resumeActivity = () => {
-    onStartActivity(false);
+    startActivity(false);
 
     Mixpanel.track(
       addSurveyPropsToEvent(
@@ -224,7 +253,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
           activityStatus={activityListItem.status}
           onRestartClick={restartActivity}
           onResumeClick={resumeActivity}
-          onStartClick={() => onStartActivity(false)}
+          onStartClick={async () => await onStartActivity()}
           activityName={title}
           isDisabled={isDisabled}
           isAutoCompletionRecordDefined={!!autoCompletionRecord}
