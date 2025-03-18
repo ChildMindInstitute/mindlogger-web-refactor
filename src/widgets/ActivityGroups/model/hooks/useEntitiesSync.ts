@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 
 import { AppletDetailsContext } from '../../lib';
 
@@ -14,6 +14,12 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
   const { applet, events } = useContext(AppletDetailsContext);
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
+  // Create ref to exclude from callback dependencies to avoid infinite loop
+  const getGroupProgressRef = useRef(getGroupProgress);
+
+  // Updates GroupProgress state whenever an activity/flow is completed to align with completions
+  // data. Syncs with latest event data from the BE to ensure the most recent event data is used
+  // the next time the activity/flow is started.
   const syncEntity = useCallback(
     (entity: CompletedEntityDTO) => {
       const endAtDate = new Date(`${entity.localEndDate}T${entity.localEndTime}`);
@@ -25,15 +31,15 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
       const targetSubjectId =
         entity.targetSubjectId === applet.respondentMeta?.subjectId ? null : entity.targetSubjectId;
 
-      const groupProgress = getGroupProgress({
+      const groupProgress = getGroupProgressRef.current({
         entityId,
         eventId,
         targetSubjectId,
       });
 
-      if (!groupProgress) {
-        const event = events.events.find(({ id }) => id === eventId) ?? null;
+      const event = events.events.find(({ id }) => id === eventId) ?? null;
 
+      if (!groupProgress) {
         return saveGroupProgress({
           entityId,
           eventId,
@@ -49,10 +55,12 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
           },
         });
       } else if (groupProgress.endAt) {
+        let { endAt } = groupProgress;
+
         const isServerEndAtBigger = endAtTimestamp > new Date(groupProgress.endAt).getTime();
 
-        if (!isServerEndAtBigger) {
-          return;
+        if (isServerEndAtBigger) {
+          endAt = endAtTimestamp;
         }
 
         return saveGroupProgress({
@@ -61,12 +69,13 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
           targetSubjectId,
           progressPayload: {
             ...groupProgress,
-            endAt: endAtTimestamp,
+            endAt,
+            event,
           },
         });
       }
     },
-    [applet.respondentMeta?.subjectId, events.events, getGroupProgress, saveGroupProgress],
+    [applet.respondentMeta?.subjectId, events.events, saveGroupProgress],
   );
 
   useEffect(() => {
