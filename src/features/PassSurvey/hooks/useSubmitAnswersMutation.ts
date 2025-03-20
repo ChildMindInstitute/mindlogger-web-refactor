@@ -70,14 +70,14 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitE
     Mixpanel.track(assessmentCompletedEvent);
 
     if (prolificParams) {
-      addFeatureToEvent(assessmentCompletedEvent, MixpanelFeature.Prolific);
-
       const signupEvent: WithProlific<SignupSuccessfulEvent> = {
         action: MixpanelEventType.SignupSuccessful,
       };
 
       signupEvent[MixpanelProps.StudyUserId] = prolificParams.prolificPid;
       signupEvent[MixpanelProps.StudyReference] = prolificParams.studyId;
+
+      addFeatureToEvent(signupEvent, MixpanelFeature.Prolific);
 
       Mixpanel.track(signupEvent);
     }
