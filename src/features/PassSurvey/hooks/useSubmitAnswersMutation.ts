@@ -15,6 +15,8 @@ import {
   addSurveyPropsToEvent,
   MixpanelFeature,
   addFeatureToEvent,
+  WithProlific,
+  SignupSuccessfulEvent,
 } from '~/shared/utils';
 
 type Props = {
@@ -30,20 +32,32 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitE
   const { applet } = useContext(SurveyContext);
 
   const onSuccess = (_: AxiosResponse, variables: AnswerPayload) => {
-    const event: AssessmentCompletedEvent = addSurveyPropsToEvent(
+    const { prolificParams, ...restVariables } = variables;
+    const assessmentCompletedEvent: WithProlific<AssessmentCompletedEvent> = addSurveyPropsToEvent(
       {
         action: MixpanelEventType.AssessmentCompleted,
         [MixpanelProps.SubmitId]: variables.submitId,
       },
-      { applet, ...variables },
+      {
+        applet,
+        ...restVariables,
+      },
     );
 
+    if (prolificParams) {
+      addFeatureToEvent(assessmentCompletedEvent, MixpanelFeature.Prolific);
+
+      assessmentCompletedEvent[MixpanelProps.StudyUserId] = prolificParams.prolificPid;
+      assessmentCompletedEvent[MixpanelProps.StudyReference] = prolificParams.studyId;
+    }
+
     if (isInMultiInformantFlow()) {
-      addFeatureToEvent(event, MixpanelFeature.MultiInformant);
+      addFeatureToEvent(assessmentCompletedEvent, MixpanelFeature.MultiInformant);
 
       const { multiInformantAssessmentId, submitId } = getMultiInformantState();
       if (multiInformantAssessmentId) {
-        event[MixpanelProps.MultiInformantAssessmentId] = multiInformantAssessmentId;
+        assessmentCompletedEvent[MixpanelProps.MultiInformantAssessmentId] =
+          multiInformantAssessmentId;
       }
 
       if (submitId === null) {
@@ -53,7 +67,20 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitE
       }
     }
 
-    Mixpanel.track(event);
+    Mixpanel.track(assessmentCompletedEvent);
+
+    if (prolificParams) {
+      const signupEvent: WithProlific<SignupSuccessfulEvent> = {
+        action: MixpanelEventType.SignupSuccessful,
+      };
+
+      signupEvent[MixpanelProps.StudyUserId] = prolificParams.prolificPid;
+      signupEvent[MixpanelProps.StudyReference] = prolificParams.studyId;
+
+      addFeatureToEvent(signupEvent, MixpanelFeature.Prolific);
+
+      Mixpanel.track(signupEvent);
+    }
 
     return onSubmitSuccess?.(variables);
   };

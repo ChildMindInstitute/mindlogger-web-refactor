@@ -10,11 +10,14 @@ export enum MixpanelProps {
   MultiInformantAssessmentId = 'Multi-informant Assessment ID',
   TotalResponseReports = 'Total Response Reports',
   SubmitId = 'Submit ID',
+  StudyUserId = 'Study User ID',
+  StudyReference = 'Study Reference',
 }
 
 export enum MixpanelFeature {
   MultiInformant = 'Multi-informant',
   SSI = 'SSI',
+  Prolific = 'Prolific',
 }
 
 export enum MixpanelEventType {
@@ -43,6 +46,11 @@ export type WithFeature<T = object> = T & {
   [MixpanelProps.Feature]?: MixpanelFeature[];
 };
 
+export type WithProlific<T> = T & {
+  [MixpanelProps.StudyUserId]?: string;
+  [MixpanelProps.StudyReference]?: string;
+};
+
 export type AppletClickEvent = WithAppletId<{
   action: MixpanelEventType.AppletClick;
 }>;
@@ -69,6 +77,8 @@ export type AssessmentStartedEvent = WithFeature<
     [MixpanelProps.ActivityFlowId]?: string;
     [MixpanelProps.MultiInformantAssessmentId]?: string;
     [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+    [MixpanelProps.StudyUserId]?: string;
+    [MixpanelProps.StudyReference]?: string;
   }>
 >;
 
