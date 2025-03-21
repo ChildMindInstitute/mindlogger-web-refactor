@@ -73,6 +73,12 @@ export const useEntityComplete = (props: Props) => {
       }
 
       if (prolificParams && props.publicAppletKey) {
+        removeActivityProgress({
+          activityId: props.activityId,
+          eventId: props.eventId,
+          targetSubjectId: props.targetSubjectId,
+        });
+
         const { data: completionCodesReponse } = await fetchCompletionCodes();
         if (!isCompletionCodesReponseError && completionCodesReponse) {
           clearProlificParams(); // Resetting redux state after completion
@@ -121,6 +127,7 @@ export const useEntityComplete = (props: Props) => {
       isCompletionCodesReponseError,
       clearProlificParams,
       addErrorBanner,
+      removeActivityProgress,
       props.activityId,
       props.appletId,
       props.eventId,
