@@ -8,7 +8,7 @@ import { useTakeNowRedirect } from '../model/hooks/useTakeNowRedirect';
 
 import { appletModel, useAppletBaseInfoByIdQuery } from '~/entities/applet';
 import { useProlificStudyStateQuery } from '~/entities/applet/api/integrations/useProlificIntegrationEnabledQuery';
-import { useUpdateProlificParams } from '~/entities/applet/model/hooks/useSaveProlificParams';
+import { useProlific } from '~/entities/applet/model/hooks/useProlific';
 import { useMyAssignmentsQuery } from '~/entities/assignment';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
 import { TakeNowSuccessModalProps } from '~/features/TakeNow/lib/types';
@@ -103,7 +103,7 @@ export const ActivityGroups = (props: Props) => {
     },
   );
 
-  const { saveProlificParams, clearProlificParams } = useUpdateProlificParams();
+  const { saveProlificParams, clearProlificParams } = useProlific();
 
   useOnceEffect(() => {
     ensureMultiInformantStateExists();

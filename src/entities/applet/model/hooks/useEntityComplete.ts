@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { t } from 'i18next';
 import type { NavigateOptions } from 'react-router/dist/lib/context';
 
-import { useUpdateProlificParams } from './useSaveProlificParams';
+import { useProlific } from './useProlific';
 
 import { ActivityPipelineType } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
@@ -56,7 +56,7 @@ export const useEntityComplete = (props: Props) => {
 
   const { addErrorBanner } = useBanners();
 
-  const { clearProlificParams } = useUpdateProlificParams();
+  const { clearProlificParams } = useProlific();
 
   const completeEntityAndRedirect = useCallback(
     async (completionType: CompletionType) => {
