@@ -341,7 +341,7 @@ const PassingScreen = (props: Props) => {
 
   // This effect is responsible for starting the timer when the user is inactive
   useEffect(() => {
-    const idleTimer = context?.event?.timers?.idleTimer;
+    const idleTimer = groupProgress?.event?.timers?.idleTimer;
 
     if (!idleTimer) {
       return;
@@ -359,14 +359,19 @@ const PassingScreen = (props: Props) => {
     return () => {
       IdleTimer.stop(listener);
     };
-  }, [IdleTimer, autoCompletionState, context.event?.timers?.idleTimer, props.onTimerFinish]);
+  }, [
+    IdleTimer,
+    autoCompletionState,
+    groupProgress?.event?.timers?.idleTimer,
+    props.onTimerFinish,
+  ]);
 
   return (
     <>
       <SurveyLayout
         progress={progress}
         isSaveAndExitButtonShown={true}
-        entityTimer={context.event?.timers?.timer ?? undefined}
+        entityTimer={groupProgress?.event?.timers?.timer ?? undefined}
         footerActions={
           <SurveyManageButtons
             timerSettings={!isSubmitModalOpen ? timerSettings : undefined}

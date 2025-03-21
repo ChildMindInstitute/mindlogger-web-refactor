@@ -1,4 +1,5 @@
 import { AnswerAlert, ScoreRecord } from '~/features/PassSurvey/lib';
+import { ScheduleEventDto } from '~/shared/api';
 
 export type Consents = {
   shareToPublic: boolean;
@@ -34,21 +35,22 @@ export type FlowProgress = {
   pipelineActivityOrder: number;
   currentActivityStartAt: number | null;
   executionGroupKey: string;
-  context: ProgressContext;
 };
 
 export type ActivityProgress = {
   type: ActivityPipelineType.Regular;
-  context: ProgressContext;
 };
 
 export type ProgressContext = {
   summaryData: Record<ActivityId, FlowSummaryData>;
 };
 
-export type ActivityOrFlowProgress = FlowProgress | ActivityProgress;
+export type ActivityOrFlowProgress = {
+  context: ProgressContext;
+  event: ScheduleEventDto | null;
+} & (FlowProgress | ActivityProgress);
 
-type EventProgressTimestampState = {
+export type EventProgressTimestampState = {
   startAt: number | null;
   endAt: number | null;
 };

@@ -45,7 +45,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
   const appletId = applet?.id;
   const flows = applet?.activityFlows;
 
-  const { removeGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
+  const { flowRestarted, activityRestarted } = appletModel.hooks.useGroupProgressStateManager();
 
   const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
@@ -134,7 +134,10 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
 
       if (shouldRestart) {
         removeActivityProgress({ activityId, eventId, targetSubjectId });
-        removeGroupProgress({ entityId: flowId, eventId, targetSubjectId });
+
+        // Update group progress rather than remove to preserve version of event that the flow was
+        // started with
+        flowRestarted({ flowId, eventId, targetSubjectId, activityId: firstActivityId });
       }
 
       const activityIdToNavigate = shouldRestart ? firstActivityId : activityId;
@@ -150,7 +153,10 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
 
     if (shouldRestart) {
       removeActivityProgress({ activityId, eventId, targetSubjectId });
-      removeGroupProgress({ entityId: activityId, eventId, targetSubjectId });
+
+      // Update group progress rather than remove to preserve version of event that the activity was
+      // started with
+      activityRestarted({ activityId, eventId, targetSubjectId });
     }
 
     return navigateToEntity({
