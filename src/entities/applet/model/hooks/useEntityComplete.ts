@@ -43,14 +43,14 @@ export const useEntityComplete = (props: Props) => {
     appletModel.hooks.useGroupProgressStateManager();
 
   const prolificParams = useAppSelector(prolificParamsSelector);
-  const { data: completionCodesReponse, isError: isCompletionCodesReponseError } =
+  const { isError: isCompletionCodesReponseError, refetch: fetchCompletionCodes } =
     useProlificCompletionCodeQuery(
       {
         appletId: props.appletId,
         studyId: prolificParams?.studyId ?? '',
       },
       {
-        enabled: !!prolificParams,
+        enabled: false,
       },
     );
 
@@ -59,7 +59,7 @@ export const useEntityComplete = (props: Props) => {
   const { clearProlificParams } = useUpdateProlificParams();
 
   const completeEntityAndRedirect = useCallback(
-    (completionType: CompletionType) => {
+    async (completionType: CompletionType) => {
       entityCompleted({
         entityId: props.flowId ? props.flowId : props.activityId,
         eventId: props.eventId,
@@ -73,27 +73,27 @@ export const useEntityComplete = (props: Props) => {
       }
 
       if (prolificParams && props.publicAppletKey) {
+        const { data: completionCodesReponse } = await fetchCompletionCodes();
         if (!isCompletionCodesReponseError && completionCodesReponse) {
           clearProlificParams(); // Resetting redux state after completion
 
           const { completionCodes } = completionCodesReponse.data;
           for (const code of completionCodes) {
             if (code.codeType === 'COMPLETED') {
-              window.location.replace(
+              return window.location.replace(
                 `https://app.prolific.com/submissions/complete?cc=${code.code}`,
               );
-              return;
             }
           }
-
-          addErrorBanner({ children: t('prolific.nocode'), duration: null });
-          return navigator.navigate(
-            ROUTES.publicJoin.navigateTo(props.publicAppletKey, prolificParams),
-            {
-              replace: true,
-            },
-          );
         }
+
+        addErrorBanner({ children: t('prolific.nocode'), duration: null });
+        return navigator.navigate(
+          ROUTES.publicJoin.navigateTo(props.publicAppletKey, prolificParams),
+          {
+            replace: true,
+          },
+        );
       }
 
       if (props.publicAppletKey) {
@@ -117,7 +117,7 @@ export const useEntityComplete = (props: Props) => {
       isInMultiInformantFlow,
       navigator,
       prolificParams,
-      completionCodesReponse,
+      fetchCompletionCodes,
       isCompletionCodesReponseError,
       clearProlificParams,
       addErrorBanner,
@@ -234,11 +234,13 @@ export const useEntityComplete = (props: Props) => {
 
   const completeActivity = useCallback(
     (input?: CompleteOptions) => {
-      removeActivityProgress({
-        activityId: props.activityId,
-        eventId: props.eventId,
-        targetSubjectId: props.targetSubjectId,
-      });
+      if (!prolificParams) {
+        removeActivityProgress({
+          activityId: props.activityId,
+          eventId: props.eventId,
+          targetSubjectId: props.targetSubjectId,
+        });
+      }
 
       return completeEntityAndRedirect(input?.type || 'regular');
     },
@@ -248,6 +250,7 @@ export const useEntityComplete = (props: Props) => {
       props.eventId,
       props.targetSubjectId,
       removeActivityProgress,
+      prolificParams,
     ],
   );
 
