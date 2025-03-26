@@ -297,7 +297,9 @@ const appletsSlice = createSlice({
       const groupProgress = state.groupProgress[id] as ActivityProgress &
         EventProgressTimestampState;
 
-      groupProgress.startAt = new Date().getTime();
+      if (groupProgress) {
+        groupProgress.startAt = new Date().getTime();
+      }
     },
 
     flowRestarted: (state, { payload }: PayloadAction<FlowRestartedPayload>) => {
@@ -305,10 +307,12 @@ const appletsSlice = createSlice({
 
       const groupProgress = state.groupProgress[id] as FlowProgress & EventProgressTimestampState;
 
-      groupProgress.currentActivityId = payload.activityId;
-      groupProgress.pipelineActivityOrder = 0;
-      groupProgress.currentActivityStartAt = groupProgress.startAt = new Date().getTime();
-      groupProgress.executionGroupKey = uuidV4();
+      if (groupProgress) {
+        groupProgress.currentActivityId = payload.activityId;
+        groupProgress.pipelineActivityOrder = 0;
+        groupProgress.currentActivityStartAt = groupProgress.startAt = new Date().getTime();
+        groupProgress.executionGroupKey = uuidV4();
+      }
     },
 
     entityCompleted: (state, { payload }: PayloadAction<InProgressEntity>) => {
