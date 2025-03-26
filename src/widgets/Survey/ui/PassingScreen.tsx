@@ -48,7 +48,7 @@ const PassingScreen = (props: Props) => {
     ),
   );
 
-  const { handleProlificError, prolificParams } = useProlific();
+  const { handleProlificSubmitError, prolificParams } = useProlific();
 
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
@@ -201,15 +201,7 @@ const PassingScreen = (props: Props) => {
       return;
     }
 
-    handleProlificError(() => {
-      if (error.response?.status === 400) {
-        addErrorBanner(t('prolific.alreadyAnswered'));
-      } else if (error.response?.status === 403) {
-        addErrorBanner(t('prolific.nocode'));
-      } else {
-        throw error;
-      }
-    });
+    handleProlificSubmitError(error, addErrorBanner);
   };
 
   const { submitAnswers, isLoading } = useSubmitAnswersMutations({

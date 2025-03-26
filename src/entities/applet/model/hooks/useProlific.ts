@@ -1,12 +1,15 @@
 import { useCallback } from 'react';
 
+import { AxiosError } from 'axios';
+
 import { actions } from '../slice';
 import type { ProlificUrlParamsPayload } from '../types';
 
 import { prolificParamsSelector } from '~/entities/applet/model/selectors';
-import { useAppDispatch, useAppSelector } from '~/shared/utils';
+import { useAppDispatch, useAppSelector, useCustomTranslation } from '~/shared/utils';
 
 export const useProlific = () => {
+  const { t } = useCustomTranslation();
   const dispatch = useAppDispatch();
 
   const prolificParams = useAppSelector(prolificParamsSelector);
@@ -22,16 +25,27 @@ export const useProlific = () => {
     dispatch(actions.clearProlificParams());
   }, [dispatch]);
 
-  const handleProlificError = useCallback(
-    (handle: () => void) => {
+  const handleProlificSubmitError = useCallback(
+    (error: AxiosError, addErrorBanner: (message: string) => void) => {
       if (!prolificParams) {
         return;
       }
 
-      handle();
+      if (error.response?.status === 400) {
+        addErrorBanner(t('prolific.alreadyAnswered'));
+      } else if (error.response?.status === 403) {
+        addErrorBanner(t('prolific.nocode'));
+      } else {
+        throw error;
+      }
     },
-    [prolificParams],
+    [prolificParams, t],
   );
 
-  return { saveProlificParams, clearProlificParams, handleProlificError, prolificParams };
+  return {
+    saveProlificParams,
+    clearProlificParams,
+    handleProlificSubmitError,
+    prolificParams,
+  };
 };
