@@ -22,7 +22,7 @@ import {
 type Props = {
   isPublic: boolean;
   onSubmitSuccess?: (variables: AnswerPayload) => void;
-  onSubmitError?: () => void;
+  onSubmitError?: (error?: AxiosError) => void;
 };
 
 export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitError }: Props) => {
@@ -100,8 +100,8 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitE
   } = usePublicSaveAnswerMutation({
     onSuccess,
     onError: (error) => {
-      if (error instanceof AxiosError && error.response.status === 400) {
-        onSubmitError?.();
+      if (error instanceof AxiosError) {
+        onSubmitError?.(error);
         return;
       } else if (error instanceof Error) {
         throw error;

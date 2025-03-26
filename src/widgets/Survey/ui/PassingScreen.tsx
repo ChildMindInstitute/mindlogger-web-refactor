@@ -1,12 +1,14 @@
 import { useCallback, useContext, useEffect, useMemo } from 'react';
 
+import { AxiosError } from 'axios';
+
 import { validateBeforeMoveForward } from '../model';
 import { useAutoForward, useSurveyState } from '../model/hooks';
 
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
-import { prolificParamsSelector } from '~/entities/applet/model/selectors';
+import { useProlific } from '~/entities/applet/model/hooks/useProlific';
 import { useBanners } from '~/entities/banner/model';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
@@ -46,7 +48,7 @@ const PassingScreen = (props: Props) => {
     ),
   );
 
-  const prolificParams = useAppSelector(prolificParamsSelector);
+  const { handleProlificSubmitError, prolificParams } = useProlific();
 
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
@@ -193,9 +195,13 @@ const PassingScreen = (props: Props) => {
     return completeActivity();
   };
 
-  const onSubmitError = () => {
+  const onSubmitError = (error?: AxiosError) => {
     closeSubmitModal();
-    addErrorBanner(t('prolific.alreadyAnswered'));
+    if (!error) {
+      return;
+    }
+
+    handleProlificSubmitError(error, addErrorBanner);
   };
 
   const { submitAnswers, isLoading } = useSubmitAnswersMutations({
