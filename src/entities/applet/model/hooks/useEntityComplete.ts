@@ -73,19 +73,23 @@ export const useEntityComplete = (props: Props) => {
       }
 
       if (prolificParams && props.publicAppletKey) {
+        const { data: completionCodesReponse } = await fetchCompletionCodes();
+
         removeActivityProgress({
           activityId: props.activityId,
           eventId: props.eventId,
           targetSubjectId: props.targetSubjectId,
         });
 
-        const { data: completionCodesReponse } = await fetchCompletionCodes();
         if (!isCompletionCodesReponseError && completionCodesReponse) {
           clearProlificParams(); // Resetting redux state after completion
 
           const { completionCodes } = completionCodesReponse.data;
           for (const code of completionCodes) {
             if (code.codeType === 'COMPLETED') {
+              // There is a delay in the redirect, the start screen is shown for a second
+              // before the redirect to prolific happens. This is a workaround to hide that screen during that time.
+              document.body.innerHTML = '';
               return window.location.replace(
                 `https://app.prolific.com/submissions/complete?cc=${code.code}`,
               );
