@@ -1,12 +1,14 @@
 import { useCallback, useContext, useEffect, useMemo } from 'react';
 
+import { AxiosError } from 'axios';
+
 import { validateBeforeMoveForward } from '../model';
 import { useAutoForward, useSurveyState } from '../model/hooks';
 
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
-import { prolificParamsSelector } from '~/entities/applet/model/selectors';
+import { useProlific } from '~/entities/applet/model/hooks/useProlific';
 import { useBanners } from '~/entities/banner/model';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
@@ -46,7 +48,7 @@ const PassingScreen = (props: Props) => {
     ),
   );
 
-  const prolificParams = useAppSelector(prolificParamsSelector);
+  const { handleProlificSubmitError, prolificParams } = useProlific();
 
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
@@ -193,9 +195,13 @@ const PassingScreen = (props: Props) => {
     return completeActivity();
   };
 
-  const onSubmitError = () => {
+  const onSubmitError = (error?: AxiosError) => {
     closeSubmitModal();
-    addErrorBanner(t('prolific.alreadyAnswered'));
+    if (!error) {
+      return;
+    }
+
+    handleProlificSubmitError(error, addErrorBanner);
   };
 
   const { submitAnswers, isLoading } = useSubmitAnswersMutations({
@@ -341,7 +347,7 @@ const PassingScreen = (props: Props) => {
 
   // This effect is responsible for starting the timer when the user is inactive
   useEffect(() => {
-    const idleTimer = context?.event?.timers?.idleTimer;
+    const idleTimer = groupProgress?.event?.timers?.idleTimer;
 
     if (!idleTimer) {
       return;
@@ -359,14 +365,19 @@ const PassingScreen = (props: Props) => {
     return () => {
       IdleTimer.stop(listener);
     };
-  }, [IdleTimer, autoCompletionState, context.event?.timers?.idleTimer, props.onTimerFinish]);
+  }, [
+    IdleTimer,
+    autoCompletionState,
+    groupProgress?.event?.timers?.idleTimer,
+    props.onTimerFinish,
+  ]);
 
   return (
     <>
       <SurveyLayout
         progress={progress}
         isSaveAndExitButtonShown={true}
-        entityTimer={context.event?.timers?.timer ?? undefined}
+        entityTimer={groupProgress?.event?.timers?.timer ?? undefined}
         footerActions={
           <SurveyManageButtons
             timerSettings={!isSubmitModalOpen ? timerSettings : undefined}

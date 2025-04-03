@@ -3,6 +3,8 @@ import { useCallback } from 'react';
 import { groupProgressSelector } from '../selectors';
 import { actions } from '../slice';
 import {
+  FlowRestartedPayload,
+  InProgressActivity,
   InProgressEntity,
   InProgressFlow,
   RemoveGroupProgressPayload,
@@ -21,6 +23,9 @@ type Return = {
 
   entityCompleted: (props: InProgressEntity) => void;
   flowUpdated: (props: InProgressFlow) => void;
+
+  flowRestarted: (props: FlowRestartedPayload) => void;
+  activityRestarted: (props: InProgressActivity) => void;
 };
 
 export const useGroupProgressStateManager = (): Return => {
@@ -39,6 +44,20 @@ export const useGroupProgressStateManager = (): Return => {
       );
     },
     [groupProgresses],
+  );
+
+  const activityRestarted = useCallback(
+    (props: InProgressActivity) => {
+      dispatch(actions.activityRestarted(props));
+    },
+    [dispatch],
+  );
+
+  const flowRestarted = useCallback(
+    (props: FlowRestartedPayload) => {
+      dispatch(actions.flowRestarted(props));
+    },
+    [dispatch],
   );
 
   const flowUpdated = useCallback(
@@ -85,5 +104,8 @@ export const useGroupProgressStateManager = (): Return => {
 
     entityCompleted,
     flowUpdated,
+
+    activityRestarted,
+    flowRestarted,
   };
 };

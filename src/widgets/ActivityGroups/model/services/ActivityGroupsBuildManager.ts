@@ -1,6 +1,11 @@
 import { mapActivitiesFromDto, mapActivityFlowsFromDto } from '../mappers';
 
-import { ActivityPipelineType, GroupProgressState } from '~/abstract/lib';
+import {
+  ActivityPipelineType,
+  getDataFromProgressId,
+  GroupProgressId,
+  GroupProgressState,
+} from '~/abstract/lib';
 import {
   Activity,
   ActivityFlow,
@@ -10,6 +15,7 @@ import {
   createActivityGroupsBuilder,
 } from '~/abstract/lib/GroupBuilder';
 import { EventModel, ScheduleEvent } from '~/entities/event';
+import { mapEventFromDto } from '~/entities/event/model';
 import {
   ActivityBaseDTO,
   ActivityFlowDTO,
@@ -101,8 +107,48 @@ const createActivityGroupsBuildManager = () => {
       progress: params.entityProgress,
     });
 
-    const eventEntities: EventEntity[] = [];
     const calculator = EventModel.ScheduledDateCalculator;
+
+    /* Handle in-progress activities/flows
+    =================================================== */
+    const groupProgress = params.entityProgress;
+
+    const inProgressEventEntities: EventEntity[] = [];
+
+    // Iterate through currently in-progress activity/flow data and use events attached to
+    // their persisted state to build groupInProgress
+    for (const [groupProgressId, groupProgressItem] of Object.entries(groupProgress)) {
+      const { entityId, targetSubjectId } = getDataFromProgressId(
+        groupProgressId as GroupProgressId,
+      );
+
+      // Event should always be present in groupProgressItem, but we must check for type safety
+      if (!groupProgressItem.event) continue;
+
+      const event = mapEventFromDto(groupProgressItem.event);
+
+      const entity = idToEntity[entityId];
+      if (!entity || entity.isHidden) continue;
+
+      const targetSubject = targetSubjectId
+        ? (params.assignments?.find((a) => a.targetSubject.id === targetSubjectId)?.targetSubject ??
+          null)
+        : null;
+
+      inProgressEventEntities.push({
+        entity,
+        event,
+        targetSubject,
+      });
+    }
+
+    sort(inProgressEventEntities);
+
+    const groupInProgress = builder.buildInProgress(inProgressEventEntities);
+
+    /* Handle available/scheduled activities/flows
+    =================================================== */
+    const eventEntities: EventEntity[] = [];
 
     for (const event of events) {
       const entity = idToEntity[event.entityId];
@@ -143,7 +189,6 @@ const createActivityGroupsBuildManager = () => {
     sort(eventEntities);
 
     const groupAvailable = builder.buildAvailable(eventEntities);
-    const groupInProgress = builder.buildInProgress(eventEntities);
     const groupScheduled = builder.buildScheduled(eventEntities);
 
     return {

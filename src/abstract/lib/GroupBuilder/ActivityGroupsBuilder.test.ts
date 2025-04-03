@@ -20,6 +20,7 @@ import { ActivityPipelineType, FlowProgress, GroupProgressState } from '~/abstra
 import { AvailabilityLabelType, EventAvailability } from '~/entities/event';
 import { PeriodicityType } from '~/entities/event';
 import { MIDNIGHT_DATE } from '~/shared/constants';
+import { mockEvent } from '~/test/utils/mock';
 
 const getProgress = (startAt: Date, endAt: Date | null) => {
   const result: GroupProgressState = {
@@ -30,6 +31,7 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
       context: {
         summaryData: {},
       },
+      event: mockEvent,
     },
   };
   return result;
@@ -1580,6 +1582,7 @@ describe('ActivityGroupsBuilder', () => {
           context: {
             summaryData: {},
           },
+          event: mockEvent,
         },
       };
 

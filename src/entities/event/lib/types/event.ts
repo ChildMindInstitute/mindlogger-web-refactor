@@ -57,4 +57,5 @@ export type ScheduleEvent = {
   notificationSettings: NotificationSettings;
   selectedDate: Date | null;
   scheduledAt: Date | null;
+  version?: string | null;
 };

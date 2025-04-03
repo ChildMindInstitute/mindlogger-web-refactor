@@ -22,7 +22,7 @@ import {
   TimeRangeItem,
   PhrasalTemplateItem,
 } from '~/entities/activity/lib';
-import { ScoreAndReports } from '~/shared/api';
+import { ScheduleEventDto, ScoreAndReports } from '~/shared/api';
 import { DayMonthYearDTO, HourMinuteDTO } from '~/shared/utils';
 
 export type UserEventTypes = 'SET_ANSWER' | 'PREV' | 'NEXT' | 'SKIP' | 'DONE';
@@ -159,7 +159,7 @@ export type RemoveGroupProgressPayload = {
 };
 
 export type SaveGroupProgressPayload = {
-  activityId: string;
+  entityId: string;
   eventId: string;
   targetSubjectId: string | null;
   progressPayload: GroupProgress;
@@ -244,6 +244,21 @@ export type InProgressFlow = {
   eventId: string;
   targetSubjectId: string | null;
   pipelineActivityOrder: number;
+};
+
+export type ActivityStartedPayload = {
+  event: ScheduleEventDto;
+} & Omit<InProgressActivity, 'eventId'>;
+
+export type FlowStartedPayload = {
+  event: ScheduleEventDto;
+} & Omit<InProgressFlow, 'eventId'>;
+
+export type FlowRestartedPayload = {
+  flowId: string;
+  eventId: string;
+  targetSubjectId: string | null;
+  activityId: string;
 };
 
 export type MultiInformantPayload = Required<MultiInformantState>;

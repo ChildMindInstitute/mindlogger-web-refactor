@@ -9,6 +9,7 @@ import { ActivityType } from './types';
 import { ActivityPipelineType, GroupProgressState } from '~/abstract/lib';
 import { AvailabilityLabelType, EventAvailability, PeriodicityType } from '~/entities/event';
 import { HourMinute } from '~/shared/utils';
+import { mockEvent } from '~/test/utils/mock';
 
 jest.mock('@app/shared/lib/constants', () => ({
   ...jest.requireActual('@app/shared/lib/constants'),
@@ -24,6 +25,7 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
       context: {
         summaryData: {},
       },
+      event: mockEvent,
     },
   };
   return result;

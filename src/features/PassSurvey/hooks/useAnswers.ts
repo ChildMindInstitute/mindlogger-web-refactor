@@ -56,7 +56,7 @@ export const useAnswerBuilder = (): AnswerBuilder => {
         groupProgress,
         userEvents: params.userEvents,
         items: params.items,
-        event: params.event ?? context.event,
+        event: params.event ?? groupProgress.event ?? context.event,
         activityId: params.activityId,
         appletId: params.appletId ?? context.appletId,
         appletVersion: params.appletVersion ?? context.appletVersion,

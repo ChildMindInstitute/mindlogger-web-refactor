@@ -34,7 +34,7 @@ export const useEntityTimer = ({ onFinish }: Props) => {
   useEffect(() => {
     const isSummaryScreenOpen = activityProgress?.isSummaryScreenOpen ?? false;
 
-    const timerSettings = context.event.timers.timer;
+    const timerSettings = groupProgress?.event?.timers.timer;
 
     if (!groupProgress || !timerSettings || isSummaryScreenOpen) {
       return;
@@ -85,7 +85,6 @@ export const useEntityTimer = ({ onFinish }: Props) => {
   }, [
     activityProgress?.isSummaryScreenOpen,
     context.entityId,
-    context.event.timers.timer,
     context.eventId,
     groupProgress,
     onFinish,

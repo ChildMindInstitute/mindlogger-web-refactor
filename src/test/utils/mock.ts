@@ -5,6 +5,7 @@ import {
   ActivityFlowDTO,
   AppletEventsResponse,
   HydratedAssignmentDTO,
+  ScheduleEventDto,
 } from '~/shared/api';
 import { SubjectDTO } from '~/shared/api/types/subject';
 
@@ -173,6 +174,24 @@ const mockEventId4 = 'event-4';
 const mockEventId5 = 'event-5';
 const mockEventId6 = 'event-6';
 
+export const mockEvent: ScheduleEventDto = {
+  id: mockEventId6,
+  entityId: mockFlowId3,
+  availabilityType: AvailabilityLabelType.AlwaysAvailable,
+  availability: {
+    oneTimeCompletion: false,
+    periodicityType: 'ALWAYS',
+    timeFrom: { hours: 0, minutes: 0 },
+    timeTo: { hours: 0, minutes: 0 },
+    allowAccessBeforeFromTime: false,
+  },
+  selectedDate: null,
+  timers: {
+    timer: null,
+    idleTimer: null,
+  },
+};
+
 export const mockEventsResponse: AppletEventsResponse = {
   events: [
     {
@@ -260,23 +279,7 @@ export const mockEventsResponse: AppletEventsResponse = {
         idleTimer: null,
       },
     },
-    {
-      id: mockEventId6,
-      entityId: mockFlowId3,
-      availabilityType: AvailabilityLabelType.AlwaysAvailable,
-      availability: {
-        oneTimeCompletion: false,
-        periodicityType: 'ALWAYS',
-        timeFrom: { hours: 0, minutes: 0 },
-        timeTo: { hours: 0, minutes: 0 },
-        allowAccessBeforeFromTime: false,
-      },
-      selectedDate: null,
-      timers: {
-        timer: null,
-        idleTimer: null,
-      },
-    },
+    mockEvent,
   ],
 };
 
@@ -292,5 +295,6 @@ export const mockEntityProgress: GroupProgressState = {
     context: { summaryData: {} },
     startAt: 1,
     endAt: null,
+    event: mockEvent,
   },
 };
