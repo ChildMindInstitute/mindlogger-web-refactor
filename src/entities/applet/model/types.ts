@@ -9,6 +9,7 @@ import {
   MessageItem,
   MultiSelectionRowsItem,
   RadioItem,
+  RequestHealthRecordDataItem,
   SelectorItem,
   SingleMultiSelectAnswer,
   SingleSelectionRowsItem,
@@ -79,7 +80,8 @@ export type ItemRecord =
   | MultiSelectionRowsItem
   | SingleSelectionRowsItem
   | SliderRowsItem
-  | PhrasalTemplateItem;
+  | PhrasalTemplateItem
+  | RequestHealthRecordDataItem;
 
 export type ItemWithAdditionalResponse = Extract<
   ItemRecord,

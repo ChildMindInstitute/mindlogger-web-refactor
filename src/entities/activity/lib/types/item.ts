@@ -33,7 +33,8 @@ export type ActivityItemType =
   | 'audioPlayer'
   | 'unsupportable'
   | 'splashScreen'
-  | 'phrasalTemplate';
+  | 'phrasalTemplate'
+  | 'requestHealthRecordData';
 
 export type ButtonsConfig = {
   removeBackButton: boolean;
@@ -83,6 +84,7 @@ export type Config =
   | ParagraphItemConfig
   | PhrasalTemplateItemConfig
   | RadioItemConfig
+  | RequestHealthRecordDataItemConfig
   | SelectorItemConfig
   | SliderItemConfig
   | SliderRowsItemConfig
@@ -100,7 +102,8 @@ export type ResponseValues =
   | AudioPlayerItemValues
   | MultiSelectionRowsItemResponseValues
   | SliderRowsItemResponseValues
-  | PhrasalTemplateValues;
+  | PhrasalTemplateValues
+  | RequestHealthRecordDataValues;
 
 export type EmptyResponseValues = null;
 
@@ -244,7 +247,7 @@ export type RadioValues = {
     color: string | null;
     isHidden: boolean;
     alert: string | null;
-    value: number;
+    value: number | string;
   }>;
 };
 
@@ -447,3 +450,29 @@ export type SliderRows = Array<{
   maxImage: string | null;
   alerts: SliderAlerts;
 }>;
+
+export interface RequestHealthRecordDataItem extends ActivityItemBase {
+  responseType: 'requestHealthRecordData';
+  config: RequestHealthRecordDataItemConfig;
+  responseValues: RequestHealthRecordDataValues;
+  answer: DefaultAnswer;
+}
+
+export type RequestHealthRecordDataItemConfig = {
+  removeBackButton: boolean;
+  skippableItem: never;
+};
+
+export type RequestHealthRecordDataValues = {
+  type: 'requestHealthRecordData';
+  optInOutOptions: [
+    {
+      id: 'opt_in';
+      label: string;
+    },
+    {
+      id: 'opt_out';
+      label: string;
+    },
+  ];
+};

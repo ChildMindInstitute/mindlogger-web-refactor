@@ -8,7 +8,7 @@ import Box from '~/shared/ui/Box';
 type Props = {
   options: RadioItem['responseValues']['options'];
   itemId: string;
-  value: string;
+  value: string | null;
 
   onValueChange: (value: string) => void;
   replaceText: (value: string) => string;

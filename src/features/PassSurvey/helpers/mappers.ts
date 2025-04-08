@@ -6,6 +6,7 @@ import {
   MultiSelectionRowsItem,
   ParagraphTextItem,
   RadioItem,
+  RequestHealthRecordDataItem,
   SelectorItem,
   SingleSelectionRowsItem,
   SliderItem,
@@ -80,6 +81,9 @@ export function mapToAnswers(
 
       case 'sliderRows':
         return convertToSliderRowsAnswer(item);
+
+      case 'requestHealthRecordData':
+        return convertToRequestHealthRecordDataAnswer(item);
 
       default:
         return null;
@@ -311,6 +315,22 @@ function convertToSliderRowsAnswer(item: SliderRowsItem) {
     answer: {
       value: item.answer,
       text: item.additionalText || null,
+    },
+    itemId: item.id,
+  };
+}
+
+function convertToRequestHealthRecordDataAnswer(item: RequestHealthRecordDataItem) {
+  if (!item.answer[0]) {
+    return {
+      answer: null,
+      itemId: item.id,
+    };
+  }
+
+  return {
+    answer: {
+      value: item.answer[0],
     },
     itemId: item.id,
   };
