@@ -56,6 +56,7 @@ describe('Activity helpers', () => {
         'time',
         'timeRange',
         'audioPlayer',
+        'requestHealthRecordData',
       ];
 
       expect(isSupportedActivity(supportedResponseTypes)).toEqual(true);
@@ -105,6 +106,12 @@ describe('Activity helpers', () => {
 
     it('Audio player item should return true', () => {
       expect(supportsAdditionalResponseField({ responseType: 'audioPlayer' })).toEqual(true);
+    });
+
+    it('Request health record data item should return false', () => {
+      expect(supportsAdditionalResponseField({ responseType: 'requestHealthRecordData' })).toEqual(
+        false,
+      );
     });
   });
 

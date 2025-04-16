@@ -35,19 +35,27 @@ export const ActivityCardItem = ({
   onItemAdditionalTextChange,
 }: ActivityCardItemProps) => {
   const questionText = useMemo(() => {
-    return replaceText(item.question);
-  }, [item.question, replaceText]);
+    // Exclude item types that provide custom formatted markdown
+    if (['phrasalTemplate', 'requestHealthRecordData'].includes(item.responseType)) {
+      return null;
+    }
 
-  const isOptionalFlagHidden = ['message', 'audioPlayer', 'splashScreen'].includes(
-    item.responseType,
-  );
+    return replaceText(item.question);
+  }, [item.question, replaceText, item.responseType]);
+
+  const isOptionalFlagHidden = [
+    'message',
+    'audioPlayer',
+    'splashScreen',
+    'requestHealthRecordData',
+  ].includes(item.responseType);
 
   const { t } = useCustomTranslation();
 
   return (
     <SliderAnimation step={step} prevStep={prevStep ?? step}>
       <CardItem
-        markdown={item.responseType === 'phrasalTemplate' ? null : questionText}
+        markdown={questionText}
         watermark={watermark}
         isOptional={!isOptionalFlagHidden && (item.config.skippableItem || allowToSkipAllItems)}
         testId="active-item"

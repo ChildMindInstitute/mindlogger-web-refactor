@@ -7,6 +7,7 @@ import { SliderRows } from './Matrix/Slider';
 import { ParagraphTextItem } from './ParagraphTextItem';
 import { PhrasalTemplateItem } from './PhrasalTemplateItem';
 import { RadioItem } from './RadioItem';
+import { RequestHealthRecordDataItem } from './RequestHealthRecordDataItem';
 import { SelectorItem } from './SelectorItem';
 import { SliderItem } from './SliderItem';
 import { SplashScreen } from './SplashScreen';
@@ -132,6 +133,15 @@ export const ItemPicker = ({ item, onValueChange, isDisabled, replaceText }: Ite
 
     case 'phrasalTemplate':
       return <PhrasalTemplateItem item={item} replaceText={replaceText} />;
+
+    case 'requestHealthRecordData':
+      return (
+        <RequestHealthRecordDataItem
+          item={item}
+          replaceText={replaceText}
+          onValueChange={onValueChange}
+        />
+      );
 
     default:
       return <></>;

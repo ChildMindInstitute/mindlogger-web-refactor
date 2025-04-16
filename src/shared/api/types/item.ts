@@ -22,7 +22,8 @@ export type ItemResponseTypeDTO =
   | 'text'
   | 'time'
   | 'timeRange'
-  | 'video';
+  | 'video'
+  | 'requestHealthRecordData';
 
 export interface ItemDetailsBaseDTO {
   id: string;
