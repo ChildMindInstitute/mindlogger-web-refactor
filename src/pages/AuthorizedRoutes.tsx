@@ -23,6 +23,7 @@ const PublicAppletDetailsPage = lazy(() => import('./PublicJoin'));
 const InvitationPage = lazy(() => import('./Invitation'));
 const PrivateJoinPage = lazy(() => import('./PrivateJoin'));
 const TransferOwnershipPage = lazy(() => import('./TransferOwnership'));
+const NavigateToActiveAssessment = lazy(() => import('./NavigateToActiveAssessment'));
 
 type Props = {
   refreshToken: string;
@@ -35,6 +36,7 @@ function AuthorizedRoutes({ refreshToken }: Props) {
         <Route element={<ProtectedRoute token={refreshToken} />}>
           <Route path={ROUTES.survey.path} element={<SurveyPage />} />
           <Route path={ROUTES.publicSurvey.path} element={<PublicSurvey />} />
+          <Route path={ROUTES.activeAssessment.path} element={<NavigateToActiveAssessment />} />
 
           <Route path={ROUTES.autoCompletion.path} element={<AutoCompletion />} />
           <Route path={ROUTES.publicAutoCompletion.path} element={<PublicAutoCompletion />} />

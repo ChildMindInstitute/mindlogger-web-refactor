@@ -66,3 +66,9 @@ export type GroupProgress = ActivityOrFlowProgress & EventProgressTimestampState
 export type GroupProgressId = `${string}/${string}` | `${string}/${string}/${string}`;
 
 export type GroupProgressState = Record<GroupProgressId, GroupProgress>;
+
+export type ActiveAssessment = {
+  appletId: string;
+  publicAppletKey: string | null;
+  groupProgressId: GroupProgressId;
+} | null;

@@ -37,6 +37,7 @@ import {
   getProgressId,
   GroupProgress,
   GroupProgressState,
+  ActiveAssessment,
 } from '~/abstract/lib';
 import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
 
@@ -48,6 +49,7 @@ type InitialState = {
   multiInformantState: MultiInformantState;
   consents: ActivityConsents;
   prolificParams?: ProlificUrlParamsPayload;
+  activeAssessment: ActiveAssessment;
 };
 
 const initialState: InitialState = {
@@ -57,6 +59,7 @@ const initialState: InitialState = {
   completions: {},
   multiInformantState: {},
   consents: {},
+  activeAssessment: null,
 };
 
 const appletsSlice = createSlice({
@@ -411,6 +414,10 @@ const appletsSlice = createSlice({
 
     clearProlificParams: (state) => {
       state.prolificParams = undefined;
+    },
+
+    setActiveAssessment: (state, action: PayloadAction<ActiveAssessment>) => {
+      state.activeAssessment = action.payload;
     },
   },
 });

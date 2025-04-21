@@ -103,6 +103,9 @@ const ROUTES = {
       return `/protected/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}?${params.toString()}`;
     },
   },
+  activeAssessment: {
+    path: '/active-assessment',
+  },
   invitationAccept: {
     path: '/protected/invite/accepted',
   },
