@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 
 import { Box } from '@mui/material';
 
@@ -12,8 +12,9 @@ import { RegularGrid } from './RadioItem/RegularGrid';
 
 import { REQUEST_HEALTH_RECORD_DATA_LINK } from '~/abstract/lib/constants';
 import requestHealthRecordDataIcon from '~/assets/request-health-record-data-icon.svg';
+import { SurveyContext } from '~/features/PassSurvey';
 import { SliderAnimation } from '~/shared/animations';
-import { Markdown } from '~/shared/ui';
+import { Markdown, ItemMarkdown } from '~/shared/ui';
 import { useCustomTranslation, usePrevious } from '~/shared/utils';
 
 type RequestHealthRecordDataItemProps = {
@@ -28,7 +29,12 @@ export const RequestHealthRecordDataItem = ({
   onValueChange,
 }: RequestHealthRecordDataItemProps) => {
   const { t } = useCustomTranslation();
-  const questionText = useMemo(() => replaceText(item.question), [item.question, replaceText]);
+  const { activity } = useContext(SurveyContext);
+  const consentMarkdown = useMemo(() => {
+    const markdown = replaceText(item.question);
+
+    return `${markdown}\n\n&nbsp;\n\n<a href="${REQUEST_HEALTH_RECORD_DATA_LINK}" target="_blank" rel="noreferrer">${t('requestHealthRecordData.linkText')}</a>`;
+  }, [item.question, replaceText, t]);
 
   // Map opt-in and opt-out options to RadioValues format
   const options: RadioValues['options'] = useMemo(
@@ -79,15 +85,10 @@ export const RequestHealthRecordDataItem = ({
             />
           </Box>
 
-          {questionText && questionText.trim().length > 0 ? (
-            <Markdown markdown={questionText} />
-          ) : null}
-
-          <p>
-            <a href={REQUEST_HEALTH_RECORD_DATA_LINK} target="_blank" rel="noreferrer">
-              {t('requestHealthRecordData.linkText')}
-            </a>
-          </p>
+          <ItemMarkdown
+            markdown={consentMarkdown}
+            isOptional={item.config.skippableItem || activity.isSkippable}
+          />
 
           <RegularGrid
             itemId={item.id}

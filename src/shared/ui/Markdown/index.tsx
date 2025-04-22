@@ -8,7 +8,7 @@ import { useMarkdownExtender } from './lib/useMarkdownExtender';
 import './style.css';
 import { useCustomTranslation } from '~/shared/utils';
 
-type MarkdownProps = Omit<ReactMarkdownOptions, 'children'> & {
+export type MarkdownProps = Omit<ReactMarkdownOptions, 'children'> & {
   markdown: string;
 };
 
