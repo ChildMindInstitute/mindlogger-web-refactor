@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { Box } from '@mui/material';
 
 import {
   RadioValues,
+  RequestHealthRecordDataItemStep,
   RequestHealthRecordDataItem as RequestHealthRecordDataItemType,
 } from '../../lib';
 import { Answer } from '../../lib';
@@ -11,8 +12,9 @@ import { RegularGrid } from './RadioItem/RegularGrid';
 
 import { REQUEST_HEALTH_RECORD_DATA_LINK } from '~/abstract/lib/constants';
 import requestHealthRecordDataIcon from '~/assets/request-health-record-data-icon.svg';
+import { SliderAnimation } from '~/shared/animations';
 import { Markdown } from '~/shared/ui';
-import { useCustomTranslation } from '~/shared/utils';
+import { useCustomTranslation, usePrevious } from '~/shared/utils';
 
 type RequestHealthRecordDataItemProps = {
   item: RequestHealthRecordDataItemType;
@@ -50,44 +52,77 @@ export const RequestHealthRecordDataItem = ({
     [item.answer],
   );
 
-  const handleValueChange = (optionId: string) => {
-    onValueChange([optionId]);
-  };
+  const handleValueChange = useCallback(
+    (optionId: string) => {
+      onValueChange([optionId]);
+    },
+    [onValueChange],
+  );
+
+  const content = useMemo(() => {
+    if (item.subStep === RequestHealthRecordDataItemStep.ConsentPrompt) {
+      return (
+        <Box
+          display="flex"
+          flex={1}
+          flexDirection="column"
+          fontWeight="400"
+          fontSize="18px"
+          lineHeight="28px"
+          mb="48px"
+          gap="24px"
+        >
+          <Box display="flex" justifyContent="center">
+            <img
+              src={requestHealthRecordDataIcon}
+              alt={String(t('requestHealthRecordData.title'))}
+            />
+          </Box>
+
+          {questionText && questionText.trim().length > 0 ? (
+            <Markdown markdown={questionText} />
+          ) : null}
+
+          <p>
+            <a href={REQUEST_HEALTH_RECORD_DATA_LINK} target="_blank" rel="noreferrer">
+              {t('requestHealthRecordData.linkText')}
+            </a>
+          </p>
+
+          <RegularGrid
+            itemId={item.id}
+            value={selectedOption}
+            options={options}
+            onValueChange={handleValueChange}
+            replaceText={replaceText}
+            isDisabled={false}
+          />
+        </Box>
+      );
+    }
+
+    // TODO: Display appropriate substep screen for RequestHealthRecordDataItem
+    return (
+      <p>
+        Step {item.subStep + 1} of {RequestHealthRecordDataItemStep.AdditionalPrompt + 1}
+      </p>
+    );
+  }, [
+    item.subStep,
+    questionText,
+    t,
+    handleValueChange,
+    item.id,
+    options,
+    replaceText,
+    selectedOption,
+  ]);
+
+  const prevSubStep = usePrevious(item.subStep);
 
   return (
-    <>
-      <Box
-        display="flex"
-        flexDirection="column"
-        fontWeight="400"
-        fontSize="18px"
-        lineHeight="28px"
-        mb="48px"
-        gap="24px"
-      >
-        <Box display="flex" justifyContent="center">
-          <img src={requestHealthRecordDataIcon} alt={String(t('requestHealthRecordData.title'))} />
-        </Box>
-
-        {questionText && questionText.trim().length > 0 ? (
-          <Markdown markdown={questionText} />
-        ) : null}
-
-        <p>
-          <a href={REQUEST_HEALTH_RECORD_DATA_LINK} target="_blank" rel="noreferrer">
-            {t('requestHealthRecordData.linkText')}
-          </a>
-        </p>
-      </Box>
-
-      <RegularGrid
-        itemId={item.id}
-        value={selectedOption}
-        options={options}
-        onValueChange={handleValueChange}
-        replaceText={replaceText}
-        isDisabled={false}
-      />
-    </>
+    <SliderAnimation step={item.subStep} prevStep={prevSubStep ?? item.subStep} key={item.subStep}>
+      {content}
+    </SliderAnimation>
   );
 };

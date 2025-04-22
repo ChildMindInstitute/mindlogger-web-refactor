@@ -1,5 +1,6 @@
 import { ItemRecord, UserEventResponse } from './types';
 
+import { RequestHealthRecordDataItemStep } from '~/entities/activity';
 import { ActivityItemDetailsDTO } from '~/shared/api';
 import { dateToDayMonthYear, dateToHourMinute } from '~/shared/utils';
 
@@ -76,21 +77,30 @@ export const mapItemAnswerToUserEventResponse = (item: ItemRecord): UserEventRes
 };
 
 export function mapItemToRecord(item: ActivityItemDetailsDTO): ItemRecord {
-  if (item.responseType === 'message') {
-    return {
-      ...item,
-      config: {
-        ...item.config,
-        skippableItem: false,
-      },
-      answer: [],
-    };
-  }
+  switch (item.responseType) {
+    case 'message':
+      return {
+        ...item,
+        config: {
+          ...item.config,
+          skippableItem: false,
+        },
+        answer: [],
+      };
 
-  return {
-    ...item,
-    answer: [],
-  };
+    case 'requestHealthRecordData':
+      return {
+        ...item,
+        subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
+        answer: [],
+      };
+
+    default:
+      return {
+        ...item,
+        answer: [],
+      };
+  }
 }
 
 export function mapSplashScreenToRecord(splashScreen: string): ItemRecord {

@@ -8,6 +8,7 @@ import {
   MultiSelectionRowsItemDTO,
   PhrasalTemplateItemDTO,
   RadioItemDTO,
+  RequestHealthRecordDataItemDTO,
   SelectorItemDTO,
   SingleSelectionRowsItemDTO,
   SliderItemDTO,
@@ -102,7 +103,8 @@ export type ActivityItemDetailsDTO =
   | SliderRowsItemDTO
   | TextItemDTO
   | TimeItemDTO
-  | TimeRangeItemDTO;
+  | TimeRangeItemDTO
+  | RequestHealthRecordDataItemDTO;
 
 export type AnswerPayload = {
   appletId: ID;

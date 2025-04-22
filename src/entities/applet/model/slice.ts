@@ -26,6 +26,7 @@ import {
   FlowStartedPayload,
   InProgressActivity,
   FlowRestartedPayload,
+  UpdateSubStepPayload,
 } from './types';
 
 import {
@@ -246,6 +247,17 @@ const appletsSlice = createSlice({
       const activityProgress = state.progress[id];
 
       activityProgress.step -= 1;
+    },
+
+    setSubStep: (state, { payload }: PayloadAction<UpdateSubStepPayload>) => {
+      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
+
+      const activityProgress = state.progress[id];
+      const currentItem = activityProgress.items[activityProgress.step];
+
+      if (typeof currentItem.subStep === 'number') {
+        currentItem.subStep = payload.subStep;
+      }
     },
 
     activityStarted: (state, { payload }: PayloadAction<ActivityStartedPayload>) => {

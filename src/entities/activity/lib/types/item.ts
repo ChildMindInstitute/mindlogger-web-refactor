@@ -73,6 +73,7 @@ export interface ActivityItemBase {
   additionalText?: string | null;
   conditionalLogic: ConditionalLogic | null;
   isHidden: boolean;
+  subStep?: number;
 }
 
 export type Config =
@@ -451,11 +452,19 @@ export type SliderRows = Array<{
   alerts: SliderAlerts;
 }>;
 
+export enum RequestHealthRecordDataItemStep {
+  ConsentPrompt = 0,
+  Partnership = 1,
+  OneUpHealth = 2,
+  AdditionalPrompt = 3,
+}
+
 export interface RequestHealthRecordDataItem extends ActivityItemBase {
   responseType: 'requestHealthRecordData';
   config: RequestHealthRecordDataItemConfig;
   responseValues: RequestHealthRecordDataValues;
   answer: DefaultAnswer;
+  subStep: RequestHealthRecordDataItemStep;
 }
 
 export type RequestHealthRecordDataItemConfig = {

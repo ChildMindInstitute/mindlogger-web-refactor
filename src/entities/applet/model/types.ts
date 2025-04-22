@@ -198,6 +198,10 @@ export type UpdateStepPayload = {
   targetSubjectId: string | null;
 };
 
+export type UpdateSubStepPayload = UpdateStepPayload & {
+  subStep: number;
+};
+
 export type SaveUserEventPayload = {
   entityId: string;
   eventId: string;

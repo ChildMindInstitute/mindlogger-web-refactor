@@ -3,7 +3,7 @@ import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { AxiosError } from 'axios';
 
 import { validateBeforeMoveForward } from '../model';
-import { useAutoForward, useSurveyState } from '../model/hooks';
+import { useAutoForward, useSubSteps, useSurveyState } from '../model/hooks';
 
 import { ActivityPipelineType, FlowProgress, FlowSummaryData, getProgressId } from '~/abstract/lib';
 import { ActivityCardItem, Answer, useTextVariablesReplacer } from '~/entities/activity';
@@ -96,6 +96,14 @@ const PassingScreen = (props: Props) => {
 
   const { step, item, hasPrevStep, hasNextStep, progress, conditionallyHiddenItemIds } =
     useSurveyState(activityProgress);
+
+  const {
+    hasNextSubStep,
+    hasPrevSubStep,
+    handleNextSubStep,
+    handlePrevSubStep,
+    isNavigationHidden,
+  } = useSubSteps({ item });
 
   const canGoBack = !item?.config.removeBackButton && context.activity.responseIsEditable;
 
@@ -235,6 +243,12 @@ const PassingScreen = (props: Props) => {
       saveUserEventByType('NEXT', item);
     }
 
+    // If the current item has subSteps and there are more subSteps to go through
+    if (hasNextSubStep) {
+      return handleNextSubStep();
+    }
+
+    // Otherwise, proceed to the next step
     return incrementStep({
       activityId: context.activityId,
       eventId: context.eventId,
@@ -246,6 +260,8 @@ const PassingScreen = (props: Props) => {
     context.activityId,
     context.eventId,
     incrementStep,
+    hasNextSubStep,
+    handleNextSubStep,
     targetSubjectId,
     saveUserEventByType,
   ]);
@@ -253,6 +269,12 @@ const PassingScreen = (props: Props) => {
   const onBack = useCallback(() => {
     saveUserEventByType('PREV', item);
 
+    // If the current item has subSteps and we're not at the first subStep
+    if (hasPrevSubStep) {
+      return handlePrevSubStep();
+    }
+
+    // If we're at the first subStep or there are no subSteps, go to the previous step
     if (!hasPrevStep) {
       return;
     }
@@ -267,6 +289,8 @@ const PassingScreen = (props: Props) => {
     context.eventId,
     decrementStep,
     hasPrevStep,
+    hasPrevSubStep,
+    handlePrevSubStep,
     item,
     saveUserEventByType,
     targetSubjectId,
@@ -290,7 +314,8 @@ const PassingScreen = (props: Props) => {
 
     conditionallyHiddenItemIds?.forEach(removeItemAnswer);
 
-    if (!hasNextStep) {
+    // If there are no more steps and no more subSteps, open the submit modal
+    if (!hasNextStep && !hasNextSubStep) {
       return openSubmitModal();
     }
 
@@ -302,6 +327,7 @@ const PassingScreen = (props: Props) => {
     conditionallyHiddenItemIds,
     removeItemAnswer,
     hasNextStep,
+    hasNextSubStep,
     onNext,
     addWarningBanner,
     t,
@@ -382,7 +408,7 @@ const PassingScreen = (props: Props) => {
           <SurveyManageButtons
             timerSettings={!isSubmitModalOpen ? timerSettings : undefined}
             isLoading={false}
-            isBackShown={hasPrevStep && canGoBack}
+            isBackShown={(hasPrevStep || hasPrevSubStep) && canGoBack}
             onBackButtonClick={onBack}
             onNextButtonClick={onMoveForward}
             backButtonText={t('Consent.back') ?? undefined}
