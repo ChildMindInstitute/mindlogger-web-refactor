@@ -92,6 +92,7 @@ export function mapItemToRecord(item: ActivityItemDetailsDTO): ItemRecord {
       return {
         ...item,
         subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
+        additionalEHRs: null,
         answer: [],
       };
 

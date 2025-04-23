@@ -465,6 +465,7 @@ export interface RequestHealthRecordDataItem extends ActivityItemBase {
   responseValues: RequestHealthRecordDataValues;
   answer: DefaultAnswer;
   subStep: RequestHealthRecordDataItemStep;
+  additionalEHRs: 'requested' | 'done' | null;
 }
 
 export type RequestHealthRecordDataItemConfig = {

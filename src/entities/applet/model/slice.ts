@@ -27,6 +27,7 @@ import {
   InProgressActivity,
   FlowRestartedPayload,
   UpdateSubStepPayload,
+  SaveItemCustomPropertyPayload,
 } from './types';
 
 import {
@@ -206,6 +207,28 @@ const appletsSlice = createSlice({
       }
 
       activityProgress.items[itemIndex].additionalText = payload.additionalText;
+    },
+
+    saveCustomProperty: (
+      state: InitialState,
+      { payload }: PayloadAction<SaveItemCustomPropertyPayload>,
+    ) => {
+      const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
+      const activityProgress = state.progress[id];
+
+      if (!activityProgress) {
+        return state;
+      }
+
+      const itemIndex = activityProgress.items.findIndex(({ id }) => id === payload.itemId);
+
+      if (itemIndex === -1) {
+        return state;
+      }
+
+      (activityProgress.items[itemIndex] as unknown as Record<string, unknown>)[
+        payload.customProperty
+      ] = payload.value;
     },
 
     saveUserEvent: (state, { payload }: PayloadAction<SaveUserEventPayload>) => {

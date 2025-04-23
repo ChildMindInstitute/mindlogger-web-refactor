@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 
 import { Box } from '@mui/material';
 
@@ -11,7 +11,10 @@ import { Answer } from '../../lib';
 import { RegularGrid } from './RadioItem/RegularGrid';
 
 import { REQUEST_HEALTH_RECORD_DATA_LINK } from '~/abstract/lib/constants';
+import requestHealthRecordDataIconSuccess from '~/assets/request-health-record-data-icon-success.svg';
 import requestHealthRecordDataIcon from '~/assets/request-health-record-data-icon.svg';
+import requestHealthRecordDataPartnership from '~/assets/request-health-record-data-partnership.svg';
+import { appletModel } from '~/entities/applet';
 import { SurveyContext } from '~/features/PassSurvey';
 import { SliderAnimation } from '~/shared/animations';
 import { Markdown, ItemMarkdown } from '~/shared/ui';
@@ -29,94 +32,180 @@ export const RequestHealthRecordDataItem = ({
   onValueChange,
 }: RequestHealthRecordDataItemProps) => {
   const { t } = useCustomTranslation();
-  const { activity } = useContext(SurveyContext);
+  const { activity, activityId, eventId, targetSubject } = useContext(SurveyContext);
+  const { saveItemCustomProperty } = appletModel.hooks.useSaveItemAnswer({
+    activityId,
+    eventId,
+    targetSubjectId: targetSubject?.id ?? null,
+  });
+
   const consentMarkdown = useMemo(() => {
     const markdown = replaceText(item.question);
 
     return `${markdown}\n\n&nbsp;\n\n<a href="${REQUEST_HEALTH_RECORD_DATA_LINK}" target="_blank" rel="noreferrer">${t('requestHealthRecordData.linkText')}</a>`;
   }, [item.question, replaceText, t]);
 
-  // Map opt-in and opt-out options to RadioValues format
-  const options: RadioValues['options'] = useMemo(
-    () =>
-      item.responseValues.optInOutOptions.map((option) => ({
-        id: option.id,
-        text: option.label,
-        tooltip: null,
-        image: null,
-        color: null,
-        isHidden: false,
-        alert: null,
-        score: null,
-        value: option.id,
-      })),
-    [item.responseValues.optInOutOptions],
-  );
-
-  const selectedOption = useMemo(
-    () => (item.answer.length > 0 ? item.answer[0] : null),
-    [item.answer],
-  );
-
-  const handleValueChange = useCallback(
-    (optionId: string) => {
-      onValueChange([optionId]);
-    },
-    [onValueChange],
-  );
-
   const content = useMemo(() => {
-    if (item.subStep === RequestHealthRecordDataItemStep.ConsentPrompt) {
-      return (
-        <Box
-          display="flex"
-          flex={1}
-          flexDirection="column"
-          fontWeight="400"
-          fontSize="18px"
-          lineHeight="28px"
-          mb="48px"
-          gap="24px"
-        >
-          <Box display="flex" justifyContent="center">
-            <img
-              src={requestHealthRecordDataIcon}
-              alt={String(t('requestHealthRecordData.title'))}
+    switch (item.subStep) {
+      case RequestHealthRecordDataItemStep.ConsentPrompt:
+        // Map opt-in and opt-out options to RadioValues format
+        const consentOptions: RadioValues['options'] = item.responseValues.optInOutOptions.map(
+          (option) => ({
+            id: option.id,
+            text: option.label,
+            tooltip: null,
+            image: null,
+            color: null,
+            isHidden: false,
+            alert: null,
+            score: null,
+            value: option.id,
+          }),
+        );
+
+        return (
+          <Box
+            display="flex"
+            flexDirection="column"
+            fontWeight="400"
+            fontSize="18px"
+            lineHeight="28px"
+            mb="48px"
+            gap="24px"
+          >
+            <Box display="flex" justifyContent="center">
+              <img
+                src={requestHealthRecordDataIcon}
+                alt={String(t('requestHealthRecordData.title'))}
+              />
+            </Box>
+
+            <Box mb="24px">
+              <ItemMarkdown
+                markdown={consentMarkdown}
+                isOptional={item.config.skippableItem || activity.isSkippable}
+              />
+            </Box>
+
+            <RegularGrid
+              itemId={item.id}
+              value={item.answer.length > 0 ? item.answer[0] : null}
+              options={consentOptions}
+              onValueChange={(optionId: string) => onValueChange([optionId])}
+              replaceText={replaceText}
+              isDisabled={false}
             />
           </Box>
+        );
 
-          <ItemMarkdown
-            markdown={consentMarkdown}
-            isOptional={item.config.skippableItem || activity.isSkippable}
-          />
+      case RequestHealthRecordDataItemStep.Partnership:
+        return (
+          <Box
+            display="flex"
+            flexDirection="column"
+            fontWeight="400"
+            fontSize="18px"
+            lineHeight="28px"
+            mb="48px"
+            gap="24px"
+            textAlign="center"
+          >
+            <Box display="flex" justifyContent="center" my="22px">
+              <img
+                src={requestHealthRecordDataPartnership}
+                alt={String(t('requestHealthRecordData.title'))}
+              />
+            </Box>
 
-          <RegularGrid
-            itemId={item.id}
-            value={selectedOption}
-            options={options}
-            onValueChange={handleValueChange}
-            replaceText={replaceText}
-            isDisabled={false}
-          />
-        </Box>
-      );
+            <Markdown
+              markdown={t('requestHealthRecordData.partnershipText')}
+              sx={{ '&& p': { mb: '24px' } }}
+            />
+          </Box>
+        );
+
+      case RequestHealthRecordDataItemStep.OneUpHealth:
+        return <p>TODO: iframe</p>;
+
+      case RequestHealthRecordDataItemStep.AdditionalPrompt:
+        const additionalOptions: RadioValues['options'] = [
+          {
+            id: 'requested',
+            text: t('additional.yes'),
+            tooltip: null,
+            image: null,
+            score: null,
+            color: null,
+            isHidden: false,
+            alert: null,
+            value: 'requested',
+          },
+          {
+            id: 'done',
+            text: t('additional.no'),
+            tooltip: null,
+            image: null,
+            score: null,
+            color: null,
+            isHidden: false,
+            alert: null,
+            value: 'done',
+          },
+        ];
+
+        return (
+          <Box
+            display="flex"
+            flexDirection="column"
+            fontWeight="400"
+            fontSize="18px"
+            lineHeight="28px"
+            mb="48px"
+            gap="24px"
+            textAlign="center"
+          >
+            <Box display="flex" justifyContent="center">
+              <img
+                src={requestHealthRecordDataIconSuccess}
+                alt={String(t('requestHealthRecordData.title'))}
+              />
+            </Box>
+
+            <Markdown
+              markdown={t('requestHealthRecordData.additionalPromptText')}
+              sx={{ '&& p': { mb: '24px' } }}
+            />
+
+            <RegularGrid
+              itemId={`${item.id}-additional-prompt`}
+              value={item.additionalEHRs}
+              options={additionalOptions}
+              onValueChange={(value) =>
+                saveItemCustomProperty<RequestHealthRecordDataItemType>(
+                  item.id,
+                  'additionalEHRs',
+                  value,
+                )
+              }
+              replaceText={replaceText}
+              isDisabled={false}
+            />
+          </Box>
+        );
     }
-
-    // TODO: Display appropriate substep screen for RequestHealthRecordDataItem
-    return (
-      <p>
-        Step {item.subStep + 1} of {RequestHealthRecordDataItemStep.AdditionalPrompt + 1}
-      </p>
-    );
   }, [
     item.subStep,
-    questionText,
-    t,
-    handleValueChange,
+    item.responseValues.optInOutOptions,
+    item.config.skippableItem,
     item.id,
-    options,
+    item.answer,
+    item.additionalEHRs,
+    t,
+    consentMarkdown,
+    activity.isSkippable,
     replaceText,
-    selectedOption,
+    onValueChange,
+    saveItemCustomProperty,
   ]);
 
   const prevSubStep = usePrevious(item.subStep);
