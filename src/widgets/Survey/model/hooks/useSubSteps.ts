@@ -1,6 +1,6 @@
 import { useCallback, useContext, useMemo } from 'react';
 
-import { RequestHealthRecordDataItemStep } from '~/entities/activity';
+import { RequestHealthRecordDataItem, RequestHealthRecordDataItemStep } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { ItemRecord } from '~/entities/applet/model/types';
 import { SurveyContext } from '~/features/PassSurvey';
@@ -10,18 +10,24 @@ type UseSubStepsProps = {
 };
 
 export const useSubSteps = ({ item }: UseSubStepsProps) => {
-  const context = useContext(SurveyContext);
+  const { activityId, eventId, targetSubject } = useContext(SurveyContext);
   const { setSubStep: setActivitySubStep } = appletModel.hooks.useActivityProgress();
+  const { saveItemCustomProperty } = appletModel.hooks.useSaveItemAnswer({
+    activityId,
+    eventId,
+    targetSubjectId: targetSubject?.id ?? null,
+  });
+
   const setSubStep = useCallback(
     (subStep: number) => {
       setActivitySubStep({
-        activityId: context.activityId,
-        eventId: context.eventId,
-        targetSubjectId: context.targetSubject?.id ?? null,
+        activityId,
+        eventId,
+        targetSubjectId: targetSubject?.id ?? null,
         subStep,
       });
     },
-    [context.activityId, context.eventId, context.targetSubject?.id, setActivitySubStep],
+    [activityId, eventId, targetSubject?.id, setActivitySubStep],
   );
 
   const subStep = useMemo(() => {
@@ -36,7 +42,14 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     if (subStep === null) return false;
 
     if (item.responseType === 'requestHealthRecordData') {
-      return subStep < RequestHealthRecordDataItemStep.AdditionalPrompt;
+      if (item.answer[0] !== 'opt_in') {
+        return false;
+      }
+
+      return (
+        item.additionalEHRs === 'requested' ||
+        subStep < RequestHealthRecordDataItemStep.AdditionalPrompt
+      );
     }
 
     return false;
@@ -46,7 +59,10 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     if (subStep === null) return false;
 
     if (item.responseType === 'requestHealthRecordData') {
-      return subStep > RequestHealthRecordDataItemStep.ConsentPrompt;
+      return (
+        subStep > RequestHealthRecordDataItemStep.ConsentPrompt &&
+        subStep !== RequestHealthRecordDataItemStep.AdditionalPrompt
+      );
     }
 
     return false;
@@ -56,9 +72,18 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     if (!hasNextSubStep || subStep === null) return;
 
     if (item.responseType === 'requestHealthRecordData') {
-      setSubStep(subStep + 1);
+      if (subStep === RequestHealthRecordDataItemStep.AdditionalPrompt) {
+        if (item.additionalEHRs === 'requested') {
+          // If requested to add additional EHRs, return to OneUpHealth
+          setSubStep(RequestHealthRecordDataItemStep.OneUpHealth);
+          // Reset request to add additional EHRs to unselected
+          saveItemCustomProperty<RequestHealthRecordDataItem>(item.id, 'additionalEHRs', null);
+        }
+      } else {
+        setSubStep(subStep + 1);
+      }
     }
-  }, [hasNextSubStep, item.responseType, setSubStep, subStep]);
+  }, [hasNextSubStep, item, saveItemCustomProperty, setSubStep, subStep]);
 
   const handlePrevSubStep = useCallback(() => {
     if (!hasPrevSubStep || subStep === null) return;
@@ -66,13 +91,23 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     if (item.responseType === 'requestHealthRecordData') {
       setSubStep(subStep - 1);
     }
-  }, [hasPrevSubStep, item.responseType, setSubStep, subStep]);
+  }, [hasPrevSubStep, item, setSubStep, subStep]);
+
+  const isNavigationHidden = useMemo(() => {
+    if (item.responseType === 'requestHealthRecordData') {
+      return subStep === RequestHealthRecordDataItemStep.OneUpHealth;
+    }
+
+    return false;
+  }, [item, subStep]);
 
   return {
     subStep,
+    setSubStep,
     hasNextSubStep,
     hasPrevSubStep,
     handleNextSubStep,
     handlePrevSubStep,
+    isNavigationHidden,
   };
 };

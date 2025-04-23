@@ -405,15 +405,17 @@ const PassingScreen = (props: Props) => {
         isSaveAndExitButtonShown={true}
         entityTimer={groupProgress?.event?.timers?.timer ?? undefined}
         footerActions={
-          <SurveyManageButtons
-            timerSettings={!isSubmitModalOpen ? timerSettings : undefined}
-            isLoading={false}
-            isBackShown={(hasPrevStep || hasPrevSubStep) && canGoBack}
-            onBackButtonClick={onBack}
-            onNextButtonClick={onMoveForward}
-            backButtonText={t('Consent.back') ?? undefined}
-            nextButtonText={t('Consent.next')}
-          />
+          isNavigationHidden ? undefined : (
+            <SurveyManageButtons
+              timerSettings={!isSubmitModalOpen ? timerSettings : undefined}
+              isLoading={false}
+              isBackShown={(hasPrevStep || hasPrevSubStep) && canGoBack}
+              onBackButtonClick={onBack}
+              onNextButtonClick={onMoveForward}
+              backButtonText={t('Consent.back') ?? undefined}
+              nextButtonText={t('Consent.next')}
+            />
+          )
         }
       >
         <Box maxWidth="900px" display="flex" alignItems="center" flex={1}>
