@@ -37,6 +37,8 @@ export const SelectBaseBox = (props: Props) => {
     ? hoverBackgroundColor
     : Theme.colors.light.neutural90;
 
+  const dataTestId = `select-box ${props.color ? `bgcolor-${props.color}` : ''}`.trim();
+
   return (
     <Box
       display="flex"
@@ -50,7 +52,7 @@ export const SelectBaseBox = (props: Props) => {
       border={`2px solid ${borderColor}`}
       bgcolor={props.color ? props.color : backgroundColor}
       onClick={props.onHandleChange}
-      data-testid={`select-box ${props.color ? `bgcolor-${props.color}` : ''}`}
+      data-testid={dataTestId}
       sx={{
         ...(props.sx ?? {}),
         transition: 'background-color 0.2s ease-in-out',
