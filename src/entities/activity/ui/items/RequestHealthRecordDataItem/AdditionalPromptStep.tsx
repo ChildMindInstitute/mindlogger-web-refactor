@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 
 import { RegularGrid } from '../RadioItem/RegularGrid';
 
@@ -18,6 +18,9 @@ type AdditionalPromptStepProps = {
 
 export const AdditionalPromptStep = ({ item, replaceText }: AdditionalPromptStepProps) => {
   const { t } = useCustomTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const { activityId, eventId, targetSubject } = useContext(SurveyContext);
   const { saveItemCustomProperty } = appletModel.hooks.useSaveItemAnswer({
     activityId,
@@ -57,9 +60,8 @@ export const AdditionalPromptStep = ({ item, replaceText }: AdditionalPromptStep
       fontWeight="400"
       fontSize="18px"
       lineHeight="28px"
-      mb="48px"
       gap="24px"
-      textAlign="center"
+      textAlign={isMobile ? 'left' : 'center'}
     >
       <Box display="flex" justifyContent="center">
         <img

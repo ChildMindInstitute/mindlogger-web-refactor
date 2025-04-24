@@ -53,7 +53,6 @@ export const ConsentPromptStep = ({
       fontWeight="400"
       fontSize="18px"
       lineHeight="28px"
-      mb="48px"
       gap="24px"
     >
       <Box display="flex" justifyContent="center">
