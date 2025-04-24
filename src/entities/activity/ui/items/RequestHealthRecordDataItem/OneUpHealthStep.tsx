@@ -1,6 +1,7 @@
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 
 import { useOneUpHealthTokenQuery } from '~/entities/activity/api';
+import { useGroupProgressRecord } from '~/entities/applet/model/hooks';
 import { SurveyContext } from '~/features/PassSurvey';
 import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
@@ -8,8 +9,13 @@ import Loader from '~/shared/ui/Loader';
 export const OneUpHealthStep: FC = () => {
   const { appletId } = useContext(SurveyContext);
 
-  // TODO: Use the real submitId
-  const submitId = '1234567890';
+  const { eventId, targetSubject, entityId } = useContext(SurveyContext);
+  const groupProgress = useGroupProgressRecord({
+    entityId,
+    eventId,
+    targetSubjectId: targetSubject?.id ?? null,
+  });
+  const submitId = groupProgress?.submitId;
 
   // Fetch the token using our custom hook
   const { data, isLoading } = useOneUpHealthTokenQuery({ appletId, submitId });

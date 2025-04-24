@@ -290,6 +290,7 @@ const appletsSlice = createSlice({
         type: ActivityPipelineType.Regular,
         startAt: new Date().getTime(),
         endAt: null,
+        submitId: uuidV4(),
         context: {
           summaryData: {},
         },
@@ -308,7 +309,7 @@ const appletsSlice = createSlice({
         startAt: new Date().getTime(),
         currentActivityStartAt: new Date().getTime(),
         endAt: null,
-        executionGroupKey: uuidV4(),
+        submitId: uuidV4(),
         pipelineActivityOrder: payload.pipelineActivityOrder,
         context: {
           summaryData: {},
@@ -337,6 +338,7 @@ const appletsSlice = createSlice({
 
       if (groupProgress) {
         groupProgress.startAt = new Date().getTime();
+        groupProgress.submitId = uuidV4();
       }
     },
 
@@ -349,7 +351,7 @@ const appletsSlice = createSlice({
         groupProgress.currentActivityId = payload.activityId;
         groupProgress.pipelineActivityOrder = 0;
         groupProgress.currentActivityStartAt = groupProgress.startAt = new Date().getTime();
-        groupProgress.executionGroupKey = uuidV4();
+        groupProgress.submitId = uuidV4();
       }
     },
 

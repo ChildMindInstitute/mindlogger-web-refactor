@@ -34,11 +34,12 @@ export type FlowProgress = {
   currentActivityId: string;
   pipelineActivityOrder: number;
   currentActivityStartAt: number | null;
-  executionGroupKey: string;
+  submitId: string;
 };
 
 export type ActivityProgress = {
   type: ActivityPipelineType.Regular;
+  submitId: string;
 };
 
 export type ProgressContext = {

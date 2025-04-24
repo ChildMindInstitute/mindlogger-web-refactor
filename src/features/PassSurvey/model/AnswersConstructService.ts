@@ -117,7 +117,7 @@ export default class AnswersConstructService implements ICompletionConstructServ
       appletId: this.appletId,
       activityId: this.activityId,
       flowId: this.flow?.id ?? null,
-      submitId: this.getSubmitId(),
+      submitId: this.groupProgress.submitId,
       version: this.appletVersion,
       createdAt: new Date().getTime(),
       isFlowCompleted: isSurveyCompleted,
@@ -255,14 +255,6 @@ export default class AnswersConstructService implements ICompletionConstructServ
     const pipelineActivityOrder = this.groupProgress.pipelineActivityOrder;
 
     return activitiesInFlow === pipelineActivityOrder + 1;
-  }
-
-  private getSubmitId(): string {
-    if (this.groupProgress.type === ActivityPipelineType.Regular) {
-      return uuid();
-    }
-
-    return this.groupProgress.executionGroupKey;
   }
 
   private getEventScheduledTime(): number | null {
