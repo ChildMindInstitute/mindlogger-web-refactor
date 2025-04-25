@@ -6,6 +6,12 @@ import { Route, Routes, MemoryRouter } from 'react-router-dom';
 
 import { ExtendedRenderOptions, setupStore } from '~/app/store';
 
+// Extended options for renderWithProviders
+type RenderWithProvidersOptions = ExtendedRenderOptions & {
+  disableRouter?: boolean;
+  mockDispatch?: ReturnType<typeof setupStore>['dispatch'];
+};
+
 export const renderWithProviders = (
   ui: React.ReactElement,
   {
@@ -13,18 +19,33 @@ export const renderWithProviders = (
     routePath = '/',
     preloadedState = {},
     store = setupStore(preloadedState),
+    disableRouter,
+    mockDispatch,
     ...options
-  }: ExtendedRenderOptions = {},
+  }: RenderWithProvidersOptions,
 ) => {
-  const Providers = ({ children }: { children: ReactNode }) => (
-    <Provider store={store}>
-      <MemoryRouter initialEntries={[route]}>
-        <Routes>
-          <Route path={routePath} element={children} />
-        </Routes>
-      </MemoryRouter>
-    </Provider>
-  );
+  // Replace dispatch with mock if provided
+  if (mockDispatch) {
+    store.dispatch = mockDispatch;
+  }
+
+  const Providers = ({ children }: { children: ReactNode }) => {
+    // Wrap with Redux Provider always
+    const reduxProvider = <Provider store={store}>{children}</Provider>;
+
+    // Optionally wrap with router
+    if (!disableRouter) {
+      return (
+        <MemoryRouter initialEntries={[route]}>
+          <Routes>
+            <Route path={routePath} element={reduxProvider} />
+          </Routes>
+        </MemoryRouter>
+      );
+    }
+
+    return reduxProvider;
+  };
 
   return { ...render(ui, { wrapper: Providers, ...options }), store };
 };

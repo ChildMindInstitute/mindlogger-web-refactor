@@ -1,6 +1,6 @@
 import { validateBeforeMoveForward } from './validateItem';
 
-import { RequestHealthRecordDataItem } from '~/entities/activity';
+import { RequestHealthRecordDataItem, RequestHealthRecordDataItemStep } from '~/entities/activity';
 import { ActivityDTO } from '~/shared/api';
 
 describe('validateBeforeMoveForward', () => {
@@ -63,6 +63,8 @@ describe('validateBeforeMoveForward', () => {
         answer: [],
         conditionalLogic: null,
         isHidden: false,
+        subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
+        additionalEHRs: null,
       };
 
       // Test validation
@@ -107,6 +109,8 @@ describe('validateBeforeMoveForward', () => {
         answer: [],
         conditionalLogic: null,
         isHidden: false,
+        subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
+        additionalEHRs: null,
       };
 
       // Test validation
@@ -151,6 +155,8 @@ describe('validateBeforeMoveForward', () => {
         answer: [],
         conditionalLogic: null,
         isHidden: false,
+        subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
+        additionalEHRs: null,
       };
 
       // Create a skippable activity
