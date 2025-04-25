@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { Box, useTheme, useMediaQuery } from '@mui/material';
+import { Box } from '@mui/material';
 
 import { RegularGrid } from '../RadioItem/RegularGrid';
 
@@ -8,7 +8,7 @@ import requestHealthRecordDataIconSuccess from '~/assets/request-health-record-d
 import { RequestHealthRecordDataItem } from '~/entities/activity/lib';
 import { appletModel } from '~/entities/applet';
 import { SurveyContext } from '~/features/PassSurvey';
-import { Markdown } from '~/shared/ui';
+import { ItemMarkdown } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
 type AdditionalPromptStepProps = {
@@ -18,8 +18,6 @@ type AdditionalPromptStepProps = {
 
 export const AdditionalPromptStep = ({ item, replaceText }: AdditionalPromptStepProps) => {
   const { t } = useCustomTranslation();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { activityId, eventId, targetSubject } = useContext(SurveyContext);
   const { saveItemCustomProperty } = appletModel.hooks.useSaveItemAnswer({
@@ -61,7 +59,6 @@ export const AdditionalPromptStep = ({ item, replaceText }: AdditionalPromptStep
       fontSize="18px"
       lineHeight="28px"
       gap="24px"
-      textAlign={isMobile ? 'left' : 'center'}
     >
       <Box display="flex" justifyContent="center">
         <img
@@ -70,9 +67,9 @@ export const AdditionalPromptStep = ({ item, replaceText }: AdditionalPromptStep
         />
       </Box>
 
-      <Markdown
+      <ItemMarkdown
         markdown={t('requestHealthRecordData.additionalPromptText')}
-        sx={{ '&& p': { mb: '24px' } }}
+        sx={{ '&& > p': { mb: '24px' } }}
       />
 
       <RegularGrid
