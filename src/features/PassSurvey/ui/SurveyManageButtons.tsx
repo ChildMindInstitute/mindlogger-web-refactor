@@ -9,6 +9,7 @@ import { useCustomMediaQuery } from '~/shared/utils';
 type ItemCardButtonsProps = {
   isLoading: boolean;
   isBackShown: boolean;
+  isNextShown?: boolean;
 
   backButtonText?: string;
   nextButtonText: string;
@@ -21,6 +22,7 @@ type ItemCardButtonsProps = {
 
 export const SurveyManageButtons = ({
   isBackShown,
+  isNextShown = true,
   onBackButtonClick,
   onNextButtonClick,
   isLoading,
@@ -69,15 +71,17 @@ export const SurveyManageButtons = ({
         </Box>
       )) || <div></div>}
 
-      <Box width={greaterThanSM ? '208px' : '120px'} data-testid="assessment-next-button">
-        <BaseButton
-          type="button"
-          variant="contained"
-          isLoading={isLoading}
-          onClick={onNextButtonClick}
-          text={nextButtonText}
-        />
-      </Box>
+      {(isNextShown && (
+        <Box width={greaterThanSM ? '208px' : '120px'} data-testid="assessment-next-button">
+          <BaseButton
+            type="button"
+            variant="contained"
+            isLoading={isLoading}
+            onClick={onNextButtonClick}
+            text={nextButtonText}
+          />
+        </Box>
+      )) || <div></div>}
     </Box>
   );
 };

@@ -102,7 +102,8 @@ const PassingScreen = (props: Props) => {
     hasPrevSubStep,
     handleNextSubStep,
     handlePrevSubStep,
-    isNavigationHidden,
+    isBackHidden,
+    isNextHidden,
   } = useSubSteps({ item });
 
   const canGoBack = !item?.config.removeBackButton && context.activity.responseIsEditable;
@@ -405,11 +406,12 @@ const PassingScreen = (props: Props) => {
         isSaveAndExitButtonShown={true}
         entityTimer={groupProgress?.event?.timers?.timer ?? undefined}
         footerActions={
-          isNavigationHidden ? undefined : (
+          !(isBackHidden && isNextHidden) && (
             <SurveyManageButtons
               timerSettings={!isSubmitModalOpen ? timerSettings : undefined}
               isLoading={false}
-              isBackShown={(hasPrevStep || hasPrevSubStep) && canGoBack}
+              isBackShown={(hasPrevStep || hasPrevSubStep) && canGoBack && !isBackHidden}
+              isNextShown={!isNextHidden}
               onBackButtonClick={onBack}
               onNextButtonClick={onMoveForward}
               backButtonText={t('Consent.back') ?? undefined}

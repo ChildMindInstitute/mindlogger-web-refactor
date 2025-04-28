@@ -1,6 +1,6 @@
 import { useCallback, useContext, useMemo } from 'react';
 
-import { RequestHealthRecordDataItem, RequestHealthRecordDataItemStep } from '~/entities/activity';
+import { RequestHealthRecordDataItemStep } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { ItemRecord } from '~/entities/applet/model/types';
 import { SurveyContext } from '~/features/PassSurvey';
@@ -12,11 +12,6 @@ type UseSubStepsProps = {
 export const useSubSteps = ({ item }: UseSubStepsProps) => {
   const { activityId, eventId, targetSubject } = useContext(SurveyContext);
   const { setSubStep: setActivitySubStep } = appletModel.hooks.useActivityProgress();
-  const { saveItemCustomProperty } = appletModel.hooks.useSaveItemAnswer({
-    activityId,
-    eventId,
-    targetSubjectId: targetSubject?.id ?? null,
-  });
 
   const setSubStep = useCallback(
     (subStep: number) => {
@@ -76,14 +71,12 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
         if (item.additionalEHRs === 'requested') {
           // If requested to add additional EHRs, return to OneUpHealth
           setSubStep(RequestHealthRecordDataItemStep.OneUpHealth);
-          // Reset request to add additional EHRs to unselected
-          saveItemCustomProperty<RequestHealthRecordDataItem>(item.id, 'additionalEHRs', null);
         }
       } else {
         setSubStep(subStep + 1);
       }
     }
-  }, [hasNextSubStep, item, saveItemCustomProperty, setSubStep, subStep]);
+  }, [hasNextSubStep, item, setSubStep, subStep]);
 
   const handlePrevSubStep = useCallback(() => {
     if (!hasPrevSubStep || subStep === null) return;
@@ -93,7 +86,15 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     }
   }, [hasPrevSubStep, item, setSubStep, subStep]);
 
-  const isNavigationHidden = useMemo(() => {
+  const isBackHidden = useMemo(() => {
+    if (item.responseType === 'requestHealthRecordData') {
+      return subStep === RequestHealthRecordDataItemStep.OneUpHealth;
+    }
+
+    return false;
+  }, [item, subStep]);
+
+  const isNextHidden = useMemo(() => {
     if (item.responseType === 'requestHealthRecordData') {
       return subStep === RequestHealthRecordDataItemStep.OneUpHealth;
     }
@@ -108,6 +109,7 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     hasPrevSubStep,
     handleNextSubStep,
     handlePrevSubStep,
-    isNavigationHidden,
+    isBackHidden,
+    isNextHidden,
   };
 };
