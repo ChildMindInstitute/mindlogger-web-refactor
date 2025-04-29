@@ -64,7 +64,7 @@ export const OneUpHealthStep: FC = () => {
         style={{
           border: 0,
           width: '100%',
-          height: '700px',
+          height: '710px',
           marginTop: '-80px',
           marginBottom: '-80px',
           maxHeight: 'calc(100vh - 120px)',

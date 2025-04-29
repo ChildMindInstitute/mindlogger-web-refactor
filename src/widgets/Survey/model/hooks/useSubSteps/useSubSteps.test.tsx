@@ -98,11 +98,10 @@ describe('useSubSteps', () => {
     expect(result.current.subStep).toBeNull();
     expect(result.current.hasNextSubStep).toBe(false);
     expect(result.current.hasPrevSubStep).toBe(false);
-    expect(result.current.isBackHidden).toBe(false);
-    expect(result.current.isNextHidden).toBe(false);
+    expect(result.current.nextButtonText).toBeUndefined();
   });
 
-  test('should handle requestHealthRecordData item with subStep', () => {
+  test('should handle requestHealthRecordData item with sub steps', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
       answer: ['opt_in'],
@@ -116,11 +115,10 @@ describe('useSubSteps', () => {
     expect(result.current.subStep).toBe(RequestHealthRecordDataItemStep.ConsentPrompt);
     expect(result.current.hasNextSubStep).toBe(true);
     expect(result.current.hasPrevSubStep).toBe(false); // ConsentPrompt is the first step
-    expect(result.current.isBackHidden).toBe(false);
-    expect(result.current.isNextHidden).toBe(false);
+    expect(result.current.nextButtonText).toBeUndefined();
   });
 
-  test('should handle requestHealthRecordData item with OneUpHealth subStep', () => {
+  test('should handle requestHealthRecordData item on OneUpHealth sub step', () => {
     // Setup a requestHealthRecordData item with OneUpHealth step
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.OneUpHealth,
@@ -133,10 +131,23 @@ describe('useSubSteps', () => {
     });
 
     expect(result.current.subStep).toBe(RequestHealthRecordDataItemStep.OneUpHealth);
-    expect(result.current.hasNextSubStep).toBe(true);
+    expect(result.current.hasNextSubStep).toBe(false);
     expect(result.current.hasPrevSubStep).toBe(true);
-    expect(result.current.isBackHidden).toBe(true);
-    expect(result.current.isNextHidden).toBe(true);
+    expect(result.current.nextButtonText).toBe('requestHealthRecordData.skipButtonText');
+  });
+
+  test('should handle hasPrevSubStep on OneUpHealth sub step with additionalEHRs requested', () => {
+    const mockItem = createMockEhrItem({
+      subStep: RequestHealthRecordDataItemStep.OneUpHealth,
+      answer: ['opt_in'],
+      additionalEHRs: 'requested',
+    });
+
+    const { result } = renderHook(() => useSubSteps({ item: mockItem as ItemRecord }), {
+      wrapper,
+    });
+
+    expect(result.current.hasPrevSubStep).toBe(false); // Should be false when at OneUpHealth with additionalEHRs requested
   });
 
   test('should not have next step if user opted out', () => {

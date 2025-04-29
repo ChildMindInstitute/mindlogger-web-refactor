@@ -97,14 +97,8 @@ const PassingScreen = (props: Props) => {
   const { step, item, hasPrevStep, hasNextStep, progress, conditionallyHiddenItemIds } =
     useSurveyState(activityProgress);
 
-  const {
-    hasNextSubStep,
-    hasPrevSubStep,
-    handleNextSubStep,
-    handlePrevSubStep,
-    isBackHidden,
-    isNextHidden,
-  } = useSubSteps({ item });
+  const { hasNextSubStep, hasPrevSubStep, handleNextSubStep, handlePrevSubStep, nextButtonText } =
+    useSubSteps({ item });
 
   const canGoBack = !item?.config.removeBackButton && context.activity.responseIsEditable;
 
@@ -406,18 +400,15 @@ const PassingScreen = (props: Props) => {
         isSaveAndExitButtonShown={true}
         entityTimer={groupProgress?.event?.timers?.timer ?? undefined}
         footerActions={
-          !(isBackHidden && isNextHidden) && (
-            <SurveyManageButtons
-              timerSettings={!isSubmitModalOpen ? timerSettings : undefined}
-              isLoading={false}
-              isBackShown={(hasPrevStep || hasPrevSubStep) && canGoBack && !isBackHidden}
-              isNextShown={!isNextHidden}
-              onBackButtonClick={onBack}
-              onNextButtonClick={onMoveForward}
-              backButtonText={t('Consent.back') ?? undefined}
-              nextButtonText={t('Consent.next')}
-            />
-          )
+          <SurveyManageButtons
+            timerSettings={!isSubmitModalOpen ? timerSettings : undefined}
+            isLoading={false}
+            isBackShown={(hasPrevStep || hasPrevSubStep) && canGoBack}
+            onBackButtonClick={onBack}
+            onNextButtonClick={onMoveForward}
+            backButtonText={String(t('Consent.back'))}
+            nextButtonText={String(nextButtonText ?? t('Consent.next'))}
+          />
         }
       >
         <Box maxWidth="900px" display="flex" alignItems="center" flex={1}>

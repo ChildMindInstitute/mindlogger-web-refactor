@@ -4,12 +4,14 @@ import { RequestHealthRecordDataItemStep } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { ItemRecord } from '~/entities/applet/model/types';
 import { SurveyContext } from '~/features/PassSurvey';
+import { useCustomTranslation } from '~/shared/utils';
 
 type UseSubStepsProps = {
   item: ItemRecord;
 };
 
 export const useSubSteps = ({ item }: UseSubStepsProps) => {
+  const { t } = useCustomTranslation();
   const { activityId, eventId, targetSubject } = useContext(SurveyContext);
   const { setSubStep: setActivitySubStep } = appletModel.hooks.useActivityProgress();
 
@@ -37,13 +39,14 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     if (subStep === null) return false;
 
     if (item.responseType === 'requestHealthRecordData') {
-      if (item.answer[0] !== 'opt_in') {
-        return false;
-      }
-
       return (
-        item.additionalEHRs === 'requested' ||
-        subStep < RequestHealthRecordDataItemStep.AdditionalPrompt
+        // Go to the next substep only if the user has opted in to sharing EHR data, and
+        item.answer[0] === 'opt_in' &&
+        // we're not on the OneUpHealth step (user should be skipped to next item instead), and
+        subStep !== RequestHealthRecordDataItemStep.OneUpHealth &&
+        // we're before the last sub-step OR additional EHRs have been requested
+        (subStep < RequestHealthRecordDataItemStep.AdditionalPrompt ||
+          item.additionalEHRs === 'requested')
       );
     }
 
@@ -55,8 +58,15 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
 
     if (item.responseType === 'requestHealthRecordData') {
       return (
+        // Go to the previous substep only if we're after the first step, and
         subStep > RequestHealthRecordDataItemStep.ConsentPrompt &&
-        subStep !== RequestHealthRecordDataItemStep.AdditionalPrompt
+        // we're not on the AdditionalPrompt step, and
+        subStep !== RequestHealthRecordDataItemStep.AdditionalPrompt &&
+        // we're not on the OneUpHealth step with additionalEHRs requested
+        !(
+          subStep === RequestHealthRecordDataItemStep.OneUpHealth &&
+          item.additionalEHRs === 'requested'
+        )
       );
     }
 
@@ -69,10 +79,11 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     if (item.responseType === 'requestHealthRecordData') {
       if (subStep === RequestHealthRecordDataItemStep.AdditionalPrompt) {
         if (item.additionalEHRs === 'requested') {
-          // If requested to add additional EHRs, return to OneUpHealth
+          // If requested to add additional EHRs, return to OneUpHealth step
           setSubStep(RequestHealthRecordDataItemStep.OneUpHealth);
         }
       } else {
+        // Go to the next substep
         setSubStep(subStep + 1);
       }
     }
@@ -82,25 +93,21 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     if (!hasPrevSubStep || subStep === null) return;
 
     if (item.responseType === 'requestHealthRecordData') {
+      // Go to the previous substep
       setSubStep(subStep - 1);
     }
   }, [hasPrevSubStep, item, setSubStep, subStep]);
 
-  const isBackHidden = useMemo(() => {
+  const nextButtonText = useMemo(() => {
     if (item.responseType === 'requestHealthRecordData') {
-      return subStep === RequestHealthRecordDataItemStep.OneUpHealth;
+      if (subStep === RequestHealthRecordDataItemStep.OneUpHealth) {
+        // If at the OneUpHealth step, the "Next" button should show "Skip"
+        return t('requestHealthRecordData.skipButtonText');
+      }
     }
 
-    return false;
-  }, [item, subStep]);
-
-  const isNextHidden = useMemo(() => {
-    if (item.responseType === 'requestHealthRecordData') {
-      return subStep === RequestHealthRecordDataItemStep.OneUpHealth;
-    }
-
-    return false;
-  }, [item, subStep]);
+    return undefined;
+  }, [item, subStep, t]);
 
   return {
     subStep,
@@ -109,7 +116,6 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     hasPrevSubStep,
     handleNextSubStep,
     handlePrevSubStep,
-    isBackHidden,
-    isNextHidden,
+    nextButtonText,
   };
 };
