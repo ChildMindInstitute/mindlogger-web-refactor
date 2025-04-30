@@ -101,7 +101,7 @@ describe('useSubSteps', () => {
     expect(result.current.nextButtonText).toBeUndefined();
   });
 
-  test('should handle requestHealthRecordData item with sub steps', () => {
+  test('should handle ConsentPrompt sub step', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
       answer: ['opt_in'],
@@ -118,7 +118,7 @@ describe('useSubSteps', () => {
     expect(result.current.nextButtonText).toBeUndefined();
   });
 
-  test('should handle requestHealthRecordData item on OneUpHealth sub step', () => {
+  test('should handle OneUpHealth sub step without additional EHRs requested', () => {
     // Setup a requestHealthRecordData item with OneUpHealth step
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.OneUpHealth,
@@ -136,9 +136,9 @@ describe('useSubSteps', () => {
     expect(result.current.nextButtonText).toBe('requestHealthRecordData.skipButtonText');
   });
 
-  test('should handle hasPrevSubStep on OneUpHealth sub step with additionalEHRs requested', () => {
+  test('should handle AdditionalPrompt sub step with additional EHRs requested', () => {
     const mockItem = createMockEhrItem({
-      subStep: RequestHealthRecordDataItemStep.OneUpHealth,
+      subStep: RequestHealthRecordDataItemStep.AdditionalPrompt,
       answer: ['opt_in'],
       additionalEHRs: 'requested',
     });
@@ -147,7 +147,10 @@ describe('useSubSteps', () => {
       wrapper,
     });
 
-    expect(result.current.hasPrevSubStep).toBe(false); // Should be false when at OneUpHealth with additionalEHRs requested
+    expect(result.current.subStep).toBe(RequestHealthRecordDataItemStep.AdditionalPrompt);
+    expect(result.current.hasNextSubStep).toBe(true); // Should have next step when additionalEHRs is requested
+    expect(result.current.hasPrevSubStep).toBe(false); // AdditionalPrompt should not have prev step
+    expect(result.current.nextButtonText).toBeUndefined();
   });
 
   test('should not have next step if user opted out', () => {
@@ -185,7 +188,7 @@ describe('useSubSteps', () => {
     });
   });
 
-  test('should handle previous sub step correctly', () => {
+  test('should handle previous sub step correctly without additional EHRs requested', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.OneUpHealth,
       answer: ['opt_in'],
@@ -206,7 +209,7 @@ describe('useSubSteps', () => {
     });
   });
 
-  test('should handle additional EHRs request', () => {
+  test('should handle additional EHRs request - navigating from AdditionalPrompt to OneUpHealth', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.AdditionalPrompt,
       answer: ['opt_in'],
@@ -217,6 +220,9 @@ describe('useSubSteps', () => {
       wrapper,
     });
 
+    // When additionalEHRs is 'requested', we should have a next step from AdditionalPrompt
+    expect(result.current.hasNextSubStep).toBe(true);
+
     result.current.handleNextSubStep();
 
     expect(mockSetSubStep).toHaveBeenCalledWith({
@@ -224,6 +230,30 @@ describe('useSubSteps', () => {
       eventId: 'event-123',
       targetSubjectId: 'subject-123',
       subStep: RequestHealthRecordDataItemStep.OneUpHealth,
+    });
+  });
+
+  test('should handle additional EHRs request - navigating from OneUpHealth to AdditionalPrompt', () => {
+    const mockItem = createMockEhrItem({
+      subStep: RequestHealthRecordDataItemStep.OneUpHealth,
+      answer: ['opt_in'],
+      additionalEHRs: 'requested',
+    });
+
+    const { result } = renderHook(() => useSubSteps({ item: mockItem as ItemRecord }), {
+      wrapper,
+    });
+
+    // Test that hasPrevSubStep is true when at OneUpHealth with additionalEHRs requested
+    expect(result.current.hasPrevSubStep).toBe(true);
+
+    result.current.handlePrevSubStep();
+
+    expect(mockSetSubStep).toHaveBeenCalledWith({
+      activityId: 'activity-123',
+      eventId: 'event-123',
+      targetSubjectId: 'subject-123',
+      subStep: RequestHealthRecordDataItemStep.AdditionalPrompt,
     });
   });
 

@@ -60,13 +60,8 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
       return (
         // Go to the previous substep only if we're after the first step, and
         subStep > RequestHealthRecordDataItemStep.ConsentPrompt &&
-        // we're not on the AdditionalPrompt step, and
-        subStep !== RequestHealthRecordDataItemStep.AdditionalPrompt &&
-        // we're not on the OneUpHealth step with additionalEHRs requested
-        !(
-          subStep === RequestHealthRecordDataItemStep.OneUpHealth &&
-          item.additionalEHRs === 'requested'
-        )
+        // we're not on the AdditionalPrompt step
+        subStep !== RequestHealthRecordDataItemStep.AdditionalPrompt
       );
     }
 
@@ -93,8 +88,17 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     if (!hasPrevSubStep || subStep === null) return;
 
     if (item.responseType === 'requestHealthRecordData') {
-      // Go to the previous substep
-      setSubStep(subStep - 1);
+      if (
+        subStep === RequestHealthRecordDataItemStep.OneUpHealth &&
+        item.additionalEHRs === 'requested'
+      ) {
+        // Go back to the AdditionalPrompt step if we're on the OneUpHealth step and
+        // additional EHRs have been requested
+        setSubStep(RequestHealthRecordDataItemStep.AdditionalPrompt);
+      } else {
+        // Else go to the previous substep
+        setSubStep(subStep - 1);
+      }
     }
   }, [hasPrevSubStep, item, setSubStep, subStep]);
 

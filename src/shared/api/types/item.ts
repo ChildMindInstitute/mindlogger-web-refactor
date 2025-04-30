@@ -403,7 +403,7 @@ export interface RequestHealthRecordDataItemDTO extends ItemDetailsBaseDTO {
 
 type RequestHealthRecordDataItemConfigDTO = {
   removeBackButton: boolean;
-  skippableItem: never;
+  skippableItem?: boolean;
 };
 
 type RequestHealthRecordDataItemResponseValuesDTO = {

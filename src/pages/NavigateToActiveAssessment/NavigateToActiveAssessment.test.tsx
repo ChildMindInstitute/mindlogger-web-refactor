@@ -102,6 +102,7 @@ describe('NavigateToActiveAssessment', () => {
           id: 'item-1',
           responseType: 'requestHealthRecordData',
           subStep: RequestHealthRecordDataItemStep.OneUpHealth,
+          additionalEHRs: 'requested',
         },
       ],
     };
@@ -132,6 +133,16 @@ describe('NavigateToActiveAssessment', () => {
         itemId: 'item-1',
         customProperty: 'subStep',
         value: RequestHealthRecordDataItemStep.AdditionalPrompt,
+      }),
+    );
+    expect(mockDispatch).toHaveBeenCalledWith(
+      appletModel.actions.saveCustomProperty({
+        entityId: 'activity-123',
+        eventId: 'event-123',
+        targetSubjectId: 'subject-123',
+        itemId: 'item-1',
+        customProperty: 'additionalEHRs',
+        value: null,
       }),
     );
   });

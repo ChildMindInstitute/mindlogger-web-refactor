@@ -48,7 +48,7 @@ const NavigateToActiveAssessment = () => {
    *
    * When the activity contains an EHR item type that's in the OneUpHealth step, and we're resuming
    * the activity via the /active-assessment route, advance the item's state to the last sub-step
-   * (after the OneUpHealth step).
+   * (after the OneUpHealth step). Also reset the additional EHRs request to unanswered.
    =================================================== */
   const ehrItemIndex =
     activityProgress?.items.findIndex((item) => item.responseType === 'requestHealthRecordData') ??
@@ -68,6 +68,16 @@ const NavigateToActiveAssessment = () => {
         itemId: ehrItem.id,
         customProperty: 'subStep',
         value: RequestHealthRecordDataItemStep.AdditionalPrompt,
+      }),
+    );
+    dispatch(
+      actions.saveCustomProperty({
+        entityId: activityId,
+        eventId: progressData.eventId,
+        targetSubjectId: progressData.targetSubjectId,
+        itemId: ehrItem.id,
+        customProperty: 'additionalEHRs',
+        value: null,
       }),
     );
   }

@@ -9,7 +9,7 @@ import { RequestHealthRecordDataItem } from '~/entities/activity/lib';
 import { appletModel } from '~/entities/applet';
 import { SurveyContext } from '~/features/PassSurvey';
 import { ItemMarkdown } from '~/shared/ui';
-import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
+import { useCustomTranslation } from '~/shared/utils';
 
 type AdditionalPromptStepProps = {
   item: RequestHealthRecordDataItem;
@@ -50,13 +50,6 @@ export const AdditionalPromptStep = ({ item, replaceText }: AdditionalPromptStep
       value: 'done',
     },
   ];
-
-  useOnceEffect(() => {
-    // Reset to unselected when arriving here after having previously selected "Yes"
-    if (item.additionalEHRs === 'requested') {
-      saveItemCustomProperty<RequestHealthRecordDataItem>(item.id, 'additionalEHRs', null);
-    }
-  });
 
   return (
     <Box

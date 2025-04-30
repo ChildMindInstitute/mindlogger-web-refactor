@@ -52,8 +52,35 @@ export const RequestHealthRecordDataItem = ({
 
   const prevSubStep = usePrevious(item.subStep);
 
+  // Custom animation direction logic
+  const customPrevStep = useMemo(() => {
+    // If additional EHRs have been requested:
+    if (item.additionalEHRs === 'requested') {
+      // and if we're moving between OneUpHealth and AdditionalPrompt steps:
+      if (
+        item.subStep === RequestHealthRecordDataItemStep.AdditionalPrompt &&
+        prevSubStep === RequestHealthRecordDataItemStep.OneUpHealth
+      ) {
+        // force the animation to appear as if we're moving forward (from a higher step number)
+        return RequestHealthRecordDataItemStep.AdditionalPrompt + 1;
+      }
+
+      // or if we're moving from AdditionalPrompt back to OneUpHealth:
+      if (
+        item.subStep === RequestHealthRecordDataItemStep.OneUpHealth &&
+        prevSubStep === RequestHealthRecordDataItemStep.AdditionalPrompt
+      ) {
+        // force the animation to appear as if we're moving backward (from a lower step number)
+        return RequestHealthRecordDataItemStep.OneUpHealth - 1;
+      }
+    }
+
+    // Default behavior for all other cases
+    return prevSubStep ?? item.subStep;
+  }, [item.subStep, prevSubStep, item.additionalEHRs]);
+
   return (
-    <SliderAnimation step={item.subStep} prevStep={prevSubStep ?? item.subStep} key={item.subStep}>
+    <SliderAnimation step={item.subStep} prevStep={customPrevStep} key={item.subStep}>
       {content}
     </SliderAnimation>
   );
