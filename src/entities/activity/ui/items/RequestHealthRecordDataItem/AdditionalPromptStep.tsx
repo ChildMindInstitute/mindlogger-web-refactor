@@ -26,27 +26,26 @@ export const AdditionalPromptStep = ({ item, replaceText }: AdditionalPromptStep
     targetSubjectId: targetSubject?.id ?? null,
   });
 
+  const baseOption = {
+    tooltip: null,
+    image: null,
+    score: null,
+    color: null,
+    isHidden: false,
+    alert: null,
+  };
+
   const additionalOptions = [
     {
+      ...baseOption,
       id: 'requested',
       text: t('additional.yes'),
-      tooltip: null,
-      image: null,
-      score: null,
-      color: null,
-      isHidden: false,
-      alert: null,
       value: 'requested',
     },
     {
+      ...baseOption,
       id: 'done',
       text: t('additional.no'),
-      tooltip: null,
-      image: null,
-      score: null,
-      color: null,
-      isHidden: false,
-      alert: null,
       value: 'done',
     },
   ];

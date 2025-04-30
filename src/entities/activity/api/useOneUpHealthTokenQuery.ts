@@ -15,7 +15,7 @@ export const useOneUpHealthTokenQuery = <TData = ReturnAwaited<FetchFn>>(
         submitId: submitId as string,
       }),
     {
-      retry: 1,
+      retry: 4,
       enabled: !!submitId,
       ...options,
     },

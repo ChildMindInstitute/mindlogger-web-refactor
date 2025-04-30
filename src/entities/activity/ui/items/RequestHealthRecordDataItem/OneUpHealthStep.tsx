@@ -6,6 +6,17 @@ import { SurveyContext } from '~/features/PassSurvey';
 import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 
+/**
+ * Displays an iframe interface provided by 1UpHealth, which allows the user to search for a
+ * 3rd-party health system they are part of and consent to share their health data.
+ *
+ * The access token, provided by the BE (which in turn calls the 1UpHealth API to generate the
+ * token), is based on the submission ID associated with this assessment. This is used to
+ * authenticate the user and activate the 1UpHealth iframe.
+ *
+ * This iframe implementation is based on the sample code provided by 1UpHealth. More information:
+ * https://docs.1up.health/help-center/Content/en-US/connect-patient/system-search-api.html#embed-the-system-search-tool-iframe-and-function-for-react
+ */
 export const OneUpHealthStep: FC = () => {
   const { appletId } = useContext(SurveyContext);
 
