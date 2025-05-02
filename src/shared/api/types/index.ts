@@ -7,3 +7,4 @@ export * from './events';
 export * from './item';
 export * from './conditionalLogic';
 export * from './assignment';
+export * from './subject';

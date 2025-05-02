@@ -1,4 +1,8 @@
-import { ConditionalLogic, PhrasalTemplateConfigDTO } from '~/shared/api';
+import {
+  ConditionalLogic,
+  PhrasalTemplateConfigDTO,
+  RequestHealthRecordDataItemResponseValuesDTO,
+} from '~/shared/api';
 
 export type DefaultAnswer = Array<string>;
 export type MatrixMultiSelectAnswer = Array<Array<string | null>>;
@@ -473,16 +477,4 @@ export type RequestHealthRecordDataItemConfig = {
   skippableItem?: boolean;
 };
 
-export type RequestHealthRecordDataValues = {
-  type: 'requestHealthRecordData';
-  optInOutOptions: [
-    {
-      id: 'opt_in';
-      label: string;
-    },
-    {
-      id: 'opt_out';
-      label: string;
-    },
-  ];
-};
+export type RequestHealthRecordDataValues = RequestHealthRecordDataItemResponseValuesDTO;

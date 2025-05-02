@@ -1,7 +1,7 @@
 import { validateBeforeMoveForward } from './validateItem';
 
 import { RequestHealthRecordDataItem, RequestHealthRecordDataItemStep } from '~/entities/activity';
-import { ActivityDTO } from '~/shared/api';
+import { EHRConsent, ActivityDTO } from '~/shared/api';
 
 describe('validateBeforeMoveForward', () => {
   // Mock functions for warnings
@@ -51,11 +51,11 @@ describe('validateBeforeMoveForward', () => {
           type: 'requestHealthRecordData',
           optInOutOptions: [
             {
-              id: 'opt_in',
+              id: EHRConsent.OptIn,
               label: 'Opt In',
             },
             {
-              id: 'opt_out',
+              id: EHRConsent.OptOut,
               label: 'Opt Out',
             },
           ],
@@ -97,11 +97,11 @@ describe('validateBeforeMoveForward', () => {
           type: 'requestHealthRecordData',
           optInOutOptions: [
             {
-              id: 'opt_in',
+              id: EHRConsent.OptIn,
               label: 'Opt In',
             },
             {
-              id: 'opt_out',
+              id: EHRConsent.OptOut,
               label: 'Opt Out',
             },
           ],
@@ -143,11 +143,11 @@ describe('validateBeforeMoveForward', () => {
           type: 'requestHealthRecordData',
           optInOutOptions: [
             {
-              id: 'opt_in',
+              id: EHRConsent.OptIn,
               label: 'Opt In',
             },
             {
-              id: 'opt_out',
+              id: EHRConsent.OptOut,
               label: 'Opt Out',
             },
           ],

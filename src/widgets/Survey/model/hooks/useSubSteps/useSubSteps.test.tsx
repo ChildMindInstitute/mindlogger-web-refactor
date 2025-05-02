@@ -12,7 +12,7 @@ import {
 } from '~/entities/activity';
 import { ItemRecord } from '~/entities/applet/model/types';
 import { SurveyContext } from '~/features/PassSurvey';
-import { SubjectDTO } from '~/shared/api/types/subject';
+import { SubjectDTO, EHRConsent } from '~/shared/api';
 
 // Mock dependencies
 const mockSetSubStep = vi.fn();
@@ -53,8 +53,8 @@ describe('useSubSteps', () => {
     responseValues: {
       type: 'requestHealthRecordData' as const,
       optInOutOptions: [
-        { id: 'opt_in', label: 'Opt In' },
-        { id: 'opt_out', label: 'Opt Out' },
+        { id: EHRConsent.OptIn, label: 'Opt In' },
+        { id: EHRConsent.OptOut, label: 'Opt Out' },
       ],
     },
     ...props,
@@ -104,7 +104,7 @@ describe('useSubSteps', () => {
   test('should handle ConsentPrompt sub step', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
-      answer: ['opt_in'],
+      answer: [EHRConsent.OptIn],
       additionalEHRs: null,
     });
 
@@ -122,7 +122,7 @@ describe('useSubSteps', () => {
     // Setup a requestHealthRecordData item with OneUpHealth step
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.OneUpHealth,
-      answer: ['opt_in'],
+      answer: [EHRConsent.OptIn],
       additionalEHRs: null,
     });
 
@@ -139,7 +139,7 @@ describe('useSubSteps', () => {
   test('should handle AdditionalPrompt sub step with additional EHRs requested', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.AdditionalPrompt,
-      answer: ['opt_in'],
+      answer: [EHRConsent.OptIn],
       additionalEHRs: 'requested',
     });
 
@@ -156,7 +156,7 @@ describe('useSubSteps', () => {
   test('should not have next step if user opted out', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
-      answer: ['opt_out'],
+      answer: [EHRConsent.OptOut],
       additionalEHRs: null,
     });
 
@@ -170,7 +170,7 @@ describe('useSubSteps', () => {
   test('should handle next sub step correctly', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
-      answer: ['opt_in'],
+      answer: [EHRConsent.OptIn],
       additionalEHRs: null,
     });
 
@@ -191,7 +191,7 @@ describe('useSubSteps', () => {
   test('should handle previous sub step correctly without additional EHRs requested', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.OneUpHealth,
-      answer: ['opt_in'],
+      answer: [EHRConsent.OptIn],
       additionalEHRs: null,
     });
 
@@ -212,7 +212,7 @@ describe('useSubSteps', () => {
   test('should handle next sub step correctly with additional EHRs explicitly not requested', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.OneUpHealth,
-      answer: ['opt_in'],
+      answer: [EHRConsent.OptIn],
       additionalEHRs: 'done',
     });
 
@@ -231,7 +231,7 @@ describe('useSubSteps', () => {
   test('should handle additional EHRs request - navigating from AdditionalPrompt to OneUpHealth', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.AdditionalPrompt,
-      answer: ['opt_in'],
+      answer: [EHRConsent.OptIn],
       additionalEHRs: 'requested',
     });
 
@@ -255,7 +255,7 @@ describe('useSubSteps', () => {
   test('should handle additional EHRs request - navigating from OneUpHealth to AdditionalPrompt', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.OneUpHealth,
-      answer: ['opt_in'],
+      answer: [EHRConsent.OptIn],
       additionalEHRs: 'requested',
     });
 
@@ -276,7 +276,7 @@ describe('useSubSteps', () => {
   test('should handle setting sub step directly', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
-      answer: ['opt_in'],
+      answer: [EHRConsent.OptIn],
       additionalEHRs: null,
     });
 

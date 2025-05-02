@@ -406,15 +406,20 @@ type RequestHealthRecordDataItemConfigDTO = {
   skippableItem?: boolean;
 };
 
-type RequestHealthRecordDataItemResponseValuesDTO = {
+export enum EHRConsent {
+  OptIn = 'opt_in',
+  OptOut = 'opt_out',
+}
+
+export type RequestHealthRecordDataItemResponseValuesDTO = {
   type: 'requestHealthRecordData';
   optInOutOptions: [
     {
-      id: 'opt_in';
+      id: EHRConsent.OptIn;
       label: string;
     },
     {
-      id: 'opt_out';
+      id: EHRConsent.OptOut;
       label: string;
     },
   ];

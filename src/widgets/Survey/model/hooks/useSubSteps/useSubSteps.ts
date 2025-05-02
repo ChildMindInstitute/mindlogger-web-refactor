@@ -4,6 +4,7 @@ import { RequestHealthRecordDataItemStep } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { ItemRecord } from '~/entities/applet/model/types';
 import { SurveyContext } from '~/features/PassSurvey';
+import { EHRConsent } from '~/shared/api';
 import { useCustomTranslation } from '~/shared/utils';
 
 type UseSubStepsProps = {
@@ -41,7 +42,7 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     if (item.responseType === 'requestHealthRecordData') {
       return (
         // Go to the next substep only if the user has opted in to sharing EHR data, and
-        item.answer[0] === 'opt_in' &&
+        (item.answer[0] as EHRConsent) === EHRConsent.OptIn &&
         // we're not on the OneUpHealth step (user should be skipped to next item instead), and
         subStep !== RequestHealthRecordDataItemStep.OneUpHealth &&
         // we're before the last sub-step OR additional EHRs have been requested
