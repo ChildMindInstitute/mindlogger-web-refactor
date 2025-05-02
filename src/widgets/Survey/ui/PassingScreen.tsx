@@ -269,16 +269,15 @@ const PassingScreen = (props: Props) => {
       return handlePrevSubStep();
     }
 
-    // If we're at the first subStep or there are no subSteps, go to the previous step
-    if (!hasPrevStep) {
-      return;
+    // If we're at the first subStep or there are no subSteps and we're not at the first step, go to
+    // the previous step
+    if (hasPrevStep) {
+      return decrementStep({
+        activityId: context.activityId,
+        eventId: context.eventId,
+        targetSubjectId,
+      });
     }
-
-    return decrementStep({
-      activityId: context.activityId,
-      eventId: context.eventId,
-      targetSubjectId,
-    });
   }, [
     context.activityId,
     context.eventId,

@@ -10,7 +10,6 @@ import { insertAfterMedia, useCustomTranslation } from '~/shared/utils';
 
 type ItemMarkdownProps = MarkdownProps & {
   isOptional?: boolean;
-  targetSubjectId?: string | null;
 };
 
 export const ItemMarkdown = ({ markdown, isOptional, ...rest }: ItemMarkdownProps) => {

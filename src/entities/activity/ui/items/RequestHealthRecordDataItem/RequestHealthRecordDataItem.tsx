@@ -61,7 +61,7 @@ export const RequestHealthRecordDataItem = ({
         item.subStep === RequestHealthRecordDataItemStep.AdditionalPrompt &&
         prevSubStep === RequestHealthRecordDataItemStep.OneUpHealth
       ) {
-        // force the animation to appear as if we're moving forward (from a higher step number)
+        // force the animation to appear as if we're moving backward (from a higher step number)
         return RequestHealthRecordDataItemStep.AdditionalPrompt + 1;
       }
 
@@ -70,7 +70,7 @@ export const RequestHealthRecordDataItem = ({
         item.subStep === RequestHealthRecordDataItemStep.OneUpHealth &&
         prevSubStep === RequestHealthRecordDataItemStep.AdditionalPrompt
       ) {
-        // force the animation to appear as if we're moving backward (from a lower step number)
+        // force the animation to appear as if we're moving forward (from a lower step number)
         return RequestHealthRecordDataItemStep.OneUpHealth - 1;
       }
     }

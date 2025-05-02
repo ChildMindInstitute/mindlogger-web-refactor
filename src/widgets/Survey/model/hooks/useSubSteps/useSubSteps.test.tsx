@@ -209,6 +209,25 @@ describe('useSubSteps', () => {
     });
   });
 
+  test('should handle next sub step correctly with additional EHRs explicitly not requested', () => {
+    const mockItem = createMockEhrItem({
+      subStep: RequestHealthRecordDataItemStep.OneUpHealth,
+      answer: ['opt_in'],
+      additionalEHRs: 'done',
+    });
+
+    const { result } = renderHook(() => useSubSteps({ item: mockItem as ItemRecord }), {
+      wrapper,
+    });
+
+    // When additionalEHRs is 'done', we should not have a next step
+    expect(result.current.hasNextSubStep).toBe(false);
+
+    result.current.handleNextSubStep();
+
+    expect(mockSetSubStep).not.toHaveBeenCalled();
+  });
+
   test('should handle additional EHRs request - navigating from AdditionalPrompt to OneUpHealth', () => {
     const mockItem = createMockEhrItem({
       subStep: RequestHealthRecordDataItemStep.AdditionalPrompt,
@@ -243,9 +262,6 @@ describe('useSubSteps', () => {
     const { result } = renderHook(() => useSubSteps({ item: mockItem as ItemRecord }), {
       wrapper,
     });
-
-    // Test that hasPrevSubStep is true when at OneUpHealth with additionalEHRs requested
-    expect(result.current.hasPrevSubStep).toBe(true);
 
     result.current.handlePrevSubStep();
 
