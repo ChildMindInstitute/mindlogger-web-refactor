@@ -460,7 +460,7 @@ export interface RequestHealthRecordDataItem extends ActivityItemBase {
 
 export type RequestHealthRecordDataItemConfig = {
   removeBackButton: boolean;
-  skippableItem: never;
+  skippableItem?: boolean;
 };
 
 export type RequestHealthRecordDataValues = {
