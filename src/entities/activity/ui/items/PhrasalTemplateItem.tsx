@@ -55,7 +55,7 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
 
     // Schedule the async download to preserve gesture context
     setTimeout(() => {
-      downloadPhrasalTemplateItem({
+      void downloadPhrasalTemplateItem({
         documentId: documentIdRef.current,
         filename: [
           appletDisplayName,
