@@ -192,10 +192,23 @@ export type SaveItemAdditionalTextPayload = {
   additionalText: string;
 };
 
+export type SaveItemCustomPropertyPayload = {
+  entityId: string;
+  eventId: string;
+  targetSubjectId: string | null;
+  itemId: string;
+  customProperty: string;
+  value: unknown;
+};
+
 export type UpdateStepPayload = {
   activityId: string;
   eventId: string;
   targetSubjectId: string | null;
+};
+
+export type UpdateSubStepPayload = UpdateStepPayload & {
+  subStep: number;
 };
 
 export type SaveUserEventPayload = {

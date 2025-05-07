@@ -43,12 +43,9 @@ export const ActivityCardItem = ({
     return replaceText(item.question);
   }, [item.question, replaceText, item.responseType]);
 
-  const isOptionalFlagHidden = [
-    'message',
-    'audioPlayer',
-    'splashScreen',
-    'requestHealthRecordData',
-  ].includes(item.responseType);
+  const isOptionalFlagHidden = ['message', 'audioPlayer', 'splashScreen'].includes(
+    item.responseType,
+  );
 
   const { t } = useCustomTranslation();
 

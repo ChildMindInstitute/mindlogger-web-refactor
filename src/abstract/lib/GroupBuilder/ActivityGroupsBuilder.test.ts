@@ -28,6 +28,7 @@ const getProgress = (startAt: Date, endAt: Date | null) => {
       type: ActivityPipelineType.Regular,
       startAt: startAt.getTime(),
       endAt: endAt ? endAt.getTime() : null,
+      submitId: 'group-key-1',
       context: {
         summaryData: {},
       },
@@ -1577,7 +1578,7 @@ describe('ActivityGroupsBuilder', () => {
           endAt: null,
           currentActivityId: 'test-id-1',
           currentActivityStartAt: addMinutes(scheduledAt, 5).getTime(),
-          executionGroupKey: 'group-key-1',
+          submitId: 'group-key-1',
           pipelineActivityOrder: 0,
           context: {
             summaryData: {},

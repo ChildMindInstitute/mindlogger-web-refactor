@@ -47,4 +47,9 @@ export const prolificParamsSelector = createSelector(
   (state) => state.prolificParams,
 );
 
+export const activeAssessmentSelector = createSelector(
+  appletsSelector,
+  (state) => state.activeAssessment,
+);
+
 export const selectConsents = createSelector(appletsSelector, (applets) => applets.consents);

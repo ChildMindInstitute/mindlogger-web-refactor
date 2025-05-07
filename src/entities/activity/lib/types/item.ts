@@ -1,4 +1,8 @@
-import { ConditionalLogic, PhrasalTemplateConfigDTO } from '~/shared/api';
+import {
+  ConditionalLogic,
+  PhrasalTemplateConfigDTO,
+  RequestHealthRecordDataItemResponseValuesDTO,
+} from '~/shared/api';
 
 export type DefaultAnswer = Array<string>;
 export type MatrixMultiSelectAnswer = Array<Array<string | null>>;
@@ -73,6 +77,7 @@ export interface ActivityItemBase {
   additionalText?: string | null;
   conditionalLogic: ConditionalLogic | null;
   isHidden: boolean;
+  subStep?: number;
 }
 
 export type Config =
@@ -451,11 +456,20 @@ export type SliderRows = Array<{
   alerts: SliderAlerts;
 }>;
 
+export enum RequestHealthRecordDataItemStep {
+  ConsentPrompt = 0,
+  Partnership = 1,
+  OneUpHealth = 2,
+  AdditionalPrompt = 3,
+}
+
 export interface RequestHealthRecordDataItem extends ActivityItemBase {
   responseType: 'requestHealthRecordData';
   config: RequestHealthRecordDataItemConfig;
   responseValues: RequestHealthRecordDataValues;
   answer: DefaultAnswer;
+  subStep: RequestHealthRecordDataItemStep;
+  additionalEHRs: 'requested' | 'done' | null;
 }
 
 export type RequestHealthRecordDataItemConfig = {
@@ -463,16 +477,4 @@ export type RequestHealthRecordDataItemConfig = {
   skippableItem?: boolean;
 };
 
-export type RequestHealthRecordDataValues = {
-  type: 'requestHealthRecordData';
-  optInOutOptions: [
-    {
-      id: 'opt_in';
-      label: string;
-    },
-    {
-      id: 'opt_out';
-      label: string;
-    },
-  ];
-};
+export type RequestHealthRecordDataValues = RequestHealthRecordDataItemResponseValuesDTO;

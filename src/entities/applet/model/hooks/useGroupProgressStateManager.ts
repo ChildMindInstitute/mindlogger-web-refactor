@@ -11,6 +11,7 @@ import {
   SaveGroupProgressPayload,
   SaveSummaryDataInContext,
 } from '../types';
+import { useActiveAssessment } from './useActiveAssessment';
 
 import { GroupProgress, getProgressId } from '~/abstract/lib';
 import { useAppDispatch, useAppSelector } from '~/shared/utils';
@@ -31,6 +32,7 @@ type Return = {
 export const useGroupProgressStateManager = (): Return => {
   const dispatch = useAppDispatch();
   const groupProgresses = useAppSelector(groupProgressSelector);
+  const { clearActiveAssessment } = useActiveAssessment();
 
   const getGroupProgress = useCallback(
     (params: InProgressEntity) => {
@@ -70,8 +72,9 @@ export const useGroupProgressStateManager = (): Return => {
   const entityCompleted = useCallback(
     (props: InProgressEntity) => {
       dispatch(actions.entityCompleted(props));
+      clearActiveAssessment();
     },
-    [dispatch],
+    [dispatch, clearActiveAssessment],
   );
 
   const saveGroupProgress = useCallback(
