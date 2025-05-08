@@ -166,6 +166,7 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
         onMouseEnter={() => setDownloadIcon(downloadIconLight)}
         onMouseLeave={() => setDownloadIcon(downloadIconDark)}
         onClick={handleDownloadImage}
+        disabled={isMobile && !mobileDownloadFiles}
         sx={{
           width: '172px',
           height: '48px',
