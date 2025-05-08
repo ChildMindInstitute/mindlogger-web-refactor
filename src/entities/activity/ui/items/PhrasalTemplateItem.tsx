@@ -1,4 +1,4 @@
-import { useMemo, useContext, useCallback, useRef, useState, useEffect } from 'react';
+import { useMemo, useContext, useCallback, useRef, useState, useLayoutEffect } from 'react';
 
 import { Avatar, Button } from '@mui/material';
 import { format as formatDate } from 'date-fns';
@@ -104,7 +104,7 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
     );
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Fetch mobile download files
     async function effect() {
       if (documentIdRef.current) {
