@@ -14,7 +14,7 @@ import { PhrasalTemplateItem as PhrasalTemplateItemType } from '~/entities/activ
 import {
   downloadPhrasalTemplateItem,
   getDocumentImageDataUris,
-  objectUrlToFile,
+  dataUriToFile,
 } from '~/entities/activity/lib/downloadPhrasalTemplateItem';
 import { SurveyContext } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
@@ -130,7 +130,7 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
 
         const imageFiles: File[] = [];
         for (let dataUriIndex = 0; dataUriIndex < dataUris.length; dataUriIndex++) {
-          const file = await objectUrlToFile(dataUris[dataUriIndex], getFilename(dataUriIndex));
+          const file = dataUriToFile(dataUris[dataUriIndex], getFilename(dataUriIndex));
           imageFiles.push(file);
         }
 

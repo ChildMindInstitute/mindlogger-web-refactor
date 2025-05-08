@@ -39,22 +39,24 @@ export const getDocumentImageDataUris: DocumentImageDataUrisGetter = async (opti
         // scaling), then this would only make the image 50% larger.
         scale: 3,
       });
-      // Convert canvas to a Blob and create an object URL
-      const blob = await new Promise<Blob | null>((resolve) =>
-        canvas.toBlob(resolve, 'image/jpeg'),
-      );
-      if (!blob) {
-        throw new Error('Canvas toBlob failed');
-      }
-      return URL.createObjectURL(blob);
+      return canvas.toDataURL('image/jpeg');
     }),
   );
 };
 
-export const objectUrlToFile = async (objectUrl: string, filename: string): Promise<File> => {
-  const response = await fetch(objectUrl);
-  const blob = await response.blob();
-  return new File([blob], filename, { type: blob.type });
+export const dataUriToFile = (dataURI: string, filename: string): File => {
+  const byteString = atob(dataURI.split(',')[1]);
+  const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+  const byteBuffer = new ArrayBuffer(byteString.length);
+  const byteArray = new Uint8Array(byteBuffer);
+
+  for (let byteIndex = 0; byteIndex < byteString.length; byteIndex++) {
+    // Convert each character in the data-uti string to the character's byte value.
+    byteArray[byteIndex] = byteString.charCodeAt(byteIndex);
+  }
+
+  return new File([byteArray], filename, { type: mimeString });
 };
 
 type CardImageDownloaderOptions = {
@@ -83,8 +85,7 @@ export const downloadPhrasalTemplateItem: CardImageDownloader = async (options) 
   if (options.share) {
     const imageFiles: File[] = [];
     for (let dataUriIndex = 0; dataUriIndex < dataUris.length; dataUriIndex++) {
-      const file = await objectUrlToFile(dataUris[dataUriIndex], getFilename(dataUriIndex));
-      imageFiles.push(file);
+      imageFiles.push(dataUriToFile(dataUris[dataUriIndex], getFilename(dataUriIndex)));
     }
 
     if (imageFiles.length > 0) {
