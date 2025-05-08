@@ -70,7 +70,6 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
           phrasalTemplateCardTitle,
           formatDate(new Date(), 'MM_dd_yyyy'),
         ].join('_'),
-        share: false,
         single: false,
       });
     }
