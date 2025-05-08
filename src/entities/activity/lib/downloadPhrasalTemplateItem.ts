@@ -39,7 +39,14 @@ const getDocumentImageDataUris: DocumentImageDataUrisGetter = async (options) =>
         // scaling), then this would only make the image 50% larger.
         scale: 3,
       });
-      return canvas.toDataURL('image/jpeg');
+      // Convert canvas to a Blob and create an object URL
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, 'image/jpeg'),
+      );
+      if (!blob) {
+        throw new Error('Canvas toBlob failed');
+      }
+      return URL.createObjectURL(blob);
     }),
   );
 };
