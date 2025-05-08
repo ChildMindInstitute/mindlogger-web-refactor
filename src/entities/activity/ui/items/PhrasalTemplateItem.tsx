@@ -105,6 +105,10 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
   });
 
   useLayoutEffect(() => {
+    if (!isMobile) {
+      return;
+    }
+
     // Fetch mobile download files
     async function effect() {
       if (documentIdRef.current) {
@@ -140,7 +144,7 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
       }
     }
 
-    const timeout = setTimeout(effect, 3000);
+    const timeout = setTimeout(effect, 0);
 
     return () => clearTimeout(timeout);
   }, [appletDisplayName, documentIdRef, phrasalTemplateCardTitle]);
