@@ -12,7 +12,7 @@ import downloadIconLight from '~/assets/download-icon-light.svg';
 import downloadIconDark from '~/assets/download-icon.svg';
 import { PhrasalTemplateItem as PhrasalTemplateItemType } from '~/entities/activity/lib';
 import {
-  downloadPhrasalTemplateItem,
+  downloadPhrasalTemplateItemDesktop,
   getDocumentImageDataUris,
   dataUriToFile,
 } from '~/entities/activity/lib/downloadPhrasalTemplateItem';
@@ -63,7 +63,7 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
         void navigator.share({ files: mobileDownloadFiles });
       }
     } else {
-      void downloadPhrasalTemplateItem({
+      void downloadPhrasalTemplateItemDesktop({
         documentId: documentIdRef.current,
         filename: [
           appletDisplayName,
