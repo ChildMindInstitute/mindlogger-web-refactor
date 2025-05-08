@@ -110,7 +110,7 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
     }
 
     // Fetch mobile download files
-    async function effect() {
+    const interval = setInterval(async () => {
       if (documentIdRef.current) {
         console.log('Fetching mobile download files');
         const dataUris = await getDocumentImageDataUris({
@@ -140,13 +140,14 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
 
         console.log('imageFiles:', imageFiles);
 
-        setMobileDownloadFiles(imageFiles);
+        if (imageFiles.length > 0) {
+          clearInterval(interval);
+          setMobileDownloadFiles(imageFiles);
+        }
       }
-    }
+    }, 0);
 
-    const timeout = setTimeout(effect, 0);
-
-    return () => clearTimeout(timeout);
+    return () => clearInterval(interval);
   }, [appletDisplayName, documentIdRef, phrasalTemplateCardTitle]);
 
   return (
