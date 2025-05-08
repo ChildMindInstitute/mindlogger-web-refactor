@@ -41,7 +41,7 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
     (i) => i.responseType === 'phrasalTemplate',
   ).length;
 
-  const handleDownloadImage = useCallback(() => {
+  const handleDownloadImage = useCallback(async () => {
     Mixpanel.track(
       addSurveyPropsToEvent(
         {
@@ -53,19 +53,16 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
       ),
     );
 
-    // Schedule the async download to preserve gesture context
-    setTimeout(() => {
-      void downloadPhrasalTemplateItem({
-        documentId: documentIdRef.current,
-        filename: [
-          appletDisplayName,
-          phrasalTemplateCardTitle,
-          formatDate(new Date(), 'MM_dd_yyyy'),
-        ].join('_'),
-        share: isMobile,
-        single: false,
-      });
-    }, 0);
+    await downloadPhrasalTemplateItem({
+      documentId: documentIdRef.current,
+      filename: [
+        appletDisplayName,
+        phrasalTemplateCardTitle,
+        formatDate(new Date(), 'MM_dd_yyyy'),
+      ].join('_'),
+      share: isMobile,
+      single: false,
+    });
   }, [
     activityId,
     applet,
