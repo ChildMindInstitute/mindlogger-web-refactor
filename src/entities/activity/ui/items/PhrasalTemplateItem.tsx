@@ -1,4 +1,4 @@
-import { useMemo, useContext, useCallback, useRef, useState } from 'react';
+import { useMemo, useContext, useCallback, useRef, useState, useEffect } from 'react';
 
 import { Avatar, Button } from '@mui/material';
 import { format as formatDate } from 'date-fns';
@@ -11,7 +11,11 @@ import { usePhrasalTemplateTranslation } from '../../lib/usePhrasalTemplateTrans
 import downloadIconLight from '~/assets/download-icon-light.svg';
 import downloadIconDark from '~/assets/download-icon.svg';
 import { PhrasalTemplateItem as PhrasalTemplateItemType } from '~/entities/activity/lib';
-import { downloadPhrasalTemplateItem } from '~/entities/activity/lib/downloadPhrasalTemplateItem';
+import {
+  downloadPhrasalTemplateItem,
+  getDocumentImageDataUris,
+  objectUrlToFile,
+} from '~/entities/activity/lib/downloadPhrasalTemplateItem';
 import { SurveyContext } from '~/features/PassSurvey';
 import { Theme } from '~/shared/constants';
 import { Markdown } from '~/shared/ui';
@@ -36,12 +40,13 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
   const questionText = useMemo(() => replaceText(item.question), [item.question, replaceText]);
   const documentIdRef = useRef<string>(uuidV4());
   const { t } = usePhrasalTemplateTranslation();
+  const [mobileDownloadFiles, setMobileDownloadFiles] = useState<File[] | null>(null);
 
   const phraseBuilderCount = activity.items.filter(
     (i) => i.responseType === 'phrasalTemplate',
   ).length;
 
-  const handleDownloadImage = useCallback(async () => {
+  const handleDownloadImage = useCallback(() => {
     Mixpanel.track(
       addSurveyPropsToEvent(
         {
@@ -53,16 +58,20 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
       ),
     );
 
-    await downloadPhrasalTemplateItem({
-      documentId: documentIdRef.current,
-      filename: [
-        appletDisplayName,
-        phrasalTemplateCardTitle,
-        formatDate(new Date(), 'MM_dd_yyyy'),
-      ].join('_'),
-      share: isMobile,
-      single: false,
-    });
+    if (isMobile && mobileDownloadFiles && mobileDownloadFiles.length > 0) {
+      void navigator.share({ files: mobileDownloadFiles });
+    } else {
+      void downloadPhrasalTemplateItem({
+        documentId: documentIdRef.current,
+        filename: [
+          appletDisplayName,
+          phrasalTemplateCardTitle,
+          formatDate(new Date(), 'MM_dd_yyyy'),
+        ].join('_'),
+        share: false,
+        single: false,
+      });
+    }
   }, [
     activityId,
     applet,
@@ -71,9 +80,10 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
     item.id,
     phrasalTemplateCardTitle,
     phraseBuilderCount,
+    mobileDownloadFiles,
   ]);
 
-  useOnceEffect(() =>
+  useOnceEffect(() => {
     Mixpanel.track(
       addSurveyPropsToEvent(
         {
@@ -83,8 +93,42 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
         },
         { applet, activityId, flowId: flow?.id },
       ),
-    ),
-  );
+    );
+  });
+
+  useEffect(() => {
+    // Fetch mobile download files
+    async function effect() {
+      if (documentIdRef.current) {
+        const dataUris = await getDocumentImageDataUris({
+          documentId: documentIdRef.current,
+          single: false,
+        });
+
+        const fileName = [
+          appletDisplayName,
+          phrasalTemplateCardTitle,
+          formatDate(new Date(), 'MM_dd_yyyy'),
+        ].join('_');
+
+        const getFilename = (index: number) => {
+          const filename =
+            dataUris.length <= 1 ? fileName : `${fileName}_${index + 1}of${dataUris.length}`;
+          return `${filename}.jpg`;
+        };
+
+        const imageFiles: File[] = [];
+        for (let dataUriIndex = 0; dataUriIndex < dataUris.length; dataUriIndex++) {
+          const file = await objectUrlToFile(dataUris[dataUriIndex], getFilename(dataUriIndex));
+          imageFiles.push(file);
+        }
+
+        setMobileDownloadFiles(imageFiles);
+      }
+    }
+
+    void effect();
+  }, [appletDisplayName, documentIdRef, phrasalTemplateCardTitle]);
 
   return (
     <Box gap="24px" display={'flex'} flexDirection={'column'} alignItems="center">

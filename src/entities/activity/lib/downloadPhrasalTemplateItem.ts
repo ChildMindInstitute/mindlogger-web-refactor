@@ -7,7 +7,7 @@ type GetDocumentImageDataUrisOptions = {
 
 type DocumentImageDataUrisGetter = (options: GetDocumentImageDataUrisOptions) => Promise<string[]>;
 
-const getDocumentImageDataUris: DocumentImageDataUrisGetter = async (options) => {
+export const getDocumentImageDataUris: DocumentImageDataUrisGetter = async (options) => {
   let nodes: HTMLElement[];
   if (options.single) {
     const documentNode = document.querySelector<HTMLElement>(
@@ -51,7 +51,7 @@ const getDocumentImageDataUris: DocumentImageDataUrisGetter = async (options) =>
   );
 };
 
-const objectUrlToFile = async (objectUrl: string, filename: string): Promise<File> => {
+export const objectUrlToFile = async (objectUrl: string, filename: string): Promise<File> => {
   const response = await fetch(objectUrl);
   const blob = await response.blob();
   return new File([blob], filename, { type: blob.type });
