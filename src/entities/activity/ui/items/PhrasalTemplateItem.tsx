@@ -58,15 +58,9 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
       ),
     );
 
-    console.log('Downloading image files');
-    console.log('isMobile:', isMobile);
-
     if (isMobile) {
       if (mobileDownloadFiles && mobileDownloadFiles.length > 0) {
-        console.log(`Downloading ${mobileDownloadFiles.length} files`);
         void navigator.share({ files: mobileDownloadFiles });
-      } else {
-        console.log('No files to download');
       }
     } else {
       void downloadPhrasalTemplateItem({
@@ -112,13 +106,10 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
     // Fetch mobile download files
     const interval = setInterval(async () => {
       if (documentIdRef.current) {
-        console.log('Fetching mobile download files');
         const dataUris = await getDocumentImageDataUris({
           documentId: documentIdRef.current,
           single: false,
         });
-
-        console.log('dataUris:', dataUris);
 
         const fileName = [
           appletDisplayName,
@@ -137,8 +128,6 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
           const file = dataUriToFile(dataUris[dataUriIndex], getFilename(dataUriIndex));
           imageFiles.push(file);
         }
-
-        console.log('imageFiles:', imageFiles);
 
         if (imageFiles.length > 0) {
           clearInterval(interval);

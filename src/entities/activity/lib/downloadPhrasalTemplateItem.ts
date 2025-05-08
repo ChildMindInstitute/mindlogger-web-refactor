@@ -8,7 +8,6 @@ type GetDocumentImageDataUrisOptions = {
 type DocumentImageDataUrisGetter = (options: GetDocumentImageDataUrisOptions) => Promise<string[]>;
 
 export const getDocumentImageDataUris: DocumentImageDataUrisGetter = async (options) => {
-  console.log('getDocumentImageDataUris', options);
   let nodes: HTMLElement[];
   if (options.single) {
     const documentNode = document.querySelector<HTMLElement>(
@@ -28,8 +27,6 @@ export const getDocumentImageDataUris: DocumentImageDataUrisGetter = async (opti
       ),
     );
   }
-
-  console.log('nodes', nodes);
 
   return Promise.all(
     nodes.map(async (node) => {
