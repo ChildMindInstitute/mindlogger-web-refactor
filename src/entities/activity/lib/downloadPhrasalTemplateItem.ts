@@ -51,19 +51,10 @@ const getDocumentImageDataUris: DocumentImageDataUrisGetter = async (options) =>
   );
 };
 
-const dataUriToFile = (dataURI: string, filename: string): File => {
-  const byteString = atob(dataURI.split(',')[1]);
-  const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-  const byteBuffer = new ArrayBuffer(byteString.length);
-  const byteArray = new Uint8Array(byteBuffer);
-
-  for (let byteIndex = 0; byteIndex < byteString.length; byteIndex++) {
-    // Convert each character in the data-uti string to the character's byte value.
-    byteArray[byteIndex] = byteString.charCodeAt(byteIndex);
-  }
-
-  return new File([byteArray], filename, { type: mimeString });
+const objectUrlToFile = async (objectUrl: string, filename: string): Promise<File> => {
+  const response = await fetch(objectUrl);
+  const blob = await response.blob();
+  return new File([blob], filename, { type: blob.type });
 };
 
 type CardImageDownloaderOptions = {
@@ -92,7 +83,8 @@ export const downloadPhrasalTemplateItem: CardImageDownloader = async (options) 
   if (options.share) {
     const imageFiles: File[] = [];
     for (let dataUriIndex = 0; dataUriIndex < dataUris.length; dataUriIndex++) {
-      imageFiles.push(dataUriToFile(dataUris[dataUriIndex], getFilename(dataUriIndex)));
+      const file = await objectUrlToFile(dataUris[dataUriIndex], getFilename(dataUriIndex));
+      imageFiles.push(file);
     }
 
     if (imageFiles.length > 0) {
