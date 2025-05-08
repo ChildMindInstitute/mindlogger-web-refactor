@@ -140,7 +140,9 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
       }
     }
 
-    void effect();
+    const timeout = setTimeout(effect, 3000);
+
+    return () => clearTimeout(timeout);
   }, [appletDisplayName, documentIdRef, phrasalTemplateCardTitle]);
 
   return (
