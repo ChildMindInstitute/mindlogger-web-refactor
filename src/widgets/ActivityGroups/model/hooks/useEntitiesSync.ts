@@ -1,5 +1,7 @@
 import { useCallback, useContext, useEffect, useRef } from 'react';
 
+import { v4 as uuidV4 } from 'uuid';
+
 import { AppletDetailsContext } from '../../lib';
 
 import { ActivityPipelineType } from '~/abstract/lib';
@@ -48,6 +50,7 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
             type: ActivityPipelineType.Regular,
             startAt: null,
             endAt: endAtTimestamp,
+            submitId: uuidV4(),
             context: {
               summaryData: {},
             },

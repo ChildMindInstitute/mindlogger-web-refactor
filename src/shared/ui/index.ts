@@ -8,6 +8,7 @@ export { DisplaySystemMessage } from './DisplaySystemMessage';
 export { PasswordIcon } from './PasswordIcon';
 export { PageMessage } from './PageMessage';
 export { Markdown } from './Markdown';
+export { ItemMarkdown } from './ItemMarkdown';
 export { BaseProgressBar } from './ProgressBar';
 export * from './Items';
 export { CardItem } from './CardItem';

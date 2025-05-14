@@ -26,6 +26,8 @@ import {
   FlowStartedPayload,
   InProgressActivity,
   FlowRestartedPayload,
+  UpdateSubStepPayload,
+  SaveItemCustomPropertyPayload,
 } from './types';
 
 import {
@@ -37,6 +39,7 @@ import {
   getProgressId,
   GroupProgress,
   GroupProgressState,
+  ActiveAssessment,
 } from '~/abstract/lib';
 import { MultiInformantState } from '~/abstract/lib/types/multiInformant';
 
@@ -48,6 +51,7 @@ type InitialState = {
   multiInformantState: MultiInformantState;
   consents: ActivityConsents;
   prolificParams?: ProlificUrlParamsPayload;
+  activeAssessment: ActiveAssessment;
 };
 
 const initialState: InitialState = {
@@ -57,6 +61,7 @@ const initialState: InitialState = {
   completions: {},
   multiInformantState: {},
   consents: {},
+  activeAssessment: null,
 };
 
 const appletsSlice = createSlice({
@@ -204,6 +209,28 @@ const appletsSlice = createSlice({
       activityProgress.items[itemIndex].additionalText = payload.additionalText;
     },
 
+    saveCustomProperty: (
+      state: InitialState,
+      { payload }: PayloadAction<SaveItemCustomPropertyPayload>,
+    ) => {
+      const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
+      const activityProgress = state.progress[id];
+
+      if (!activityProgress) {
+        return state;
+      }
+
+      const itemIndex = activityProgress.items.findIndex(({ id }) => id === payload.itemId);
+
+      if (itemIndex === -1) {
+        return state;
+      }
+
+      (activityProgress.items[itemIndex] as unknown as Record<string, unknown>)[
+        payload.customProperty
+      ] = payload.value;
+    },
+
     saveUserEvent: (state, { payload }: PayloadAction<SaveUserEventPayload>) => {
       const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
       const activityProgress = state.progress[id];
@@ -245,6 +272,17 @@ const appletsSlice = createSlice({
       activityProgress.step -= 1;
     },
 
+    setSubStep: (state, { payload }: PayloadAction<UpdateSubStepPayload>) => {
+      const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
+
+      const activityProgress = state.progress[id];
+      const currentItem = activityProgress.items[activityProgress.step];
+
+      if (typeof currentItem.subStep === 'number') {
+        currentItem.subStep = payload.subStep;
+      }
+    },
+
     activityStarted: (state, { payload }: PayloadAction<ActivityStartedPayload>) => {
       const id = getProgressId(payload.activityId, payload.event.id, payload.targetSubjectId);
 
@@ -252,6 +290,7 @@ const appletsSlice = createSlice({
         type: ActivityPipelineType.Regular,
         startAt: new Date().getTime(),
         endAt: null,
+        submitId: uuidV4(),
         context: {
           summaryData: {},
         },
@@ -270,7 +309,7 @@ const appletsSlice = createSlice({
         startAt: new Date().getTime(),
         currentActivityStartAt: new Date().getTime(),
         endAt: null,
-        executionGroupKey: uuidV4(),
+        submitId: uuidV4(),
         pipelineActivityOrder: payload.pipelineActivityOrder,
         context: {
           summaryData: {},
@@ -299,6 +338,7 @@ const appletsSlice = createSlice({
 
       if (groupProgress) {
         groupProgress.startAt = new Date().getTime();
+        groupProgress.submitId = uuidV4();
       }
     },
 
@@ -311,7 +351,7 @@ const appletsSlice = createSlice({
         groupProgress.currentActivityId = payload.activityId;
         groupProgress.pipelineActivityOrder = 0;
         groupProgress.currentActivityStartAt = groupProgress.startAt = new Date().getTime();
-        groupProgress.executionGroupKey = uuidV4();
+        groupProgress.submitId = uuidV4();
       }
     },
 
@@ -411,6 +451,10 @@ const appletsSlice = createSlice({
 
     clearProlificParams: (state) => {
       state.prolificParams = undefined;
+    },
+
+    setActiveAssessment: (state, action: PayloadAction<ActiveAssessment>) => {
+      state.activeAssessment = action.payload;
     },
   },
 });

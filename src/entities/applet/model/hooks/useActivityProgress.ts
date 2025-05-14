@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { mapItemToRecord, mapSplashScreenToRecord } from '../mapper';
 import { activityProgressSelector } from '../selectors';
 import { actions } from '../slice';
-import { ActivityProgress, ItemRecord } from '../types';
+import { ActivityProgress, ItemRecord, UpdateSubStepPayload } from '../types';
 
 import { getProgressId } from '~/abstract/lib';
 import { ActivityDTO } from '~/shared/api';
@@ -123,12 +123,20 @@ export const useActivityProgress = () => {
     [dispatch],
   );
 
+  const setSubStep = useCallback(
+    (props: UpdateSubStepPayload) => {
+      dispatch(actions.setSubStep(props));
+    },
+    [dispatch],
+  );
+
   return {
     getActivityProgress,
     setInitialProgress,
     removeActivityProgress,
     incrementStep,
     decrementStep,
+    setSubStep,
     openSummaryScreen,
     closeSummaryScreen,
   };

@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 
 import PassingScreen from './PassingScreen';
 import SummaryScreen from './SummaryScreen';
@@ -17,6 +17,7 @@ type Props = {
 
 export const ScreenManager = ({ openTimesUpModal }: Props) => {
   const context = useContext(SurveyContext);
+  const { setActiveAssessment } = appletModel.hooks.useActiveAssessment();
 
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(
@@ -66,6 +67,27 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
   const showSummaryScreen = activityProgress?.isSummaryScreenOpen ?? false;
 
   const isActivityStarted = items.length > 0;
+
+  // Update active assessment
+  useEffect(() => {
+    setActiveAssessment({
+      appletId: context.appletId,
+      publicAppletKey: context.publicAppletKey,
+      groupProgressId: getProgressId(
+        context.flow ? context.flow.id : context.activityId,
+        context.eventId,
+        context.targetSubject?.id ?? null,
+      ),
+    });
+  }, [
+    context.flow,
+    context.activityId,
+    context.appletId,
+    context.eventId,
+    context.publicAppletKey,
+    context.targetSubject?.id,
+    setActiveAssessment,
+  ]);
 
   if (!isActivityStarted) {
     return <WelcomeScreen />;

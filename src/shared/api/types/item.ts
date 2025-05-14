@@ -51,7 +51,8 @@ export type ConfigDTO =
   | SliderRowsItemConfigDTO
   | TextItemConfigDTO
   | TimeItemConfigDTO
-  | TimeRangeItemConfigDTO;
+  | TimeRangeItemConfigDTO
+  | RequestHealthRecordDataItemConfigDTO;
 
 export type ResponseValuesDTO =
   | AudioPlayerItemResponseValuesDTO
@@ -63,7 +64,8 @@ export type ResponseValuesDTO =
   | SelectorItemResponseValues
   | SingleSelectionRowsItemResponseValuesDTO
   | SliderItemResponseValuesDTO
-  | SliderRowsItemResponseValuesDTO;
+  | SliderRowsItemResponseValuesDTO
+  | RequestHealthRecordDataItemResponseValuesDTO;
 
 type EmptyResponseValuesDTO = null;
 
@@ -392,3 +394,33 @@ export type SliderRowsDto = Array<{
   maxImage: string | null;
   alerts: SliderAlertsDto;
 }>;
+
+export interface RequestHealthRecordDataItemDTO extends ItemDetailsBaseDTO {
+  responseType: 'requestHealthRecordData';
+  config: RequestHealthRecordDataItemConfigDTO;
+  responseValues: RequestHealthRecordDataItemResponseValuesDTO;
+}
+
+type RequestHealthRecordDataItemConfigDTO = {
+  removeBackButton: boolean;
+  skippableItem?: boolean;
+};
+
+export enum EHRConsent {
+  OptIn = 'opt_in',
+  OptOut = 'opt_out',
+}
+
+export type RequestHealthRecordDataItemResponseValuesDTO = {
+  type: 'requestHealthRecordData';
+  optInOutOptions: [
+    {
+      id: EHRConsent.OptIn;
+      label: string;
+    },
+    {
+      id: EHRConsent.OptOut;
+      label: string;
+    },
+  ];
+};
