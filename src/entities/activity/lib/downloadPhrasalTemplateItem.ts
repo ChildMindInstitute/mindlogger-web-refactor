@@ -7,7 +7,7 @@ type GetDocumentImageDataUrisOptions = {
 
 type DocumentImageDataUrisGetter = (options: GetDocumentImageDataUrisOptions) => Promise<string[]>;
 
-const getDocumentImageDataUris: DocumentImageDataUrisGetter = async (options) => {
+export const getDocumentImageDataUris: DocumentImageDataUrisGetter = async (options) => {
   let nodes: HTMLElement[];
   if (options.single) {
     const documentNode = document.querySelector<HTMLElement>(
@@ -44,7 +44,7 @@ const getDocumentImageDataUris: DocumentImageDataUrisGetter = async (options) =>
   );
 };
 
-const dataUriToFile = (dataURI: string, filename: string): File => {
+export const dataUriToFile = (dataURI: string, filename: string): File => {
   const byteString = atob(dataURI.split(',')[1]);
   const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
 
@@ -63,12 +63,11 @@ type CardImageDownloaderOptions = {
   documentId: string;
   filename: string;
   single: boolean;
-  share: boolean;
 };
 
 type CardImageDownloader = (options: CardImageDownloaderOptions) => Promise<void>;
 
-export const downloadPhrasalTemplateItem: CardImageDownloader = async (options) => {
+export const downloadPhrasalTemplateItemDesktop: CardImageDownloader = async (options) => {
   const dataUris = await getDocumentImageDataUris({
     documentId: options.documentId,
     single: options.single,
@@ -82,32 +81,21 @@ export const downloadPhrasalTemplateItem: CardImageDownloader = async (options) 
     return `${filename}.jpg`;
   };
 
-  if (options.share) {
-    const imageFiles: File[] = [];
-    for (let dataUriIndex = 0; dataUriIndex < dataUris.length; dataUriIndex++) {
-      imageFiles.push(dataUriToFile(dataUris[dataUriIndex], getFilename(dataUriIndex)));
-    }
+  for (let dataUriIndex = 0; dataUriIndex < dataUris.length; dataUriIndex++) {
+    const dataUri = dataUris[dataUriIndex];
+    const downloadLink = document.createElement('a');
+    downloadLink.setAttribute('href', dataUri);
+    downloadLink.setAttribute('download', getFilename(dataUriIndex));
 
-    if (imageFiles.length > 0) {
-      await navigator.share({ files: imageFiles });
-    }
-  } else {
-    for (let dataUriIndex = 0; dataUriIndex < dataUris.length; dataUriIndex++) {
-      const dataUri = dataUris[dataUriIndex];
-      const downloadLink = document.createElement('a');
-      downloadLink.setAttribute('href', dataUri);
-      downloadLink.setAttribute('download', getFilename(dataUriIndex));
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
 
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
+    // Add some delay before removing the link so Safari wouldn't end up skipping items.
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    document.body.removeChild(downloadLink);
 
-      // Add some delay before removing the link so Safari wouldn't end up skipping items.
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      document.body.removeChild(downloadLink);
-
-      if (dataUriIndex < dataUris.length - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-      }
+    if (dataUriIndex < dataUris.length - 1) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
   }
 };
