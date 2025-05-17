@@ -2,9 +2,14 @@ import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } fro
 
 import { useTranslation } from 'react-i18next';
 
+import {
+  useOneUpHealthRefreshTokenMutation,
+  useOneUpHealthTokenQuery,
+} from '~/entities/activity/api';
 import { useGroupProgressRecord } from '~/entities/applet/model/hooks';
 import { useBanners } from '~/entities/banner/model/hooks';
 import { SurveyContext } from '~/features/PassSurvey';
+import { BaseError } from '~/shared/api';
 import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 
@@ -60,6 +65,47 @@ export const OneUpHealthStep: FC = () => {
       setRefreshTokenValue(data.data.result.refreshToken);
     }
   }, [data]);
+
+  const { mutateAsync: refreshToken } = useOneUpHealthRefreshTokenMutation({
+    onSuccess: (response) => {
+      console.info('Token refreshed successfully');
+
+      if (response?.data?.result) {
+        setAccessToken(response.data.result.accessToken);
+        setRefreshTokenValue(response.data.result.refreshToken);
+
+        setIsIframeLoaded(false);
+
+        // Force iframe reload
+        if (iframeRef.current) {
+          const src = iframeRef.current.src;
+          iframeRef.current.src = '';
+          setTimeout(() => {
+            if (iframeRef.current) {
+              iframeRef.current.src = src;
+            }
+          }, 50);
+        }
+      }
+      setErrorType(null);
+      refreshInProgressRef.current = false;
+    },
+    onError: (error) => {
+      console.error('Error refreshing token:', error);
+      setErrorType('communicationError');
+      refreshInProgressRef.current = false;
+    },
+  });
+
+  const refreshInProgressRef = useRef(false);
+  const handleTokenRefresh = useCallback(() => {
+    if (!refreshTokenValue || refreshInProgressRef.current) return;
+    refreshInProgressRef.current = true;
+
+    return refreshToken({
+      refreshToken: refreshTokenValue,
+    });
+  }, [refreshTokenValue, refreshToken]);
 
   // Instantiate channel and iframeRef variable
   const messageChannelRef = useRef<MessageChannel>();
@@ -150,6 +196,10 @@ export const OneUpHealthStep: FC = () => {
       });
 
       console.error(errorTypes[errorType].logMessage);
+
+      if (errorType === 'tokenExpired' && !refreshInProgressRef.current) {
+        void handleTokenRefresh();
+      }
     } else {
       removeErrorBanner();
     }
