@@ -3,6 +3,7 @@ import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } fro
 import { useTranslation } from 'react-i18next';
 
 import { useGroupProgressRecord } from '~/entities/applet/model/hooks';
+import { useBanners } from '~/entities/banner/model/hooks';
 import { SurveyContext } from '~/features/PassSurvey';
 import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
@@ -35,6 +36,7 @@ type OneUpHealthErrorConfig = {
  */
 export const OneUpHealthStep: FC = () => {
   const { t } = useTranslation();
+  const { addErrorBanner, removeErrorBanner } = useBanners();
 
   const { appletId, eventId, targetSubject, entityId, activityId } = useContext(SurveyContext);
   const groupProgress = useGroupProgressRecord({
@@ -135,6 +137,35 @@ export const OneUpHealthStep: FC = () => {
   );
 
   useEffect(() => {
+    return () => {
+      removeErrorBanner();
+    };
+  }, [removeErrorBanner]);
+
+  useEffect(() => {
+    if (errorType) {
+      addErrorBanner({
+        children: errorTypes[errorType].banner,
+        duration: null,
+      });
+
+      console.error(errorTypes[errorType].logMessage);
+    } else {
+      removeErrorBanner();
+    }
+  }, [errorType, addErrorBanner, removeErrorBanner, errorTypes, handleTokenRefresh]);
+
+  // Handle API errors
+  useEffect(() => {
+    if (error) {
+      const type = determineErrorType(error);
+      setErrorType(type);
+    } else {
+      setErrorType(null);
+    }
+  }, [error, determineErrorType]);
+
+  useEffect(() => {
     if (!accessToken || !iframeRef.current?.contentWindow || !isIframeLoaded) return;
 
     // Initialize message channel only when we have both the token and the iframe is ready
@@ -160,33 +191,56 @@ export const OneUpHealthStep: FC = () => {
         messageChannelRef.current.port1.postMessage(secureDataPacket);
       } catch (e) {
         console.error(`Error encountered sending secure data to iframe: ${e}`);
+        setErrorType('communicationError');
       }
     };
 
     setupMessageChannel();
   }, [accessToken, isIframeLoaded]);
 
+  const handleIframeError = () => {
+    setErrorType('communicationError');
+  };
+
   return (
     <>
-      <iframe
-        style={{
-          border: 0,
-          width: '100%',
-          height: '710px',
-          marginTop: '-80px',
-          marginBottom: '-80px',
-          maxHeight: 'calc(100vh - 120px)',
-          boxShadow: '0 4px 4px 0 #00000040',
-          visibility: isLoading ? 'hidden' : 'visible',
-        }}
-        id="system-search-iframe"
-        src="https://system-search.1up.health/search"
-        ref={iframeRef}
-        onLoad={() => setIsIframeLoaded(true)}
-      />
+      {!isLoading && !errorType && (
+        <iframe
+          style={{
+            border: 0,
+            width: '100%',
+            height: '710px',
+            marginTop: '-80px',
+            marginBottom: '-80px',
+            maxHeight: 'calc(100vh - 120px)',
+            boxShadow: '0 4px 4px 0 #00000040',
+          }}
+          id="system-search-iframe"
+          src="https://system-search.1up.health/search"
+          ref={iframeRef}
+          onLoad={() => setIsIframeLoaded(true)}
+          onError={handleIframeError}
+        />
+      )}
       {isLoading && (
         <Box position="absolute" top={0} left={0} right={0} bottom={0}>
           <Loader />
+        </Box>
+      )}
+      {errorType && (
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          height="400px"
+          padding={3}
+          textAlign="center"
+        >
+          <Box marginBottom={2} fontWeight="bold">
+            {errorTypes[errorType].title}
+          </Box>
+          <Box marginBottom={3}>{errorTypes[errorType].message}</Box>
         </Box>
       )}
     </>
