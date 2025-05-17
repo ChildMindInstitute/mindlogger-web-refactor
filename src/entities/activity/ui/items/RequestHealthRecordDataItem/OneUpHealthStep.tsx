@@ -1,12 +1,28 @@
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
 import { useOneUpHealthTokenQuery } from '~/entities/activity/api';
 import { useGroupProgressRecord } from '~/entities/applet/model/hooks';
 import { SurveyContext } from '~/features/PassSurvey';
+import { BaseError } from '~/shared/api';
 import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
+
+type OneUpHealthErrorType =
+  | 'geographicRestriction'
+  | 'tokenExpired'
+  | 'serviceUnavailable'
+  | 'communicationError'
+  | 'unknown';
+
+type OneUpHealthErrorConfig = {
+  check: (err: BaseError) => boolean;
+  title: string;
+  message: string;
+  banner: string;
+  logMessage: string;
+};
 
 /**
  * Displays an iframe interface provided by 1UpHealth, which allows the user to search for a
@@ -50,6 +66,65 @@ export const OneUpHealthStep: FC = () => {
   const messageChannelRef = useRef<MessageChannel>();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isIframeLoaded, setIsIframeLoaded] = useState(false);
+
+  const errorTypes: Record<OneUpHealthErrorType, OneUpHealthErrorConfig> = useMemo(
+    () => ({
+      geographicRestriction: {
+        check: (err: BaseError) =>
+          err?.status === 502 && (err?.evaluatedMessage ?? '').includes('within the United States'),
+        title: t('oneUpHealth.geographicRestriction.title'),
+        message: t('oneUpHealth.geographicRestriction.message'),
+        banner: t('oneUpHealth.geographicRestriction.banner'),
+        logMessage: 'Detected geographic restriction error',
+      },
+      tokenExpired: {
+        check: (err: BaseError) =>
+          err?.status === 502 && (err?.evaluatedMessage ?? '').includes('token has expired'),
+        // Since we're not actually showing a banner for this error, we just return empty strings
+        title: '',
+        message: '',
+        banner: '',
+        logMessage: 'Token expired error',
+      },
+      serviceUnavailable: {
+        check: (err: BaseError) =>
+          err?.status === 502 && (err?.evaluatedMessage ?? '').includes('currently unavailable'),
+        title: t('oneUpHealth.serviceUnavailable.title'),
+        message: t('oneUpHealth.serviceUnavailable.message'),
+        banner: t('oneUpHealth.serviceUnavailable.banner'),
+        logMessage: 'Service unavailable error',
+      },
+      communicationError: {
+        check: () => false, // This is set manually, not checked
+        title: t('oneUpHealth.communicationError.title'),
+        message: t('oneUpHealth.communicationError.message'),
+        banner: t('oneUpHealth.communicationError.banner'),
+        logMessage: 'Communication error with iframe',
+      },
+      unknown: {
+        check: () => true, // Default fallback
+        title: t('oneUpHealth.unknownError.title'),
+        message: t('oneUpHealth.unknownError.message'),
+        banner: t('oneUpHealth.unknownError.banner'),
+        logMessage: 'Unknown 1UpHealth error',
+      },
+    }),
+    [t],
+  );
+  const [errorType, setErrorType] = useState<OneUpHealthErrorType | null>(null);
+
+  // Determine error type from error object
+  const determineErrorType = useCallback(
+    (err: BaseError): OneUpHealthErrorType => {
+      for (const [type, config] of Object.entries(errorTypes)) {
+        if (type !== 'unknown' && type !== 'communicationError' && config.check(err)) {
+          return type as OneUpHealthErrorType;
+        }
+      }
+      return 'unknown' as OneUpHealthErrorType;
+    },
+    [errorTypes],
+  );
 
   useEffect(() => {
     if (!accessToken || !iframeRef.current?.contentWindow || !isIframeLoaded) return;
