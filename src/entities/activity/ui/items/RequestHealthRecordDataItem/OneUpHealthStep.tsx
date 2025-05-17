@@ -2,7 +2,10 @@ import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } fro
 
 import { useTranslation } from 'react-i18next';
 
-import { useOneUpHealthTokenQuery } from '~/entities/activity/api';
+import {
+  useOneUpHealthRefreshTokenMutation,
+  useOneUpHealthTokenQuery,
+} from '~/entities/activity/api';
 import { useGroupProgressRecord } from '~/entities/applet/model/hooks';
 import { useBanners } from '~/entities/banner/model/hooks';
 import { SurveyContext } from '~/features/PassSurvey';
@@ -64,6 +67,47 @@ export const OneUpHealthStep: FC = () => {
     }
   }, [data]);
 
+  const { mutateAsync: refreshToken } = useOneUpHealthRefreshTokenMutation({
+    onSuccess: (response) => {
+      console.info('Token refreshed successfully');
+
+      if (response?.data?.result) {
+        setAccessToken(response.data.result.accessToken);
+        setRefreshTokenValue(response.data.result.refreshToken);
+
+        setIsIframeLoaded(false);
+
+        // Force iframe reload
+        if (iframeRef.current) {
+          const src = iframeRef.current.src;
+          iframeRef.current.src = '';
+          setTimeout(() => {
+            if (iframeRef.current) {
+              iframeRef.current.src = src;
+            }
+          }, 50);
+        }
+      }
+      setErrorType(null);
+      refreshInProgressRef.current = false;
+    },
+    onError: (error) => {
+      console.error('Error refreshing token:', error);
+      setErrorType('communicationError');
+      refreshInProgressRef.current = false;
+    },
+  });
+
+  const refreshInProgressRef = useRef(false);
+  const handleTokenRefresh = useCallback(() => {
+    if (!refreshTokenValue || refreshInProgressRef.current) return;
+    refreshInProgressRef.current = true;
+
+    return refreshToken({
+      refreshToken: refreshTokenValue,
+    });
+  }, [refreshTokenValue, refreshToken]);
+
   // Instantiate channel and iframeRef variable
   const messageChannelRef = useRef<MessageChannel>();
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -81,7 +125,11 @@ export const OneUpHealthStep: FC = () => {
       },
       tokenExpired: {
         check: (err: BaseError) =>
-          err?.status === 502 && (err?.evaluatedMessage ?? '').includes('token has expired'),
+          err?.status === 502 &&
+          ((err?.evaluatedMessage || (err.response.data.result?.[0]?.message ?? '')).includes(
+            'token has expired',
+          ) ??
+            false),
         // Since we're not actually showing a banner for this error, we just return empty strings
         title: '',
         message: '',
@@ -136,12 +184,16 @@ export const OneUpHealthStep: FC = () => {
 
   useEffect(() => {
     if (errorType) {
-      addErrorBanner({
-        children: errorTypes[errorType].banner,
-        duration: null,
-      });
-
       console.error(errorTypes[errorType].logMessage);
+
+      if (errorType !== 'tokenExpired') {
+        addErrorBanner({
+          children: errorTypes[errorType].banner,
+          duration: null,
+        });
+      } else if (!refreshInProgressRef.current) {
+        void handleTokenRefresh();
+      }
     } else {
       removeErrorBanner();
     }
@@ -219,7 +271,7 @@ export const OneUpHealthStep: FC = () => {
           <Loader />
         </Box>
       )}
-      {errorType && (
+      {errorType && errorType !== 'tokenExpired' && (
         <Box
           display="flex"
           flexDirection="column"
