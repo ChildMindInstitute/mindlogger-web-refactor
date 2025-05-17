@@ -18,9 +18,9 @@ import Loader from '~/shared/ui/Loader';
  * https://docs.1up.health/help-center/Content/en-US/connect-patient/system-search-api.html#embed-the-system-search-tool-iframe-and-function-for-react
  */
 export const OneUpHealthStep: FC = () => {
-  const { appletId } = useContext(SurveyContext);
+  const { t } = useTranslation();
 
-  const { eventId, targetSubject, entityId } = useContext(SurveyContext);
+  const { appletId, eventId, targetSubject, entityId, activityId } = useContext(SurveyContext);
   const groupProgress = useGroupProgressRecord({
     entityId,
     eventId,
@@ -29,8 +29,19 @@ export const OneUpHealthStep: FC = () => {
   const submitId = groupProgress?.submitId;
 
   // Fetch the token using our custom hook
-  const { data, isLoading } = useOneUpHealthTokenQuery({ appletId, submitId });
-  const accessToken = data?.data?.result?.accessToken;
+  const { data, isLoading, error } = useOneUpHealthTokenQuery(
+    { appletId, submitId, activityId },
+    { refetchOnWindowFocus: false },
+  );
+  const [accessToken, setAccessToken] = useState<string | undefined>();
+  const [refreshTokenValue, setRefreshTokenValue] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (data?.data?.result) {
+      setAccessToken(data.data.result.accessToken);
+      setRefreshTokenValue(data.data.result.refreshToken);
+    }
+  }, [data]);
 
   // Instantiate channel and iframeRef variable
   const messageChannelRef = useRef<MessageChannel>();
