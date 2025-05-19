@@ -93,7 +93,7 @@ export const OneUpHealthStep: FC = () => {
     },
     onError: (error) => {
       console.error('Error refreshing token:', error);
-      setErrorType('communicationError');
+      handleApiErrors(error);
       refreshInProgressRef.current = false;
     },
   });
@@ -176,6 +176,14 @@ export const OneUpHealthStep: FC = () => {
     [errorTypes],
   );
 
+  const handleApiErrors = useCallback(
+    (err: BaseError) => {
+      const type = determineErrorType(err);
+      setErrorType(type);
+    },
+    [determineErrorType],
+  );
+
   useEffect(() => {
     return () => {
       removeErrorBanner();
@@ -202,12 +210,11 @@ export const OneUpHealthStep: FC = () => {
   // Handle API errors
   useEffect(() => {
     if (error) {
-      const type = determineErrorType(error);
-      setErrorType(type);
+      handleApiErrors(error);
     } else {
       setErrorType(null);
     }
-  }, [error, determineErrorType]);
+  }, [error, handleApiErrors]);
 
   useEffect(() => {
     if (!accessToken || !iframeRef.current?.contentWindow || !isIframeLoaded) return;
