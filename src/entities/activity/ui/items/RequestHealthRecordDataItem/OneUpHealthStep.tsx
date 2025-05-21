@@ -290,7 +290,6 @@ export const OneUpHealthStep: FC = () => {
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
-          height="400px"
           padding={3}
           textAlign="center"
         >
