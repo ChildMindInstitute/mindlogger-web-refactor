@@ -133,9 +133,10 @@ export const OneUpHealthStep: FC = () => {
             'token has expired',
           ) ??
             false),
-        title: t('oneUpHealth.tokenExpired.title'),
-        message: t('oneUpHealth.tokenExpired.message'),
-        banner: t('oneUpHealth.tokenExpired.banner'),
+        // Since we're not actually showing a banner for this error, we just return empty strings
+        title: '',
+        message: '',
+        banner: '',
         logMessage: 'Token expired error',
       },
       serviceUnavailable: {
@@ -198,14 +199,14 @@ export const OneUpHealthStep: FC = () => {
 
   useEffect(() => {
     if (errorType) {
-      addErrorBanner({
-        children: errorTypes[errorType].banner,
-        duration: null,
-      });
-
       console.error(errorTypes[errorType].logMessage);
 
-      if (errorType === 'tokenExpired' && !refreshInProgressRef.current) {
+      if (errorType !== 'tokenExpired') {
+        addErrorBanner({
+          children: errorTypes[errorType].banner,
+          duration: null,
+        });
+      } else if (!refreshInProgressRef.current) {
         void handleTokenRefresh();
       }
     } else {
@@ -284,7 +285,7 @@ export const OneUpHealthStep: FC = () => {
           <Loader />
         </Box>
       )}
-      {errorType && (
+      {errorType && errorType !== 'tokenExpired' && (
         <Box
           display="flex"
           flexDirection="column"
