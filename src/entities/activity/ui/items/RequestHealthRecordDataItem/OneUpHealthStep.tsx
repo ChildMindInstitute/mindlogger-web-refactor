@@ -18,8 +18,6 @@ import Loader from '~/shared/ui/Loader';
  * https://docs.1up.health/help-center/Content/en-US/connect-patient/system-search-api.html#embed-the-system-search-tool-iframe-and-function-for-react
  */
 export const OneUpHealthStep: FC = () => {
-  const { t } = useTranslation();
-
   const { appletId, eventId, targetSubject, entityId, activityId } = useContext(SurveyContext);
   const groupProgress = useGroupProgressRecord({
     entityId,
