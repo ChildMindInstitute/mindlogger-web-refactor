@@ -27,17 +27,15 @@ export const OneUpHealthStep: FC = () => {
   const submitId = groupProgress?.submitId;
 
   // Fetch the token using our custom hook
-  const { data, isLoading, error } = useOneUpHealthTokenQuery(
+  const { data, isLoading } = useOneUpHealthTokenQuery(
     { appletId, submitId, activityId },
     { refetchOnWindowFocus: false },
   );
   const [accessToken, setAccessToken] = useState<string | undefined>();
-  const [refreshTokenValue, setRefreshTokenValue] = useState<string | undefined>();
 
   useEffect(() => {
     if (data?.data?.result) {
       setAccessToken(data.data.result.accessToken);
-      setRefreshTokenValue(data.data.result.refreshToken);
     }
   }, [data]);
 
