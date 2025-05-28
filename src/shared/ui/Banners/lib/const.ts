@@ -3,6 +3,7 @@ import { ComponentType } from 'react';
 import { BannerProps } from '../Banner';
 
 import { BannerType } from '~/entities/banner/model';
+import { ROUTES } from '~/shared/constants';
 import { ErrorBanner } from '~/shared/ui/Banners/ErrorBanner';
 import { InfoBanner } from '~/shared/ui/Banners/InfoBanner';
 import { RebrandBanner } from '~/shared/ui/Banners/RebrandBanner';
@@ -16,3 +17,11 @@ export const BannerComponents: Record<BannerType, ComponentType<BannerProps>> = 
   InfoBanner,
   RebrandBanner,
 };
+
+export const REBRAND_BANNER_EXCLUDED_ROUTES = [
+  ROUTES.survey.path,
+  ROUTES.publicSurvey.path,
+  ROUTES.autoCompletion.path,
+  ROUTES.publicAutoCompletion.path,
+  ROUTES.activeAssessment.path,
+];
