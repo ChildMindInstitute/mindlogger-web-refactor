@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+import { useLocation } from 'react-router-dom';
+
 import { useBanners } from '~/entities/banner/model';
 
 /**
@@ -8,14 +10,17 @@ import { useBanners } from '~/entities/banner/model';
  */
 export const useRebrandBanner = () => {
   const { addBanner } = useBanners();
+  const location = useLocation();
 
   useEffect(() => {
-    // Use a timeout to ensure this runs after any other banners are added
+    // Using a small timeout to ensure this runs after any other banners are added
     // This will make the RebrandBanner appear on top
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       addBanner('RebrandBanner', {});
-    }, 0);
-  }, [addBanner]);
+    }, 10);
+
+    return () => clearTimeout(timeoutId);
+  }, [addBanner, location.pathname]);
 };
 
 export default useRebrandBanner;
