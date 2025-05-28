@@ -165,7 +165,7 @@ export const Page = ({
           left="0"
           bottom="0"
           width="100%"
-          sx={{ margin: `0 auto ${scaledFooterOffset}px auto`, zIndex: 2 }}
+          sx={{ margin: `0 auto ${scaledFooterOffset}px auto`, zIndex: 2, opacity: 0.15 }}
         >
           <img
             src={footerLogo}
