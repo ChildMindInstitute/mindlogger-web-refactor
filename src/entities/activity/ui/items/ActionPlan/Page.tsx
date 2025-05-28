@@ -3,13 +3,13 @@ import { useContext, useMemo } from 'react';
 import { Body } from './Body';
 import { DocumentContext, DocumentData, PageComponent } from './Document.type';
 import { Header } from './Header';
-import { usePageWidth, useXScaledDimension, usePageMinHeight } from './hooks';
+import { usePageMinHeight, usePageWidth, useXScaledDimension } from './hooks';
 import { getPagePhraseIds } from './pageComponent';
 import { Phrase } from './Phrase';
 import { StretchySvg } from './StretchySvg';
 import { Title } from './Title';
 
-import footerLogo from '~/assets/mindlogger-action-plan-footer-logo.svg';
+import footerLogo from '~/assets/curious_logo--black.png';
 import { useActionPlanTranslation } from '~/entities/activity/lib/useActionPlanTranslation';
 import { Theme } from '~/shared/constants';
 import Box from '~/shared/ui/Box';
@@ -41,8 +41,8 @@ export const Page = ({
   const scaledBottomPadding = useXScaledDimension(80);
   const scaledLeftPadding = useXScaledDimension(36.5);
   const scaledHeaderGap = useXScaledDimension(32);
-  const scaledFooterWidth = useXScaledDimension(113);
-  const scaledFooterHeight = useXScaledDimension(16);
+  const scaledFooterWidth = useXScaledDimension(148.48);
+  const scaledFooterHeight = useXScaledDimension(32);
   const scaledFooterOffset = useXScaledDimension(25);
 
   const [phraseIds, firstPhraseId, lastPhraseId] = useMemo(() => {
