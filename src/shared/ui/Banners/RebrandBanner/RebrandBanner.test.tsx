@@ -96,11 +96,13 @@ describe('RebrandBanner', () => {
       expect(screen.getByTestId('rebrand-banner')).toBeInTheDocument();
     });
 
-    test('does not render on non-matching route when not authorized', () => {
-      mockUseLocation.mockReturnValue({ pathname: '/some-other-route' });
+    test('does not render on excluded route', () => {
+      mockUseLocation.mockReturnValue({
+        pathname: '/protected/applets/123/activityId/456/event/789/entityType/regular',
+      });
       mockUseAuthorization.mockReturnValue({
-        isAuthorized: false,
-        user: null,
+        isAuthorized: true,
+        user: { id: 'user-123' },
       });
 
       renderWithProviders(<RebrandBanner />, { disableRouter: true });
