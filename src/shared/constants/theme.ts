@@ -6,7 +6,7 @@ export const Theme = {
       onSecondaryContainer: '#0E1D2A',
       onSurface: '#1A1C1E',
       onSurfaceOpacity008: 'rgba(26, 28, 30, 0.08)',
-      primary: '#0067A0',
+      primary: '#00639A',
       primary008: 'rgba(0, 103, 160, 0.08)',
       primary012: 'rgba(0, 103, 160, 0.12)',
       primary95: '#E8F2FF',
