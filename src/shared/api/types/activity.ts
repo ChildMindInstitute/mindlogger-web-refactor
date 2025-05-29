@@ -116,6 +116,7 @@ export type AnswerPayload = {
   alerts: Array<AlertDTO>;
   isFlowCompleted: boolean;
   consentToShare?: boolean;
+  allowedEhrIngest?: boolean;
   client: {
     appId: 'mindlogger-web';
     appVersion: string;

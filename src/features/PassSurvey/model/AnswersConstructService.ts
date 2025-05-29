@@ -11,6 +11,7 @@ import {
   ActivityFlowDTO,
   AnswerPayload,
   AnswerTypesPayload,
+  EHRConsent,
   EncryptionDTO,
   ScheduleEventDto,
 } from '~/shared/api';
@@ -113,6 +114,8 @@ export default class AnswersConstructService implements ICompletionConstructServ
 
     const publicKey = this.generatePublicKey(privateKey);
 
+    const allowedEhrIngest = this.determineEhrConsent();
+
     return {
       appletId: this.appletId,
       activityId: this.activityId,
@@ -122,6 +125,7 @@ export default class AnswersConstructService implements ICompletionConstructServ
       createdAt: new Date().getTime(),
       isFlowCompleted: isSurveyCompleted,
       prolificParams: this.prolificParams,
+      allowedEhrIngest,
       answer: {
         answer: encryptedAnswers,
         itemIds: answersDictionary.itemIds,
@@ -268,5 +272,14 @@ export default class AnswersConstructService implements ICompletionConstructServ
     const startFrom = new Date(startFromDate).setHours(startFromHour, startFromMinute, 0, 0);
 
     return startFromHour && startFromMinute ? getUnixTime(startFrom) : null;
+  }
+
+  private determineEhrConsent(): boolean {
+    return this.items.some(
+      (item) =>
+        item.responseType === 'requestHealthRecordData' &&
+        typeof item.answer[0] === 'string' &&
+        (item.answer[0] as EHRConsent) === EHRConsent.OptIn,
+    );
   }
 }
