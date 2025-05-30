@@ -6,8 +6,11 @@ interface Result {
 
 export type BaseError = {
   message?: string;
-  response: { data: { result?: Array<Result> } };
+  response: {
+    data: { result?: Array<Result> };
+  };
   evaluatedMessage?: string;
+  status?: number;
 };
 
 export interface BaseSuccessResponse<T> {
