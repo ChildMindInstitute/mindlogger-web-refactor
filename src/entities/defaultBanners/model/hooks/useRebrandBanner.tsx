@@ -5,11 +5,9 @@ import { useLocation } from 'react-router-dom';
 import { BannerOrder, useBanners } from '~/entities/banner/model';
 import { DismissedBannersStore } from '~/entities/defaultBanners/model';
 import { REBRAND_BANNER_EXCLUDED_ROUTES } from '~/shared/ui/Banners/lib/const';
-import { useAppDispatch } from '~/shared/utils';
 import { matchPaths } from '~/shared/utils/matchPaths';
 
 export const useRebrandBanner = (dismissed: DismissedBannersStore, bannerScope: string) => {
-  const dispatch = useAppDispatch();
   const { addBanner, removeBanner } = useBanners();
   const location = useLocation();
 
@@ -36,15 +34,7 @@ export const useRebrandBanner = (dismissed: DismissedBannersStore, bannerScope: 
     return () => {
       removeBanner('RebrandBanner');
     };
-  }, [
-    location.pathname,
-    dismissed,
-    bannerScope,
-    isExcludedRoute,
-    dispatch,
-    addBanner,
-    removeBanner,
-  ]);
+  }, [location.pathname, dismissed, bannerScope, isExcludedRoute, addBanner, removeBanner]);
 };
 
 export default useRebrandBanner;

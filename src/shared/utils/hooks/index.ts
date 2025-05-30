@@ -12,5 +12,4 @@ export { useOnceEffect } from './useOnceEffect';
 export { useOnceLayoutEffect } from './useOnceLayoutEffect';
 export { usePasswordType } from './usePasswordType';
 export * from './usePrevious';
-export { useRebrandBanner } from './useRebrandBanner';
 export * from './useWindowFocus';
