@@ -9,7 +9,7 @@ import { renderWithProviders } from '~/test/utils';
 
 const preloadedState: PreloadedState<RootState> = {
   banners: {
-    banners: [{ key: 'SuccessBanner', bannerProps: { children: 'test message' } }],
+    banners: [{ key: 'SuccessBanner', bannerProps: { children: 'test message' }, order: 1 }],
   },
 };
 

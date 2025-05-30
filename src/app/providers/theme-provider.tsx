@@ -48,6 +48,7 @@ const theme = createTheme({
           },
           '.MuiAlert-icon': {
             marginLeft: 'auto',
+            opacity: 1,
           },
           '.MuiAlert-message': {
             padding: 0,
