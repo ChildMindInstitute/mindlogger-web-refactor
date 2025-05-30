@@ -1,13 +1,13 @@
-# Child Mind Institute - MindLogger Web App
+# Child Mind Institute - Curious Web App
 
-This repository is used for the respondent web app of the [MindLogger](https://mindlogger.org/) application stack.
+This repository is used for the respondent web app of the [Curious](https://mindlogger.org/) application stack.
 
 ## Application Stack
 
-* MindLogger Admin - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-admin)
-* MindLogger Backend - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-backend-refactor)
-* MindLogger Mobile App - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-app-refactor)
-* MindLogger Web App - **This Repo**
+* Curious Admin - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-admin)
+* Curious Backend - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-backend-refactor)
+* Curious Mobile App - [GitHub Repo](https://github.com/ChildMindInstitute/mindlogger-app-refactor)
+* Curious Web App - **This Repo**
 
 ## Getting Started
 
@@ -30,7 +30,7 @@ Running the app:
 
 ## Features
 
-See MindLogger's [Knowledge Base article](https://mindlogger.atlassian.net/servicedesk/customer/portal/3/topic/4d9a9ad4-c663-443b-b7fc-be9faf5d9383/article/337444910) to discover the MindLogger application stack's features.
+See Curious's [Knowledge Base article](https://mindlogger.atlassian.net/servicedesk/customer/portal/3/topic/4d9a9ad4-c663-443b-b7fc-be9faf5d9383/article/337444910) to discover the Curious application stack's features.
 
 ## Technologies
 

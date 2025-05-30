@@ -96,7 +96,7 @@ export const ActivityUnsupportedLabel = () => {
             textDecoration: 'underline',
           }}
         >
-          {` ${t('mindloggerMobileApp')}.`}
+          {` ${t('curiousMobileApp')}.`}
         </Text>
       </a>
     </Box>
