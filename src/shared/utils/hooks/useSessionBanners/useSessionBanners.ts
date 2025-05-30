@@ -1,17 +1,18 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useBanners } from '~/entities/banner/model';
 import { userModel } from '~/entities/user';
 
 export const useSessionBanners = () => {
-  const { isAuthorized } = userModel.hooks.useAuthorization();
   const { removeAllBanners } = useBanners();
+  const { isAuthorized } = userModel.hooks.useAuthorization();
 
   const prevIsAuthorized = useRef(isAuthorized);
+  useEffect(() => {
+    if (prevIsAuthorized.current !== isAuthorized && !isAuthorized) {
+      removeAllBanners();
+    }
 
-  if (prevIsAuthorized.current !== isAuthorized && !isAuthorized) {
-    removeAllBanners();
-  }
-
-  prevIsAuthorized.current = isAuthorized;
+    prevIsAuthorized.current = isAuthorized;
+  }, [isAuthorized, removeAllBanners]);
 };

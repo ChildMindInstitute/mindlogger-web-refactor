@@ -15,6 +15,7 @@ export const Banner = ({
   onClose,
   hasCloseButton = !!onClose,
   severity = 'success',
+  icon,
   ...rest
 }: BannerProps) => {
   const [isHovering, setIsHovering] = useState(false);
@@ -35,6 +36,7 @@ export const Banner = ({
   return (
     <Alert
       iconMapping={BANNER_ICONS}
+      icon={icon}
       onClose={hasCloseButton ? onClose : undefined}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
