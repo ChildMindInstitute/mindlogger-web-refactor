@@ -4,6 +4,7 @@ import { initReactI18next } from 'react-i18next';
 
 import elResources from '~/i18n/el/translation.json';
 import enResources from '~/i18n/en/translation.json';
+import esResources from '~/i18n/es/translation.json';
 import frResources from '~/i18n/fr/translation.json';
 
 const i18nManager = {
@@ -17,8 +18,9 @@ const i18nManager = {
           en: enResources,
           fr: frResources,
           el: elResources,
+          es: esResources,
         },
-        supportedLngs: ['en', 'fr', 'el'],
+        supportedLngs: ['en', 'fr', 'el', 'es'],
         interpolation: {
           escapeValue: false,
         },
