@@ -1,53 +1,39 @@
-import { useEffect, useState } from 'react';
-
 import { Trans } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 
 import { Banner, BannerProps } from '../Banner';
 import { StyledImg } from './RebrandBanner.styles';
 
 import curiousIcon from '~/assets/curious_icon--white.png';
-import { userModel } from '~/entities/user';
-import { REBRAND_BANNER_EXCLUDED_ROUTES } from '~/shared/ui/Banners/lib/const';
+import { defaultBannersModel } from '~/entities/defaultBanners';
+import { useAppDispatch } from '~/shared/utils';
 
-/**
- * Returns a unique key for the rebrand banner dismiss state
- * Otherwise, it creates a user-only key for use on the auth screen
- */
-export const getDismissedKey = (userId: string) => `rebrand-banner-dismissed-${userId}`;
+interface RebrandBannerProps extends BannerProps {
+  bannerScope?: string;
+}
 
-export const GLOBAL_DISMISSED_KEY = 'rebrand-banner-dismissed-global';
+export const RebrandBanner = ({
+  bannerScope = 'global',
+  duration = null,
+  onClose,
+  ...props
+}: RebrandBannerProps) => {
+  const dispatch = useAppDispatch();
 
-export const RebrandBanner = (props: BannerProps) => {
-  const location = useLocation();
-  const { isAuthorized, user } = userModel.hooks.useAuthorization();
-  const userId = user?.id;
-  const [isRebrandBannerActive, setIsRebrandBannerActive] = useState(false);
-
-  const dismissedKey = isAuthorized && userId ? getDismissedKey(userId) : GLOBAL_DISMISSED_KEY;
-
-  useEffect(() => {
-    const dismissed = localStorage.getItem(dismissedKey);
-    setIsRebrandBannerActive(!dismissed);
-  }, [dismissedKey]);
-
-  const isExcludedRoute = REBRAND_BANNER_EXCLUDED_ROUTES.some((route) => {
-    const routePattern = route.replace(/:[^/]+/g, '[^/]+');
-    const regex = new RegExp(`^${routePattern}$`);
-    return regex.test(location.pathname);
-  });
-
-  const handleDismiss = () => {
-    localStorage.setItem(dismissedKey, 'true');
-    setIsRebrandBannerActive(false);
+  const handleClose = () => {
+    dispatch(
+      defaultBannersModel.actions.dismissBanner({
+        key: bannerScope,
+        bannerType: 'RebrandBanner',
+      }),
+    );
+    onClose?.();
   };
 
-  return isRebrandBannerActive && !isExcludedRoute ? (
+  return (
     <Banner
-      duration={null}
-      severity={undefined}
-      data-testid="rebrand-banner"
+      duration={duration}
       icon={<StyledImg src={curiousIcon} />}
+      data-testid="rebrand-banner"
       sx={{
         backgroundColor: '#0b0907',
         color: '#fdfcfc',
@@ -58,11 +44,8 @@ export const RebrandBanner = (props: BannerProps) => {
           color: '#fdfcfc',
         },
       }}
+      onClose={handleClose}
       {...props}
-      onClose={() => {
-        handleDismiss();
-        props?.onClose?.();
-      }}
     >
       <Trans i18nKey="rebrandBanner">
         <strong>We are rebranding! </strong>
@@ -76,5 +59,5 @@ export const RebrandBanner = (props: BannerProps) => {
 				</StyledLink> */}
       </Trans>
     </Banner>
-  ) : null;
+  );
 };
