@@ -1,234 +1,143 @@
-import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { useLocation } from 'react-router-dom';
-import { MockInstance, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { getDismissedKey, GLOBAL_DISMISSED_KEY, RebrandBanner } from './index';
+import { RebrandBanner } from './index';
 
-import { userModel } from '~/entities/user';
-import { renderWithProviders } from '~/test/utils';
+import { BannerPayload } from '~/entities/banner/model';
+import { defaultBannersModel } from '~/entities/defaultBanners';
 
-// Mock react-router-dom's useLocation
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+// Mock dispatch function
+const mockDispatch = vi.fn();
+
+// Mock dependencies
+vi.mock('~/shared/utils', async () => {
+  const actual = await vi.importActual('~/shared/utils');
   return {
     ...actual,
-    useLocation: vi.fn(),
+    useAppDispatch: () => mockDispatch,
   };
 });
 
-// Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
-  return {
-    getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => {
-      store[key] = value;
+vi.mock('~/entities/defaultBanners', () => ({
+  defaultBannersModel: {
+    actions: {
+      dismissBanner: vi.fn((payload: Omit<BannerPayload, 'order'>) => ({
+        type: 'defaultBanners/dismissBanner',
+        payload,
+      })),
     },
-    clear: () => {
-      store = {};
-    },
-  };
-})();
-
-Object.defineProperty(window, 'localStorage', { value: localStorageMock });
-
-// Mock useAuthorization hook
-vi.mock('~/entities/user/model/hooks', () => ({
-  useAuthorization: vi.fn(),
+  },
 }));
 
-const mockUseAuthorization = userModel.hooks.useAuthorization as unknown as MockInstance;
-const mockUseLocation = useLocation as unknown as MockInstance;
+// Mock the Trans component from react-i18next
+vi.mock('react-i18next', () => ({
+  Trans: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
 
 describe('RebrandBanner', () => {
   beforeEach(() => {
-    localStorageMock.clear();
     vi.clearAllMocks();
   });
 
-  describe('Route matching', () => {
-    test('renders on login route when not authorized', () => {
-      mockUseLocation.mockReturnValue({ pathname: '/login' });
-      mockUseAuthorization.mockReturnValue({
-        isAuthorized: false,
-        user: null,
-      });
+  it('renders with correct styling and content', () => {
+    // Render the component
+    render(<RebrandBanner />);
 
-      renderWithProviders(<RebrandBanner />, { disableRouter: true });
+    // Check that the banner is rendered with the correct test ID
+    const banner = screen.getByTestId('rebrand-banner');
+    expect(banner).toBeInTheDocument();
 
-      expect(screen.getByTestId('rebrand-banner')).toBeInTheDocument();
+    // Check that the banner has the correct background color
+    expect(banner).toHaveStyle('background-color: #0b0907');
+    expect(banner).toHaveStyle('color: #fdfcfc');
+
+    // Check that the banner contains the expected text
+    expect(screen.getByText(/We are rebranding!/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Design updates are on the way—same great app, fresh new look./i),
+    ).toBeInTheDocument();
+  });
+
+  it('dispatches dismissBanner action with global scope when closed', () => {
+    // Render the component
+    render(<RebrandBanner />);
+
+    // Find and click the close button
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    fireEvent.click(closeButton);
+
+    // Check that the dismissBanner action was dispatched with the correct payload
+    expect(defaultBannersModel.actions.dismissBanner).toHaveBeenCalledWith({
+      key: 'global',
+      bannerType: 'RebrandBanner',
     });
-
-    test('renders on signup route when not authorized', () => {
-      mockUseLocation.mockReturnValue({ pathname: '/signup' });
-      mockUseAuthorization.mockReturnValue({
-        isAuthorized: false,
-        user: null,
-      });
-
-      renderWithProviders(<RebrandBanner />, { disableRouter: true });
-
-      expect(screen.getByTestId('rebrand-banner')).toBeInTheDocument();
-    });
-
-    test('renders on /protected/ route when authorized', () => {
-      mockUseLocation.mockReturnValue({ pathname: '/protected/profile' });
-      mockUseAuthorization.mockReturnValue({
-        isAuthorized: true,
-        user: { id: 'user-123' },
-      });
-
-      renderWithProviders(<RebrandBanner />, { disableRouter: true });
-
-      expect(screen.getByTestId('rebrand-banner')).toBeInTheDocument();
-    });
-
-    test('renders on /protected/applets/123 route when authorized', () => {
-      mockUseLocation.mockReturnValue({ pathname: '/protected/applets/123' });
-      mockUseAuthorization.mockReturnValue({
-        isAuthorized: true,
-        user: { id: 'user-123' },
-      });
-
-      renderWithProviders(<RebrandBanner />, { disableRouter: true });
-
-      expect(screen.getByTestId('rebrand-banner')).toBeInTheDocument();
-    });
-
-    test('does not render on excluded route', () => {
-      mockUseLocation.mockReturnValue({
-        pathname: '/protected/applets/123/activityId/456/event/789/entityType/regular',
-      });
-      mockUseAuthorization.mockReturnValue({
-        isAuthorized: true,
-        user: { id: 'user-123' },
-      });
-
-      renderWithProviders(<RebrandBanner />, { disableRouter: true });
-
-      expect(screen.queryByTestId('rebrand-banner')).not.toBeInTheDocument();
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: 'defaultBanners/dismissBanner',
+      payload: {
+        key: 'global',
+        bannerType: 'RebrandBanner',
+      },
     });
   });
 
-  describe('Dismissal functionality', () => {
-    test('sets global localStorage when dismissed by non-authorized user', async () => {
-      mockUseLocation.mockReturnValue({ pathname: '/login' });
-      mockUseAuthorization.mockReturnValue({
-        isAuthorized: false,
-        user: null,
-      });
+  it('dispatches dismissBanner action with custom scope when provided', () => {
+    // Render the component with a custom bannerScope
+    const customScope = 'user-123';
+    render(<RebrandBanner bannerScope={customScope} />);
 
-      renderWithProviders(<RebrandBanner />, { disableRouter: true });
+    // Find and click the close button
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    fireEvent.click(closeButton);
 
-      const closeButton = screen.getByRole('button', { name: /close/i });
-      await userEvent.click(closeButton);
-
-      expect(localStorageMock.getItem(GLOBAL_DISMISSED_KEY)).toBe('true');
+    // Check that the dismissBanner action was dispatched with the correct payload
+    expect(defaultBannersModel.actions.dismissBanner).toHaveBeenCalledWith({
+      key: customScope,
+      bannerType: 'RebrandBanner',
     });
-
-    test('sets user-specific localStorage when dismissed by authorized user', async () => {
-      const userId = 'user-123';
-      mockUseLocation.mockReturnValue({ pathname: '/protected/profile' });
-      mockUseAuthorization.mockReturnValue({
-        isAuthorized: true,
-        user: { id: userId },
-      });
-
-      renderWithProviders(<RebrandBanner />, { disableRouter: true });
-
-      const closeButton = screen.getByRole('button', { name: /close/i });
-      await userEvent.click(closeButton);
-
-      expect(localStorageMock.getItem(getDismissedKey(userId))).toBe('true');
-    });
-
-    test('banner collapses after dismissal', async () => {
-      mockUseLocation.mockReturnValue({ pathname: '/protected/profile' });
-      mockUseAuthorization.mockReturnValue({
-        isAuthorized: true,
-        user: { id: 'user-123' },
-      });
-
-      renderWithProviders(<RebrandBanner />, { disableRouter: true });
-
-      const banner = screen.getByTestId('rebrand-banner');
-      expect(banner).toBeInTheDocument();
-
-      const closeButton = screen.getByRole('button', { name: /close/i });
-      await userEvent.click(closeButton);
-
-      // Wait for the collapse animation to complete
-      await waitFor(() => {
-        expect(screen.queryByTestId('rebrand-banner')).not.toBeInTheDocument();
-      });
-    });
-
-    test('calls onClose prop when provided and banner is dismissed', async () => {
-      const onCloseMock = vi.fn();
-      mockUseLocation.mockReturnValue({ pathname: '/protected/profile' });
-      mockUseAuthorization.mockReturnValue({
-        isAuthorized: true,
-        user: { id: 'user-123' },
-      });
-
-      renderWithProviders(<RebrandBanner onClose={onCloseMock} />, { disableRouter: true });
-
-      const closeButton = screen.getByRole('button', { name: /close/i });
-      await userEvent.click(closeButton);
-
-      expect(onCloseMock).toHaveBeenCalled();
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: 'defaultBanners/dismissBanner',
+      payload: {
+        key: customScope,
+        bannerType: 'RebrandBanner',
+      },
     });
   });
 
-  describe('localStorage persistence', () => {
-    test('does not show banner when global dismissal is in localStorage', () => {
-      mockUseLocation.mockReturnValue({ pathname: '/login' });
-      mockUseAuthorization.mockReturnValue({
-        isAuthorized: false,
-        user: null,
-      });
+  it('passes additional props to the Banner component', () => {
+    // Render the component with additional props
+    render(<RebrandBanner data-custom="test-value" />);
 
-      localStorageMock.setItem(GLOBAL_DISMISSED_KEY, 'true');
+    // Check that the additional props were passed to the Banner component
+    const banner = screen.getByTestId('rebrand-banner');
+    expect(banner).toHaveAttribute('data-custom', 'test-value');
+  });
 
-      renderWithProviders(<RebrandBanner />, { disableRouter: true });
+  it('renders with the correct icon', () => {
+    // Render the component
+    render(<RebrandBanner />);
 
-      expect(screen.queryByTestId('rebrand-banner')).not.toBeInTheDocument();
+    // Check that the banner contains an image
+    const icon = screen.getByRole('img');
+    expect(icon).toBeInTheDocument();
+  });
+
+  it('calls custom onClose handler when banner is closed', () => {
+    // Create a mock onClose handler
+    const mockOnClose = vi.fn();
+
+    // Render the component with the custom onClose handler
+    render(<RebrandBanner onClose={mockOnClose} />);
+
+    // Find and click the close button
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    fireEvent.click(closeButton);
+
+    // Verify that both the dismissBanner action and custom onClose handler were called
+    expect(defaultBannersModel.actions.dismissBanner).toHaveBeenCalledWith({
+      key: 'global',
+      bannerType: 'RebrandBanner',
     });
-
-    test('does not show banner when user-specific dismissal is in localStorage', () => {
-      const userId = 'user-123';
-      mockUseLocation.mockReturnValue({ pathname: '/protected/profile' });
-      mockUseAuthorization.mockReturnValue({
-        isAuthorized: true,
-        user: { id: userId },
-      });
-
-      localStorageMock.setItem(getDismissedKey(userId), 'true');
-
-      renderWithProviders(<RebrandBanner />, { disableRouter: true });
-
-      expect(screen.queryByTestId('rebrand-banner')).not.toBeInTheDocument();
-    });
-
-    test('shows banner when different user logs in', () => {
-      const userId1 = 'user-123';
-      const userId2 = 'user-456';
-      mockUseLocation.mockReturnValue({ pathname: '/protected/profile' });
-
-      // Set dismissal for first user
-      localStorageMock.setItem(getDismissedKey(userId1), 'true');
-
-      // Log in as second user
-      mockUseAuthorization.mockReturnValue({
-        isAuthorized: true,
-        user: { id: userId2 },
-      });
-
-      renderWithProviders(<RebrandBanner />, { disableRouter: true });
-
-      // Banner should be visible for second user
-      expect(screen.getByTestId('rebrand-banner')).toBeInTheDocument();
-    });
+    expect(mockDispatch).toHaveBeenCalled();
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 });
