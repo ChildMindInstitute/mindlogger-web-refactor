@@ -141,11 +141,7 @@ export const OneUpHealthStep: FC = () => {
       },
       tokenExpired: {
         check: (err: BaseError) =>
-          err?.status === 502 &&
-          ((err?.evaluatedMessage || (err.response.data.result?.[0]?.message ?? '')).includes(
-            'token has expired',
-          ) ??
-            false),
+          err?.status === 502 && (err?.evaluatedMessage ?? '').includes('token has expired'),
         // Since we're not actually showing a banner for this error, we just return empty strings
         title: '',
         message: '',
