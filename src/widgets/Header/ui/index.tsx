@@ -7,13 +7,12 @@ import IconButton from '@mui/material/IconButton';
 import AccountDropdown from './AccountDropdown';
 import LoginButton from './LoginButton';
 
-import MLLogo from '~/assets/ml-logo.svg';
+import curiousLogo from '~/assets/curious_logo--white.png';
 import { userModel } from '~/entities/user';
 import { LanguageDropdown } from '~/features/language';
 import { Theme } from '~/shared/constants';
 import ROUTES from '~/shared/constants/routes';
-import { Box } from '~/shared/ui';
-import { AvatarBase } from '~/shared/ui';
+import { AvatarBase, Box } from '~/shared/ui';
 import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
 
 const Header = (): JSX.Element | null => {
@@ -46,7 +45,7 @@ const Header = (): JSX.Element | null => {
     <Box sx={{ backgroundColor: Theme.colors.light.primary, padding: '8px 16px' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <ButtonBase onClick={onLogoClick} disableRipple sx={{ marginY: '15px' }}>
-          <AvatarBase src={MLLogo} name="" width="143px" height="24px" variant="square" />
+          <AvatarBase src={curiousLogo} name="" width="148.48px" height="32px" variant="square" />
         </ButtonBase>
 
         {lessThanSM && (

@@ -8,7 +8,7 @@ import { useAppSelector } from '~/shared/utils';
 
 const handlePureClose = (
   removeBanner: (key: BannerType) => void,
-  { key, bannerProps }: BannerPayload,
+  { key, bannerProps }: Omit<BannerPayload, 'order'>,
 ) => {
   removeBanner(key);
   bannerProps?.onClose?.();
@@ -18,9 +18,11 @@ export const Banners = () => {
   const { removeBanner } = useBanners();
   const banners = useAppSelector(bannersSelector);
 
+  const sortedBanners = [...banners].sort((a, b) => a.order - b.order);
+
   return (
     <TransitionGroup>
-      {banners.map(({ key, bannerProps }) => {
+      {sortedBanners.map(({ key, bannerProps }) => {
         const BannerComponent = BannerComponents[key];
 
         return (

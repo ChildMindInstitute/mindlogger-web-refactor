@@ -16,7 +16,7 @@ const emptyState: PreloadedState<RootState> = {
 
 const populatedState: PreloadedState<RootState> = {
   banners: {
-    banners: [{ key: 'SuccessBanner', bannerProps: { children: 'test banner' } }],
+    banners: [{ key: 'SuccessBanner', bannerProps: { children: 'test banner' }, order: 1 }],
   },
 };
 
