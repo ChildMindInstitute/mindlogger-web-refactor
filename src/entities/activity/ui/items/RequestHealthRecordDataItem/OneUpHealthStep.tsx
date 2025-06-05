@@ -1,5 +1,6 @@
 import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
+import { datadogLogs } from '@datadog/browser-logs';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -93,6 +94,7 @@ export const OneUpHealthStep: FC = () => {
     },
     onError: (error) => {
       console.error('Error refreshing token:', error);
+      datadogLogs.logger.error('Error refreshing 1UpHealth token', { error });
       handleApiErrors(error);
       refreshInProgressRef.current = false;
     },
@@ -205,6 +207,12 @@ export const OneUpHealthStep: FC = () => {
   useEffect(() => {
     if (errorType) {
       console.error(errorTypes[errorType].logMessage);
+      datadogLogs.logger.error(errorTypes[errorType].logMessage, {
+        errorType,
+        appletId,
+        activityId,
+        submitId,
+      });
 
       if (errorType !== 'tokenExpired') {
         addErrorBanner({
@@ -217,7 +225,16 @@ export const OneUpHealthStep: FC = () => {
     } else {
       removeErrorBanner();
     }
-  }, [errorType, addErrorBanner, removeErrorBanner, errorTypes, handleTokenRefresh]);
+  }, [
+    errorType,
+    addErrorBanner,
+    removeErrorBanner,
+    errorTypes,
+    handleTokenRefresh,
+    appletId,
+    activityId,
+    submitId,
+  ]);
 
   // Handle API errors
   useEffect(() => {
@@ -254,15 +271,27 @@ export const OneUpHealthStep: FC = () => {
         messageChannelRef.current.port1.postMessage(secureDataPacket);
       } catch (e) {
         console.error(`Error encountered sending secure data to iframe: ${e}`);
+        datadogLogs.logger.error('Error sending secure data to 1UpHealth iframe', {
+          error: e,
+          appletId,
+          activityId,
+          submitId,
+        });
         setErrorType('communicationError');
       }
     };
 
     setupMessageChannel();
-  }, [accessToken, isIframeLoaded]);
+  }, [accessToken, isIframeLoaded, appletId, activityId, submitId]);
 
   const handleIframeError = () => {
     setErrorType('communicationError');
+    datadogLogs.logger.error('1UpHealth iframe loading error', {
+      errorType: 'communicationError',
+      appletId,
+      activityId,
+      submitId,
+    });
   };
 
   return (
