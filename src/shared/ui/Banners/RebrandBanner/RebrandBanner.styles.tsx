@@ -8,7 +8,4 @@ export const StyledImg = styled('img')({
 export const StyledLink = styled('a')({
   color: '#b6deff',
   textDecoration: 'underline',
-  '&:hover': {
-    textDecoration: 'none',
-  },
 });
