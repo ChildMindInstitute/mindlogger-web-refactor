@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { BannerOrder, useBanners } from '~/entities/banner/model';
@@ -9,6 +10,7 @@ import { matchPaths } from '~/shared/utils/matchPaths';
 
 export const useRebrandBanner = (dismissed: DismissedBannersStore, bannerScope: string) => {
   const { addBanner, removeBanner } = useBanners();
+  const { i18n } = useTranslation();
   const location = useLocation();
 
   const isExcludedRoute = matchPaths(REBRAND_BANNER_EXCLUDED_ROUTES, location.pathname).some(
@@ -34,7 +36,7 @@ export const useRebrandBanner = (dismissed: DismissedBannersStore, bannerScope: 
     return () => {
       removeBanner('RebrandBanner');
     };
-  }, [location.pathname, dismissed, bannerScope, isExcludedRoute, addBanner, removeBanner]);
+  }, [location.pathname, dismissed, bannerScope, isExcludedRoute, addBanner, removeBanner, i18n]);
 };
 
 export default useRebrandBanner;
