@@ -53,7 +53,6 @@ export const OneUpHealthStep: FC = () => {
   const submitId = groupProgress?.submitId;
 
   // Fetch the token using our custom hook
-
   const { data, isLoading, error } = useOneUpHealthTokenQuery(
     { appletId, submitId, activityId },
     { refetchOnWindowFocus: false },
@@ -109,22 +108,6 @@ export const OneUpHealthStep: FC = () => {
       refreshToken: refreshTokenValue,
     });
   }, [refreshTokenValue, refreshToken]);
-
-  const [isDebugMode, setIsDebugMode] = useState(false);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.shiftKey && event.key === 'D') {
-        event.preventDefault();
-        setIsDebugMode((prev) => !prev);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
 
   // Instantiate channel and iframeRef variable
   const messageChannelRef = useRef<MessageChannel>();
@@ -332,96 +315,6 @@ export const OneUpHealthStep: FC = () => {
             {errorTypes[errorType].title}
           </Box>
           <Box marginBottom={3}>{errorTypes[errorType].message}</Box>
-        </Box>
-      )}
-
-      {/* Debug panel */}
-      {isDebugMode && (
-        <Box
-          position="fixed"
-          bottom={0}
-          right={0}
-          bgcolor="rgba(0, 0, 0, 0.8)"
-          color="white"
-          p={2}
-          zIndex={9999}
-          borderRadius="8px 0 0 0"
-          width="300px"
-        >
-          <Box fontWeight="bold" mb={2}>
-            Error Simulation Panel
-          </Box>
-          <Box display="flex" flexDirection="column" gap={1}>
-            <button
-              onClick={() => setErrorType('tokenExpired')}
-              style={{
-                padding: '8px',
-                backgroundColor: '#f44336',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                marginBottom: '8px',
-              }}
-            >
-              Test Token Expired
-            </button>
-            <button
-              onClick={() => setErrorType('geographicRestriction')}
-              style={{
-                padding: '8px',
-                backgroundColor: '#ff9800',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                marginBottom: '8px',
-              }}
-            >
-              Test Geographic Restriction
-            </button>
-            <button
-              onClick={() => setErrorType('serviceUnavailable')}
-              style={{
-                padding: '8px',
-                backgroundColor: '#2196f3',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                marginBottom: '8px',
-              }}
-            >
-              Test Service Unavailable
-            </button>
-            <button
-              onClick={() => setErrorType('communicationError')}
-              style={{
-                padding: '8px',
-                backgroundColor: '#989825',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                marginBottom: '8px',
-              }}
-            >
-              Test Communication Error
-            </button>
-            <button
-              onClick={() => setErrorType('unknown')}
-              style={{
-                padding: '8px',
-                backgroundColor: '#9c27b0',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
-            >
-              Test General Error
-            </button>
-          </Box>
         </Box>
       )}
     </>
