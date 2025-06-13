@@ -35,7 +35,7 @@ export const SelectBaseText = (props: Props) => {
               </span>
             ) : (
               `${word} `
-            )
+            ),
           )
         : props.text}
     </Text>
