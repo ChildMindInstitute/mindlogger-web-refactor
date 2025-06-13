@@ -8,6 +8,7 @@ type Props = {
 
 export const SelectBaseText = (props: Props) => {
   const { processedWords } = useCustomWordWrap(props.text);
+  const hasLongWord = processedWords.some(({ needsWrap }) => needsWrap);
 
   return (
     <Text
@@ -22,23 +23,21 @@ export const SelectBaseText = (props: Props) => {
         cursor: 'pointer',
         lineBreak: 'normal',
         display: '-webkit-box',
-
-        // Using kebab-case (i.e. `-webkit-some-things`) would cause warnings
-        // in the JS console about kebab-case being not supported for CSS
-        // properties.
         webkitLineClamp: '3',
         webkitBoxOrient: 'vertical',
       }}
     >
-      {processedWords.map(({ word, needsWrap, ref }, index) => {
-        return needsWrap ? (
-          <span ref={ref} style={{ wordBreak: 'break-word' }} key={index}>
-            {`${word} `}
-          </span>
-        ) : (
-          `${word} `
-        );
-      })}
+      {hasLongWord
+        ? processedWords.map(({ word, needsWrap, ref }, index) =>
+            needsWrap ? (
+              <span ref={ref} style={{ wordBreak: 'break-word' }} key={index}>
+                {`${word} `}
+              </span>
+            ) : (
+              `${word} `
+            )
+          )
+        : props.text}
     </Text>
   );
 };
