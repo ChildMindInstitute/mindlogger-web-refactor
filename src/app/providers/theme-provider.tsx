@@ -16,7 +16,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '"Lato", "Atkinson", sans-serif',
+    fontFamily: '"Lato", "Moderat", sans-serif',
   },
   components: {
     MuiAlert: {
