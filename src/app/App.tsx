@@ -11,8 +11,9 @@ import ApplicationRouter from '~/pages';
 import { Mixpanel } from '~/shared/utils';
 import { FeatureFlags } from '~/shared/utils/featureFlags';
 
-import '~/assets/fonts/Atkinson/atkinson.css';
+import '~/assets/fonts/Affix/affix.css';
 import '~/assets/fonts/Lato/lato.css';
+import '~/assets/fonts/Moderat/moderat.css';
 
 import './index.css';
 
