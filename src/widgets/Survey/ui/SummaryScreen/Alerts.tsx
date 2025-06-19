@@ -1,6 +1,6 @@
 import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { useCustomTranslation } from '~/shared/utils';
@@ -15,11 +15,11 @@ export const Alerts = ({ alerts }: Props) => {
   return (
     <Box
       padding="24px 32px"
-      bgcolor={Theme.colors.light.errorVariant10}
+      bgcolor={variables.palette.error50}
       borderRadius="12px"
       data-testid="alerts-container"
     >
-      <Text fontWeight="600" fontSize="24px" lineHeight="32px" testid="alerts-title">
+      <Text variant="headlineSmall" testid="alerts-title">
         {t('alerts')}
       </Text>
       <Box>
@@ -27,10 +27,10 @@ export const Alerts = ({ alerts }: Props) => {
           <Box display="flex" gap="8px" key={index} marginTop="16px" data-testid="alert-item">
             <NotificationImportantIcon
               fontSize="small"
-              sx={{ color: Theme.colors.light.errorVariant100 }}
+              sx={{ color: variables.palette.error50 }}
               data-testid="alert-item-icon"
             />
-            <Text fontWeight="400" fontSize="16px" lineHeight="22px" testid="alert-item-label">
+            <Text variant="bodyLarge" testid="alert-item-label">
               {alert}
             </Text>
           </Box>

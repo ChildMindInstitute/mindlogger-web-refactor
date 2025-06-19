@@ -5,7 +5,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import { ActivityStatus } from '~/abstract/lib/GroupBuilder';
 import ActivityRestartIcon from '~/assets/activity-restart-icon.svg';
 import { useBanners } from '~/entities/banner/model';
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { BaseButton, MuiModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
@@ -88,9 +88,7 @@ export const ActivityCardRestartResume = ({
           >
             <img src={ActivityRestartIcon} alt={String(t('additional.restart'))} />
 
-            <Text sx={{ marginLeft: 1 }} variant="body1" fontSize="16px">
-              {t('additional.restart')}
-            </Text>
+            <Text sx={{ marginLeft: 1 }}>{t('additional.restart')}</Text>
           </ButtonBase>
         </Box>
       ) : (
@@ -121,14 +119,7 @@ export const ActivityCardRestartResume = ({
           marginY: 2,
         }}
         labelComponent={
-          <Text
-            fontSize="16px"
-            fontWeight="400"
-            lineHeight="24px"
-            letterSpacing="0.15px"
-            color={Theme.colors.light.onSurface}
-            sx={{ textTransform: 'none' }}
-          >
+          <Text color={variables.palette.onSurface} sx={{ textTransform: 'none' }}>
             {t('additional.activity_resume_restart')} <b>{activityName}</b>?
           </Text>
         }

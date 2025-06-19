@@ -1,6 +1,6 @@
 import { ActivityLabelTypography } from './ActivityLabelTypography';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Box } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
@@ -18,7 +18,7 @@ export const ActivityInProgressLabel = (props: Props) => {
       sx={{
         padding: '4px 8px',
         borderRadius: '8px',
-        backgroundColor: Theme.colors.light.accentYellow30,
+        backgroundColor: variables.palette.yellowAlpha30,
       }}
     >
       <ActivityLabelTypography
@@ -26,7 +26,7 @@ export const ActivityInProgressLabel = (props: Props) => {
           count: props.activityLength,
           countOfCompletedQuestions: props.countOfCompletedQuestions,
         })}
-        color={Theme.colors.light.onSurface}
+        color={variables.palette.onSurface}
       />
     </Box>
   );

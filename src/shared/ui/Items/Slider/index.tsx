@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import Slider from '@mui/material/Slider';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Box } from '~/shared/ui';
 import { useCustomMediaQuery } from '~/shared/utils';
 
@@ -77,9 +77,9 @@ export const SliderItemBase = (props: Props) => {
         sx={{
           height: '8px',
           opacity: 1,
-          color: Theme.colors.light.surfaceVariant,
+          color: variables.palette.surfaceVariant,
           '& .MuiSlider-thumb': {
-            backgroundColor: Theme.colors.light.primary,
+            backgroundColor: variables.palette.primary,
             width: '24px',
             height: '24px',
           },
@@ -90,13 +90,13 @@ export const SliderItemBase = (props: Props) => {
           },
           '& .MuiSlider-track': {
             opacity: 1,
-            color: Theme.colors.light.primary,
+            color: variables.palette.primary,
             left: '-1% !important',
           },
           '& .MuiSlider-mark': {
             width: '4px',
             height: '4px',
-            color: Theme.colors.light.outline,
+            color: variables.palette.outline,
             borderRadius: '50%',
             opacity: showStickMarks ? 1 : 0,
           },
@@ -104,19 +104,19 @@ export const SliderItemBase = (props: Props) => {
             opacity: showStickLabel ? 1 : 0,
           },
           '& .MuiSlider-valueLabel': {
-            color: Theme.colors.light.onPrimary,
+            color: variables.palette.onPrimary,
             fontSize: '22px',
             fontWeight: 700,
             lineHeight: '28px',
-            backgroundColor: Theme.colors.light.primary,
+            backgroundColor: variables.palette.primary,
             borderRadius: '8px',
             padding: '8px',
             '&::before': {
-              backgroundColor: Theme.colors.light.primary,
+              backgroundColor: variables.palette.primary,
             },
           },
           [`& .MuiSlider-markLabel[data-index="${selectedValueIndex}"]`]: {
-            color: Theme.colors.light.primary,
+            color: variables.palette.primary,
             fontWeight: 700,
           },
         }}

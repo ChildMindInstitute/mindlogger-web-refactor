@@ -1,6 +1,6 @@
 import { ActivityLabelTypography } from './ActivityLabelTypography';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Box } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
@@ -17,12 +17,12 @@ export const ActivityAvailableLabel = (props: Props) => {
       sx={{
         padding: '4px 8px',
         borderRadius: '8px',
-        backgroundColor: Theme.colors.light.primary95,
+        backgroundColor: variables.palette.primary95,
       }}
     >
       <ActivityLabelTypography
         text={t('questionCount', { count: props.activityLength })}
-        color={Theme.colors.light.onPrimaryContainer}
+        color={variables.palette.onPrimaryContainer}
       />
     </Box>
   );

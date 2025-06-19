@@ -1,4 +1,4 @@
-import { useMemo, useContext, useCallback, useRef, useState, useLayoutEffect } from 'react';
+import { useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { Avatar, Button } from '@mui/material';
 import { format as formatDate } from 'date-fns';
@@ -12,14 +12,12 @@ import downloadIconLight from '~/assets/download-icon-light.svg';
 import downloadIconDark from '~/assets/download-icon.svg';
 import { PhrasalTemplateItem as PhrasalTemplateItemType } from '~/entities/activity/lib';
 import {
+  dataUriToFile,
   downloadPhrasalTemplateItemDesktop,
   getDocumentImageDataUris,
-  dataUriToFile,
 } from '~/entities/activity/lib/downloadPhrasalTemplateItem';
 import { SurveyContext } from '~/features/PassSurvey';
-import { Theme } from '~/shared/constants';
-import { Markdown } from '~/shared/ui';
-import { Box, Text } from '~/shared/ui';
+import { Box, Markdown, Text } from '~/shared/ui';
 import {
   addSurveyPropsToEvent,
   Mixpanel,
@@ -141,9 +139,7 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
   return (
     <Box gap="24px" display={'flex'} flexDirection={'column'} alignItems="center">
       <Box gap="8px" display={'flex'} flexDirection={'column'} alignItems="center">
-        <Text fontWeight="400" fontSize="24px" lineHeight="32px">
-          {t('title')}
-        </Text>
+        <Text variant="headlineSmall">{t('title')}</Text>
         {questionText && questionText.trim().length > 0 ? (
           <Box
             sx={{
@@ -160,7 +156,7 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
       </Box>
       <Button
         type="button"
-        variant="contained"
+        variant="tonal"
         disableElevation={true}
         onMouseEnter={() => setDownloadIcon(downloadIconLight)}
         onMouseLeave={() => setDownloadIcon(downloadIconDark)}
@@ -168,29 +164,13 @@ export const PhrasalTemplateItem = ({ item, replaceText }: PhrasalTemplateItemPr
         disabled={isMobile && !mobileDownloadFiles}
         sx={{
           width: '172px',
-          height: '48px',
           padding: '10px 24px 10px 16px',
-          borderRadius: '100px',
-          backgroundColor: Theme.colors.light.secondaryContainer,
-
-          fontSize: '14px',
-          fontStyle: 'normal',
-          fontWeight: '400',
-          lineHeight: '20px',
-          letterSpacing: '0.1px',
-          color: Theme.colors.light.onSecondaryContainer,
-          textTransform: 'none',
-
-          // Hover styles
-          '&:hover': {
-            color: Theme.colors.light.onPrimary,
-          },
         }}
         startIcon={
           <Avatar src={downloadIcon} variant="square" sx={{ width: '18px', height: '18px' }} />
         }
       >
-        {t('download')}
+        <Text variant="titleSmall">{t('download')}</Text>
       </Button>
       <ActionPlanDocument
         documentId={documentIdRef.current}

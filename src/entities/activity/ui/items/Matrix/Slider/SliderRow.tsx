@@ -1,6 +1,5 @@
-import { Theme } from '~/shared/constants';
-import { Box } from '~/shared/ui';
-import { SliderItemBase, Text } from '~/shared/ui';
+import { variables } from '~/shared/constants/theme/variables';
+import { Box, SliderItemBase, Text } from '~/shared/ui';
 
 type Props = {
   label: string;
@@ -33,11 +32,10 @@ export const SliderRow = ({
   isEven,
 }: Props) => {
   return (
-    <Box bgcolor={isEven ? Theme.colors.light.surface3 : undefined} padding="50px">
+    <Box bgcolor={isEven ? variables.palette.surface3 : undefined} padding="50px">
       <Text
-        variant="body1"
-        fontSize="20px"
-        fontWeight="400"
+        variant="titleLargish"
+        component="p"
         padding="0px 0px 50px 0px" // Bottom padding
         sx={{ textAlign: 'center' }}
       >

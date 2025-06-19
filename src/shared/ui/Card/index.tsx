@@ -59,14 +59,13 @@ export const CustomCard = ({ id, title, description, imageSrc, onClick }: CardPr
       <CardContent data-testid="custom-card-content-block">
         <Text
           gutterBottom
-          variant="h1"
-          fontSize="20px"
+          variant="titleLargish"
           sx={{ wordBreak: 'break-word', '&:hover': { textDecoration: 'underline' } }}
           testid="custom-card-title"
         >
           {title}
         </Text>
-        <Text variant="body2" color="text.secondary" testid="custom-card-description">
+        <Text variant="bodyMedium" color="text.secondary" testid="custom-card-description">
           {description}
         </Text>
       </CardContent>

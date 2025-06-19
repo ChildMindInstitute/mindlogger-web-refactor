@@ -1,7 +1,6 @@
-import { ItemTimerBar } from './ItemTimerBar';
 import { TimerSettings } from '../hooks';
+import { ItemTimerBar } from './ItemTimerBar';
 
-import { Theme } from '~/shared/constants';
 import { BaseButton } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import { useCustomMediaQuery } from '~/shared/utils';
@@ -64,7 +63,6 @@ export const SurveyManageButtons = ({
             variant="outlined"
             onClick={onBackButtonClick}
             text={backButtonText}
-            borderColor={Theme.colors.light.outline}
           />
         </Box>
       )) || <div></div>}

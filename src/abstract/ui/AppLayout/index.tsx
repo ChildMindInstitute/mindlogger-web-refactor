@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 
 import { Outlet } from 'react-router-dom';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Banners, Box } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
@@ -14,7 +14,7 @@ type Props = PropsWithChildren<{
 }>;
 
 const Layout = ({
-  bgColor = Theme.colors.light.surface1,
+  bgColor = variables.palette.surface1,
   footer,
   header,
   onKeyDownHandler,

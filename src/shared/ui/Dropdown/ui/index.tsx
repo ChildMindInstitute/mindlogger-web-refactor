@@ -36,7 +36,7 @@ const BaseDropdown = ({ title, options, beforeIndexDivider }: BaseDropdownProps)
         aria-expanded={open ? 'true' : undefined}
         variant="contained"
         disableElevation
-        sx={{ textTransform: 'none', fontSize: '16px' }}
+        sx={{ textTransform: 'none', borderRadius: '4px', fontWeight: '400' }}
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
       >

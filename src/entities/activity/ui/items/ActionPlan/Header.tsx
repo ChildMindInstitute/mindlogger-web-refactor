@@ -1,6 +1,6 @@
 import { useXScaledDimension } from './hooks';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Text from '~/shared/ui/Text';
 
 export const Header = ({ children }: { children: string }) => {
@@ -8,10 +8,9 @@ export const Header = ({ children }: { children: string }) => {
 
   return (
     <Text
+      variant="titleLargeBold"
       fontSize={`${headerFontSize}px`}
-      fontWeight="700"
-      lineHeight="28px"
-      color={Theme.colors.light.onSurface}
+      color={variables.palette.onSurface}
     >
       {children}
     </Text>

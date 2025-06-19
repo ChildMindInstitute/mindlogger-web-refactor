@@ -1,13 +1,14 @@
 import { useCallback, useContext } from 'react';
 
-import { ProgressBar } from './ProgressBar';
 import { useAutoCompletion } from '../lib';
+import { ProgressBar } from './ProgressBar';
 
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import { SurveyContext, SurveyLayout, SurveyManageButtons } from '~/features/PassSurvey';
-import { ROUTES, Theme } from '~/shared/constants';
+import { ROUTES } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { useCustomNavigation, useCustomTranslation } from '~/shared/utils';
@@ -107,14 +108,14 @@ export const AutoCompletionScreen = () => {
             flexDirection="column"
             gap="12px"
           >
-            <Text variant="h4">{t('autoCompletion.title')}</Text>
-            <Text variant="body1">{t('autoCompletion.description')}</Text>
+            <Text variant="titleLargishBold">{t('autoCompletion.title')}</Text>
+            <Text>{t('autoCompletion.description')}</Text>
           </Box>
 
           <Box
             padding="16px 8px"
             marginTop="16px"
-            bgcolor={Theme.colors.light.primary012}
+            bgcolor={variables.palette.primary012}
             borderRadius="12px"
           >
             {completionState && (

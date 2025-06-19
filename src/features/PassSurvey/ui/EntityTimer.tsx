@@ -3,7 +3,8 @@ import { useContext, useEffect, useState } from 'react';
 import { getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { SurveyContext, formatTimerTime } from '~/features/PassSurvey';
-import { MINUTES_IN_HOUR, MS_IN_MINUTE, Theme } from '~/shared/constants';
+import { MINUTES_IN_HOUR, MS_IN_MINUTE } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { ClockIcon } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
@@ -90,7 +91,7 @@ export const EntityTimer = ({ entityTimerSettings }: Props) => {
   const getColor = () => {
     const isLessThan10Mins = checkLessThan10Mins();
 
-    return isLessThan10Mins ? Theme.colors.light.error : Theme.colors.light.outline;
+    return isLessThan10Mins ? variables.palette.error : variables.palette.outline;
   };
 
   useEffect(() => {

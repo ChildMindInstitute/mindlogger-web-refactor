@@ -25,7 +25,7 @@ export default function RecoveryPasswordPage() {
   if (isError) {
     return (
       <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
-        <Text variant="body1" fontSize="24px" margin="16px 0px">
+        <Text variant="headlineSmall" margin="16px 0px">
           <Box dangerouslySetInnerHTML={{ __html: t('invalidLink') ?? '' }} />
         </Text>
       </Box>

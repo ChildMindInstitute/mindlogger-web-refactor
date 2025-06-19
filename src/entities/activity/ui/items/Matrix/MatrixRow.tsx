@@ -3,7 +3,7 @@ import { PropsWithChildren } from 'react';
 import { AxisItem, AxisListItem } from './AxisListItem';
 import { MatrixCell } from './MatrixCell';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Box } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
@@ -16,7 +16,7 @@ export const MatrixRow = ({ children, item, isEven }: Props) => {
     <Box
       display="flex"
       flex={1}
-      bgcolor={isEven ? Theme.colors.light.surface3 : undefined}
+      bgcolor={isEven ? variables.palette.surface3 : undefined}
       data-testid="matrix-row-container"
     >
       <MatrixCell isRowLabel={true}>

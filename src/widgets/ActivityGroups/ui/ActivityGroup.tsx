@@ -3,7 +3,7 @@ import { EmptyState } from './EmptyState';
 
 import { ActivityListGroup } from '~/abstract/lib/GroupBuilder';
 import ChecklistIcon from '~/assets/checklist-icon.svg';
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { useCustomTranslation } from '~/shared/utils';
@@ -18,14 +18,10 @@ export const ActivityGroup = ({ group: { name, activities } }: Props) => {
   return (
     <Box data-testid={`${name}-block`}>
       <Text
-        variant="h3"
-        color={Theme.colors.light.onSurface}
+        variant="titleLargeBold"
+        color={variables.palette.onSurface}
         sx={{
           marginBottom: '16px',
-          fontSize: '22px',
-          fontStyle: 'normal',
-          fontWeight: 700,
-          lineHeight: '28px',
         }}
       >
         {t(name)}

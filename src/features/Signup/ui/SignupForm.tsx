@@ -6,13 +6,13 @@ import { SignupFormSchema, TSignupForm } from '../model/signup.schema';
 
 import { useBanners } from '~/entities/banner/model';
 import { useLoginMutation, userModel, useSignupMutation } from '~/entities/user';
-import { Box } from '~/shared/ui';
 import {
-  Input,
-  CheckboxWithLabel,
-  BasicFormProvider,
-  PasswordIcon,
   BaseButton,
+  BasicFormProvider,
+  Box,
+  CheckboxWithLabel,
+  Input,
+  PasswordIcon,
   Text,
 } from '~/shared/ui';
 import { Mixpanel, MixpanelEventType, useCustomForm, usePasswordType } from '~/shared/utils';
@@ -128,7 +128,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
 
         <Box display="flex" justifyContent="center">
           <CheckboxWithLabel id="terms" onChange={() => setTerms((prev) => !prev)}>
-            <Text variant="body1">
+            <Text>
               {`${t('iAgreeTo')} `}
               <a href={TERMS_URL} target="_blank" rel="noreferrer">
                 {t('termsOfService')}

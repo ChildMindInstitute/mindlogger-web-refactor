@@ -1,5 +1,7 @@
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { variables } from '~/shared/constants';
+
 // This Loader component is very common component
 // Don`t remove default export
 // Don`t remove inline styles. It was made for component lightness
@@ -14,7 +16,7 @@ export default function Loader() {
         alignItems: 'center',
       }}
     >
-      <CircularProgress />
+      <CircularProgress sx={{ color: variables.palette.primary }} />
     </div>
   );
 }

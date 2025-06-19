@@ -10,15 +10,12 @@ type Props = {
 export const AudioPlayerDuration = ({ currentDuration, totalDuration }: Props) => {
   const { lessThanSM } = useCustomMediaQuery();
 
-  const fontSize = lessThanSM ? '12px' : '14px';
-
   const width = lessThanSM ? '75px' : '100px';
 
   return (
     <Box width={width} data-testid="audio-player-duration">
       <Text
-        variant="body1"
-        fontSize={fontSize}
+        variant={lessThanSM ? 'bodySmall' : 'bodyMedium'}
         sx={{ cursor: 'default' }}
       >{`${currentDuration} / ${totalDuration}`}</Text>
     </Box>

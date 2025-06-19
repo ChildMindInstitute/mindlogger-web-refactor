@@ -1,4 +1,4 @@
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { BaseTextInput } from '~/shared/ui';
 
 type Props = {
@@ -39,12 +39,12 @@ export const TextItem = ({ value = '', onValueChange, disabled, isMultiline, has
               '& .MuiInputBase-root': {
                 height: '100%',
                 paddingRight: '2px',
-                ...(hasError ? { border: `2px solid ${Theme.colors.light.error}` } : {}),
+                ...(hasError ? { border: `2px solid ${variables.palette.error}` } : {}),
                 borderWidth: '2px',
                 borderRadius: '12px',
               },
               '& .MuiOutlinedInput-notchedOutline': {
-                border: hasError ? 'none' : `2px solid ${Theme.colors.light.surfaceVariant}`,
+                border: hasError ? 'none' : `2px solid ${variables.palette.surfaceVariant}`,
               },
             }
           : null

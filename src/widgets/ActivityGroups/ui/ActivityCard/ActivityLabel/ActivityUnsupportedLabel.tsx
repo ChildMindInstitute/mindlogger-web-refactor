@@ -3,7 +3,7 @@ import { isIOS } from 'react-device-detect';
 
 import { APPSTORE_LINK, GOOGLEPLAY_LINK } from '~/abstract/lib/constants';
 import ExclamationIcon from '~/assets/exclamation-circle.svg';
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
@@ -30,28 +30,19 @@ export const ActivityUnsupportedLabel = () => {
           sx={{
             padding: '4px 8px',
             borderRadius: '8px',
-            backgroundColor: Theme.colors.light.accentOrange30,
+            backgroundColor: variables.palette.orangeAlpha30,
           }}
         >
           <Avatar src={ExclamationIcon} sx={{ width: '18px', height: '18px' }} />
-          <Text
-            color={Theme.colors.light.onSurface}
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="20px"
-            letterSpacing="0.1px"
-          >
+          <Text color={variables.palette.onSurface} variant="bodyMedium">
             {t('mustBeCompletedUsingMobileApp')}
           </Text>
         </Box>
 
         <a href={storeLink} target="_blank" rel="noreferrer">
           <Text
-            color={Theme.colors.light.primary}
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="20px"
-            letterSpacing="0.1px"
+            color={variables.palette.primary}
+            variant="bodyMedium"
             sx={{
               textDecoration: 'underline',
             }}
@@ -72,26 +63,17 @@ export const ActivityUnsupportedLabel = () => {
       sx={{
         padding: '4px 8px',
         borderRadius: '8px',
-        backgroundColor: Theme.colors.light.accentOrange30,
+        backgroundColor: variables.palette.orangeAlpha30,
       }}
     >
       <Avatar src={ExclamationIcon} sx={{ width: '18px', height: '18px' }} />
-      <Text
-        color={Theme.colors.light.onSurface}
-        fontSize="14px"
-        fontWeight="400"
-        lineHeight="20px"
-        letterSpacing="0.1px"
-      >
+      <Text color={variables.palette.onSurface} variant="bodyMedium">
         {t('pleaseCompleteOnThe')}
       </Text>
       <a href={storeLink} target="_blank" rel="noreferrer">
         <Text
-          color={Theme.colors.light.primary}
-          fontSize="14px"
-          fontWeight="400"
-          lineHeight="20px"
-          letterSpacing="0.1px"
+          color={variables.palette.primary}
+          variant="bodyMedium"
           sx={{
             textDecoration: 'underline',
           }}

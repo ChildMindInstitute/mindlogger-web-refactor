@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 
 import { MultiInformantSubject } from '~/abstract/lib/types/multiInformant';
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Text } from '~/shared/ui';
 
 type MultiInformantBadgeTileProps = {
@@ -18,15 +18,10 @@ export const MultiInformantTooltipText = ({ subject, caption }: MultiInformantBa
 
   return (
     <Box display="flex" gap="8px" maxWidth="none">
-      <Text
-        component="span"
-        color={Theme.colors.light.inverseOnSurface}
-        variant="subtitle2"
-        fontWeight="700"
-      >
+      <Text color={variables.palette.inverseOnSurface} variant="labelLargeBold">
         {caption}:
       </Text>
-      <Text component="span" color={Theme.colors.light.inverseOnSurface} variant="body2">
+      <Text color={variables.palette.inverseOnSurface} variant="labelLarge">
         {text}
       </Text>
     </Box>
