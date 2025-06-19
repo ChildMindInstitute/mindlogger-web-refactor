@@ -460,6 +460,26 @@ const theme = createTheme({
         },
       },
     },
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          boxShadow: variables.boxShadow.light2,
+        },
+        list: {
+          backgroundColor: variables.palette.surface1,
+          padding: '8px 4px',
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            backgroundColor: variables.palette.surfaceVariant,
+          },
+        },
+      },
+    },
   },
 });
 
