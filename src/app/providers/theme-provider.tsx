@@ -294,6 +294,172 @@ const theme = createTheme({
         }),
       },
     },
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: 'contained' },
+          style: {
+            fontWeight: variables.font.weight.bold,
+            color: variables.palette.onPrimary,
+            backgroundColor: variables.palette.primary,
+
+            '&.Mui-disabled': {
+              backgroundColor: variables.palette.onSurfaceAlpha12,
+              color: variables.palette.disabled,
+            },
+
+            '&:not(.Mui-disabled)': {
+              '&:hover': {
+                background: `linear-gradient(${variables.palette.onPrimaryAlpha8}, ${variables.palette.onPrimaryAlpha8}), ${variables.palette.primary}`,
+              },
+
+              '&:focus, &:active': {
+                background: `linear-gradient(${variables.palette.onPrimaryAlpha12}, ${variables.palette.onPrimaryAlpha12}), ${variables.palette.primary}`,
+              },
+            },
+          },
+        },
+        {
+          props: { variant: 'outlined' },
+          style: {
+            fontWeight: variables.font.weight.regular,
+            backgroundColor: 'transparent',
+            color: variables.palette.primary,
+            border: `${variables.borderWidth.md} solid ${variables.palette.outlineVariant}`,
+
+            '&.Mui-disabled': {
+              borderColor: variables.palette.onSurfaceAlpha12,
+              color: variables.palette.disabled,
+            },
+
+            '&:not(.Mui-disabled)': {
+              '&:hover': {
+                backgroundColor: variables.palette.primaryAlpha8,
+              },
+
+              '&:focus, &:active': {
+                backgroundColor: variables.palette.primaryAlpha12,
+              },
+
+              '&:focus': {
+                borderColor: variables.palette.primary,
+              },
+            },
+          },
+        },
+        {
+          props: { variant: 'text' },
+          style: {
+            backgroundColor: 'transparent',
+            fontWeight: variables.font.weight.regular,
+            color: variables.palette.primary,
+
+            '&.Mui-disabled': {
+              color: variables.palette.disabled,
+            },
+
+            '&:not(.MuiButton-textError):not(.Mui-disabled)': {
+              '&:hover': {
+                backgroundColor: variables.palette.primaryAlpha8,
+              },
+
+              '&:focus, &:active': {
+                backgroundColor: variables.palette.primaryAlpha12,
+              },
+            },
+          },
+        },
+        {
+          props: { variant: 'elevated' },
+          style: {
+            fontWeight: variables.font.weight.bold,
+            backgroundColor: variables.palette.surface1,
+            color: variables.palette.primary,
+            boxShadow: variables.boxShadow.light1,
+
+            '&.Mui-disabled': {
+              backgroundColor: variables.palette.onSurfaceAlpha12,
+              color: variables.palette.disabled,
+            },
+
+            '&:not(.Mui-disabled)': {
+              '&:hover': {
+                background: `linear-gradient(${variables.palette.primaryAlpha8}, ${variables.palette.primaryAlpha8}), ${variables.palette.surface1}`,
+                boxShadow: variables.boxShadow.light2,
+              },
+
+              '&:focus, &:active': {
+                background: `linear-gradient(${variables.palette.surface1Alpha12}, ${variables.palette.surface1Alpha12}), ${variables.palette.surface1}`,
+              },
+            },
+          },
+        },
+        {
+          props: { variant: 'tonal' },
+          style: {
+            fontWeight: variables.font.weight.regular,
+            background: variables.palette.secondaryContainer,
+            color: variables.palette.onSecondaryContainer,
+
+            '&.Mui-disabled': {
+              backgroundColor: variables.palette.onSurfaceAlpha12,
+              color: variables.palette.disabled,
+            },
+
+            '&:not(.Mui-disabled)': {
+              '&:hover, &:focus, &:active': {
+                background: `linear-gradient(${variables.palette.onSurfaceVariantAlpha8}, ${variables.palette.onSurfaceVariantAlpha8}), ${variables.palette.secondaryContainer}`,
+              },
+
+              '&:hover': {
+                boxShadow: variables.boxShadow.light1,
+              },
+            },
+          },
+        },
+        {
+          props: { variant: 'textNeutral' },
+          style: {
+            fontWeight: variables.font.weight.regular,
+            background: 'transparent',
+            color: variables.palette.onSurfaceVariant,
+
+            '&.Mui-disabled': {
+              color: variables.palette.disabled,
+            },
+
+            '&:not(.Mui-disabled)': {
+              '&:hover': {
+                backgroundColor: variables.palette.onSurfaceVariantAlpha8,
+              },
+
+              '&:focus, &:active': {
+                backgroundColor: variables.palette.onSurfaceVariantAlpha12,
+              },
+            },
+          },
+        },
+      ],
+      styleOverrides: {
+        root: {
+          border: 'none',
+          borderRadius: variables.borderRadius.xxxl,
+          boxShadow: 'none',
+          fontSize: variables.font.size.title3,
+          lineHeight: variables.font.lineHeight.title3,
+          letterSpacing: variables.font.letterSpacing.md,
+          height: '48px',
+          minWidth: '100px',
+          padding: '12px 24px',
+          textTransform: 'none',
+          gap: '8px',
+
+          '& svg:not([fill])': {
+            fill: 'currentColor',
+          },
+        },
+      },
+    },
   },
 });
 
