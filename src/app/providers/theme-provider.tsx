@@ -352,13 +352,14 @@ const theme = createTheme({
           style: {
             backgroundColor: 'transparent',
             fontWeight: variables.font.weight.regular,
-            color: variables.palette.primary,
 
             '&.Mui-disabled': {
               color: variables.palette.disabled,
             },
 
             '&:not(.MuiButton-textError):not(.Mui-disabled)': {
+              color: variables.palette.primary,
+
               '&:hover': {
                 backgroundColor: variables.palette.primaryAlpha8,
               },
