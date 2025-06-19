@@ -224,6 +224,7 @@ const alphaVariantsPalette: Palette = {
   primaryAlpha12: hexToRgba(semanticPalette.primary40, 0.12),
   primaryAlpha16: hexToRgba(semanticPalette.primary40, 0.16),
   onPrimaryAlpha8: hexToRgba(semanticPalette.onPrimary, 0.08),
+  onPrimaryAlpha12: hexToRgba(semanticPalette.onPrimary, 0.12),
   onPrimaryContainerAlpha8: hexToRgba(semanticPalette.onPrimaryContainer, 0.08),
 
   onSecondaryContainerAlpha8: hexToRgba(semanticPalette.onSecondaryContainer, 0.08),
