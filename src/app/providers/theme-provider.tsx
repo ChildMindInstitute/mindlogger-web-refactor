@@ -209,6 +209,9 @@ const theme = createTheme({
           margin: 0,
           padding: 0,
         },
+        input: {
+          fontFamily: variables.font.family.body,
+        },
         '.outline-none': {
           outline: 'none !important',
           boxShadow: 'none !important',
