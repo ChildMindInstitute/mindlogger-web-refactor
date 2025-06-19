@@ -192,6 +192,54 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: () => ({
         typography,
+        'html, body, #root': {
+          height: '100svh',
+          width: '100%',
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale',
+        },
+        '#root': {
+          display: 'flex',
+        },
+        a: {
+          textDecoration: 'none',
+          color: variables.palette.secondary,
+        },
+        p: {
+          margin: 0,
+          padding: 0,
+        },
+        '.outline-none': {
+          outline: 'none !important',
+          boxShadow: 'none !important',
+        },
+        '.border-none': {
+          border: 'none !important',
+        },
+        '.disable-default-style': {
+          border: 'none',
+          outline: 'none',
+          background: 'none',
+          padding: 'none',
+          margin: 'none',
+        },
+        '.color-white': {
+          color: variables.palette.white,
+        },
+        '.color-white:hover': {
+          color: variables.palette.white,
+        },
+        '.hover': {
+          transition: '0.2s',
+        },
+        '.hover:hover': {
+          cursor: 'pointer',
+          boxShadow: '0 0px 2px 0 rgba(0, 0, 0, 0.1), 0 6px 15px 0 rgba(0, 0, 0, 0.16)',
+        },
+        'input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active':
+          {
+            boxShadow: 'inset 0 0 30px 30px rgba(255, 255, 255, 1)',
+          },
       }),
     },
     MuiAlert: {
