@@ -1,3 +1,5 @@
+const NUMERIC_REGEX = /^\d+$/;
+
 /**
  * Converts a hex color to RGB components
  * @param hex The hex color to convert (e.g., "#RRGGBB" or "#RGB")
@@ -55,11 +57,11 @@ export function flattenPaletteObject<T extends Record<string | number, string>>(
   // Add the default color with just the prefix as the key
   result[prefix] = paletteObject.default || paletteObject[40];
 
-  // Add all other colors with the prefix + key as the key
+  // Add all other colors with the prefix + key as the key (eg. primary30)
   Object.entries(paletteObject).forEach(([key, value]) => {
     if (key !== 'default') {
       // If the key is a number, use it as is, otherwise capitalize the first letter
-      const formattedKey = /^\d+$/.test(key)
+      const formattedKey = NUMERIC_REGEX.test(key)
         ? `${prefix}${key}`
         : `${prefix}${key.charAt(0).toUpperCase()}${key.slice(1)}`;
       result[formattedKey] = value;
