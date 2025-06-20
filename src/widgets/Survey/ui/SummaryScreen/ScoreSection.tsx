@@ -12,9 +12,7 @@ export const ScoreSection = (props: Props) => {
   return (
     <Box padding="0px 16px" data-testid="score-section">
       <Text
-        fontWeight="600"
-        fontSize="24px"
-        lineHeight="32px"
+        variant="headlineSmall"
         margin="0px 0px 16px 0px"
         testid={`score-section-title activity-name-${props.score.activityName}`}
       >

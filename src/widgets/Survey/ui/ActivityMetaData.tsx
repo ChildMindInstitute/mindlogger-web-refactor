@@ -20,13 +20,13 @@ export const ActivityMetaData = ({ activityLength, isFlow, activityOrderInFlow }
   return (
     <Box data-testid="flow-welcome-screen-metadata">
       <Text
-        variant="body1"
+        variant="bodyLarger"
         component="span"
         testid="metadata-activity-serial-number"
       >{`${t('activity')} ${activityOrderInFlow} `}</Text>
       &bull;
       <Text
-        variant="body1"
+        variant="bodyLarger"
         component="span"
         testid="metadata-activity-length"
       >{` ${activityLengthLabel}`}</Text>

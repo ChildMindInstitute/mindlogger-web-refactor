@@ -41,21 +41,12 @@ export const TransferOwnershipDecline = ({ appletId, keyParam }: TransferOwnersh
       textAlign="center"
       data-testid="transfer-ownership-declined"
     >
-      <Text
-        variant="body1"
-        fontSize="30px"
-        margin="16px 0px"
-        testid="transfer-ownership-declined-title"
-      >
+      <Text variant="headlineMedium" margin="16px 0px" testid="transfer-ownership-declined-title">
         {t('declined.title')}
       </Text>
       <Box data-testid="transfer-ownership-declined-content">
-        <Text variant="body2" fontSize="18px">
-          {t('declined.message1')}
-        </Text>
-        <Text variant="body2" fontSize="18px">
-          {t('declined.message2')}
-        </Text>
+        <Text variant="bodyLarger">{t('declined.message1')}</Text>
+        <Text variant="bodyLarger">{t('declined.message2')}</Text>
       </Box>
     </Box>
   );

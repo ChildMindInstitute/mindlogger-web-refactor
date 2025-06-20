@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 
 import { SxProps } from '@mui/material';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Box } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
@@ -23,19 +23,15 @@ type Props = PropsWithChildren<{
 }>;
 
 export const SelectBaseBox = (props: Props) => {
-  const borderColor = props.checked
-    ? Theme.colors.light.primary
-    : Theme.colors.light.surfaceVariant;
+  const borderColor = props.checked ? variables.palette.primary : variables.palette.surfaceVariant;
   const backgroundColor = props.checked
-    ? Theme.colors.light.secondaryContainer
-    : Theme.colors.light.surface;
+    ? variables.palette.secondaryContainer
+    : variables.palette.surface;
   const hoverBackgroundColor = props.checked
-    ? Theme.colors.light.secondaryContainerHover
-    : Theme.colors.light.onSurfaceOpacity008;
+    ? variables.palette.secondaryFixedDim
+    : variables.palette.onSurfaceAlpha8;
 
-  const activeBackgroundColor = props.checked
-    ? hoverBackgroundColor
-    : Theme.colors.light.neutural90;
+  const activeBackgroundColor = props.checked ? hoverBackgroundColor : variables.palette.neutural90;
 
   return (
     <Box

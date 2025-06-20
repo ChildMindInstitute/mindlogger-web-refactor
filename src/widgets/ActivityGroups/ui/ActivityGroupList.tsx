@@ -3,9 +3,9 @@ import { useContext, useMemo, useState } from 'react';
 import { Container } from '@mui/material';
 import { subMonths } from 'date-fns';
 
+import { AppletDetailsContext } from '../lib';
 import { ActivityGroup } from './ActivityGroup';
 import { EmptyState } from './EmptyState';
-import { AppletDetailsContext } from '../lib';
 import { useActivityGroups, useEntitiesSync, useIntegrationsSync } from '../model/hooks';
 
 import { ActivityGroupType } from '~/abstract/lib/GroupBuilder';
@@ -87,14 +87,10 @@ export const ActivityGroupList = () => {
           testid="applet-image"
         />
         <Text
-          variant="h4"
+          variant="titleLarge"
           onClick={onCardAboutClick}
           testid="applet-name"
           sx={{
-            fontSize: '22px',
-            fontWeight: 400,
-            lineHeight: '28px',
-            fontStyle: 'normal',
             cursor: isAppletAboutExist ? 'pointer' : 'default',
             wordBreak: 'break-word',
           }}

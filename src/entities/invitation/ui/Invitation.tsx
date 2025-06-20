@@ -1,10 +1,9 @@
+import { InvitationDetails, useInvitationTranslation } from '../lib';
 import { InvitationContent } from './InvitationContent';
 import { InvitationHeader } from './InvitationHeader';
-import { InvitationDetails, useInvitationTranslation } from '../lib';
 
-import { Theme } from '~/shared/constants';
-import { Box } from '~/shared/ui';
-import { PageMessage } from '~/shared/ui';
+import { variables } from '~/shared/constants/theme/variables';
+import { Box, PageMessage } from '~/shared/ui';
 import Logo from '~/shared/ui/Logo';
 
 interface InvitationProps {
@@ -26,7 +25,7 @@ export const Invitation = ({ invite, actionComponent, isUserAuthenticated }: Inv
 
   return (
     <Box
-      color={Theme.colors.light.onPrimaryContainer}
+      color={variables.palette.onPrimaryContainer}
       textAlign="left"
       data-testid="invitation-block"
     >

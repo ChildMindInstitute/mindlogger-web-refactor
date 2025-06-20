@@ -4,7 +4,7 @@ import { PageMessage } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
 import Text from '~/shared/ui/Text';
-import { MixpanelEventType, MixpanelProps, Mixpanel, useCustomTranslation } from '~/shared/utils';
+import { Mixpanel, MixpanelEventType, MixpanelProps, useCustomTranslation } from '~/shared/utils';
 
 type TransferOwnershipProps = {
   appletId: string;
@@ -46,19 +46,12 @@ export const TransferOwnershipAccept = ({ appletId, keyParam }: TransferOwnershi
       textAlign="center"
       data-testid="transfer-ownership-accepted"
     >
-      <Text
-        variant="body1"
-        fontSize="30px"
-        margin="16px 0px"
-        testid="transfer-ownership-accepted-title"
-      >
+      <Text variant="headlineMedium" margin="16px 0px" testid="transfer-ownership-accepted-title">
         {t('accepted.title')}
       </Text>
       <Box data-testid="transfer-ownership-accepted-content">
-        <Text variant="body2" fontSize="18px">
-          {t('accepted.message1')}
-        </Text>
-        <Text variant="body2" fontSize="18px" sx={{ '& a:hover': { textDecoration: 'underline' } }}>
+        <Text variant="bodyLarger">{t('accepted.message1')}</Text>
+        <Text variant="bodyLarger" sx={{ '& a:hover': { textDecoration: 'underline' } }}>
           {t('accepted.message2')}{' '}
           <a href={adminPanelUrl} target="_blank" rel="noreferrer">
             {t('adminPanel')}

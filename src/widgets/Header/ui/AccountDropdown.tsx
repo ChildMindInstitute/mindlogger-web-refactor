@@ -41,6 +41,7 @@ const AccountDropdown = ({ title, toggleMenuOpen }: IAccountDropdownProps) => {
         title={title}
         options={preparedAccountDropdownOptions}
         beforeIndexDivider={preparedAccountDropdownOptions.length - 1}
+        buttonSx={{ padding: '6px 16px' }}
       />
     </div>
   );

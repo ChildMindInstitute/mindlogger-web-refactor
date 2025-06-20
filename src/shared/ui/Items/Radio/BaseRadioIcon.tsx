@@ -1,5 +1,4 @@
-import { Theme } from '../../../constants';
-
+import { variables } from '~/shared/constants/theme/variables';
 import { Box } from '~/shared/ui';
 
 export const BaseRadioIcon = () => {
@@ -9,10 +8,10 @@ export const BaseRadioIcon = () => {
       borderRadius="50%"
       width="24px"
       height="24px"
-      boxShadow={`inset 0 0 0 2px ${Theme.colors.light.outlineVariant}, inset 0 -1px 0 ${Theme.colors.light.outlineVariant}`}
+      boxShadow={`inset 0 0 0 2px ${variables.palette.outlineVariant}, inset 0 -1px 0 ${variables.palette.outlineVariant}`}
       sx={{
         '.Mui-focusVisible &': {
-          outline: `2px auto ${Theme.colors.light.primary}`,
+          outline: `2px auto ${variables.palette.primary}`,
           outlineOffset: 2,
         },
         'input:disabled ~ &': {

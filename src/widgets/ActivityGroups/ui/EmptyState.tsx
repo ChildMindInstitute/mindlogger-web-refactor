@@ -1,6 +1,6 @@
 import { Avatar, Box, BoxProps } from '@mui/material';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Text } from '~/shared/ui';
 
 type Props = BoxProps & {
@@ -21,7 +21,7 @@ export const EmptyState = ({ icon, description, ...rest }: Props) => {
       {...rest}
     >
       <Avatar src={icon} sx={{ width: '80px', height: '80px', borderRadius: 0 }} />
-      <Text variant="h4" color={Theme.colors.light.outline} fontSize="24px" lineHeight="32px">
+      <Text color={variables.palette.outline} variant="headlineSmall">
         {description}
       </Text>
     </Box>

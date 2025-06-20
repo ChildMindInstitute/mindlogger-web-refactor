@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import { datadogLogs } from '@datadog/browser-logs';
 import { datadogRum } from '@datadog/browser-rum';
+import { CssBaseline } from '@mui/material';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
 
 import Providers from './providers';
@@ -10,11 +11,6 @@ import i18nManager from './system/locale/i18n';
 import ApplicationRouter from '~/pages';
 import { Mixpanel } from '~/shared/utils';
 import { FeatureFlags } from '~/shared/utils/featureFlags';
-
-import '~/assets/fonts/Atkinson/atkinson.css';
-import '~/assets/fonts/Lato/lato.css';
-
-import './index.css';
 
 const isProduction = import.meta.env.VITE_ENV === 'prod';
 const isDev = import.meta.env.VITE_ENV === 'dev';
@@ -75,6 +71,7 @@ function App() {
 
   return (
     <Providers>
+      <CssBaseline />
       <ApplicationRouter />
     </Providers>
   );

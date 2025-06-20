@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Box } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
@@ -7,7 +5,7 @@ import Tooltip from '@mui/material/Tooltip';
 import TooltipIcon from '~/assets/tooltip-icon-i.svg';
 import { useMultiInformantState } from '~/entities/applet/model/hooks';
 import { MultiInformantTooltipText } from '~/features/TakeNow/ui/MultiInformantTooltipText';
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { useCustomTranslation } from '~/shared/utils';
 
 export const MultiInformantTooltip = () => {
@@ -30,7 +28,7 @@ export const MultiInformantTooltip = () => {
           padding="4px 8px"
           maxWidth="none"
           borderRadius="4px"
-          sx={{ backgroundColor: Theme.colors.light.inverseSurface }}
+          sx={{ backgroundColor: variables.palette.inverseSurface }}
         >
           <MultiInformantTooltipText
             caption={t('takeNow.tooltip.providingResponses')}

@@ -16,7 +16,7 @@ export const PageMessage = ({ message, testid }: Props) => {
       textAlign="center"
       data-testid={testid}
     >
-      <Text variant="body1" fontSize="24px" margin="16px 0px">
+      <Text component="p" variant="headlineSmall" margin="16px 0px">
         {message}
       </Text>
     </Box>

@@ -48,6 +48,7 @@ const LanguageDropdown = (props: Props) => {
             .value
         }
         options={preparedLanguageOptions}
+        buttonSx={{ padding: '6px 16px' }}
       />
     </div>
   );

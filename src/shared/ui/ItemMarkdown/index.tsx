@@ -1,10 +1,10 @@
-import { useMemo, useContext } from 'react';
+import { useContext, useMemo } from 'react';
 
-import { TargetSubjectLine } from './TargetSubjectLine';
 import { Markdown, MarkdownProps } from '../Markdown';
+import { TargetSubjectLine } from './TargetSubjectLine';
 
 import { SurveyContext } from '~/features/PassSurvey';
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Box, Text } from '~/shared/ui';
 import { insertAfterMedia, useCustomTranslation } from '~/shared/utils';
 
@@ -44,14 +44,7 @@ export const ItemMarkdown = ({ markdown, isOptional, ...rest }: ItemMarkdownProp
         {...rest}
       />
       {isOptional && (
-        <Text
-          variant="body1"
-          color={Theme.colors.light.outline}
-          testid="optional-item-label"
-          fontWeight="400"
-          fontSize="18px"
-          lineHeight="28px"
-        >
+        <Text color={variables.palette.outline} testid="optional-item-label" variant="titleLargish">
           {`(${t('optional')})`}
         </Text>
       )}

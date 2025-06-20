@@ -2,7 +2,7 @@ import { Avatar } from '@mui/material';
 
 import SubjectIcon from '~/assets/subject-icon.svg';
 import { SubjectDTO } from '~/shared/api/types/subject';
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Box, Text } from '~/shared/ui';
 import { getSubjectName, useCustomTranslation } from '~/shared/utils';
 
@@ -24,18 +24,12 @@ export const TargetSubjectLabel = ({ subject }: Props) => {
         padding: '4px 8px',
         borderRadius: '8px',
         gap: '8px',
-        backgroundColor: Theme.colors.light.accentYellow30,
+        backgroundColor: variables.palette.yellowAlpha30,
         whiteSpace: 'nowrap',
       }}
     >
       <Avatar src={SubjectIcon} sx={{ width: '18px', height: '18px', borderRadius: 0 }} />
-      <Text
-        color={Theme.colors.light.onSurface}
-        fontSize="14px"
-        fontWeight="400"
-        lineHeight="20px"
-        letterSpacing="0.1px"
-      >
+      <Text color={variables.palette.onSurface} variant="labelLarge">
         {t('targetSubjectLabel', { name })}
       </Text>
     </Box>

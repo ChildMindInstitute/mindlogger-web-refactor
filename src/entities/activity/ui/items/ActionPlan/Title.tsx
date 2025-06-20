@@ -1,6 +1,6 @@
 import { useXScaledDimension } from './hooks';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 
@@ -23,11 +23,10 @@ export const Title = ({ children }: { children: string }) => {
       justifyContent="center"
     >
       <Text
+        variant="titleMediumBold"
         fontSize={`${titleFontSize}px`}
-        fontWeight="700"
-        lineHeight="24px"
         letterSpacing={`${letterSpacing}px`}
-        color={Theme.colors.light.onSurface}
+        color={variables.palette.onSurface}
         sx={{ textAlign: 'center' }}
       >
         {children}

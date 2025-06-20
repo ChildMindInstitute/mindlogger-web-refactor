@@ -5,7 +5,7 @@ import { LoginSchema, TLoginForm } from '../model/login.schema';
 
 import { useBanners } from '~/entities/banner/model';
 import { ILoginPayload, useLoginMutation, userModel } from '~/entities/user';
-import { ROUTES, Theme } from '~/shared/constants';
+import { ROUTES } from '~/shared/constants';
 import { BaseButton, BasicFormProvider, Box, Input, PasswordIcon, Text } from '~/shared/ui';
 import { Mixpanel, MixpanelEventType, useCustomForm, usePasswordType } from '~/shared/utils';
 
@@ -78,18 +78,15 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
         />
 
         <Box display="flex" justifyContent="center">
-          <Link to={ROUTES.forgotPassword.path} relative="path">
-            <Text
-              color={Theme.colors.light.primary}
-              fontSize="16px"
-              fontWeight="400"
-              lineHeight="20px"
-              letterSpacing="0.1px"
-              sx={{ textDecoration: 'underline' }}
+          <Text>
+            <Link
+              to={ROUTES.forgotPassword.path}
+              relative="path"
+              style={{ textDecoration: 'underline' }}
             >
               {t('forgotPassword')}
-            </Text>
-          </Link>
+            </Link>
+          </Text>
         </Box>
 
         <BaseButton

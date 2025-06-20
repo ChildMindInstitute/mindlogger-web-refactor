@@ -10,8 +10,8 @@ import LoginButton from './LoginButton';
 import curiousLogo from '~/assets/curious_logo--white.png';
 import { userModel } from '~/entities/user';
 import { LanguageDropdown } from '~/features/language';
-import { Theme } from '~/shared/constants';
 import ROUTES from '~/shared/constants/routes';
+import { variables } from '~/shared/constants/theme/variables';
 import { AvatarBase, Box } from '~/shared/ui';
 import { useCustomMediaQuery, useCustomNavigation } from '~/shared/utils';
 
@@ -42,7 +42,7 @@ const Header = (): JSX.Element | null => {
   };
 
   return (
-    <Box sx={{ backgroundColor: Theme.colors.light.primary, padding: '8px 16px' }}>
+    <Box sx={{ backgroundColor: variables.palette.primary, padding: '8px 16px' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <ButtonBase onClick={onLogoClick} disableRipple sx={{ marginY: '15px' }}>
           <AvatarBase src={curiousLogo} name="" width="148.48px" height="32px" variant="square" />

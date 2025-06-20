@@ -7,7 +7,7 @@ import { useXScaledDimension, useYScaledDimension } from './hooks';
 import { ResponseSegment } from './ResponseSegment';
 import { TextSegment } from './TextSegment';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 
 export type PhraseProps = {
@@ -115,7 +115,7 @@ export const Phrase = ({
                 width: imageWidth,
                 height: imageHeight,
                 borderRadius: '8px',
-                border: `1px solid ${Theme.colors.light.inverseOnSurface}`,
+                border: `1px solid ${variables.palette.inverseOnSurface}`,
                 padding: `${imagePadding}px`,
               }}
             />

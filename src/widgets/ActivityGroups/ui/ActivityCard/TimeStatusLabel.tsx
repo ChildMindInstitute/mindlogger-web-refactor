@@ -4,7 +4,7 @@ import { addDays, startOfDay } from 'date-fns';
 
 import { ActivityListItem, ActivityStatus } from '~/abstract/lib/GroupBuilder';
 import ClockIcon from '~/assets/Clock.svg';
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { convertToTimeOnNoun, useCustomTranslation } from '~/shared/utils';
@@ -50,7 +50,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
     fontWeight: 400,
     lineHeight: '24px',
     letterSpacing: '0.15px',
-    color: Theme.colors.light.onSurfaceVariant,
+    color: variables.palette.onSurfaceVariant,
   };
 
   if (isEntityAlwaysAvailable) {
@@ -61,7 +61,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
     return (
       <Box display="flex" alignItems="center" gap="8px" data-testid="time-status-label">
         <Avatar src={ClockIcon} sx={{ width: '24px', height: '24px' }} />
-        <Text variant="body1" sx={timeStatusLabelSx}>
+        <Text sx={timeStatusLabelSx}>
           {`${t('activity_due_date.available')} ${formatDate(activity.availableFrom ?? null)} ${t(
             'activity_due_date.to',
           )} ${formatDate(activity.availableTo ?? null)} ${isSpreadToNextDay ? t('activity_due_date.the_following_day') : ''}`}
@@ -75,7 +75,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
       <Box display="flex" alignItems="center" gap="8px" data-testid="time-status-label">
         <Avatar src={ClockIcon} sx={{ width: '24px', height: '24px' }} />
 
-        <Text variant="body1" sx={timeStatusLabelSx}>{`${t(
+        <Text sx={timeStatusLabelSx}>{`${t(
           'time_to_complete_hm',
           activity.timeLeftToComplete ?? {},
         )}`}</Text>
@@ -86,7 +86,7 @@ const TimeStatusLabel = ({ activity }: TimeStatusLabelProps) => {
   return (
     <Box display="flex" alignItems="center" gap="8px" data-testid="time-status-label">
       <Avatar src={ClockIcon} sx={{ width: '24px', height: '24px' }} />
-      <Text variant="body1" sx={timeStatusLabelSx}>{`${t('activity_due_date.to')} ${formatDate(
+      <Text sx={timeStatusLabelSx}>{`${t('activity_due_date.to')} ${formatDate(
         activity.availableTo ?? null,
       )} ${isSpreadToNextDay ? t('activity_due_date.the_following_day') : ''}`}</Text>
     </Box>
