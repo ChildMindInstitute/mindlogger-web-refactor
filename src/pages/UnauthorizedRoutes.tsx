@@ -9,6 +9,7 @@ import SignupPage from './Signup';
 
 import Layout from '~/abstract/ui/AppLayout';
 import AppletDetailsPage from '~/pages/AppletDetailsPage';
+import EHRRedirectInterstitialPage from '~/pages/EHRRedirectInterstitial';
 import ROUTES from '~/shared/constants/routes';
 import Footer from '~/widgets/Footer';
 import Header from '~/widgets/Header';
@@ -39,6 +40,13 @@ function UnauthorizedRoutes() {
         <Route path={ROUTES.publicJoin.path} element={<PublicAppletDetailsPage />} />
 
         <Route path="*" element={<Navigate to={ROUTES.login.path} />} />
+      </Route>
+
+      <Route element={<Layout header={<Header />} showBanners={false} />}>
+        <Route
+          path={ROUTES.ehrRedirectInterstitial.path}
+          element={<EHRRedirectInterstitialPage />}
+        />
       </Route>
     </Routes>
   );
