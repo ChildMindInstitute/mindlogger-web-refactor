@@ -35,12 +35,16 @@ export const EHRRedirectInterstitialPage = () => {
         onPrimaryButtonClick={() => {
           // Open the Android app. This won't work for iOS, so the iOS app will have to intercept
           // and handle the `/ehr-complete` route itself.
-          window.location.replace(window.location.origin + ROUTES.activeAssessment.path);
+          window.location.replace(
+            window.location.origin + ROUTES.activeAssessment.path + window.location.search,
+          );
         }}
         footerSecondaryButton={t('secondaryAction')}
         onSecondaryButtonClick={() => {
           // Continue in the web app
-          navigate(ROUTES.activeAssessment.path);
+          navigate(ROUTES.activeAssessment.path + window.location.search, {
+            replace: true,
+          });
         }}
       />
     </Box>
