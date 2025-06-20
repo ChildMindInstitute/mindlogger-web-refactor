@@ -115,7 +115,7 @@ export const AutoCompletionScreen = () => {
           <Box
             padding="16px 8px"
             marginTop="16px"
-            bgcolor={variables.palette.primary012}
+            bgcolor={variables.palette.primaryAlpha12}
             borderRadius="12px"
           >
             {completionState && (
