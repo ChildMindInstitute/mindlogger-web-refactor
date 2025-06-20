@@ -19,6 +19,7 @@ export const EHRRedirectInterstitialPage = () => {
       justifyContent="center"
       alignItems="center"
       textAlign="center"
+      minHeight="100vh"
       style={{
         backgroundColor: '#D69AB8',
         backgroundImage: `url(${doctor})`,
