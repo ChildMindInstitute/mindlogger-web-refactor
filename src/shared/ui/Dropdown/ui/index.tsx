@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { SxProps } from '@mui/material';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -13,9 +14,10 @@ type BaseDropdownProps = {
   title: string;
   options: DropdownOptionList;
   beforeIndexDivider?: number;
+  buttonSx?: SxProps;
 };
 
-const BaseDropdown = ({ title, options, beforeIndexDivider }: BaseDropdownProps) => {
+const BaseDropdown = ({ title, options, beforeIndexDivider, buttonSx }: BaseDropdownProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -36,7 +38,7 @@ const BaseDropdown = ({ title, options, beforeIndexDivider }: BaseDropdownProps)
         aria-expanded={open ? 'true' : undefined}
         variant="contained"
         disableElevation
-        sx={{ textTransform: 'none', borderRadius: '4px', fontWeight: '400' }}
+        sx={{ ...buttonSx, textTransform: 'none', borderRadius: '4px', fontWeight: '400' }}
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
       >

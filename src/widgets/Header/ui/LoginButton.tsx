@@ -27,6 +27,7 @@ const LoginButton = ({ toggleMenuOpen }: Props) => {
         textTransform: 'none',
         borderRadius: '4px',
         fontWeight: '400',
+        padding: '6px 16px',
       }}
     >
       {t('logIn')}
