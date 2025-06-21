@@ -12,6 +12,7 @@ import SettingsPage from './Settings';
 import SurveyPage from './Survey';
 
 import Layout from '~/abstract/ui/AppLayout';
+import EHRRedirectInterstitialPage from '~/pages/EHRRedirectInterstitial';
 import ROUTES from '~/shared/constants/routes';
 import Footer from '~/widgets/Footer';
 import Header from '~/widgets/Header';
@@ -51,6 +52,12 @@ function AuthorizedRoutes({ refreshToken }: Props) {
             <Route path={ROUTES.privateJoin.path} element={<PrivateJoinPage />} />
             <Route path={ROUTES.publicJoin.path} element={<PublicAppletDetailsPage />} />
             <Route path={ROUTES.transferOwnership.path} element={<TransferOwnershipPage />} />
+          </Route>
+          <Route element={<Layout header={<Header />} showBanners={false} />}>
+            <Route
+              path={ROUTES.ehrRedirectInterstitial.path}
+              element={<EHRRedirectInterstitialPage />}
+            />
           </Route>
         </Route>
         <Route path={ROUTES.login.path} element={<LoginPage />} />

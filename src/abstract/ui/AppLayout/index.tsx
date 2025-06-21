@@ -11,6 +11,7 @@ type Props = PropsWithChildren<{
   header?: React.ReactNode | undefined;
   footer?: React.ReactNode | undefined;
   onKeyDownHandler?: (key: string) => void;
+  showBanners?: boolean;
 }>;
 
 const Layout = ({
@@ -18,6 +19,7 @@ const Layout = ({
   footer,
   header,
   onKeyDownHandler,
+  showBanners = true,
   children,
 }: Props): null | JSX.Element => {
   return (
@@ -39,7 +41,7 @@ const Layout = ({
         flexDirection="column"
         overflow="auto"
       >
-        <Banners />
+        {showBanners && <Banners />}
         {children ? children : <Outlet />}
         {footer && footer}
       </Box>
