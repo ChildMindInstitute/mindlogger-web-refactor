@@ -5,10 +5,10 @@ import { PassSurveyModel } from '~/features/PassSurvey';
 import { useFeatureFlags } from '~/shared/utils/hooks/useFeatureFlags';
 import { FeatureFlag } from '~/shared/utils/types/featureFlags';
 
-export const useSurveyState = (activityProgress: appletModel.ActivityProgress) => {
+export const useSurveyState = (activityProgress: appletModel.ActivityProgress | null) => {
   const { featureFlag } = useFeatureFlags();
 
-  const items = useMemo(() => activityProgress?.items ?? [], [activityProgress.items]);
+  const items = useMemo(() => activityProgress?.items ?? [], [activityProgress?.items]);
 
   const availableItems = items.filter((item) => {
     if (item.isHidden) {

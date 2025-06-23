@@ -8,6 +8,7 @@ import { useActiveAssessment } from '~/entities/applet/model/hooks';
 import { selectGroupProgress } from '~/entities/applet/model/selectors';
 import ROUTES from '~/shared/constants/routes';
 import { useAppDispatch, useAppSelector } from '~/shared/utils';
+import { useSurveyState } from '~/widgets/Survey/model/hooks';
 
 const NavigateToActiveAssessment = () => {
   const dispatch = useAppDispatch();
@@ -38,6 +39,8 @@ const NavigateToActiveAssessment = () => {
     );
   });
 
+  const { item } = useSurveyState(activityProgress);
+
   /* No active assessment found, navigate to applet list
   =================================================== */
   if (!activeAssessment || !activityId) {
@@ -46,26 +49,21 @@ const NavigateToActiveAssessment = () => {
 
   /* Specific handling of activities containing EHR item types:
    *
-   * When the activity contains an EHR item type that's in the OneUpHealth step, and we're resuming
+   * When the current item is an EHR item type that's in the OneUpHealth step, and we're resuming
    * the activity via the /active-assessment route, advance the item's state to the last sub-step
    * (after the OneUpHealth step). Also reset the additional EHRs request to unanswered.
    =================================================== */
-  const ehrItemIndex =
-    activityProgress?.items.findIndex((item) => item.responseType === 'requestHealthRecordData') ??
-    -1;
-  const ehrItem = ehrItemIndex >= 0 ? activityProgress?.items[ehrItemIndex] : null;
 
   if (
-    ehrItem &&
-    activityProgress?.step === ehrItemIndex &&
-    ehrItem.subStep === RequestHealthRecordDataItemStep.OneUpHealth
+    item?.responseType === 'requestHealthRecordData' &&
+    item.subStep === RequestHealthRecordDataItemStep.OneUpHealth
   ) {
     dispatch(
       actions.saveCustomProperty({
         entityId: activityId,
         eventId: progressData.eventId,
         targetSubjectId: progressData.targetSubjectId,
-        itemId: ehrItem.id,
+        itemId: item.id,
         customProperty: 'subStep',
         value: RequestHealthRecordDataItemStep.AdditionalPrompt,
       }),
@@ -75,7 +73,7 @@ const NavigateToActiveAssessment = () => {
         entityId: activityId,
         eventId: progressData.eventId,
         targetSubjectId: progressData.targetSubjectId,
-        itemId: ehrItem.id,
+        itemId: item.id,
         customProperty: 'additionalEHRs',
         value: null,
       }),
