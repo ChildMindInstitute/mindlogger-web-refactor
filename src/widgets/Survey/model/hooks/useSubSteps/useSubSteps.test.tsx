@@ -184,6 +184,7 @@ describe('useSubSteps', () => {
       activityId: 'activity-123',
       eventId: 'event-123',
       targetSubjectId: 'subject-123',
+      item: mockItem,
       subStep: RequestHealthRecordDataItemStep.ConsentPrompt + 1,
     });
   });
@@ -205,6 +206,7 @@ describe('useSubSteps', () => {
       activityId: 'activity-123',
       eventId: 'event-123',
       targetSubjectId: 'subject-123',
+      item: mockItem,
       subStep: RequestHealthRecordDataItemStep.OneUpHealth - 1,
     });
   });
@@ -248,6 +250,7 @@ describe('useSubSteps', () => {
       activityId: 'activity-123',
       eventId: 'event-123',
       targetSubjectId: 'subject-123',
+      item: mockItem,
       subStep: RequestHealthRecordDataItemStep.OneUpHealth,
     });
   });
@@ -269,6 +272,7 @@ describe('useSubSteps', () => {
       activityId: 'activity-123',
       eventId: 'event-123',
       targetSubjectId: 'subject-123',
+      item: mockItem,
       subStep: RequestHealthRecordDataItemStep.AdditionalPrompt,
     });
   });
@@ -290,6 +294,7 @@ describe('useSubSteps', () => {
       activityId: 'activity-123',
       eventId: 'event-123',
       targetSubjectId: 'subject-123',
+      item: mockItem,
       subStep: RequestHealthRecordDataItemStep.OneUpHealth,
     });
   });
