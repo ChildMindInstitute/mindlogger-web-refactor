@@ -301,7 +301,7 @@ const theme = createTheme({
       defaultProps: { variant: 'contained', color: 'primary' },
       variants: [
         {
-          props: { variant: 'contained', color: 'primary' },
+          props: { variant: 'contained' },
           style: {
             fontWeight: variables.font.weight.bold,
             color: variables.palette.onPrimary,
