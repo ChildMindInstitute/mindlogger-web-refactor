@@ -298,9 +298,10 @@ const theme = createTheme({
       },
     },
     MuiButton: {
+      defaultProps: { variant: 'contained', color: 'primary' },
       variants: [
         {
-          props: { variant: 'contained' },
+          props: { variant: 'contained', color: 'primary' },
           style: {
             fontWeight: variables.font.weight.bold,
             color: variables.palette.onPrimary,
