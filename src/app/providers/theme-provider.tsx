@@ -314,11 +314,11 @@ const theme = createTheme({
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                background: `linear-gradient(${variables.palette.onPrimaryAlpha8}, ${variables.palette.onPrimaryAlpha8}), ${variables.palette.primary}`,
+                background: variables.palette.primaryAndNeutral100Alpha8,
               },
 
               '&:focus, &:active': {
-                background: `linear-gradient(${variables.palette.onPrimaryAlpha12}, ${variables.palette.onPrimaryAlpha12}), ${variables.palette.primary}`,
+                background: variables.palette.primaryAndNeutral100Alpha12,
               },
             },
           },
@@ -338,11 +338,11 @@ const theme = createTheme({
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                backgroundColor: variables.palette.primaryAlpha8,
+                backgroundColor: variables.palette.surfaceAndPrimary10Alpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.primaryAlpha12,
+                backgroundColor: variables.palette.surfaceAndPrimary10Alpha12,
               },
 
               '&:focus': {
@@ -365,11 +365,11 @@ const theme = createTheme({
               color: variables.palette.primary,
 
               '&:hover': {
-                backgroundColor: variables.palette.primaryAlpha8,
+                backgroundColor: variables.palette.surfaceAndPrimary10Alpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.primaryAlpha12,
+                backgroundColor: variables.palette.surfaceAndPrimary10Alpha12,
               },
             },
           },
@@ -412,12 +412,13 @@ const theme = createTheme({
             },
 
             '&:not(.Mui-disabled)': {
-              '&:hover, &:focus, &:active': {
-                background: `linear-gradient(${variables.palette.onSurfaceVariantAlpha8}, ${variables.palette.onSurfaceVariantAlpha8}), ${variables.palette.secondaryContainer}`,
+              '&:hover': {
+                background: variables.palette.secondaryContainerAndNeutral0Alpha8,
+                boxShadow: variables.boxShadow.light1,
               },
 
-              '&:hover': {
-                boxShadow: variables.boxShadow.light1,
+              '&:focus, &:active': {
+                background: variables.palette.secondaryContainerAndNeutral0Alpha12,
               },
             },
           },
