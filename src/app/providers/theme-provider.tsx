@@ -447,7 +447,7 @@ const theme = createTheme({
         },
       ],
       styleOverrides: {
-        root: {
+        root: ({ ownerState: { color } }) => ({
           border: 'none',
           borderRadius: variables.borderRadius.xxxl,
           boxShadow: 'none',
@@ -459,11 +459,29 @@ const theme = createTheme({
           padding: '12px 24px',
           textTransform: 'none',
           gap: '8px',
+          ...(color === 'success' && {
+            backgroundColor: variables.palette.green,
+            '&:hover': {
+              backgroundColor: variables.palette.greenAndOnPrimaryAlpha8,
+            },
+            '&:focus, &:active': {
+              // backgroundColor: variables.palette.greenAlpha12,
+            },
+          }),
+          ...(color === 'error' && {
+            backgroundColor: variables.palette.red,
+            '&:hover': {
+              backgroundColor: variables.palette.redAndOnPrimaryAlpha8,
+            },
+            '&:focus, &:active': {
+              // backgroundColor: variables.palette.redAlpha12,
+            },
+          }),
 
           '& svg:not([fill])': {
             fill: 'currentColor',
           },
-        },
+        }),
       },
     },
     MuiMenu: {
