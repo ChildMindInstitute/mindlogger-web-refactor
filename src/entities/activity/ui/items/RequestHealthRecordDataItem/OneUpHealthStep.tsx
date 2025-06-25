@@ -285,9 +285,9 @@ export const OneUpHealthStep: FC = () => {
             border: 0,
             width: '100%',
             height: '710px',
-            marginTop: '-80px',
-            marginBottom: '-80px',
-            maxHeight: 'calc(100vh - 120px)',
+            marginTop: '-72px',
+            marginBottom: '-72px',
+            maxHeight: '100cqh',
             boxShadow: '0 4px 4px 0 #00000040',
           }}
           id="system-search-iframe"
