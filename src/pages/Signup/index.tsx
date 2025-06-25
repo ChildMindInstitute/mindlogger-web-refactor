@@ -19,7 +19,13 @@ function SignupPage() {
 
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
-      <Box flex={1} padding="24px 32px">
+      <Box
+        flex={1}
+        sx={{
+          padding: '24px 32px',
+          '& a': { color: variables.palette.primary, textDecoration: 'underline' },
+        }}
+      >
         <Text
           color={variables.palette.onSurface}
           variant="titleLargeBold"
@@ -35,7 +41,7 @@ function SignupPage() {
         <Box margin="24px 0px" display="flex" justifyContent="center">
           <Text>{t('or')},</Text>
           &nbsp;
-          <Text color={variables.palette.primary} sx={{ textDecoration: 'underline' }}>
+          <Text>
             <Link to={ROUTES.login.path} relative="path">
               {t('logIn')}
             </Link>
