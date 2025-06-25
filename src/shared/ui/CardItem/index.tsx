@@ -1,7 +1,6 @@
 import { PropsWithChildren } from 'react';
 
 import { Box, ItemMarkdown } from '~/shared/ui';
-import Text from '~/shared/ui/Text';
 import { useCustomMediaQuery } from '~/shared/utils';
 
 interface CardItemProps extends PropsWithChildren {
@@ -24,9 +23,7 @@ export const CardItem = ({ children, markdown, isOptional, testId }: CardItemPro
       flexDirection="column"
       gap="48px"
     >
-      <Text variant="bodyLarger">
-        <ItemMarkdown markdown={markdown ?? ''} isOptional={isOptional} />
-      </Text>
+      <ItemMarkdown markdown={markdown ?? ''} isOptional={isOptional} />
       <Box>{children}</Box>
     </Box>
   );

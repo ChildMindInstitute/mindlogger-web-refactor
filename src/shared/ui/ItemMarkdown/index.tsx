@@ -5,7 +5,7 @@ import { TargetSubjectLine } from './TargetSubjectLine';
 
 import { SurveyContext } from '~/features/PassSurvey';
 import { variables } from '~/shared/constants/theme/variables';
-import { Box, Text } from '~/shared/ui';
+import { Text } from '~/shared/ui';
 import { insertAfterMedia, useCustomTranslation } from '~/shared/utils';
 
 type ItemMarkdownProps = MarkdownProps & {
@@ -26,7 +26,7 @@ export const ItemMarkdown = ({ markdown, isOptional, ...rest }: ItemMarkdownProp
   }, [markdown, context.targetSubject]);
 
   return markdown ? (
-    <Box display="flex" flexDirection="column" gap="12px">
+    <Text sx={{ display: 'flex', flexDirection: 'column', gap: '12px' }} variant="bodyLarger">
       <Markdown
         markdown={processedMarkdown}
         components={
@@ -48,6 +48,6 @@ export const ItemMarkdown = ({ markdown, isOptional, ...rest }: ItemMarkdownProp
           {`(${t('optional')})`}
         </Text>
       )}
-    </Box>
+    </Text>
   ) : null;
 };
