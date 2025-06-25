@@ -56,6 +56,7 @@ export const SaveAndExitButton = ({ appletId, publicAppletKey }: Props) => {
       <Text
         color={variables.palette.onSecondaryContainer}
         variant={lessThanSM ? 'labelLarge' : undefined}
+        sx={{ whiteSpace: 'nowrap' }}
       >
         {t('saveAndExit')}
       </Text>

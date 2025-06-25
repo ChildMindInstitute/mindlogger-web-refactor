@@ -105,7 +105,7 @@ const SurveyHeader = (props: Props) => {
           <Box
             width="140px"
             height="100%"
-            gridColumn="3/4"
+            gridColumn="3/3"
             display="flex"
             alignItems="center"
             justifyContent="center"
