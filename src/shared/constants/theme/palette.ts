@@ -260,35 +260,10 @@ const alphaVariantsPalette: Palette = {
 };
 
 /**
- * These are composite colors, made with combinations of.
- * semantic and primitive colors.
- *
- * These exist due to the way CSS mixes/layers colors,
- * not matching the exact desired values.
- *
- * To solve this, we're defining precalculated tokens
- * that match the desired colors.
- */
-const compositePalette: Palette = {
-  primaryAndNeutral100Alpha8: '#1F1D1B',
-  primaryAndNeutral100Alpha12: '#282725',
-
-  secondaryContainerAndNeutral0Alpha8: '#BCD6ED',
-  secondaryContainerAndNeutral0Alpha12: '#B5CEE3',
-
-  surfaceAndPrimary10Alpha8: '#F1F0EF',
-  surfaceAndPrimary10Alpha12: '#E9E8E8',
-
-  greenAndOnPrimaryAlpha8: '#496F57',
-  redAndOnPrimaryAlpha8: '#BE4246',
-};
-
-/**
  * This contains all colors, their tonal variants,
  * semantic colors (onContainer, container, etc), and alpha variants.
  */
 export const palette: Palette = {
   ...semanticPalette,
   ...alphaVariantsPalette,
-  ...compositePalette,
 };
