@@ -278,6 +278,9 @@ const compositePalette: Palette = {
 
   surfaceAndPrimary10Alpha8: '#F1F0EF',
   surfaceAndPrimary10Alpha12: '#E9E8E8',
+
+  greenAndOnPrimaryAlpha8: '#496F57',
+  redAndOnPrimaryAlpha8: '#BE4246',
 };
 
 /**
