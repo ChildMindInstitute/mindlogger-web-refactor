@@ -44,7 +44,7 @@ export const ItemMarkdown = ({ markdown, isOptional, ...rest }: ItemMarkdownProp
         {...rest}
       />
       {isOptional && (
-        <Text color={variables.palette.outline} testid="optional-item-label" variant="titleLargish">
+        <Text color={variables.palette.outline} testid="optional-item-label" variant="bodyLarger">
           {`(${t('optional')})`}
         </Text>
       )}

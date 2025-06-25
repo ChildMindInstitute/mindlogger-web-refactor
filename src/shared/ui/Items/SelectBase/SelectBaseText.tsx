@@ -12,7 +12,7 @@ export const SelectBaseText = (props: Props) => {
   return (
     <Text
       color={variables.palette.onSurface}
-      variant="titleLargish"
+      variant="bodyLarger"
       testid="select-text"
       sx={{
         wordBreak: 'none',
