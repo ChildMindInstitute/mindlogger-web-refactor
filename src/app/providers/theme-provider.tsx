@@ -340,8 +340,8 @@ const theme = createTheme({
           props: { variant: 'outlined' },
           style: {
             fontWeight: variables.font.weight.regular,
-            backgroundColor: 'transparent',
             color: variables.palette.primary,
+            background: 'transparent',
             border: `${variables.borderWidth.md} solid ${variables.palette.outlineVariant}`,
 
             '&.Mui-disabled': {
@@ -351,11 +351,11 @@ const theme = createTheme({
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                backgroundColor: variables.palette.surfaceAndPrimary10Alpha8,
+                background: variables.palette.primaryAlpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.surfaceAndPrimary10Alpha12,
+                background: variables.palette.primaryAlpha12,
               },
 
               '&:focus': {
@@ -367,8 +367,8 @@ const theme = createTheme({
         {
           props: { variant: 'text' },
           style: {
-            backgroundColor: 'transparent',
-            fontWeight: variables.font.weight.regular,
+            fontWeight: variables.palette.regular,
+            background: 'transparent',
 
             '&.Mui-disabled': {
               color: variables.palette.disabled,
@@ -378,11 +378,11 @@ const theme = createTheme({
               color: variables.palette.primary,
 
               '&:hover': {
-                backgroundColor: variables.palette.surfaceAndPrimary10Alpha8,
+                background: variables.palette.primaryAlpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.surfaceAndPrimary10Alpha12,
+                background: variables.palette.primaryAlpha12,
               },
             },
           },
@@ -391,12 +391,12 @@ const theme = createTheme({
           props: { variant: 'elevated' },
           style: {
             fontWeight: variables.font.weight.bold,
-            backgroundColor: variables.palette.surface1,
+            background: variables.palette.surface1,
             color: variables.palette.primary,
             boxShadow: variables.boxShadow.light1,
 
             '&.Mui-disabled': {
-              backgroundColor: variables.palette.onSurfaceAlpha12,
+              background: variables.palette.onSurfaceAlpha12,
               color: variables.palette.disabled,
             },
 
@@ -420,18 +420,18 @@ const theme = createTheme({
             color: variables.palette.onSecondaryContainer,
 
             '&.Mui-disabled': {
-              backgroundColor: variables.palette.onSurfaceAlpha12,
+              background: variables.palette.onSurfaceAlpha12,
               color: variables.palette.disabled,
             },
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                background: variables.palette.secondaryContainerAndNeutral0Alpha8,
+                background: `linear-gradient(${variables.palette.onSurfaceVariantAlpha8}, ${variables.palette.onSurfaceVariantAlpha8}), ${variables.palette.secondaryContainer}`,
                 boxShadow: variables.boxShadow.light1,
               },
 
               '&:focus, &:active': {
-                background: variables.palette.secondaryContainerAndNeutral0Alpha12,
+                background: `linear-gradient(${variables.palette.onSurfaceVariantAlpha12}, ${variables.palette.onSurfaceVariantAlpha12}), ${variables.palette.secondaryContainer}`,
               },
             },
           },
@@ -449,18 +449,18 @@ const theme = createTheme({
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                backgroundColor: variables.palette.onSurfaceVariantAlpha8,
+                background: variables.palette.onSurfaceVariantAlpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.onSurfaceVariantAlpha12,
+                background: variables.palette.onSurfaceVariantAlpha12,
               },
             },
           },
         },
       ],
       styleOverrides: {
-        root: ({ ownerState: { color } }) => ({
+        root: {
           border: 'none',
           borderRadius: variables.borderRadius.xxxl,
           boxShadow: 'none',
@@ -472,29 +472,11 @@ const theme = createTheme({
           padding: '12px 24px',
           textTransform: 'none',
           gap: '8px',
-          ...(color === 'success' && {
-            backgroundColor: variables.palette.green,
-            '&:hover': {
-              backgroundColor: variables.palette.greenAndOnPrimaryAlpha8,
-            },
-            '&:focus, &:active': {
-              // backgroundColor: variables.palette.greenAlpha12,
-            },
-          }),
-          ...(color === 'error' && {
-            backgroundColor: variables.palette.red,
-            '&:hover': {
-              backgroundColor: variables.palette.redAndOnPrimaryAlpha8,
-            },
-            '&:focus, &:active': {
-              // backgroundColor: variables.palette.redAlpha12,
-            },
-          }),
 
           '& svg:not([fill])': {
             fill: 'currentColor',
           },
-        }),
+        },
       },
     },
     MuiMenu: {
