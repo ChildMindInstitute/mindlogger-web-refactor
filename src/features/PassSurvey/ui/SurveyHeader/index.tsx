@@ -34,15 +34,16 @@ const SurveyHeader = (props: Props) => {
 
   return (
     <Box
-      paddingX={greaterThanSM ? '24px' : '16px'}
+      paddingX={greaterThanSM ? '24px' : '4px'}
       paddingY={greaterThanSM ? '19px' : '15px'}
+      gap="8px"
       sx={{
         backgroundColor: variables.palette.surface,
         borderBottom: `1px solid ${variables.palette.surfaceVariant}`,
       }}
     >
       {!greaterThanSM && (
-        <Box marginBottom="8px">
+        <Box>
           {props.entityTimer && <EntityTimer entityTimerSettings={props.entityTimer} />}
           <MultiInformantTooltip />
         </Box>
