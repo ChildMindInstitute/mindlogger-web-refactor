@@ -281,20 +281,57 @@ const theme = createTheme({
           style: {
             fontWeight: variables.font.weight.bold,
             color: variables.palette.onPrimary,
-            backgroundColor: variables.palette.primary,
 
             '&.Mui-disabled': {
-              backgroundColor: variables.palette.onSurfaceAlpha12,
+              background: variables.palette.onSurfaceAlpha12,
               color: variables.palette.disabled,
             },
+          },
+        },
+        {
+          props: { variant: 'contained', color: 'primary' },
+          style: {
+            background: variables.palette.primary,
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                background: variables.palette.primaryAndNeutral100Alpha8,
+                background: `linear-gradient(${variables.palette.onPrimaryAlpha8}, ${variables.palette.onPrimaryAlpha8}), ${variables.palette.primary}`,
               },
 
               '&:focus, &:active': {
-                background: variables.palette.primaryAndNeutral100Alpha12,
+                background: `linear-gradient(${variables.palette.onPrimaryAlpha12}, ${variables.palette.onPrimaryAlpha12}), ${variables.palette.primary}`,
+              },
+            },
+          },
+        },
+        {
+          props: { variant: 'contained', color: 'success' },
+          style: {
+            background: variables.palette.green,
+
+            '&:not(.Mui-disabled)': {
+              '&:hover': {
+                background: `linear-gradient(${variables.palette.onPrimaryAlpha8}, ${variables.palette.onPrimaryAlpha8}), ${variables.palette.green}`,
+              },
+
+              '&:focus, &:active': {
+                background: `linear-gradient(${variables.palette.onPrimaryAlpha12}, ${variables.palette.onPrimaryAlpha12}), ${variables.palette.green}`,
+              },
+            },
+          },
+        },
+        {
+          props: { variant: 'contained', color: 'error' },
+          style: {
+            background: variables.palette.error,
+
+            '&:not(.Mui-disabled)': {
+              '&:hover': {
+                background: `linear-gradient(${variables.palette.onPrimaryAlpha8}, ${variables.palette.onPrimaryAlpha8}), ${variables.palette.error}`,
+              },
+
+              '&:focus, &:active': {
+                background: `linear-gradient(${variables.palette.onPrimaryAlpha12}, ${variables.palette.onPrimaryAlpha12}), ${variables.palette.error}`,
               },
             },
           },
