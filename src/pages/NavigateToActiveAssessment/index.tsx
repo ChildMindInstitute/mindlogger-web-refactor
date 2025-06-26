@@ -51,32 +51,33 @@ const NavigateToActiveAssessment = () => {
    *
    * When the current item is an EHR item type that's in the OneUpHealth step, and we're resuming
    * the activity via the /active-assessment route, advance the item's state to the last sub-step
-   * (after the OneUpHealth step). Also reset the additional EHRs request to unanswered.
+   * (after the OneUpHealth step). Also reset the additional EHRs request to unanswered, and track
+   * that the EHR share was successful.
    =================================================== */
 
   if (
     item?.responseType === 'requestHealthRecordData' &&
     item.subStep === RequestHealthRecordDataItemStep.OneUpHealth
   ) {
+    const payload = {
+      entityId: activityId,
+      eventId: progressData.eventId,
+      targetSubjectId: progressData.targetSubjectId,
+      itemId: item.id,
+    };
+
     dispatch(
       actions.saveCustomProperty({
-        entityId: activityId,
-        eventId: progressData.eventId,
-        targetSubjectId: progressData.targetSubjectId,
-        itemId: item.id,
+        ...payload,
         customProperty: 'subStep',
         value: RequestHealthRecordDataItemStep.AdditionalPrompt,
       }),
     );
     dispatch(
-      actions.saveCustomProperty({
-        entityId: activityId,
-        eventId: progressData.eventId,
-        targetSubjectId: progressData.targetSubjectId,
-        itemId: item.id,
-        customProperty: 'additionalEHRs',
-        value: null,
-      }),
+      actions.saveCustomProperty({ ...payload, customProperty: 'additionalEHRs', value: null }),
+    );
+    dispatch(
+      actions.saveCustomProperty({ ...payload, customProperty: 'ehrShareSuccess', value: true }),
     );
   }
 

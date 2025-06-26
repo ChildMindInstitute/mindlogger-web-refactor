@@ -470,6 +470,7 @@ export interface RequestHealthRecordDataItem extends ActivityItemBase {
   answer: DefaultAnswer;
   subStep: RequestHealthRecordDataItemStep;
   ehrSearchSkipped: boolean;
+  ehrShareSuccess: boolean;
   additionalEHRs: 'requested' | 'done' | null;
 }
 
