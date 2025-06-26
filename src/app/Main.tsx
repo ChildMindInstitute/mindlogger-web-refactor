@@ -8,7 +8,7 @@ const LaunchDarklyProvider = lazy(() => import('./LaunchDarklyProvider'));
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
-    <Suspense fallback={<Loader />}>
+    <Suspense fallback={<Loader style={{ position: 'fixed', left: 0, top: 0 }} />}>
       <LaunchDarklyProvider />
     </Suspense>
   </StrictMode>,

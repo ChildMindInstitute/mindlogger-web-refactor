@@ -1,7 +1,7 @@
 import { TimerSettings } from '../hooks';
 import { ItemTimerBar } from './ItemTimerBar';
 
-import { BaseButton } from '~/shared/ui';
+import { BaseButton, Text } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import { useCustomMediaQuery } from '~/shared/utils';
 
@@ -63,7 +63,9 @@ export const SurveyManageButtons = ({
             variant="outlined"
             onClick={onBackButtonClick}
             text={backButtonText}
-          />
+          >
+            <Text variant="titleMedium">{backButtonText}</Text>
+          </BaseButton>
         </Box>
       )) || <div></div>}
 

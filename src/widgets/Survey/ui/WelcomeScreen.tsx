@@ -138,7 +138,7 @@ const WelcomeScreen = () => {
           // which can not contain `<div />`.
           component="div"
           variant="bodyLarger"
-          color={variables.palette.secondary}
+          color={variables.palette.onSurfaceVariant}
           sx={{ marginTop: '24px' }}
         >
           <ActivityMetaData

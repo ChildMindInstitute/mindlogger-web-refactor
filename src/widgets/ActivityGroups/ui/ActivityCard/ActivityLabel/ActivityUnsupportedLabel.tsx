@@ -72,13 +72,12 @@ export const ActivityUnsupportedLabel = () => {
       </Text>
       <a href={storeLink} target="_blank" rel="noreferrer">
         <Text
-          color={variables.palette.primary}
           variant="bodyMedium"
           sx={{
             textDecoration: 'underline',
           }}
         >
-          {` ${t('curiousMobileApp')}.`}
+          {`${t('curiousMobileApp')}.`}
         </Text>
       </a>
     </Box>

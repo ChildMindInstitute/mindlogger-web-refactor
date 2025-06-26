@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useBanners } from '~/entities/banner/model';
 import { useAcceptPrivateInviteMutation, useInvitationTranslation } from '~/entities/invitation';
 import ROUTES from '~/shared/constants/routes';
-import { Box } from '~/shared/ui';
-import { BaseButton } from '~/shared/ui';
-import { MixpanelEventType, MixpanelProps, Mixpanel } from '~/shared/utils';
+import { BaseButton, Box } from '~/shared/ui';
+import { Mixpanel, MixpanelEventType, MixpanelProps } from '~/shared/utils';
 
 interface PrivateJoinAcceptButtonProps {
   invitationKey: string;
@@ -39,7 +38,6 @@ export const PrivateJoinAcceptButton = ({
     <Box width="250px">
       <BaseButton
         type="button"
-        variant="contained"
         color="success"
         onClick={onPrivateJoinAccept}
         isLoading={isLoading}

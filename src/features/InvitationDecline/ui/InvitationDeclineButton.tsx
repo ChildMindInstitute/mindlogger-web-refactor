@@ -1,8 +1,7 @@
 import { useBanners } from '~/entities/banner/model';
 import { useDeclineInviteMutation, useInvitationTranslation } from '~/entities/invitation';
 import ROUTES from '~/shared/constants/routes';
-import { Box } from '~/shared/ui';
-import { BaseButton } from '~/shared/ui';
+import { BaseButton, Box } from '~/shared/ui';
 import { useCustomNavigation } from '~/shared/utils';
 
 interface InvitationDeclineButtonProps {
@@ -30,12 +29,11 @@ export const InvitationDeclineButton = ({ invitationKey }: InvitationDeclineButt
     <Box width="250px">
       <BaseButton
         type="button"
-        variant="contained"
         color="error"
         onClick={onInviteDecline}
         isLoading={isDeclineLoading}
         text={t('buttons.declineInvitation')}
-      ></BaseButton>
+      />
     </Box>
   );
 };

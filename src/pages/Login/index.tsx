@@ -42,7 +42,15 @@ function LoginPage() {
 
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
-      <Box flex={1} padding="24px 32px" gap="20px" flexDirection="column">
+      <Box
+        flex={1}
+        gap="20px"
+        flexDirection="column"
+        sx={{
+          padding: '24px 32px',
+          '& a': { color: variables.palette.primary, textDecoration: 'underline' },
+        }}
+      >
         <Text
           color={variables.palette.onSurface}
           sx={{ marginBottom: '24px' }}
@@ -59,12 +67,7 @@ function LoginPage() {
           <Text>{t('or')},</Text>
           &nbsp;
           <Text>
-            <Link
-              to={ROUTES.signup.path}
-              relative="path"
-              onClick={onCreateAccountClick}
-              style={{ textDecoration: 'underline' }}
-            >
+            <Link to={ROUTES.signup.path} relative="path" onClick={onCreateAccountClick}>
               {t('create')}
             </Link>
           </Text>

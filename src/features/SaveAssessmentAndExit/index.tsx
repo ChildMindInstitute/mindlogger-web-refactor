@@ -13,6 +13,7 @@ import {
   Mixpanel,
   MixpanelEventType,
   useAppSelector,
+  useCustomMediaQuery,
   useCustomNavigation,
   useCustomTranslation,
 } from '~/shared/utils';
@@ -25,6 +26,7 @@ type Props = {
 export const SaveAndExitButton = ({ appletId, publicAppletKey }: Props) => {
   const { t } = useCustomTranslation();
   const { applet, activityId, flow } = useContext(SurveyContext);
+  const { lessThanSM } = useCustomMediaQuery();
 
   const navigator = useCustomNavigation();
   const prolificParams = useAppSelector(prolificParamsSelector);
@@ -49,8 +51,15 @@ export const SaveAndExitButton = ({ appletId, publicAppletKey }: Props) => {
       onClick={onSaveAndExitClick}
       data-testid="assessment-save-and-exit-button"
       variant="tonal"
+      sx={lessThanSM ? { padding: '8px 13.5px', height: '40px' } : undefined}
     >
-      <Text color={variables.palette.onSecondaryContainer}>{t('saveAndExit')}</Text>
+      <Text
+        color={variables.palette.onSecondaryContainer}
+        variant={lessThanSM ? 'labelLarge' : undefined}
+        sx={{ whiteSpace: 'nowrap' }}
+      >
+        {t('saveAndExit')}
+      </Text>
     </Button>
   );
 };

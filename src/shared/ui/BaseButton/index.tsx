@@ -11,7 +11,7 @@ type Props = PropsWithChildren<{
   type: 'button' | 'submit';
   isLoading?: boolean;
   disabled?: boolean;
-  variant: 'contained' | 'outlined' | 'text' | 'elevated' | 'tonal' | 'textNeutral';
+  variant?: 'contained' | 'outlined' | 'text' | 'elevated' | 'tonal' | 'textNeutral';
   borderColor?: string;
 
   text?: string | null;

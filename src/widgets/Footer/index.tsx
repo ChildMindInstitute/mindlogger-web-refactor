@@ -21,7 +21,20 @@ export default function Footer() {
         borderTop: `1px solid ${variables.palette.surfaceVariant}`,
       }}
     >
-      <Box display="flex" alignItems="center" textAlign="center" marginY={3} gap={2}>
+      <Box
+        display="flex"
+        alignItems="center"
+        textAlign="center"
+        marginY={3}
+        gap={2}
+        sx={{
+          '& a': {
+            color: variables.palette.primary,
+            textDecoration: 'underline',
+            '&:hover': { textDecoration: 'none' },
+          },
+        }}
+      >
         {greaterThanMD && (
           <span>
             {t('product')}{' '}

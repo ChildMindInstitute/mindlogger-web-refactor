@@ -1,8 +1,7 @@
 import { useBanners } from '~/entities/banner/model';
 import { useAcceptInviteMutation, useInvitationTranslation } from '~/entities/invitation';
 import ROUTES from '~/shared/constants/routes';
-import { Box } from '~/shared/ui';
-import { BaseButton } from '~/shared/ui';
+import { BaseButton, Box } from '~/shared/ui';
 import { Mixpanel, MixpanelEventType, useCustomNavigation } from '~/shared/utils';
 
 interface InvitationAcceptButtonProps {
@@ -31,12 +30,11 @@ export const InvitationAcceptButton = ({ invitationKey }: InvitationAcceptButton
     <Box width="250px">
       <BaseButton
         type="button"
-        variant="contained"
         color="success"
         onClick={onInviteAccept}
         isLoading={isAcceptLoading}
         text={t('buttons.acceptInvitation')}
-      ></BaseButton>
+      />
     </Box>
   );
 };
