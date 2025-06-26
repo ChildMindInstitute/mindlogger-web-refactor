@@ -65,6 +65,7 @@ describe('validateBeforeMoveForward', () => {
         isHidden: false,
         subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
         additionalEHRs: null,
+        ehrSearchSkipped: false,
       };
 
       // Test validation
@@ -111,6 +112,7 @@ describe('validateBeforeMoveForward', () => {
         isHidden: false,
         subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
         additionalEHRs: null,
+        ehrSearchSkipped: false,
       };
 
       // Test validation
@@ -157,6 +159,7 @@ describe('validateBeforeMoveForward', () => {
         isHidden: false,
         subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
         additionalEHRs: null,
+        ehrSearchSkipped: false,
       };
 
       // Create a skippable activity

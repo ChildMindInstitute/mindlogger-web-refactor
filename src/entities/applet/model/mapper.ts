@@ -93,6 +93,7 @@ export function mapItemToRecord(item: ActivityItemDetailsDTO): ItemRecord {
         ...item,
         subStep: RequestHealthRecordDataItemStep.ConsentPrompt,
         additionalEHRs: null,
+        ehrSearchSkipped: false,
         answer: [],
       };
 

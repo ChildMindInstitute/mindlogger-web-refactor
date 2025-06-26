@@ -3,6 +3,9 @@ import {
   ActivityResumedEvent,
   AssessmentCompletedEvent,
   AssessmentStartedEvent,
+  EHRProviderSearchEvent,
+  EHRProviderSearchSkippedEvent,
+  EHRProviderShareSuccessEvent,
   MixpanelFeature,
   MixpanelProps,
   ResponseReportDownloadClickedEvent,
@@ -26,6 +29,9 @@ export const addSurveyPropsToEvent = <
     | ActivityResumedEvent
     | AssessmentCompletedEvent
     | AssessmentStartedEvent
+    | EHRProviderSearchEvent
+    | EHRProviderSearchSkippedEvent
+    | EHRProviderShareSuccessEvent
     | ResponseReportDownloadClickedEvent
     | ResponseReportGeneratedEvent
     | SaveAndExitClickedEvent,
