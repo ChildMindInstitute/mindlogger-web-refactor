@@ -62,5 +62,9 @@ export const addSurveyPropsToEvent = <
     addFeatureToEvent(event, MixpanelFeature.SSI);
   }
 
+  if (containsResponseTypes.includes('requestHealthRecordData')) {
+    addFeatureToEvent(event, MixpanelFeature.EHR);
+  }
+
   return event;
 };

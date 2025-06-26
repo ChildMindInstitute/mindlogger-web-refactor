@@ -12,12 +12,20 @@ export enum MixpanelProps {
   SubmitId = 'Submit ID',
   StudyUserId = 'Study User ID',
   StudyReference = 'Study Reference',
+  EHRStatus = 'EHR Status',
 }
 
 export enum MixpanelFeature {
   MultiInformant = 'Multi-informant',
   SSI = 'SSI',
   Prolific = 'Prolific',
+  EHR = 'EHR',
+}
+
+export enum EHRStatus {
+  ParticipantDeclined = 'Participant Declined',
+  ParticipantSkipped = 'Participant Skipped',
+  ParticipantConsented = 'Participant Consented',
 }
 
 export enum MixpanelEventType {
@@ -67,6 +75,7 @@ export type AssessmentCompletedEvent = WithFeature<
     [MixpanelProps.ActivityFlowId]?: string;
     [MixpanelProps.MultiInformantAssessmentId]?: string;
     [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+    [MixpanelProps.EHRStatus]?: EHRStatus;
   }>
 >;
 
