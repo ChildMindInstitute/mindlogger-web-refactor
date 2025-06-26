@@ -25,10 +25,7 @@ export const InactivityTracker = ({ children }: InactivityTrackerProps) => {
     return () => {
       IdleTimer.stop(listener);
     };
-
-    // Should only run once
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [IdleTimer, logout]);
 
   return children as JSX.Element;
 };
