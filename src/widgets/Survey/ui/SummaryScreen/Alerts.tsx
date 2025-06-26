@@ -15,7 +15,7 @@ export const Alerts = ({ alerts }: Props) => {
   return (
     <Box
       padding="24px 32px"
-      bgcolor={variables.palette.error50}
+      bgcolor={variables.palette.errorContainer}
       borderRadius="12px"
       data-testid="alerts-container"
     >
@@ -26,11 +26,11 @@ export const Alerts = ({ alerts }: Props) => {
         {alerts.map((alert, index) => (
           <Box display="flex" gap="8px" key={index} marginTop="16px" data-testid="alert-item">
             <NotificationImportantIcon
-              fontSize="small"
-              sx={{ color: variables.palette.error50 }}
+              fontSize="medium"
+              sx={{ color: variables.palette.error }}
               data-testid="alert-item-icon"
             />
-            <Text variant="bodyLarge" testid="alert-item-label">
+            <Text variant="bodyLarger" testid="alert-item-label">
               {alert}
             </Text>
           </Box>

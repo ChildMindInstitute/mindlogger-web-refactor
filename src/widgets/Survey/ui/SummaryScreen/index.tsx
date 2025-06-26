@@ -80,7 +80,7 @@ const SummaryScreen = () => {
             {t('reportSummary')}
           </Text>
           {summaryData && summaryData.alerts.length > 0 && (
-            <Box margin="16px 0px">
+            <Box my="24px">
               <Alerts alerts={summaryData.alerts} />
             </Box>
           )}
@@ -89,7 +89,7 @@ const SummaryScreen = () => {
               summaryData.scores.length > 0 &&
               summaryData.scores.map((score, index) => (
                 <Box key={index}>
-                  <Divider sx={{ margin: '16px 0px' }} />
+                  <Divider sx={{ margin: '24px 0px' }} />
                   <ScoreSection score={score} />
                 </Box>
               ))}

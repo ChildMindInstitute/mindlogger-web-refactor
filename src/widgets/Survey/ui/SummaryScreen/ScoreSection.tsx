@@ -10,7 +10,7 @@ type Props = {
 
 export const ScoreSection = (props: Props) => {
   return (
-    <Box padding="0px 16px" data-testid="score-section">
+    <Box data-testid="score-section">
       <Text
         variant="headlineSmall"
         margin="0px 0px 16px 0px"
