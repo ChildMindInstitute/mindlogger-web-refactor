@@ -23,14 +23,14 @@ export const Scores = (props: Props) => {
           <Box display="flex" gap="8px" alignItems="center">
             {score.highlighted && (
               <NotificationImportantIcon
-                fontSize="small"
-                sx={{ color: variables.palette.error50 }}
+                fontSize="medium"
+                sx={{ color: variables.palette.error }}
                 data-testid="score-item-highlighted-icon"
               />
             )}
             <Text
-              variant="bodyMedium"
-              color={score.highlighted ? variables.palette.error50 : undefined}
+              variant="titleLargishBold"
+              color={score.highlighted ? variables.palette.error : undefined}
               testid="score-item-label"
             >
               {score.label}
@@ -39,13 +39,19 @@ export const Scores = (props: Props) => {
           <Box
             display="flex"
             justifyContent="center"
-            width="136px"
+            minWidth="120px"
             padding="4px 0px"
-            bgcolor={score.highlighted ? variables.palette.error50 : undefined}
+            bgcolor={
+              score.highlighted ? variables.palette.errorContainer : variables.palette.surface1
+            }
             borderRadius="100px"
             data-testid="score-item-value-container"
           >
-            <Text variant="headlineMedium" testid="score-item-value">
+            <Text
+              variant="titleLargeBold"
+              color={score.highlighted ? variables.palette.error : undefined}
+              testid="score-item-value"
+            >
               {score.value}
             </Text>
           </Box>
