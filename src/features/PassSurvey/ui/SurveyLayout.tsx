@@ -40,6 +40,7 @@ const SurveyLayout = (props: Props) => {
         flex={1}
         flexDirection="column"
         overflow="scroll"
+        sx={{ containerType: 'size' }}
       >
         <Box display="flex" flex={1} justifyContent="center">
           {props.children}

@@ -5,7 +5,7 @@ import { variables } from '~/shared/constants';
 // This Loader component is very common component
 // Don`t remove default export
 // Don`t remove inline styles. It was made for component lightness
-export default function Loader() {
+export default function Loader({ style }: { style?: React.CSSProperties }) {
   return (
     <div
       style={{
@@ -14,6 +14,7 @@ export default function Loader() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        ...style,
       }}
     >
       <CircularProgress sx={{ color: variables.palette.primary }} />

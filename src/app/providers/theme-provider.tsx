@@ -212,37 +212,13 @@ const theme = createTheme({
         input: {
           fontFamily: variables.font.family.body,
         },
-        '.outline-none': {
-          outline: 'none !important',
-          boxShadow: 'none !important',
-        },
-        '.border-none': {
-          border: 'none !important',
-        },
-        '.disable-default-style': {
-          border: 'none',
-          outline: 'none',
-          background: 'none',
-          padding: 'none',
-          margin: 'none',
-        },
-        '.color-white': {
-          color: variables.palette.white,
-        },
-        '.color-white:hover': {
-          color: variables.palette.white,
-        },
-        '.hover': {
-          transition: '0.2s',
-        },
-        '.hover:hover': {
-          cursor: 'pointer',
-          boxShadow: '0 0px 2px 0 rgba(0, 0, 0, 0.1), 0 6px 15px 0 rgba(0, 0, 0, 0.16)',
-        },
-        'input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active':
-          {
-            boxShadow: 'inset 0 0 30px 30px rgba(255, 255, 255, 1)',
+        'input:-webkit-autofill': {
+          boxShadow: `inset 0 0 30px 30px ${variables.palette.white}`,
+
+          '&:hover, &:focus, &:active': {
+            boxShadow: `inset 0 0 30px 30px ${variables.palette.white}`,
           },
+        },
       }),
     },
     MuiAlert: {
@@ -298,18 +274,24 @@ const theme = createTheme({
       },
     },
     MuiButton: {
+      defaultProps: { variant: 'contained', color: 'primary' },
       variants: [
         {
           props: { variant: 'contained' },
           style: {
             fontWeight: variables.font.weight.bold,
             color: variables.palette.onPrimary,
-            backgroundColor: variables.palette.primary,
 
             '&.Mui-disabled': {
-              backgroundColor: variables.palette.onSurfaceAlpha12,
+              background: variables.palette.onSurfaceAlpha12,
               color: variables.palette.disabled,
             },
+          },
+        },
+        {
+          props: { variant: 'contained', color: 'primary' },
+          style: {
+            background: variables.palette.primary,
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
@@ -323,11 +305,43 @@ const theme = createTheme({
           },
         },
         {
+          props: { variant: 'contained', color: 'success' },
+          style: {
+            background: variables.palette.green,
+
+            '&:not(.Mui-disabled)': {
+              '&:hover': {
+                background: `linear-gradient(${variables.palette.onPrimaryAlpha8}, ${variables.palette.onPrimaryAlpha8}), ${variables.palette.green}`,
+              },
+
+              '&:focus, &:active': {
+                background: `linear-gradient(${variables.palette.onPrimaryAlpha12}, ${variables.palette.onPrimaryAlpha12}), ${variables.palette.green}`,
+              },
+            },
+          },
+        },
+        {
+          props: { variant: 'contained', color: 'error' },
+          style: {
+            background: variables.palette.error,
+
+            '&:not(.Mui-disabled)': {
+              '&:hover': {
+                background: `linear-gradient(${variables.palette.onPrimaryAlpha8}, ${variables.palette.onPrimaryAlpha8}), ${variables.palette.error}`,
+              },
+
+              '&:focus, &:active': {
+                background: `linear-gradient(${variables.palette.onPrimaryAlpha12}, ${variables.palette.onPrimaryAlpha12}), ${variables.palette.error}`,
+              },
+            },
+          },
+        },
+        {
           props: { variant: 'outlined' },
           style: {
             fontWeight: variables.font.weight.regular,
-            backgroundColor: 'transparent',
             color: variables.palette.primary,
+            background: 'transparent',
             border: `${variables.borderWidth.md} solid ${variables.palette.outlineVariant}`,
 
             '&.Mui-disabled': {
@@ -337,11 +351,11 @@ const theme = createTheme({
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                backgroundColor: variables.palette.primaryAlpha8,
+                background: variables.palette.primaryAlpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.primaryAlpha12,
+                background: variables.palette.primaryAlpha12,
               },
 
               '&:focus': {
@@ -353,8 +367,8 @@ const theme = createTheme({
         {
           props: { variant: 'text' },
           style: {
-            backgroundColor: 'transparent',
-            fontWeight: variables.font.weight.regular,
+            fontWeight: variables.palette.regular,
+            background: 'transparent',
 
             '&.Mui-disabled': {
               color: variables.palette.disabled,
@@ -364,11 +378,11 @@ const theme = createTheme({
               color: variables.palette.primary,
 
               '&:hover': {
-                backgroundColor: variables.palette.primaryAlpha8,
+                background: variables.palette.primaryAlpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.primaryAlpha12,
+                background: variables.palette.primaryAlpha12,
               },
             },
           },
@@ -377,12 +391,12 @@ const theme = createTheme({
           props: { variant: 'elevated' },
           style: {
             fontWeight: variables.font.weight.bold,
-            backgroundColor: variables.palette.surface1,
+            background: variables.palette.surface1,
             color: variables.palette.primary,
             boxShadow: variables.boxShadow.light1,
 
             '&.Mui-disabled': {
-              backgroundColor: variables.palette.onSurfaceAlpha12,
+              background: variables.palette.onSurfaceAlpha12,
               color: variables.palette.disabled,
             },
 
@@ -406,17 +420,18 @@ const theme = createTheme({
             color: variables.palette.onSecondaryContainer,
 
             '&.Mui-disabled': {
-              backgroundColor: variables.palette.onSurfaceAlpha12,
+              background: variables.palette.onSurfaceAlpha12,
               color: variables.palette.disabled,
             },
 
             '&:not(.Mui-disabled)': {
-              '&:hover, &:focus, &:active': {
+              '&:hover': {
                 background: `linear-gradient(${variables.palette.onSurfaceVariantAlpha8}, ${variables.palette.onSurfaceVariantAlpha8}), ${variables.palette.secondaryContainer}`,
+                boxShadow: variables.boxShadow.light1,
               },
 
-              '&:hover': {
-                boxShadow: variables.boxShadow.light1,
+              '&:focus, &:active': {
+                background: `linear-gradient(${variables.palette.onSurfaceVariantAlpha12}, ${variables.palette.onSurfaceVariantAlpha12}), ${variables.palette.secondaryContainer}`,
               },
             },
           },
@@ -434,11 +449,11 @@ const theme = createTheme({
 
             '&:not(.Mui-disabled)': {
               '&:hover': {
-                backgroundColor: variables.palette.onSurfaceVariantAlpha8,
+                background: variables.palette.onSurfaceVariantAlpha8,
               },
 
               '&:focus, &:active': {
-                backgroundColor: variables.palette.onSurfaceVariantAlpha12,
+                background: variables.palette.onSurfaceVariantAlpha12,
               },
             },
           },

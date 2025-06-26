@@ -22,7 +22,6 @@ export const CardItem = ({ children, markdown, isOptional, testId }: CardItemPro
       padding={greaterThanSM ? '72px 48px' : '36px 16px'}
       flexDirection="column"
       gap="48px"
-      sx={{ fontWeight: '400', fontSize: '18px', lineHeight: '28px' }}
     >
       <ItemMarkdown markdown={markdown ?? ''} isOptional={isOptional} />
       <Box>{children}</Box>

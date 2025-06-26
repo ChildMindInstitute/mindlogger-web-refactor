@@ -27,11 +27,13 @@ export const SelectBaseBox = (props: Props) => {
   const backgroundColor = props.checked
     ? variables.palette.secondaryContainer
     : variables.palette.surface;
-  const hoverBackgroundColor = props.checked
-    ? variables.palette.secondaryFixedDim
-    : variables.palette.onSurfaceAlpha8;
+  const hoverBackground = props.checked
+    ? `linear-gradient(${variables.palette.onSurfaceVariantAlpha8}, ${variables.palette.onSurfaceVariantAlpha8}), ${variables.palette.secondaryContainer}`
+    : variables.palette.primaryAlpha8;
 
-  const activeBackgroundColor = props.checked ? hoverBackgroundColor : variables.palette.neutural90;
+  const activeBackground = props.checked
+    ? `linear-gradient(${variables.palette.onSurfaceVariantAlpha12}, ${variables.palette.onSurfaceVariantAlpha12}), ${variables.palette.secondaryContainer}`
+    : variables.palette.primaryAlpha12;
 
   return (
     <Box
@@ -52,10 +54,10 @@ export const SelectBaseBox = (props: Props) => {
         transition: 'background-color 0.2s ease-in-out',
         cursor: 'pointer',
         '&:hover': {
-          background: hoverBackgroundColor,
+          background: hoverBackground,
         },
         '&:active': {
-          background: activeBackgroundColor,
+          background: activeBackground,
         },
       }}
     >
