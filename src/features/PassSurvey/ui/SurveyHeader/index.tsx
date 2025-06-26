@@ -5,7 +5,7 @@ import { EntityTimer } from '../EntityTimer';
 
 import { SaveAndExitButton } from '~/features/SaveAssessmentAndExit';
 import { MultiInformantTooltip } from '~/features/TakeNow';
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { AvatarBase, BaseProgressBar, Box, Text } from '~/shared/ui';
 import { HourMinute, isStringExist, useCustomMediaQuery } from '~/shared/utils';
 
@@ -34,15 +34,16 @@ const SurveyHeader = (props: Props) => {
 
   return (
     <Box
-      paddingX={greaterThanSM ? '24px' : '16px'}
+      paddingX={greaterThanSM ? '24px' : '4px'}
       paddingY={greaterThanSM ? '19px' : '15px'}
+      gap="8px"
       sx={{
-        backgroundColor: Theme.colors.light.surface,
-        borderBottom: `1px solid ${Theme.colors.light.surfaceVariant}`,
+        backgroundColor: variables.palette.surface,
+        borderBottom: `1px solid ${variables.palette.surfaceVariant}`,
       }}
     >
       {!greaterThanSM && (
-        <Box marginBottom="8px">
+        <Box>
           {props.entityTimer && <EntityTimer entityTimerSettings={props.entityTimer} />}
           <MultiInformantTooltip />
         </Box>
@@ -77,8 +78,7 @@ const SurveyHeader = (props: Props) => {
                 <AvatarBase borderRadius="50%" height="36px" width="36px" src={context.watermark} />
               )}
               <Text
-                variant="body1"
-                color={Theme.colors.light.onSurface}
+                color={variables.palette.onSurface}
                 testid="assessment-activity-title"
                 sx={{ textAlign: greaterThanSM ? 'center' : 'left' }}
               >
@@ -103,9 +103,9 @@ const SurveyHeader = (props: Props) => {
 
         {greaterThanSM && props.isSaveAndExitButtonShown && (
           <Box
-            width="125px"
+            width="140px"
             height="100%"
-            gridColumn="3/4"
+            gridColumn="3/3"
             display="flex"
             alignItems="center"
             justifyContent="center"

@@ -1,7 +1,6 @@
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 
-import { Theme } from '../../constants';
-
+import { variables } from '~/shared/constants/theme/variables';
 import { Box } from '~/shared/ui';
 
 interface BaseProgressBarProps {
@@ -30,11 +29,11 @@ export const BaseProgressBar = ({
           height,
           borderRadius: '100px',
           [`&.${linearProgressClasses.colorPrimary}`]: {
-            backgroundColor: Theme.colors.light.surfaceVariant,
+            backgroundColor: variables.palette.surfaceVariant,
           },
           [`& .${linearProgressClasses.bar}`]: {
             borderRadius: 5,
-            backgroundColor: Theme.colors.light.primary,
+            backgroundColor: variables.palette.green,
           },
         }}
       />

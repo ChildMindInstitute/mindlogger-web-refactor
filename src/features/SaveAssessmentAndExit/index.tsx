@@ -1,17 +1,19 @@
 import { useContext } from 'react';
 
-import ButtonBase from '@mui/material/ButtonBase';
+import { Button } from '@mui/material';
 
 import { SurveyContext } from '../PassSurvey';
 
 import { prolificParamsSelector } from '~/entities/applet/model/selectors';
-import { ROUTES, Theme } from '~/shared/constants';
+import { ROUTES } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Text from '~/shared/ui/Text';
 import {
   addSurveyPropsToEvent,
   Mixpanel,
   MixpanelEventType,
   useAppSelector,
+  useCustomMediaQuery,
   useCustomNavigation,
   useCustomTranslation,
 } from '~/shared/utils';
@@ -24,6 +26,7 @@ type Props = {
 export const SaveAndExitButton = ({ appletId, publicAppletKey }: Props) => {
   const { t } = useCustomTranslation();
   const { applet, activityId, flow } = useContext(SurveyContext);
+  const { lessThanSM } = useCustomMediaQuery();
 
   const navigator = useCustomNavigation();
   const prolificParams = useAppSelector(prolificParamsSelector);
@@ -44,21 +47,19 @@ export const SaveAndExitButton = ({ appletId, publicAppletKey }: Props) => {
   };
 
   return (
-    <ButtonBase
+    <Button
       onClick={onSaveAndExitClick}
       data-testid="assessment-save-and-exit-button"
-      sx={{
-        borderRadius: '100px',
-        padding: '10px 12px',
-        transition: 'all 0.2s',
-        '&:hover': { backgroundColor: Theme.colors.light.primary008 },
-        '&:focus': { backgroundColor: Theme.colors.light.primary012 },
-        '&:active': { backgroundColor: Theme.colors.light.primary012 },
-      }}
+      variant="tonal"
+      sx={lessThanSM ? { padding: '8px 13.5px', height: '40px' } : undefined}
     >
-      <Text variant="body1" color={Theme.colors.light.primary} fontSize="16px">
-        {t('save_and_exit')}
+      <Text
+        color={variables.palette.onSecondaryContainer}
+        variant={lessThanSM ? 'labelLarge' : undefined}
+        sx={{ whiteSpace: 'nowrap' }}
+      >
+        {t('saveAndExit')}
       </Text>
-    </ButtonBase>
+    </Button>
   );
 };

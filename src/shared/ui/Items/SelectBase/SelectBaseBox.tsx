@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 
 import { SxProps } from '@mui/material';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Box } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
@@ -23,19 +23,17 @@ type Props = PropsWithChildren<{
 }>;
 
 export const SelectBaseBox = (props: Props) => {
-  const borderColor = props.checked
-    ? Theme.colors.light.primary
-    : Theme.colors.light.surfaceVariant;
+  const borderColor = props.checked ? variables.palette.primary : variables.palette.surfaceVariant;
   const backgroundColor = props.checked
-    ? Theme.colors.light.secondaryContainer
-    : Theme.colors.light.surface;
-  const hoverBackgroundColor = props.checked
-    ? Theme.colors.light.secondaryContainerHover
-    : Theme.colors.light.onSurfaceOpacity008;
+    ? variables.palette.secondaryContainer
+    : variables.palette.surface;
+  const hoverBackground = props.checked
+    ? `linear-gradient(${variables.palette.onSurfaceVariantAlpha8}, ${variables.palette.onSurfaceVariantAlpha8}), ${variables.palette.secondaryContainer}`
+    : variables.palette.primaryAlpha8;
 
-  const activeBackgroundColor = props.checked
-    ? hoverBackgroundColor
-    : Theme.colors.light.neutural90;
+  const activeBackground = props.checked
+    ? `linear-gradient(${variables.palette.onSurfaceVariantAlpha12}, ${variables.palette.onSurfaceVariantAlpha12}), ${variables.palette.secondaryContainer}`
+    : variables.palette.primaryAlpha12;
 
   return (
     <Box
@@ -56,10 +54,10 @@ export const SelectBaseBox = (props: Props) => {
         transition: 'background-color 0.2s ease-in-out',
         cursor: 'pointer',
         '&:hover': {
-          background: hoverBackgroundColor,
+          background: hoverBackground,
         },
         '&:active': {
-          background: activeBackgroundColor,
+          background: activeBackground,
         },
       }}
     >

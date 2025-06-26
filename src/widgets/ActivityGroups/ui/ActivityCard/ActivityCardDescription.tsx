@@ -1,4 +1,4 @@
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 
@@ -11,12 +11,8 @@ export const ActivityCardDescription = ({ description, isFlow }: Props) => {
   return (
     <Box data-testid={isFlow ? 'flow-card-description' : 'activity-card-description'}>
       <Text
-        variant="body1"
-        color={Theme.colors.light.onSurface}
-        fontSize="16px"
-        fontWeight="400"
-        lineHeight="24px"
-        letterSpacing="0.15px"
+        color={variables.palette.onSurface}
+        variant="bodyLarge"
         sx={{
           textAlign: 'left',
         }}

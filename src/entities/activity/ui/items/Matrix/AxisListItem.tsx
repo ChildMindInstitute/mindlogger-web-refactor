@@ -1,5 +1,4 @@
-import { Box } from '~/shared/ui';
-import { AvatarBase, CustomTooltip, Text } from '~/shared/ui';
+import { AvatarBase, Box, CustomTooltip, Text } from '~/shared/ui';
 import { useCustomMediaQuery } from '~/shared/utils';
 
 export type AxisItem = {
@@ -38,9 +37,7 @@ export const AxisListItem = ({ item, maxWidth, axisHeaderFor }: Props) => {
       {item && (
         <Box display="flex" flexDirection="column" alignItems="center" gap="4px">
           {(!isAxisHeaderForRow || !greaterThanTarget) && (
-            <Text variant="body1" fontSize={lessThanTarget ? '14px' : '18px'}>
-              {text}
-            </Text>
+            <Text variant={lessThanTarget ? 'bodyMedium' : 'bodyLarger'}>{text}</Text>
           )}
           <Box
             display="flex"
@@ -62,9 +59,7 @@ export const AxisListItem = ({ item, maxWidth, axisHeaderFor }: Props) => {
             )}
 
             {isAxisHeaderForRow && greaterThanTarget && (
-              <Text variant="body1" fontSize={lessThanTarget ? '14px' : '18px'}>
-                {text}
-              </Text>
+              <Text variant={lessThanTarget ? 'bodyMedium' : 'bodyLarger'}>{text}</Text>
             )}
             {tooltip && <CustomTooltip markdown={tooltip} />}
             {!tooltip && isAxisHeaderForRow && greaterThanTarget && (

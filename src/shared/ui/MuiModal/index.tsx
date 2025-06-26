@@ -10,7 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { SxProps } from '@mui/material/styles';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { BaseButton, Box } from '~/shared/ui';
 
 type Props = {
@@ -70,7 +70,7 @@ export const MuiModal = (props: Props) => {
         '& .MuiPaper-root': {
           borderRadius: '16px',
           padding: '24px',
-          backgroundColor: Theme.colors.light.surface2,
+          backgroundColor: variables.palette.surface2,
         },
         '& .MuiDialogTitle-root': {
           padding: '0',
@@ -90,7 +90,7 @@ export const MuiModal = (props: Props) => {
           onClick={onHide}
           data-testid="customized-dialog-close-icon"
           sx={{
-            color: Theme.colors.light.onSurfaceVariant,
+            color: variables.palette.onSurfaceVariant,
             marginLeft: 'auto',
             cursor: 'pointer',
           }}
@@ -100,14 +100,10 @@ export const MuiModal = (props: Props) => {
       {title && (
         <DialogTitle id="customized-dialog-title">
           <Typography
-            fontSize="22px"
-            fontWeight={700}
-            fontStyle="normal"
-            lineHeight="28px"
-            letterSpacing="0.1px"
+            variant="titleLargeBold"
             textTransform="none"
             paddingBottom="8px"
-            color={Theme.colors.light.onSurface}
+            color={variables.palette.onSurface}
             {...titleProps}
           >
             {title}
@@ -116,15 +112,7 @@ export const MuiModal = (props: Props) => {
       )}
       {label && (
         <DialogContent>
-          <Typography
-            fontSize="16px"
-            fontWeight={400}
-            fontStyle="normal"
-            lineHeight="24px"
-            letterSpacing="0.15px"
-            textTransform="none"
-            color={Theme.colors.light.onSurface}
-          >
+          <Typography variant="bodyLarge" textTransform="none" color={variables.palette.onSurface}>
             {label}
           </Typography>
         </DialogContent>
@@ -140,7 +128,7 @@ export const MuiModal = (props: Props) => {
                 variant="text"
                 onClick={onSecondaryButtonClick}
                 text={footerSecondaryButton}
-                borderColor={Theme.colors.light.outline}
+                borderColor={variables.palette.outline}
                 sx={{
                   '&:hover': {
                     border: 'none',
@@ -148,13 +136,9 @@ export const MuiModal = (props: Props) => {
                 }}
               >
                 <Typography
-                  fontSize="14px"
-                  fontWeight={400}
-                  fontStyle="normal"
-                  lineHeight="20px"
-                  letterSpacing="0.1px"
+                  variant="labelLarge"
                   textTransform="none"
-                  color={Theme.colors.light.primary}
+                  color={variables.palette.primary}
                 >
                   {footerSecondaryButton}
                 </Typography>

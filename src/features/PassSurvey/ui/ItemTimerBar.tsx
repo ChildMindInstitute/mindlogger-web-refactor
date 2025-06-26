@@ -1,4 +1,4 @@
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { convertMillisecondsToMinSec, useCustomTranslation } from '~/shared/utils';
@@ -35,7 +35,7 @@ export const ItemTimerBar = ({ time, progress, duration }: Props) => {
       data-testid="activity-item-timer"
     >
       <Box
-        bgcolor={lessThan10Seconds ? Theme.colors.light.error : Theme.colors.light.primary}
+        bgcolor={lessThan10Seconds ? variables.palette.error : variables.palette.primary}
         height="2px"
         width="100%"
         sx={{
@@ -53,10 +53,8 @@ export const ItemTimerBar = ({ time, progress, duration }: Props) => {
       <Box width="100%" display="flex" justifyContent="center">
         <Box overflow="hidden">
           <Text
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="20px"
-            color={lessThan10Seconds ? Theme.colors.light.error : Theme.colors.light.outline}
+            variant="bodyMedium"
+            color={lessThan10Seconds ? variables.palette.error : variables.palette.outline}
             sx={{
               textAlign: 'center',
               transform: isPassedMoreThan(5600) ? 'translateX(40px)' : 'none',

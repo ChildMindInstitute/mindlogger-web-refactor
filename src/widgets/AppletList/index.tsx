@@ -1,7 +1,6 @@
 import { AppletList, mapToAppletList, useAppletListQuery } from '~/entities/applet';
 import { userModel } from '~/entities/user';
-import { Box } from '~/shared/ui';
-import { Text } from '~/shared/ui';
+import { Box, Text } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { useCustomTranslation } from '~/shared/utils';
 
@@ -38,7 +37,7 @@ export const AppletListWidget = () => {
   if (isAppletsEmpty) {
     return (
       <Box display="flex" flex={1} alignItems="center" justifyContent="center">
-        <Text variant="body1">{t('noApplets')}</Text>
+        <Text>{t('noApplets')}</Text>
       </Box>
     );
   }

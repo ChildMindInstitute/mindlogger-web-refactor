@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { ParagraphTextItem as ParagraphItemType } from '../../lib';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { TextItem as BaseTextItem, Box } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
@@ -48,7 +48,7 @@ export const ParagraphTextItem = ({
         justifyContent="flex-end"
         alignItems="center"
         fontSize="small"
-        color={hasError ? Theme.colors.light.error : Theme.colors.light.outline}
+        color={hasError ? variables.palette.error : variables.palette.outline}
         mr={2}
       >
         {`${t('charactersCount', { numCharacters, maxCharacters: maxResponseLength })}`}

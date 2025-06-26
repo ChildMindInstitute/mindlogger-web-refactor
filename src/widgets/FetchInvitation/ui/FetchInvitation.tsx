@@ -4,8 +4,7 @@ import { useAuthorizationGuard } from '../../AuthorizationGuard';
 import { Invitation, useInvitationQuery, useInvitationTranslation } from '~/entities/invitation';
 import { InvitationAcceptButton } from '~/features/InvitationAccept';
 import { InvitationDeclineButton } from '~/features/InvitationDecline';
-import { Box } from '~/shared/ui';
-import { Text } from '~/shared/ui';
+import { Box, Text } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
 import { useCustomMediaQuery } from '~/shared/utils';
 
@@ -33,9 +32,7 @@ export const FetchInvitation = ({ keyParams }: FetchInvitationProps) => {
         flexDirection="column"
         textAlign="center"
       >
-        <Text variant="body1" margin="12px">
-          {t('loadingInvitation')}
-        </Text>
+        <Text margin="12px">{t('loadingInvitation')}</Text>
         <Loader />
       </Box>
     );

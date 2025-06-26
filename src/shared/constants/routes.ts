@@ -106,6 +106,9 @@ const ROUTES = {
   activeAssessment: {
     path: '/active-assessment',
   },
+  ehrRedirectInterstitial: {
+    path: '/ehr-complete',
+  },
   invitationAccept: {
     path: '/protected/invite/accepted',
   },

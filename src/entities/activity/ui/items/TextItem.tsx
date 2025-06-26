@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import { TextItem as TextItemType } from '../../lib';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { TextItem as BaseTextItem } from '~/shared/ui';
 import { useCustomTranslation } from '~/shared/utils';
 
@@ -48,7 +48,7 @@ export const TextItem = ({ item, value, onValueChange, isDisabled }: TextItemPro
         justifyContent="flex-end"
         alignItems="center"
         fontSize="small"
-        color={hasError ? `${Theme.colors.light.error}` : Theme.colors.light.outline}
+        color={hasError ? `${variables.palette.error}` : variables.palette.outline}
         mr={2}
       >
         {t('charactersCount', { numCharacters, maxCharacters: maxResponseLength })}

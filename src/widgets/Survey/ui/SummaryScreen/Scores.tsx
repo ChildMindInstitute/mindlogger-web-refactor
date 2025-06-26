@@ -1,7 +1,7 @@
 import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
 
 import { UIScore } from '~/features/PassSurvey';
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 
@@ -23,16 +23,14 @@ export const Scores = (props: Props) => {
           <Box display="flex" gap="8px" alignItems="center">
             {score.highlighted && (
               <NotificationImportantIcon
-                fontSize="small"
-                sx={{ color: Theme.colors.light.errorVariant100 }}
+                fontSize="medium"
+                sx={{ color: variables.palette.error }}
                 data-testid="score-item-highlighted-icon"
               />
             )}
             <Text
-              fontWeight="400"
-              fontSize="18px"
-              lineHeight="24px"
-              color={score.highlighted ? Theme.colors.light.errorVariant100 : undefined}
+              variant="titleLargishBold"
+              color={score.highlighted ? variables.palette.error : undefined}
               testid="score-item-label"
             >
               {score.label}
@@ -41,13 +39,19 @@ export const Scores = (props: Props) => {
           <Box
             display="flex"
             justifyContent="center"
-            width="136px"
+            minWidth="120px"
             padding="4px 0px"
-            bgcolor={score.highlighted ? Theme.colors.light.errorVariant10 : undefined}
+            bgcolor={
+              score.highlighted ? variables.palette.errorContainer : variables.palette.surface1
+            }
             borderRadius="100px"
             data-testid="score-item-value-container"
           >
-            <Text fontWeight="300" fontSize="28px" lineHeight="38px" testid="score-item-value">
+            <Text
+              variant="titleLargeBold"
+              color={score.highlighted ? variables.palette.error : undefined}
+              testid="score-item-value"
+            >
               {score.value}
             </Text>
           </Box>

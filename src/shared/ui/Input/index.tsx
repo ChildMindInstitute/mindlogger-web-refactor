@@ -7,8 +7,9 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { useController, useFormContext } from 'react-hook-form';
 
-import { Theme } from '../../constants';
 import { useCustomTranslation } from '../../utils';
+
+import { variables } from '~/shared/constants/theme/variables';
 
 interface IInputCommonProps {
   id: string;
@@ -57,7 +58,7 @@ const Input = (props: IInputCommonProps) => {
         className={className}
         error={!!error}
         endAdornment={<InputAdornment position="end">{Icon}</InputAdornment>}
-        sx={{ backgroundColor: Theme.colors.light.onPrimary }}
+        sx={{ backgroundColor: variables.palette.onPrimary }}
       />
       {error?.message && <FormHelperText id={id}>{t(error.message)}</FormHelperText>}
     </FormControl>

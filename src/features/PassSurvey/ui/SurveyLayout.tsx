@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 
 import SurveyHeader from './SurveyHeader';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Banners, Box } from '~/shared/ui';
 import { HourMinute } from '~/shared/utils';
 
@@ -23,7 +23,7 @@ const SurveyLayout = (props: Props) => {
       display="flex"
       flex={1}
       flexDirection="column"
-      bgcolor={Theme.colors.light.surface}
+      bgcolor={variables.palette.surface}
     >
       <SurveyHeader
         progress={props.progress}
@@ -40,6 +40,7 @@ const SurveyLayout = (props: Props) => {
         flex={1}
         flexDirection="column"
         overflow="scroll"
+        sx={{ containerType: 'size' }}
       >
         <Box display="flex" flex={1} justifyContent="center">
           {props.children}
@@ -48,7 +49,7 @@ const SurveyLayout = (props: Props) => {
 
       <Box
         sx={{
-          borderTop: `1px solid ${Theme.colors.light.surfaceVariant}`,
+          borderTop: `1px solid ${variables.palette.surfaceVariant}`,
         }}
       >
         {props.footerActions}

@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { SignupForm, useSignupTranslation } from '~/features/Signup';
-import { ROUTES, Theme } from '~/shared/constants';
+import { ROUTES } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { Mixpanel } from '~/shared/utils';
@@ -18,13 +19,16 @@ function SignupPage() {
 
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center" textAlign="center">
-      <Box flex={1} padding="24px 32px">
+      <Box
+        flex={1}
+        sx={{
+          padding: '24px 32px',
+          '& a': { color: variables.palette.primary, textDecoration: 'underline' },
+        }}
+      >
         <Text
-          variant="h5"
-          color={Theme.colors.light.onSurface}
-          fontSize="22px"
-          fontWeight="700"
-          lineHeight="28px"
+          color={variables.palette.onSurface}
+          variant="titleLargeBold"
           sx={{ marginBottom: '24px' }}
         >
           {t('title')}
@@ -35,18 +39,9 @@ function SignupPage() {
         </Box>
 
         <Box margin="24px 0px" display="flex" justifyContent="center">
-          <Text fontSize="16px" fontWeight="400" lineHeight="20px" letterSpacing="0.1px">
-            {t('or')},
-          </Text>
+          <Text>{t('or')},</Text>
           &nbsp;
-          <Text
-            color={Theme.colors.light.primary}
-            fontSize="16px"
-            fontWeight="400"
-            lineHeight="20px"
-            letterSpacing="0.1px"
-            sx={{ textDecoration: 'underline' }}
-          >
+          <Text>
             <Link to={ROUTES.login.path} relative="path">
               {t('logIn')}
             </Link>

@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { Box } from '~/shared/ui';
 
 type Props = PropsWithChildren<{
@@ -14,10 +14,10 @@ export const ActivityCardBase = (props: Props) => {
     <Box
       data-testid={props.isFlow ? 'flow-card' : 'activity-card'}
       sx={{
-        backgroundColor: Theme.colors.light.surface,
+        backgroundColor: variables.palette.surface,
         padding: '24px',
         marginBottom: '16px',
-        border: `1px solid ${Theme.colors.light.surfaceVariant}`,
+        border: `1px solid ${variables.palette.surfaceVariant}`,
         borderRadius: '16px',
         minWidth: '343px',
         maxWidth: '1200px',

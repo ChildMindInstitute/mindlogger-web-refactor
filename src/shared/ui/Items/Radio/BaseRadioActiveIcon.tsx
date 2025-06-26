@@ -1,5 +1,4 @@
-import { Theme } from '../../../constants/theme';
-
+import { variables } from '~/shared/constants/theme/variables';
 import { Box } from '~/shared/ui';
 
 export const BaseRadioActiveIcon = () => {
@@ -11,14 +10,14 @@ export const BaseRadioActiveIcon = () => {
       height="24px"
       sx={{
         '.Mui-focusVisible &': {
-          outline: `2px auto ${Theme.colors.light.primary}`,
+          outline: `2px auto ${variables.palette.primary}`,
           outlineOffset: 2,
         },
         'input:disabled ~ &': {
           boxShadow: 'none',
           background: 'rgba(206,217,224,.5)',
         },
-        backgroundColor: Theme.colors.light.primary,
+        backgroundColor: variables.palette.primary,
         backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
         '&:before': {
           display: 'block',
@@ -28,7 +27,7 @@ export const BaseRadioActiveIcon = () => {
           content: '""',
         },
         'input:hover ~ &': {
-          backgroundColor: Theme.colors.light.primary,
+          backgroundColor: variables.palette.primary,
         },
       }}
     ></Box>

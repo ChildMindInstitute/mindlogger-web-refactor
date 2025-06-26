@@ -76,11 +76,11 @@ const SummaryScreen = () => {
         data-testid="assessment-summary-screen-container"
       >
         <Box flex={1}>
-          <Text fontWeight="400" fontSize="40px" lineHeight="54px" testid="report-summary-screen">
+          <Text variant="displayMedium" testid="report-summary-screen">
             {t('reportSummary')}
           </Text>
           {summaryData && summaryData.alerts.length > 0 && (
-            <Box margin="16px 0px">
+            <Box my="24px">
               <Alerts alerts={summaryData.alerts} />
             </Box>
           )}
@@ -89,7 +89,7 @@ const SummaryScreen = () => {
               summaryData.scores.length > 0 &&
               summaryData.scores.map((score, index) => (
                 <Box key={index}>
-                  <Divider sx={{ margin: '16px 0px' }} />
+                  <Divider sx={{ margin: '24px 0px' }} />
                   <ScoreSection score={score} />
                 </Box>
               ))}

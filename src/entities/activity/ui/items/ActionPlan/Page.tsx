@@ -11,7 +11,7 @@ import { Title } from './Title';
 
 import footerLogo from '~/assets/curious_logo--black.png';
 import { useActionPlanTranslation } from '~/entities/activity/lib/useActionPlanTranslation';
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 
 type PageProps = {
@@ -74,7 +74,7 @@ export const Page = ({
       sx={{
         width: `${pageWidth}px`,
         padding: `0 ${scaledPadding}px ${scaledPadding}px`,
-        backgroundColor: Theme.colors.light.primaryFixed,
+        backgroundColor: variables.palette.primaryFixed,
         borderRadius: '16px',
       }}
     >

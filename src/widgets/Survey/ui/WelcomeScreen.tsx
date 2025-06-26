@@ -9,7 +9,7 @@ import SubjectIcon from '~/assets/subject-icon.svg';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
 import { StartSurveyButton, SurveyContext, SurveyLayout } from '~/features/PassSurvey';
-import { Theme } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { AvatarBase } from '~/shared/ui/Avatar';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
@@ -137,10 +137,8 @@ const WelcomeScreen = () => {
           // bunch of `div`s, but `<Text />`'s default component is a `<p />`,
           // which can not contain `<div />`.
           component="div"
-          variant="body1"
-          fontSize="18px"
-          fontWeight="400"
-          color={Theme.colors.light.secondary}
+          variant="bodyLarger"
+          color={variables.palette.onSurfaceVariant}
           sx={{ marginTop: '24px' }}
         >
           <ActivityMetaData
@@ -151,27 +149,23 @@ const WelcomeScreen = () => {
         </Text>
         <Box display="flex" alignItems="center" gap="6px">
           <Text
-            variant="body1"
-            fontSize="18px"
-            fontWeight="700"
-            color={Theme.colors.light.onSurface}
+            variant="titleLargishBold"
+            color={variables.palette.onSurface}
             margin="16px 0px"
             testid="flow-welcome-screen-title"
           >
             {context.activity.name}
           </Text>
           {isTimedActivity && (
-            <Text fontSize="18px" variant="body1">
+            <Text variant="bodyLarger">
               {t('timedActivityTitle', { activityName: context.activity.name })}
             </Text>
           )}
         </Box>
 
         <Text
-          variant="body1"
-          fontSize="18px"
-          fontWeight="400"
-          color={Theme.colors.light.onSurface}
+          variant="bodyLarger"
+          color={variables.palette.onSurface}
           testid="flow-welcome-screen-decription"
           sx={{ textAlign: 'center' }}
         >
@@ -180,15 +174,13 @@ const WelcomeScreen = () => {
 
         {isTimedActivity && (
           <Box textAlign="center" marginTop="16px">
-            <Text variant="body1" fontSize="18px">
+            <Text variant="bodyLarger">
               {t('youWillHaveToCompleteIt', {
                 hours: groupProgress.event?.timers.timer?.hours,
                 minutes: groupProgress.event?.timers.timer?.minutes,
               })}
             </Text>
-            <Text variant="body1" fontSize="18px">
-              {t('yourWorkWillBeSubmitted')}
-            </Text>
+            <Text variant="bodyLarger">{t('yourWorkWillBeSubmitted')}</Text>
           </Box>
         )}
       </Box>
