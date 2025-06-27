@@ -11,7 +11,7 @@ import {
   useSaveAnswerMutation,
 } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
-import { AnswerPayload, EHRConsent } from '~/shared/api';
+import { AnswerPayload } from '~/shared/api';
 import {
   MixpanelEventType,
   MixpanelProps,
@@ -90,10 +90,10 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitE
       | RequestHealthRecordDataItem
       | undefined;
     if (ehrItem) {
-      if (ehrItem.ehrSearchSkipped) {
-        assessmentCompletedEvent[MixpanelProps.EHRStatus] = EHRStatus.ParticipantSkipped;
-      } else if ((ehrItem.answer[0] as EHRConsent) === EHRConsent.OptIn) {
+      if (ehrItem.ehrShareSuccess) {
         assessmentCompletedEvent[MixpanelProps.EHRStatus] = EHRStatus.ParticipantConsented;
+      } else if (ehrItem.ehrSearchSkipped) {
+        assessmentCompletedEvent[MixpanelProps.EHRStatus] = EHRStatus.ParticipantSkipped;
       } else {
         assessmentCompletedEvent[MixpanelProps.EHRStatus] = EHRStatus.ParticipantDeclined;
       }

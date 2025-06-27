@@ -77,6 +77,9 @@ const NavigateToActiveAssessment = () => {
       actions.saveCustomProperty({ ...payload, customProperty: 'additionalEHRs', value: null }),
     );
     dispatch(
+      actions.saveCustomProperty({ ...payload, customProperty: 'ehrSearchSkipped', value: false }),
+    );
+    dispatch(
       actions.saveCustomProperty({ ...payload, customProperty: 'ehrShareSuccess', value: true }),
     );
   }
