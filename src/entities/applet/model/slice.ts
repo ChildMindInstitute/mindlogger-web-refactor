@@ -276,9 +276,9 @@ const appletsSlice = createSlice({
       const id = getProgressId(payload.activityId, payload.eventId, payload.targetSubjectId);
 
       const activityProgress = state.progress[id];
-      const currentItem = activityProgress.items[activityProgress.step];
+      const currentItem = activityProgress.items.find(({ id }) => id === payload.item.id);
 
-      if (typeof currentItem.subStep === 'number') {
+      if (currentItem && typeof currentItem.subStep === 'number') {
         currentItem.subStep = payload.subStep;
       }
     },

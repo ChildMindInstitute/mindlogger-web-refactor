@@ -22,10 +22,11 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
         activityId,
         eventId,
         targetSubjectId: targetSubject?.id ?? null,
+        item,
         subStep,
       });
     },
-    [activityId, eventId, targetSubject?.id, setActivitySubStep],
+    [setActivitySubStep, activityId, eventId, targetSubject?.id, item],
   );
 
   const subStep = useMemo(() => {
