@@ -4,7 +4,12 @@ import { AxiosError, AxiosResponse } from 'axios';
 
 import { SurveyContext } from '..';
 
-import { usePublicSaveAnswerMutation, useSaveAnswerMutation } from '~/entities/activity';
+import { getProgressId } from '~/abstract/lib';
+import {
+  RequestHealthRecordDataItem,
+  usePublicSaveAnswerMutation,
+  useSaveAnswerMutation,
+} from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { AnswerPayload } from '~/shared/api';
 import {
@@ -17,7 +22,10 @@ import {
   addFeatureToEvent,
   WithProlific,
   SignupSuccessfulEvent,
+  useAppSelector,
+  EHRStatus,
 } from '~/shared/utils';
+import { useSurveyState } from '~/widgets/Survey/model/hooks';
 
 type Props = {
   isPublic: boolean;
@@ -29,7 +37,18 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitE
   const { isInMultiInformantFlow, getMultiInformantState, updateMultiInformantState } =
     appletModel.hooks.useMultiInformantState();
 
-  const { applet } = useContext(SurveyContext);
+  const { applet, activityId, flow, eventId, targetSubject } = useContext(SurveyContext);
+
+  const activityProgress = useAppSelector((state) => {
+    if (!activityId) return null;
+
+    return appletModel.selectors.selectActivityProgress(
+      state,
+      getProgressId(activityId, eventId, targetSubject?.id ?? null),
+    );
+  });
+
+  const { visibleItems } = useSurveyState(activityProgress);
 
   const onSuccess = (_: AxiosResponse, variables: AnswerPayload) => {
     const { prolificParams, ...restVariables } = variables;
@@ -64,6 +83,19 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitE
         updateMultiInformantState({
           submitId: variables.submitId,
         });
+      }
+    }
+
+    const ehrItem = visibleItems.find((item) => item.responseType === 'requestHealthRecordData') as
+      | RequestHealthRecordDataItem
+      | undefined;
+    if (ehrItem) {
+      if (ehrItem.ehrShareSuccess) {
+        assessmentCompletedEvent[MixpanelProps.EHRStatus] = EHRStatus.ParticipantConsented;
+      } else if (ehrItem.ehrSearchSkipped) {
+        assessmentCompletedEvent[MixpanelProps.EHRStatus] = EHRStatus.ParticipantSkipped;
+      } else {
+        assessmentCompletedEvent[MixpanelProps.EHRStatus] = EHRStatus.ParticipantDeclined;
       }
     }
 

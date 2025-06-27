@@ -9,7 +9,13 @@ import { RequestHealthRecordDataItem } from '~/entities/activity/lib';
 import { appletModel } from '~/entities/applet';
 import { SurveyContext } from '~/features/PassSurvey';
 import { ItemMarkdown } from '~/shared/ui';
-import { useCustomTranslation } from '~/shared/utils';
+import {
+  addSurveyPropsToEvent,
+  Mixpanel,
+  MixpanelEventType,
+  useCustomTranslation,
+  useOnceEffect,
+} from '~/shared/utils';
 
 type AdditionalPromptStepProps = {
   item: RequestHealthRecordDataItem;
@@ -19,11 +25,26 @@ type AdditionalPromptStepProps = {
 export const AdditionalPromptStep = ({ item, replaceText }: AdditionalPromptStepProps) => {
   const { t } = useCustomTranslation();
 
-  const { activityId, eventId, targetSubject } = useContext(SurveyContext);
+  const { applet, activityId, flow, eventId, targetSubject } = useContext(SurveyContext);
   const { saveItemCustomProperty } = appletModel.hooks.useSaveItemAnswer({
     activityId,
     eventId,
     targetSubjectId: targetSubject?.id ?? null,
+  });
+
+  useOnceEffect(() => {
+    if (item.ehrShareSuccess) {
+      Mixpanel.track(
+        addSurveyPropsToEvent(
+          { action: MixpanelEventType.EHRProviderShareSuccess },
+          {
+            applet,
+            activityId,
+            flowId: flow?.id,
+          },
+        ),
+      );
+    }
   });
 
   const baseOption = {

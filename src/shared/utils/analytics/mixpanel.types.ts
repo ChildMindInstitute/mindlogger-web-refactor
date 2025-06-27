@@ -12,12 +12,20 @@ export enum MixpanelProps {
   SubmitId = 'Submit ID',
   StudyUserId = 'Study User ID',
   StudyReference = 'Study Reference',
+  EHRStatus = 'EHR Status',
 }
 
 export enum MixpanelFeature {
   MultiInformant = 'Multi-informant',
   SSI = 'SSI',
   Prolific = 'Prolific',
+  EHR = 'EHR',
+}
+
+export enum EHRStatus {
+  ParticipantDeclined = 'Participant Declined',
+  ParticipantSkipped = 'Participant Skipped',
+  ParticipantConsented = 'Participant Consented',
 }
 
 export enum MixpanelEventType {
@@ -26,6 +34,9 @@ export enum MixpanelEventType {
   AppletClick = 'Applet click',
   AssessmentCompleted = 'Assessment completed',
   AssessmentStarted = 'Assessment Started',
+  EHRProviderSearch = 'EHR Provider Search',
+  EHRProviderSearchSkipped = 'EHR Provider Search Skipped',
+  EHRProviderShareSuccess = 'EHR Provider Share Success',
   InvitationAccepted = 'Invitation Accepted',
   LoginBtnClick = 'Login Button click',
   LoginScreenCreateAccountBtnClick = 'Create account button on login screen click',
@@ -41,6 +52,11 @@ export enum MixpanelEventType {
 }
 
 type WithAppletId<T> = T & { [MixpanelProps.AppletId]?: string | null };
+
+type WithAppletActivityOrFlowId<T> = WithAppletId<T> & {
+  [MixpanelProps.ActivityId]?: string;
+  [MixpanelProps.ActivityFlowId]?: string;
+};
 
 export type WithFeature<T = object> = T & {
   [MixpanelProps.Feature]?: MixpanelFeature[];
@@ -60,25 +76,43 @@ export type TransferOwnershipAcceptedEvent = WithAppletId<{
 }>;
 
 export type AssessmentCompletedEvent = WithFeature<
-  WithAppletId<{
+  WithAppletActivityOrFlowId<{
     action: MixpanelEventType.AssessmentCompleted;
     [MixpanelProps.SubmitId]: string;
-    [MixpanelProps.ActivityId]?: string;
-    [MixpanelProps.ActivityFlowId]?: string;
     [MixpanelProps.MultiInformantAssessmentId]?: string;
     [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+    [MixpanelProps.EHRStatus]?: EHRStatus;
   }>
 >;
 
 export type AssessmentStartedEvent = WithFeature<
-  WithAppletId<{
+  WithAppletActivityOrFlowId<{
     action: MixpanelEventType.AssessmentStarted;
-    [MixpanelProps.ActivityId]?: string;
-    [MixpanelProps.ActivityFlowId]?: string;
     [MixpanelProps.MultiInformantAssessmentId]?: string;
     [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
     [MixpanelProps.StudyUserId]?: string;
     [MixpanelProps.StudyReference]?: string;
+  }>
+>;
+
+export type EHRProviderSearchEvent = WithFeature<
+  WithAppletActivityOrFlowId<{
+    action: MixpanelEventType.EHRProviderSearch;
+    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+  }>
+>;
+
+export type EHRProviderSearchSkippedEvent = WithFeature<
+  WithAppletActivityOrFlowId<{
+    action: MixpanelEventType.EHRProviderSearchSkipped;
+    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+  }>
+>;
+
+export type EHRProviderShareSuccessEvent = WithFeature<
+  WithAppletActivityOrFlowId<{
+    action: MixpanelEventType.EHRProviderShareSuccess;
+    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
   }>
 >;
 
@@ -87,29 +121,23 @@ export type InvitationAcceptedEvent = WithAppletId<{
 }>;
 
 export type ActivityRestartedEvent = WithFeature<
-  WithAppletId<{
+  WithAppletActivityOrFlowId<{
     action: MixpanelEventType.ActivityRestarted;
-    [MixpanelProps.ActivityId]?: string;
-    [MixpanelProps.ActivityFlowId]?: string | null;
     [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
   }>
 >;
 
 export type ActivityResumedEvent = WithFeature<
-  WithAppletId<{
+  WithAppletActivityOrFlowId<{
     action: MixpanelEventType.ActivityResumed;
-    [MixpanelProps.ActivityId]?: string;
-    [MixpanelProps.ActivityFlowId]?: string | null;
     [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
   }>
 >;
 
 export type ReturnToAdminAppEvent = WithFeature<
-  WithAppletId<{
+  WithAppletActivityOrFlowId<{
     action: MixpanelEventType.ReturnToAdminApp;
     [MixpanelProps.SubmitId]?: string | null;
-    [MixpanelProps.ActivityId]?: string;
-    [MixpanelProps.ActivityFlowId]?: string;
     [MixpanelProps.MultiInformantAssessmentId]?: string;
   }>
 >;
@@ -127,34 +155,34 @@ export type LogoutEvent = {
 };
 
 export type ResponseReportDownloadClickedEvent = WithFeature<
-  WithAppletId<{
-    action: MixpanelEventType.ResponseReportDownloadClicked;
-    [MixpanelProps.ItemId]: string;
-    [MixpanelProps.ActivityId]?: string;
-    [MixpanelProps.ActivityFlowId]?: string;
-    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
-    [MixpanelProps.TotalResponseReports]: number;
-  }>
+  WithAppletActivityOrFlowId<
+    WithAppletId<{
+      action: MixpanelEventType.ResponseReportDownloadClicked;
+      [MixpanelProps.ItemId]: string;
+      [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+      [MixpanelProps.TotalResponseReports]: number;
+    }>
+  >
 >;
 
 export type ResponseReportGeneratedEvent = WithFeature<
-  WithAppletId<{
-    action: MixpanelEventType.ResponseReportGenerated;
-    [MixpanelProps.ItemId]: string;
-    [MixpanelProps.ActivityId]?: string;
-    [MixpanelProps.ActivityFlowId]?: string;
-    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
-    [MixpanelProps.TotalResponseReports]: number;
-  }>
+  WithAppletActivityOrFlowId<
+    WithAppletId<{
+      action: MixpanelEventType.ResponseReportGenerated;
+      [MixpanelProps.ItemId]: string;
+      [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+      [MixpanelProps.TotalResponseReports]: number;
+    }>
+  >
 >;
 
 export type SaveAndExitClickedEvent = WithFeature<
-  WithAppletId<{
-    action: MixpanelEventType.SaveAndExitClicked;
-    [MixpanelProps.ActivityId]?: string;
-    [MixpanelProps.ActivityFlowId]?: string;
-    [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
-  }>
+  WithAppletActivityOrFlowId<
+    WithAppletId<{
+      action: MixpanelEventType.SaveAndExitClicked;
+      [MixpanelProps.ItemTypes]?: ItemResponseTypeDTO[];
+    }>
+  >
 >;
 
 export type SignupSuccessfulEvent = {
@@ -170,20 +198,23 @@ export type LoginScreenCreateAccountBtnClickEvent = {
 };
 
 export type MixpanelEvent =
-  | AppletClickEvent
-  | TransferOwnershipAcceptedEvent
-  | AssessmentCompletedEvent
-  | AssessmentStartedEvent
-  | InvitationAcceptedEvent
   | ActivityRestartedEvent
   | ActivityResumedEvent
-  | ReturnToAdminAppEvent
-  | LoginSuccessfulEvent
+  | AppletClickEvent
+  | AssessmentCompletedEvent
+  | AssessmentStartedEvent
+  | EHRProviderSearchEvent
+  | EHRProviderSearchSkippedEvent
+  | EHRProviderShareSuccessEvent
+  | InvitationAcceptedEvent
   | LoginBtnClickEvent
+  | LoginScreenCreateAccountBtnClickEvent
+  | LoginSuccessfulEvent
   | LogoutEvent
   | ResponseReportDownloadClickedEvent
   | ResponseReportGeneratedEvent
+  | ReturnToAdminAppEvent
   | SaveAndExitClickedEvent
   | SignupSuccessfulEvent
-  | TransferOwnershipDeclinedEvent
-  | LoginScreenCreateAccountBtnClickEvent;
+  | TransferOwnershipAcceptedEvent
+  | TransferOwnershipDeclinedEvent;
