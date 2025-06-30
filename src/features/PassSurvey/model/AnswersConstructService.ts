@@ -265,13 +265,13 @@ export default class AnswersConstructService implements ICompletionConstructServ
     const startFromDate = this.event.availability.startDate;
     const startFromHour = this.event.availability.timeFrom?.hours;
     const startFromMinute = this.event.availability.timeFrom?.minutes;
-    if (!startFromDate || !startFromHour || !startFromMinute) {
+    if (!startFromDate || startFromHour === undefined || startFromMinute === undefined) {
       return null;
     }
 
     const startFrom = new Date(startFromDate).setHours(startFromHour, startFromMinute, 0, 0);
 
-    return startFromHour && startFromMinute ? getUnixTime(startFrom) : null;
+    return getUnixTime(startFrom);
   }
 
   private determineEhrConsent(): boolean {
