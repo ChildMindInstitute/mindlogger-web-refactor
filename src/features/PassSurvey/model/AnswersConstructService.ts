@@ -269,7 +269,7 @@ export default class AnswersConstructService implements ICompletionConstructServ
       return null;
     }
 
-    const startFrom = new Date(startFromDate).setHours(startFromHour, startFromMinute, 0, 0);
+    const startFrom = new Date(startFromDate).setUTCHours(startFromHour, startFromMinute, 0, 0);
 
     return getUnixTime(startFrom);
   }
