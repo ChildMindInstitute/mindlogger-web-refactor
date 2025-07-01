@@ -47,6 +47,11 @@ export const EHRRedirectInterstitialPage = () => {
             replace: true,
           });
         }}
+        footerWrapperSXProps={{
+          padding: 0,
+          paddingTop: '24px',
+        }}
+        canStackButtons
       />
     </Box>
   );
