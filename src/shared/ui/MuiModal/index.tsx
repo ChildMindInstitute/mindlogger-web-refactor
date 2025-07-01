@@ -26,6 +26,7 @@ type Props = {
   secondaryButtonDisabled?: boolean;
   onSecondaryButtonClick?: () => void;
   isSecondaryButtonLoading?: boolean;
+  canStackButtons?: boolean;
   testId?: string;
   showCloseIcon?: boolean;
   titleProps?: TypographyProps;
@@ -55,6 +56,7 @@ export const MuiModal = (props: Props) => {
     labelComponent,
     footerWrapperSXProps,
     maxWidth = 'xs',
+    canStackButtons = false,
     DialogProps,
   } = props;
 
@@ -120,9 +122,18 @@ export const MuiModal = (props: Props) => {
 
       {labelComponent && <DialogContent>{labelComponent}</DialogContent>}
       {(footerPrimaryButton || footerSecondaryButton) && (
-        <DialogActions sx={{ ...footerWrapperSXProps }}>
+        <DialogActions
+          sx={{
+            ...footerWrapperSXProps,
+            flexDirection: { xs: canStackButtons ? 'column' : 'row' },
+          }}
+        >
           {footerSecondaryButton && (
-            <Box width="120px" data-testid="assessment-back-button">
+            <Box
+              width={{ xs: canStackButtons ? '100%' : '120px', sm: '120px' }}
+              sx={{ order: { xs: canStackButtons ? 2 : 'initial' } }}
+              data-testid="assessment-back-button"
+            >
               <BaseButton
                 type="button"
                 variant="text"
@@ -147,7 +158,14 @@ export const MuiModal = (props: Props) => {
           )}
 
           {footerPrimaryButton && (
-            <Box minWidth="120px" data-testid="popup-primary-button">
+            <Box
+              minWidth={{ xs: canStackButtons ? '100%' : '120px', sm: '120px' }}
+              sx={{
+                marginBottom: { xs: canStackButtons ? '8px' : 0 },
+                marginLeft: { xs: canStackButtons ? '0 !important' : '8px !important' },
+              }}
+              data-testid="popup-primary-button"
+            >
               <BaseButton
                 type="button"
                 variant="contained"
