@@ -13,6 +13,7 @@ import { SurveyContext } from '~/features/PassSurvey';
 import { BaseError } from '~/shared/api';
 import { Box } from '~/shared/ui';
 import Loader from '~/shared/ui/Loader';
+import { addSurveyPropsToEvent, Mixpanel, MixpanelEventType, useOnceEffect } from '~/shared/utils';
 
 type OneUpHealthErrorType =
   | 'geographicRestriction'
@@ -44,13 +45,27 @@ export const OneUpHealthStep: FC = () => {
   const { t } = useTranslation();
   const { addErrorBanner, removeErrorBanner } = useBanners();
 
-  const { appletId, eventId, targetSubject, entityId, activityId } = useContext(SurveyContext);
+  const { applet, appletId, eventId, targetSubject, entityId, activityId, flow } =
+    useContext(SurveyContext);
   const groupProgress = useGroupProgressRecord({
     entityId,
     eventId,
     targetSubjectId: targetSubject?.id ?? null,
   });
   const submitId = groupProgress?.submitId;
+
+  useOnceEffect(() => {
+    Mixpanel.track(
+      addSurveyPropsToEvent(
+        { action: MixpanelEventType.EHRProviderSearch },
+        {
+          applet,
+          activityId,
+          flowId: flow?.id,
+        },
+      ),
+    );
+  });
 
   // Fetch the token using our custom hook
   const { data, isLoading, error } = useOneUpHealthTokenQuery(

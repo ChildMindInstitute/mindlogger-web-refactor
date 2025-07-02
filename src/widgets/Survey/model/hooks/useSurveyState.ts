@@ -45,6 +45,7 @@ export const useSurveyState = (activityProgress: appletModel.ActivityProgress | 
 
   return {
     item,
+    visibleItems,
     conditionallyHiddenItemIds: hiddenItemIds,
 
     hasNextStep,

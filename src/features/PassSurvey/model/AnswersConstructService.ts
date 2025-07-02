@@ -114,6 +114,12 @@ export default class AnswersConstructService implements ICompletionConstructServ
 
     const publicKey = this.generatePublicKey(privateKey);
 
+    // TODO: `allowedEhrIngest` flag should not be based on whether the user has opted in
+    // to sharing EHRs. Rather, it should be based on whether the `/active-assessment` deep
+    // link was called during the assessment.
+    //
+    // Here is the bug reported about this issue:
+    // https://mindlogger.atlassian.net/browse/M2-9411
     const allowedEhrIngest = this.determineEhrConsent();
 
     return {
