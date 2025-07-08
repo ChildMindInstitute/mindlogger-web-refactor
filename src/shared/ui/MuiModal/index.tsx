@@ -125,13 +125,13 @@ export const MuiModal = (props: Props) => {
         <DialogActions
           sx={{
             ...footerWrapperSXProps,
-            flexDirection: { xs: canStackButtons ? 'column' : 'row' },
+            flexDirection: { xs: canStackButtons ? 'column' : 'row', sm: 'row' },
           }}
         >
           {footerSecondaryButton && (
             <Box
               width={{ xs: canStackButtons ? '100%' : '120px', sm: '120px' }}
-              sx={{ order: { xs: canStackButtons ? 2 : 'initial' } }}
+              sx={{ order: { xs: canStackButtons ? 2 : 'initial', sm: 'initial' } }}
               data-testid="assessment-back-button"
             >
               <BaseButton
@@ -161,8 +161,11 @@ export const MuiModal = (props: Props) => {
             <Box
               minWidth={{ xs: canStackButtons ? '100%' : '120px', sm: '120px' }}
               sx={{
-                marginBottom: { xs: canStackButtons ? '8px' : 0 },
-                marginLeft: { xs: canStackButtons ? '0 !important' : '8px !important' },
+                marginBottom: { xs: canStackButtons ? '8px' : 0, sm: 0 },
+                marginLeft: {
+                  xs: canStackButtons ? '0 !important' : '8px !important',
+                  sm: '8px !important',
+                },
               }}
               data-testid="popup-primary-button"
             >
