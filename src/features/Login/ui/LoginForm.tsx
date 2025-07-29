@@ -43,7 +43,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
     },
     onError(error) {
       if (error.evaluatedMessage) {
-        addErrorBanner({ i18nKey: 'Login.invalidCredentials' });
+        addErrorBanner(t('invalidCredentials'));
       }
     },
   });
