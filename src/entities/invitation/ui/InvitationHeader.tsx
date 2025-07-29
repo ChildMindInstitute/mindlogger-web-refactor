@@ -17,7 +17,7 @@ export const InvitationHeader = ({ appletName, role }: InvitationHeaderProps) =>
         {t('inviteContent.welcome')}
         <strong>{` ${appletName}`}</strong>
       </Text>
-      <Text variant="body1">{`${t('inviteContent.title', { role })} ${appletName}. ${t(
+      <Text variant="body1">{`${t('inviteContent.title', { role: t(`roles.${role}`, role) })} ${appletName}. ${t(
         'inviteContent.toAccept',
       )}`}</Text>
     </Box>
