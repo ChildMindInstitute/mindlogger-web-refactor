@@ -1,9 +1,16 @@
+import { Trans } from 'react-i18next';
+
 import { Banner, BannerProps } from '../Banner';
 
-export const ErrorBanner = ({ children, ...props }: BannerProps) => {
+type ErrorBannerProps = BannerProps & {
+  i18nKey?: string;
+  children?: string;
+};
+
+export const ErrorBanner = ({ i18nKey, children, ...props }: ErrorBannerProps) => {
   return (
     <Banner severity="error" {...props}>
-      {children}
+      {i18nKey ? <Trans i18nKey={i18nKey} /> : children}
     </Banner>
   );
 };
