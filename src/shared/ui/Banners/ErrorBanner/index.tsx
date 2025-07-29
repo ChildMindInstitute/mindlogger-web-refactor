@@ -1,10 +1,12 @@
+import React from 'react';
+
 import { Trans } from 'react-i18next';
 
 import { Banner, BannerProps } from '../Banner';
 
 type ErrorBannerProps = BannerProps & {
   i18nKey?: string;
-  children?: string;
+  children?: React.ReactNode;
 };
 
 export const ErrorBanner = ({ i18nKey, children, ...props }: ErrorBannerProps) => {
