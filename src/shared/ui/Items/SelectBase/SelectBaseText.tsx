@@ -23,6 +23,10 @@ export const SelectBaseText = (props: Props) => {
         cursor: 'pointer',
         lineBreak: 'normal',
         display: '-webkit-box',
+
+        // Using kebab-case (i.e. `-webkit-some-things`) would cause warnings
+        // in the JS console about kebab-case being not supported for CSS
+        // properties.
         webkitLineClamp: '3',
         webkitBoxOrient: 'vertical',
       }}
