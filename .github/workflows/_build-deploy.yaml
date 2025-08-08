@@ -1,0 +1,112 @@
+name: Build and Deploy
+on:
+  workflow_call:
+    inputs:
+      env:
+        required: true
+        description: Environment name
+        type: string
+      version:
+        required: false
+        description: Version
+        type: string
+        default: latest
+
+concurrency:
+  cancel-in-progress: false
+  group: build-deploy-${{ inputs.env }}
+
+env:
+#  NODE_VERSION: v20.11.0
+  VITE_BUILD_VERSION: ${{ inputs.version }}
+  VITE_DD_VERSION: ${{ inputs.version }}
+
+jobs:
+  setup-vars:
+    uses: ./.github/workflows/_setup.yaml
+    with:
+      env-name: ${{ inputs.env-name }}
+
+  build:
+    runs-on: ubuntu-latest
+    name: Node Build
+    needs: setup-vars
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout
+
+      - name: Setup node version
+        run: |
+          echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+
+      - name: Configure aws credentials for build variables
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::917902836630:role/cmiml-devops-oidc-github-role
+          role-session-name: OIDC-GHA-Build-Secrets
+          aws-region: us-east-1
+
+      - name: Load build config
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: /CodeBuild/web-app/${{ inputs.env }}
+          parse-json-secrets: true
+
+      - uses: actions/setup-node@v4
+        name: Setup Node
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # These steps are in Jenkins but they are not in the Amplify preview builds.  Testing the
+      # build without them for now
+#      - name: Remove .yarnrc file to avoid conflicts
+#        run: rm -rf .yarnrc
+#
+#      - name: Enable Corepack
+#        run: corepack enable
+#
+#      - name: Prepare and activate Yarn version 1.22.22
+#        run: corepack prepare yarn@1.22.22 --activate
+#
+#      - name: Verify Yarn version
+#        run: yarn --version
+
+      - name: Install dependencies with frozen lockfile
+        run: yarn install --frozen-lockfile
+
+      - name: Running tests
+        env:
+          VITE_API_HOST: http://localhost:8080
+        run: yarn test
+
+      # TODO Lint?
+
+      - name: Build web app
+        run: yarn build
+
+      - name: Create Mobile Support Files
+        run: |
+          mkdir -p dist/.well-known
+          jq -n --arg APPLE_APP_ID "${{ env.APPLE_APP_ID }}" -f public/apple-app-site-association.template.json > dist/.well-known/apple-app-site-association.json
+          jq -n --arg MOBILE_ANDROID_PACKAGE "${{ env.MOBILE_ANDROID_PACKAGE }}" --arg MOBILE_ANDROID_FINGERPRINT "${{ env.MOBILE_ANDROID_FINGERPRINT }}" -f public/assetlinks.template.json > dist/.well-known/assetlinks.json
+
+      - name: Configure AWS credentials for deploy
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ needs.setup-vars.outputs.role }}
+          role-session-name: OIDC-GHA-session-deploy
+          aws-region: ${{ needs.setup-vars.outputs.region }}
+
+      # TODO Sync with delete?  Should test
+      - name: Deploy
+        run: |
+          aws s3 sync ./dist s3://cmiml-${{ inputs.env }}-web-app
+
+      - name: Invalidate Cloudfront caches
+        run:
+          for id in $(aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items[] | select(.Comment | test("web"; "i")) | .Id'); do
+            aws cloudfront create-invalidation --distribution-id ${id} --paths "/*"
+          done
