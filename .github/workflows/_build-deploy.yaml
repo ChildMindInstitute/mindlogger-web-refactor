@@ -106,7 +106,7 @@ jobs:
           aws s3 sync ./dist s3://cmiml-${{ inputs.env-name }}-web-app
 
       - name: Invalidate Cloudfront caches
-        run:
+        run: |
           for id in $(aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items[] | select(.Comment | test("web"; "i")) | .Id'); do
             AWS_PAGER="" aws cloudfront create-invalidation --distribution-id ${id} --paths "/*" --output table
           done
