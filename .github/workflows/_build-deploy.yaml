@@ -27,7 +27,7 @@ jobs:
     with:
       env-name: ${{ inputs.env-name }}
 
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
     name: Node Build
     needs: setup-vars
@@ -111,3 +111,37 @@ jobs:
           for id in $(aws cloudfront list-distributions --output json | jq -r '.DistributionList.Items[] | select(.Comment | test("web"; "i")) | .Id'); do
             AWS_PAGER="" aws cloudfront create-invalidation --distribution-id ${id} --paths "/*" --output table
           done
+
+  on-deploy-failure:
+    runs-on: ubuntu-latest
+    if: ${{ !cancelled() && (needs.build-deploy.result == 'failure' || needs.build-deploy.result == 'timed_out') }}
+    needs:
+      - build-deploy
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Send Slack message on failure"
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: failure
+          SLACK_WEBHOOK: ${{ secrets.slack-webhook }}
+          SLACKIFY_MARKDOWN: true
+          MSG_MINIMAL: actions url
+          SLACK_TITLE: Web Deploy Failed to ${{ inputs.env-name }}
+          SLACK_MESSAGE: '🚨 Error when executing deployment!'
+
+  on-deploy-success:
+    runs-on: ubuntu-latest
+    if: ${{ !cancelled() && (needs.build-deploy.result == 'success') }}
+    needs:
+      - build-deploy
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Send Slack message on success"
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: success
+          SLACK_WEBHOOK: ${{ secrets.slack-webhook }}
+          SLACKIFY_MARKDOWN: true
+          MSG_MINIMAL: actions url
+          SLACK_TITLE: Web Deployed to ${{ inputs.env-name }}
+          SLACK_MESSAGE: '🚀 Deployment was successful.  Version: *${{ inputs.version }}*'
