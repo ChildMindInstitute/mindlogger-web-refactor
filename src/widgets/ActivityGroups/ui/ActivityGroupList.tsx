@@ -29,7 +29,6 @@ export const ActivityGroupList = () => {
     useCompletedEntitiesQuery(
       {
         appletId: applet.id,
-        version: applet.version,
         fromDate: formatToDtoDate(subMonths(new Date(), 1)),
       },
       { select: (data) => data.data.result, enabled: !isPublic },
