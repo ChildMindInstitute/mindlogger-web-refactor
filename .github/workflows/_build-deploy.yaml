@@ -11,6 +11,11 @@ on:
         description: Version
         type: string
         default: latest
+      git-ref:
+        required: false
+        description: Github ref that matches the build version
+        type: string
+        default: dev
     secrets:
       slack-webhook:
         required: true
@@ -40,6 +45,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         name: Checkout
+        with:
+          ref: ${{ inputs.git-ref }}
 
       - name: Setup node version
         run: |

@@ -30,7 +30,7 @@ jobs:
       - id: ref
         name: Select Ref
         run: |
-          TARGET_REF="${{ github.event.inputs.target_ref }}"
+          TARGET_REF="${{ github.event.inputs.target-ref }}"
           # Use shell parameter expansion to provide a default value if input is unset or empty
           # github.ref_name will be used if the input is not provided or empty
           # Remove "refs/heads/" or "refs/tags/" if present in github.ref_name
@@ -46,5 +46,6 @@ jobs:
     with:
       env-name: uat
       version: ${{ needs.ref.outputs.target-ref }}
+      git-ref: ${{ needs.ref.outputs.target-ref }}
     secrets:
       slack-webhook: ${{ secrets.SLACK_WEBHOOK_DEPLOY_TO_UAT }}
