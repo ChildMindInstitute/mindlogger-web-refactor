@@ -42,6 +42,7 @@ jobs:
   build-deploy:
     name: Build and Deploy
     uses: ./.github/workflows/_build-deploy.yaml
+    needs: ref
     with:
       env-name: uat
       version: ${{ needs.ref.outputs.target-ref }}
