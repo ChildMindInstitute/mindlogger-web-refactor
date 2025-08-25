@@ -16,6 +16,24 @@ Running the app:
 ### 1. Prerequisites
 
 * NodeJS `20.11.0` or higher, recommend using `asdf` or `nvm` to manage local node version
+  #### 🔧 Node Version Management (with `nvm`)
+  To install:
+
+  ```bash
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash 
+  ```
+  After installation, add the following lines to your shell profile (~/.zshrc, ~/.bashrc, or ~/.bash_profile):
+
+  ```bash
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"            # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  ```
+  Then restart your terminal.
+
+   #####  Why is this step required?
+    When nvm is installed, it is placed in ~/.nvm but not automatically available in your terminal. These lines ensure nvm is loaded in every shell session, so commands like nvm use and nvm install work properly.
+    
 * Yarn 1.x
 * [Backend](https://github.com/ChildMindInstitute/mindlogger-backend-refactor) project running locally or accessible in a test environment
   * If running locally, ensure that `http://localhost:5173` has been added to the BE's `CORS__ALLOW_ORIGINS` environment variable
