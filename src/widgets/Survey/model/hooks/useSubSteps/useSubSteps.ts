@@ -1,11 +1,16 @@
 import { useCallback, useContext, useMemo } from 'react';
 
-import { RequestHealthRecordDataItemStep } from '~/entities/activity';
+import { RequestHealthRecordDataItem, RequestHealthRecordDataItemStep } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { ItemRecord } from '~/entities/applet/model/types';
 import { SurveyContext } from '~/features/PassSurvey';
 import { EHRConsent } from '~/shared/api';
-import { useCustomTranslation } from '~/shared/utils';
+import {
+  addSurveyPropsToEvent,
+  Mixpanel,
+  MixpanelEventType,
+  useCustomTranslation,
+} from '~/shared/utils';
 
 type UseSubStepsProps = {
   item: ItemRecord;
@@ -13,7 +18,7 @@ type UseSubStepsProps = {
 
 export const useSubSteps = ({ item }: UseSubStepsProps) => {
   const { t } = useCustomTranslation();
-  const { activityId, eventId, targetSubject } = useContext(SurveyContext);
+  const { applet, activityId, flow, eventId, targetSubject } = useContext(SurveyContext);
   const { setSubStep: setActivitySubStep } = appletModel.hooks.useActivityProgress();
 
   const setSubStep = useCallback(
@@ -22,11 +27,18 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
         activityId,
         eventId,
         targetSubjectId: targetSubject?.id ?? null,
+        item,
         subStep,
       });
     },
-    [activityId, eventId, targetSubject?.id, setActivitySubStep],
+    [setActivitySubStep, activityId, eventId, targetSubject?.id, item],
   );
+
+  const { saveItemCustomProperty } = appletModel.hooks.useSaveItemAnswer({
+    activityId,
+    eventId,
+    targetSubjectId: targetSubject?.id ?? null,
+  });
 
   const subStep = useMemo(() => {
     if (item.responseType === 'requestHealthRecordData') {
@@ -36,6 +48,10 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     return null;
   }, [item]);
 
+  /**
+   * Returns true if there is a next sub-step (and handleNextSubStep should be called when the
+   * Next button is pressed), false otherwise.
+   */
   const hasNextSubStep = useMemo(() => {
     if (subStep === null) return false;
 
@@ -54,6 +70,10 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     return false;
   }, [item, subStep]);
 
+  /**
+   * Returns true if there is a previous sub-step (and handlePrevSubStep should be called when the
+   * Back button is pressed), false otherwise.
+   */
   const hasPrevSubStep = useMemo(() => {
     if (subStep === null) return false;
 
@@ -69,6 +89,40 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     return false;
   }, [item, subStep]);
 
+  /**
+   * Handle any submission logic for a sub-step, called before navigating to the next sub-step (or
+   * submitting the activity, if the item is the last step).
+   */
+  const handleSubmitSubStep = useCallback(() => {
+    if (subStep === null) return;
+
+    if (item.responseType === 'requestHealthRecordData') {
+      if (subStep === RequestHealthRecordDataItemStep.OneUpHealth) {
+        // When clicking next on this step, it means the user has skipped the EHR search
+        if (item.additionalEHRs === null) {
+          // Only track a skipped status (used for Mixpanel tracking) and Mixpanel event if no
+          // additional EHRs have been requested yet
+          saveItemCustomProperty<RequestHealthRecordDataItem>(item.id, 'ehrSearchSkipped', true);
+
+          Mixpanel.track(
+            addSurveyPropsToEvent(
+              { action: MixpanelEventType.EHRProviderSearchSkipped },
+              {
+                applet,
+                activityId,
+                flowId: flow?.id,
+              },
+            ),
+          );
+        }
+      }
+    }
+  }, [subStep, item, saveItemCustomProperty, applet, activityId, flow?.id]);
+
+  /**
+   * Handles the logic for controlling navigation to the next sub-step when the Next button is
+   * pressed.
+   */
   const handleNextSubStep = useCallback(() => {
     if (!hasNextSubStep || subStep === null) return;
 
@@ -83,8 +137,12 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
         setSubStep(subStep + 1);
       }
     }
-  }, [hasNextSubStep, item, setSubStep, subStep]);
+  }, [hasNextSubStep, subStep, item, setSubStep]);
 
+  /**
+   * Handles the logic for controlling navigation to the previous sub-step when the Back button is
+   * pressed.
+   */
   const handlePrevSubStep = useCallback(() => {
     if (!hasPrevSubStep || subStep === null) return;
 
@@ -103,6 +161,9 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     }
   }, [hasPrevSubStep, item, setSubStep, subStep]);
 
+  /**
+   * Returns the text to be displayed on the "Next" button.
+   */
   const nextButtonText = useMemo(() => {
     if (item.responseType === 'requestHealthRecordData') {
       if (subStep === RequestHealthRecordDataItemStep.OneUpHealth) {
@@ -119,6 +180,7 @@ export const useSubSteps = ({ item }: UseSubStepsProps) => {
     setSubStep,
     hasNextSubStep,
     hasPrevSubStep,
+    handleSubmitSubStep,
     handleNextSubStep,
     handlePrevSubStep,
     nextButtonText,

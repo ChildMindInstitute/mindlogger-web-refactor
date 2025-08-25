@@ -43,7 +43,7 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
     },
     onError(error) {
       if (error.evaluatedMessage) {
-        addErrorBanner(error.evaluatedMessage);
+        addErrorBanner(t('invalidCredentials'));
       }
     },
   });

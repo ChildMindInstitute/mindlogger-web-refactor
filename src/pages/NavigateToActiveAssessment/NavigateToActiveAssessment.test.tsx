@@ -147,6 +147,74 @@ describe('NavigateToActiveAssessment', () => {
     );
   });
 
+  test('should handle EHR item step correctly when preceded by hidden item', () => {
+    // Setup
+    const mockActiveAssessment = {
+      appletId: 'applet-123',
+      groupProgressId: 'activity-123/event-123/subject-123',
+      publicAppletKey: null,
+    };
+
+    const mockGroupProgress = {
+      type: ActivityPipelineType.Regular,
+      currentActivityId: 'activity-123',
+    };
+
+    const mockActivityProgress = {
+      step: 0, // Step 0 in visibleItems array (EHR item becomes first visible item after hidden item is filtered out)
+      items: [
+        { id: 'item-0', responseType: 'text', isHidden: true }, // Hidden item that should be filtered out
+        {
+          id: 'item-1',
+          responseType: 'requestHealthRecordData',
+          subStep: RequestHealthRecordDataItemStep.OneUpHealth,
+          additionalEHRs: 'requested',
+        },
+        { id: 'item-2', responseType: 'text' }, // Another visible item
+      ],
+    };
+
+    // Render with preloaded state for both groupProgress and activityProgress
+    renderWithProviders(<NavigateToActiveAssessment />, {
+      preloadedState: {
+        applets: {
+          activeAssessment: mockActiveAssessment,
+          groupProgress: {
+            'activity-123/event-123/subject-123': mockGroupProgress,
+          },
+          progress: {
+            'activity-123/event-123/subject-123': mockActivityProgress,
+          },
+        },
+      } as unknown as PreloadedState<RootState>,
+      disableRouter: true,
+      mockDispatch,
+    });
+
+    // Assertions - The EHR item should still be found and processed correctly
+    // even though there's a hidden item before it in the original items array
+    expect(mockDispatch).toHaveBeenCalledWith(
+      appletModel.actions.saveCustomProperty({
+        entityId: 'activity-123',
+        eventId: 'event-123',
+        targetSubjectId: 'subject-123',
+        itemId: 'item-1',
+        customProperty: 'subStep',
+        value: RequestHealthRecordDataItemStep.AdditionalPrompt,
+      }),
+    );
+    expect(mockDispatch).toHaveBeenCalledWith(
+      appletModel.actions.saveCustomProperty({
+        entityId: 'activity-123',
+        eventId: 'event-123',
+        targetSubjectId: 'subject-123',
+        itemId: 'item-1',
+        customProperty: 'additionalEHRs',
+        value: null,
+      }),
+    );
+  });
+
   test('should navigate to public survey when publicAppletKey is present', () => {
     // Setup
     const mockActiveAssessment = {

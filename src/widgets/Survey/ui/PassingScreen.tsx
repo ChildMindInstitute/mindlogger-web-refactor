@@ -97,8 +97,14 @@ const PassingScreen = (props: Props) => {
   const { step, item, hasPrevStep, hasNextStep, progress, conditionallyHiddenItemIds } =
     useSurveyState(activityProgress);
 
-  const { hasNextSubStep, hasPrevSubStep, handleNextSubStep, handlePrevSubStep, nextButtonText } =
-    useSubSteps({ item });
+  const {
+    hasNextSubStep,
+    hasPrevSubStep,
+    handleSubmitSubStep,
+    handleNextSubStep,
+    handlePrevSubStep,
+    nextButtonText,
+  } = useSubSteps({ item });
 
   const canGoBack = !item?.config.removeBackButton && context.activity.responseIsEditable;
 
@@ -308,6 +314,8 @@ const PassingScreen = (props: Props) => {
 
     conditionallyHiddenItemIds?.forEach(removeItemAnswer);
 
+    handleSubmitSubStep();
+
     // If there are no more steps and no more subSteps, open the submit modal
     if (!hasNextStep && !hasNextSubStep) {
       return openSubmitModal();
@@ -320,6 +328,7 @@ const PassingScreen = (props: Props) => {
     removeWarningBanner,
     conditionallyHiddenItemIds,
     removeItemAnswer,
+    handleSubmitSubStep,
     hasNextStep,
     hasNextSubStep,
     onNext,

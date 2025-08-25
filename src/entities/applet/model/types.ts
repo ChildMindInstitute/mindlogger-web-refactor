@@ -208,6 +208,7 @@ export type UpdateStepPayload = {
 };
 
 export type UpdateSubStepPayload = UpdateStepPayload & {
+  item: ItemRecord;
   subStep: number;
 };
 
