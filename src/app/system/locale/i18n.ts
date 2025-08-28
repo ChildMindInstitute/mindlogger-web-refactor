@@ -6,6 +6,7 @@ import elResources from '~/i18n/el/translation.json';
 import enResources from '~/i18n/en/translation.json';
 import esResources from '~/i18n/es/translation.json';
 import frResources from '~/i18n/fr/translation.json';
+import ptResources from '~/i18n/pt/translation.json';
 
 const i18nManager = {
   async initialize() {
@@ -19,8 +20,9 @@ const i18nManager = {
           fr: frResources,
           el: elResources,
           es: esResources,
+          pt: ptResources,
         },
-        supportedLngs: ['en', 'fr', 'el', 'es'],
+        supportedLngs: ['en', 'fr', 'el', 'es', 'pt'],
         interpolation: {
           escapeValue: false,
         },
