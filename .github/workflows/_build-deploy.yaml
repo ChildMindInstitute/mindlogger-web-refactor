@@ -156,7 +156,7 @@ jobs:
         run: |
           aws ssm put-parameter \
                   --name "/curious/app/web/${{ inputs.env-name }}/version" \
-                  --value "${{ inputs.image-tag }}" \
+                  --value "${{ inputs.version }}" \
                   --type "String" \
                   --overwrite
       - name: "Send Slack message on success"
