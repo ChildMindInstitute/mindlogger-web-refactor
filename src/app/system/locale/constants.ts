@@ -5,5 +5,5 @@ export enum SupportableLanguage {
   French = 'fr',
   Greek = 'el',
   Spanish = 'es',
-  Portuguese = 'pt',
+  Portuguese = 'pt-BR',
 }

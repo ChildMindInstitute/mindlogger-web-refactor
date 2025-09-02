@@ -20,9 +20,9 @@ const i18nManager = {
           fr: frResources,
           el: elResources,
           es: esResources,
-          pt: ptResources,
+          'pt-BR': ptResources,
         },
-        supportedLngs: ['en', 'fr', 'el', 'es', 'pt'],
+        supportedLngs: ['en', 'fr', 'el', 'es', 'pt-BR'],
         interpolation: {
           escapeValue: false,
         },
