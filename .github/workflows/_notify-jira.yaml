@@ -1,0 +1,32 @@
+name: _notify-jira.yaml
+on:
+#  workflow_call:
+  workflow_dispatch:
+    inputs:
+      previous-tag:
+        required: true
+        description: Previous tag
+      current-tag:
+        required: true
+        default: dev
+        description: Current tag
+
+
+
+jobs:
+  send-notifications:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout
+      - name: Determine Jira tickets from commit messages
+        id: jira-tickets
+        run: |
+          currentTag="${{ inputs.current-tag }}"
+          previousTag="${{ inputs.previous-tag }}"
+          git fetch --unshallow
+          commitMessages=$(git log --pretty=%B $previousTag..$currentTag)
+          echo "Commit messages since the last release: ${commitMessages}"
+          jiraTickets=$(echo "$commitMessages" | grep -io 'M2-[0-9]\+' | tr '[:lower:]' '[:upper:]' | sort | uniq | tr '\n' ' ')
+          echo "Jira tickets since the last release: ${jiraTickets}"
+          echo "tickets=${jiraTickets}" >> $GITHUB_OUTPUT

@@ -144,8 +144,19 @@ jobs:
     if: ${{ !cancelled() && (needs.build-deploy.result == 'success') }}
     needs:
       - build-deploy
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - name: "Send Slack message on success"
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: success
+          SLACK_WEBHOOK: ${{ secrets.slack-webhook }}
+          SLACKIFY_MARKDOWN: true
+          MSG_MINIMAL: actions url
+          SLACK_TITLE: Web Deployed to ${{ inputs.env-name }}
+          SLACK_MESSAGE: '🚀 Deployment was successful.  Version: *${{ inputs.version }}*'
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -159,12 +170,4 @@ jobs:
                   --value "${{ inputs.version }}" \
                   --type "String" \
                   --overwrite
-      - name: "Send Slack message on success"
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_COLOR: success
-          SLACK_WEBHOOK: ${{ secrets.slack-webhook }}
-          SLACKIFY_MARKDOWN: true
-          MSG_MINIMAL: actions url
-          SLACK_TITLE: Web Deployed to ${{ inputs.env-name }}
-          SLACK_MESSAGE: '🚀 Deployment was successful.  Version: *${{ inputs.version }}*'
+
