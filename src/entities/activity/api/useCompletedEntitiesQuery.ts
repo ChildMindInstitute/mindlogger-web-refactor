@@ -5,7 +5,7 @@ type Options<TData> = QueryOptions<FetchFn, TData>;
 
 type Params = {
   appletId: string;
-  version: string;
+  version?: string;
   fromDate: string;
 };
 
