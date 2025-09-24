@@ -24,13 +24,7 @@ export type ID = string;
 
 export interface GetCompletedEntitiesPayload {
   appletId: ID;
-  version: string;
-  fromDate: string; // example: 2022-01-01
-}
-
-export interface GetCompletedEntitiesPayload {
-  appletId: ID;
-  version: string;
+  version?: string;
   fromDate: string; // example: 2022-01-01
 }
 
