@@ -16,11 +16,16 @@ const authFile = path.join(__dirname, 'playwright/.auth/user.json')
  */
 export default defineConfig({
   // Global setup for authentication
-  globalSetup: require.resolve('./global-setup'),
+  globalSetup: require.resolve('./auth.setup.ts'),
 
   // Base URL for HTTP requests
   use: {
-    baseURL: 'https://api-uat.cmiml.net', // Your API or web application base URL
+    baseURL: process.env.BASE_URL, // Your API or web application base URL
+    extraHTTPHeaders: {
+      // Add authorization token to all requests. authHeader, content type.  Reference the locust headers
+      // Assuming personal access token available in the environment.
+      'Authorization': `bearer ${process.env.TOKEN}`,
+    },
     storageState: authFile, // Path to store/load authentication state
     trace: 'on-first-retry', // Collect trace when retrying failed tests
     // Other common options like headless, viewport, etc. can be added here
