@@ -1,7 +1,12 @@
+
 import { request, expect } from '@playwright/test';
+import dotenv from 'dotenv';
 import path from 'path';
 
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+
 const authFile = path.join(__dirname, 'playwright/.auth/user.json');
+let apiToken = '';
 
 async function globalSetup() {
     const requestContext = await request.newContext({
@@ -14,6 +19,11 @@ async function globalSetup() {
             'email': process.env.EMAIL,
             'password': process.env.PASSWORD,
         },
+        headers: {
+            // authorization: `Bearer ${VALUE}`,
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
     });
 
     expect(response.ok()).toBeTruthy();
@@ -21,23 +31,9 @@ async function globalSetup() {
     // Save the authentication state (e.g., cookies, tokens)
     await requestContext.storageState({ path: authFile });
     const body = await response.json();
-    process.env.TOKEN = body.data.accessToken;
+    // console.log(body.result.token.accessToken);
+
+    process.env.API_TOKEN = body.result.token.accessToken;
 }
 
 export default globalSetup;
-
-// import { test as setup } from '@playwright/test';
-// import path from 'path';
-
-// const authFile = path.join(__dirname, 'playwright/.auth/user.json');
-
-// setup('authenticate', async ({ request }) => {
-//     // Send authentication request.
-//     // await request.post('/auth/login', {
-//     //     // data: {
-//     //     //     'email': 'email',
-//     //     //     'password': 'password',
-//     //     // }
-//     // });
-//     // await request.storageState({ path: authFile });
-// });

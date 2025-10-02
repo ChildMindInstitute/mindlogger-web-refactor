@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const authFile = path.join(__dirname, 'playwright/.auth/user.json')
 
@@ -24,7 +27,7 @@ export default defineConfig({
     extraHTTPHeaders: {
       // Add authorization token to all requests. authHeader, content type.  Reference the locust headers
       // Assuming personal access token available in the environment.
-      'Authorization': `bearer ${process.env.TOKEN}`,
+      'Authorization': `bearer ${process.env.API_TOKEN}`,
     },
     storageState: authFile, // Path to store/load authentication state
     trace: 'on-first-retry', // Collect trace when retrying failed tests
