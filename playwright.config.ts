@@ -27,7 +27,7 @@ export default defineConfig({
     extraHTTPHeaders: {
       // Add authorization token to all requests. authHeader, content type.  Reference the locust headers
       // Assuming personal access token available in the environment.
-      'Authorization': `bearer ${process.env.API_TOKEN}`,
+      'Authorization': `Bearer ${process.env.API_TOKEN || ''}`,
     },
     storageState: authFile, // Path to store/load authentication state
     trace: 'on-first-retry', // Collect trace when retrying failed tests
