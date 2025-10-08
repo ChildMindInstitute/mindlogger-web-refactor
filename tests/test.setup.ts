@@ -31,4 +31,38 @@ test('User authenticates through the login page and is redirected to the applet 
   // Optionally, check for an element that is only visible when logged in
   const myTestElement = page.getByTestId('applet-list');
   await expect(myTestElement).toBeVisible();
+// });
+
+// test('Verify that the applet list page displays applets', async ({ page }) => {
+  // Assuming the user is already logged in from the previous test
+  // Navigate to the applets list page
+  // await page.goto('https://web-uat.cmiml.net/protected/applets');
+  // Wait for the applet list to load and click on the first applet
+  // TODO change this test step to use index 0 of the array of applets to ensure we select the first applet regardless of the name.
+  await page.getByRole('heading', { name: 'Applets1 tests'}).click();
+  //Wait for the applet details page to load and assert that there is an available activity
+  await expect(page.getByRole('heading', { name: 'Available'})).toBeVisible();
+  // Click the start button to start the applet activity
+  await page.getByRole('button', { name: 'Start'}).click();
+  // Wait for the first activity page to load and assert that the progress bar is visible
+  const progressBar = page.getByRole('progressbar')
+  await expect(progressBar).toBeVisible()
+  // click the start button to navigate to the first activties question
+  await page.getByRole('button', { name: 'Start'}).click();
+  // click the next button without selecting an option to trigger the warning banner
+  await page.getByRole('button', { name: 'Next'}).click();
+  const warningBanner = page.getByTestId('warning-banner')
+  await expect(warningBanner).toBeVisible();
+  // select an option and click next to trigger the submit popup banner
+  await page.getByTestId('select-box').click();
+  await page.getByRole('button', { name: 'Next'}).click();
+  // assert that the submit popup banner is visible and click the submit button
+  const popupBannerSubmit = page.getByTestId('popup-primary-button')
+  expect(popupBannerSubmit).toBeVisible()
+  await popupBannerSubmit.click();
+  // assert that the submit popup banner is hidden and the success banner is visible with the text 'Done'
+  await expect(popupBannerSubmit).toBeHidden();
+  const successBanner = page.getByTestId('success-banner')
+  await expect(successBanner).toBeVisible()
+  await expect(successBanner).toContainText('Done')
 });
