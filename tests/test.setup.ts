@@ -1,4 +1,48 @@
 import { test, expect } from '@playwright/test';
+import { v4 as uuidv4 } from 'uuid';
+
+async function postDataToAPI({ url, data }: { url: any; data: any; }): Promise<any> {
+  try {
+    const response = await fetch(url, {
+      method: 'POST', // Specify the HTTP method as POST
+      headers: {
+        'Content-Type': 'application/json' // Indicate that the request body is JSON
+      },
+      body: JSON.stringify(data) // Convert the data object to a JSON string
+    });
+
+    if (!response.ok) {
+      // Handle HTTP errors (e.g., 404 Not Found, 500 Internal Server Error)
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseData = await response.json(); // Parse the JSON response
+    console.log('Success:', responseData);
+    return responseData; // Return the parsed response data
+  } catch (error) {
+    console.error('Error posting data:', error);
+    throw error; // Re-throw the error for further handling
+  }
+}
+
+const appletCreateAPIURL = 'https://api-uat.cmiml.net/applets/{applet_id}/publish';
+function generateUUIDWithLibrary() {
+  return uuidv4();
+}
+const appletId = generateUUIDWithLibrary();
+const fullURL = appletCreateAPIURL.replace('{applet_id}', appletId);  
+const myData = {};
+
+// Call the function to post data
+postDataToAPI({ url: fullURL, data: myData })
+  .then(responseData => {
+    // Handle the response data as needed
+    console.log('Applet created with ID:', appletId);
+  })
+  .catch(error => {
+    // Handle errors as needed
+    console.error('Failed to create applet:', error);
+  });
 
 // test.use({ storageState: 'playwright/.auth/user.json' });
 
@@ -66,3 +110,9 @@ test('User authenticates through the login page and is redirected to the applet 
   await expect(successBanner).toBeVisible()
   await expect(successBanner).toContainText('Done')
 });
+
+test('Verify that a user can access an assessment on the web, completing it to submit the answers', async ({ page }) => {
+
+})
+
+
