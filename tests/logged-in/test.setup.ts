@@ -1,40 +1,22 @@
 import { test, expect } from '@playwright/test';
 import { v4 as uuidv4 } from 'uuid';
+import { DataToAPI } from '../helpers/API-methods';
 
-async function postDataToAPI({ url, data }: { url: any; data: any; }): Promise<any> {
-  try {
-    const response = await fetch(url, {
-      method: 'POST', // Specify the HTTP method as POST
-      headers: {
-        'Content-Type': 'application/json' // Indicate that the request body is JSON
-      },
-      body: JSON.stringify(data) // Convert the data object to a JSON string
-    });
-
-    if (!response.ok) {
-      // Handle HTTP errors (e.g., 404 Not Found, 500 Internal Server Error)
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const responseData = await response.json(); // Parse the JSON response
-    console.log('Success:', responseData);
-    return responseData; // Return the parsed response data
-  } catch (error) {
-    console.error('Error posting data:', error);
-    throw error; // Re-throw the error for further handling
-  }
-}
-
+// Define the API endpoint URL with a placeholder for the applet ID
 const appletCreateAPIURL = 'https://api-uat.cmiml.net/applets/{applet_id}/publish';
 function generateUUIDWithLibrary() {
   return uuidv4();
 }
+
+// Generate a new UUID for the applet ID
 const appletId = generateUUIDWithLibrary();
-const fullURL = appletCreateAPIURL.replace('{applet_id}', appletId);  
+// Replace the placeholder in the URL with the generated applet ID
+const fullURL = appletCreateAPIURL.replace('{applet_id}', appletId);
 const myData = {};
 
 // Call the function to post data
-postDataToAPI({ url: fullURL, data: myData })
+
+DataToAPI({ url: fullURL, data: myData, method: 'POST' })
   .then(responseData => {
     // Handle the response data as needed
     console.log('Applet created with ID:', appletId);
@@ -55,7 +37,7 @@ test.skip('Can log into the app and verify the main landing page', async ({ page
   await expect(myTestElement).toBeVisible();
 });
 
-//
+
 test('User authenticates through the login page and is redirected to the applet list page', async ({ page }) => {
   await page.goto('https://web-uat.cmiml.net/login');
 
@@ -75,31 +57,31 @@ test('User authenticates through the login page and is redirected to the applet 
   // Optionally, check for an element that is only visible when logged in
   const myTestElement = page.getByTestId('applet-list');
   await expect(myTestElement).toBeVisible();
-// });
+  // });
 
-// test('Verify that the applet list page displays applets', async ({ page }) => {
+  // test('Verify that the applet list page displays applets', async ({ page }) => {
   // Assuming the user is already logged in from the previous test
   // Navigate to the applets list page
   // await page.goto('https://web-uat.cmiml.net/protected/applets');
   // Wait for the applet list to load and click on the first applet
   // TODO change this test step to use index 0 of the array of applets to ensure we select the first applet regardless of the name.
-  await page.getByRole('heading', { name: 'Applets1 tests'}).click();
+  await page.getByRole('heading', { name: 'Applets1 tests' }).click();
   //Wait for the applet details page to load and assert that there is an available activity
-  await expect(page.getByRole('heading', { name: 'Available'})).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Available' })).toBeVisible();
   // Click the start button to start the applet activity
-  await page.getByRole('button', { name: 'Start'}).click();
+  await page.getByRole('button', { name: 'Start' }).click();
   // Wait for the first activity page to load and assert that the progress bar is visible
   const progressBar = page.getByRole('progressbar')
   await expect(progressBar).toBeVisible()
   // click the start button to navigate to the first activties question
-  await page.getByRole('button', { name: 'Start'}).click();
+  await page.getByRole('button', { name: 'Start' }).click();
   // click the next button without selecting an option to trigger the warning banner
-  await page.getByRole('button', { name: 'Next'}).click();
+  await page.getByRole('button', { name: 'Next' }).click();
   const warningBanner = page.getByTestId('warning-banner')
   await expect(warningBanner).toBeVisible();
   // select an option and click next to trigger the submit popup banner
   await page.getByTestId('select-box').click();
-  await page.getByRole('button', { name: 'Next'}).click();
+  await page.getByRole('button', { name: 'Next' }).click();
   // assert that the submit popup banner is visible and click the submit button
   const popupBannerSubmit = page.getByTestId('popup-primary-button')
   expect(popupBannerSubmit).toBeVisible()
