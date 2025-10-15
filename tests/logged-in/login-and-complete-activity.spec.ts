@@ -2,6 +2,9 @@ import { test, expect } from '@playwright/test';
 import { v4 as uuidv4 } from 'uuid';
 import { dataToAPI, createAppletPayload } from '../utils/API-methods';
 
+// Can use test.use to use storage state.
+// test.use({ storageState: 'playwright/.auth/user.json' });
+
 // Define the API endpoint URL with a placeholder for the applet ID
 const appletCreateAPIURL = 'https://api-uat.cmiml.net/applets/{applet_id}/publish';
 function generateUUIDWithLibrary() {
@@ -14,10 +17,11 @@ const appletId = generateUUIDWithLibrary();
 const fullURL = appletCreateAPIURL.replace('{applet_id}', appletId);
 const myData = createAppletPayload;
 
+// TODO need to add headers if the API request login 
+// from the setup file is not working
 // Call the function to post data
-
 dataToAPI({ url: fullURL, data: myData, method: 'POST' })
-  .then(responseData => {
+  .then(() => {
     // Handle the response data as needed
     console.log('Applet created with ID:', appletId);
   })
@@ -26,9 +30,7 @@ dataToAPI({ url: fullURL, data: myData, method: 'POST' })
     console.error('Failed to create applet:', error);
   });
 
-// test.use({ storageState: 'playwright/.auth/user.json' });
-
-// unskip this test to test local storage of bearer token is working
+// unskip this test to test if the setup files bearer token is working
 test.skip('Can log into the app and verify the main landing page', async ({ page }) => {
   await page.goto('https://web-uat.cmiml.net/protected/applets');
   // await page.waitForSelector('title', {state:'visible'});
@@ -87,8 +89,6 @@ test('User authenticates through the login page and is redirected to the applet 
   await expect(successBanner).toContainText('Done')
 });
 
-test('Verify that a user can access an assessment on the web, completing it to submit the answers', async ({ page }) => {
+test.skip('Verify that a user can access an assessment on the web, completing it to submit the answers', async ({ page }) => {
 
 })
-
-
