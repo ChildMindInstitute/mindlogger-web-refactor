@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { v4 as uuidv4 } from 'uuid';
-import { dataToAPI, createAppletPayload } from '../helpers/API-methods';
+import { dataToAPI, createAppletPayload } from '../utils/API-methods';
 
 // Define the API endpoint URL with a placeholder for the applet ID
 const appletCreateAPIURL = 'https://api-uat.cmiml.net/applets/{applet_id}/publish';

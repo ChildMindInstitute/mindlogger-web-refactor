@@ -43,6 +43,12 @@ export default defineConfig({
       testMatch: /.*\.setup\.ts/, //Matches the authentication setup file
     },
     {
+      name: 'Smoke Tests',
+      testMatch: /.*\.spec\.ts/,  //Matches the smoke test files
+      retries: 0,
+      dependencies: ['setup'],
+    },
+    {
       name: "chrome",
       use: {
         ...devices["Desktop Chrome"],
@@ -97,7 +103,7 @@ export default defineConfig({
   ],
 
   // Other configuration options
-  testDir: 'tests',
+  testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
