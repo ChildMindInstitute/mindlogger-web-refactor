@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { v4 as uuidv4 } from 'uuid';
-import { DataToAPI } from '../helpers/API-methods';
+import { dataToAPI, createAppletPayload } from '../helpers/API-methods';
 
 // Define the API endpoint URL with a placeholder for the applet ID
 const appletCreateAPIURL = 'https://api-uat.cmiml.net/applets/{applet_id}/publish';
@@ -12,11 +12,11 @@ function generateUUIDWithLibrary() {
 const appletId = generateUUIDWithLibrary();
 // Replace the placeholder in the URL with the generated applet ID
 const fullURL = appletCreateAPIURL.replace('{applet_id}', appletId);
-const myData = {};
+const myData = createAppletPayload;
 
 // Call the function to post data
 
-DataToAPI({ url: fullURL, data: myData, method: 'POST' })
+dataToAPI({ url: fullURL, data: myData, method: 'POST' })
   .then(responseData => {
     // Handle the response data as needed
     console.log('Applet created with ID:', appletId);
@@ -37,23 +37,17 @@ test.skip('Can log into the app and verify the main landing page', async ({ page
   await expect(myTestElement).toBeVisible();
 });
 
-
 test('User authenticates through the login page and is redirected to the applet list page', async ({ page }) => {
   await page.goto('https://web-uat.cmiml.net/login');
-
   // Fill in login form
   await page.fill('input[name="email"]', process.env.EMAIL || '');
   await page.fill('input[name="password"]', process.env.PASSWORD || '');
-
   // Submit the form
   await page.click('button[type="submit"]');
-
   // Wait for navigation to the protected page
   await page.waitForURL('**/protected/applets');
-
   // Verify that we are on the protected page
   await expect(page).toHaveURL(/.*\/protected\/applets/);
-
   // Optionally, check for an element that is only visible when logged in
   const myTestElement = page.getByTestId('applet-list');
   await expect(myTestElement).toBeVisible();
