@@ -1,9 +1,45 @@
 import { test, expect } from '@playwright/test';
 import { v4 as uuidv4 } from 'uuid';
 import { dataToAPI, createAppletPayload } from '../utils/API-methods';
+import fs from 'fs';
 
-// Can use test.use to use storage state.
-// test.use({ storageState: 'playwright/.auth/user.json' });
+const authFile = 'playwright/.auth/token.json';
+let token = '';
+
+// moving the auth.setup and playwright config logic to the test file to see if I can log in at the test spec level.
+//test.use evaluates before the beforeAll function
+//it is possible to modify the in memory API_TOKEN value without chaning the original .env variable value
+test.use({
+  baseURL: process.env.BASE_URL, // Your API or web application base URL
+  extraHTTPHeaders: {
+    // Add authorization token to all requests. authHeader, content type.  Reference the locust headers
+    // Assuming personal access token available in the environment.
+    'Authorization': `Bearer ${process.env.API_TOKEN || ''}`,
+  },
+  storageState: authFile, // Path to store/load authentication state
+  trace: 'on-first-retry', // Collect trace when retrying failed tests
+  // Other common options like headless, viewport, etc. can be added here
+});
+
+test.beforeAll(async ({ request }) => {
+  const response = await request.post('/auth/login', {
+    data: {
+      'email': process.env.EMAIL,
+      'password': process.env.PASSWORD,
+    },
+    headers: {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+  
+  expect(response.ok()).toBeTruthy();
+  const body = await response.json();
+  token = body.result.token.accessToken;
+  expect(body.result.token.tokenType).toBe('Bearer');
+  const tokenFilePath = 'playwright/.auth/token.json';
+  const writeFileSync = fs.writeFileSync(tokenFilePath, JSON.stringify({ 'Bearer': token }), 'utf8');
+});
 
 // Define the API endpoint URL with a placeholder for the applet ID
 const appletCreateAPIURL = 'https://api-uat.cmiml.net/applets/{applet_id}/publish';
