@@ -12,7 +12,7 @@ dotenv.config({ path: path.resolve(__dirname, '.env') });
 const authFile = path.join(__dirname, '.auth/session.json')
 
 export default defineConfig({
-  testDir: "./tests",
+  testDir: './tests',
   use: {
     baseURL: process.env.BASE_URL,
     storageState: authFile, // Path to store/load authentication state
@@ -22,22 +22,22 @@ export default defineConfig({
   projects: [
     // Setup project that authenticates and saves storage state
     {
-      name: "setup",
-      testMatch: '*.setup.ts',
+      name: 'setup',
+      testMatch: /global\.setup\.ts/,
       use: {
-        ...devices["Desktop Chrome"],
+        ...devices['Desktop Chrome'],
       },
     },
     {
     // Project for Chrome browser
-      name: "chrome",
-      testMatch: '/**/*.spec.ts',
+      name: 'chrome',
+      // testMatch: '/**/*.spec.ts',
       use: {
-        ...devices["Desktop Chrome"],
+        ...devices['Desktop Chrome'],
         // Use prepared auth state.
         storageState: authFile,
       },
-      dependencies: ["setup"],
+      dependencies: ['setup'],
     },
     //TODO: Enable other browsers when needed.
     //At the moment all browsers but Chrome fail.
