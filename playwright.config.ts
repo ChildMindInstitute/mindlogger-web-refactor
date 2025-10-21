@@ -23,7 +23,7 @@ export default defineConfig({
     // Setup project that authenticates and saves storage state
     {
       name: "setup",
-      testMatch: /.*\.setup\.ts/,
+      testMatch: '*.setup.ts',
       use: {
         ...devices["Desktop Chrome"],
       },
@@ -31,7 +31,7 @@ export default defineConfig({
     {
     // Project for Chrome browser
       name: "chrome",
-      testMatch: /.*\.spec\.ts/,
+      testMatch: '/**/*.spec.ts',
       use: {
         ...devices["Desktop Chrome"],
         // Use prepared auth state.
