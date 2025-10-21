@@ -60,10 +60,11 @@ jobs:
     needs: [ ref, build-deploy ]
     uses: ./.github/workflows/_notify-jira.yaml
     with:
-      env-name: prod
+      env-name: uat
       git-tag: ${{ needs.ref.outputs.target-ref }}
     secrets:
       devops-repo-key: ${{ secrets.DEVOPS_REPO_KEY }}
       jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
-      github-token: ${{ secrets.DEVOPS_GITHUB_TOKEN }}
-      slack-webhook: ${{ secrets.SLACK_WEBHOOK_RELEASE_COMMUNICATIONS }}
+      github-pat: ${{ secrets.DEVOPS_GITHUB_TOKEN }}
+      #slack-webhook: ${{ secrets.SLACK_WEBHOOK_RELEASE_COMMUNICATIONS }}
+      slack-webhook: ${{ secrets.SLACK_WEBHOOK_NOTIFICATION_TEST }}
