@@ -31,7 +31,6 @@ jobs:
         with:
           repository: ChildMindInstitute/cmiml-devops
           ssh-key: ${{ secrets.devops-repo-key }}
-#          token: ${{ secrets.github-pat }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@v6
@@ -50,16 +49,3 @@ jobs:
           unbuffer uv run slack-issues.py from-release-notes ${{ inputs.git-tag }} ${{ inputs.env-name }}
         working-directory: ./jira
 
-#      - uses: actions/checkout@v4
-#        name: Checkout
-#      - name: Determine Jira tickets from commit messages
-#        id: jira-tickets
-#        run: |
-#          currentTag="${{ inputs.current-tag }}"
-#          previousTag="${{ inputs.previous-tag }}"
-#          git fetch --unshallow
-#          commitMessages=$(git log --pretty=%B $previousTag..$currentTag)
-#          echo "Commit messages since the last release: ${commitMessages}"
-#          jiraTickets=$(echo "$commitMessages" | grep -io 'M2-[0-9]\+' | tr '[:lower:]' '[:upper:]' | sort | uniq | tr '\n' ' ')
-#          echo "Jira tickets since the last release: ${jiraTickets}"
-#          echo "tickets=${jiraTickets}" >> $GITHUB_OUTPUT

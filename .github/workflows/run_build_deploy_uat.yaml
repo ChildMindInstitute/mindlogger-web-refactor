@@ -43,17 +43,17 @@ jobs:
           echo "Target reference: $TARGET_REF"
           echo "ref=$TARGET_REF" >> $GITHUB_OUTPUT
 
-#  build-deploy:
-#    name: Build and Deploy
-#    uses: ./.github/workflows/_build-deploy.yaml
-#    needs: ref
-#    with:
-#      env-name: uat
-#      version: ${{ needs.ref.outputs.target-ref }}
-#      git-ref: ${{ needs.ref.outputs.target-ref }}
-#    secrets:
-#      slack-webhook: ${{ secrets.SLACK_WEBHOOK_DEPLOY_TO_UAT }}
-#      datadog-api-key: ${{ secrets.DATADOG_API_KEY }}
+  build-deploy:
+    name: Build and Deploy
+    uses: ./.github/workflows/_build-deploy.yaml
+    needs: ref
+    with:
+      env-name: uat
+      version: ${{ needs.ref.outputs.target-ref }}
+      git-ref: ${{ needs.ref.outputs.target-ref }}
+    secrets:
+      slack-webhook: ${{ secrets.SLACK_WEBHOOK_DEPLOY_TO_UAT }}
+      datadog-api-key: ${{ secrets.DATADOG_API_KEY }}
 
   notify:
     name: Notifications
@@ -67,5 +67,4 @@ jobs:
       devops-repo-key: ${{ secrets.DEVOPS_REPO_KEY }}
       jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
       github-pat: ${{ secrets.DEVOPS_GITHUB_TOKEN }}
-      #slack-webhook: ${{ secrets.SLACK_WEBHOOK_RELEASE_COMMUNICATIONS }}
-      slack-webhook: ${{ secrets.SLACK_WEBHOOK_NOTIFICATION_TEST }}
+      slack-webhook: ${{ secrets.SLACK_WEBHOOK_RELEASE_COMMUNICATIONS }}
