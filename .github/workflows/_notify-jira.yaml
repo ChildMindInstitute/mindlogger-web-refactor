@@ -42,7 +42,7 @@ jobs:
           GITHUB_REPO: ${{ github.repository }}
           JIRA_USERNAME: andrew.weiland@childmind.org
           JIRA_API_TOKEN: ${{ secrets.jira-api-token }}
-          #GITHUB_TOKEN: ${{ secrets.github-pat }}
+          GITHUB_TOKEN: ${{ secrets.github-pat }}
           SLACK_WEBHOOK: ${{ secrets.slack-webhook }}
           MENTION_USERS: U07AP86C133,U022MMR13KQ,U06HTJBUXC4
         run: |
