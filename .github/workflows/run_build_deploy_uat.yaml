@@ -57,8 +57,7 @@ jobs:
 
   notify:
     name: Notifications
-#    needs: [ ref, build-deploy ]
-    needs: ref
+    needs: [ ref, build-deploy ]
     uses: ./.github/workflows/_notify-jira.yaml
     with:
       env-name: uat
