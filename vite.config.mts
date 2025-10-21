@@ -13,7 +13,7 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
 
   const baseConfig: UserConfig = {
     optimizeDeps: {
-      exclude: ['vite']
+      exclude: ['vite', 'node_modules', 'tests/**/*.spec.ts', 'tests/**/*.setup.ts']
     },
     define: {
       global: 'globalThis',
