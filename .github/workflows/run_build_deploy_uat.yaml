@@ -1,15 +1,19 @@
 name: Build and Deploy to UAT
 
 on:
-  push:
-    tags:
-      - "*-rc[0-9]+"
+#  push:
+#    tags:
+#      - "*-rc[0-9]+"
   workflow_dispatch:
     inputs:
       target-ref:
         description: The RC tag to use
         required: true
         type: string
+  release:
+    types:
+      - prereleased
+
 
 concurrency:
   cancel-in-progress: true
@@ -32,9 +36,9 @@ jobs:
         run: |
           TARGET_REF="${{ github.event.inputs.target-ref }}"
           # Use shell parameter expansion to provide a default value if input is unset or empty
-          # github.ref_name will be used if the input is not provided or empty
+          # github.event.release.tag_name will be used if the input is not provided or empty
           # Remove "refs/heads/" or "refs/tags/" if present in github.ref_name
-          TARGET_REF=${TARGET_REF:-$(echo "${{ github.ref_name }}" | sed 's/refs\/heads\///g' | sed 's/refs\/tags\///g')}
+          TARGET_REF=${TARGET_REF:-$(echo "${{ github.event.release.tag_name }}" | sed 's/refs\/heads\///g' | sed 's/refs\/tags\///g')}
 
           echo "Target reference: $TARGET_REF"
           echo "ref=$TARGET_REF" >> $GITHUB_OUTPUT
@@ -49,3 +53,18 @@ jobs:
       git-ref: ${{ needs.ref.outputs.target-ref }}
     secrets:
       slack-webhook: ${{ secrets.SLACK_WEBHOOK_DEPLOY_TO_UAT }}
+      datadog-api-key: ${{ secrets.DATADOG_API_KEY }}
+
+  notify:
+    name: Notifications
+    needs: [ ref, build-deploy ]
+    uses: ./.github/workflows/_notify-jira.yaml
+    with:
+      env-name: uat
+      git-tag: ${{ needs.ref.outputs.target-ref }}
+    secrets:
+      devops-repo-key: ${{ secrets.DEVOPS_REPO_KEY }}
+      jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      github-pat: ${{ secrets.DEVOPS_GITHUB_TOKEN }}
+      #slack-webhook: ${{ secrets.SLACK_WEBHOOK_RELEASE_COMMUNICATIONS }}
+      slack-webhook: ${{ secrets.SLACK_WEBHOOK_NOTIFICATION_TEST }}
