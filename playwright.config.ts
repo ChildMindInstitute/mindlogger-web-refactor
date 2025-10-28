@@ -37,7 +37,7 @@ export default defineConfig({
         // Use prepared auth state.
         storageState: authFile,
       },
-      dependencies: ['setup'],
+      // dependencies: ['setup'],
     },
     //TODO: Enable other browsers when needed.
     //At the moment all browsers but Chrome fail.
