@@ -1,9 +1,4 @@
 import { test, expect } from '@playwright/test';
-const authFile = '.auth/session.json';
-
-test.describe('Assessment activity tests', () => {
-  // Use the authenticated storage state for tests in this describe block
-  test.use({ storageState: authFile });
 
   test('Verify that a user can access an assessment on the web, completing it to submit the answers', async ({ page }) => {
     // Assuming the user is already logged in through the global setup
@@ -40,4 +35,3 @@ test.describe('Assessment activity tests', () => {
     await expect(successBanner).toBeVisible()
     await expect(successBanner).toContainText('Done')
   });
-});

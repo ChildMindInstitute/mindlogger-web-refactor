@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 // Define the path to the authentication file 
-const authFile = '.auth/session.json'
+const authFile = 'tests/.auth/session.json'
 
 // Define a setup test to authenticate and save storage state into an auth file
 setup("authenticate", async ({ page }) => {

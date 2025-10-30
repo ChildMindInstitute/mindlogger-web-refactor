@@ -9,10 +9,10 @@ import dotenv from 'dotenv';
  */
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-// const authFile = path.join(__dirname, '.auth/session.json')
+const authFile = path.join(__dirname, 'tests/.auth/session.json')
 
 export default defineConfig({
-  // ,
+  testDir: './tests',
   use: {
     baseURL: process.env.BASE_URL,
     trace: 'on-first-retry', // Collect trace when retrying failed tests
@@ -26,14 +26,22 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
       },
+      teardown: 'teardown',
+    },
+    {
+      name: 'teardown',
+      testMatch: /global\.teardown\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
     },
     {
       // Project for Chrome browser
       name: 'chrome',
-      testDir: './tests',
-      // testMatch: '/**/*.spec.ts',
+      testMatch: '/**/*.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
+        storageState: authFile,
       },
       dependencies: ['setup'],
     },
