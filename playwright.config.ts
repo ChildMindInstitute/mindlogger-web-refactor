@@ -9,16 +9,15 @@ import dotenv from 'dotenv';
  */
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-const authFile = path.join(__dirname, '.auth/session.json')
+// const authFile = path.join(__dirname, '.auth/session.json')
 
 export default defineConfig({
-  testDir: './tests',
+  // ,
   use: {
     baseURL: process.env.BASE_URL,
-    storageState: authFile, // Path to store/load authentication state
     trace: 'on-first-retry', // Collect trace when retrying failed tests
     // Other common options like headless, viewport, etc. can be added here
-  },  
+  },
   projects: [
     // Setup project that authenticates and saves storage state
     {
@@ -29,15 +28,14 @@ export default defineConfig({
       },
     },
     {
-    // Project for Chrome browser
+      // Project for Chrome browser
       name: 'chrome',
+      testDir: './tests',
       // testMatch: '/**/*.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
-        // Use prepared auth state.
-        storageState: authFile,
       },
-      // dependencies: ['setup'],
+      dependencies: ['setup'],
     },
     //TODO: Enable other browsers when needed.
     //At the moment all browsers but Chrome fail.
