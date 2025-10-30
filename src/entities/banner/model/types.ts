@@ -5,7 +5,7 @@ export const Banners = [
   'ErrorBanner',
   'WarningBanner',
   'InfoBanner',
-  'RebrandBanner',
+  'AnnouncementBanner',
 ] as const;
 export type BannerType = (typeof Banners)[number];
 
