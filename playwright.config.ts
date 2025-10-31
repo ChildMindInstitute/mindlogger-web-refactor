@@ -36,6 +36,16 @@ export default defineConfig({
       },
     },
     {
+      name: 'loggedOut',
+      testMatch: '/logged-out/*.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        // Clears storage state for logged out tests
+        storageState: undefined,
+      },
+      dependencies: ['setup'],
+    },
+    {
       // Project for Chrome browser
       name: 'chrome',
       testMatch: '/**/*.spec.ts',
