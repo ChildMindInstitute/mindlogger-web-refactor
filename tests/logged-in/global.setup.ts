@@ -12,8 +12,8 @@ const authFile = 'tests/.auth/session.json'
 setup("authenticate", async ({ page }) => {
     await page.goto('/login');
     // Fill in login form
-    await page.fill('input[name="email"]', process.env.EMAIL || '');
-    await page.fill('input[name="password"]', process.env.PASSWORD || '');
+    await page.fill('input[name="email"]', process.env.PLAYWRIGHT_EMAIL || '');
+    await page.fill('input[name="password"]', process.env.PLAYWRIGHT_PASSWORD || '');
     // Submit the form
     await page.click('button[type="submit"]');
     // Wait for navigation to the protected page

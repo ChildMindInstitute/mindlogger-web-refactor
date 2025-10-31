@@ -14,7 +14,7 @@ const authFile = path.join(__dirname, 'tests/.auth/session.json')
 export default defineConfig({
   testDir: './tests',
   use: {
-    baseURL: process.env.BASE_URL,
+    baseURL: process.env.PLAYWRIGHT_BASE_URL,
     trace: 'on-first-retry', // Collect trace when retrying failed tests
     // Other common options like headless, viewport, etc. can be added here
   },
