@@ -13,7 +13,7 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
 
   const baseConfig: UserConfig = {
     optimizeDeps: {
-      exclude: ['vite']
+      exclude: ['vite', 'tests/*'],
     },
     define: {
       global: 'globalThis',
@@ -23,26 +23,6 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
     },
     plugins: [react(), nodePolyfills()],
     resolve: {
-      alias: {
-        '~': resolve(__dirname, 'src'),
-        Buffer: 'buffer',
-      },
-    },
-    test: {
-      setupFiles: ['./src/test/vitest.setup.ts'],
-      environment: 'jsdom',
-      server: {
-        deps: {
-          inline: ['vitest-canvas-mock'],
-        },
-      },
-      globals: true,
-      css: true,
-      environmentOptions: {
-        jsdom: {
-          resources: 'usable',
-        },
-      },
       alias: {
         '~': resolve(__dirname, 'src'),
         Buffer: 'buffer',
