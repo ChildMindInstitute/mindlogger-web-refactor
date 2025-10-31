@@ -28,26 +28,6 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
         Buffer: 'buffer',
       },
     },
-    test: {
-      setupFiles: ['./src/test/vitest.setup.ts'],
-      environment: 'jsdom',
-      server: {
-        deps: {
-          inline: ['vitest-canvas-mock'],
-        },
-      },
-      globals: true,
-      css: true,
-      environmentOptions: {
-        jsdom: {
-          resources: 'usable',
-        },
-      },
-      alias: {
-        '~': resolve(__dirname, 'src'),
-        Buffer: 'buffer',
-      },
-    },
     build: {
       sourcemap: env.VITE_ENV === 'dev',
     },

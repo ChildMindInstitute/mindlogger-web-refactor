@@ -66,10 +66,27 @@ jobs:
       - name: Install dependencies with frozen lockfile
         run: yarn install --frozen-lockfile
 
-      - name: Running tests
+      - name: Running unit tests
         env:
           REACT_APP_API_DOMAIN: http://localhost:8080
         run: yarn test
+
+      # Playwright tests
+      - name: Install Playwright dependencies
+        run: yarn playwright install
+      - name: Running e2e tests
+        env:
+          BASE_URL: https://web-uat.cmiml.net
+          BASE_URL_API: https://api-uat.cmiml.net
+          EMAIL: 'phillipe.bojorquez@childmind.org'
+          TEST_USER_0_EMAIL: 'phillipe.bojorquez@childmind.org'
+          TEST_USER_0_PASSWORD: ${{ secrets.PLAYWRIGHT_USER_PASSWORD }}
+          TEST_USER_1_EMAIL: ''
+          TEST_USER_1_PASSWORD: ''
+          PASSWORD: ${{ secrets.PLAYWRIGHT_USER_PASSWORD }}
+        run: |
+          yarn test:e2e
+
   build:
     runs-on: ubuntu-latest
     needs: tests
