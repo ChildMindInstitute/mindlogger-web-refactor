@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { RebrandBanner } from './index';
+import { AnnouncementBanner } from './index';
 
 import { BannerPayload } from '~/entities/banner/model';
 import { defaultBannersModel } from '~/entities/defaultBanners';
@@ -34,17 +34,17 @@ vi.mock('react-i18next', () => ({
   Trans: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-describe('RebrandBanner', () => {
+describe('AnnouncementBanner', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders with correct styling and content', () => {
     // Render the component
-    render(<RebrandBanner />);
+    render(<AnnouncementBanner />);
 
     // Check that the banner is rendered with the correct test ID
-    const banner = screen.getByTestId('rebrand-banner');
+    const banner = screen.getByTestId('announcement-banner');
     expect(banner).toBeInTheDocument();
 
     // Check that the banner has the correct background color
@@ -60,7 +60,7 @@ describe('RebrandBanner', () => {
 
   it('dispatches dismissBanner action with global scope when closed', () => {
     // Render the component
-    render(<RebrandBanner />);
+    render(<AnnouncementBanner />);
 
     // Find and click the close button
     const closeButton = screen.getByRole('button', { name: /close/i });
@@ -69,13 +69,13 @@ describe('RebrandBanner', () => {
     // Check that the dismissBanner action was dispatched with the correct payload
     expect(defaultBannersModel.actions.dismissBanner).toHaveBeenCalledWith({
       key: 'global',
-      bannerType: 'RebrandBanner',
+      bannerType: 'AnnouncementBanner',
     });
     expect(mockDispatch).toHaveBeenCalledWith({
       type: 'defaultBanners/dismissBanner',
       payload: {
         key: 'global',
-        bannerType: 'RebrandBanner',
+        bannerType: 'AnnouncementBanner',
       },
     });
   });
@@ -83,7 +83,7 @@ describe('RebrandBanner', () => {
   it('dispatches dismissBanner action with custom scope when provided', () => {
     // Render the component with a custom bannerScope
     const customScope = 'user-123';
-    render(<RebrandBanner bannerScope={customScope} />);
+    render(<AnnouncementBanner bannerScope={customScope} />);
 
     // Find and click the close button
     const closeButton = screen.getByRole('button', { name: /close/i });
@@ -92,29 +92,29 @@ describe('RebrandBanner', () => {
     // Check that the dismissBanner action was dispatched with the correct payload
     expect(defaultBannersModel.actions.dismissBanner).toHaveBeenCalledWith({
       key: customScope,
-      bannerType: 'RebrandBanner',
+      bannerType: 'AnnouncementBanner',
     });
     expect(mockDispatch).toHaveBeenCalledWith({
       type: 'defaultBanners/dismissBanner',
       payload: {
         key: customScope,
-        bannerType: 'RebrandBanner',
+        bannerType: 'AnnouncementBanner',
       },
     });
   });
 
   it('passes additional props to the Banner component', () => {
     // Render the component with additional props
-    render(<RebrandBanner data-custom="test-value" />);
+    render(<AnnouncementBanner data-custom="test-value" />);
 
     // Check that the additional props were passed to the Banner component
-    const banner = screen.getByTestId('rebrand-banner');
+    const banner = screen.getByTestId('announcement-banner');
     expect(banner).toHaveAttribute('data-custom', 'test-value');
   });
 
   it('renders with the correct icon', () => {
     // Render the component
-    render(<RebrandBanner />);
+    render(<AnnouncementBanner />);
 
     // Check that the banner contains an image
     const icon = screen.getByRole('img');
@@ -126,7 +126,7 @@ describe('RebrandBanner', () => {
     const mockOnClose = vi.fn();
 
     // Render the component with the custom onClose handler
-    render(<RebrandBanner onClose={mockOnClose} />);
+    render(<AnnouncementBanner onClose={mockOnClose} />);
 
     // Find and click the close button
     const closeButton = screen.getByRole('button', { name: /close/i });
@@ -135,7 +135,7 @@ describe('RebrandBanner', () => {
     // Verify that both the dismissBanner action and custom onClose handler were called
     expect(defaultBannersModel.actions.dismissBanner).toHaveBeenCalledWith({
       key: 'global',
-      bannerType: 'RebrandBanner',
+      bannerType: 'AnnouncementBanner',
     });
     expect(mockDispatch).toHaveBeenCalled();
     expect(mockOnClose).toHaveBeenCalledTimes(1);
