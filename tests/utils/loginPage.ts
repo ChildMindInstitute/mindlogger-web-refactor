@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { UserAPI } from './createUsers'; // Import the improved class
+import { UserAPI } from './userApi'; // Import the improved class
 
 // Function to perform login
 export const login = async (page: Page, url: any, email: string, password: string) => {

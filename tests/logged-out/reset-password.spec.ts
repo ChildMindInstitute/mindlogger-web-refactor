@@ -1,38 +1,21 @@
-import { test, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { login } from '../utils/loginPage.ts';
-import { UserAPI } from '../utils/createUsers.ts';
-import path from 'path';
+import { generateRandomUser } from '../utils/userApi.ts';
+import {test} from '../fixtures/fixtures.ts';
 import dotenv from 'dotenv';
+import path from 'path';
+
 
 // Load environment variables from .env file
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-test.beforeAll(async () => {
-
-    //apiAdminLogin();
-    // Example usage in a test or script:
-    (async () => {
-        const userApi = new UserAPI(); // Use default baseUrl
-        //TODO: Generate unique email for each test run with a GUID or timestamp
-        const random = Math.floor(Math.random() * 10000000);
-        await userApi.init();
-
-        const newUser = {
-            email: `test.automation+${random}@example.com`,
-            firstName: 'test',
-            lastName: `automation+${random}`,
-            password: 'SecurePass123!'
-        };
-
-        try {
-            const result = await userApi.createUser(newUser);
-            console.log('User created successfully:', result);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            await userApi.dispose();
-        }
-    });
+test.beforeAll(async ({api}) => {
+    const newUser = generateRandomUser();
+    const response = await api.createUser(newUser);
+    expect(response).toHaveProperty('result')
+    // TODO take newly created user and use it in these tests instead of the default .env one
+    // This will avoid email reset issues and encryption warnings.
+    // Keep a known email from .env for the reset twice quickly to get encryption warning
 });
 
 test('User can reset their password when logged in', async ({ page }) => {
@@ -88,8 +71,6 @@ test('User can reset their password when logged in', async ({ page }) => {
 
 test('User can reset their password through the web interface when logged out', async ({ page }) => {
     //TODO: Mock email sending and receiving for password reset link
-    //TODO: Use unique test email to ensure test isolation
-
     await page.goto('/login');
     await page.click('text=Forgot Password?');
     await page.fill('input[name="email"]', process.env.PLAYWRIGHT_EMAIL || '');
