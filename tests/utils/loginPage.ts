@@ -2,7 +2,7 @@ import { Page } from '@playwright/test';
 import { UserAPI } from './userApi'; // Import the improved class
 
 // Function to perform login
-export const login = async (page: Page, url: any, email: string, password: string) => {
+export const UIlogin = async (page: Page, url: any, email: string, password: string) => {
     await page.goto(url);
     // Fill in login form
     await page.fill('input[name="email"]', email || '');

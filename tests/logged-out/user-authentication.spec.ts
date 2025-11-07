@@ -1,9 +1,9 @@
-import { test, expect } from '@playwright/test';
-import { login } from '../utils/loginPage.ts';
+import { expect, test } from '@playwright/test';
+import { UIlogin } from '../utils/loginPage.ts';
 
 test('User recieves error message when no login credentials are used', async ({ page }) => {
     // Attempt to log in without entering any credentials
-    await login(page, '/login', '', '');
+    await UIlogin(page, '/login', '', '');
     const emailErrorMessage = page.getByText('Email must be valid.');
     await expect(emailErrorMessage).toHaveText('Email must be valid.');
     const passwordErrorMessage = page.getByText('Password is required.')
@@ -12,7 +12,7 @@ test('User recieves error message when no login credentials are used', async ({ 
 
 test('User receives an error message when using incorrect login credentials', async ({ page }) => {
     // Attempt to log in with incorrect credentials
-    await login(page, '/login', 'wrongemail@email.com', 'wrongpassword');
+    await UIlogin(page, '/login', 'wrongemail@email.com', 'wrongpassword');
     await expect(page.getByTestId('error-banner')).toBeVisible();
 });
 
@@ -26,7 +26,7 @@ test('Unauthenticated user is redirected to the /login page when attempting to a
 
 test('Authenticated user can navigate directly to a protected page', async ({ page }) => {
     // Log in with valid credentials
-    await login(page, '/login', process.env.PLAYWRIGHT_EMAIL || '', process.env.PLAYWRIGHT_PASSWORD || '')
+    await UIlogin(page, '/login', process.env.PLAYWRIGHT_EMAIL || '', process.env.PLAYWRIGHT_PASSWORD || '')
     // Wait for navigation to the protected page
     await page.waitForURL('/protected/applets');
     const appletList = page.getByTestId('applet-list');

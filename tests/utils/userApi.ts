@@ -1,13 +1,25 @@
 import { APIRequestContext, request } from '@playwright/test';
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
+// Load environment variables from .env file
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 interface CreateUserPayload {
+  confirmPassword?: string;
   email: string;
   firstName: string;
   lastName: string;
   password: string;
+}
+
+interface CreateUserResponse {
+  result: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    id: string;
+  };
 }
 
 export class UserAPI {
@@ -30,11 +42,11 @@ export class UserAPI {
 
       // Perform admin login
       const email = process.env.PLAYWRIGHT_ADMIN_EMAIL || 'admin@example.com';
-      const password = process.env.PLAYWRIGHT_ADMIN_PASSWORD || 'AdminPass123!';
+      const password = process.env.PLAYWRIGHT_ADMIN_PASSWORD || 'noPassword!';
       const loginResponse = await this.login(email, password);
       this.token = loginResponse.result.token.accessToken;
 
-      // Dispose old context and create new one with token
+      // Dispose old context and create new one with the token derived from the previous api context
       await this.apiContext.dispose();
       this.apiContext = await request.newContext({
         extraHTTPHeaders: {
@@ -50,7 +62,7 @@ export class UserAPI {
     }
   }
 
-  async createUser(payload: CreateUserPayload) {
+  async createUser(payload: CreateUserPayload): Promise<CreateUserResponse> {
     try {
       this.log(`Creating user: ${payload.email}`);
       const response = await this.apiContext.post(`${this.baseUrl}/users`, { data: payload });
@@ -59,9 +71,10 @@ export class UserAPI {
         const errorText = await response.text();
         throw new Error(`Failed to create user: ${response.status()} ${response.statusText()} - ${errorText}`);
       }
-
-      const result = await response.json();
-      this.log(`User created successfully: ${payload.email}`);
+      // The response object is from Playwright’s APIRequestContext.post() call.
+      // const result: CreateUserResponse This ensures type safety: if the API response doesn’t match this structure, TypeScript will warn you during development.
+      const result: CreateUserResponse = await response.json();
+      this.log(`User created successfully: ${result.result.email} (ID: ${result.result.id})`);
       return result;
     } catch (error) {
       this.log(`Error creating user: ${error}`);
@@ -119,6 +132,6 @@ export function generateRandomUser(): CreateUserPayload {
     email: `user${random}@example.com`,
     firstName: 'Test',
     lastName: `User${random}`,
-    password: 'SecurePass123!'
+    password: process.env.PLAYWRIGHT_GENERAL_PASSWORD || 'DefaultPassword123!'
   };
 }
