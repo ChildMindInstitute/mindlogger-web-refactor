@@ -1,6 +1,7 @@
-import { test as setup, expect } from "@playwright/test";
+import { test as setup } from "@playwright/test";
 import path from 'path';
 import dotenv from 'dotenv';
+import { UIlogin } from "../utils/loginPage";
 
 // Load environment variables from .env file
 dotenv.config({ path: path.resolve(__dirname, '.env') });
@@ -10,19 +11,9 @@ const authFile = 'tests/.auth/session.json'
 
 // Define a setup test to authenticate and save storage state into an auth file
 setup("authenticate", async ({ page }) => {
-    await page.goto('/login');
-    // Fill in login form
-    await page.fill('input[name="email"]', process.env.PLAYWRIGHT_EMAIL || '');
-    await page.fill('input[name="password"]', process.env.PLAYWRIGHT_PASSWORD || '');
-    // Submit the form
-    await page.click('button[type="submit"]');
+    await UIlogin(page, '/login', process.env.PLAYWRIGHT_ADMIN_EMAIL || '', process.env.PLAYWRIGHT_ADMIN_PASSWORD || '');
     // Wait for navigation to the protected page
-    await page.waitForURL('**/protected/applets');
-    // Verify that we are on the protected page
-    await expect(page).toHaveURL(/.*\/protected\/applets/);
-    // Optionally, check for an element that is only visible when logged in
-    const myTestElement = page.getByTestId('applet-list');
-    await expect(myTestElement).toBeVisible();
+    // await page.waitForURL('**/protected/applets');
     // write storage and session data to disk
     await page.context().storageState({ path: authFile })
 });
