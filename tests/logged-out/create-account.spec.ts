@@ -14,7 +14,7 @@ test('User can create an account through the web interface', async ({ page }) =>
     await page.getByText('Create an account').click();
     await page.waitForURL('/signup');
     await expect(header).toBeVisible();
-    createEmailUI(page, `${process.env.PLAYWRIGHT_TEST_USER_0_EMAIL}`, `${process.env.PLAYWRIGHT_TEST_USER_0_PASSWORD}`);
+    createEmailUI(page, `${process.env.PLAYWRIGHT_AUTOMATION_TEST_USER_EMAIL}`, `${process.env.PLAYWRIGHT_AUTOMATION_TEST_USER_PASSWORD}`);
     await page.getByRole('checkbox', { name: 'I agree to the Terms of Service' }).check();
     await page.getByRole('button', { name: 'Create Account' }).click();
 });

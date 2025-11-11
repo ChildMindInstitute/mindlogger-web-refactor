@@ -37,6 +37,8 @@ export const apiAdminLogin = async (page: Page, email: string, password: string)
         await userApi.dispose();
     }
 };
+
+// Function to create an account via UI
 export const createEmailUI = async (page: Page, email: string, password: string) => {
     await page.goto('/login');
     await page.getByText('Create an account').click();

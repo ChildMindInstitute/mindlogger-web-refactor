@@ -83,12 +83,11 @@ jobs:
         env:
           PLAYWRIGHT_BASE_URL: https://web-uat.cmiml.net
           PLAYWRIGHT_BASE_URL_API: https://api-uat.cmiml.net
-          PLAYWRIGHT_EMAIL: 'phillipe.bojorquez@childmind.org'
-          PLAYWRIGHT_TEST_USER_0_EMAIL: 'phillipe.bojorquez@childmind.org'
-          PLAYWRIGHT_TEST_USER_0_PASSWORD: ${{ secrets.PLAYWRIGHT_USER_PASSWORD }}
-          PLAYWRIGHT_TEST_USER_1_EMAIL: ''
-          PLAYWRIGHT_TEST_USER_1_PASSWORD: ''
-          PLAYWRIGHT_PASSWORD: ${{ secrets.PLAYWRIGHT_USER_PASSWORD }}
+          PLAYWRIGHT_ADMIN_EMAIL: 'automation.test+admin@example.com'
+          PLAYWRIGHT_ADMIN_PASSWORD: ${{ secrets.PLAYWRIGHT_ADMIN_PASSWORD }}
+          PLAYWRIGHT_AUTOMATION_TEST_USER_EMAIL: 'automation.test+user@example.com'
+          PLAYWRIGHT_AUTOMATION_TEST_USER_PASSWORD: ${{ secrets.PLAYWRIGHT_AUTOMATION_TEST_USER_PASSWORD }}
+          PLAYWRIGHT_GENERAL_PASSWORD: ${{ secrets.PLAYWRIGHT_GENERAL_PASSWORD }}
         run: |
           yarn test:e2e
 
