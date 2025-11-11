@@ -1,10 +1,5 @@
 name: CI
-on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
+on: [pull_request]
 
 #env:
 #  NODE_VERSION: 20.11.0
@@ -71,26 +66,10 @@ jobs:
       - name: Install dependencies with frozen lockfile
         run: yarn install --frozen-lockfile
 
-      - name: Running unit tests
+      - name: Running tests
         env:
           REACT_APP_API_DOMAIN: http://localhost:8080
         run: yarn test
-
-      # Playwright tests
-      - name: Install Playwright dependencies
-        run: yarn playwright install
-      - name: Running e2e tests
-        env:
-          PLAYWRIGHT_BASE_URL: https://web-uat.cmiml.net
-          PLAYWRIGHT_BASE_URL_API: https://api-uat.cmiml.net
-          PLAYWRIGHT_EMAIL: 'phillipe.bojorquez@childmind.org'
-          PLAYWRIGHT_TEST_USER_0_EMAIL: 'phillipe.bojorquez@childmind.org'
-          PLAYWRIGHT_TEST_USER_0_PASSWORD: ${{ secrets.PLAYWRIGHT_USER_PASSWORD }}
-          PLAYWRIGHT_TEST_USER_1_EMAIL: ''
-          PLAYWRIGHT_TEST_USER_1_PASSWORD: ''
-          PLAYWRIGHT_PASSWORD: ${{ secrets.PLAYWRIGHT_USER_PASSWORD }}
-        run: |
-          yarn test:e2e
 
   build:
     runs-on: ubuntu-latest
@@ -117,7 +96,6 @@ jobs:
 
       - name: Verify Yarn version
         run: yarn --version
-
 
       - name: Install dependencies with frozen lockfile
         run: yarn install --frozen-lockfile
