@@ -1,4 +1,4 @@
 export { useDefaultBanners } from './hooks/useDefaultBanners';
-export { useRebrandBanner } from './hooks/useRebrandBanner';
+export { useAnnouncementBanner } from './hooks/useAnnouncementBanner';
 export * from './selectors';
 export * from './slice';
