@@ -1,8 +1,8 @@
 import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { useAnnouncementBanner } from './useAnnouncementBanner';
 import { useDefaultBanners } from './useDefaultBanners';
-import { useRebrandBanner } from './useRebrandBanner';
 
 import { dismissedBannersSelector } from '~/entities/defaultBanners/model/selectors';
 import { userModel } from '~/entities/user';
@@ -25,15 +25,15 @@ vi.mock('~/entities/defaultBanners/model/selectors', () => ({
   dismissedBannersSelector: 'dismissedBannersSelector',
 }));
 
-vi.mock('./useRebrandBanner', () => ({
-  useRebrandBanner: vi.fn(),
+vi.mock('./useAnnouncementBanner', () => ({
+  useAnnouncementBanner: vi.fn(),
 }));
 
 describe('useDefaultBanners', () => {
   // Setup mock values
   const mockUserId = 'test-user-123';
   const mockDismissedBanners = {
-    [`user-${mockUserId}`]: ['RebrandBanner'],
+    [`user-${mockUserId}`]: ['AnnouncementBanner'],
     global: [],
   };
 
@@ -49,7 +49,7 @@ describe('useDefaultBanners', () => {
 
     (useAppSelector as unknown as ReturnType<typeof vi.fn>).mockReturnValue(mockDismissedBanners);
 
-    (useRebrandBanner as unknown as ReturnType<typeof vi.fn>).mockReturnValue(undefined);
+    (useAnnouncementBanner as unknown as ReturnType<typeof vi.fn>).mockReturnValue(undefined);
   });
 
   it('should use global banner scope when user is not authorized', () => {
@@ -64,7 +64,7 @@ describe('useDefaultBanners', () => {
 
     // Verify
     expect(useAppSelector).toHaveBeenCalledWith(dismissedBannersSelector);
-    expect(useRebrandBanner).toHaveBeenCalledWith(mockDismissedBanners, 'global');
+    expect(useAnnouncementBanner).toHaveBeenCalledWith(mockDismissedBanners, 'global');
   });
 
   it('should use user-specific banner scope when user is authorized', () => {
@@ -79,7 +79,7 @@ describe('useDefaultBanners', () => {
 
     // Verify
     expect(useAppSelector).toHaveBeenCalledWith(dismissedBannersSelector);
-    expect(useRebrandBanner).toHaveBeenCalledWith(mockDismissedBanners, `user-${mockUserId}`);
+    expect(useAnnouncementBanner).toHaveBeenCalledWith(mockDismissedBanners, `user-${mockUserId}`);
   });
 
   it('should handle undefined user id when authorized', () => {
@@ -93,7 +93,7 @@ describe('useDefaultBanners', () => {
     renderHook(() => useDefaultBanners());
 
     // Verify
-    expect(useRebrandBanner).toHaveBeenCalledWith(mockDismissedBanners, 'user-undefined');
+    expect(useAnnouncementBanner).toHaveBeenCalledWith(mockDismissedBanners, 'user-undefined');
   });
 
   it('should handle null user when authorized', () => {
@@ -107,7 +107,7 @@ describe('useDefaultBanners', () => {
     renderHook(() => useDefaultBanners());
 
     // Verify
-    expect(useRebrandBanner).toHaveBeenCalledWith(mockDismissedBanners, 'user-undefined');
+    expect(useAnnouncementBanner).toHaveBeenCalledWith(mockDismissedBanners, 'user-undefined');
   });
 
   it('should handle empty dismissed banners', () => {
@@ -119,6 +119,6 @@ describe('useDefaultBanners', () => {
     renderHook(() => useDefaultBanners());
 
     // Verify
-    expect(useRebrandBanner).toHaveBeenCalledWith(emptyDismissedBanners, 'global');
+    expect(useAnnouncementBanner).toHaveBeenCalledWith(emptyDismissedBanners, 'global');
   });
 });

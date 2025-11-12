@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DismissedBannersStore } from '../slice';
-import { useRebrandBanner } from './useRebrandBanner';
+import { useAnnouncementBanner } from './useAnnouncementBanner';
 
 import { BannerOrder, useBanners } from '~/entities/banner/model';
 
@@ -39,7 +39,7 @@ vi.mock('~/entities/banner/model', async () => {
   };
 });
 
-describe('useRebrandBanner', () => {
+describe('useAnnouncementBanner', () => {
   // Setup mock values
   const mockBannerScope = 'user-123';
 
@@ -66,12 +66,12 @@ describe('useRebrandBanner', () => {
     const dismissed = {};
 
     // Execute
-    const { unmount } = renderHook(() => useRebrandBanner(dismissed, mockBannerScope));
+    const { unmount } = renderHook(() => useAnnouncementBanner(dismissed, mockBannerScope));
 
     // Verify
     expect(mockAddBanner).toHaveBeenCalledTimes(1);
     expect(mockAddBanner).toHaveBeenCalledWith(
-      'RebrandBanner',
+      'AnnouncementBanner',
       {
         severity: undefined,
         duration: null,
@@ -82,17 +82,17 @@ describe('useRebrandBanner', () => {
 
     // Cleanup
     unmount();
-    expect(mockRemoveBanner).toHaveBeenCalledWith('RebrandBanner');
+    expect(mockRemoveBanner).toHaveBeenCalledWith('AnnouncementBanner');
   });
 
   it('should not add banner when previously dismissed', () => {
     // Setup
     const dismissed = {
-      [mockBannerScope]: ['RebrandBanner'],
+      [mockBannerScope]: ['AnnouncementBanner'],
     } as DismissedBannersStore;
 
     // Execute
-    renderHook(() => useRebrandBanner(dismissed, mockBannerScope));
+    renderHook(() => useAnnouncementBanner(dismissed, mockBannerScope));
 
     // Verify
     expect(mockAddBanner).not.toHaveBeenCalled();
@@ -102,7 +102,7 @@ describe('useRebrandBanner', () => {
     // Setup
     const dismissed = {};
 
-    // Use one of the actual excluded routes from REBRAND_BANNER_EXCLUDED_ROUTES
+    // Use one of the actual excluded routes from ANNOUNCEMENT_BANNER_EXCLUDED_ROUTES
     const excludedRoutePath = '/protected/applets/123/activityId/456/event/789/entityType/regular';
 
     // Mock location with an excluded route
@@ -111,7 +111,7 @@ describe('useRebrandBanner', () => {
     });
 
     // Execute
-    renderHook(() => useRebrandBanner(dismissed, mockBannerScope));
+    renderHook(() => useAnnouncementBanner(dismissed, mockBannerScope));
 
     // Verify
     expect(mockAddBanner).not.toHaveBeenCalled();
@@ -122,7 +122,7 @@ describe('useRebrandBanner', () => {
     const dismissed = {};
 
     // Execute
-    renderHook(() => useRebrandBanner(dismissed, mockBannerScope));
+    renderHook(() => useAnnouncementBanner(dismissed, mockBannerScope));
 
     // Verify
     expect(mockAddBanner).toHaveBeenCalledTimes(1);
@@ -130,10 +130,10 @@ describe('useRebrandBanner', () => {
 
   it('should handle undefined dismissed banners for scope', () => {
     // Setup - Use an object without the specific scope
-    const dismissed = { 'other-scope': ['RebrandBanner'] } as DismissedBannersStore;
+    const dismissed = { 'other-scope': ['AnnouncementBanner'] } as DismissedBannersStore;
 
     // Execute
-    renderHook(() => useRebrandBanner(dismissed, mockBannerScope));
+    renderHook(() => useAnnouncementBanner(dismissed, mockBannerScope));
 
     // Verify
     expect(mockAddBanner).toHaveBeenCalledTimes(1);
@@ -144,12 +144,12 @@ describe('useRebrandBanner', () => {
     const dismissed = {};
 
     // Execute
-    const { unmount } = renderHook(() => useRebrandBanner(dismissed, mockBannerScope));
+    const { unmount } = renderHook(() => useAnnouncementBanner(dismissed, mockBannerScope));
 
     // Unmount to trigger cleanup
     unmount();
 
     // Verify
-    expect(mockRemoveBanner).toHaveBeenCalledWith('RebrandBanner');
+    expect(mockRemoveBanner).toHaveBeenCalledWith('AnnouncementBanner');
   });
 });

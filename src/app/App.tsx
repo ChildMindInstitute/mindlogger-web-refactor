@@ -13,7 +13,7 @@ import { Mixpanel } from '~/shared/utils';
 import { FeatureFlags } from '~/shared/utils/featureFlags';
 
 const isProduction = import.meta.env.VITE_ENV === 'prod';
-const isDev = import.meta.env.VITE_ENV === 'dev';
+const isUat = import.meta.env.VITE_ENV === 'uat';
 
 if (import.meta.env.VITE_DD_CLIENT_TOKEN) {
   datadogLogs.init({
@@ -30,7 +30,7 @@ if (import.meta.env.VITE_DD_CLIENT_TOKEN) {
 if (
   import.meta.env.VITE_DD_APP_ID &&
   import.meta.env.VITE_DD_CLIENT_TOKEN &&
-  (isDev || isProduction)
+  (isUat || isProduction)
 ) {
   datadogRum.init({
     applicationId: import.meta.env.VITE_DD_APP_ID,
@@ -48,9 +48,10 @@ if (
     trackResources: true,
     trackLongTasks: true,
     trackUserInteractions: false,
-    allowedTracingUrls: (import.meta.env.VITE_DD_TRACING_URLS ?? '')
-      .split(',')
-      .map((it: string) => it.trim()),
+    allowedTracingUrls: [
+      (url) => url.indexOf('cmiml.net') > -1,
+      (url) => url.indexOf('gettingcurious.com') > -1,
+    ],
   });
 }
 
