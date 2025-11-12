@@ -37,7 +37,7 @@ export const useSubmitAnswersMutations = ({ isPublic, onSubmitSuccess, onSubmitE
   const { isInMultiInformantFlow, getMultiInformantState, updateMultiInformantState } =
     appletModel.hooks.useMultiInformantState();
 
-  const { applet, activityId, flow, eventId, targetSubject } = useContext(SurveyContext);
+  const { applet, activityId, eventId, targetSubject } = useContext(SurveyContext);
 
   const activityProgress = useAppSelector((state) => {
     if (!activityId) return null;
