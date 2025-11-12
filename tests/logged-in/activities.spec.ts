@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
 
-  test('Verify that a user can access an assessment on the web, completing it to submit the answers', async ({ page }) => {
+  // fixme: This test is currently broken due to changes in the .env file users.
+  // It needs to be updated to use a valid test user, API object creation, and 5 item typesmplate.
+  // Once updated, remove the 'fixme' annotation.
+  test.fixme('Verify that a user can access an assessment on the web, completing it to submit the answers', async ({ page }) => {
     // Assuming the user is already logged in through the global setup
     // Navigate to the applets list page
     await page.goto('/protected/applets');

@@ -39,15 +39,14 @@ export const apiAdminLogin = async (page: Page, email: string, password: string)
 };
 
 // Function to create an account via UI
-export const createEmailUI = async (page: Page, email: string, password: string) => {
-    await page.goto('/login');
-    await page.getByText('Create an account').click();
+export const createAccountForm = async (page: Page, email: string, password: string) => {
+    await page.goto('/signup');
     await page.waitForURL('/signup');
-    await page.fill('input[name="email"]', `${email + Date.now()}@example.com`);
+    await page.fill('input[name="email"]', email);
     await page.fill('input[name="firstName"]', 'Automation');
     await page.fill('input[name="lastName"]', 'Tester');
     await page.fill('input[name="password"]', password);
     await page.fill('input[name="confirmPassword"]', password);
-    await page.getByRole('checkbox', { name: 'I agree to the Terms of Service' }).check();
+    await page.getByRole('checkbox', { name: 'I agree to the Terms of Service' }).click();
     await page.getByRole('button', { name: 'Create Account' }).click();
 };
