@@ -3,11 +3,11 @@ import { act, renderHook } from '@testing-library/react';
 import { useWindowFocus } from './useWindowFocus';
 
 const fireFocusEvent = () => {
-  global.window.dispatchEvent(new Event('focus'));
+  window.dispatchEvent(new Event('focus'));
 };
 
 const fireBlurEvent = () => {
-  global.window.dispatchEvent(new Event('blur'));
+  window.dispatchEvent(new Event('blur'));
 };
 
 describe('useWindowFocus)', () => {
