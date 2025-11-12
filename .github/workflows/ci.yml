@@ -74,15 +74,22 @@ jobs:
       # Playwright tests
       - name: Install Playwright dependencies
         run: yarn playwright install
+      - name: Configure aws credentials for secrets
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::917902836630:role/cmiml-devops-oidc-github-role
+          role-session-name: OIDC-GHA-Build-Secrets
+          aws-region: us-east-1
+      - name: Load Playwright environment
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: |
+            ,github/build
+          parse-json-secrets: true
       - name: Running e2e tests
         env:
           PLAYWRIGHT_BASE_URL: https://web-uat.cmiml.net
           PLAYWRIGHT_BASE_URL_API: https://api-uat.cmiml.net
-          PLAYWRIGHT_ADMIN_EMAIL: 'automation.test+admin@example.com'
-          PLAYWRIGHT_ADMIN_PASSWORD: ${{ secrets.PLAYWRIGHT_ADMIN_PASSWORD }}
-          PLAYWRIGHT_AUTOMATION_TEST_USER_EMAIL: 'automation.test+user@example.com'
-          PLAYWRIGHT_AUTOMATION_TEST_USER_PASSWORD: ${{ secrets.PLAYWRIGHT_AUTOMATION_TEST_USER_PASSWORD }}
-          PLAYWRIGHT_GENERAL_PASSWORD: ${{ secrets.PLAYWRIGHT_GENERAL_PASSWORD }}
         run: |
           yarn test:e2e
 
