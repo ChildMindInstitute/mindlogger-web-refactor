@@ -19,8 +19,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals", "@playwright/test", "node"]
   },
-  "include": ["src"],
+  "include": ["src", "tests/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

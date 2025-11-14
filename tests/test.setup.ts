@@ -16,8 +16,8 @@ test('User authenticates through the login page and is redirected to the applet 
   await page.goto('https://web-uat.cmiml.net/login');
 
   // Fill in login form
-  await page.fill('input[name="email"]', process.env.EMAIL || '');
-  await page.fill('input[name="password"]', process.env.PASSWORD || '');
+  await page.fill('input[name="email"]', process.env.uat.EMAIL || '');
+  await page.fill('input[name="password"]', process.env.uat.PASSWORD || '');
 
   // Submit the form
   await page.click('button[type="submit"]');

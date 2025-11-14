@@ -1,5 +1,5 @@
 import { test as base } from '@playwright/test';
-import { UserAPI } from '../utils/userApi.ts' 
+import { UserAPI } from '../utils/userApi' 
 
 type Fixtures = {
   api: UserAPI;

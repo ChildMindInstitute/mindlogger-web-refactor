@@ -2,8 +2,8 @@ import { APIRequestContext, request } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Load environment variables from .env file
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+// Load environment variables from .env.uat file
+dotenv.config({ path: path.resolve(__dirname, '.env.uat') });
 
 interface CreateUserPayload {
   confirmPassword?: string;
@@ -27,7 +27,7 @@ export class UserAPI {
   private readonly baseUrl: string;
   private token: string | null = null;
 
-  constructor(baseUrl: string = process.env.API_BASE_URL || 'https://api-uat.cmiml.net') {
+  constructor(baseUrl: string = process.env.uat.API_BASE_URL || 'https://api-uat.cmiml.net') {
     this.baseUrl = baseUrl;
   }
 
@@ -41,8 +41,8 @@ export class UserAPI {
       });
 
       // Perform admin login
-      const email = process.env.PLAYWRIGHT_ADMIN_EMAIL || 'admin@example.com';
-      const password = process.env.PLAYWRIGHT_ADMIN_PASSWORD || 'noPassword!';
+      const email = process.env.uat.PLAYWRIGHT_ADMIN_EMAIL || 'admin@example.com';
+      const password = process.env.uat.PLAYWRIGHT_ADMIN_PASSWORD || 'noPassword!';
       const loginResponse = await this.login(email, password);
       this.token = loginResponse.result.token.accessToken;
 
@@ -132,6 +132,21 @@ export function generateRandomUser(): CreateUserPayload {
     email: `user${random}@example.com`,
     firstName: 'Test',
     lastName: `User${random}`,
-    password: process.env.PLAYWRIGHT_GENERAL_PASSWORD || 'DefaultPassword123!'
+    password: process.env.uat.PLAYWRIGHT_GENERAL_PASSWORD || 'DefaultPassword123!'
   };
 }
+
+import type { 
+  LoginPayload, 
+  LoginSuccessResponse,
+  SignupPayload,
+  UserDTO 
+} from '../src/shared/api/types/authorization';
+
+import type { 
+  InvitationDetails 
+} from '../src/entities/invitation/lib/types';
+
+import type { 
+  BaseSuccessResponse 
+} from '../src/shared/api/types/base';
