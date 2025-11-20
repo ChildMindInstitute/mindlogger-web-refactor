@@ -1,31 +1,31 @@
 import { Trans } from 'react-i18next';
 
 import { Banner, BannerProps } from '../Banner';
-import { StyledImg, StyledLink } from './RebrandBanner.styles';
+import { StyledImg, StyledLink } from './AnnouncementBanner.styles';
 
 import curiousIcon from '~/assets/curious_icon--white.png';
 import { defaultBannersModel } from '~/entities/defaultBanners';
 import { useAppDispatch } from '~/shared/utils';
 
-const CURIOUS_REBRAND_URL = 'https://www.gettingcurious.com/rebrand';
+const ANNOUNCEMENT_URL = 'https://www.gettingcurious.com/rebrand';
 
-interface RebrandBannerProps extends BannerProps {
+interface AnnouncementBannerProps extends BannerProps {
   bannerScope?: string;
 }
 
-export const RebrandBanner = ({
+export const AnnouncementBanner = ({
   bannerScope = 'global',
   duration = null,
   onClose,
   ...props
-}: RebrandBannerProps) => {
+}: AnnouncementBannerProps) => {
   const dispatch = useAppDispatch();
 
   const handleClose = () => {
     dispatch(
       defaultBannersModel.actions.dismissBanner({
         key: bannerScope,
-        bannerType: 'RebrandBanner',
+        bannerType: 'AnnouncementBanner',
       }),
     );
     onClose?.();
@@ -35,7 +35,7 @@ export const RebrandBanner = ({
     <Banner
       duration={duration}
       icon={<StyledImg src={curiousIcon} />}
-      data-testid="rebrand-banner"
+      data-testid="announcement-banner"
       sx={{
         backgroundColor: '#0b0907',
         color: '#fdfcfc',
@@ -49,10 +49,10 @@ export const RebrandBanner = ({
       onClose={handleClose}
       {...props}
     >
-      <Trans i18nKey="rebrandBanner">
+      <Trans i18nKey="announcementBanner">
         <strong>We are rebranding! </strong>
         <>Design updates are on the way—same great app, fresh new look. Curious? </>
-        <StyledLink href={CURIOUS_REBRAND_URL} target="_blank">
+        <StyledLink href={ANNOUNCEMENT_URL} target="_blank">
           Click to learn more.
         </StyledLink>
       </Trans>

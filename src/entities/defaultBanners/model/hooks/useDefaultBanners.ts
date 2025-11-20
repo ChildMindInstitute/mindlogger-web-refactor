@@ -1,4 +1,4 @@
-import { useRebrandBanner } from './useRebrandBanner';
+import { useAnnouncementBanner } from './useAnnouncementBanner';
 
 import { dismissedBannersSelector } from '~/entities/defaultBanners/model/selectors';
 import { userModel } from '~/entities/user';
@@ -12,5 +12,5 @@ export const useDefaultBanners = () => {
 
   const dismissed = useAppSelector(dismissedBannersSelector);
 
-  useRebrandBanner(dismissed, bannerScope);
+  useAnnouncementBanner(dismissed, bannerScope);
 };
