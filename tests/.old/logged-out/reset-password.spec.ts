@@ -2,8 +2,8 @@ import { expect } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
 import { test } from '../fixtures/fixtures.ts';
-import { UIlogin } from '../utils/loginPage.ts';
-import { generateRandomUser } from '../utils/userApi.ts';
+import { UIlogin } from '../../utils/.old/loginPage.ts';
+import { generateRandomUser } from '../../utils/.old/userApi.ts';
 
 // Load environment variables from .env file
 dotenv.config({ path: path.resolve(__dirname, '.env') });
@@ -49,9 +49,9 @@ test('User can reset their password when logged in', async ({ page, api }) => {
     await page.getByRole('button', { name: 'Submit' }).click();
     await expect(page.getByText('Passwords Do Not Match')).toBeVisible();
 
-    // Add password change steps that use the same old and new password 
+    // Add password change steps that use the same old and new password
     await page.getByRole('textbox', { name: 'Old Password' }).fill(createdUserPassword || '');
-    //todo new password 
+    //todo new password
     await page.getByRole('textbox', { name: 'New Password' }).fill(createdUserPassword || '');
     await page.getByRole('textbox', { name: 'Confirm Password' }).fill(createdUserPassword || '');
     // Submit the password change form using the same old and new password

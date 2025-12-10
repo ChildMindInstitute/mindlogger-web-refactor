@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
-import { createAccountForm } from '../utils/loginPage';
+import { createAccountForm } from '../../utils/.old/loginPage';
 
 // Load environment variables from .env file
 dotenv.config({ path: path.resolve(__dirname, '.env') });
@@ -29,7 +29,7 @@ test('User receives form validation messages when attempting to create an accoun
             page.getByText('Password must be at least 6').first(),
             page.getByText('Password must be at least 6').nth(1)
         ];
-    
+
     await page.goto('/login');
     await page.getByText('Create an account').click();
     await page.waitForURL('/signup');

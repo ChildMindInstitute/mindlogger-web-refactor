@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
   // fixme: This test is currently broken due to changes in the .env file users.
-  // It needs to be updated to use a valid test user, API object creation, and 5 item typesmplate.
+  // It needs to be updated to use a valid test user, API object creation, and 5 item types.
   // Once updated, remove the 'fixme' annotation.
   test.fixme('Verify that a user can access an assessment on the web, completing it to submit the answers', async ({ page }) => {
     // Assuming the user is already logged in through the global setup

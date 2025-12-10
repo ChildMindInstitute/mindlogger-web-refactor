@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { UIlogin } from '../utils/loginPage.ts';
+import { UIlogin } from '../../utils/.old/loginPage.ts';
 
 test('User recieves error message when no login credentials are used', async ({ page }) => {
     // Attempt to log in without entering any credentials

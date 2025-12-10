@@ -1,12 +1,12 @@
 import { test as setup } from "@playwright/test";
 import path from 'path';
 import dotenv from 'dotenv';
-import { UIlogin } from "../utils/loginPage";
+import { UIlogin } from "../../utils/.old/loginPage";
 
 // Load environment variables from .env file
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-// Define the path to the authentication file 
+// Define the path to the authentication file
 const authFile = 'tests/.auth/session.json'
 
 // Define a setup test to authenticate and save storage state into an auth file

@@ -1,15 +1,7 @@
 import { Page } from '@playwright/test';
-import { UserAPI } from './userApi'; // Import the improved class
+import { UserAPI } from './userApi';
 
-// Function to perform login
-export const UIlogin = async (page: Page, url: any, email: string, password: string) => {
-    await page.goto(url);
-    // Fill in login form
-    await page.fill('input[name="email"]', email || '');
-    await page.fill('input[name="password"]', password || '');
-    // Submit the form
-    await page.click('button[type="submit"]');
-};
+
 // Function to perform admin login via API and set token in localStorage
 export const apiAdminLogin = async (page: Page, email: string, password: string) => {
     const userApi = new UserAPI();
