@@ -16,8 +16,26 @@ export default defineConfig({
       testMatch: /tests\/setup\/auth\.setup\.ts/,
     },
     {
+      name: 'smoke',
+      testMatch: 'smoke/**/*.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: runtimeConfig.storageState,
+      },
+      dependencies: ['setup'],
+    },
+    {
       name: 'e2e',
       testMatch: 'e2e/**/*.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: runtimeConfig.storageState,
+      },
+      dependencies: ['setup', 'smoke'],
+    },
+    {
+      name: 'user',
+      testMatch: 'user/**/*.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
         storageState: runtimeConfig.storageState,

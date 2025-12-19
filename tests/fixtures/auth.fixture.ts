@@ -1,5 +1,7 @@
 import { Page } from '@playwright/test';
-import {AuthSelectors} from "../selectors/auth.selectors";
+import {AuthSelectors} from "../utils/selectors/auth.selectors";
+
+// TODO This might be deprecated
 
 // Function to perform login
 export const performLogin = async (page: Page, url: string, email: string, password: string) => {

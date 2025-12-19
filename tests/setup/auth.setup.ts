@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import {performLogin} from "../utils/fixtures/auth.fixture";
+import {performLogin} from "../fixtures/auth.fixture";
 import {runtimeConfig} from "../config";
 import {AuthSelectors} from "../utils/selectors/auth.selectors";
 

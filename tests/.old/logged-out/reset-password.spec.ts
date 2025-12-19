@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
-import { test } from '../fixtures/fixtures.ts';
+import { test } from '../fixtures/api.fixtures.ts';
 import { UIlogin } from '../../utils/.old/loginPage.ts';
 import { generateRandomUser } from '../../utils/.old/userApi.ts';
 

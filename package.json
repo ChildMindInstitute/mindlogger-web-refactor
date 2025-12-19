@@ -15,7 +15,9 @@
     "prepare": "husky install",
     "test:watch": "TZ=UTC vitest",
     "test": "TZ=UTC vitest run",
-    "test:e2e": "TZ=UTC playwright test",
+    "test:e2e": "TZ=UTC playwright test --project=e2e",
+    "test:user": "TZ=UTC playwright test --project=login",
+    "test:smoke": "TZ=UTC playwright test --project=smoke",
     "test:ui": "TZ=UTC vitest --ui",
     "coverage": "TZ=UTC vitest run --coverage"
   },
