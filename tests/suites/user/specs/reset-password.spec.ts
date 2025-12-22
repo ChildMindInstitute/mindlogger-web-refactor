@@ -1,4 +1,4 @@
-import { test, expect } from '../fixtures/all.fixtures'
+import { test, expect } from '../../../fixtures/all.fixtures'
 import {generateRandomUser} from "../../../utils/data/users";
 
 test.describe('Password Reset', () => {

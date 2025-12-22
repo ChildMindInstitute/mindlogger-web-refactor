@@ -6,7 +6,6 @@ import {ForgotPasswordPage} from "../pages/forget-password.page";
 import {LoginPage} from "../pages/login.page";
 import {SettingsPage} from "../pages/settings.page";
 import {SignupPage} from "../pages/signup.page";
-import {runtimeConfig} from "../config";
 
 
 type PagesFixtures = {

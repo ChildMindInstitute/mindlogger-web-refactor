@@ -1,23 +1,24 @@
 import {request, test as base} from '@playwright/test';
-import {UserAPI} from "../util/user-api";
-import {AppletAPI} from "../util/applet-api";
-import {runtimeConfig} from "../../../config";
-import {readStorageFile} from "../../../utils/file";
+import {UserAPI} from "../utils/api-client/user-api";
+import {AppletAPI} from "../utils/api-client/applet-api";
+import {runtimeConfig} from "../config";
+import {readStorageFile} from "../utils/file";
 
 type Fixtures = {
   userApi: UserAPI;
   adminUserApi: UserAPI
   appletApi: AppletAPI
+  adminAppletApi: AppletAPI
 };
 
 
 const initContext = async (storageFile: string) => {
   const { accessToken } = JSON.parse(
-    readStorageFile(runtimeConfig.userTokenFile)
+    readStorageFile(storageFile)
   );
 
   return await request.newContext({
-    baseURL: runtimeConfig.baseURL,
+    baseURL: runtimeConfig.apiBaseURL,
     extraHTTPHeaders: {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
@@ -26,7 +27,7 @@ const initContext = async (storageFile: string) => {
 }
 
 export const test = base.extend<Fixtures>({
-  userApi: async ({}: any, use: (arg0: any) => any) => {
+  userApi: async ({}: any, use) => {
     const context = await initContext(runtimeConfig.userTokenFile)
 
     const api = new UserAPI(context);
@@ -34,7 +35,7 @@ export const test = base.extend<Fixtures>({
     await api.dispose();
   },
 
-  adminUserApi: async ({}: any, use: (arg0: any) => any) => {
+  adminUserApi: async ({}: any, use) => {
     const context = await initContext(runtimeConfig.adminTokenFile)
 
     const api = new UserAPI(context);
@@ -43,13 +44,21 @@ export const test = base.extend<Fixtures>({
   },
 
 
-  appletApi: async ({}: any, use: (arg0: any) => any) => {
+  appletApi: async ({}: any, use) => {
     const context = await initContext(runtimeConfig.userTokenFile)
 
     const api = new AppletAPI(context);
     await use(api);
     await api.dispose();
   },
+
+  adminAppletApi: async ({}: any, use) => {
+    const context = await initContext(runtimeConfig.adminTokenFile)
+
+    const api = new AppletAPI(context);
+    await use(api);
+    await api.dispose();
+  }
 
 });
 

@@ -1,13 +1,9 @@
-import { APIRequestContext, request } from '@playwright/test';
-import {runtimeConfig} from "../../../config";
+import { APIRequestContext } from '@playwright/test';
 
-import type {
-  LoginPayload,
-  LoginSuccessResponse,
-  SignupPayload,
-} from '../../../../src/shared/api';
-
-export class CuriousApi {
+/**
+ * Base class for Curious API operations
+ */
+export abstract class CuriousApi {
 
   protected apiContext: APIRequestContext
 

@@ -1,10 +1,7 @@
-import { Page } from '@playwright/test';
-import {AuthSelectors} from "../utils/selectors/auth.selectors";
+import {Page} from "@playwright/test";
+import {AuthSelectors} from "./selectors/auth.selectors";
 
-// TODO This might be deprecated
-
-// Function to perform login
-export const performLogin = async (page: Page, url: string, email: string, password: string) => {
+export const performUiLogin = async (page: Page, url: string, email: string, password: string) => {
   console.log(`Logging in to ${url}`);
   await page.goto(url);
   // Fill in login form

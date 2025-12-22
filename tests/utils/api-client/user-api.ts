@@ -1,9 +1,4 @@
-import { APIRequestContext, request } from '@playwright/test';
-import dotenv from 'dotenv';
-import path from 'path';
-
-// Load environment variables from .env file
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+import {CuriousApi} from "./api";
 
 interface CreateUserPayload {
   confirmPassword?: string;
@@ -22,50 +17,12 @@ interface CreateUserResponse {
   };
 }
 
-export class UserAPI {
-  private apiContext!: APIRequestContext;
-  private readonly baseUrl: string;
-  private token: string | null = null;
-
-  constructor(baseUrl: string = process.env.API_BASE_URL || 'https://api-uat.cmiml.net') {
-    this.baseUrl = baseUrl;
-  }
-
-  async init() {
-    try {
-      // Create initial context for login
-      this.apiContext = await request.newContext({
-        extraHTTPHeaders: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      // Perform admin login
-      const email = process.env.PLAYWRIGHT_ADMIN_EMAIL || 'admin@example.com';
-      const password = process.env.PLAYWRIGHT_ADMIN_PASSWORD || 'noPassword!';
-      const loginResponse = await this.login(email, password);
-      this.token = loginResponse.result.token.accessToken;
-
-      // Dispose old context and create new one with the token derived from the previous api context
-      await this.apiContext.dispose();
-      this.apiContext = await request.newContext({
-        extraHTTPHeaders: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.token}`
-        }
-      });
-
-      this.log('API context initialized with admin token.');
-    } catch (error) {
-      this.log(`Error during init: ${error}`);
-      throw error;
-    }
-  }
+export class UserAPI extends CuriousApi {
 
   async createUser(payload: CreateUserPayload): Promise<CreateUserResponse> {
     try {
       this.log(`Creating user: ${payload.email}`);
-      const response = await this.apiContext.post(`${this.baseUrl}/users`, { data: payload });
+      const response = await this.apiContext.post('/users', { data: payload });
 
       if (!response.ok()) {
         const errorText = await response.text();
@@ -79,14 +36,14 @@ export class UserAPI {
     } catch (error) {
       this.log(`Error creating user: ${error}`);
       throw error;
-    } 
+    }
   }
 
   async login(email: string, password: string, retries = 3, delayMs = 1000) {
     this.log(`Attempting login for ${email} with ${retries} retries`);
     for (let attempt = 1; attempt <= retries; attempt++) {
       try {
-        const response = await this.apiContext.post(`${this.baseUrl}/auth/login`, {
+        const response = await this.apiContext.post('/auth/login', {
           data: { email, password }
         });
 
@@ -123,15 +80,4 @@ export class UserAPI {
   private log(message: string) {
     console.log(`[UserAPI] ${new Date().toISOString()} - ${message}`);
   }
-}
-
-// Utility for random user generation
-export function generateRandomUser(): CreateUserPayload {
-  const random = Math.floor(Math.random() * 100000);
-  return {
-    email: `user${random}@example.com`,
-    firstName: 'Test',
-    lastName: `User${random}`,
-    password: process.env.PLAYWRIGHT_GENERAL_PASSWORD || 'DefaultPassword123!'
-  };
 }

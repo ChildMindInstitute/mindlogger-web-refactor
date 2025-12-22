@@ -1,5 +1,5 @@
 // TODO Perhaps a better implementation
-import { APIRequestContext, expect, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import {CuriousApi} from "./api";
 
 // Important: make sure we authenticate in a clean environment by unsetting storage state.

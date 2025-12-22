@@ -1,4 +1,4 @@
-import { test, expect } from '../fixtures/all.fixtures'
+import { test, expect } from '../../../fixtures/all.fixtures'
 import {generateUniqueEmail} from "../../../utils/data/users";
 import {runtimeConfig} from "../../../config";
 

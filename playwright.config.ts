@@ -10,19 +10,18 @@ export default defineConfig({
     headless: true,
   },
 
+  globalSetup: 'tests/setup/global.setup.ts',
+
+  reporter: process.env.CI ? 'github' : 'list',
+
   projects: [
-    {
-      name: 'setup',
-      testMatch: /tests\/setup\/auth\.setup\.ts/,
-    },
     {
       name: 'smoke',
       testMatch: 'smoke/**/*.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
         storageState: runtimeConfig.storageState,
-      },
-      dependencies: ['setup'],
+      }
     },
     {
       name: 'e2e',
@@ -30,8 +29,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         storageState: runtimeConfig.storageState,
-      },
-      dependencies: ['setup', 'smoke'],
+      }
     },
     {
       name: 'user',
@@ -39,9 +37,9 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         storageState: runtimeConfig.storageState,
-      },
-      dependencies: ['setup'],
+      }
     },
+
     //TODO: Enable other browsers when needed.
     //At the moment all browsers but Chrome fail.
     //

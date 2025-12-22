@@ -1,6 +1,4 @@
 import dotenv from "dotenv";
-import path from "path";
-import fs from "fs";
 
 import {generateStorageFilename} from './utils/file'
 
@@ -19,6 +17,7 @@ export const runtimeConfig = {
   storageRoot: 'storage',
   storageState: process.env.PLAYWRIGHT_STORAGE_STATE || 'storage/default.json',
   baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
+  apiBaseURL: process.env.PLAYWRIGHT_API_BASE_URL || 'http://localhost:3000',
 
   userEmail: process.env.PLAYWRIGHT_USER_EMAIL || 'mindlogger',
   userPassword: process.env.PLAYWRIGHT_USER_PASSWORD || 'DefaultPassword123!',

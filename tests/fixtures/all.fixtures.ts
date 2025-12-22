@@ -1,5 +1,5 @@
 import {mergeTests} from "@playwright/test";
-import {test as pagesTest} from "../../../fixtures/pages.fixture";
+import {test as pagesTest} from "./pages.fixture";
 import {test as apiTest} from './api.fixtures'
 
 

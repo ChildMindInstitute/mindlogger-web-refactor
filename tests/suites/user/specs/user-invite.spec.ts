@@ -1,10 +1,10 @@
-import { test, expect } from '../fixtures/api.fixtures'
+import { test, expect } from '../../../fixtures/api.fixtures'
 
 test.describe('User Invitations', () => {
   // Skeleton for invitation tests based on the commented-out user-invite.spec.ts
   // This test requires a valid applet ID and proper API setup
 
-  test.skip('Create manager invite via API', async ({ appletApi, userApi }) => {
+  test.skip('Create manager invite via API', async ({ appletApi }) => {
     // Example flow (adapt with real applet ID and data):
     // 1. Create an applet (or use existing applet ID)
     const appletID = '4f1c4d70-4441-405d-92fc-1d47d80c3788'; // Replace with valid ID
@@ -29,7 +29,7 @@ test.describe('User Invitations', () => {
     expect(invitations).toBeTruthy();
   });
 
-  test.skip('User can accept an invite', async ({ page, userApi }) => {
+  test.skip('User can accept an invite', async ({  }) => {
     // TODO: Implement invite acceptance flow
     // 1. Create user
     // 2. Send invite
