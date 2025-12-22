@@ -16,5 +16,11 @@ export const Dictionary = {
     lastName: {
       required: 'validation.lastNameRequired',
     },
+    mfa: {
+      codeRequired: 'validation.mfaCodeRequired',
+      codeFormat: 'validation.mfaCodeFormat',
+      recoveryCodeRequired: 'validation.recoveryCodeRequired',
+      recoveryCodeFormat: 'validation.recoveryCodeFormat',
+    },
   },
 };

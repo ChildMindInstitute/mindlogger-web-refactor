@@ -5,7 +5,38 @@ export interface LoginPayload {
   password: string;
 }
 
-export type LoginSuccessResponse = BaseSuccessResponse<{
+// Standard login success result (no MFA)
+export interface LoginSuccessResult {
+  token: AuthorizationDTO;
+  user: UserDTO;
+}
+
+// MFA required result from login
+export interface MFARequiredResult {
+  mfaRequired: true;
+  mfaToken: string;
+  mfaSessionId: string;
+}
+
+// Login response is a union - either success or MFA required
+export type LoginResult = LoginSuccessResult | MFARequiredResult;
+
+export type LoginSuccessResponse = BaseSuccessResponse<LoginResult>;
+
+// MFA TOTP verification payload
+export interface MFAVerifyTOTPPayload {
+  mfaToken: string;
+  totpCode: string;
+}
+
+// MFA Recovery code verification payload
+export interface MFAVerifyRecoveryPayload {
+  mfaToken: string;
+  code: string;
+}
+
+// MFA verification success response (same structure as standard login success)
+export type MFAVerifySuccessResponse = BaseSuccessResponse<{
   token: AuthorizationDTO;
   user: UserDTO;
 }>;

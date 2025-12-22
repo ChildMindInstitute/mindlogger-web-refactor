@@ -5,3 +5,5 @@ export * from './useRevoveryPasswordMutation';
 export * from './useApproveRecoveryPasswordMutation';
 export * from './useUpdatePasswordMutation';
 export * from './useRecoveryPasswordLinkHealthcheckQuery';
+export * from './useMFAVerifyMutation';
+export * from './useMFARecoveryMutation';

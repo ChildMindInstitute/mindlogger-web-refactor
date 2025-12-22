@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 
 import { useLoginTranslation } from '../lib/useLoginTranslation';
 import { LoginSchema, TLoginForm } from '../model/login.schema';
+import { MFARequiredResponse, isMFARequiredResponse } from '../model/mfa.types';
 
 import { useBanners } from '~/entities/banner/model';
 import { ILoginPayload, useLoginMutation, userModel } from '~/entities/user';
@@ -11,9 +12,11 @@ import { Mixpanel, MixpanelEventType, useCustomForm, usePasswordType } from '~/s
 
 interface LoginFormProps {
   locationState?: Record<string, unknown>;
+  /** Callback when MFA is required - receives MFA session data and password for encryption */
+  onMFARequired?: (mfaData: MFARequiredResponse, password: string) => void;
 }
 
-export const LoginForm = ({ locationState }: LoginFormProps) => {
+export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
   const { t } = useLoginTranslation();
 
   const { addErrorBanner, removeErrorBanner } = useBanners();
@@ -29,7 +32,18 @@ export const LoginForm = ({ locationState }: LoginFormProps) => {
 
   const { mutate: login, isLoading } = useLoginMutation({
     onSuccess(data, variables) {
-      const { user, token } = data.data.result;
+      const result = data.data.result;
+
+      // Check if MFA is required
+      if (isMFARequiredResponse(result)) {
+        if (onMFARequired) {
+          onMFARequired(result, variables.password);
+        }
+        return;
+      }
+
+      // Normal login flow (no MFA)
+      const { user, token } = result;
 
       removeErrorBanner();
 

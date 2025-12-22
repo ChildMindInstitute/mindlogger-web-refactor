@@ -3,7 +3,7 @@ import { lazy } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useBanners } from '~/entities/banner/model';
-import { LoginForm, useLoginTranslation } from '~/features/Login';
+import { AuthFlow, useLoginTranslation } from '~/features/Login';
 import { ROUTES } from '~/shared/constants';
 import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
@@ -60,7 +60,7 @@ function LoginPage() {
         </Text>
 
         <Box className="loginForm" maxWidth="400px" margin="0 auto">
-          <LoginForm locationState={location.state as Record<string, unknown>} />
+          <AuthFlow locationState={location.state as Record<string, unknown>} />
         </Box>
 
         <Box margin="24px 0px" display="flex" justifyContent="center">
