@@ -38,7 +38,7 @@ jobs:
 
       - run: yarn eslint src
 
-  tests:
+  unit-tests:
     runs-on: ubuntu-latest
     needs: lint
     permissions:
@@ -75,7 +75,38 @@ jobs:
           REACT_APP_API_DOMAIN: http://localhost:8080
         run: yarn test
 
-      # Playwright tests
+  playwright-tests:
+    runs-on: ubuntu-latest
+    needs: lint
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup node version
+        run: |
+          echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Remove .yarnrc file to avoid conflicts
+        run: rm -rf .yarnrc
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Prepare and activate Yarn version 1.22.22
+        run: corepack prepare yarn@1.22.22 --activate
+
+      - name: Verify Yarn version
+        run: yarn --version
+
+      - name: Install dependencies with frozen lockfile
+        run: yarn install --frozen-lockfile
+
       - name: Install Playwright dependencies
         run: yarn playwright install
       - name: Configure aws credentials for secrets
@@ -90,16 +121,17 @@ jobs:
           secret-ids: |
             ,github/build
           parse-json-secrets: true
-      - name: Running e2e tests
+      - name: Running smoke tests
         env:
           PLAYWRIGHT_BASE_URL: https://web-uat.cmiml.net
-          PLAYWRIGHT_BASE_URL_API: https://api-uat.cmiml.net
+          PLAYWRIGHT_API_BASE_URL: https://api-uat.cmiml.net
         run: |
-          yarn test:e2e
+          yarn test:smoke
+
 
   build:
     runs-on: ubuntu-latest
-    needs: tests
+    needs: [unit-tests, playwright-tests]
     steps:
       - uses: actions/checkout@v4
       - name: Setup node version
