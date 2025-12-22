@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, ChangeEvent } from 'react';
+import { memo, useEffect, useRef, useCallback, ChangeEvent } from 'react';
 
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -6,17 +6,15 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { useController } from 'react-hook-form';
 
+import { useMFAContext } from '../lib/MFAContext';
 import { useMFAVerification } from '../lib/useMFAVerification';
 import { MFATOTPSchema, TMFATOTPForm } from '../model/mfa.schema';
-import { MFAState, MFAAction } from '../model/mfa.types';
 
 import { variables } from '~/shared/constants/theme/variables';
 import { BaseButton, BasicFormProvider, Box, Text } from '~/shared/ui';
 import { useCustomForm, useCustomTranslation } from '~/shared/utils';
 
 interface MFAFormProps {
-  mfaState: MFAState;
-  dispatch: React.Dispatch<MFAAction>;
   onSuccess: (result: {
     user: { id: string; firstName: string; lastName: string; email: string };
     tokens: { accessToken: string; refreshToken: string; tokenType: string };
@@ -29,23 +27,17 @@ interface MFAFormProps {
 /**
  * MFA TOTP Form Component
  *
- * Features:
- * - 6-digit numeric input with letter-spacing for readability
- * - Auto-submit when 6 digits are entered
- * - Sanitizes input to digits only
- * - Displays error messages with remaining attempts
- * - "Can't access authenticator" link for recovery code fallback
+ * Consumes MFA session from context (isolated state).
+ * Error state is local to useMFAVerification (API-driven).
+ * Parent components won't re-render on MFA errors.
  */
-const MFAFormComponent = ({
-  mfaState,
-  dispatch,
-  onSuccess,
-  onSwitchToRecovery,
-  onBackToLogin,
-}: MFAFormProps) => {
+const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAFormProps) => {
   const { t } = useCustomTranslation({ keyPrefix: 'MFA' });
-  const formRef = useRef<HTMLFormElement>(null);
   const isUserTypingRef = useRef(false);
+  const isAutoSubmittingRef = useRef(false);
+
+  // Get session from context - isolated from parent
+  const { session, incrementAttempts } = useMFAContext();
 
   const form = useCustomForm<typeof MFATOTPSchema>(
     { defaultValues: { totpCode: '' } },
@@ -53,11 +45,11 @@ const MFAFormComponent = ({
   );
   const { handleSubmit, setValue, watch, control } = form;
 
-  const { error, displayError, isSessionExpired, isSubmitting, verifyCode, clearError, cleanup } =
+  const { displayError, isSessionExpired, isSubmitting, verifyCode, clearError } =
     useMFAVerification({
       type: 'totp',
-      mfaState,
-      dispatch,
+      session,
+      onIncrementAttempts: incrementAttempts,
       onSuccess,
     });
 
@@ -66,32 +58,39 @@ const MFAFormComponent = ({
   // Sanitize TOTP input to digits only, max 6
   const sanitizeTotp = (raw: string) => raw.replace(/\D/g, '').slice(0, 6);
 
+  const onSubmit = useCallback(
+    async (data: TMFATOTPForm) => {
+      if (isSessionExpired) return;
+      isUserTypingRef.current = false;
+      const success = await verifyCode(data.totpCode);
+      if (!success) {
+        setValue('totpCode', '');
+      }
+      isAutoSubmittingRef.current = false;
+    },
+    [isSessionExpired, verifyCode, setValue],
+  );
+
   // Auto-submit when 6 digits entered
   useEffect(() => {
-    if (totpCode.length === 6 && /^\d{6}$/.test(totpCode) && !isSubmitting && !isSessionExpired) {
-      formRef.current?.requestSubmit();
+    if (
+      totpCode.length === 6 &&
+      /^\d{6}$/.test(totpCode) &&
+      !isSubmitting &&
+      !isSessionExpired &&
+      !isAutoSubmittingRef.current
+    ) {
+      isAutoSubmittingRef.current = true;
+      handleSubmit(onSubmit)();
     }
-  }, [totpCode, isSubmitting, isSessionExpired]);
+  }, [totpCode, isSubmitting, isSessionExpired, handleSubmit, onSubmit]);
 
   // Clear error only when user is typing
   useEffect(() => {
-    if (error && totpCode.length > 0 && isUserTypingRef.current) {
+    if (displayError && totpCode.length > 0 && isUserTypingRef.current) {
       clearError();
     }
-  }, [totpCode, error, clearError]);
-
-  // Cleanup on unmount
-  useEffect(() => cleanup, [cleanup]);
-
-  const onSubmit = async (data: TMFATOTPForm) => {
-    if (isSessionExpired) return;
-    isUserTypingRef.current = false;
-    const success = await verifyCode(data.totpCode);
-    if (!success) {
-      // Clear input on error so user can try again
-      setValue('totpCode', '');
-    }
-  };
+  }, [totpCode, displayError, clearError]);
 
   const handleCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
     isUserTypingRef.current = true;
@@ -127,11 +126,7 @@ const MFAFormComponent = ({
       </Text>
 
       <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
-        <form
-          ref={formRef}
-          style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <Box display="flex" flexDirection="column" gap="16px" width="100%">
           <TOTPInput
             control={control}
             onChange={handleCodeChange}
@@ -185,13 +180,13 @@ const MFAFormComponent = ({
               {t('backToLogin')}
             </button>
           </Box>
-        </form>
+        </Box>
       </BasicFormProvider>
     </Box>
   );
 };
 
-// Separate TOTP input component with letter-spacing styling
+// Separate TOTP input component
 interface TOTPInputProps {
   control: ReturnType<typeof useCustomForm>['control'];
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;

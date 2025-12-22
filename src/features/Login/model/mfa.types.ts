@@ -1,21 +1,23 @@
 /**
  * MFA (Multi-Factor Authentication) Type Definitions
  *
- * CRITICAL SECURITY NOTE:
- * MFA session data is stored in-memory only (useReducer), NOT in Redux/localStorage
- * to prevent sensitive data (mfaToken, loginPassword) from being persisted.
+ * STATE ARCHITECTURE:
+ * - MFASessionState: In-memory only (Context), contains security-sensitive data
+ * - Error state: Local to useMFAVerification hook, driven by API responses
+ *
+ * BACKEND-DRIVEN EXPIRY:
+ * No local expiration tracking. Backend returns "session expired" or
+ * "session not found" errors which useMFAVerification detects.
  */
 
-// MFA Session stored in-memory (NOT Redux for security)
-export interface MFASession {
+// MFA Session stored in-memory via Context (NOT Redux for security)
+export interface MFASessionState {
   /** MFA token from backend login response */
   token: string;
   /** Session identifier for tracking */
   sessionId: string;
   /** Number of failed verification attempts */
   attempts: number;
-  /** Unix timestamp for session expiry (5 minutes from creation) */
-  expiresAt: number;
   /** CRITICAL: Retained for useOnLogin encryption key derivation */
   loginPassword: string;
 }
@@ -23,42 +25,18 @@ export interface MFASession {
 // AuthFlow state machine states
 export type AuthFlowState = 'login' | 'mfa-totp' | 'mfa-recovery';
 
-// MFA verification status
-export type MFAVerificationStatus = 'idle' | 'loading' | 'error';
-
-// MFA verification state
-export interface MFAVerificationState {
-  status: MFAVerificationStatus;
-  error?: string;
-  /** Formatted error key for display (e.g., 'invalidCode|2' for attempts remaining) */
-  displayError?: string;
-  isSessionExpired: boolean;
-}
-
-// MFA reducer action types
-export type MFAAction =
+// MFA session reducer action types (Context state)
+export type MFASessionAction =
   | {
       type: 'SET_SESSION';
       payload: {
         token: string;
         sessionId: string;
-        expiresAt: number;
         password: string;
       };
     }
   | { type: 'CLEAR_SESSION' }
-  | { type: 'INCREMENT_ATTEMPTS' }
-  | { type: 'SET_VERIFICATION_ERROR'; payload: { error: string; displayError: string } }
-  | { type: 'CLEAR_ERROR' }
-  | { type: 'SET_SESSION_EXPIRED' }
-  | { type: 'SET_LOADING' }
-  | { type: 'SET_IDLE' };
-
-// MFA state (combined for useReducer)
-export interface MFAState {
-  session: MFASession | null;
-  verification: MFAVerificationState;
-}
+  | { type: 'INCREMENT_ATTEMPTS' };
 
 // API response when MFA is required (from login endpoint)
 export interface MFARequiredResponse {

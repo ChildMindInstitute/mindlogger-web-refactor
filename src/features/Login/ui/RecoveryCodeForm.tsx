@@ -6,17 +6,15 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { useController } from 'react-hook-form';
 
+import { useMFAContext } from '../lib/MFAContext';
 import { useMFAVerification } from '../lib/useMFAVerification';
 import { MFARecoveryCodeSchema, TMFARecoveryCodeForm } from '../model/mfa.schema';
-import { MFAState, MFAAction } from '../model/mfa.types';
 
 import { variables } from '~/shared/constants/theme/variables';
 import { BaseButton, BasicFormProvider, Box, Text } from '~/shared/ui';
 import { useCustomForm, useCustomTranslation } from '~/shared/utils';
 
 interface RecoveryCodeFormProps {
-  mfaState: MFAState;
-  dispatch: React.Dispatch<MFAAction>;
   onSuccess: (result: {
     user: { id: string; firstName: string; lastName: string; email: string };
     tokens: { accessToken: string; refreshToken: string; tokenType: string };
@@ -29,15 +27,11 @@ interface RecoveryCodeFormProps {
 /**
  * MFA Recovery Code Form Component
  *
- * Features:
- * - XXXXX-XXXXX format input (alphanumeric, uppercase)
- * - Auto-format: converts to uppercase and inserts hyphen after 5 chars
- * - "Back to authenticator" link to return to TOTP form
- * - Displays error messages
+ * Consumes MFA session from context (isolated state).
+ * Error state is local to useMFAVerification (API-driven).
+ * Shows "Back to Login" only when session is expired.
  */
 const RecoveryCodeFormComponent = ({
-  mfaState,
-  dispatch,
   onSuccess,
   onSwitchToTOTP,
   onBackToLogin,
@@ -45,17 +39,20 @@ const RecoveryCodeFormComponent = ({
   const { t } = useCustomTranslation({ keyPrefix: 'MFA' });
   const isUserTypingRef = useRef(false);
 
+  // Get session from context - isolated from parent
+  const { session, incrementAttempts } = useMFAContext();
+
   const form = useCustomForm<typeof MFARecoveryCodeSchema>(
     { defaultValues: { code: '' } },
     MFARecoveryCodeSchema,
   );
   const { handleSubmit, setValue, watch, control } = form;
 
-  const { error, displayError, isSessionExpired, isSubmitting, verifyCode, clearError, cleanup } =
+  const { displayError, isSessionExpired, isSubmitting, verifyCode, clearError } =
     useMFAVerification({
       type: 'recovery',
-      mfaState,
-      dispatch,
+      session,
+      onIncrementAttempts: incrementAttempts,
       onSuccess,
     });
 
@@ -63,33 +60,25 @@ const RecoveryCodeFormComponent = ({
 
   // Auto-format recovery code: XXXXX-XXXXX
   const formatRecoveryCode = (value: string): string => {
-    // Remove all non-alphanumeric characters and convert to uppercase
     const cleaned = value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
-
-    // Add hyphen after 5 characters if needed
     if (cleaned.length > 5) {
       return `${cleaned.slice(0, 5)}-${cleaned.slice(5, 10)}`;
     }
-
     return cleaned;
   };
 
   // Clear error when user is typing
   useEffect(() => {
-    if (error && code.length > 0 && isUserTypingRef.current) {
+    if (displayError && code.length > 0 && isUserTypingRef.current) {
       clearError();
     }
-  }, [code, error, clearError]);
-
-  // Cleanup on unmount
-  useEffect(() => cleanup, [cleanup]);
+  }, [code, displayError, clearError]);
 
   const onSubmit = async (data: TMFARecoveryCodeForm) => {
     if (isSessionExpired) return;
     isUserTypingRef.current = false;
     const success = await verifyCode(data.code);
     if (!success) {
-      // Clear input on error so user can try again
       setValue('code', '');
     }
   };
@@ -116,10 +105,7 @@ const RecoveryCodeFormComponent = ({
       </Text>
 
       <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
-        <form
-          style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <Box display="flex" flexDirection="column" gap="16px" width="100%">
           <RecoveryInput
             control={control}
             onChange={handleCodeChange}
@@ -136,6 +122,7 @@ const RecoveryCodeFormComponent = ({
             text={t('continue')}
           />
 
+          {/* Show "Back to authenticator" when NOT expired */}
           {!isSessionExpired && (
             <Box display="flex" justifyContent="center">
               <button
@@ -157,6 +144,7 @@ const RecoveryCodeFormComponent = ({
             </Box>
           )}
 
+          {/* Show "Back to Login" ONLY when session expired */}
           {isSessionExpired && (
             <Box display="flex" justifyContent="center">
               <button
@@ -177,7 +165,7 @@ const RecoveryCodeFormComponent = ({
               </button>
             </Box>
           )}
-        </form>
+        </Box>
       </BasicFormProvider>
     </Box>
   );
@@ -212,7 +200,7 @@ const RecoveryInput = ({ control, onChange, disabled, error, helperText }: Recov
         onChange={onChange}
         disabled={disabled}
         inputProps={{
-          maxLength: 11, // XXXXX-XXXXX
+          maxLength: 11,
           autoComplete: 'off',
           style: { letterSpacing: '0.2em', fontSize: '1.1rem', textAlign: 'center' },
         }}

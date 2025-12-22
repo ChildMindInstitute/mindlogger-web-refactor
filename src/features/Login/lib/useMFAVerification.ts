@@ -1,7 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 
-import { useMFASessionExpiry } from './useMFASessionExpiry';
-import { MFAState, MFAAction } from '../model/mfa.types';
+import { MFASessionState } from '../model/mfa.types';
 
 import { useMFAVerifyMutation, useMFARecoveryMutation } from '~/entities/user';
 import { secureTokensStorage } from '~/shared/utils';
@@ -13,8 +12,10 @@ const WARNING_THRESHOLD = 3;
 
 interface UseMFAVerificationArgs {
   type: MFAVerificationType;
-  mfaState: MFAState;
-  dispatch: React.Dispatch<MFAAction>;
+  /** MFA session from local state (security sensitive) */
+  session: MFASessionState | null;
+  /** Increment attempts in local session state */
+  onIncrementAttempts: () => void;
   onSuccess: (result: { user: UserData; tokens: TokenData; password: string }) => void;
 }
 
@@ -32,37 +33,45 @@ interface TokenData {
 }
 
 /**
+ * Helper to detect session expiry from backend error message
+ * Matches admin pattern: Auth.reducer.ts isSessionExpiredError()
+ */
+const isSessionExpiredError = (message: string): boolean => {
+  const lower = message.toLowerCase();
+  return (
+    lower.includes('session not found') ||
+    lower.includes('expired') ||
+    lower.includes('session expired')
+  );
+};
+
+/**
  * Custom hook for MFA verification logic
  *
- * This hook manages:
- * - TOTP and Recovery code verification via API
- * - Attempt tracking and error display
- * - Session expiry detection (both timer-based and backend response)
- * - Secure token storage on success
+ * STATE ARCHITECTURE (following admin M2-10238 pattern):
+ * - All state is local - no Redux for errors
+ * - API responses drive error display
+ * - Session expiry detected from backend response (not local timer)
+ * - MFAForm handles translation of displayError keys
  *
- * CRITICAL: Uses in-memory state (NOT Redux) for security
+ * STICKY SESSION EXPIRED BEHAVIOR:
+ * - When backend returns expired/session-not-found, isSessionExpired = true
+ * - Input + Continue disabled, attempts stop incrementing
+ * - Error cannot be cleared (terminal state)
+ * - Recovery screen shows "Back to Log In" only when expired
  */
 export const useMFAVerification = ({
   type,
-  mfaState,
-  dispatch,
+  session,
+  onIncrementAttempts,
   onSuccess,
 }: UseMFAVerificationArgs) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSessionExpired, setIsSessionExpired] = useState(false);
+  const [displayError, setDisplayError] = useState<string | null>(null);
   const hasSessionExpiredRef = useRef(false);
 
-  const { session, verification } = mfaState;
   const attempts = session?.attempts || 0;
-
-  // Handle session expiry
-  const handleSessionExpired = useCallback(() => {
-    if (hasSessionExpiredRef.current) return;
-    hasSessionExpiredRef.current = true;
-    dispatch({ type: 'SET_SESSION_EXPIRED' });
-  }, [dispatch]);
-
-  // Use session expiry hook
-  useMFASessionExpiry({ mfaSession: session, onExpire: handleSessionExpired });
 
   // TOTP mutation
   const { mutateAsync: verifyTOTP } = useMFAVerifyMutation();
@@ -70,22 +79,16 @@ export const useMFAVerification = ({
   // Recovery mutation
   const { mutateAsync: verifyRecovery } = useMFARecoveryMutation();
 
-  // Verify code
+  // Verify code - API response drives all error states
   const verifyCode = useCallback(
     async (code: string): Promise<boolean> => {
-      // Don't call API if session already expired
-      if (verification.isSessionExpired) return false;
+      // Don't call API if session already expired (terminal state)
+      if (isSessionExpired) return false;
       if (isSubmitting) return false;
       if (!session) return false;
 
-      // Check if session has expired locally
-      if (Date.now() > session.expiresAt) {
-        handleSessionExpired();
-        return false;
-      }
-
       setIsSubmitting(true);
-      dispatch({ type: 'SET_LOADING' });
+      setDisplayError(null);
 
       try {
         const response =
@@ -105,38 +108,38 @@ export const useMFAVerification = ({
           password: session.loginPassword,
         });
 
-        dispatch({ type: 'SET_IDLE' });
         return true;
       } catch (error: unknown) {
         const err = error as { evaluatedMessage?: string; message?: string };
         const errorMessage = err?.evaluatedMessage || err?.message || 'Invalid verification code';
 
-        // Check for session expiry errors from backend
-        const lowerMessage = errorMessage.toLowerCase();
-        if (
-          lowerMessage.includes('session not found') ||
-          lowerMessage.includes('expired') ||
-          lowerMessage.includes('session expired')
-        ) {
-          handleSessionExpired();
+        // CHECK FOR EXPIRY FROM BACKEND FIRST - before anything else
+        if (isSessionExpiredError(errorMessage)) {
+          if (!hasSessionExpiredRef.current) {
+            hasSessionExpiredRef.current = true;
+            setIsSessionExpired(true);
+            setDisplayError('mfaSessionExpired');
+          }
+          // Do NOT increment attempts for expired session
           return false;
         }
 
-        // Increment attempts
-        dispatch({ type: 'INCREMENT_ATTEMPTS' });
+        // Normal invalid code flow - increment attempts
+        onIncrementAttempts();
         const newAttempts = attempts + 1;
 
-        // Determine display error based on type and attempt count
-        let displayError = type === 'totp' ? 'invalidCode' : 'invalidRecoveryCode';
-        if (type === 'totp' && newAttempts >= WARNING_THRESHOLD && newAttempts < MAX_ATTEMPTS) {
-          // Format: "invalidCode|2" for 2 attempts remaining
-          displayError = `invalidCode|${MAX_ATTEMPTS - newAttempts}`;
+        // Set displayError based on type and attempt count
+        if (type === 'totp') {
+          if (newAttempts >= WARNING_THRESHOLD && newAttempts < MAX_ATTEMPTS) {
+            // Format: "invalidCode|2" for 2 attempts remaining
+            setDisplayError(`invalidCode|${MAX_ATTEMPTS - newAttempts}`);
+          } else {
+            setDisplayError('invalidCode');
+          }
+        } else {
+          // Recovery codes don't track attempts
+          setDisplayError('invalidRecoveryCode');
         }
-
-        dispatch({
-          type: 'SET_VERIFICATION_ERROR',
-          payload: { error: errorMessage, displayError },
-        });
 
         return false;
       } finally {
@@ -145,26 +148,24 @@ export const useMFAVerification = ({
     },
     [
       session,
-      verification.isSessionExpired,
+      isSessionExpired,
       isSubmitting,
       type,
       verifyTOTP,
       verifyRecovery,
       onSuccess,
-      dispatch,
-      handleSessionExpired,
+      onIncrementAttempts,
       attempts,
     ],
   );
 
-  // Clear error when user types (but not session-expired errors)
+  // Clear error when user types (but not session-expired errors - they're terminal)
   const clearError = useCallback(() => {
-    // Don't clear session-expired errors - they're terminal
-    if (verification.isSessionExpired || verification.displayError === 'mfaSessionExpired') {
-      return;
+    if (isSessionExpired || displayError === 'mfaSessionExpired') {
+      return; // Don't clear terminal errors
     }
-    dispatch({ type: 'CLEAR_ERROR' });
-  }, [dispatch, verification.isSessionExpired, verification.displayError]);
+    setDisplayError(null);
+  }, [isSessionExpired, displayError]);
 
   // Cleanup on unmount
   const cleanup = useCallback(() => {
@@ -172,10 +173,9 @@ export const useMFAVerification = ({
   }, []);
 
   return {
-    // State
-    error: verification.error,
-    displayError: verification.displayError,
-    isSessionExpired: verification.isSessionExpired,
+    // Local state - API driven
+    displayError,
+    isSessionExpired,
     isSubmitting,
     attempts,
     maxAttempts: MAX_ATTEMPTS,
