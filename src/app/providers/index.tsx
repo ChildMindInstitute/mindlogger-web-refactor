@@ -8,6 +8,8 @@ import ReduxProvider from './redux';
 import RouteProvider from './route-provider';
 import MUIThemeProvider from './theme-provider';
 
+import { MFAProvider } from '~/features/Login/lib/MFAContext';
+
 type Props = PropsWithChildren<unknown>;
 
 function Providers({ children }: Props) {
@@ -16,11 +18,13 @@ function Providers({ children }: Props) {
       <CssBaseline />
       <MUIThemeProvider>
         <RouteProvider>
-          <ReduxProvider>
-            <ReactQuery>
-              <DateLocalizationProvider>{children}</DateLocalizationProvider>
-            </ReactQuery>
-          </ReduxProvider>
+          <MFAProvider>
+            <ReduxProvider>
+              <ReactQuery>
+                <DateLocalizationProvider>{children}</DateLocalizationProvider>
+              </ReactQuery>
+            </ReduxProvider>
+          </MFAProvider>
         </RouteProvider>
       </MUIThemeProvider>
     </>

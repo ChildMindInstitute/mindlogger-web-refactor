@@ -40,7 +40,7 @@ const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAF
   const { session, incrementAttempts } = useMFAContext();
 
   const form = useCustomForm<typeof MFATOTPSchema>(
-    { defaultValues: { totpCode: '' } },
+    { defaultValues: { totpCode: '' }, mode: 'onSubmit', reValidateMode: 'onSubmit' },
     MFATOTPSchema,
   );
   const { handleSubmit, setValue, watch, control } = form;
@@ -113,20 +113,22 @@ const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAF
   const helperMessage = getErrorMessage();
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" gap="24px" width="100%">
-      <Text variant="titleLargeBold" color={variables.palette.onSurface}>
-        {t('confirmYourIdentity')}
-      </Text>
-      <Text
-        variant="bodyMedium"
-        color={variables.palette.onSurfaceVariant}
-        sx={{ textAlign: 'center' }}
-      >
-        {t('enterVerificationCode')}
-      </Text>
+    <Box display="flex" flexDirection="column" alignItems="center" gap="32px" width="100%">
+      <Box display="flex" flexDirection="column" alignItems="center" gap="8px">
+        <Text variant="titleLargeBold" color={variables.palette.onSurface}>
+          {t('confirmYourIdentity')}
+        </Text>
+        <Text
+          variant="bodyMedium"
+          color={variables.palette.onSurfaceVariant}
+          sx={{ textAlign: 'center' }}
+        >
+          {t('enterVerificationCode')}
+        </Text>
+      </Box>
 
       <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
-        <Box display="flex" flexDirection="column" gap="16px" width="100%">
+        <Box display="flex" flexDirection="column" gap="24px" width="100%">
           <TOTPInput
             control={control}
             onChange={handleCodeChange}

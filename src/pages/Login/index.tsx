@@ -1,9 +1,11 @@
-import { lazy } from 'react';
+import { lazy, useCallback } from 'react';
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useBanners } from '~/entities/banner/model';
-import { AuthFlow, useLoginTranslation } from '~/features/Login';
+import { LoginForm, useLoginTranslation } from '~/features/Login';
+import { useMFAContext } from '~/features/Login/lib/MFAContext';
+import { MFARequiredResponse } from '~/features/Login/model/mfa.types';
 import { ROUTES } from '~/shared/constants';
 import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
@@ -17,10 +19,22 @@ function LoginPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { addSuccessBanner } = useBanners();
+  const { setSession } = useMFAContext();
 
   const onCreateAccountClick = () => {
     Mixpanel.track({ action: MixpanelEventType.LoginScreenCreateAccountBtnClick });
   };
+
+  // Handle MFA required: store session and navigate to MFA page
+  const handleMFARequired = useCallback(
+    (mfaData: MFARequiredResponse, password: string) => {
+      setSession(mfaData.mfaToken, mfaData.mfaSessionId, password);
+      navigate(ROUTES.verifyMFA.path, {
+        state: { backRedirectPath: location.state?.backRedirectPath },
+      });
+    },
+    [setSession, navigate, location.state?.backRedirectPath],
+  );
 
   useOnceEffect(() => {
     Mixpanel.trackPageView('Login');
@@ -60,7 +74,10 @@ function LoginPage() {
         </Text>
 
         <Box className="loginForm" maxWidth="400px" margin="0 auto">
-          <AuthFlow locationState={location.state as Record<string, unknown>} />
+          <LoginForm
+            locationState={location.state as Record<string, unknown>}
+            onMFARequired={handleMFARequired}
+          />
         </Box>
 
         <Box margin="24px 0px" display="flex" justifyContent="center">
