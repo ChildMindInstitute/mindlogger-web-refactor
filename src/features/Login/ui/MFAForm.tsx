@@ -199,13 +199,15 @@ interface TOTPInputProps {
 
 const TOTPInput = ({ control, onChange, disabled, error, helperText }: TOTPInputProps) => {
   const { t } = useCustomTranslation({ keyPrefix: 'MFA' });
+  const { t: tValidation } = useCustomTranslation();
   const {
     field,
     fieldState: { error: fieldError },
   } = useController({ name: 'totpCode', control });
 
   const displayError = error || !!fieldError;
-  const displayHelperText = helperText || (fieldError?.message ? t(fieldError.message) : undefined);
+  const displayHelperText =
+    helperText || (fieldError?.message ? tValidation(fieldError.message) : undefined);
 
   return (
     <FormControl error={displayError} sx={{ width: '100%' }} variant="outlined">
