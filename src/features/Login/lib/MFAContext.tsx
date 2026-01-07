@@ -51,10 +51,19 @@ const MFAContext = createContext<MFAContextValue | null>(null);
 /**
  * MFA Provider
  *
- * Isolates MFA session state from AuthFlow.
- * - MFA components consume this context directly
- * - Errors in MFA won't cause parent (AuthFlow/Login) re-renders
- * - Session expiry is backend-driven, no local timers
+ * WHY GLOBAL CONTEXT:
+ * - Isolates MFA session state from AuthFlow to prevent parent re-renders on MFA errors
+ * - Security: Password stored only in React state (memory), never persisted to storage
+ * - Session will be cleared after MFA verification completes (success or back to login)
+ *
+ * WHY PASSWORD IS STORED:
+ * - Password is needed for encryption key derivation after MFA succeeds (useOnLogin)
+ * - Alternative: Backend could accept userId in MFA verify endpoint to generate key server-side
+ * - TODO: Consider API enhancement to pass userId, eliminating need to retain password
+ *
+ * BACKEND-DRIVEN EXPIRY:
+ * - No local expiration timer - backend returns "session expired" errors
+ * - useMFAVerification detects expiry from API response
  */
 export const MFAProvider = ({ children }: { children: ReactNode }) => {
   const [session, dispatch] = useReducer(mfaSessionReducer, null);

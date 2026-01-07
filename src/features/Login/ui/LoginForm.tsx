@@ -13,7 +13,7 @@ import { Mixpanel, MixpanelEventType, useCustomForm, usePasswordType } from '~/s
 interface LoginFormProps {
   locationState?: Record<string, unknown>;
   /** Callback when MFA is required - receives MFA session data and password for encryption */
-  onMFARequired?: (mfaData: MFARequiredResponse, password: string) => void;
+  onMFARequired: (mfaData: MFARequiredResponse, password: string) => void;
 }
 
 export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
@@ -36,9 +36,7 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
 
       // Check if MFA is required
       if (isMFARequiredResponse(result)) {
-        if (onMFARequired) {
-          onMFARequired(result, variables.password);
-        }
+        onMFARequired(result, variables.password);
         return;
       }
 

@@ -3,14 +3,13 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { userModel } from '~/entities/user';
-import { MFAForm, useLoginTranslation } from '~/features/Login';
+import { MFAForm } from '~/features/Login';
 import { useMFAContext } from '~/features/Login/lib/MFAContext';
 import { ROUTES } from '~/shared/constants';
 import { variables } from '~/shared/constants/theme/variables';
 import { Box } from '~/shared/ui';
 
 function MFAVerifyPage() {
-  const { t } = useLoginTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const { session, clearSession } = useMFAContext();

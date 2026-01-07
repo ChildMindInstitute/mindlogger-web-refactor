@@ -18,6 +18,9 @@ function Providers({ children }: Props) {
       <CssBaseline />
       <MUIThemeProvider>
         <RouteProvider>
+          {/* MFAProvider: Isolates MFA state (token, password) from auth flow.
+              Password kept in memory only for encryption key derivation after MFA success.
+              we can remove this when we update the api to return USER_ID */}
           <MFAProvider>
             <ReduxProvider>
               <ReactQuery>

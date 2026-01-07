@@ -35,6 +35,12 @@ interface TokenData {
 /**
  * Helper to detect session expiry from backend error message
  * Matches admin pattern: Auth.reducer.ts isSessionExpiredError()
+ *
+ * TODO: Use exact error codes from backend instead of string matching:
+ * - AuthErrorCode.MFA_SESSION_NOT_FOUND
+ * - MFATokenExpiredError
+ * - MFATokenInvalidError
+ * See: mindlogger-backend-refactor/src/apps/authentication/constants.py
  */
 const isSessionExpiredError = (message: string): boolean => {
   const lower = message.toLowerCase();
@@ -91,6 +97,7 @@ export const useMFAVerification = ({
       setDisplayError(null);
 
       try {
+        // TODO: Consider passing deviceId for device tracking
         const response =
           type === 'totp'
             ? await verifyTOTP({ mfaToken: session.token, totpCode: code })
@@ -125,6 +132,7 @@ export const useMFAVerification = ({
         }
 
         // Normal invalid code flow - increment attempts
+        // TODO: Use attempts_remaining from API response instead of client-side tracking
         onIncrementAttempts();
         const newAttempts = attempts + 1;
 
@@ -167,11 +175,6 @@ export const useMFAVerification = ({
     setDisplayError(null);
   }, [isSessionExpired, displayError]);
 
-  // Cleanup on unmount
-  const cleanup = useCallback(() => {
-    hasSessionExpiredRef.current = false;
-  }, []);
-
   return {
     // Local state - API driven
     displayError,
@@ -183,6 +186,5 @@ export const useMFAVerification = ({
     // Actions
     verifyCode,
     clearError,
-    cleanup,
   };
 };

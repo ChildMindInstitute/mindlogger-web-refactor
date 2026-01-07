@@ -127,44 +127,38 @@ const RecoveryCodeFormComponent = ({
           {/* Show "Back to authenticator" when NOT expired */}
           {!isSessionExpired && (
             <Box display="flex" justifyContent="center">
-              <button
+              <BaseButton
                 type="button"
+                variant="text"
                 onClick={onSwitchToTOTP}
-                style={{
+                text={t('backToAuthenticator')}
+                sx={{
                   textDecoration: 'underline',
-                  cursor: 'pointer',
-                  background: 'none',
-                  border: 'none',
-                  padding: 0,
                   color: variables.palette.onSurfaceVariant,
-                  fontSize: 'inherit',
-                  fontFamily: 'inherit',
+                  padding: 0,
+                  minWidth: 'auto',
+                  '&:hover': { backgroundColor: 'transparent' },
                 }}
-              >
-                {t('backToAuthenticator')}
-              </button>
+              />
             </Box>
           )}
 
           {/* Show "Back to Login" ONLY when session expired */}
           {isSessionExpired && (
             <Box display="flex" justifyContent="center">
-              <button
+              <BaseButton
                 type="button"
+                variant="text"
                 onClick={onBackToLogin}
-                style={{
+                text={t('backToLogin')}
+                sx={{
                   textDecoration: 'underline',
-                  cursor: 'pointer',
-                  background: 'none',
-                  border: 'none',
-                  padding: 0,
                   color: variables.palette.onSurfaceVariant,
-                  fontSize: 'inherit',
-                  fontFamily: 'inherit',
+                  padding: 0,
+                  minWidth: 'auto',
+                  '&:hover': { backgroundColor: 'transparent' },
                 }}
-              >
-                {t('backToLogin')}
-              </button>
+              />
             </Box>
           )}
         </Box>
