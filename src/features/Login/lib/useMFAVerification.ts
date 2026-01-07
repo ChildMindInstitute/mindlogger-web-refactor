@@ -54,7 +54,6 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSessionExpired, setIsSessionExpired] = useState(false);
   const [displayError, setDisplayError] = useState<string | null>(null);
-  const [attemptsRemaining, setAttemptsRemaining] = useState<number | null>(null);
   const hasSessionExpiredRef = useRef(false);
 
   // TOTP mutation
@@ -107,9 +106,6 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
           setIsSessionExpired(true);
         }
 
-        // Update attempts from API metadata
-        setAttemptsRemaining(remaining);
-
         // Set display error (simple key, or key with attempts if warning threshold)
         if (remaining !== null && remaining <= WARNING_THRESHOLD && !expired) {
           // Format: "invalidCode|2" for 2 attempts remaining
@@ -139,7 +135,6 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
     displayError,
     isSessionExpired,
     isSubmitting,
-    attemptsRemaining,
 
     // Actions
     verifyCode,

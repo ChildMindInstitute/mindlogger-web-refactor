@@ -88,7 +88,19 @@ const RecoveryCodeFormComponent = ({
     setValue('code', formatted);
   };
 
-  const helperMessage = displayError ? t(displayError) : null;
+  // Get error message for display (handles "key|remaining" format)
+  const getErrorMessage = (): string | null => {
+    if (displayError) {
+      if (displayError.includes('|')) {
+        const [key, remaining] = displayError.split('|');
+        return `${t(key)}. ${t('attemptsRemaining', { count: parseInt(remaining) })}`;
+      }
+      return t(displayError);
+    }
+    return null;
+  };
+
+  const helperMessage = getErrorMessage();
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap="32px" width="100%">

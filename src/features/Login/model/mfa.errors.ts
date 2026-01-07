@@ -6,6 +6,7 @@
 // Error codes from backend AUTH.MFA namespace
 export const MFA_ERROR_CODES = {
   INVALID_TOTP_CODE: 'AUTH.MFA.INVALID_TOTP_CODE',
+  // Note: Backend RecoveryCodeInvalidError has no error_code - used as fallback translation key only
   INVALID_RECOVERY_CODE: 'AUTH.MFA.INVALID_RECOVERY_CODE',
   TOKEN_EXPIRED: 'AUTH.MFA.TOKEN_EXPIRED',
   TOKEN_INVALID: 'AUTH.MFA.TOKEN_INVALID',
