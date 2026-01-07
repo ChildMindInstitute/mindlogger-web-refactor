@@ -45,7 +45,7 @@ function MFARecoveryPage() {
   };
 
   const handleSwitchToTOTP = () => {
-    navigate(ROUTES.verifyMFA.path);
+    navigate(-1);
   };
 
   const handleBackToLogin = () => {

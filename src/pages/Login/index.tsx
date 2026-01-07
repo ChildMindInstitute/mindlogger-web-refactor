@@ -1,4 +1,4 @@
-import { lazy, useCallback } from 'react';
+import { lazy, useCallback, useEffect } from 'react';
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -19,7 +19,13 @@ function LoginPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { addSuccessBanner } = useBanners();
-  const { setSession } = useMFAContext();
+  const { setSession, clearSession } = useMFAContext();
+
+  // Clear any existing MFA session when login page mounts
+  // This prevents browser back/forward navigation from accessing MFA with stale session
+  useEffect(() => {
+    clearSession();
+  }, [clearSession]);
 
   const onCreateAccountClick = () => {
     Mixpanel.track({ action: MixpanelEventType.LoginScreenCreateAccountBtnClick });
