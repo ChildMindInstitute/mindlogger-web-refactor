@@ -37,7 +37,7 @@ const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAF
   const isAutoSubmittingRef = useRef(false);
 
   // Get session from context - isolated from parent
-  const { session, incrementAttempts } = useMFAContext();
+  const { session } = useMFAContext();
 
   const form = useCustomForm<typeof MFATOTPSchema>(
     { defaultValues: { totpCode: '' }, mode: 'onSubmit', reValidateMode: 'onSubmit' },
@@ -49,7 +49,6 @@ const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAF
     useMFAVerification({
       type: 'totp',
       session,
-      onIncrementAttempts: incrementAttempts,
       onSuccess,
     });
 

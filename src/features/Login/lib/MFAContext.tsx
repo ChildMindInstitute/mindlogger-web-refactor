@@ -17,19 +17,11 @@ const mfaSessionReducer = (
       return {
         token: action.payload.token,
         sessionId: action.payload.sessionId,
-        attempts: 0,
         loginPassword: action.payload.password,
       };
 
     case 'CLEAR_SESSION':
       return null;
-
-    case 'INCREMENT_ATTEMPTS':
-      if (!state) return state;
-      return {
-        ...state,
-        attempts: state.attempts + 1,
-      };
 
     default:
       return state;
@@ -43,7 +35,6 @@ interface MFAContextValue {
   session: MFASessionState | null;
   setSession: (token: string, sessionId: string, password: string) => void;
   clearSession: () => void;
-  incrementAttempts: () => void;
 }
 
 const MFAContext = createContext<MFAContextValue | null>(null);
@@ -79,12 +70,8 @@ export const MFAProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: 'CLEAR_SESSION' });
   }, []);
 
-  const incrementAttempts = useCallback(() => {
-    dispatch({ type: 'INCREMENT_ATTEMPTS' });
-  }, []);
-
   return (
-    <MFAContext.Provider value={{ session, setSession, clearSession, incrementAttempts }}>
+    <MFAContext.Provider value={{ session, setSession, clearSession }}>
       {children}
     </MFAContext.Provider>
   );

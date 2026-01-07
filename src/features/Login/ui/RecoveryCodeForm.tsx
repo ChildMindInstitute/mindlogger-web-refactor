@@ -40,7 +40,7 @@ const RecoveryCodeFormComponent = ({
   const isUserTypingRef = useRef(false);
 
   // Get session from context - isolated from parent
-  const { session, incrementAttempts } = useMFAContext();
+  const { session } = useMFAContext();
 
   const form = useCustomForm<typeof MFARecoveryCodeSchema>(
     { defaultValues: { code: '' }, mode: 'onSubmit', reValidateMode: 'onSubmit' },
@@ -52,7 +52,6 @@ const RecoveryCodeFormComponent = ({
     useMFAVerification({
       type: 'recovery',
       session,
-      onIncrementAttempts: incrementAttempts,
       onSuccess,
     });
 

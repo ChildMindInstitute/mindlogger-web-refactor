@@ -16,8 +16,6 @@ export interface MFASessionState {
   token: string;
   /** Session identifier for tracking */
   sessionId: string;
-  /** Number of failed verification attempts */
-  attempts: number;
   /** CRITICAL: Retained for useOnLogin encryption key derivation */
   loginPassword: string;
 }
@@ -35,8 +33,7 @@ export type MFASessionAction =
         password: string;
       };
     }
-  | { type: 'CLEAR_SESSION' }
-  | { type: 'INCREMENT_ATTEMPTS' };
+  | { type: 'CLEAR_SESSION' };
 
 // API response when MFA is required (from login endpoint)
 export interface MFARequiredResponse {
