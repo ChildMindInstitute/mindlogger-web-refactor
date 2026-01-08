@@ -1,19 +1,22 @@
-import { useCallback, useContext, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { v4 as uuidV4 } from 'uuid';
 
-import { AppletDetailsContext } from '../../lib';
-
 import { ActivityPipelineType } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
-import { CompletedEntitiesDTO, CompletedEntityDTO } from '~/shared/api';
+import { CompletedEntitiesDTO, CompletedEntityDTO, ScheduleEventDto } from '~/shared/api';
 
-type FilterCompletedEntitiesProps = {
-  completedEntities?: CompletedEntitiesDTO;
+type EntitiesSyncProps = {
+  completedEntities: CompletedEntitiesDTO | undefined;
+  respondentSubjectId: string | null;
+  events: ScheduleEventDto[];
 };
 
-export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesProps) => {
-  const { applet, events } = useContext(AppletDetailsContext);
+export const useEntitiesSync = ({
+  completedEntities,
+  respondentSubjectId,
+  events,
+}: EntitiesSyncProps) => {
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   // Create ref to exclude from callback dependencies to avoid infinite loop
@@ -31,7 +34,7 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
       const eventId = entity.scheduledEventId;
       // Normalize targetSubjectId to null for self-reports
       const targetSubjectId =
-        entity.targetSubjectId === applet.respondentMeta?.subjectId ? null : entity.targetSubjectId;
+        entity.targetSubjectId === respondentSubjectId ? null : entity.targetSubjectId;
 
       const groupProgress = getGroupProgressRef.current({
         entityId,
@@ -39,7 +42,7 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
         targetSubjectId,
       });
 
-      const event = events.events.find(({ id }) => id === eventId) ?? null;
+      const event = events.find(({ id }) => id === eventId) ?? null;
 
       if (!groupProgress) {
         return saveGroupProgress({
@@ -78,7 +81,7 @@ export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesPr
         });
       }
     },
-    [applet.respondentMeta?.subjectId, events.events, saveGroupProgress],
+    [respondentSubjectId, events, saveGroupProgress],
   );
 
   useEffect(() => {

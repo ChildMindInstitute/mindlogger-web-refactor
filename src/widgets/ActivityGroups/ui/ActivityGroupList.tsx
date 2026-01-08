@@ -68,7 +68,11 @@ export const ActivityGroupList = () => {
     setIsAboutOpen(true);
   };
 
-  useEntitiesSync({ completedEntities });
+  useEntitiesSync({
+    completedEntities,
+    respondentSubjectId: applet.respondentMeta?.subjectId ?? null,
+    events: events.events,
+  });
 
   if (isCompletedEntitiesFetching) {
     return <Loader />;
