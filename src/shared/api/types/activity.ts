@@ -232,11 +232,9 @@ export type MatrixMultiSelectAnswerPayload = {
 };
 
 export type CompletedEntityDTO = {
-  /** @deprecated Use activityHistoryId and flowHistoryId instead. For activities, this is the activityHistoryId. For flows, this is the flowHistoryId. */
-  id: string;
   answerId: string;
   submitId: string;
-  activityHistoryId: string | null;
+  activityHistoryId: string;
   flowHistoryId: string | null;
   targetSubjectId: string | null;
   scheduledEventId: string;
