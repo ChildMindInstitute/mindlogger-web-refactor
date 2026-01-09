@@ -41,7 +41,8 @@ interface TokenData {
  *
  * API-DRIVEN ERROR HANDLING:
  * - Uses error_code field from API response
- * - Uses metadata.session_attempts_remaining from API response
+ * - Uses metadata.session_attempts_remaining and global_attempts_remaining from API response
+ * - Global warnings take priority over session warnings (more severe)
  * - Falls back to generic errors if error_code not present
  *
  * STICKY SESSION EXPIRED BEHAVIOR:
@@ -97,7 +98,8 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
         const {
           translationKey,
           isSessionExpired: expired,
-          attemptsRemaining: remaining,
+          sessionAttemptsRemaining,
+          globalAttemptsRemaining,
         } = getMfaErrorResult(error, type);
 
         // Handle session expiry (terminal state)
@@ -106,10 +108,22 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
           setIsSessionExpired(true);
         }
 
-        // Set display error (simple key, or key with attempts if warning threshold)
-        if (remaining !== null && remaining <= WARNING_THRESHOLD && !expired) {
-          // Format: "invalidCode|2" for 2 attempts remaining
-          setDisplayError(`${translationKey}|${remaining}`);
+        // Set display error with priority-based warning
+        // Global warnings take priority over session warnings (more severe)
+        if (
+          globalAttemptsRemaining !== null &&
+          globalAttemptsRemaining <= WARNING_THRESHOLD &&
+          !expired
+        ) {
+          // Format: "invalidCode|global|5" for 5 global attempts remaining
+          setDisplayError(`${translationKey}|global|${globalAttemptsRemaining}`);
+        } else if (
+          sessionAttemptsRemaining !== null &&
+          sessionAttemptsRemaining <= WARNING_THRESHOLD &&
+          !expired
+        ) {
+          // Format: "invalidCode|session|2" for 2 session attempts remaining
+          setDisplayError(`${translationKey}|session|${sessionAttemptsRemaining}`);
         } else {
           setDisplayError(translationKey);
         }

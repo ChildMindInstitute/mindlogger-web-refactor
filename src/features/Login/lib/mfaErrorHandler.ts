@@ -10,7 +10,8 @@ export type MfaVerificationType = 'totp' | 'recovery';
 export interface MfaErrorResult {
   translationKey: string;
   isSessionExpired: boolean;
-  attemptsRemaining: number | null;
+  sessionAttemptsRemaining: number | null;
+  globalAttemptsRemaining: number | null;
 }
 
 /**
@@ -39,8 +40,9 @@ export const getMfaErrorResult = (error: unknown, type: MfaVerificationType): Mf
   // Check session expiry from error code
   const isSessionExpired = SESSION_EXPIRED_CODES.includes(errorCode);
 
-  // Get attempts remaining from metadata (prefer session over global)
-  const attemptsRemaining = metadata?.session_attempts_remaining ?? null;
+  // Get attempts remaining from metadata (both session and global)
+  const sessionAttemptsRemaining = metadata?.session_attempts_remaining ?? null;
+  const globalAttemptsRemaining = metadata?.global_attempts_remaining ?? null;
 
   // Map error code to translation key
   let translationKey: string;
@@ -70,5 +72,5 @@ export const getMfaErrorResult = (error: unknown, type: MfaVerificationType): Mf
       translationKey = type === 'totp' ? 'invalidCode' : 'invalidRecoveryCode';
   }
 
-  return { translationKey, isSessionExpired, attemptsRemaining };
+  return { translationKey, isSessionExpired, sessionAttemptsRemaining, globalAttemptsRemaining };
 };

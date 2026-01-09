@@ -80,7 +80,7 @@ const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAF
       !isAutoSubmittingRef.current
     ) {
       isAutoSubmittingRef.current = true;
-      handleSubmit(onSubmit)();
+      void handleSubmit(onSubmit)();
     }
   }, [totpCode, isSubmitting, isSessionExpired, handleSubmit, onSubmit]);
 
@@ -98,15 +98,31 @@ const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAF
   };
 
   // Get error message for display
+  // Supports formats: "key", "key|count" (legacy), "key|type|count" (new)
   const getErrorMessage = (): string | null => {
-    if (displayError) {
-      if (displayError.includes('|')) {
-        const [key, remaining] = displayError.split('|');
-        return `${t(key)}. ${t('attemptsRemaining', { count: parseInt(remaining) })}`;
+    if (!displayError) return null;
+
+    const parts = displayError.split('|');
+
+    if (parts.length === 3) {
+      // New format: "invalidCode|global|5" or "invalidCode|session|2"
+      const [key, warningType, remaining] = parts;
+      const count = parseInt(remaining);
+
+      if (warningType === 'global') {
+        return `${t(key)}. ${t('globalAttemptsRemaining', { count })}`;
       }
-      return t(displayError);
+      return `${t(key)}. ${t('sessionAttemptsRemaining', { count })}`;
     }
-    return null;
+
+    if (parts.length === 2) {
+      // Legacy format: "invalidCode|2"
+      const [key, remaining] = parts;
+      return `${t(key)}. ${t('attemptsRemaining', { count: parseInt(remaining) })}`;
+    }
+
+    // Simple key only
+    return t(displayError);
   };
 
   const helperMessage = getErrorMessage();
@@ -127,13 +143,22 @@ const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAF
       </Box>
 
       <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
-        <Box display="flex" flexDirection="column" gap="24px" width="100%">
+        <Box display="flex" flexDirection="column" alignItems="center" gap="24px" width="100%">
           <TOTPInput
             control={control}
             onChange={handleCodeChange}
             disabled={isSessionExpired}
             error={!!helperMessage}
             helperText={helperMessage || undefined}
+          />
+
+          <BaseButton
+            type="submit"
+            variant="contained"
+            isLoading={isSubmitting}
+            disabled={isSessionExpired}
+            text={t('continue')}
+            sx={{ width: '300px', height: '48px' }}
           />
 
           <Box display="flex" justifyContent="center">
@@ -143,7 +168,6 @@ const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAF
               onClick={onSwitchToRecovery}
               text={t('cantAccessAuthenticator')}
               sx={{
-                textDecoration: 'underline',
                 color: variables.palette.primary,
                 padding: 0,
                 minWidth: 'auto',
@@ -152,14 +176,6 @@ const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAF
             />
           </Box>
 
-          <BaseButton
-            type="submit"
-            variant="contained"
-            isLoading={isSubmitting}
-            disabled={isSessionExpired}
-            text={t('continue')}
-          />
-
           <Box display="flex" justifyContent="center">
             <BaseButton
               type="button"
@@ -167,7 +183,6 @@ const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAF
               onClick={onBackToLogin}
               text={t('backToLogin')}
               sx={{
-                textDecoration: 'underline',
                 color: variables.palette.onSurfaceVariant,
                 padding: 0,
                 minWidth: 'auto',
@@ -203,7 +218,7 @@ const TOTPInput = ({ control, onChange, disabled, error, helperText }: TOTPInput
     helperText || (fieldError?.message ? tValidation(fieldError.message) : undefined);
 
   return (
-    <FormControl error={displayError} sx={{ width: '100%' }} variant="outlined">
+    <FormControl error={displayError} variant="outlined" sx={{ width: '300px' }}>
       <InputLabel>{t('verificationCode')}</InputLabel>
       <OutlinedInput
         {...field}
@@ -211,12 +226,13 @@ const TOTPInput = ({ control, onChange, disabled, error, helperText }: TOTPInput
         type="text"
         onChange={onChange}
         disabled={disabled}
+        sx={{ width: '100%' }}
         inputProps={{
           maxLength: 6,
           inputMode: 'numeric',
           pattern: '[0-9]*',
           autoComplete: 'one-time-code',
-          style: { letterSpacing: '0.5em', fontSize: '1.25rem', textAlign: 'center' },
+          style: { letterSpacing: '0.3em', fontSize: '1rem', textAlign: 'center' },
         }}
         autoFocus
         error={displayError}
