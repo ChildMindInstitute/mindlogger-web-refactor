@@ -24,6 +24,7 @@ export const useActivityGroups = ({ applet, events, assignments }: Props): Retur
     events,
     assignments,
     entityProgress: groupsInProgress,
+    respondentMeta: applet.respondentMeta,
   });
 
   return { groups };

@@ -27,14 +27,18 @@ const SummaryScreen = () => {
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(
       state,
-      getProgressId(context.activityId, context.eventId, context.targetSubject?.id),
+      getProgressId(
+        context.activityId,
+        context.eventId,
+        context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+      ),
     ),
   );
 
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
     eventId: context.eventId,
     activityId: context.activityId,
-    targetSubjectId: context.targetSubject?.id ?? null,
+    targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
     publicAppletKey: context.publicAppletKey,
     flowId: context.flow?.id ?? null,
     appletId: context.appletId,
@@ -48,7 +52,7 @@ const SummaryScreen = () => {
   const { summaryData } = useSummaryData({
     activityId: context.activityId,
     eventId: context.eventId,
-    targetSubjectId: context.targetSubject?.id ?? null,
+    targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
     activityName: context.activity.name,
     scoresAndReports: activityProgress.scoreSettings,
     flowId: context.flow?.id ?? null,

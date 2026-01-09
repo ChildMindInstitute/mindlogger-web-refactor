@@ -21,6 +21,7 @@ import {
   ActivityFlowDTO,
   AppletEventsResponse,
   HydratedAssignmentDTO,
+  RespondentMetaDTO,
 } from '~/shared/api';
 
 type BuildResult = {
@@ -33,6 +34,7 @@ type ProcessParams = {
   assignments: HydratedAssignmentDTO[] | null;
   events: AppletEventsResponse;
   entityProgress: GroupProgressState;
+  respondentMeta?: RespondentMetaDTO;
 };
 
 const createActivityGroupsBuildManager = () => {
@@ -105,6 +107,7 @@ const createActivityGroupsBuildManager = () => {
     const builder = createActivityGroupsBuilder({
       allAppletActivities: activities,
       progress: params.entityProgress,
+      respondentMeta: params.respondentMeta,
     });
 
     const calculator = EventModel.ScheduledDateCalculator;

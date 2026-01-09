@@ -29,12 +29,11 @@ const WelcomeScreen = () => {
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
   const isFlow = !!context.flow;
-  const targetSubjectId = context.targetSubject?.id ?? null;
 
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
     eventId: context.eventId,
-    targetSubjectId,
+    targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
   });
 
   const isTimedActivity = !!groupProgress?.event?.timers?.timer;
@@ -47,24 +46,33 @@ const WelcomeScreen = () => {
     const event = groupProgress?.event ?? context.event;
 
     if (context.flow && !isGroupStarted) {
-      startFlow(event, context.flow, targetSubjectId);
+      startFlow(
+        event,
+        context.flow,
+        context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+      );
     }
 
     if (!context.flow) {
-      startActivity(context.activityId, event, targetSubjectId);
+      startActivity(
+        context.activityId,
+        event,
+        context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+      );
     }
 
     return setInitialProgress({
       activity: context.activity,
       eventId: context.event.id,
-      targetSubjectId,
+      targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
     });
   }, [
     context.activity,
     context.activityId,
     context.event,
     context.flow,
-    targetSubjectId,
+    context.respondentMeta?.subjectId,
+    context.targetSubject?.id,
     groupProgress,
     setInitialProgress,
     startActivity,

@@ -40,7 +40,11 @@ export const Document = ({
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(
       state,
-      getProgressId(context.activityId, context.eventId, context.targetSubject?.id),
+      getProgressId(
+        context.activityId,
+        context.eventId,
+        context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+      ),
     ),
   );
 

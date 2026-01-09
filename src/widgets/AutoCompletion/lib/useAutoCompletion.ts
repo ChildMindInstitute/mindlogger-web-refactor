@@ -15,7 +15,7 @@ export const useAutoCompletion = () => {
   const completionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: context.entityId,
     eventId: context.eventId,
-    targetSubjectId: context.targetSubject?.id ?? null,
+    targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
   });
 
   const { activitySuccessfullySubmitted } = AutoCompletionModel.useAutoCompletionStateManager();
@@ -51,7 +51,7 @@ export const useAutoCompletion = () => {
         activityProgress: getActivityProgress({
           activityId: context.activityId,
           eventId: context.eventId,
-          targetSubjectId: context.targetSubject?.id ?? null,
+          targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
         }),
         answerBuilder,
       },
@@ -74,7 +74,7 @@ export const useAutoCompletion = () => {
         activitySuccessfullySubmitted({
           entityId: context.entityId,
           eventId: context.eventId,
-          targetSubjectId: context.targetSubject?.id ?? null,
+          targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
           activityId,
         });
       }
@@ -91,6 +91,7 @@ export const useAutoCompletion = () => {
     context.entityId,
     context.eventId,
     context.publicAppletKey,
+    context.respondentMeta?.subjectId,
     context.targetSubject?.id,
     getActivityProgress,
     submitAnswersAsync,

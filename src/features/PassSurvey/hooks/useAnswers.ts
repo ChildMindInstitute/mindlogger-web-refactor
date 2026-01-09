@@ -34,7 +34,7 @@ export const useAnswerBuilder = (): AnswerBuilder => {
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
     eventId: context.eventId,
-    targetSubjectId: context.targetSubject?.id ?? null,
+    targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
   });
 
   const { getMultiInformantState, isInMultiInformantFlow } =

@@ -8,15 +8,10 @@ import { CompletedEntitiesDTO, CompletedEntityDTO, ScheduleEventDto } from '~/sh
 
 type EntitiesSyncProps = {
   completedEntities: CompletedEntitiesDTO | undefined;
-  respondentSubjectId: string | null;
   events: ScheduleEventDto[];
 };
 
-export const useEntitiesSync = ({
-  completedEntities,
-  respondentSubjectId,
-  events,
-}: EntitiesSyncProps) => {
+export const useEntitiesSync = ({ completedEntities, events }: EntitiesSyncProps) => {
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   // Create ref to exclude from callback dependencies to avoid infinite loop
@@ -32,10 +27,7 @@ export const useEntitiesSync = ({
 
       const entityId = entity.id;
       const eventId = entity.scheduledEventId;
-
-      // Normalize targetSubjectId to null for self-reports
-      const targetSubjectId =
-        entity.targetSubjectId === respondentSubjectId ? null : entity.targetSubjectId;
+      const targetSubjectId = entity.targetSubjectId;
 
       const groupProgress = getGroupProgressRef.current({
         entityId,
@@ -82,7 +74,7 @@ export const useEntitiesSync = ({
         });
       }
     },
-    [respondentSubjectId, events, saveGroupProgress],
+    [events, saveGroupProgress],
   );
 
   useEffect(() => {

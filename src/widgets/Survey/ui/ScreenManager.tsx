@@ -17,12 +17,17 @@ type Props = {
 
 export const ScreenManager = ({ openTimesUpModal }: Props) => {
   const context = useContext(SurveyContext);
+
   const { setActiveAssessment } = appletModel.hooks.useActiveAssessment();
 
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(
       state,
-      getProgressId(context.activityId, context.eventId, context.targetSubject?.id),
+      getProgressId(
+        context.activityId,
+        context.eventId,
+        context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+      ),
     ),
   );
 
@@ -39,7 +44,7 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
     saveAutoCompletion({
       entityId: context.entityId,
       eventId: context.eventId,
-      targetSubjectId: context.targetSubject?.id ?? null,
+      targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
       autoCompletion: {
         activityIdsToSubmit: activitiesToSubmit,
         successfullySubmittedActivityIds: [],
@@ -53,6 +58,7 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
     context.entityId,
     context.eventId,
     context.flow,
+    context.respondentMeta?.subjectId,
     context.targetSubject?.id,
     openTimesUpModal,
     saveAutoCompletion,
@@ -76,7 +82,7 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
       groupProgressId: getProgressId(
         context.flow ? context.flow.id : context.activityId,
         context.eventId,
-        context.targetSubject?.id ?? null,
+        context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
       ),
     });
   }, [
@@ -85,6 +91,7 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
     context.appletId,
     context.eventId,
     context.publicAppletKey,
+    context.respondentMeta?.subjectId,
     context.targetSubject?.id,
     setActiveAssessment,
   ]);

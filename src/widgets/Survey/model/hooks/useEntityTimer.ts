@@ -15,13 +15,17 @@ export const useEntityTimer = ({ onFinish }: Props) => {
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
     eventId: context.eventId,
-    targetSubjectId: context.targetSubject?.id ?? null,
+    targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
   });
 
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(
       state,
-      getProgressId(context.activityId, context.eventId, context.targetSubject?.id),
+      getProgressId(
+        context.activityId,
+        context.eventId,
+        context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+      ),
     ),
   );
 
