@@ -30,6 +30,7 @@ export const ActivityGroupList = () => {
       {
         appletId: applet.id,
         fromDate: formatToDtoDate(subMonths(new Date(), 1)),
+        includeInProgress: true,
       },
       { select: (data) => data.data.result, enabled: !isPublic },
     );

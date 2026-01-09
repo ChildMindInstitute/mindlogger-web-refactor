@@ -99,6 +99,7 @@ export const SurveyWidget = (props: Props) => {
     {
       appletId,
       fromDate: formatToDtoDate(subMonths(new Date(), 1)),
+      includeInProgress: true,
     },
     { select: (data) => data.data.result, enabled: !publicAppletKey },
   );
