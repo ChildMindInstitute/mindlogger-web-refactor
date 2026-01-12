@@ -121,7 +121,7 @@ const RecoveryCodeFormComponent = ({
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap="32px" width="100%">
       <Box display="flex" flexDirection="column" alignItems="center" gap="8px">
-        <Text variant="titleLargeBold" color={variables.palette.onSurface}>
+        <Text variant="headlineSmall" color={variables.palette.onSurface}>
           {t('confirmYourIdentity')}
         </Text>
         <Text
@@ -161,6 +161,7 @@ const RecoveryCodeFormComponent = ({
                 onClick={onSwitchToTOTP}
                 text={t('backToAuthenticator')}
                 sx={{
+                  fontWeight: 400,
                   color: variables.palette.onSurfaceVariant,
                   padding: 0,
                   minWidth: 'auto',
@@ -179,6 +180,7 @@ const RecoveryCodeFormComponent = ({
                 onClick={onBackToLogin}
                 text={t('backToLogin')}
                 sx={{
+                  fontWeight: 400,
                   color: variables.palette.onSurfaceVariant,
                   padding: 0,
                   minWidth: 'auto',

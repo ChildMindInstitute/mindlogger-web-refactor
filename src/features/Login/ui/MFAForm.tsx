@@ -130,7 +130,7 @@ const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAF
   return (
     <Box display="flex" flexDirection="column" alignItems="center" gap="32px" width="100%">
       <Box display="flex" flexDirection="column" alignItems="center" gap="8px">
-        <Text variant="titleLargeBold" color={variables.palette.onSurface}>
+        <Text variant="headlineSmall" color={variables.palette.onSurface}>
           {t('confirmYourIdentity')}
         </Text>
         <Text
@@ -162,33 +162,31 @@ const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAF
           />
 
           <Box display="flex" justifyContent="center">
-            <BaseButton
-              type="button"
-              variant="text"
+            <Text
+              variant="bodyLarge"
+              color={variables.palette.primary}
               onClick={onSwitchToRecovery}
-              text={t('cantAccessAuthenticator')}
               sx={{
-                color: variables.palette.primary,
-                padding: 0,
-                minWidth: 'auto',
-                '&:hover': { backgroundColor: 'transparent' },
+                cursor: 'pointer',
+                '&:hover': { opacity: 0.8 },
               }}
-            />
+            >
+              {t('cantAccessAuthenticator')}
+            </Text>
           </Box>
 
           <Box display="flex" justifyContent="center">
-            <BaseButton
-              type="button"
-              variant="text"
+            <Text
+              variant="bodyLarge"
+              color={variables.palette.onSurfaceVariant}
               onClick={onBackToLogin}
-              text={t('backToLogin')}
               sx={{
-                color: variables.palette.onSurfaceVariant,
-                padding: 0,
-                minWidth: 'auto',
-                '&:hover': { backgroundColor: 'transparent' },
+                cursor: 'pointer',
+                '&:hover': { opacity: 0.8 },
               }}
-            />
+            >
+              {t('backToLogin')}
+            </Text>
           </Box>
         </Box>
       </BasicFormProvider>
