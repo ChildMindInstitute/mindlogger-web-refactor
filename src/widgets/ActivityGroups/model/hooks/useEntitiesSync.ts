@@ -30,7 +30,7 @@ export const useEntitiesSync = ({
       const endAtDate = new Date(`${entity.localEndDate}T${entity.localEndTime}`);
       const endAtTimestamp = endAtDate.getTime();
 
-      const entityId = entity.flowHistoryId ?? entity.activityHistoryId;
+      const entityId = entity.flowId ?? entity.activityId;
       const eventId = entity.scheduledEventId;
       // Normalize targetSubjectId to null for self-reports
       const targetSubjectId =
