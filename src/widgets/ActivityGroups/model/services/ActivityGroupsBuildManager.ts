@@ -16,25 +16,17 @@ import {
 } from '~/abstract/lib/GroupBuilder';
 import { EventModel, ScheduleEvent } from '~/entities/event';
 import { mapEventFromDto } from '~/entities/event/model';
-import {
-  ActivityBaseDTO,
-  ActivityFlowDTO,
-  AppletEventsResponse,
-  HydratedAssignmentDTO,
-  RespondentMetaDTO,
-} from '~/shared/api';
+import { AppletBaseDTO, AppletEventsResponse, HydratedAssignmentDTO } from '~/shared/api';
 
 type BuildResult = {
   groups: ActivityListGroup[];
 };
 
 type ProcessParams = {
-  activities: ActivityBaseDTO[];
-  flows: ActivityFlowDTO[];
+  applet: AppletBaseDTO;
   assignments: HydratedAssignmentDTO[] | null;
   events: AppletEventsResponse;
   entityProgress: GroupProgressState;
-  respondentMeta?: RespondentMetaDTO;
 };
 
 const createActivityGroupsBuildManager = () => {
@@ -95,8 +87,8 @@ const createActivityGroupsBuildManager = () => {
   };
 
   const process = (params: ProcessParams): BuildResult => {
-    const activities: Activity[] = mapActivitiesFromDto(params.activities);
-    const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(params.flows);
+    const activities: Activity[] = mapActivitiesFromDto(params.applet.activities);
+    const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(params.applet.activityFlows);
 
     const eventsResponse = params.events;
     const events: ScheduleEvent[] = EventModel.mapEventsFromDto(eventsResponse.events);
@@ -107,7 +99,7 @@ const createActivityGroupsBuildManager = () => {
     const builder = createActivityGroupsBuilder({
       allAppletActivities: activities,
       progress: params.entityProgress,
-      respondentMeta: params.respondentMeta,
+      respondentMeta: params.applet.respondentMeta,
     });
 
     const calculator = EventModel.ScheduledDateCalculator;

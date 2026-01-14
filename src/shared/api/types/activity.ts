@@ -239,6 +239,8 @@ export type CompletedEntityDTO = {
   scheduledEventId: string;
   localEndDate: string;
   localEndTime: string;
+  isFlowCompleted: boolean | null;
+  activityFlowOrder: number | null;
 };
 
 export type CompletedEntitiesDTO = {

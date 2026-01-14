@@ -70,6 +70,7 @@ export const ActivityGroupList = () => {
   };
 
   useEntitiesSync({
+    applet,
     completedEntities,
     events: events.events,
   });
