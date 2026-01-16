@@ -234,8 +234,8 @@ export type MatrixMultiSelectAnswerPayload = {
 export type CompletedEntityDTO = {
   answerId: string;
   submitId: string;
-  activityId: string;
-  flowId: string | null;
+  activityHistoryId: string;
+  flowHistoryId: string | null;
   targetSubjectId: string | null;
   scheduledEventId: string;
   localEndDate: string;
