@@ -16,6 +16,10 @@ export interface MFARequiredResult {
   mfaRequired: true;
   mfaToken: string;
   mfaSessionId: string;
+  /** User ID - enables immediate private key derivation */
+  userId: string;
+  /** User email - enables immediate private key derivation */
+  userEmail: string;
 }
 
 // Login response is a union - either success or MFA required

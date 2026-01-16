@@ -6,7 +6,6 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { useController } from 'react-hook-form';
 
-import { useMFAContext } from '../lib/MFAContext';
 import { useMFAVerification } from '../lib/useMFAVerification';
 import { MFATOTPSchema, TMFATOTPForm } from '../model/mfa.schema';
 
@@ -15,10 +14,15 @@ import { BaseButton, BasicFormProvider, Box, Text } from '~/shared/ui';
 import { useCustomForm, useCustomTranslation } from '~/shared/utils';
 
 interface MFAFormProps {
+  /** MFA session from Redux (passed via props) */
+  session: { token: string; sessionId: string };
+  /**
+   * Called on successful verification - tokens are already stored.
+   * Only receives user data since tokens are stored in useMFAVerification
+   * before this callback to avoid race conditions with navigation.
+   */
   onSuccess: (result: {
     user: { id: string; firstName: string; lastName: string; email: string };
-    tokens: { accessToken: string; refreshToken: string; tokenType: string };
-    password: string;
   }) => void;
   onSwitchToRecovery: () => void;
   onBackToLogin: () => void;
@@ -27,17 +31,19 @@ interface MFAFormProps {
 /**
  * MFA TOTP Form Component
  *
- * Consumes MFA session from context (isolated state).
+ * Receives MFA session via props (from Redux).
  * Error state is local to useMFAVerification (API-driven).
- * Parent components won't re-render on MFA errors.
+ * Private key is already stored before navigation to this page.
  */
-const MFAFormComponent = ({ onSuccess, onSwitchToRecovery, onBackToLogin }: MFAFormProps) => {
+const MFAFormComponent = ({
+  session,
+  onSuccess,
+  onSwitchToRecovery,
+  onBackToLogin,
+}: MFAFormProps) => {
   const { t } = useCustomTranslation({ keyPrefix: 'MFA' });
   const isUserTypingRef = useRef(false);
   const isAutoSubmittingRef = useRef(false);
-
-  // Get session from context - isolated from parent
-  const { session } = useMFAContext();
 
   const form = useCustomForm<typeof MFATOTPSchema>(
     { defaultValues: { totpCode: '' }, mode: 'onSubmit', reValidateMode: 'onSubmit' },

@@ -6,7 +6,6 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { useController } from 'react-hook-form';
 
-import { useMFAContext } from '../lib/MFAContext';
 import { useMFAVerification } from '../lib/useMFAVerification';
 import { MFARecoveryCodeSchema, TMFARecoveryCodeForm } from '../model/mfa.schema';
 
@@ -15,10 +14,15 @@ import { BaseButton, BasicFormProvider, Box, Text } from '~/shared/ui';
 import { useCustomForm, useCustomTranslation } from '~/shared/utils';
 
 interface RecoveryCodeFormProps {
+  /** MFA session from Redux (passed via props) */
+  session: { token: string; sessionId: string };
+  /**
+   * Called on successful verification - tokens are already stored.
+   * Only receives user data since tokens are stored in useMFAVerification
+   * before this callback to avoid race conditions with navigation.
+   */
   onSuccess: (result: {
     user: { id: string; firstName: string; lastName: string; email: string };
-    tokens: { accessToken: string; refreshToken: string; tokenType: string };
-    password: string;
   }) => void;
   onSwitchToTOTP: () => void;
   onBackToLogin: () => void;
@@ -27,20 +31,19 @@ interface RecoveryCodeFormProps {
 /**
  * MFA Recovery Code Form Component
  *
- * Consumes MFA session from context (isolated state).
+ * Receives MFA session via props (from Redux).
  * Error state is local to useMFAVerification (API-driven).
+ * Private key is already stored before navigation to this page.
  * Shows "Back to Login" only when session is expired.
  */
 const RecoveryCodeFormComponent = ({
+  session,
   onSuccess,
   onSwitchToTOTP,
   onBackToLogin,
 }: RecoveryCodeFormProps) => {
   const { t } = useCustomTranslation({ keyPrefix: 'MFA' });
   const isUserTypingRef = useRef(false);
-
-  // Get session from context - isolated from parent
-  const { session } = useMFAContext();
 
   const form = useCustomForm<typeof MFARecoveryCodeSchema>(
     { defaultValues: { code: '' }, mode: 'onSubmit', reValidateMode: 'onSubmit' },
@@ -155,38 +158,34 @@ const RecoveryCodeFormComponent = ({
           {/* Show "Back to authenticator" when NOT expired */}
           {!isSessionExpired && (
             <Box display="flex" justifyContent="center">
-              <BaseButton
-                type="button"
-                variant="text"
+              <Text
+                variant="bodyLarge"
+                color={variables.palette.onSurfaceVariant}
                 onClick={onSwitchToTOTP}
-                text={t('backToAuthenticator')}
                 sx={{
-                  fontWeight: 400,
-                  color: variables.palette.onSurfaceVariant,
-                  padding: 0,
-                  minWidth: 'auto',
-                  '&:hover': { backgroundColor: 'transparent' },
+                  cursor: 'pointer',
+                  '&:hover': { opacity: 0.8 },
                 }}
-              />
+              >
+                {t('backToAuthenticator')}
+              </Text>
             </Box>
           )}
 
           {/* Show "Back to Login" ONLY when session expired */}
           {isSessionExpired && (
             <Box display="flex" justifyContent="center">
-              <BaseButton
-                type="button"
-                variant="text"
+              <Text
+                variant="bodyLarge"
+                color={variables.palette.onSurfaceVariant}
                 onClick={onBackToLogin}
-                text={t('backToLogin')}
                 sx={{
-                  fontWeight: 400,
-                  color: variables.palette.onSurfaceVariant,
-                  padding: 0,
-                  minWidth: 'auto',
-                  '&:hover': { backgroundColor: 'transparent' },
+                  cursor: 'pointer',
+                  '&:hover': { opacity: 0.8 },
                 }}
-              />
+              >
+                {t('backToLogin')}
+              </Text>
             </Box>
           )}
         </Box>

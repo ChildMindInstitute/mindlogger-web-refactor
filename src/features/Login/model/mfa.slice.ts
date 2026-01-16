@@ -1,39 +1,50 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 /**
  * MFA Redux Slice
  *
- * SIMPLIFIED: Only handles reset action for AuthFlow state machine.
- * All MFA verification state (errors, session expiry) is now local to useMFAVerification hook.
- * API responses drive error display - no Redux needed for MFA errors.
+ * Stores MFA session in Redux (blacklisted from persistence - never written to disk).
+ * Verification state (errors, expiry) is local to useMFAVerification hook.
  */
 
 interface MFASliceState {
-  // Minimal state - just a flag to track if MFA flow is active
   isActive: boolean;
+  mfaToken: string | null;
+  mfaSessionId: string | null;
 }
 
 const initialState: MFASliceState = {
   isActive: false,
+  mfaToken: null,
+  mfaSessionId: null,
 };
 
 const mfaSlice = createSlice({
   name: 'mfa',
   initialState,
   reducers: {
-    setMFAActive: (state) => {
+    setMFASession: (state, action: PayloadAction<{ mfaToken: string; mfaSessionId: string }>) => {
       state.isActive = true;
+      state.mfaToken = action.payload.mfaToken;
+      state.mfaSessionId = action.payload.mfaSessionId;
     },
 
-    resetMFA: () => initialState,
+    clearMFASession: () => initialState,
   },
 });
 
 export const mfaActions = mfaSlice.actions;
 export const mfaReducer = mfaSlice.reducer;
 
+// Selector
+export const selectMFASession = (state: { mfa: MFASliceState }) => {
+  if (!state.mfa.mfaToken || !state.mfa.mfaSessionId) return null;
+  return { mfaToken: state.mfa.mfaToken, mfaSessionId: state.mfa.mfaSessionId };
+};
+
 // Export model
 export const mfaModel = {
   reducer: mfaReducer,
   actions: mfaActions,
+  selectors: { selectMFASession },
 };

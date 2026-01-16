@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { userModel } from '~/entities/user';
+import { secureUserPrivateKeyStorage } from '~/entities/user/model/secureUserPrivateKeyStorage';
 import { RecoveryCodeForm } from '~/features/Login';
-import { useMFAContext } from '~/features/Login/lib/MFAContext';
+import { mfaActions, selectMFASession } from '~/features/Login/model/mfa.slice';
 import { ROUTES } from '~/shared/constants';
 import { variables } from '~/shared/constants/theme/variables';
 import { Box } from '~/shared/ui';
@@ -12,7 +14,10 @@ import { Box } from '~/shared/ui';
 function MFARecoveryPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { session, clearSession } = useMFAContext();
+  const dispatch = useDispatch();
+
+  // Get MFA session from Redux (blacklisted from persistence)
+  const mfaSession = useSelector(selectMFASession);
 
   const { onLoginSuccess } = userModel.hooks.useOnLogin({
     backRedirectPath: location.state?.backRedirectPath as string,
@@ -20,38 +25,48 @@ function MFARecoveryPage() {
 
   // Route guard: redirect to login if no session
   useEffect(() => {
-    if (!session) {
+    if (!mfaSession) {
       navigate(ROUTES.login.path, { replace: true });
     }
-  }, [session, navigate]);
+  }, [mfaSession, navigate]);
+
+  /**
+   * Handle successful recovery code verification.
+   * Private key is already stored (derived before navigation to MFA page).
+   * Tokens are already stored by useMFAVerification before this callback.
+   * Just set user and navigate.
+   *
+   * Memoized with useCallback to ensure stable reference for useMFAVerification dependency.
+   */
+  const handleRecoverySuccess = useCallback(
+    (result: { user: { id: string; firstName: string; lastName: string; email: string } }) => {
+      // Clear MFA session after successful verification
+      dispatch(mfaActions.clearMFASession());
+
+      // Tokens already stored by useMFAVerification, just complete login
+      onLoginSuccess({ user: result.user });
+    },
+    [dispatch, onLoginSuccess],
+  );
+
+  const handleSwitchToTOTP = useCallback(() => {
+    // MFA session persists in Redux, no need to pass state
+    navigate(ROUTES.verifyMFA.path, {
+      state: { backRedirectPath: location.state?.backRedirectPath },
+    });
+  }, [navigate, location.state?.backRedirectPath]);
+
+  const handleBackToLogin = useCallback(() => {
+    // Clear MFA session and private key on abandonment
+    dispatch(mfaActions.clearMFASession());
+    secureUserPrivateKeyStorage.clearUserPrivateKey();
+    navigate(ROUTES.login.path, { replace: true });
+  }, [dispatch, navigate]);
 
   // Prevent flash of content when no session
-  if (!session) {
+  if (!mfaSession) {
     return null;
   }
-
-  const handleRecoverySuccess = (result: {
-    user: { id: string; firstName: string; lastName: string; email: string };
-    tokens: { accessToken: string; refreshToken: string; tokenType: string };
-    password: string;
-  }) => {
-    onLoginSuccess({
-      user: {
-        ...result.user,
-        password: result.password,
-      },
-      tokens: result.tokens,
-    });
-  };
-
-  const handleSwitchToTOTP = () => {
-    navigate(-1);
-  };
-
-  const handleBackToLogin = () => {
-    clearSession();
-    navigate(ROUTES.login.path, { replace: true });
-  };
 
   return (
     <Box display="flex" flex={1} justifyContent="center" alignItems="center">
@@ -70,6 +85,7 @@ function MFARecoveryPage() {
         }}
       >
         <RecoveryCodeForm
+          session={{ token: mfaSession.mfaToken, sessionId: mfaSession.mfaSessionId }}
           onSuccess={handleRecoverySuccess}
           onSwitchToTOTP={handleSwitchToTOTP}
           onBackToLogin={handleBackToLogin}

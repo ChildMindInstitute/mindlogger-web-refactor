@@ -1,16 +1,18 @@
 import { lazy, useCallback, useEffect } from 'react';
 
+import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useBanners } from '~/entities/banner/model';
+import { secureUserPrivateKeyStorage } from '~/entities/user/model/secureUserPrivateKeyStorage';
 import { LoginForm, useLoginTranslation } from '~/features/Login';
-import { useMFAContext } from '~/features/Login/lib/MFAContext';
+import { mfaActions } from '~/features/Login/model/mfa.slice';
 import { MFARequiredResponse } from '~/features/Login/model/mfa.types';
 import { ROUTES } from '~/shared/constants';
 import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { Mixpanel, MixpanelEventType, useOnceEffect } from '~/shared/utils';
+import { Mixpanel, MixpanelEventType, useEncryption, useOnceEffect } from '~/shared/utils';
 
 const DownloadMobileLinks = lazy(() => import('~/widgets/DownloadMobileLinks'));
 
@@ -18,28 +20,47 @@ function LoginPage() {
   const { t } = useLoginTranslation();
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { addSuccessBanner } = useBanners();
-  const { setSession, clearSession } = useMFAContext();
+  const { generateUserPrivateKey } = useEncryption();
 
   // Clear any existing MFA session when login page mounts
-  // This prevents browser back/forward navigation from accessing MFA with stale session
   useEffect(() => {
-    clearSession();
-  }, [clearSession]);
+    dispatch(mfaActions.clearMFASession());
+  }, [dispatch]);
 
   const onCreateAccountClick = () => {
     Mixpanel.track({ action: MixpanelEventType.LoginScreenCreateAccountBtnClick });
   };
 
-  // Handle MFA required: store session and navigate to MFA page
+  /**
+   * Handle MFA required response from login API.
+   * Derives private key immediately using password, then discards password.
+   */
   const handleMFARequired = useCallback(
     (mfaData: MFARequiredResponse, password: string) => {
-      setSession(mfaData.mfaToken, mfaData.mfaSessionId, password);
+      // Derive and store private key IMMEDIATELY (password discarded after this)
+      const userPrivateKey = generateUserPrivateKey({
+        userId: mfaData.userId,
+        email: mfaData.userEmail,
+        password,
+      });
+      secureUserPrivateKeyStorage.setUserPrivateKey(userPrivateKey);
+
+      // Store MFA session in Redux (blacklisted from persistence)
+      dispatch(
+        mfaActions.setMFASession({
+          mfaToken: mfaData.mfaToken,
+          mfaSessionId: mfaData.mfaSessionId,
+        }),
+      );
+
+      // Navigate to MFA verification
       navigate(ROUTES.verifyMFA.path, {
         state: { backRedirectPath: location.state?.backRedirectPath },
       });
     },
-    [setSession, navigate, location.state?.backRedirectPath],
+    [generateUserPrivateKey, dispatch, navigate, location.state?.backRedirectPath],
   );
 
   useOnceEffect(() => {

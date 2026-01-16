@@ -1,7 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 
 import { getMfaErrorResult, MfaVerificationType } from './mfaErrorHandler';
-import { MFASessionState } from '../model/mfa.types';
 
 import { useMFAVerifyMutation, useMFARecoveryMutation } from '~/entities/user';
 import { secureTokensStorage } from '~/shared/utils';
@@ -10,11 +9,13 @@ export type { MfaVerificationType };
 
 const WARNING_THRESHOLD = 3;
 
-interface UseMFAVerificationArgs {
-  type: MfaVerificationType;
-  /** MFA session from local state (security sensitive) */
-  session: MFASessionState | null;
-  onSuccess: (result: { user: UserData; tokens: TokenData; password: string }) => void;
+/**
+ * MFA session data - simplified (no password needed).
+ * Private key is already derived and stored before navigating to MFA page.
+ */
+interface MFASessionData {
+  token: string;
+  sessionId: string;
 }
 
 interface UserData {
@@ -24,14 +25,25 @@ interface UserData {
   email: string;
 }
 
-interface TokenData {
-  accessToken: string;
-  refreshToken: string;
-  tokenType: string;
+interface UseMFAVerificationArgs {
+  type: MfaVerificationType;
+  /** MFA session from Redux (blacklisted from persistence) */
+  session: MFASessionData | null;
+  /**
+   * Called on successful verification - tokens are already stored before this callback.
+   * Only receives user data since tokens are stored directly in useMFAVerification
+   * to avoid race conditions with navigation.
+   */
+  onSuccess: (result: { user: UserData }) => void;
 }
 
 /**
  * Custom hook for MFA verification logic
+ *
+ * ARCHITECTURE:
+ * - Private key is already derived and stored before navigation to MFA page
+ * - This hook only handles MFA verification, not encryption key derivation
+ * - Session data comes from Redux mfa slice (blacklisted from persistence)
  *
  * STATE ARCHITECTURE:
  * - All state is local - no Redux for errors
@@ -82,15 +94,12 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
 
         const result = response.data.result;
 
-        // Store tokens securely
+        // Store tokens IMMEDIATELY before callback to avoid race condition
+        // Navigation happens sync after callback, so tokens must be in storage first
         secureTokensStorage.setTokens(result.token);
 
-        // Trigger success callback with password for encryption key derivation
-        onSuccess({
-          user: result.user,
-          tokens: result.token,
-          password: session.loginPassword,
-        });
+        // Trigger success callback with user only (tokens already stored)
+        onSuccess({ user: result.user });
 
         return true;
       } catch (error: unknown) {
