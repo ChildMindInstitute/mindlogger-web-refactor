@@ -232,6 +232,7 @@ export type MatrixMultiSelectAnswerPayload = {
 };
 
 export type CompletedEntityDTO = {
+  id: string;
   answerId: string;
   submitId: string;
   activityHistoryId: string;
