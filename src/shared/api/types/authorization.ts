@@ -31,12 +31,14 @@ export type LoginSuccessResponse = BaseSuccessResponse<LoginResult>;
 export interface MFAVerifyTOTPPayload {
   mfaToken: string;
   totpCode: string;
+  deviceId: string | null;
 }
 
 // MFA Recovery code verification payload
 export interface MFAVerifyRecoveryPayload {
   mfaToken: string;
   code: string;
+  deviceId: string | null;
 }
 
 // MFA verification success response (same structure as standard login success)

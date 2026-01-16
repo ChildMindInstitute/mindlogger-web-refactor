@@ -89,8 +89,8 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
       try {
         const response =
           type === 'totp'
-            ? await verifyTOTP({ mfaToken: session.token, totpCode: code })
-            : await verifyRecovery({ mfaToken: session.token, code });
+            ? await verifyTOTP({ mfaToken: session.token, totpCode: code, deviceId: null })
+            : await verifyRecovery({ mfaToken: session.token, code, deviceId: null });
 
         const result = response.data.result;
 
