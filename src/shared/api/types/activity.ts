@@ -235,8 +235,6 @@ export type CompletedEntityDTO = {
   id: string;
   answerId: string;
   submitId: string;
-  activityHistoryId: string;
-  flowHistoryId: string | null;
   targetSubjectId: string | null;
   scheduledEventId: string;
   localEndDate: string;
