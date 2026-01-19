@@ -4,6 +4,8 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import ForgotPasswordPage from './ForgotPassword';
 import LoginPage from './Login';
+import MFARecoveryPage from './MFARecovery';
+import MFAVerifyPage from './MFAVerify';
 import PublicAutoCompletion from './PublicAutoCompletion';
 import SignupPage from './Signup';
 
@@ -30,6 +32,8 @@ function UnauthorizedRoutes() {
       <Route element={<Layout header={<Header />} footer={<Footer />} />}>
         <Route path={ROUTES.appletDetails.path} element={<AppletDetailsPage />} />
         <Route index path={ROUTES.login.path} element={<LoginPage />} />
+        <Route path={ROUTES.verifyMFA.path} element={<MFAVerifyPage />} />
+        <Route path={ROUTES.verifyRecovery.path} element={<MFARecoveryPage />} />
         <Route path={ROUTES.signup.path} element={<SignupPage />} />
         <Route path={ROUTES.forgotPassword.path} element={<ForgotPasswordPage />} />
         <Route path={ROUTES.changePassword.path} element={<RecoveryPasswordPage />} />

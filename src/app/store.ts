@@ -11,12 +11,13 @@ import { BannersStore } from '~/entities/banner/model';
 import { defaultBannersModel } from '~/entities/defaultBanners';
 import { userModel } from '~/entities/user';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
+import { mfaModel } from '~/features/Login/model/mfa.slice';
 import { RootState } from '~/shared/utils';
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['banners'],
+  blacklist: ['banners', 'mfa'], // MFA state should NOT be persisted for security
 };
 
 const bannerPersistConfig = {
@@ -33,6 +34,7 @@ export const rootReducer = combineReducers({
   ) as unknown as Reducer<BannersStore>,
   defaultBanners: defaultBannersModel.reducer,
   autoCompletion: AutoCompletionModel.reducer,
+  mfa: mfaModel.reducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>

@@ -14,6 +14,12 @@ const ROUTES = {
   changePassword: {
     path: '/password-recovery',
   },
+  verifyMFA: {
+    path: '/auth/verify-mfa',
+  },
+  verifyRecovery: {
+    path: '/auth/verify-recovery',
+  },
   invitation: {
     path: '/invitation/:inviteId',
   },
