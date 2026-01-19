@@ -30,6 +30,7 @@ export const ActivityGroupList = () => {
       {
         appletId: applet.id,
         fromDate: formatToDtoDate(subMonths(new Date(), 1)),
+        includeInProgress: true,
       },
       { select: (data) => data.data.result, enabled: !isPublic },
     );
@@ -68,7 +69,11 @@ export const ActivityGroupList = () => {
     setIsAboutOpen(true);
   };
 
-  useEntitiesSync({ completedEntities });
+  useEntitiesSync({
+    completedEntities,
+    respondentSubjectId: applet.respondentMeta?.subjectId ?? null,
+    events: events.events,
+  });
 
   if (isCompletedEntitiesFetching) {
     return <Loader />;
