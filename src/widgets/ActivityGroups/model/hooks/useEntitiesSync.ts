@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-import { v4 as uuidV4 } from 'uuid';
-
 import { ActivityPipelineType, FlowProgress } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import {
@@ -34,6 +32,9 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
       const eventId = entity.scheduledEventId;
       const targetSubjectId = entity.targetSubjectId;
 
+      // activityFlowOrder is 1-indexed, so it equals the 0-indexed position of the next activity
+      const pipelineActivityOrder = entity.activityFlowOrder ?? 0;
+
       const groupProgress = getGroupProgressRef.current({
         entityId,
         eventId,
@@ -51,24 +52,22 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
           return;
         }
 
-        // activityFlowOrder is 1-indexed, so it equals the 0-indexed position of the next activity
-        const serverPipelineActivityOrder = entity.activityFlowOrder ?? 0;
-        const localPipelineActivityOrder =
-          (groupProgress as FlowProgress)?.pipelineActivityOrder ?? 0;
-
-        // Use whichever progress is further along
-        const pipelineActivityOrder = Math.max(
-          serverPipelineActivityOrder,
-          localPipelineActivityOrder,
-        );
-        const nextActivityId = flow.activityIds[pipelineActivityOrder];
-        if (!nextActivityId) {
-          console.warn(`[useEntitiesSync] No next activity found for flow: ${entity.id}`);
+        // Skip if local is already ahead of server (nothing to update)
+        if ((groupProgress as FlowProgress)?.pipelineActivityOrder > pipelineActivityOrder) {
           return;
         }
 
-        // Skip if local is already at or ahead of server (nothing to update)
-        if (localPipelineActivityOrder >= serverPipelineActivityOrder && groupProgress?.startAt) {
+        // Skip if local is same position as server and more recent (nothing to update)
+        if (
+          (groupProgress as FlowProgress)?.pipelineActivityOrder === pipelineActivityOrder &&
+          (groupProgress?.endAt ?? 0) > endAtTimestamp
+        ) {
+          return;
+        }
+
+        const nextActivityId = flow.activityIds[pipelineActivityOrder];
+        if (!nextActivityId) {
+          console.warn(`[useEntitiesSync] No next activity found for flow: ${entity.id}`);
           return;
         }
 
@@ -80,10 +79,10 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
             type: ActivityPipelineType.Flow,
             currentActivityId: nextActivityId,
             pipelineActivityOrder,
-            currentActivityStartAt: null,
+            currentActivityStartAt: (groupProgress as FlowProgress)?.currentActivityStartAt ?? null,
             submitId: entity.submitId,
-            startAt: groupProgress?.startAt ?? endAtTimestamp,
-            endAt: null,
+            startAt: groupProgress?.startAt ?? null,
+            endAt: endAtTimestamp,
             context: groupProgress?.context ?? { summaryData: {} },
             event,
           },
@@ -97,14 +96,26 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
           entityId,
           eventId,
           targetSubjectId,
-          progressPayload: {
-            type: ActivityPipelineType.Regular,
-            startAt: null,
-            endAt: endAtTimestamp,
-            submitId: uuidV4(),
-            context: { summaryData: {} },
-            event,
-          },
+          progressPayload: isFlow
+            ? {
+                type: ActivityPipelineType.Flow,
+                currentActivityId: '',
+                pipelineActivityOrder,
+                currentActivityStartAt: null,
+                submitId: entity.submitId,
+                startAt: null,
+                endAt: endAtTimestamp,
+                context: { summaryData: {} },
+                event,
+              }
+            : {
+                type: ActivityPipelineType.Regular,
+                submitId: entity.submitId,
+                startAt: null,
+                endAt: endAtTimestamp,
+                context: { summaryData: {} },
+                event,
+              },
         });
       }
 
@@ -116,7 +127,7 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
         targetSubjectId,
         progressPayload: {
           ...groupProgress,
-          endAt: endAtTimestamp > (groupProgress.endAt ?? 0) ? endAtTimestamp : groupProgress.endAt,
+          endAt: (groupProgress.endAt ?? 0) > endAtTimestamp ? groupProgress.endAt : endAtTimestamp,
           event,
         },
       });
