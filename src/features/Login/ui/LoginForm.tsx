@@ -36,6 +36,7 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
 
       // Check if MFA is required
       if (isMFARequiredResponse(result)) {
+        Mixpanel.track({ action: MixpanelEventType.MFARequired });
         onMFARequired(result, variables.password);
         return;
       }
