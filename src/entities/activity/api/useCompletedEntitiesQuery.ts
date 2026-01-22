@@ -10,7 +10,6 @@ type Params = {
   appletId: string;
   version?: string;
   fromDate: string;
-  includeInProgress?: boolean;
 };
 
 export const useCompletedEntitiesQuery = <TData = ReturnAwaited<FetchFn>>(

@@ -1,22 +1,19 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 
 import { v4 as uuidV4 } from 'uuid';
 
+import { AppletDetailsContext } from '../../lib';
+
 import { ActivityPipelineType } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
-import { CompletedEntitiesDTO, CompletedEntityDTO, ScheduleEventDto } from '~/shared/api';
+import { CompletedEntitiesDTO, CompletedEntityDTO } from '~/shared/api';
 
-type EntitiesSyncProps = {
-  completedEntities: CompletedEntitiesDTO | undefined;
-  respondentSubjectId: string | null;
-  events: ScheduleEventDto[];
+type FilterCompletedEntitiesProps = {
+  completedEntities?: CompletedEntitiesDTO;
 };
 
-export const useEntitiesSync = ({
-  completedEntities,
-  respondentSubjectId,
-  events,
-}: EntitiesSyncProps) => {
+export const useEntitiesSync = ({ completedEntities }: FilterCompletedEntitiesProps) => {
+  const { applet, events } = useContext(AppletDetailsContext);
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   // Create ref to exclude from callback dependencies to avoid infinite loop
@@ -32,10 +29,9 @@ export const useEntitiesSync = ({
 
       const entityId = entity.id;
       const eventId = entity.scheduledEventId;
-
       // Normalize targetSubjectId to null for self-reports
       const targetSubjectId =
-        entity.targetSubjectId === respondentSubjectId ? null : entity.targetSubjectId;
+        entity.targetSubjectId === applet.respondentMeta?.subjectId ? null : entity.targetSubjectId;
 
       const groupProgress = getGroupProgressRef.current({
         entityId,
@@ -43,7 +39,7 @@ export const useEntitiesSync = ({
         targetSubjectId,
       });
 
-      const event = events.find(({ id }) => id === eventId) ?? null;
+      const event = events.events.find(({ id }) => id === eventId) ?? null;
 
       if (!groupProgress) {
         return saveGroupProgress({
@@ -82,7 +78,7 @@ export const useEntitiesSync = ({
         });
       }
     },
-    [respondentSubjectId, events, saveGroupProgress],
+    [applet.respondentMeta?.subjectId, events.events, saveGroupProgress],
   );
 
   useEffect(() => {

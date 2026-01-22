@@ -26,7 +26,6 @@ export interface GetCompletedEntitiesPayload {
   appletId: ID;
   version?: string;
   fromDate: string; // example: 2022-01-01
-  includeInProgress?: boolean;
 }
 
 export type SuccessResponseActivityById = BaseSuccessResponse<ActivityDTO>;

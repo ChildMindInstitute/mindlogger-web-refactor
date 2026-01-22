@@ -25,11 +25,7 @@ function activityService() {
       return axiosService.get<CompletedEntitiesDTOSuccessResponse>(
         `/answers/applet/${payload.appletId}/completions`,
         {
-          params: {
-            version: payload.version,
-            fromDate: payload.fromDate,
-            includeInProgress: payload.includeInProgress,
-          },
+          params: { version: payload.version, fromDate: payload.fromDate },
         },
       );
     },

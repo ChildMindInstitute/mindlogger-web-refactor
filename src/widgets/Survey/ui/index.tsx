@@ -1,12 +1,9 @@
 import { useCallback } from 'react';
 
-import { subMonths } from 'date-fns';
-
 import { ErrorScreen } from './ErrorScreen';
 import LoadingScreen from './LoadingScreen';
 import { ScreenManager } from './ScreenManager';
 
-import { useCompletedEntitiesQuery } from '~/entities/activity';
 import { useBanners } from '~/entities/banner/model';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
@@ -16,14 +13,7 @@ import {
 } from '~/features/PassSurvey';
 import ROUTES from '~/shared/constants/routes';
 import { MuiModal } from '~/shared/ui';
-import {
-  formatToDtoDate,
-  useCustomNavigation,
-  useCustomTranslation,
-  useModal,
-  useOnceEffect,
-} from '~/shared/utils';
-import { useEntitiesSync } from '~/widgets/ActivityGroups/model/hooks';
+import { useCustomNavigation, useCustomTranslation, useModal, useOnceEffect } from '~/shared/utils';
 
 type Props = {
   publicAppletKey: string | null;
@@ -94,21 +84,6 @@ export const SurveyWidget = (props: Props) => {
     isError,
     error,
   } = useSurveyDataQuery({ publicAppletKey, appletId, activityId, targetSubjectId });
-
-  const { data: completedEntities } = useCompletedEntitiesQuery(
-    {
-      appletId,
-      fromDate: formatToDtoDate(subMonths(new Date(), 1)),
-      includeInProgress: true,
-    },
-    { select: (data) => data.data.result, enabled: !publicAppletKey },
-  );
-
-  useEntitiesSync({
-    completedEntities,
-    respondentSubjectId: respondentMeta?.subjectId ?? null,
-    events: eventsDTO?.events ?? [],
-  });
 
   const responseError = error?.evaluatedMessage ?? '';
 
