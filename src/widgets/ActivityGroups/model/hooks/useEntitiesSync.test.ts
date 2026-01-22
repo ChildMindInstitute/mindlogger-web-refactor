@@ -255,16 +255,14 @@ describe('useEntitiesSync', () => {
         }),
       );
 
-      const expectedEndAt = new Date('2020-02-02T02:20:00').getTime();
-
       expect(mockSaveGroupProgress).toHaveBeenCalledWith({
         entityId: mockFlowId1,
         eventId: mockFlowEvent.id,
         targetSubjectId: null,
         progressPayload: expect.objectContaining({
           type: ActivityPipelineType.Flow,
-          startAt: null,
-          endAt: expectedEndAt,
+          startAt: baseCompletedEntity.startTime,
+          endAt: baseCompletedEntity.endTime,
           event: mockFlowEvent,
         }),
       });
@@ -292,16 +290,14 @@ describe('useEntitiesSync', () => {
         }),
       );
 
-      const expectedEndAt = new Date('2020-02-02T02:20:00').getTime();
-
       expect(mockSaveGroupProgress).toHaveBeenCalledWith({
         entityId: mockActivityId1,
         eventId: mockActivityEvent.id,
         targetSubjectId: null,
         progressPayload: expect.objectContaining({
           type: ActivityPipelineType.Regular,
-          startAt: null,
-          endAt: expectedEndAt,
+          startAt: baseCompletedEntity.startTime,
+          endAt: baseCompletedEntity.endTime,
           event: mockActivityEvent,
         }),
       });
@@ -342,14 +338,12 @@ describe('useEntitiesSync', () => {
         }),
       );
 
-      const serverEndAt = new Date('2020-02-02T02:20:00').getTime();
-
       expect(mockSaveGroupProgress).toHaveBeenCalledWith({
         entityId: mockFlowId1,
         eventId: mockFlowEvent.id,
         targetSubjectId: null,
         progressPayload: expect.objectContaining({
-          endAt: serverEndAt,
+          endAt: baseCompletedEntity.endTime,
         }),
       });
     });
@@ -386,14 +380,12 @@ describe('useEntitiesSync', () => {
         }),
       );
 
-      const serverEndAt = new Date('2020-02-02T02:20:00').getTime();
-
       expect(mockSaveGroupProgress).toHaveBeenCalledWith({
         entityId: mockActivityId1,
         eventId: mockActivityEvent.id,
         targetSubjectId: null,
         progressPayload: expect.objectContaining({
-          endAt: serverEndAt,
+          endAt: baseCompletedEntity.endTime,
         }),
       });
     });

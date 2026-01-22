@@ -25,9 +25,6 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
   // Ensures the most recent event data is used the next time the activity/flow is started.
   const syncEntity = useCallback(
     (entity: CompletedEntityDTO, isFlow: boolean) => {
-      const endAtDate = new Date(`${entity.localEndDate}T${entity.localEndTime}`);
-      const endAtTimestamp = endAtDate.getTime();
-
       const entityId = entity.id;
       const eventId = entity.scheduledEventId;
       const targetSubjectId = entity.targetSubjectId;
@@ -60,7 +57,7 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
         // Skip if local is same position as server and more recent (nothing to update)
         if (
           (groupProgress as FlowProgress)?.pipelineActivityOrder === pipelineActivityOrder &&
-          (groupProgress?.endAt ?? 0) > endAtTimestamp
+          (groupProgress?.endAt ?? 0) > entity.endTime
         ) {
           return;
         }
@@ -81,8 +78,8 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
             pipelineActivityOrder,
             currentActivityStartAt: (groupProgress as FlowProgress)?.currentActivityStartAt ?? null,
             submitId: entity.submitId,
-            startAt: groupProgress?.startAt ?? null,
-            endAt: endAtTimestamp,
+            startAt: groupProgress?.startAt ?? entity.startTime,
+            endAt: null,
             context: groupProgress?.context ?? { summaryData: {} },
             event,
           },
@@ -103,16 +100,16 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
                 pipelineActivityOrder,
                 currentActivityStartAt: null,
                 submitId: entity.submitId,
-                startAt: null,
-                endAt: endAtTimestamp,
+                startAt: entity.startTime,
+                endAt: entity.endTime,
                 context: { summaryData: {} },
                 event,
               }
             : {
                 type: ActivityPipelineType.Regular,
                 submitId: entity.submitId,
-                startAt: null,
-                endAt: endAtTimestamp,
+                startAt: entity.startTime,
+                endAt: entity.endTime,
                 context: { summaryData: {} },
                 event,
               },
@@ -127,7 +124,7 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
         targetSubjectId,
         progressPayload: {
           ...groupProgress,
-          endAt: (groupProgress.endAt ?? 0) > endAtTimestamp ? groupProgress.endAt : endAtTimestamp,
+          endAt: (groupProgress.endAt ?? 0) > entity.endTime ? groupProgress.endAt : entity.endTime,
           event,
         },
       });
