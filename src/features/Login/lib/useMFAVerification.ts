@@ -4,6 +4,8 @@ import { getMfaErrorResult, MfaVerificationType } from './mfaErrorHandler';
 
 import { useMFAVerifyMutation, useMFARecoveryMutation } from '~/entities/user';
 import { secureTokensStorage } from '~/shared/utils';
+import { Mixpanel } from '~/shared/utils/analytics';
+import { MixpanelEventType, MixpanelProps } from '~/shared/utils/analytics/mixpanel.types';
 
 export type { MfaVerificationType };
 
@@ -98,6 +100,18 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
         // Navigation happens sync after callback, so tokens must be in storage first
         secureTokensStorage.setTokens(result.token);
 
+        // Track successful verification
+        Mixpanel.track({
+          action:
+            type === 'totp'
+              ? MixpanelEventType.MFATOTPVerificationSuccess
+              : MixpanelEventType.MFARecoveryVerificationSuccess,
+        });
+
+        // Set user properties for MFA-enabled user
+        Mixpanel.login(result.user.id);
+        Mixpanel.setUserProperty('Has MFA Enabled', true);
+
         // Trigger success callback with user only (tokens already stored)
         onSuccess({ user: result.user });
 
@@ -115,6 +129,30 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
         if (expired && !hasSessionExpiredRef.current) {
           hasSessionExpiredRef.current = true;
           setIsSessionExpired(true);
+
+          // Track session expired event
+          Mixpanel.track({
+            action: MixpanelEventType.MFASessionExpired,
+            [MixpanelProps.MFAErrorCode]: translationKey,
+          });
+        } else if (!expired) {
+          // Track verification failed (only if not session expired)
+          const getAttemptType = (): 'global' | 'session' | null => {
+            if (globalAttemptsRemaining !== null) return 'global';
+            if (sessionAttemptsRemaining !== null) return 'session';
+            return null;
+          };
+
+          Mixpanel.track({
+            action:
+              type === 'totp'
+                ? MixpanelEventType.MFATOTPVerificationFailed
+                : MixpanelEventType.MFARecoveryVerificationFailed,
+            [MixpanelProps.MFAErrorCode]: translationKey,
+            [MixpanelProps.MFAAttemptsRemaining]:
+              globalAttemptsRemaining ?? sessionAttemptsRemaining,
+            [MixpanelProps.MFAAttemptType]: getAttemptType(),
+          });
         }
 
         // Set display error with priority-based warning
