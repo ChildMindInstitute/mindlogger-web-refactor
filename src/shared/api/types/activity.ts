@@ -124,8 +124,8 @@ export type AnswerPayload = {
     itemIds: Array<ID>;
     identifier: string | null;
     scheduledTime?: number;
-    startTime: number;
-    endTime: number;
+    startTime: number; // Milliseconds since Unix epoch
+    endTime: number; // Milliseconds since Unix epoch
     userPublicKey: string;
     scheduledEventId: string;
     localEndDate: string;
@@ -237,6 +237,8 @@ export type CompletedEntityDTO = {
   submitId: string;
   targetSubjectId: string | null;
   scheduledEventId: string;
+  startTime: number; // Milliseconds since Unix epoch
+  endTime: number; // Milliseconds since Unix epoch
   localEndDate: string;
   localEndTime: string;
   isFlowCompleted: boolean | null;

@@ -45,6 +45,8 @@ const baseCompletedEntity: CompletedEntityDTO = {
   submitId: 'submit-1',
   targetSubjectId: null,
   scheduledEventId: mockActivityEvent.id,
+  startTime: new Date('2020-01-01T00:00:00').getTime(),
+  endTime: new Date('2020-02-02T02:20:00').getTime(),
   localEndDate: '2020-02-02',
   localEndTime: '02:20:00',
   isFlowCompleted: null,
@@ -70,7 +72,7 @@ describe('useEntitiesSync', () => {
       const localProgress: GroupProgress = {
         ...baseFlowProgress,
         pipelineActivityOrder: 0,
-        startAt: 1000,
+        startAt: new Date('2020-01-01T00:00:00').getTime(),
         endAt: null,
         context: { summaryData: {} },
         event: mockFlowEvent,
@@ -113,7 +115,7 @@ describe('useEntitiesSync', () => {
       const localProgress: GroupProgress = {
         ...baseFlowProgress,
         pipelineActivityOrder: 2,
-        startAt: 1000,
+        startAt: new Date('2020-01-01T00:00:00').getTime(),
         endAt: null,
         context: { summaryData: {} },
         event: mockFlowEvent,
@@ -311,7 +313,7 @@ describe('useEntitiesSync', () => {
       const localProgress: GroupProgress = {
         type: ActivityPipelineType.Regular,
         submitId: 'local-submit',
-        startAt: 1000,
+        startAt: new Date('2020-01-01T00:00:00').getTime(),
         endAt: new Date('2020-01-10T01:10:00').getTime(),
         context: { summaryData: {} },
         event: mockFlowEvent,
@@ -356,7 +358,7 @@ describe('useEntitiesSync', () => {
       const localProgress: GroupProgress = {
         type: ActivityPipelineType.Regular,
         submitId: 'local-submit',
-        startAt: 1000,
+        startAt: new Date('2020-01-01T00:00:00').getTime(),
         endAt: new Date('2020-01-10T01:10:00').getTime(),
         context: { summaryData: {} },
         event: mockActivityEvent,
