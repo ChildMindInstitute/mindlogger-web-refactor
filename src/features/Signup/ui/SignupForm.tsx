@@ -6,6 +6,7 @@ import { SignupFormSchema, TSignupForm } from '../model/signup.schema';
 
 import { useBanners } from '~/entities/banner/model';
 import { useLoginMutation, userModel, useSignupMutation } from '~/entities/user';
+import { isMFARequiredResponse } from '~/features/Login/model/mfa.types';
 import {
   BaseButton,
   BasicFormProvider,
@@ -44,7 +45,17 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
 
   const { mutate: login, isLoading: isLoginLoading } = useLoginMutation({
     onSuccess(data, variables) {
-      const { user, token } = data.data.result;
+      const result = data.data.result;
+
+      // After signup, MFA should not be required (newly created accounts don't have MFA enabled)
+      // But handle it gracefully just in case
+      if (isMFARequiredResponse(result)) {
+        // This shouldn't happen for new accounts, but if it does, show an error
+        addErrorBanner(t('unexpectedError'));
+        return;
+      }
+
+      const { user, token } = result;
 
       return onLoginSuccess({
         user: {

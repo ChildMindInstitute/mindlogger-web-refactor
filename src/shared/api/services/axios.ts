@@ -64,7 +64,13 @@ axiosService.interceptors.response.use(
 
         config.headers.Authorization = `${data.result.tokenType} ${data.result.accessToken}`;
       } catch (e) {
-        eventEmitter.emit('onLogout');
+        // Skip global logout for MFA endpoints - they handle errors in the MFA flow
+        const url = config?.url || '';
+        const isMFAEndpoint = url.includes('/auth/mfa/');
+
+        if (!isMFAEndpoint) {
+          eventEmitter.emit('onLogout');
+        }
         // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         await Promise.reject(e);
       }

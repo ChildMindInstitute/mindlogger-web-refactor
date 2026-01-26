@@ -3,6 +3,9 @@ import {
   LoginPayload,
   LoginSuccessResponse,
   LogoutPayload,
+  MFAVerifyRecoveryPayload,
+  MFAVerifySuccessResponse,
+  MFAVerifyTOTPPayload,
   PasswordRecoveryApprovalSuccessResponse,
   PasswordRecoverySuccessResponse,
   RecoveryPasswordApprovalPayload,
@@ -59,6 +62,15 @@ function authorizationService() {
     },
     refreshToken(data: RefreshTokenPayload) {
       return axiosService.post<RefreshTokenSuccessResponse>('/auth/token/refresh', data);
+    },
+
+    // MFA verification endpoints
+    verifyMFATOTP(data: MFAVerifyTOTPPayload) {
+      return axiosService.post<MFAVerifySuccessResponse>('/auth/mfa/totp/verify', data);
+    },
+
+    verifyMFARecoveryCode(data: MFAVerifyRecoveryPayload) {
+      return axiosService.post<MFAVerifySuccessResponse>('/auth/mfa/recovery-codes/verify', data);
     },
   };
 }
