@@ -49,16 +49,13 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
           return;
         }
 
-        // Skip if local is already ahead of server (nothing to update)
-        if ((groupProgress as FlowProgress)?.pipelineActivityOrder > pipelineActivityOrder) {
+        // Skip if local is completed and more recent than server (nothing to update)
+        if ((groupProgress?.endAt ?? 0) > entity.endTime) {
           return;
         }
 
-        // Skip if local is same position as server and more recent (nothing to update)
-        if (
-          (groupProgress as FlowProgress)?.pipelineActivityOrder === pipelineActivityOrder &&
-          (groupProgress?.endAt ?? 0) > entity.endTime
-        ) {
+        // Skip if local is in-progress and already ahead of server (nothing to update)
+        if ((groupProgress as FlowProgress)?.pipelineActivityOrder > pipelineActivityOrder) {
           return;
         }
 
