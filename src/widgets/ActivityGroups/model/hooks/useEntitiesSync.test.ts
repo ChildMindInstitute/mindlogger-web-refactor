@@ -57,7 +57,6 @@ const baseFlowProgress: FlowProgress = {
   type: ActivityPipelineType.Flow,
   currentActivityId: mockActivityId1,
   pipelineActivityOrder: 0,
-  currentActivityStartAt: null,
   submitId: 'submit-1',
 };
 

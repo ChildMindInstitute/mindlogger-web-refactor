@@ -307,7 +307,6 @@ const appletsSlice = createSlice({
         type: ActivityPipelineType.Flow,
         currentActivityId: payload.activityId,
         startAt: new Date().getTime(),
-        currentActivityStartAt: new Date().getTime(),
         endAt: null,
         submitId: uuidV4(),
         pipelineActivityOrder: payload.pipelineActivityOrder,
@@ -327,7 +326,6 @@ const appletsSlice = createSlice({
 
       groupProgress.currentActivityId = payload.activityId;
       groupProgress.pipelineActivityOrder = payload.pipelineActivityOrder;
-      groupProgress.currentActivityStartAt = new Date().getTime();
     },
 
     activityRestarted: (state, { payload }: PayloadAction<InProgressActivity>) => {
@@ -350,7 +348,7 @@ const appletsSlice = createSlice({
       if (groupProgress) {
         groupProgress.currentActivityId = payload.activityId;
         groupProgress.pipelineActivityOrder = 0;
-        groupProgress.currentActivityStartAt = groupProgress.startAt = new Date().getTime();
+        groupProgress.startAt = new Date().getTime();
         groupProgress.submitId = uuidV4();
       }
     },

@@ -290,7 +290,6 @@ export const mockEntityProgress: GroupProgressState = {
     type: ActivityPipelineType.Flow,
     currentActivityId: mockActivityId1,
     pipelineActivityOrder: 1,
-    currentActivityStartAt: null,
     submitId: 'test-key',
     context: { summaryData: {} },
     startAt: 1,
