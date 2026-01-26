@@ -112,16 +112,33 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
       }
 
       // Case 3: Completed entity with local progress
-      // Complete local progress, or update using more recent completion time for update
+      // Skip if local is completed and more recent than server (nothing to update)
+      if ((groupProgress.endAt ?? 0) > entity.endTime) {
+        return;
+      }
       return saveGroupProgress({
         entityId,
         eventId,
         targetSubjectId,
-        progressPayload: {
-          ...groupProgress,
-          endAt: (groupProgress.endAt ?? 0) > entity.endTime ? groupProgress.endAt : entity.endTime,
-          event,
-        },
+        progressPayload: isFlow
+          ? {
+              ...groupProgress,
+              type: ActivityPipelineType.Flow,
+              currentActivityId: '',
+              pipelineActivityOrder,
+              submitId: entity.submitId,
+              startAt: entity.startTime,
+              endAt: entity.endTime,
+              event,
+            }
+          : {
+              ...groupProgress,
+              type: ActivityPipelineType.Regular,
+              submitId: entity.submitId,
+              startAt: entity.startTime,
+              endAt: entity.endTime,
+              event,
+            },
       });
     },
     [applet.activityFlows, events, saveGroupProgress],
