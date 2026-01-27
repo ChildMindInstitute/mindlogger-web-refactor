@@ -8,7 +8,6 @@ import { AppletBaseDTO, CompletedEntityDTO } from '~/shared/api';
 import {
   mockActivities,
   mockActivityId1,
-  mockActivityId2,
   mockActivityId3,
   mockAppletId,
   mockEventsResponse,
@@ -146,51 +145,7 @@ describe('useEntitiesSync', () => {
       expect(mockSaveGroupProgress).not.toHaveBeenCalled();
     });
 
-    it('should use server progress when server is more recent at the same position', () => {
-      const localProgress: GroupProgress = {
-        ...baseFlowProgress,
-        pipelineActivityOrder: 1,
-        startAt: new Date('2020-01-10T01:10:00').getTime(),
-        endAt: null,
-        context: { summaryData: {} },
-        event: mockFlowEvent,
-      };
-      mockGetGroupProgress.mockReturnValue(localProgress);
-
-      renderHook(() =>
-        useEntitiesSync({
-          applet: mockApplet,
-          completedEntities: {
-            id: mockAppletId,
-            version: '1.0.0',
-            activities: [],
-            activityFlows: [
-              {
-                ...baseCompletedEntity,
-                id: mockFlowId1,
-                scheduledEventId: mockFlowEvent.id,
-                isFlowCompleted: false,
-                activityFlowOrder: 1,
-                submitId: 'server-submit-id',
-              },
-            ],
-          },
-          events: [mockFlowEvent],
-        }),
-      );
-
-      expect(mockSaveGroupProgress).toHaveBeenCalledWith(
-        expect.objectContaining({
-          progressPayload: expect.objectContaining({
-            pipelineActivityOrder: 1,
-            currentActivityId: mockActivityId2,
-            submitId: 'server-submit-id',
-          }),
-        }),
-      );
-    });
-
-    it('should use local progress when local is more recent at the same position', () => {
+    it('should use local progress when local is at the same position as server', () => {
       const localProgress: GroupProgress = {
         ...baseFlowProgress,
         pipelineActivityOrder: 1,
