@@ -33,10 +33,14 @@ interface UseMFAVerificationArgs {
   session: MFASessionData | null;
   /**
    * Called on successful verification - tokens are already stored before this callback.
-   * Only receives user data since tokens are stored directly in useMFAVerification
+   * Only receives user data and MFA context since tokens are stored directly in useMFAVerification
    * to avoid race conditions with navigation.
    */
-  onSuccess: (result: { user: UserData }) => void;
+  onSuccess: (result: {
+    user: UserData;
+    mfaUsed: boolean;
+    mfaMethod: 'Authenticator App' | 'Backup Codes';
+  }) => void;
 }
 
 /**
@@ -112,8 +116,12 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
         Mixpanel.login(result.user.id);
         Mixpanel.setUserProperty('Has MFA Enabled', true);
 
-        // Trigger success callback with user only (tokens already stored)
-        onSuccess({ user: result.user });
+        // Trigger success callback with user and MFA context (tokens already stored)
+        onSuccess({
+          user: result.user,
+          mfaUsed: true,
+          mfaMethod: type === 'totp' ? 'Authenticator App' : 'Backup Codes',
+        });
 
         return true;
       } catch (error: unknown) {
@@ -152,6 +160,14 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
             [MixpanelProps.MFAAttemptsRemaining]:
               globalAttemptsRemaining ?? sessionAttemptsRemaining,
             [MixpanelProps.MFAAttemptType]: getAttemptType(),
+          });
+
+          // Track login failed at MFA stage
+          Mixpanel.track({
+            action: MixpanelEventType.LoginFailed,
+            [MixpanelProps.FailureStage]: 'MFA',
+            [MixpanelProps.MFARequired]: true,
+            [MixpanelProps.MFAMethodUsed]: type === 'totp' ? 'Authenticator App' : 'Backup Codes',
           });
         }
 

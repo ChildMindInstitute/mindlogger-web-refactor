@@ -6,9 +6,16 @@ import { MFARequiredResponse, isMFARequiredResponse } from '../model/mfa.types';
 
 import { useBanners } from '~/entities/banner/model';
 import { ILoginPayload, useLoginMutation, userModel } from '~/entities/user';
+import { LoginResult } from '~/shared/api';
 import { ROUTES } from '~/shared/constants';
 import { BaseButton, BasicFormProvider, Box, Input, PasswordIcon, Text } from '~/shared/ui';
-import { Mixpanel, MixpanelEventType, useCustomForm, usePasswordType } from '~/shared/utils';
+import {
+  Mixpanel,
+  MixpanelEventType,
+  MixpanelProps,
+  useCustomForm,
+  usePasswordType,
+} from '~/shared/utils';
 
 interface LoginFormProps {
   locationState?: Record<string, unknown>;
@@ -32,17 +39,32 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
 
   const { mutate: login, isLoading } = useLoginMutation({
     onSuccess(data, variables) {
-      const result = data.data.result;
+      const result: LoginResult = data.data.result;
 
       // Check if MFA is required
       if (isMFARequiredResponse(result)) {
+        // Track login button click with MFA required
+        Mixpanel.track({
+          action: MixpanelEventType.LoginBtnClick,
+          [MixpanelProps.MFARequired]: true,
+          [MixpanelProps.AuthMethod]: 'Password',
+        });
+
         Mixpanel.track({ action: MixpanelEventType.MFARequired });
         onMFARequired(result, variables.password);
         return;
       }
 
       // Normal login flow (no MFA)
+      // TypeScript now knows result is LoginSuccessResult
       const { user, token } = result;
+
+      // Track login button click without MFA
+      Mixpanel.track({
+        action: MixpanelEventType.LoginBtnClick,
+        [MixpanelProps.MFARequired]: false,
+        [MixpanelProps.AuthMethod]: 'Password',
+      });
 
       removeErrorBanner();
 
@@ -52,21 +74,27 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
           password: variables.password,
         },
         tokens: token,
+        mfaUsed: false,
+        mfaMethod: null,
       });
     },
     onError(error) {
       if (error.evaluatedMessage) {
         addErrorBanner(t('invalidCredentials'));
+
+        // Track login failed at credentials stage
+        Mixpanel.track({
+          action: MixpanelEventType.LoginFailed,
+          [MixpanelProps.FailureStage]: 'Credentials',
+          [MixpanelProps.MFARequired]: false, // Unknown at this stage
+          [MixpanelProps.MFAMethodUsed]: null,
+        });
       }
     },
   });
 
   const onLoginSubmit = (data: TLoginForm) => {
     login(data as ILoginPayload);
-  };
-
-  const onLoginButtonClick = () => {
-    Mixpanel.track({ action: MixpanelEventType.LoginBtnClick });
   };
 
   return (
@@ -102,13 +130,7 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
           </Text>
         </Box>
 
-        <BaseButton
-          type="submit"
-          variant="contained"
-          isLoading={isLoading}
-          onClick={onLoginButtonClick}
-          text={t('button')}
-        />
+        <BaseButton type="submit" variant="contained" isLoading={isLoading} text={t('button')} />
       </Box>
     </BasicFormProvider>
   );

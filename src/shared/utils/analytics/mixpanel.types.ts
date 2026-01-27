@@ -20,6 +20,14 @@ export enum MixpanelProps {
   MFAAttemptsRemaining = 'MFA Attempts Remaining',
   MFAAttemptType = 'MFA Attempt Type',
   MFAIsAutoSubmit = 'MFA Is Auto Submit',
+
+  // Login Props
+  MFARequired = 'MFA Required',
+  AuthMethod = 'Auth Method',
+  MFAUsed = 'MFA Used',
+  MFAMethodUsed = 'MFA Method Used',
+  UserId = 'User ID',
+  FailureStage = 'Failure Stage',
 }
 
 export enum MixpanelFeature {
@@ -46,6 +54,7 @@ export enum MixpanelEventType {
   EHRProviderShareSuccess = 'EHR Provider Share Success',
   InvitationAccepted = 'Invitation Accepted',
   LoginBtnClick = 'Login Button click',
+  LoginFailed = 'Login Failed',
   LoginScreenCreateAccountBtnClick = 'Create account button on login screen click',
   LoginSuccessful = 'Login Successful',
   Logout = 'logout',
@@ -165,10 +174,22 @@ export type ReturnToAdminAppEvent = WithFeature<
 
 export type LoginSuccessfulEvent = {
   action: MixpanelEventType.LoginSuccessful;
+  [MixpanelProps.MFAUsed]: boolean;
+  [MixpanelProps.MFAMethodUsed]: 'Authenticator App' | 'Backup Codes' | null;
+  [MixpanelProps.UserId]: string;
 };
 
 export type LoginBtnClickEvent = {
   action: MixpanelEventType.LoginBtnClick;
+  [MixpanelProps.MFARequired]: boolean;
+  [MixpanelProps.AuthMethod]: 'Password';
+};
+
+export type LoginFailedEvent = {
+  action: MixpanelEventType.LoginFailed;
+  [MixpanelProps.FailureStage]: 'Credentials' | 'MFA';
+  [MixpanelProps.MFARequired]: boolean;
+  [MixpanelProps.MFAMethodUsed]: 'Authenticator App' | 'Backup Codes' | null;
 };
 
 export type LogoutEvent = {
@@ -275,6 +296,7 @@ export type MixpanelEvent =
   | EHRProviderShareSuccessEvent
   | InvitationAcceptedEvent
   | LoginBtnClickEvent
+  | LoginFailedEvent
   | LoginScreenCreateAccountBtnClickEvent
   | LoginSuccessfulEvent
   | LogoutEvent

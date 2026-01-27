@@ -20,11 +20,13 @@ interface MFAFormProps {
   session: { token: string; sessionId: string };
   /**
    * Called on successful verification - tokens are already stored.
-   * Only receives user data since tokens are stored in useMFAVerification
+   * Only receives user data and MFA context since tokens are stored in useMFAVerification
    * before this callback to avoid race conditions with navigation.
    */
   onSuccess: (result: {
     user: { id: string; firstName: string; lastName: string; email: string };
+    mfaUsed: boolean;
+    mfaMethod: 'Authenticator App' | 'Backup Codes';
   }) => void;
   onSwitchToRecovery: () => void;
   onBackToLogin: () => void;
