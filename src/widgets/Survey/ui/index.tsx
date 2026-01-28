@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { subMonths } from 'date-fns';
 
@@ -6,7 +6,9 @@ import { ErrorScreen } from './ErrorScreen';
 import LoadingScreen from './LoadingScreen';
 import { ScreenManager } from './ScreenManager';
 
+import { FlowProgress, getProgressId } from '~/abstract/lib';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
+import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
@@ -18,6 +20,7 @@ import ROUTES from '~/shared/constants/routes';
 import { MuiModal } from '~/shared/ui';
 import {
   formatToDtoDate,
+  useAppSelector,
   useCustomNavigation,
   useCustomTranslation,
   useModal,
@@ -104,11 +107,37 @@ export const SurveyWidget = (props: Props) => {
     { select: (data) => data.data.result, enabled: !publicAppletKey },
   );
 
+  // Sync with server
   useEntitiesSync({
     applet: appletBaseDTO!,
     completedEntities,
     events: eventsDTO?.events ?? [],
   });
+
+  // After server sync, redirect to current activity if flow progressed on another device
+  const groupProgressId = flowId ? getProgressId(flowId, eventId, targetSubjectId) : null;
+  const groupProgress = useAppSelector((state) =>
+    groupProgressId ? appletModel.selectors.selectGroupProgress(state, groupProgressId) : undefined,
+  );
+  const currentActivityId = (groupProgress as FlowProgress)?.currentActivityId;
+
+  useEffect(() => {
+    if (!currentActivityId || currentActivityId === activityId) return;
+
+    const navigateToProps = {
+      appletId,
+      activityId: currentActivityId,
+      entityType: 'flow' as const,
+      eventId,
+      flowId,
+    };
+
+    const screenToNavigate = publicAppletKey
+      ? ROUTES.publicSurvey.navigateTo({ ...navigateToProps, publicAppletKey })
+      : ROUTES.survey.navigateTo({ ...navigateToProps, targetSubjectId });
+
+    navigator.navigate(screenToNavigate, { replace: true });
+  }, [activityId, currentActivityId]);
 
   const responseError = error?.evaluatedMessage ?? '';
 
