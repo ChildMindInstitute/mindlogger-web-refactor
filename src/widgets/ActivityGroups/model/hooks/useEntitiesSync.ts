@@ -9,7 +9,7 @@ import {
   ScheduleEventDto,
 } from '~/shared/api';
 
-type EntitiesSyncProps = {
+export type EntitiesSyncProps = {
   applet: AppletBaseDTO;
   completedEntities: CompletedEntitiesDTO | undefined;
   events: ScheduleEventDto[];
