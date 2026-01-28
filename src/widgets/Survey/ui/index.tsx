@@ -117,9 +117,11 @@ export const SurveyWidget = (props: Props) => {
   // After server sync, redirect to current activity if flow progressed on another device
   const groupProgressId = flowId ? getProgressId(flowId, eventId, targetSubjectId) : null;
   const groupProgress = useAppSelector((state) =>
-    groupProgressId ? appletModel.selectors.selectGroupProgress(state, groupProgressId) : undefined,
+    groupProgressId ? appletModel.selectors.selectGroupProgress(state, groupProgressId) : null,
   );
-  const currentActivityId = (groupProgress as FlowProgress)?.currentActivityId;
+  const currentActivityId = !groupProgress?.endAt
+    ? (groupProgress as FlowProgress)?.currentActivityId
+    : null;
 
   useEffect(() => {
     if (!currentActivityId || currentActivityId === activityId) return;
