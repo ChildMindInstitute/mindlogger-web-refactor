@@ -246,6 +246,84 @@ describe('useEntitiesSync', () => {
   });
 
   describe('syncEntity - Case 3: Completed flow or activity with local progress', () => {
+    it('should complete local in-progress flow with server completed flow', () => {
+      const localProgress: GroupProgress = {
+        ...baseFlowProgress,
+        startAt: new Date('2020-01-01T00:00:00').getTime(),
+        endAt: null,
+        context: { summaryData: {} },
+        event: mockFlowEvent,
+      };
+      mockGetGroupProgress.mockReturnValue(localProgress);
+
+      const serverCompletedEntities: EntitiesSyncProps = {
+        applet: mockApplet,
+        completedEntities: {
+          id: mockAppletId,
+          version: '1.0.0',
+          activities: [],
+          activityFlows: [
+            {
+              ...baseCompletedEntity,
+              id: mockFlowId1,
+              scheduledEventId: mockFlowEvent.id,
+              isFlowCompleted: true,
+            },
+          ],
+        },
+        events: [mockFlowEvent],
+      };
+      renderHook(() => useEntitiesSync(serverCompletedEntities));
+
+      expect(mockSaveGroupProgress).toHaveBeenCalledWith({
+        entityId: mockFlowId1,
+        eventId: mockFlowEvent.id,
+        targetSubjectId: null,
+        progressPayload: expect.objectContaining({
+          endAt: baseCompletedEntity.endTime,
+        }),
+      });
+    });
+
+    it('should complete local in-progress activity with server standalone activity', () => {
+      const localProgress: GroupProgress = {
+        ...baseFlowProgress,
+        type: ActivityPipelineType.Regular,
+        startAt: new Date('2020-01-01T00:00:00').getTime(),
+        endAt: null,
+        context: { summaryData: {} },
+        event: mockActivityEvent,
+      };
+      mockGetGroupProgress.mockReturnValue(localProgress);
+
+      const serverCompletedEntities: EntitiesSyncProps = {
+        applet: mockApplet,
+        completedEntities: {
+          id: mockAppletId,
+          version: '1.0.0',
+          activities: [
+            {
+              ...baseCompletedEntity,
+              id: mockActivityId1,
+              scheduledEventId: mockActivityEvent.id,
+            },
+          ],
+          activityFlows: [],
+        },
+        events: [mockActivityEvent],
+      };
+      renderHook(() => useEntitiesSync(serverCompletedEntities));
+
+      expect(mockSaveGroupProgress).toHaveBeenCalledWith({
+        entityId: mockActivityId1,
+        eventId: mockActivityEvent.id,
+        targetSubjectId: null,
+        progressPayload: expect.objectContaining({
+          endAt: baseCompletedEntity.endTime,
+        }),
+      });
+    });
+
     it('should update local flow with server time when server is more recent', () => {
       const localProgress: GroupProgress = {
         ...baseFlowProgress,
