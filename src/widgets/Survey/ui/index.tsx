@@ -129,6 +129,7 @@ export const SurveyWidget = (props: Props) => {
     respondentSubjectId: respondentMeta?.subjectId ?? null,
     events: eventsDTO?.events ?? [],
     activityFlows: appletBaseDTO?.activityFlows ?? [],
+    flowResumeEnabled,
   });
 
   // After server sync, redirect to current activity if flow progressed on another device

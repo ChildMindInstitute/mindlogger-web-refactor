@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 
+import { v4 as uuidV4 } from 'uuid';
+
 import { ActivityPipelineType, FlowProgress } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import {
@@ -14,6 +16,7 @@ export type EntitiesSyncProps = {
   respondentSubjectId: string | null;
   events: ScheduleEventDto[];
   activityFlows: ActivityFlowDTO[];
+  flowResumeEnabled: boolean;
 };
 
 export const useEntitiesSync = ({
@@ -21,6 +24,7 @@ export const useEntitiesSync = ({
   respondentSubjectId,
   events,
   activityFlows,
+  flowResumeEnabled,
 }: EntitiesSyncProps) => {
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
@@ -28,7 +32,6 @@ export const useEntitiesSync = ({
   const getGroupProgressRef = useRef(getGroupProgress);
 
   // Syncs local GroupProgress state with server completions data.
-  // Ensures the most recent event data is used the next time the activity/flow is started.
   const syncEntity = useCallback(
     (entity: CompletedEntityDTO, isFlow: boolean) => {
       const entityId = entity.id;
@@ -150,13 +153,82 @@ export const useEntitiesSync = ({
             },
       });
     },
-    [respondentSubjectId, events, activityFlows],
+    [respondentSubjectId, events, activityFlows, saveGroupProgress],
+  );
+
+  // Legacy sync logic before flow resume was implemented (#690). Used when flow resume is disabled.
+  const syncEntityLegacy = useCallback(
+    (entity: CompletedEntityDTO) => {
+      const endAtDate = new Date(`${entity.localEndDate}T${entity.localEndTime}`);
+      const endAtTimestamp = endAtDate.getTime();
+
+      const entityId = entity.id;
+      const eventId = entity.scheduledEventId;
+
+      // Normalize targetSubjectId to null for self-reports
+      const targetSubjectId =
+        entity.targetSubjectId === respondentSubjectId ? null : entity.targetSubjectId;
+
+      const groupProgress = getGroupProgressRef.current({
+        entityId,
+        eventId,
+        targetSubjectId,
+      });
+
+      const event = events.find(({ id }) => id === eventId) ?? null;
+
+      if (!groupProgress) {
+        return saveGroupProgress({
+          entityId,
+          eventId,
+          targetSubjectId,
+          progressPayload: {
+            type: ActivityPipelineType.Regular,
+            startAt: null,
+            endAt: endAtTimestamp,
+            submitId: uuidV4(),
+            context: {
+              summaryData: {},
+            },
+            event,
+          },
+        });
+      } else if (groupProgress.endAt) {
+        let { endAt } = groupProgress;
+
+        const isServerEndAtBigger = endAtTimestamp > new Date(groupProgress.endAt).getTime();
+
+        if (isServerEndAtBigger) {
+          endAt = endAtTimestamp;
+        }
+
+        return saveGroupProgress({
+          entityId,
+          eventId,
+          targetSubjectId,
+          progressPayload: {
+            ...groupProgress,
+            endAt,
+            event,
+          },
+        });
+      }
+    },
+    [respondentSubjectId, events, saveGroupProgress],
   );
 
   useEffect(() => {
-    if (completedEntities) {
-      completedEntities.activities.forEach((entity) => syncEntity(entity, false));
-      completedEntities.activityFlows.forEach((entity) => syncEntity(entity, true));
+    if (flowResumeEnabled) {
+      completedEntities?.activities.forEach((entity) => syncEntity(entity, false));
+      completedEntities?.activityFlows.forEach((entity) => syncEntity(entity, true));
+    } else {
+      completedEntities?.activities.forEach(syncEntityLegacy);
+      completedEntities?.activityFlows.forEach(syncEntityLegacy);
     }
-  }, [completedEntities, syncEntity]);
+  }, [
+    completedEntities?.activities,
+    completedEntities?.activityFlows,
+    syncEntity,
+    syncEntityLegacy,
+  ]);
 };

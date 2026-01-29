@@ -80,6 +80,7 @@ export const ActivityGroupList = () => {
     respondentSubjectId: applet.respondentMeta?.subjectId ?? null,
     events: events.events,
     activityFlows: applet.activityFlows,
+    flowResumeEnabled,
   });
 
   if (isCompletedEntitiesFetching) {
