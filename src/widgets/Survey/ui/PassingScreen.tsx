@@ -39,14 +39,12 @@ const PassingScreen = (props: Props) => {
 
   const context = useContext(SurveyContext);
 
+  const targetSubjectId = context.targetSubject?.id ?? null;
+
   const activityProgress = useAppSelector((state) =>
     appletModel.selectors.selectActivityProgress(
       state,
-      getProgressId(
-        context.activityId,
-        context.eventId,
-        context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
-      ),
+      getProgressId(context.activityId, context.eventId, context.targetSubject?.id),
     ),
   );
 
@@ -55,13 +53,13 @@ const PassingScreen = (props: Props) => {
   const groupProgress = appletModel.hooks.useGroupProgressRecord({
     entityId: context.entityId,
     eventId: context.eventId,
-    targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+    targetSubjectId,
   });
 
   const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: context.entityId,
     eventId: context.eventId,
-    targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+    targetSubjectId,
   });
 
   const { saveSummaryDataInContext } = appletModel.hooks.useGroupProgressStateManager();
@@ -77,21 +75,21 @@ const PassingScreen = (props: Props) => {
     appletModel.hooks.useUserEvents({
       activityId: context.activityId,
       eventId: context.eventId,
-      targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+      targetSubjectId,
     });
 
   const { saveItemAnswer, saveItemAdditionalText, removeItemAnswer } =
     appletModel.hooks.useSaveItemAnswer({
       activityId: context.activityId,
       eventId: context.eventId,
-      targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+      targetSubjectId,
     });
 
   const { getSummaryForCurrentActivity } = useSummaryData({
     activityId: context.activityId,
     activityName: context.activity.name,
     eventId: context.eventId,
-    targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+    targetSubjectId,
     scoresAndReports: context.activity.scoresAndReports,
     flowId: null,
   });
@@ -115,7 +113,7 @@ const PassingScreen = (props: Props) => {
   const { completeActivity, completeFlow } = appletModel.hooks.useEntityComplete({
     activityId: context.activityId,
     eventId: context.eventId,
-    targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+    targetSubjectId,
     publicAppletKey: context.publicAppletKey,
     flowId: context.flow?.id ?? null,
     appletId: context.appletId,
@@ -165,7 +163,7 @@ const PassingScreen = (props: Props) => {
         saveSummaryDataInContext({
           entityId: context.entityId,
           eventId: context.eventId,
-          targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+          targetSubjectId,
 
           activityId: context.activityId,
           summaryData: summaryDataContext,
@@ -188,7 +186,7 @@ const PassingScreen = (props: Props) => {
         return openSummaryScreen({
           activityId: context.activityId,
           eventId: context.eventId,
-          targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+          targetSubjectId,
         });
       }
 
@@ -199,7 +197,7 @@ const PassingScreen = (props: Props) => {
       return openSummaryScreen({
         activityId: context.activityId,
         eventId: context.eventId,
-        targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+        targetSubjectId,
       });
     }
 
@@ -255,7 +253,7 @@ const PassingScreen = (props: Props) => {
     return incrementStep({
       activityId: context.activityId,
       eventId: context.eventId,
-      targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+      targetSubjectId,
     });
   }, [
     item,
@@ -265,8 +263,7 @@ const PassingScreen = (props: Props) => {
     incrementStep,
     hasNextSubStep,
     handleNextSubStep,
-    context.respondentMeta?.subjectId,
-    context.targetSubject?.id,
+    targetSubjectId,
     saveUserEventByType,
   ]);
 
@@ -284,20 +281,19 @@ const PassingScreen = (props: Props) => {
       return decrementStep({
         activityId: context.activityId,
         eventId: context.eventId,
-        targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+        targetSubjectId,
       });
     }
   }, [
     context.activityId,
     context.eventId,
-    context.respondentMeta?.subjectId,
-    context.targetSubject?.id,
     decrementStep,
     hasPrevStep,
     hasPrevSubStep,
     handlePrevSubStep,
     item,
     saveUserEventByType,
+    targetSubjectId,
   ]);
 
   const onMoveForward = useCallback(() => {
@@ -368,7 +364,7 @@ const PassingScreen = (props: Props) => {
     item,
     activityId: context.activityId,
     eventId: context.eventId,
-    targetSubjectId: context.targetSubject?.id ?? context.respondentMeta?.subjectId ?? null,
+    targetSubjectId,
     isSubmitModalOpen,
     onTimerEnd: hasNextStep ? onNext : openSubmitModal,
   });

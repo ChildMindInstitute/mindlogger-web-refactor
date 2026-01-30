@@ -4,7 +4,6 @@ import { Activity, EventEntity } from './activityGroups.types';
 
 import { GroupProgress, GroupProgressState, getProgressId } from '~/abstract/lib';
 import { AvailabilityLabelType, PeriodicityType, ScheduleEvent } from '~/entities/event';
-import { RespondentMetaDTO } from '~/shared/api';
 import { MINUTES_IN_HOUR, MS_IN_MINUTE } from '~/shared/constants';
 import {
   DatesFromTo,
@@ -19,7 +18,6 @@ const ManyYears = 100;
 export type GroupsBuildContext = {
   allAppletActivities: Activity[];
   progress: GroupProgressState;
-  respondentMeta?: RespondentMetaDTO;
 };
 
 export class GroupUtility {
@@ -27,12 +25,9 @@ export class GroupUtility {
 
   protected _activities: Activity[];
 
-  protected respondentMeta?: RespondentMetaDTO;
-
   constructor(inputParams: GroupsBuildContext) {
     this.progress = inputParams.progress;
     this._activities = inputParams.allAppletActivities;
-    this.respondentMeta = inputParams.respondentMeta;
   }
 
   private getStartedAt(eventActivity: EventEntity): Date {
@@ -123,14 +118,9 @@ export class GroupUtility {
   }
 
   public getProgressRecord(eventEntity: EventEntity): GroupProgress | null {
-    // Use targetSubject.id for multi-informant, fall back to respondent's subjectId for self-reports
     const record =
       this.progress[
-        getProgressId(
-          eventEntity.entity.id,
-          eventEntity.event.id,
-          eventEntity.targetSubject?.id ?? this.respondentMeta?.subjectId ?? null,
-        )
+        getProgressId(eventEntity.entity.id, eventEntity.event.id, eventEntity.targetSubject?.id)
       ];
     return record ?? null;
   }

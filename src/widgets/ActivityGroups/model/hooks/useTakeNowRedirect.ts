@@ -40,13 +40,7 @@ export function useTakeNowRedirect({
           return;
         }
 
-        startSurvey({
-          activityId,
-          eventId,
-          flowId,
-          shouldRestart: true,
-          targetSubjectId: applet?.respondentMeta?.subjectId ?? null,
-        });
+        startSurvey({ activityId, eventId, flowId, shouldRestart: true, targetSubjectId: null });
       },
     [startSurvey],
   );

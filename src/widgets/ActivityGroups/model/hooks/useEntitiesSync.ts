@@ -12,10 +12,16 @@ import {
 export type EntitiesSyncProps = {
   applet: AppletBaseDTO;
   completedEntities: CompletedEntitiesDTO | undefined;
+  respondentSubjectId: string | null;
   events: ScheduleEventDto[];
 };
 
-export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesSyncProps) => {
+export const useEntitiesSync = ({
+  applet,
+  completedEntities,
+  respondentSubjectId,
+  events,
+}: EntitiesSyncProps) => {
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   // Create ref to exclude from callback dependencies to avoid infinite loop
@@ -27,7 +33,10 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
     (entity: CompletedEntityDTO, isFlow: boolean) => {
       const entityId = entity.id;
       const eventId = entity.scheduledEventId;
-      const targetSubjectId = entity.targetSubjectId;
+
+      // Normalize targetSubjectId to null for self-reports
+      const targetSubjectId =
+        entity.targetSubjectId === respondentSubjectId ? null : entity.targetSubjectId;
 
       // activityFlowOrder is 1-indexed, so it equals the 0-indexed position of the next activity
       const pipelineActivityOrder = entity.activityFlowOrder ?? 0;
@@ -141,7 +150,7 @@ export const useEntitiesSync = ({ applet, completedEntities, events }: EntitiesS
             },
       });
     },
-    [applet.activityFlows, events, saveGroupProgress],
+    [applet.activityFlows, respondentSubjectId, events, saveGroupProgress],
   );
 
   useEffect(() => {

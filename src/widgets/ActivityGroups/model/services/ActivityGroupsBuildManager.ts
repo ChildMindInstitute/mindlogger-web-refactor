@@ -99,7 +99,6 @@ const createActivityGroupsBuildManager = () => {
     const builder = createActivityGroupsBuilder({
       allAppletActivities: activities,
       progress: params.entityProgress,
-      respondentMeta: params.applet.respondentMeta,
     });
 
     const calculator = EventModel.ScheduledDateCalculator;

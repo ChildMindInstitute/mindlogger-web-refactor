@@ -111,6 +111,7 @@ export const SurveyWidget = (props: Props) => {
   useEntitiesSync({
     applet: appletBaseDTO!,
     completedEntities,
+    respondentSubjectId: respondentMeta?.subjectId ?? null,
     events: eventsDTO?.events ?? [],
   });
 
