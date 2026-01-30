@@ -70,10 +70,10 @@ export const ActivityGroupList = () => {
   };
 
   useEntitiesSync({
-    applet,
     completedEntities,
     respondentSubjectId: applet.respondentMeta?.subjectId ?? null,
     events: events.events,
+    activityFlows: applet.activityFlows,
   });
 
   if (isCompletedEntitiesFetching) {

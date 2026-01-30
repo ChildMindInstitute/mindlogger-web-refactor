@@ -109,10 +109,10 @@ export const SurveyWidget = (props: Props) => {
 
   // Sync with server
   useEntitiesSync({
-    applet: appletBaseDTO!,
     completedEntities,
     respondentSubjectId: respondentMeta?.subjectId ?? null,
     events: eventsDTO?.events ?? [],
+    activityFlows: appletBaseDTO?.activityFlows ?? [],
   });
 
   // After server sync, redirect to current activity if flow progressed on another device

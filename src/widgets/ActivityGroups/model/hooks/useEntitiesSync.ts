@@ -3,24 +3,24 @@ import { useCallback, useEffect, useRef } from 'react';
 import { ActivityPipelineType, FlowProgress } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import {
-  AppletBaseDTO,
+  ActivityFlowDTO,
   CompletedEntitiesDTO,
   CompletedEntityDTO,
   ScheduleEventDto,
 } from '~/shared/api';
 
 export type EntitiesSyncProps = {
-  applet: AppletBaseDTO;
   completedEntities: CompletedEntitiesDTO | undefined;
   respondentSubjectId: string | null;
   events: ScheduleEventDto[];
+  activityFlows: ActivityFlowDTO[];
 };
 
 export const useEntitiesSync = ({
-  applet,
   completedEntities,
   respondentSubjectId,
   events,
+  activityFlows,
 }: EntitiesSyncProps) => {
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
@@ -52,7 +52,7 @@ export const useEntitiesSync = ({
       // Case 1: In-progress flow (started on another device, not yet completed)
       // Create or update resumable progress so user can continue where they left off
       if (isFlow && entity.isFlowCompleted === false) {
-        const flow = applet.activityFlows.find((f) => f.id === entity.id);
+        const flow = activityFlows.find((f) => f.id === entity.id);
         if (!flow) {
           console.warn(`[useEntitiesSync] Flow not found for entity ID: ${entity.id}`);
           return;
@@ -150,7 +150,7 @@ export const useEntitiesSync = ({
             },
       });
     },
-    [applet.activityFlows, respondentSubjectId, events, saveGroupProgress],
+    [respondentSubjectId, events, activityFlows],
   );
 
   useEffect(() => {

@@ -4,9 +4,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { EntitiesSyncProps, useEntitiesSync } from './useEntitiesSync';
 
 import { ActivityPipelineType, FlowProgress, GroupProgress } from '~/abstract/lib';
-import { AppletBaseDTO, CompletedEntityDTO } from '~/shared/api';
+import { CompletedEntityDTO } from '~/shared/api';
 import {
-  mockActivities,
   mockActivityId1,
   mockActivityId3,
   mockAppletId,
@@ -28,11 +27,6 @@ vi.mock('~/entities/applet', () => ({
     },
   },
 }));
-
-const mockApplet = {
-  activities: mockActivities,
-  activityFlows: mockFlows,
-} as AppletBaseDTO;
 
 // Extract events from mockEventsResponse for the entities we're testing
 const mockActivityEvent = mockEventsResponse.events.find((e) => e.entityId === mockActivityId1)!;
@@ -80,7 +74,6 @@ describe('useEntitiesSync', () => {
       mockGetGroupProgress.mockReturnValue(localProgress);
 
       const serverCompletedEntities: EntitiesSyncProps = {
-        applet: mockApplet,
         completedEntities: {
           id: mockAppletId,
           version: '1.0.0',
@@ -95,7 +88,9 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        respondentSubjectId: null,
         events: [mockFlowEvent],
+        activityFlows: mockFlows,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -121,7 +116,6 @@ describe('useEntitiesSync', () => {
       mockGetGroupProgress.mockReturnValue(localProgress);
 
       const serverCompletedEntities: EntitiesSyncProps = {
-        applet: mockApplet,
         completedEntities: {
           id: mockAppletId,
           version: '1.0.0',
@@ -136,7 +130,9 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        respondentSubjectId: null,
         events: [mockFlowEvent],
+        activityFlows: mockFlows,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -155,7 +151,6 @@ describe('useEntitiesSync', () => {
       mockGetGroupProgress.mockReturnValue(localProgress);
 
       const serverCompletedEntities: EntitiesSyncProps = {
-        applet: mockApplet,
         completedEntities: {
           id: mockAppletId,
           version: '1.0.0',
@@ -170,7 +165,9 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        respondentSubjectId: null,
         events: [mockFlowEvent],
+        activityFlows: mockFlows,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -181,7 +178,6 @@ describe('useEntitiesSync', () => {
   describe('syncEntity - Case 2: Completed flow or activity with no local progress', () => {
     it('should create local completed flow for server completed flow', () => {
       const serverCompletedEntities: EntitiesSyncProps = {
-        applet: mockApplet,
         completedEntities: {
           id: mockAppletId,
           version: '1.0.0',
@@ -195,7 +191,9 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        respondentSubjectId: null,
         events: [mockFlowEvent],
+        activityFlows: mockFlows,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -214,7 +212,6 @@ describe('useEntitiesSync', () => {
 
     it('should create local completed activity for server standalone activity', () => {
       const serverCompletedEntities: EntitiesSyncProps = {
-        applet: mockApplet,
         completedEntities: {
           id: mockAppletId,
           version: '1.0.0',
@@ -227,7 +224,9 @@ describe('useEntitiesSync', () => {
           ],
           activityFlows: [],
         },
+        respondentSubjectId: null,
         events: [mockActivityEvent],
+        activityFlows: mockFlows,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -257,7 +256,6 @@ describe('useEntitiesSync', () => {
       mockGetGroupProgress.mockReturnValue(localProgress);
 
       const serverCompletedEntities: EntitiesSyncProps = {
-        applet: mockApplet,
         completedEntities: {
           id: mockAppletId,
           version: '1.0.0',
@@ -271,7 +269,9 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        respondentSubjectId: null,
         events: [mockFlowEvent],
+        activityFlows: mockFlows,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -297,7 +297,6 @@ describe('useEntitiesSync', () => {
       mockGetGroupProgress.mockReturnValue(localProgress);
 
       const serverCompletedEntities: EntitiesSyncProps = {
-        applet: mockApplet,
         completedEntities: {
           id: mockAppletId,
           version: '1.0.0',
@@ -310,7 +309,9 @@ describe('useEntitiesSync', () => {
           ],
           activityFlows: [],
         },
+        respondentSubjectId: null,
         events: [mockActivityEvent],
+        activityFlows: mockFlows,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -335,7 +336,6 @@ describe('useEntitiesSync', () => {
       mockGetGroupProgress.mockReturnValue(localProgress);
 
       const serverCompletedEntities: EntitiesSyncProps = {
-        applet: mockApplet,
         completedEntities: {
           id: mockAppletId,
           version: '1.0.0',
@@ -349,7 +349,9 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        respondentSubjectId: null,
         events: [mockFlowEvent],
+        activityFlows: mockFlows,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -375,7 +377,6 @@ describe('useEntitiesSync', () => {
       mockGetGroupProgress.mockReturnValue(localProgress);
 
       const serverCompletedEntities: EntitiesSyncProps = {
-        applet: mockApplet,
         completedEntities: {
           id: mockAppletId,
           version: '1.0.0',
@@ -388,7 +389,9 @@ describe('useEntitiesSync', () => {
           ],
           activityFlows: [],
         },
+        respondentSubjectId: null,
         events: [mockActivityEvent],
+        activityFlows: mockFlows,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
