@@ -91,6 +91,7 @@ describe('useEntitiesSync', () => {
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
+        flowResumeEnabled: true,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -133,6 +134,7 @@ describe('useEntitiesSync', () => {
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
+        flowResumeEnabled: true,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -168,6 +170,7 @@ describe('useEntitiesSync', () => {
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
+        flowResumeEnabled: true,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -194,6 +197,7 @@ describe('useEntitiesSync', () => {
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
+        flowResumeEnabled: true,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -227,6 +231,7 @@ describe('useEntitiesSync', () => {
         respondentSubjectId: null,
         events: [mockActivityEvent],
         activityFlows: mockFlows,
+        flowResumeEnabled: true,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -272,6 +277,7 @@ describe('useEntitiesSync', () => {
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
+        flowResumeEnabled: true,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -312,6 +318,7 @@ describe('useEntitiesSync', () => {
         respondentSubjectId: null,
         events: [mockActivityEvent],
         activityFlows: mockFlows,
+        flowResumeEnabled: true,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -352,6 +359,7 @@ describe('useEntitiesSync', () => {
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
+        flowResumeEnabled: true,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
@@ -392,6 +400,7 @@ describe('useEntitiesSync', () => {
         respondentSubjectId: null,
         events: [mockActivityEvent],
         activityFlows: mockFlows,
+        flowResumeEnabled: true,
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
