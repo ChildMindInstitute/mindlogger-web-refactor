@@ -116,6 +116,9 @@ const createActivityGroupsBuildManager = () => {
         groupProgressId as GroupProgressId,
       );
 
+      // Skip if already completed
+      if (groupProgressItem.endAt) continue;
+
       // Event should always be present in groupProgressItem, but we must check for type safety
       if (!groupProgressItem.event) continue;
 
