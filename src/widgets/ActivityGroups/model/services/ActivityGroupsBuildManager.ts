@@ -16,20 +16,14 @@ import {
 } from '~/abstract/lib/GroupBuilder';
 import { EventModel, ScheduleEvent } from '~/entities/event';
 import { mapEventFromDto } from '~/entities/event/model';
-import {
-  ActivityBaseDTO,
-  ActivityFlowDTO,
-  AppletEventsResponse,
-  HydratedAssignmentDTO,
-} from '~/shared/api';
+import { AppletBaseDTO, AppletEventsResponse, HydratedAssignmentDTO } from '~/shared/api';
 
 type BuildResult = {
   groups: ActivityListGroup[];
 };
 
 type ProcessParams = {
-  activities: ActivityBaseDTO[];
-  flows: ActivityFlowDTO[];
+  applet: AppletBaseDTO;
   assignments: HydratedAssignmentDTO[] | null;
   events: AppletEventsResponse;
   entityProgress: GroupProgressState;
@@ -93,8 +87,8 @@ const createActivityGroupsBuildManager = () => {
   };
 
   const process = (params: ProcessParams): BuildResult => {
-    const activities: Activity[] = mapActivitiesFromDto(params.activities);
-    const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(params.flows);
+    const activities: Activity[] = mapActivitiesFromDto(params.applet.activities);
+    const activityFlows: ActivityFlow[] = mapActivityFlowsFromDto(params.applet.activityFlows);
 
     const eventsResponse = params.events;
     const events: ScheduleEvent[] = EventModel.mapEventsFromDto(eventsResponse.events);
@@ -121,6 +115,9 @@ const createActivityGroupsBuildManager = () => {
       const { entityId, targetSubjectId } = getDataFromProgressId(
         groupProgressId as GroupProgressId,
       );
+
+      // Skip if already completed
+      if (groupProgressItem.endAt) continue;
 
       // Event should always be present in groupProgressItem, but we must check for type safety
       if (!groupProgressItem.event) continue;

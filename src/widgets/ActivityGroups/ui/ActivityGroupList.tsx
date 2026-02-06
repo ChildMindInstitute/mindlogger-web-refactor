@@ -73,6 +73,7 @@ export const ActivityGroupList = () => {
     completedEntities,
     respondentSubjectId: applet.respondentMeta?.subjectId ?? null,
     events: events.events,
+    activityFlows: applet.activityFlows,
   });
 
   if (isCompletedEntitiesFetching) {

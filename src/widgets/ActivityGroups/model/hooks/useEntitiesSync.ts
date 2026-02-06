@@ -1,41 +1,45 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-import { v4 as uuidV4 } from 'uuid';
-
-import { ActivityPipelineType } from '~/abstract/lib';
+import { ActivityPipelineType, FlowProgress } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
-import { CompletedEntitiesDTO, CompletedEntityDTO, ScheduleEventDto } from '~/shared/api';
+import {
+  ActivityFlowDTO,
+  CompletedEntitiesDTO,
+  CompletedEntityDTO,
+  ScheduleEventDto,
+} from '~/shared/api';
 
-type EntitiesSyncProps = {
+export type EntitiesSyncProps = {
   completedEntities: CompletedEntitiesDTO | undefined;
   respondentSubjectId: string | null;
   events: ScheduleEventDto[];
+  activityFlows: ActivityFlowDTO[];
 };
 
 export const useEntitiesSync = ({
   completedEntities,
   respondentSubjectId,
   events,
+  activityFlows,
 }: EntitiesSyncProps) => {
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
   // Create ref to exclude from callback dependencies to avoid infinite loop
   const getGroupProgressRef = useRef(getGroupProgress);
 
-  // Updates GroupProgress state whenever an activity/flow is completed to align with completions
-  // data. Syncs with latest event data from the BE to ensure the most recent event data is used
-  // the next time the activity/flow is started.
+  // Syncs local GroupProgress state with server completions data.
+  // Ensures the most recent event data is used the next time the activity/flow is started.
   const syncEntity = useCallback(
-    (entity: CompletedEntityDTO) => {
-      const endAtDate = new Date(`${entity.localEndDate}T${entity.localEndTime}`);
-      const endAtTimestamp = endAtDate.getTime();
-
+    (entity: CompletedEntityDTO, isFlow: boolean) => {
       const entityId = entity.id;
       const eventId = entity.scheduledEventId;
 
       // Normalize targetSubjectId to null for self-reports
       const targetSubjectId =
         entity.targetSubjectId === respondentSubjectId ? null : entity.targetSubjectId;
+
+      // activityFlowOrder is 1-indexed, so it equals the 0-indexed position of the next activity
+      const pipelineActivityOrder = entity.activityFlowOrder ?? 0;
 
       const groupProgress = getGroupProgressRef.current({
         entityId,
@@ -45,29 +49,29 @@ export const useEntitiesSync = ({
 
       const event = events.find(({ id }) => id === eventId) ?? null;
 
-      if (!groupProgress) {
-        return saveGroupProgress({
-          entityId,
-          eventId,
-          targetSubjectId,
-          progressPayload: {
-            type: ActivityPipelineType.Regular,
-            startAt: null,
-            endAt: endAtTimestamp,
-            submitId: uuidV4(),
-            context: {
-              summaryData: {},
-            },
-            event,
-          },
-        });
-      } else if (groupProgress.endAt) {
-        let { endAt } = groupProgress;
+      // Case 1: In-progress flow (started on another device, not yet completed)
+      // Create or update resumable progress so user can continue where they left off
+      if (isFlow && entity.isFlowCompleted === false) {
+        const flow = activityFlows.find((f) => f.id === entity.id);
+        if (!flow) {
+          console.warn(`[useEntitiesSync] Flow not found for entity ID: ${entity.id}`);
+          return;
+        }
 
-        const isServerEndAtBigger = endAtTimestamp > new Date(groupProgress.endAt).getTime();
+        // Skip if local is completed and as recent or more recent than server (nothing to update)
+        if ((groupProgress?.endAt ?? 0) >= entity.endTime) {
+          return;
+        }
 
-        if (isServerEndAtBigger) {
-          endAt = endAtTimestamp;
+        // Skip if local is in-progress and at or ahead of server (nothing to update)
+        if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
+          return;
+        }
+
+        const nextActivityId = flow.activityIds[pipelineActivityOrder];
+        if (!nextActivityId) {
+          console.warn(`[useEntitiesSync] No next activity found for flow: ${entity.id}`);
+          return;
         }
 
         return saveGroupProgress({
@@ -75,21 +79,84 @@ export const useEntitiesSync = ({
           eventId,
           targetSubjectId,
           progressPayload: {
-            ...groupProgress,
-            endAt,
+            type: ActivityPipelineType.Flow,
+            currentActivityId: nextActivityId,
+            pipelineActivityOrder,
+            submitId: entity.submitId,
+            startAt: groupProgress?.startAt ?? entity.startTime,
+            endAt: null,
+            context: groupProgress?.context ?? { summaryData: {} },
             event,
           },
         });
       }
+
+      // Case 2: Completed entity with no local progress
+      // Create a new completed record
+      if (!groupProgress) {
+        return saveGroupProgress({
+          entityId,
+          eventId,
+          targetSubjectId,
+          progressPayload: isFlow
+            ? {
+                type: ActivityPipelineType.Flow,
+                currentActivityId: '',
+                pipelineActivityOrder,
+                submitId: entity.submitId,
+                startAt: entity.startTime,
+                endAt: entity.endTime,
+                context: { summaryData: {} },
+                event,
+              }
+            : {
+                type: ActivityPipelineType.Regular,
+                submitId: entity.submitId,
+                startAt: entity.startTime,
+                endAt: entity.endTime,
+                context: { summaryData: {} },
+                event,
+              },
+        });
+      }
+
+      // Case 3: Completed entity with local progress
+      // Skip if local is completed and as recent or more recent than server (nothing to update)
+      if ((groupProgress.endAt ?? 0) >= entity.endTime) {
+        return;
+      }
+      return saveGroupProgress({
+        entityId,
+        eventId,
+        targetSubjectId,
+        progressPayload: isFlow
+          ? {
+              ...groupProgress,
+              type: ActivityPipelineType.Flow,
+              currentActivityId: '',
+              pipelineActivityOrder,
+              submitId: entity.submitId,
+              startAt: entity.startTime,
+              endAt: entity.endTime,
+              event,
+            }
+          : {
+              ...groupProgress,
+              type: ActivityPipelineType.Regular,
+              submitId: entity.submitId,
+              startAt: entity.startTime,
+              endAt: entity.endTime,
+              event,
+            },
+      });
     },
-    [respondentSubjectId, events, saveGroupProgress],
+    [respondentSubjectId, events, activityFlows],
   );
 
   useEffect(() => {
-    if (!completedEntities) {
-      return;
+    if (completedEntities) {
+      completedEntities.activities.forEach((entity) => syncEntity(entity, false));
+      completedEntities.activityFlows.forEach((entity) => syncEntity(entity, true));
     }
-
-    [...completedEntities.activities, ...completedEntities.activityFlows].forEach(syncEntity);
   }, [completedEntities, syncEntity]);
 };

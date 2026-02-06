@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { subMonths } from 'date-fns';
 
@@ -6,7 +6,9 @@ import { ErrorScreen } from './ErrorScreen';
 import LoadingScreen from './LoadingScreen';
 import { ScreenManager } from './ScreenManager';
 
+import { FlowProgress, getProgressId } from '~/abstract/lib';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
+import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
@@ -18,6 +20,7 @@ import ROUTES from '~/shared/constants/routes';
 import { MuiModal } from '~/shared/ui';
 import {
   formatToDtoDate,
+  useAppSelector,
   useCustomNavigation,
   useCustomTranslation,
   useModal,
@@ -34,10 +37,13 @@ type Props = {
   targetSubjectId: string | null;
 
   flowId: string | null;
+
+  shouldRestart?: boolean;
 };
 
 export const SurveyWidget = (props: Props) => {
-  const { publicAppletKey, appletId, activityId, eventId, flowId, targetSubjectId } = props;
+  const { publicAppletKey, appletId, activityId, eventId, flowId, targetSubjectId, shouldRestart } =
+    props;
 
   const { t } = useCustomTranslation();
   const navigator = useCustomNavigation();
@@ -95,24 +101,57 @@ export const SurveyWidget = (props: Props) => {
     error,
   } = useSurveyDataQuery({ publicAppletKey, appletId, activityId, targetSubjectId });
 
-  const { data: completedEntities } = useCompletedEntitiesQuery(
+  const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(
     {
       appletId,
       fromDate: formatToDtoDate(subMonths(new Date(), 1)),
       includeInProgress: true,
     },
-    { select: (data) => data.data.result, enabled: !publicAppletKey },
+    { select: (data) => data.data.result, enabled: !publicAppletKey && !shouldRestart },
   );
 
+  // Sync with server
+  // - gate on shouldRestart to avoid passing in cached completedEntities
+  // - gate on applet loading to ensure respondentMeta?.subjectId is available
+  // - gate on fresh data to avoid syncing with stale cache
   useEntitiesSync({
-    completedEntities,
+    completedEntities: shouldRestart || isLoading || isFetching ? undefined : completedEntities,
     respondentSubjectId: respondentMeta?.subjectId ?? null,
     events: eventsDTO?.events ?? [],
+    activityFlows: appletBaseDTO?.activityFlows ?? [],
   });
+
+  // After server sync, redirect to current activity if flow progressed on another device
+  const groupProgressId = flowId ? getProgressId(flowId, eventId, targetSubjectId) : null;
+  const groupProgress = useAppSelector((state) =>
+    groupProgressId ? appletModel.selectors.selectGroupProgress(state, groupProgressId) : null,
+  );
+  const currentActivityId = !groupProgress?.endAt
+    ? (groupProgress as FlowProgress)?.currentActivityId
+    : null;
+
+  useEffect(() => {
+    if (!currentActivityId || currentActivityId === activityId) return;
+
+    const navigateToProps = {
+      appletId,
+      activityId: currentActivityId,
+      entityType: 'flow' as const,
+      eventId,
+      flowId,
+    };
+
+    const screenToNavigate = publicAppletKey
+      ? ROUTES.publicSurvey.navigateTo({ ...navigateToProps, publicAppletKey })
+      : ROUTES.survey.navigateTo({ ...navigateToProps, targetSubjectId });
+
+    navigator.navigate(screenToNavigate, { replace: true });
+  }, [activityId, currentActivityId]);
 
   const responseError = error?.evaluatedMessage ?? '';
 
-  if (isLoading) {
+  if (isLoading || (flowId && isFetching)) {
+    // loading screen on initial load and when refetching completed entities for flows
     return <LoadingScreen publicAppletKey={publicAppletKey} appletId={appletId} />;
   }
 
