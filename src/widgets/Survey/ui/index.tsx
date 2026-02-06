@@ -98,7 +98,7 @@ export const SurveyWidget = (props: Props) => {
     error,
   } = useSurveyDataQuery({ publicAppletKey, appletId, activityId, targetSubjectId });
 
-  const { data: completedEntities } = useCompletedEntitiesQuery(
+  const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(
     {
       appletId,
       fromDate: formatToDtoDate(subMonths(new Date(), 1)),
@@ -107,9 +107,9 @@ export const SurveyWidget = (props: Props) => {
     { select: (data) => data.data.result, enabled: !publicAppletKey },
   );
 
-  // Sync with server
+  // Sync with server (gate on fresh data to avoid syncing with stale cache)
   useEntitiesSync({
-    completedEntities,
+    completedEntities: isFetching ? undefined : completedEntities,
     respondentSubjectId: respondentMeta?.subjectId ?? null,
     events: eventsDTO?.events ?? [],
     activityFlows: appletBaseDTO?.activityFlows ?? [],
@@ -144,7 +144,8 @@ export const SurveyWidget = (props: Props) => {
 
   const responseError = error?.evaluatedMessage ?? '';
 
-  if (isLoading) {
+  if (isLoading || (flowId && isFetching)) {
+    // loading screen on initial load and when refetching completed entities for flows
     return <LoadingScreen publicAppletKey={publicAppletKey} appletId={appletId} />;
   }
 
