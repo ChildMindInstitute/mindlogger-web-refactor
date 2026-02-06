@@ -24,6 +24,7 @@ type NavigateToEntityProps = {
   targetSubjectId: string | null;
   entityType: EntityType;
   eventId: string;
+  shouldRestart?: boolean;
 };
 
 type OnActivityCardClickProps = {
@@ -59,7 +60,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
       return;
     }
 
-    const { activityId, flowId, eventId, targetSubjectId, entityType } = params;
+    const { activityId, flowId, eventId, targetSubjectId, entityType, shouldRestart } = params;
 
     if (isPublic && publicAppletKey) {
       return navigator.navigate(
@@ -70,6 +71,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
           entityType,
           publicAppletKey,
           flowId,
+          shouldRestart,
         }),
       );
     }
@@ -82,6 +84,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
         targetSubjectId,
         entityType,
         flowId,
+        shouldRestart,
       }),
     );
   }
@@ -148,6 +151,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
         eventId,
         flowId,
         targetSubjectId,
+        shouldRestart,
       });
     }
 
@@ -165,6 +169,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
       eventId,
       flowId: null,
       targetSubjectId,
+      shouldRestart,
     });
   }
 

@@ -37,10 +37,13 @@ type Props = {
   targetSubjectId: string | null;
 
   flowId: string | null;
+
+  shouldRestart?: boolean;
 };
 
 export const SurveyWidget = (props: Props) => {
-  const { publicAppletKey, appletId, activityId, eventId, flowId, targetSubjectId } = props;
+  const { publicAppletKey, appletId, activityId, eventId, flowId, targetSubjectId, shouldRestart } =
+    props;
 
   const { t } = useCustomTranslation();
   const navigator = useCustomNavigation();
@@ -104,7 +107,7 @@ export const SurveyWidget = (props: Props) => {
       fromDate: formatToDtoDate(subMonths(new Date(), 1)),
       includeInProgress: true,
     },
-    { select: (data) => data.data.result, enabled: !publicAppletKey },
+    { select: (data) => data.data.result, enabled: !publicAppletKey && !shouldRestart },
   );
 
   // Sync with server (gate on fresh data to avoid syncing with stale cache)
