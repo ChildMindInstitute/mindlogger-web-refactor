@@ -111,10 +111,11 @@ export const SurveyWidget = (props: Props) => {
   );
 
   // Sync with server
+  // - gate on shouldRestart to avoid passing in cached completedEntities
   // - gate on applet loading to ensure respondentMeta?.subjectId is available
-  // - gate on fresh data to avoid syncing with stale cache)
+  // - gate on fresh data to avoid syncing with stale cache
   useEntitiesSync({
-    completedEntities: isLoading || isFetching ? undefined : completedEntities,
+    completedEntities: shouldRestart || isLoading || isFetching ? undefined : completedEntities,
     respondentSubjectId: respondentMeta?.subjectId ?? null,
     events: eventsDTO?.events ?? [],
     activityFlows: appletBaseDTO?.activityFlows ?? [],
