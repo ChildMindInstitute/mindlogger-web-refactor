@@ -26,6 +26,9 @@ import {
   useModal,
   useOnceEffect,
 } from '~/shared/utils';
+import { isFlowResumeEnabled } from '~/shared/utils/featureFlags';
+import { useFeatureFlags } from '~/shared/utils/hooks';
+import { FeatureFlag } from '~/shared/utils/types/featureFlags';
 import { useEntitiesSync } from '~/widgets/ActivityGroups/model/hooks';
 
 type Props = {
@@ -101,13 +104,20 @@ export const SurveyWidget = (props: Props) => {
     error,
   } = useSurveyDataQuery({ publicAppletKey, appletId, activityId, targetSubjectId });
 
+  const { featureFlag } = useFeatureFlags();
+  const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, false);
+  const flowResumeEnabled = isFlowResumeEnabled(flowResumeFlag, appletId);
+
   const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(
     {
       appletId,
       fromDate: formatToDtoDate(subMonths(new Date(), 1)),
       includeInProgress: true,
     },
-    { select: (data) => data.data.result, enabled: !publicAppletKey && !shouldRestart },
+    {
+      select: (data) => data.data.result,
+      enabled: flowResumeEnabled && !publicAppletKey && !shouldRestart,
+    },
   );
 
   // Sync with server
@@ -119,6 +129,7 @@ export const SurveyWidget = (props: Props) => {
     respondentSubjectId: respondentMeta?.subjectId ?? null,
     events: eventsDTO?.events ?? [],
     activityFlows: appletBaseDTO?.activityFlows ?? [],
+    flowResumeEnabled,
   });
 
   // After server sync, redirect to current activity if flow progressed on another device
@@ -131,7 +142,7 @@ export const SurveyWidget = (props: Props) => {
     : null;
 
   useEffect(() => {
-    if (!currentActivityId || currentActivityId === activityId) return;
+    if (!flowResumeEnabled || !currentActivityId || currentActivityId === activityId) return;
 
     const navigateToProps = {
       appletId,

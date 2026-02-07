@@ -17,11 +17,17 @@ import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
 import Text from '~/shared/ui/Text';
 import { formatToDtoDate, useCustomTranslation } from '~/shared/utils';
+import { isFlowResumeEnabled } from '~/shared/utils/featureFlags';
+import { useFeatureFlags } from '~/shared/utils/hooks';
+import { FeatureFlag } from '~/shared/utils/types/featureFlags';
 
 export const ActivityGroupList = () => {
   const { t } = useCustomTranslation();
 
   const { applet, events, assignments, isPublic } = useContext(AppletDetailsContext);
+  const { featureFlag } = useFeatureFlags();
+  const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, false);
+  const flowResumeEnabled = isFlowResumeEnabled(flowResumeFlag, applet.id);
 
   useIntegrationsSync({ appletDetails: applet });
 
@@ -30,7 +36,7 @@ export const ActivityGroupList = () => {
       {
         appletId: applet.id,
         fromDate: formatToDtoDate(subMonths(new Date(), 1)),
-        includeInProgress: true,
+        includeInProgress: flowResumeEnabled ? true : undefined,
       },
       { select: (data) => data.data.result, enabled: !isPublic },
     );
@@ -74,6 +80,7 @@ export const ActivityGroupList = () => {
     respondentSubjectId: applet.respondentMeta?.subjectId ?? null,
     events: events.events,
     activityFlows: applet.activityFlows,
+    flowResumeEnabled,
   });
 
   if (isCompletedEntitiesFetching) {
