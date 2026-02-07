@@ -26,7 +26,7 @@ export const ActivityGroupList = () => {
 
   const { applet, events, assignments, isPublic } = useContext(AppletDetailsContext);
   const { featureFlag } = useFeatureFlags();
-  const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, false);
+  const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, []);
   const flowResumeEnabled = isFlowResumeEnabled(flowResumeFlag, applet.id);
 
   useIntegrationsSync({ appletDetails: applet });

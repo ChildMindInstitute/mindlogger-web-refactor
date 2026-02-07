@@ -9,7 +9,7 @@ export type FeatureFlagType = {
   [FeatureFlag.EnableParticipantMultiInformant]: boolean;
   [FeatureFlag.EnablePhrasalTemplate]: boolean;
   [FeatureFlag.EnableActivityAssign]: boolean;
-  [FeatureFlag.EnableFlowResume]: string[] | boolean;
+  [FeatureFlag.EnableFlowResume]: string[];
 };
 
 // Mapping between the feature flag we want to use in code, to the
