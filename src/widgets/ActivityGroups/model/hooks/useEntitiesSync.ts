@@ -30,6 +30,7 @@ export const useEntitiesSync = ({
 
   // Create ref to exclude from callback dependencies to avoid infinite loop
   const getGroupProgressRef = useRef(getGroupProgress);
+  getGroupProgressRef.current = getGroupProgress;
 
   // Syncs local GroupProgress state with server completions data.
   const syncEntity = useCallback(
@@ -56,20 +57,27 @@ export const useEntitiesSync = ({
       // Create or update resumable progress so user can continue where they left off
       if (isFlow && entity.isFlowCompleted === false) {
         const flow = activityFlows.find((f) => f.id === entity.id);
+
         if (!flow) {
           console.warn(`[useEntitiesSync] Flow not found for entity ID: ${entity.id}`);
           return;
         }
 
-        // Skip if local is completed and as recent or more recent than server (nothing to update)
-        if ((groupProgress?.endAt ?? 0) >= entity.endTime) {
-          return;
-        }
+        // If submitIds match, only skip if local is at or ahead
+        const isSameSubmission = groupProgress?.submitId === entity.submitId;
 
-        // Skip if local is in-progress and at or ahead of server (nothing to update)
-        if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
-          return;
+        if (isSameSubmission) {
+          // Same submission: Skip if local is completed and as recent or more recent than server
+          if ((groupProgress?.endAt ?? 0) >= entity.endTime) {
+            return;
+          }
+
+          // Same submission: Skip if local is in-progress and at or ahead of server
+          if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
+            return;
+          }
         }
+        // Different submission: Always replace local with server data (continue to save)
 
         const nextActivityId = flow.activityIds[pipelineActivityOrder];
         if (!nextActivityId) {
