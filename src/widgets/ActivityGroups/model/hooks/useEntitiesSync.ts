@@ -65,11 +65,13 @@ export const useEntitiesSync = ({
 
         if (groupProgress?.submitId === entity.submitId) {
           // If submitIds match, only skip if local is at or ahead
+          // ("Keep last activity in each submission" in AnswerService._filter_activity_flows)
           if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
             return;
           }
         } else {
           // If submitIds are different, skip if local is in-progress and at or ahead of server
+          // ("Farthest along in-progress flow" in AnswerService._filter_activity_flows)
           if (
             !groupProgress?.endAt &&
             (groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder
@@ -77,6 +79,7 @@ export const useEntitiesSync = ({
             return;
           }
           // If submitIds are different, skip if local is completed and as recent or more recent than server
+          // ("More recent between best completed flow and best in-progress flow" in AnswerService._filter_activity_flows)
           if ((groupProgress?.endAt ?? 0) >= entity.endTime) {
             return;
           }
