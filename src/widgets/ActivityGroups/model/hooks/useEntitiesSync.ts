@@ -70,7 +70,10 @@ export const useEntitiesSync = ({
           }
         } else {
           // If submitIds are different, skip if local is in-progress and at or ahead of server
-          if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
+          if (
+            !groupProgress?.endAt &&
+            (groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder
+          ) {
             return;
           }
           // If submitIds are different, skip if local is completed and as recent or more recent than server
