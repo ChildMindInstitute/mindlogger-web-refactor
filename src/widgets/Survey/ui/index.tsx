@@ -105,7 +105,7 @@ export const SurveyWidget = (props: Props) => {
   } = useSurveyDataQuery({ publicAppletKey, appletId, activityId, targetSubjectId });
 
   const { featureFlag } = useFeatureFlags();
-  const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, false);
+  const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, []);
   const flowResumeEnabled = isFlowResumeEnabled(flowResumeFlag, appletId);
 
   const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(

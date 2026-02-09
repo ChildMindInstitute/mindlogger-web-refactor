@@ -4,5 +4,5 @@ export const isFlowResumeEnabled = (
   flag: FeatureFlagType[FeatureFlag.EnableFlowResume],
   appletId: string,
 ): boolean => {
-  return flag === true || (Array.isArray(flag) && flag.includes(appletId));
+  return flag.includes('*') || flag.includes(appletId);
 };
