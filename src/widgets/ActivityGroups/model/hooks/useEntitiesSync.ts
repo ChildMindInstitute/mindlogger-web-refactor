@@ -63,21 +63,21 @@ export const useEntitiesSync = ({
           return;
         }
 
-        // If submitIds match, only skip if local is at or ahead
-        const isSameSubmission = groupProgress?.submitId === entity.submitId;
-
-        if (isSameSubmission) {
-          // Same submission: Skip if local is completed and as recent or more recent than server
-          if ((groupProgress?.endAt ?? 0) >= entity.endTime) {
-            return;
-          }
-
-          // Same submission: Skip if local is in-progress and at or ahead of server
+        if (groupProgress?.submitId === entity.submitId) {
+          // If submitIds match, only skip if local is at or ahead
           if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
             return;
           }
+        } else {
+          // If submitIds are different, skip if local is in-progress and at or ahead of server
+          if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
+            return;
+          }
+          // If submitIds are different, skip if local is completed and as recent or more recent than server
+          if ((groupProgress?.endAt ?? 0) >= entity.endTime) {
+            return;
+          }
         }
-        // Different submission: Always replace local with server data (continue to save)
 
         const nextActivityId = flow.activityIds[pipelineActivityOrder];
         if (!nextActivityId) {
