@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { v4 as uuidV4 } from 'uuid';
 
@@ -33,8 +33,9 @@ export const useEntitiesSync = ({
   getGroupProgressRef.current = getGroupProgress;
 
   // Syncs local GroupProgress state with server completions data.
+  // Returns true if local GroupProgress state was updated or false if skipped.
   const syncEntity = useCallback(
-    (entity: CompletedEntityDTO, isFlow: boolean) => {
+    (entity: CompletedEntityDTO, isFlow: boolean): boolean => {
       const entityId = entity.id;
       const eventId = entity.scheduledEventId;
 
@@ -60,14 +61,14 @@ export const useEntitiesSync = ({
 
         if (!flow) {
           console.warn(`[useEntitiesSync] Flow not found for entity ID: ${entity.id}`);
-          return;
+          return false;
         }
 
         if (groupProgress?.submitId === entity.submitId) {
           // If submitIds match, only skip if local is at or ahead
           // ("Keep last activity in each submission" in AnswerService._filter_activity_flows)
           if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
-            return;
+            return false;
           }
         } else {
           // If submitIds are different, skip if local is in-progress and at or ahead of server
@@ -76,22 +77,22 @@ export const useEntitiesSync = ({
             !groupProgress?.endAt &&
             (groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder
           ) {
-            return;
+            return false;
           }
           // If submitIds are different, skip if local is completed and as recent or more recent than server
           // ("More recent between best completed flow and best in-progress flow" in AnswerService._filter_activity_flows)
           if ((groupProgress?.endAt ?? 0) >= entity.endTime) {
-            return;
+            return false;
           }
         }
 
         const nextActivityId = flow.activityIds[pipelineActivityOrder];
         if (!nextActivityId) {
           console.warn(`[useEntitiesSync] No next activity found for flow: ${entity.id}`);
-          return;
+          return false;
         }
 
-        return saveGroupProgress({
+        saveGroupProgress({
           entityId,
           eventId,
           targetSubjectId,
@@ -106,12 +107,13 @@ export const useEntitiesSync = ({
             event,
           },
         });
+        return true;
       }
 
       // Case 2: Completed entity with no local progress
       // Create a new completed record
       if (!groupProgress) {
-        return saveGroupProgress({
+        saveGroupProgress({
           entityId,
           eventId,
           targetSubjectId,
@@ -135,18 +137,19 @@ export const useEntitiesSync = ({
                 event,
               },
         });
+        return true;
       }
 
       // Case 3: Completed entity with local progress
       // Skip if local is completed and as recent or more recent than server (nothing to update)
       if ((groupProgress.endAt ?? 0) >= entity.endTime) {
-        return;
+        return false;
       }
       // Skip if local is in-progress and started more recently than server completed
       if (!groupProgress.endAt && (groupProgress.startAt ?? 0) > entity.endTime) {
-        return;
+        return false;
       }
-      return saveGroupProgress({
+      saveGroupProgress({
         entityId,
         eventId,
         targetSubjectId,
@@ -170,6 +173,7 @@ export const useEntitiesSync = ({
               event,
             },
       });
+      return true;
     },
     [respondentSubjectId, events, activityFlows, saveGroupProgress],
   );
@@ -235,10 +239,18 @@ export const useEntitiesSync = ({
     [respondentSubjectId, events, saveGroupProgress],
   );
 
+  const [changes, setChanges] = useState<string[]>([]);
+
   useEffect(() => {
     if (flowResumeEnabled) {
-      completedEntities?.activities.forEach((entity) => syncEntity(entity, false));
-      completedEntities?.activityFlows.forEach((entity) => syncEntity(entity, true));
+      const changedIds: string[] = [];
+      completedEntities?.activities.forEach((entity) => {
+        if (syncEntity(entity, false)) changedIds.push(entity.id);
+      });
+      completedEntities?.activityFlows.forEach((entity) => {
+        if (syncEntity(entity, true)) changedIds.push(entity.id);
+      });
+      setChanges(changedIds);
     } else {
       completedEntities?.activities.forEach(syncEntityLegacy);
       completedEntities?.activityFlows.forEach(syncEntityLegacy);
@@ -249,4 +261,6 @@ export const useEntitiesSync = ({
     syncEntity,
     syncEntityLegacy,
   ]);
+
+  return { changes };
 };
