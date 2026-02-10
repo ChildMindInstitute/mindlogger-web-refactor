@@ -142,6 +142,10 @@ export const useEntitiesSync = ({
       if ((groupProgress.endAt ?? 0) >= entity.endTime) {
         return;
       }
+      // Skip if local is in-progress and started more recently than server completed
+      if (!groupProgress.endAt && (groupProgress.startAt ?? 0) > entity.endTime) {
+        return;
+      }
       return saveGroupProgress({
         entityId,
         eventId,
