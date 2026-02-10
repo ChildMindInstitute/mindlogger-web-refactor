@@ -30,6 +30,7 @@ export const useEntitiesSync = ({
 
   // Create ref to exclude from callback dependencies to avoid infinite loop
   const getGroupProgressRef = useRef(getGroupProgress);
+  getGroupProgressRef.current = getGroupProgress;
 
   // Syncs local GroupProgress state with server completions data.
   const syncEntity = useCallback(
@@ -56,19 +57,32 @@ export const useEntitiesSync = ({
       // Create or update resumable progress so user can continue where they left off
       if (isFlow && entity.isFlowCompleted === false) {
         const flow = activityFlows.find((f) => f.id === entity.id);
+
         if (!flow) {
           console.warn(`[useEntitiesSync] Flow not found for entity ID: ${entity.id}`);
           return;
         }
 
-        // Skip if local is completed and as recent or more recent than server (nothing to update)
-        if ((groupProgress?.endAt ?? 0) >= entity.endTime) {
-          return;
-        }
-
-        // Skip if local is in-progress and at or ahead of server (nothing to update)
-        if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
-          return;
+        if (groupProgress?.submitId === entity.submitId) {
+          // If submitIds match, only skip if local is at or ahead
+          // ("Keep last activity in each submission" in AnswerService._filter_activity_flows)
+          if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
+            return;
+          }
+        } else {
+          // If submitIds are different, skip if local is in-progress and at or ahead of server
+          // ("Farthest along in-progress flow" in AnswerService._filter_activity_flows)
+          if (
+            !groupProgress?.endAt &&
+            (groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder
+          ) {
+            return;
+          }
+          // If submitIds are different, skip if local is completed and as recent or more recent than server
+          // ("More recent between best completed flow and best in-progress flow" in AnswerService._filter_activity_flows)
+          if ((groupProgress?.endAt ?? 0) >= entity.endTime) {
+            return;
+          }
         }
 
         const nextActivityId = flow.activityIds[pipelineActivityOrder];
@@ -126,6 +140,10 @@ export const useEntitiesSync = ({
       // Case 3: Completed entity with local progress
       // Skip if local is completed and as recent or more recent than server (nothing to update)
       if ((groupProgress.endAt ?? 0) >= entity.endTime) {
+        return;
+      }
+      // Skip if local is in-progress and started more recently than server completed
+      if (!groupProgress.endAt && (groupProgress.startAt ?? 0) > entity.endTime) {
         return;
       }
       return saveGroupProgress({
