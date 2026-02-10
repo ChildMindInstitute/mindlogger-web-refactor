@@ -135,37 +135,49 @@ export const SurveyWidget = (props: Props) => {
     flowResumeEnabled,
   });
 
-  // After server sync, redirect to current activity if flow progressed on another device
-  const groupProgressId = flowId ? getProgressId(flowId, eventId, targetSubjectId) : null;
+  // After server sync:
+  // - Redirect to activity list if one-time entity was completed on another device
+  // - Redirect to latest activity if flow progressed on another device
+  const groupProgressId = getProgressId(flowId ?? activityId, eventId, targetSubjectId);
   const groupProgress = useAppSelector((state) =>
     groupProgressId ? appletModel.selectors.selectGroupProgress(state, groupProgressId) : null,
   );
+  const isOneTimeCompletion =
+    eventsDTO?.events.find(({ id }) => id === eventId)?.availability.oneTimeCompletion ?? false;
   const currentActivityId = !groupProgress?.endAt
     ? (groupProgress as FlowProgress)?.currentActivityId
     : null;
 
   useEffect(() => {
-    if (!flowResumeEnabled || !currentActivityId || currentActivityId === activityId) return;
+    if (!flowResumeEnabled) return;
 
-    const navigateToProps = {
-      appletId,
-      activityId: currentActivityId,
-      entityType: 'flow' as const,
-      eventId,
-      flowId,
-    };
+    // If one-time entity was completed on another device, redirect to activity list
+    if (groupProgress?.endAt && isOneTimeCompletion) {
+      navigator.navigate(ROUTES.appletDetails.navigateTo(appletId), { replace: true });
+      return;
+    }
 
-    const screenToNavigate = publicAppletKey
-      ? ROUTES.publicSurvey.navigateTo({ ...navigateToProps, publicAppletKey })
-      : ROUTES.survey.navigateTo({ ...navigateToProps, targetSubjectId });
-
-    navigator.navigate(screenToNavigate, { replace: true });
-  }, [activityId, currentActivityId]);
+    // If flow progressed on another device, redirect to latest activity
+    if (currentActivityId && currentActivityId !== activityId) {
+      const navigateToProps = {
+        appletId,
+        activityId: currentActivityId,
+        entityType: 'flow' as const,
+        eventId,
+        flowId,
+      };
+      const screenToNavigate = publicAppletKey
+        ? ROUTES.publicSurvey.navigateTo({ ...navigateToProps, publicAppletKey })
+        : ROUTES.survey.navigateTo({ ...navigateToProps, targetSubjectId });
+      navigator.navigate(screenToNavigate, { replace: true });
+      return;
+    }
+  }, [activityId, currentActivityId, groupProgress?.endAt, isOneTimeCompletion]);
 
   const responseError = error?.evaluatedMessage ?? '';
 
-  if (isLoading || (flowId && isFetching)) {
-    // loading screen on initial load and when refetching completed entities for flows
+  if (isLoading || isFetching) {
+    // loading screen on initial load and when refetching completed entities
     return <LoadingScreen publicAppletKey={publicAppletKey} appletId={appletId} />;
   }
 
