@@ -108,6 +108,8 @@ export const SurveyWidget = (props: Props) => {
   const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, []);
   const flowResumeEnabled = isFlowResumeEnabled(flowResumeFlag, appletId);
 
+  const shouldFetchCompletedEntities = flowResumeEnabled && !publicAppletKey && !shouldRestart;
+
   const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(
     {
       appletId,
@@ -116,7 +118,7 @@ export const SurveyWidget = (props: Props) => {
     },
     {
       select: (data) => data.data.result,
-      enabled: flowResumeEnabled && !publicAppletKey && !shouldRestart,
+      enabled: shouldFetchCompletedEntities,
     },
   );
 
@@ -125,7 +127,8 @@ export const SurveyWidget = (props: Props) => {
   // - gate on applet loading to ensure respondentMeta?.subjectId is available
   // - gate on fresh data to avoid syncing with stale cache
   useEntitiesSync({
-    completedEntities: shouldRestart || isLoading || isFetching ? undefined : completedEntities,
+    completedEntities:
+      !shouldFetchCompletedEntities || isLoading || isFetching ? undefined : completedEntities,
     respondentSubjectId: respondentMeta?.subjectId ?? null,
     events: eventsDTO?.events ?? [],
     activityFlows: appletBaseDTO?.activityFlows ?? [],
