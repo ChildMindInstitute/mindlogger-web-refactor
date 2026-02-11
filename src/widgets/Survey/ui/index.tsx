@@ -149,7 +149,7 @@ export const SurveyWidget = (props: Props) => {
 
   useEffect(() => {
     // Only consider redirect if progress has changed
-    if (!groupProgressChanged) return;
+    if (!flowResumeEnabled || !groupProgressChanged) return;
 
     // If entity was completed on another device, redirect to activity list
     if (groupProgress?.endAt) {
