@@ -126,7 +126,7 @@ export const SurveyWidget = (props: Props) => {
   // - gate on shouldRestart to avoid passing in cached completedEntities
   // - gate on applet loading to ensure respondentMeta?.subjectId is available
   // - gate on fresh data to avoid syncing with stale cache
-  useEntitiesSync({
+  const { changes } = useEntitiesSync({
     completedEntities:
       !shouldFetchCompletedEntities || isLoading || isFetching ? undefined : completedEntities,
     respondentSubjectId: respondentMeta?.subjectId ?? null,
@@ -136,23 +136,23 @@ export const SurveyWidget = (props: Props) => {
   });
 
   // After server sync:
-  // - Redirect to activity list if one-time entity was completed on another device
+  // - Redirect to activity list if entity was completed on another device
   // - Redirect to latest activity if flow progressed on another device
+  const groupProgressChanged = changes.includes(flowId ?? activityId);
   const groupProgressId = getProgressId(flowId ?? activityId, eventId, targetSubjectId);
   const groupProgress = useAppSelector((state) =>
     groupProgressId ? appletModel.selectors.selectGroupProgress(state, groupProgressId) : null,
   );
-  const isOneTimeCompletion =
-    eventsDTO?.events.find(({ id }) => id === eventId)?.availability.oneTimeCompletion ?? false;
   const currentActivityId = !groupProgress?.endAt
     ? (groupProgress as FlowProgress)?.currentActivityId
     : null;
 
   useEffect(() => {
-    if (!flowResumeEnabled) return;
+    // Only consider redirect if progress has changed
+    if (!groupProgressChanged) return;
 
-    // If one-time entity was completed on another device, redirect to activity list
-    if (groupProgress?.endAt && isOneTimeCompletion) {
+    // If entity was completed on another device, redirect to activity list
+    if (groupProgress?.endAt) {
       navigator.navigate(ROUTES.appletDetails.navigateTo(appletId), { replace: true });
       return;
     }
@@ -172,7 +172,7 @@ export const SurveyWidget = (props: Props) => {
       navigator.navigate(screenToNavigate, { replace: true });
       return;
     }
-  }, [activityId, currentActivityId, groupProgress?.endAt, isOneTimeCompletion]);
+  }, [activityId, currentActivityId, groupProgress?.endAt, groupProgressChanged]);
 
   const responseError = error?.evaluatedMessage ?? '';
 
