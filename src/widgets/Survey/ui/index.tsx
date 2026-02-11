@@ -51,7 +51,7 @@ export const SurveyWidget = (props: Props) => {
   const { t } = useCustomTranslation();
   const navigator = useCustomNavigation();
 
-  const { removeAllBanners } = useBanners();
+  const { removeAllBanners, addSuccessBanner } = useBanners();
 
   const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: props.flowId ?? props.activityId,
@@ -153,6 +153,7 @@ export const SurveyWidget = (props: Props) => {
 
     // If entity was completed on another device, redirect to activity list
     if (groupProgress?.endAt) {
+      addSuccessBanner(t('additional.activity_already_completed'));
       navigator.navigate(ROUTES.appletDetails.navigateTo(appletId), { replace: true });
       return;
     }
