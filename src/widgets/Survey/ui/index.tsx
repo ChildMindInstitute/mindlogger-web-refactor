@@ -133,7 +133,7 @@ export const SurveyWidget = (props: Props) => {
   // - gate on fresh data to avoid syncing with stale cache
   const { changes } = useEntitiesSync({
     completedEntities:
-      !shouldFetchCompletedEntities || isLoading || isFetching ? undefined : completedEntities,
+      shouldFetchCompletedEntities && !isLoading && !isFetching ? completedEntities : undefined,
     respondentSubjectId: respondentMeta?.subjectId ?? null,
     events: eventsDTO?.events ?? [],
     activityFlows: appletBaseDTO?.activityFlows ?? [],
