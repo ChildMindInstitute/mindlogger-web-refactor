@@ -111,10 +111,9 @@ export const SurveyWidget = (props: Props) => {
   const isOneTimeCompletion =
     eventsDTO?.events.find((e) => e.id === eventId)?.availability.oneTimeCompletion ?? false;
 
-  // Skip fetch for public applets and on "Restart" by user
+  // Skip fetch on "Restart" by user
   // (but never skip for one-time entities that cannot be restarted after completion)
-  const shouldFetchCompletedEntities =
-    flowResumeEnabled && !publicAppletKey && (!shouldRestart || isOneTimeCompletion);
+  const shouldFetchCompletedEntities = flowResumeEnabled && (!shouldRestart || isOneTimeCompletion);
 
   const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(
     {
