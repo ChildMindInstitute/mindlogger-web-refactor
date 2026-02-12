@@ -146,7 +146,12 @@ export const useEntitiesSync = ({
         return false;
       }
       // Skip if local is in-progress and started more recently than server completed
-      if (!groupProgress.endAt && (groupProgress.startAt ?? 0) > entity.endTime) {
+      // (but never skip for one-time entities that cannot be restarted after completion)
+      if (
+        !groupProgress.endAt &&
+        (groupProgress.startAt ?? 0) > entity.endTime &&
+        !event?.availability.oneTimeCompletion
+      ) {
         return false;
       }
       saveGroupProgress({

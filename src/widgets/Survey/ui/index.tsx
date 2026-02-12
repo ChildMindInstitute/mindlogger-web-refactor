@@ -108,7 +108,13 @@ export const SurveyWidget = (props: Props) => {
   const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, []);
   const flowResumeEnabled = isFlowResumeEnabled(flowResumeFlag, appletId);
 
-  const shouldFetchCompletedEntities = flowResumeEnabled && !publicAppletKey && !shouldRestart;
+  const isOneTimeCompletion =
+    eventsDTO?.events.find((e) => e.id === eventId)?.availability.oneTimeCompletion ?? false;
+
+  // Skip fetch for public applets and on "Restart" by user
+  // (but never skip for one-time entities that cannot be restarted after completion)
+  const shouldFetchCompletedEntities =
+    flowResumeEnabled && !publicAppletKey && (!shouldRestart || isOneTimeCompletion);
 
   const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(
     {
@@ -158,8 +164,8 @@ export const SurveyWidget = (props: Props) => {
       return;
     }
 
-    // If flow progressed on another device, redirect to latest activity
-    if (currentActivityId && currentActivityId !== activityId) {
+    // If flow progressed on another device and this is not a restart, redirect to latest activity
+    if (!shouldRestart && currentActivityId && currentActivityId !== activityId) {
       const navigateToProps = {
         appletId,
         activityId: currentActivityId,
