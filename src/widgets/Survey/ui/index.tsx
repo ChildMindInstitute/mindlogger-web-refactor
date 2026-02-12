@@ -108,11 +108,11 @@ export const SurveyWidget = (props: Props) => {
   const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, []);
   const flowResumeEnabled = isFlowResumeEnabled(flowResumeFlag, appletId);
 
-  const isOneTimeCompletion =
-    eventsDTO?.events.find((e) => e.id === eventId)?.availability.oneTimeCompletion ?? false;
-
   // Skip fetch on "Restart" by user
   // (but never skip for one-time entities that cannot be restarted after completion)
+  const event = eventsDTO?.events.find((e) => e.id === eventId);
+  const isOneTimeCompletion =
+    event?.availability.oneTimeCompletion || event?.availability.periodicityType === 'ONCE';
   const shouldFetchCompletedEntities = flowResumeEnabled && (!shouldRestart || isOneTimeCompletion);
 
   const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(

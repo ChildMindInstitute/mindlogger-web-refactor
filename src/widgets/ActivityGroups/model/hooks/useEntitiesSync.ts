@@ -147,10 +147,12 @@ export const useEntitiesSync = ({
       }
       // Skip if local is in-progress and started more recently than server completed
       // (but never skip for one-time entities that cannot be restarted after completion)
+      const isOneTimeCompletion =
+        event?.availability.oneTimeCompletion || event?.availability.periodicityType === 'ONCE';
       if (
         !groupProgress.endAt &&
         (groupProgress.startAt ?? 0) > entity.endTime &&
-        !event?.availability.oneTimeCompletion
+        !isOneTimeCompletion
       ) {
         return false;
       }
