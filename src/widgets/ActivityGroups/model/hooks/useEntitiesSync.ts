@@ -4,6 +4,7 @@ import { v4 as uuidV4 } from 'uuid';
 
 import { ActivityPipelineType, FlowProgress } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
+import { PeriodicityType } from '~/entities/event';
 import {
   ActivityFlowDTO,
   CompletedEntitiesDTO,
@@ -148,7 +149,8 @@ export const useEntitiesSync = ({
       // Skip if local is in-progress and started more recently than server completed
       // (but never skip for one-time entities that cannot be restarted after completion)
       const isOneTimeCompletion =
-        event?.availability.oneTimeCompletion || event?.availability.periodicityType === 'ONCE';
+        event?.availability.oneTimeCompletion ||
+        event?.availability.periodicityType === PeriodicityType.Once;
       if (
         !groupProgress.endAt &&
         (groupProgress.startAt ?? 0) > entity.endTime &&
