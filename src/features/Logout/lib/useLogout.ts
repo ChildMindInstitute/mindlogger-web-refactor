@@ -2,8 +2,6 @@ import { useCallback } from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import { queryClient } from '~/app/providers/react-query';
-import { persistor } from '~/app/store';
 import { appletModel } from '~/entities/applet';
 import { useLogoutMutation, userModel } from '~/entities/user';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
@@ -41,8 +39,6 @@ export const useLogout = (): UseLogoutReturn => {
     clearUser();
     clearStore();
     clearAutoCompletionState();
-    queryClient.clear();
-    persistor.purge();
     secureTokensStorage.clearTokens();
     userModel.secureUserPrivateKeyStorage.clearUserPrivateKey();
 
