@@ -10,6 +10,7 @@ import { FlowProgress, getProgressId } from '~/abstract/lib';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
+import { PeriodicityType } from '~/entities/event';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
   SurveyContext,
@@ -51,7 +52,7 @@ export const SurveyWidget = (props: Props) => {
   const { t } = useCustomTranslation();
   const navigator = useCustomNavigation();
 
-  const { removeAllBanners } = useBanners();
+  const { removeAllBanners, addSuccessBanner } = useBanners();
 
   const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: props.flowId ?? props.activityId,
@@ -108,6 +109,14 @@ export const SurveyWidget = (props: Props) => {
   const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, []);
   const flowResumeEnabled = isFlowResumeEnabled(flowResumeFlag, appletId);
 
+  // Skip fetch on "Restart" by user
+  // (but never skip for one-time entities that cannot be restarted after completion)
+  const event = eventsDTO?.events.find((e) => e.id === eventId);
+  const isOneTimeCompletion =
+    event?.availability.oneTimeCompletion ||
+    event?.availability.periodicityType === PeriodicityType.Once;
+  const shouldFetchCompletedEntities = flowResumeEnabled && (!shouldRestart || isOneTimeCompletion);
+
   const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(
     {
       appletId,
@@ -116,7 +125,7 @@ export const SurveyWidget = (props: Props) => {
     },
     {
       select: (data) => data.data.result,
-      enabled: flowResumeEnabled && !publicAppletKey && !shouldRestart,
+      enabled: shouldFetchCompletedEntities,
     },
   );
 
@@ -124,16 +133,20 @@ export const SurveyWidget = (props: Props) => {
   // - gate on shouldRestart to avoid passing in cached completedEntities
   // - gate on applet loading to ensure respondentMeta?.subjectId is available
   // - gate on fresh data to avoid syncing with stale cache
-  useEntitiesSync({
-    completedEntities: shouldRestart || isLoading || isFetching ? undefined : completedEntities,
+  const { changes } = useEntitiesSync({
+    completedEntities:
+      shouldFetchCompletedEntities && !isLoading && !isFetching ? completedEntities : undefined,
     respondentSubjectId: respondentMeta?.subjectId ?? null,
     events: eventsDTO?.events ?? [],
     activityFlows: appletBaseDTO?.activityFlows ?? [],
     flowResumeEnabled,
   });
 
-  // After server sync, redirect to current activity if flow progressed on another device
-  const groupProgressId = flowId ? getProgressId(flowId, eventId, targetSubjectId) : null;
+  // After server sync:
+  // - Redirect to activity list if entity was completed on another device
+  // - Redirect to latest activity if flow progressed on another device
+  const groupProgressChanged = changes.includes(flowId ?? activityId);
+  const groupProgressId = getProgressId(flowId ?? activityId, eventId, targetSubjectId);
   const groupProgress = useAppSelector((state) =>
     groupProgressId ? appletModel.selectors.selectGroupProgress(state, groupProgressId) : null,
   );
@@ -142,27 +155,37 @@ export const SurveyWidget = (props: Props) => {
     : null;
 
   useEffect(() => {
-    if (!flowResumeEnabled || !currentActivityId || currentActivityId === activityId) return;
+    // Only consider redirect if progress has changed
+    if (!flowResumeEnabled || !groupProgressChanged) return;
 
-    const navigateToProps = {
-      appletId,
-      activityId: currentActivityId,
-      entityType: 'flow' as const,
-      eventId,
-      flowId,
-    };
+    // If entity was completed on another device, redirect to activity list
+    if (groupProgress?.endAt) {
+      addSuccessBanner(t('additional.activity_already_completed'));
+      navigator.navigate(ROUTES.appletDetails.navigateTo(appletId), { replace: true });
+      return;
+    }
 
-    const screenToNavigate = publicAppletKey
-      ? ROUTES.publicSurvey.navigateTo({ ...navigateToProps, publicAppletKey })
-      : ROUTES.survey.navigateTo({ ...navigateToProps, targetSubjectId });
-
-    navigator.navigate(screenToNavigate, { replace: true });
-  }, [activityId, currentActivityId]);
+    // If flow progressed on another device and this is not a restart, redirect to latest activity
+    if (!shouldRestart && currentActivityId && currentActivityId !== activityId) {
+      const navigateToProps = {
+        appletId,
+        activityId: currentActivityId,
+        entityType: 'flow' as const,
+        eventId,
+        flowId,
+      };
+      const screenToNavigate = publicAppletKey
+        ? ROUTES.publicSurvey.navigateTo({ ...navigateToProps, publicAppletKey })
+        : ROUTES.survey.navigateTo({ ...navigateToProps, targetSubjectId });
+      navigator.navigate(screenToNavigate, { replace: true });
+      return;
+    }
+  }, [activityId, currentActivityId, groupProgress?.endAt, groupProgressChanged]);
 
   const responseError = error?.evaluatedMessage ?? '';
 
-  if (isLoading || (flowId && isFetching)) {
-    // loading screen on initial load and when refetching completed entities for flows
+  if (isLoading || isFetching) {
+    // loading screen on initial load and when refetching completed entities
     return <LoadingScreen publicAppletKey={publicAppletKey} appletId={appletId} />;
   }
 
