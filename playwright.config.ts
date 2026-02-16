@@ -1,50 +1,45 @@
 import { defineConfig, devices } from '@playwright/test';
-import path from 'path';
-import dotenv from 'dotenv';
+import {runtimeConfig} from './tests/config'
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- * See https://playwright.dev/docs/test-configuration.
- */
-dotenv.config({ path: path.resolve(__dirname, '.env') });
-
-const authFile = path.join(__dirname, 'tests/.auth/session.json')
 
 export default defineConfig({
   testDir: './tests',
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL,
     trace: 'on-first-retry', // Collect trace when retrying failed tests
-    // Other common options like headless, viewport, etc. can be added here
+    headless: true,
   },
+
+  globalSetup: 'tests/setup/global.setup.ts',
+
+  reporter: process.env.CI ? 'github' : 'list',
+
   projects: [
-    // Setup project that authenticates and saves storage state
     {
-      name: 'setup',
-      testMatch: /global\.setup\.ts/,
+      name: 'smoke',
+      testMatch: 'smoke/**/*.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
-      },
-      teardown: 'teardown',
+        storageState: runtimeConfig.storageState,
+      }
     },
     {
-      name: 'teardown',
-      testMatch: /global\.teardown\.ts/,
+      name: 'e2e',
+      testMatch: 'e2e/**/*.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
-      },
+        storageState: runtimeConfig.storageState,
+      }
     },
     {
-      // Project for Chrome browser
-      name: 'chrome',
-      testMatch: '/**/*.spec.ts',
+      name: 'user',
+      testMatch: 'user/**/*.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
-        storageState: authFile,
-      },
-      dependencies: ['setup'],
+        storageState: runtimeConfig.storageState,
+      }
     },
+
     //TODO: Enable other browsers when needed.
     //At the moment all browsers but Chrome fail.
     //
