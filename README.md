@@ -96,6 +96,7 @@ See the documentation on [Vitest](https://vitest.dev/guide/) for more informatio
 * `yarn test` - Runs test suite once
 * `yarn test:ui` - Run the Vitest UI at [http://localhost:51204/__vitest\__/](http://localhost:51204/__vitest__/)
 * `yarn coverage` - Generate test coverage report
+* `yarn test:e2e` - Run the Playwright e2e test suite
 
 ### Linting
 
