@@ -10,7 +10,6 @@ import { FlowProgress, getProgressId } from '~/abstract/lib';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
-import { PeriodicityType } from '~/entities/event';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
   SurveyContext,
@@ -109,13 +108,9 @@ export const SurveyWidget = (props: Props) => {
   const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, []);
   const flowResumeEnabled = isFlowResumeEnabled(flowResumeFlag, appletId);
 
-  // Skip fetch on "Restart" by user
-  // (but never skip for one-time entities that cannot be restarted after completion)
-  const event = eventsDTO?.events.find((e) => e.id === eventId);
-  const isOneTimeCompletion =
-    event?.availability.oneTimeCompletion ||
-    event?.availability.periodicityType === PeriodicityType.Once;
-  const shouldFetchCompletedEntities = flowResumeEnabled && (!shouldRestart || isOneTimeCompletion);
+  // Skip fetching completed entities when user explicitly clicked "Restart".
+  // This prevents the sync logic from overwriting local restart progress with server data.
+  const shouldFetchCompletedEntities = flowResumeEnabled && !shouldRestart;
 
   const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(
     {
