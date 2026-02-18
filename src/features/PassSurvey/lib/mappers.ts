@@ -21,6 +21,7 @@ type Props = {
   currentEventId: string;
   flowId: string | null;
   publicAppletKey: string | null;
+  shouldRestart?: boolean;
 };
 
 export const mapRawDataToSurveyContext = ({
@@ -33,6 +34,7 @@ export const mapRawDataToSurveyContext = ({
   publicAppletKey,
   targetSubject,
   respondentMeta,
+  shouldRestart,
 }: Props): SurveyContext => {
   if (!appletDTO || !appletBaseDTO || !eventsDTO || !activityDTO) {
     throw new Error('[MapRawDataToSurveyContext] Missing required data');
@@ -72,5 +74,6 @@ export const mapRawDataToSurveyContext = ({
     appletVersion: appletDTO.version,
     flow,
     integrations: appletDTO.integrations,
+    shouldRestart,
   };
 };

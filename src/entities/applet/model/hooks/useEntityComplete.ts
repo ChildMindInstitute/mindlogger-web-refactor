@@ -26,6 +26,8 @@ type Props = {
 
   appletId: string;
   flow: ActivityFlowDTO | null;
+
+  shouldRestart?: boolean; // Flag to propagate through flow navigation to skip sync
 };
 
 type CompleteOptions = {
@@ -148,6 +150,7 @@ export const useEntityComplete = (props: Props) => {
             entityType: 'flow',
             publicAppletKey: props.publicAppletKey,
             flowId: props.flowId,
+            shouldRestart: props.shouldRestart,
           }),
           { replace: true },
         );
@@ -161,6 +164,7 @@ export const useEntityComplete = (props: Props) => {
           targetSubjectId: props.targetSubjectId,
           entityType: 'flow',
           flowId: props.flowId,
+          shouldRestart: props.shouldRestart,
         }),
         { replace: true },
       );
@@ -172,6 +176,7 @@ export const useEntityComplete = (props: Props) => {
       props.flowId,
       props.publicAppletKey,
       props.targetSubjectId,
+      props.shouldRestart,
     ],
   );
 

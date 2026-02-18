@@ -221,6 +221,7 @@ export const SurveyWidget = (props: Props) => {
         flowId,
         targetSubject,
         publicAppletKey,
+        shouldRestart,
       })}
     >
       <ScreenManager openTimesUpModal={openTimesUpModal} />
