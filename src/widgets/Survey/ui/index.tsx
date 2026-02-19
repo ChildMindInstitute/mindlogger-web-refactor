@@ -108,10 +108,6 @@ export const SurveyWidget = (props: Props) => {
   const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, []);
   const flowResumeEnabled = isFlowResumeEnabled(flowResumeFlag, appletId);
 
-  // Skip fetching completed entities when user explicitly clicked "Restart".
-  // This prevents the sync logic from overwriting local restart progress with server data.
-  const shouldFetchCompletedEntities = flowResumeEnabled && !shouldRestart;
-
   const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(
     {
       appletId,
@@ -120,21 +116,22 @@ export const SurveyWidget = (props: Props) => {
     },
     {
       select: (data) => data.data.result,
-      enabled: shouldFetchCompletedEntities,
+      enabled: flowResumeEnabled,
     },
   );
 
   // Sync with server
-  // - gate on shouldRestart to avoid passing in cached completedEntities
   // - gate on applet loading to ensure respondentMeta?.subjectId is available
   // - gate on fresh data to avoid syncing with stale cache
+  // - pass shouldRestart to skip in-progress syncing but still check completion status
   const { changes } = useEntitiesSync({
     completedEntities:
-      shouldFetchCompletedEntities && !isLoading && !isFetching ? completedEntities : undefined,
+      flowResumeEnabled && !isLoading && !isFetching ? completedEntities : undefined,
     respondentSubjectId: respondentMeta?.subjectId ?? null,
     events: eventsDTO?.events ?? [],
     activityFlows: appletBaseDTO?.activityFlows ?? [],
     flowResumeEnabled,
+    shouldRestart,
   });
 
   // After server sync:
