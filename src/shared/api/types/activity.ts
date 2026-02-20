@@ -235,6 +235,7 @@ export type CompletedEntityDTO = {
   id: string;
   answerId: string;
   submitId: string;
+  version: string;
   targetSubjectId: string | null;
   scheduledEventId: string;
   startTime: number; // Milliseconds since Unix epoch
