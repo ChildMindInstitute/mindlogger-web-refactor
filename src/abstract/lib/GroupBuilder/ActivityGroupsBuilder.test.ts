@@ -1668,6 +1668,7 @@ describe('ActivityGroupsBuilder', () => {
             timeLeftToComplete: null,
             image: null,
             isInActivityFlow: true,
+            isDeletedFlow: false,
             activityFlowDetails: {
               showActivityFlowBadge: true,
               activityFlowName: 'test-flow-name-1',
@@ -1710,6 +1711,7 @@ describe('ActivityGroupsBuilder', () => {
             timeLeftToComplete: null,
             image: null,
             isInActivityFlow: true,
+            isDeletedFlow: false,
             activityFlowDetails: {
               showActivityFlowBadge: false,
               activityFlowName: 'test-flow-name-1',

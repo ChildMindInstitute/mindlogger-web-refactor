@@ -36,6 +36,10 @@ export type FlowProgress = {
   submitId: string;
   // Version of the applet when the flow was first started
   appletVersion?: string;
+  // Snapshot of the flow's activity IDs at start time (for deleted flow recovery)
+  flowActivityIds?: string[];
+  // Flow name at start time (for deleted flow recovery)
+  flowName?: string;
 };
 
 export type ActivityProgress = {

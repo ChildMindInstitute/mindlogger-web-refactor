@@ -271,6 +271,8 @@ export type ActivityStartedPayload = {
 export type FlowStartedPayload = {
   event: ScheduleEventDto;
   appletVersion: string;
+  flowActivityIds: string[];
+  flowName: string;
 } & Omit<InProgressFlow, 'eventId'>;
 
 export type FlowRestartedPayload = {
@@ -279,6 +281,8 @@ export type FlowRestartedPayload = {
   targetSubjectId: string | null;
   activityId: string;
   appletVersion: string;
+  flowActivityIds: string[];
+  flowName: string;
 };
 
 export type MultiInformantPayload = Required<MultiInformantState>;

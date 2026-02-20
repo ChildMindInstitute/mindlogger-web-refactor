@@ -17,6 +17,7 @@ export class ListItemsFactory {
     const activityFlow = activityEvent.entity as ActivityFlow;
 
     item.isInActivityFlow = true;
+    item.isDeletedFlow = activityEvent.isDeletedFlow ?? false;
     item.activityFlowDetails = {
       showActivityFlowBadge: !activityFlow.hideBadge,
       activityFlowName: activityFlow.name,
@@ -39,6 +40,15 @@ export class ListItemsFactory {
     }
 
     if (!activity) {
+      // For deleted flows, the activity may not exist in the current applet version
+      if (activityEvent.isDeletedFlow) {
+        item.activityId = '';
+        item.activityFlowDetails.activityPositionInFlow = position;
+        item.name = activityFlow.name;
+        item.description = activityFlow.description;
+        return;
+      }
+
       throw new Error(
         '[ListItemsFactory:populateActivityFlowFields] Activity not found in activities list',
       );

@@ -33,6 +33,8 @@ export type ActivityListItem = {
   isTimerSet: boolean;
   isTimerElapsed: boolean;
   timeLeftToComplete?: HourMinute | null;
+  /** True when the flow was deleted in a newer applet version but is still in-progress */
+  isDeletedFlow?: boolean;
 };
 
 export type ActivityListGroup = {
