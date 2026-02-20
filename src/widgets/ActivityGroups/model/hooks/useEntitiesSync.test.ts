@@ -42,6 +42,7 @@ const baseCompletedEntity: CompletedEntityDTO = {
   id: mockActivityId1,
   answerId: 'answer-id',
   submitId: 'server-submit-id', // test with different submit ID
+  version: '1.0.0',
   targetSubjectId: null,
   scheduledEventId: mockActivityEvent.id,
   startTime: new Date('2020-01-01T00:00:00').getTime(),
@@ -105,6 +106,7 @@ describe('useEntitiesSync', () => {
           progressPayload: expect.objectContaining({
             pipelineActivityOrder: 2,
             currentActivityId: mockActivityId3,
+            appletVersion: '1.0.0',
           }),
         }),
       );
