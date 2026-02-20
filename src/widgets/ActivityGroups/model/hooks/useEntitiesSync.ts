@@ -70,8 +70,13 @@ export const useEntitiesSync = ({
 
         const flow = activityFlows.find((f) => f.id === entity.id);
 
-        if (!flow) {
-          console.warn(`[useEntitiesSync] Flow not found for entity ID: ${entity.id}`);
+        // If flow was removed in a newer applet version, fall back to stored metadata
+        const localFlowProgress = groupProgress as FlowProgress | undefined;
+        const flowActivityIds = flow?.activityIds ?? localFlowProgress?.flowActivityIds;
+        const flowName = flow?.name ?? localFlowProgress?.flowName;
+
+        if (!flowActivityIds) {
+          console.info(`[useEntitiesSync] Flow not found and no stored metadata: ${entity.id}`);
           return false;
         }
 
@@ -99,9 +104,9 @@ export const useEntitiesSync = ({
           }
         }
 
-        const nextActivityId = flow.activityIds[pipelineActivityOrder];
+        const nextActivityId = flowActivityIds[pipelineActivityOrder];
         if (!nextActivityId) {
-          console.warn(`[useEntitiesSync] No next activity found for flow: ${entity.id}`);
+          console.info(`[useEntitiesSync] No next activity found for flow: ${entity.id}`);
           return false;
         }
 
@@ -129,6 +134,8 @@ export const useEntitiesSync = ({
             pipelineActivityOrder,
             submitId: entity.submitId,
             appletVersion: entity.version,
+            flowActivityIds,
+            flowName,
             startAt: groupProgress?.startAt ?? entity.startTime,
             endAt: null,
             context: groupProgress?.context ?? { summaryData: {} },
