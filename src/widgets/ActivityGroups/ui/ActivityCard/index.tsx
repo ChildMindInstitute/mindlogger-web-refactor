@@ -257,6 +257,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
           activityName={title}
           isDisabled={isDisabled}
           isAutoCompletionRecordDefined={!!autoCompletionRecord}
+          isRestartDisabled={activityListItem.isDeletedFlow}
         />
       </Box>
     </ActivityCardBase>
