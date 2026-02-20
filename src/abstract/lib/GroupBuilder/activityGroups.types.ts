@@ -31,6 +31,8 @@ export type EventEntity = {
   event: ScheduleEvent;
   /** Target subject of assignment if not self-report, else null */
   targetSubject: SubjectDTO | null;
+  /** True when the flow was deleted in a newer applet version but is still in-progress */
+  isDeletedFlow?: boolean;
 };
 
 export type EntityType = 'regular' | 'flow';
