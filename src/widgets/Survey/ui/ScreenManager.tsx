@@ -5,7 +5,7 @@ import SummaryScreen from './SummaryScreen';
 import WelcomeScreen from './WelcomeScreen';
 import { useEntityTimer } from '../model/hooks';
 
-import { getProgressId } from '~/abstract/lib';
+import { FlowProgress, getProgressId } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import { SurveyContext } from '~/features/PassSurvey';
@@ -28,11 +28,23 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
 
   const { saveAutoCompletion } = AutoCompletionModel.useAutoCompletionStateManager();
 
+  // Read stored flow activity IDs from GroupProgress (handles version changes)
+  const groupProgressId = getProgressId(
+    context.entityId,
+    context.eventId,
+    context.targetSubject?.id ?? null,
+  );
+  const storedFlowActivityIds = useAppSelector((state) => {
+    if (!groupProgressId) return null;
+    const gp = appletModel.selectors.selectGroupProgress(state, groupProgressId);
+    return (gp as FlowProgress)?.flowActivityIds ?? null;
+  });
+
   const onTimerFinish = useCallback(() => {
     const activitiesToSubmit: string[] = AutoCompletionModel.extractActivityIdsToSubmitByParams({
       isFlow: !!context.flow,
       interruptedActivityId: context.activityId,
-      flowActivityIds: context.flow?.activityIds ?? null,
+      flowActivityIds: storedFlowActivityIds ?? context.flow?.activityIds ?? null,
       interruptedActivityProgress: activityProgress ?? null,
     });
 
@@ -56,6 +68,7 @@ export const ScreenManager = ({ openTimesUpModal }: Props) => {
     context.targetSubject?.id,
     openTimesUpModal,
     saveAutoCompletion,
+    storedFlowActivityIds,
   ]);
 
   useEntityTimer({
