@@ -147,6 +147,8 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
           targetSubjectId,
           activityId: firstActivityId,
           appletVersion: applet.version,
+          flowActivityIds: flow?.activityIds ?? [],
+          flowName: flow?.name ?? '',
         });
       } else {
         // Safety net: useEntitiesSync also clears stale progress, but may not

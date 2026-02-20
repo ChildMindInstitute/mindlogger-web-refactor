@@ -41,6 +41,8 @@ export const useEntityStart = () => {
     targetSubjectId: string | null,
     pipelineActivityOrder: number,
     appletVersion: string,
+    flowActivityIds: string[],
+    flowName: string,
   ): void {
     dispatch(
       actions.flowStarted({
@@ -50,6 +52,8 @@ export const useEntityStart = () => {
         targetSubjectId,
         pipelineActivityOrder,
         appletVersion,
+        flowActivityIds,
+        flowName,
       }),
     );
   }
@@ -93,7 +97,16 @@ export const useEntityStart = () => {
 
     const firstActivityId: string = flowActivities[0];
 
-    return flowStarted(flowId, firstActivityId, event, targetSubjectId, 0, appletVersion);
+    return flowStarted(
+      flowId,
+      firstActivityId,
+      event,
+      targetSubjectId,
+      0,
+      appletVersion,
+      flow.activityIds,
+      flow.name,
+    );
   }
 
   return { startActivity, startFlow };
