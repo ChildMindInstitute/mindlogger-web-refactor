@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 import { ItemAnswer, mapAlerts, mapToAnswers } from '../helpers';
 
-import { ActivityPipelineType, GroupProgress } from '~/abstract/lib';
+import { ActivityPipelineType, FlowProgress, GroupProgress } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { ProlificUrlParamsPayload } from '~/entities/applet/model';
 import { userModel } from '~/entities/user';
@@ -260,7 +260,9 @@ export default class AnswersConstructService implements ICompletionConstructServ
       throw new Error('[AnswersConstructBuilder] Flow is not defined');
     }
 
-    const activitiesInFlow = this.flow.activityIds.length;
+    // Prefer stored activity IDs from when the flow was started (handles version changes)
+    const storedActivityIds = (this.groupProgress as FlowProgress).flowActivityIds;
+    const activitiesInFlow = storedActivityIds?.length ?? this.flow.activityIds.length;
 
     const pipelineActivityOrder = this.groupProgress.pipelineActivityOrder;
 
