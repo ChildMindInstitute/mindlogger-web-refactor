@@ -34,11 +34,15 @@ export type FlowProgress = {
   currentActivityId: string;
   pipelineActivityOrder: number;
   submitId: string;
+  // Version of the applet when the flow was first started
+  appletVersion?: string;
 };
 
 export type ActivityProgress = {
   type: ActivityPipelineType.Regular;
   submitId: string;
+  // Version of the applet when the activity was first started
+  appletVersion?: string;
 };
 
 export type ProgressContext = {

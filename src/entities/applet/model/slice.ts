@@ -291,6 +291,7 @@ const appletsSlice = createSlice({
         startAt: new Date().getTime(),
         endAt: null,
         submitId: uuidV4(),
+        appletVersion: payload.appletVersion,
         context: {
           summaryData: {},
         },
@@ -310,6 +311,7 @@ const appletsSlice = createSlice({
         endAt: null,
         submitId: uuidV4(),
         pipelineActivityOrder: payload.pipelineActivityOrder,
+        appletVersion: payload.appletVersion,
         context: {
           summaryData: {},
         },
@@ -337,6 +339,11 @@ const appletsSlice = createSlice({
       if (groupProgress) {
         groupProgress.startAt = new Date().getTime();
         groupProgress.submitId = uuidV4();
+        // On restart, update to current applet version
+        const version = payload.appletVersion;
+        if (version) {
+          groupProgress.appletVersion = version;
+        }
       }
     },
 
@@ -351,6 +358,8 @@ const appletsSlice = createSlice({
         groupProgress.startAt = new Date().getTime();
         groupProgress.endAt = null;
         groupProgress.submitId = uuidV4();
+        // On restart, update to current applet version
+        groupProgress.appletVersion = payload.appletVersion;
       }
     },
 
