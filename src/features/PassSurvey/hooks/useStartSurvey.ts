@@ -141,7 +141,13 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
 
         // Update group progress rather than remove to preserve version of event that the flow was
         // started with
-        flowRestarted({ flowId, eventId, targetSubjectId, activityId: firstActivityId });
+        flowRestarted({
+          flowId,
+          eventId,
+          targetSubjectId,
+          activityId: firstActivityId,
+          appletVersion: applet.version,
+        });
       } else {
         // Safety net: useEntitiesSync also clears stale progress, but may not
         // have fired yet when the user clicks "Start".
@@ -173,7 +179,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
 
       // Update group progress rather than remove to preserve version of event that the activity was
       // started with
-      activityRestarted({ activityId, eventId, targetSubjectId });
+      activityRestarted({ activityId, eventId, targetSubjectId, appletVersion: applet.version });
     } else {
       // Safety net: same as the flow branch above.
       const entityProgress = getGroupProgress({

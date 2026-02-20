@@ -59,7 +59,8 @@ export const useAnswerBuilder = (): AnswerBuilder => {
         event: params.event ?? groupProgress.event ?? context.event,
         activityId: params.activityId,
         appletId: params.appletId ?? context.appletId,
-        appletVersion: params.appletVersion ?? context.appletVersion,
+        // Use the version stored in progress to match the version from when the session started
+        appletVersion: params.appletVersion ?? groupProgress.appletVersion ?? context.appletVersion,
         flow: params.flow ?? context.flow,
         encryption,
         publicAppletKey: params.publicAppletKey ?? context.publicAppletKey,
