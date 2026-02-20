@@ -128,6 +128,7 @@ export const useEntitiesSync = ({
             currentActivityId: nextActivityId,
             pipelineActivityOrder,
             submitId: entity.submitId,
+            appletVersion: entity.version,
             startAt: groupProgress?.startAt ?? entity.startTime,
             endAt: null,
             context: groupProgress?.context ?? { summaryData: {} },
