@@ -118,6 +118,7 @@ const PassingScreen = (props: Props) => {
     flowId: context.flow?.id ?? null,
     appletId: context.appletId,
     flow: context.flow,
+    shouldRestart: context.shouldRestart,
   });
 
   const { replaceTextVariables } = useTextVariablesReplacer({

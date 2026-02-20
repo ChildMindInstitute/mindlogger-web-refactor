@@ -18,6 +18,8 @@ export type EntitiesSyncProps = {
   events: ScheduleEventDto[];
   activityFlows: ActivityFlowDTO[];
   flowResumeEnabled: boolean;
+  /** When true, skip syncing in-progress data from server (user wants to restart fresh) */
+  shouldRestart?: boolean;
 };
 
 export const useEntitiesSync = ({
@@ -26,6 +28,7 @@ export const useEntitiesSync = ({
   events,
   activityFlows,
   flowResumeEnabled,
+  shouldRestart,
 }: EntitiesSyncProps) => {
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
 
@@ -57,7 +60,13 @@ export const useEntitiesSync = ({
 
       // Case 1: In-progress flow (started on another device, not yet completed)
       // Create or update resumable progress so user can continue where they left off
+      // Skip this case when shouldRestart=true (user wants to start fresh, not resume)
       if (isFlow && entity.isFlowCompleted === false) {
+        // When restarting, skip in-progress syncing - user wants to start fresh
+        if (shouldRestart) {
+          return false;
+        }
+
         const flow = activityFlows.find((f) => f.id === entity.id);
 
         if (!flow) {

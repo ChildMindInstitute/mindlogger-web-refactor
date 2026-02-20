@@ -10,7 +10,6 @@ import { FlowProgress, getProgressId } from '~/abstract/lib';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
-import { PeriodicityType } from '~/entities/event';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
   SurveyContext,
@@ -109,14 +108,6 @@ export const SurveyWidget = (props: Props) => {
   const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, []);
   const flowResumeEnabled = isFlowResumeEnabled(flowResumeFlag, appletId);
 
-  // Skip fetch on "Restart" by user
-  // (but never skip for one-time entities that cannot be restarted after completion)
-  const event = eventsDTO?.events.find((e) => e.id === eventId);
-  const isOneTimeCompletion =
-    event?.availability.oneTimeCompletion ||
-    event?.availability.periodicityType === PeriodicityType.Once;
-  const shouldFetchCompletedEntities = flowResumeEnabled && (!shouldRestart || isOneTimeCompletion);
-
   const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(
     {
       appletId,
@@ -125,21 +116,22 @@ export const SurveyWidget = (props: Props) => {
     },
     {
       select: (data) => data.data.result,
-      enabled: shouldFetchCompletedEntities,
+      enabled: flowResumeEnabled,
     },
   );
 
   // Sync with server
-  // - gate on shouldRestart to avoid passing in cached completedEntities
   // - gate on applet loading to ensure respondentMeta?.subjectId is available
   // - gate on fresh data to avoid syncing with stale cache
+  // - pass shouldRestart to skip in-progress syncing but still check completion status
   const { changes } = useEntitiesSync({
     completedEntities:
-      shouldFetchCompletedEntities && !isLoading && !isFetching ? completedEntities : undefined,
+      flowResumeEnabled && !isLoading && !isFetching ? completedEntities : undefined,
     respondentSubjectId: respondentMeta?.subjectId ?? null,
     events: eventsDTO?.events ?? [],
     activityFlows: appletBaseDTO?.activityFlows ?? [],
     flowResumeEnabled,
+    shouldRestart,
   });
 
   // After server sync:
@@ -221,6 +213,7 @@ export const SurveyWidget = (props: Props) => {
         flowId,
         targetSubject,
         publicAppletKey,
+        shouldRestart,
       })}
     >
       <ScreenManager openTimesUpModal={openTimesUpModal} />

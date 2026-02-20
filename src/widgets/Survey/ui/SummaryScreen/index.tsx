@@ -39,6 +39,7 @@ const SummaryScreen = () => {
     flowId: context.flow?.id ?? null,
     appletId: context.appletId,
     flow: context.flow,
+    shouldRestart: context.shouldRestart,
   });
 
   const onFinish = () => {
