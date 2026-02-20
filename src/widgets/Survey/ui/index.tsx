@@ -53,6 +53,16 @@ export const SurveyWidget = (props: Props) => {
 
   const { removeAllBanners, addSuccessBanner } = useBanners();
 
+  // Read stored version from GroupProgress for version-aware activity fetch.
+  // This is needed before useSurveyDataQuery so deleted activities can be
+  // fetched from history using the version stored when the flow started.
+  const entityProgressId = getProgressId(flowId ?? activityId, eventId, targetSubjectId);
+  const storedAppletVersion = useAppSelector((state) => {
+    if (!entityProgressId) return undefined;
+    const progress = appletModel.selectors.selectGroupProgress(state, entityProgressId);
+    return progress?.appletVersion;
+  });
+
   const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: props.flowId ?? props.activityId,
     eventId: props.eventId,
@@ -102,7 +112,13 @@ export const SurveyWidget = (props: Props) => {
     isLoading,
     isError,
     error,
-  } = useSurveyDataQuery({ publicAppletKey, appletId, activityId, targetSubjectId });
+  } = useSurveyDataQuery({
+    publicAppletKey,
+    appletId,
+    activityId,
+    targetSubjectId,
+    activityVersion: storedAppletVersion,
+  });
 
   const { featureFlag } = useFeatureFlags();
   const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, []);
