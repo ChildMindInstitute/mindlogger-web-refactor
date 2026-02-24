@@ -46,7 +46,8 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
   const appletId = applet?.id;
   const flows = applet?.activityFlows;
 
-  const { flowRestarted, activityRestarted } = appletModel.hooks.useGroupProgressStateManager();
+  const { flowRestarted, activityRestarted, getGroupProgress } =
+    appletModel.hooks.useGroupProgressStateManager();
 
   const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
@@ -141,6 +142,21 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
         // Update group progress rather than remove to preserve version of event that the flow was
         // started with
         flowRestarted({ flowId, eventId, targetSubjectId, activityId: firstActivityId });
+      } else {
+        // Clear stale activity progress when entity is not in-progress.
+        // This handles the case where an activity was saved locally but completed
+        // on another device — the server sync updates group progress to "completed"
+        // but leaves old activity answers in state. Without this, clicking "Start"
+        // would show those stale answers and submit with a duplicate submitId.
+        const entityProgress = getGroupProgress({
+          entityId: flowId,
+          eventId,
+          targetSubjectId,
+        });
+
+        if (!entityProgress || entityProgress.endAt) {
+          removeActivityProgress({ activityId, eventId, targetSubjectId });
+        }
       }
 
       const activityIdToNavigate = shouldRestart ? firstActivityId : activityId;
@@ -161,6 +177,18 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
       // Update group progress rather than remove to preserve version of event that the activity was
       // started with
       activityRestarted({ activityId, eventId, targetSubjectId });
+    } else {
+      // Clear stale activity progress when entity is not in-progress.
+      // Same rationale as the flow branch above.
+      const entityProgress = getGroupProgress({
+        entityId: activityId,
+        eventId,
+        targetSubjectId,
+      });
+
+      if (!entityProgress || entityProgress.endAt) {
+        removeActivityProgress({ activityId, eventId, targetSubjectId });
+      }
     }
 
     return navigateToEntity({
