@@ -143,11 +143,8 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
         // started with
         flowRestarted({ flowId, eventId, targetSubjectId, activityId: firstActivityId });
       } else {
-        // Clear stale activity progress when entity is not in-progress.
-        // This handles the case where an activity was saved locally but completed
-        // on another device — the server sync updates group progress to "completed"
-        // but leaves old activity answers in state. Without this, clicking "Start"
-        // would show those stale answers and submit with a duplicate submitId.
+        // Safety net: useEntitiesSync also clears stale progress, but may not
+        // have fired yet when the user clicks "Start".
         const entityProgress = getGroupProgress({
           entityId: flowId,
           eventId,
@@ -178,8 +175,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
       // started with
       activityRestarted({ activityId, eventId, targetSubjectId });
     } else {
-      // Clear stale activity progress when entity is not in-progress.
-      // Same rationale as the flow branch above.
+      // Safety net: same as the flow branch above.
       const entityProgress = getGroupProgress({
         entityId: activityId,
         eventId,

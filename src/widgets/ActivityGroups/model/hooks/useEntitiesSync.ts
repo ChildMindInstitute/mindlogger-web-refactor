@@ -109,10 +109,10 @@ export const useEntitiesSync = ({
         // clear stale activity answers from the old execution to prevent them from being
         // shown when the user resumes the new execution.
         if (groupProgress && groupProgress.submitId !== entity.submitId) {
-          const oldCurrentActivityId = (groupProgress as FlowProgress).currentActivityId;
-          if (oldCurrentActivityId) {
+          const activityId = (groupProgress as FlowProgress).currentActivityId;
+          if (activityId) {
             removeActivityProgress({
-              activityId: oldCurrentActivityId,
+              activityId,
               eventId,
               targetSubjectId,
             });
@@ -184,13 +184,14 @@ export const useEntitiesSync = ({
       ) {
         return false;
       }
-      // Clear stale activity answers when a completed entity from server replaces
-      // local in-progress state with a different submitId
-      if (isFlow && groupProgress.submitId !== entity.submitId && !groupProgress.endAt) {
-        const oldCurrentActivityId = (groupProgress as FlowProgress).currentActivityId;
-        if (oldCurrentActivityId) {
+      // Clear stale activity answers when a completed entity replaces
+      // local in-progress state (same or different submitId, flow or standalone).
+      // For standalone activities, the entityId is the activityId.
+      if (!groupProgress.endAt) {
+        const activityId = isFlow ? (groupProgress as FlowProgress).currentActivityId : entityId;
+        if (activityId) {
           removeActivityProgress({
-            activityId: oldCurrentActivityId,
+            activityId,
             eventId,
             targetSubjectId,
           });
