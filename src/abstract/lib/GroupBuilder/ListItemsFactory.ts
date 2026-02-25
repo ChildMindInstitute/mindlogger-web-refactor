@@ -18,20 +18,26 @@ export class ListItemsFactory {
 
     item.isInActivityFlow = true;
     item.isDeletedFlow = activityEvent.isDeletedFlow ?? false;
+
+    const isInProgress = this.utility.isInProgress(activityEvent);
+    const progressRecord = isInProgress
+      ? (this.utility.getProgressRecord(activityEvent) as FlowProgress)
+      : undefined;
+
+    // Use stored activity IDs from progress if available (handles version changes)
+    const effectiveActivityCount =
+      progressRecord?.flowActivityIds?.length ?? activityFlow.activityIds.length;
+
     item.activityFlowDetails = {
       showActivityFlowBadge: !activityFlow.hideBadge,
       activityFlowName: activityFlow.name,
-      numberOfActivitiesInFlow: activityFlow.activityIds.length,
+      numberOfActivitiesInFlow: effectiveActivityCount,
       activityPositionInFlow: 0,
     };
 
-    const isInProgress = this.utility.isInProgress(activityEvent);
-
     let activity: Activity | undefined, position: number;
 
-    if (isInProgress) {
-      const progressRecord = this.utility.getProgressRecord(activityEvent) as FlowProgress;
-
+    if (isInProgress && progressRecord) {
       activity = this.utility.activities.find((x) => x.id === progressRecord.currentActivityId);
       position = progressRecord.pipelineActivityOrder + 1;
     } else {

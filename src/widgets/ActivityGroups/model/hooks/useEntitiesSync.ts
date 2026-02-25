@@ -70,9 +70,11 @@ export const useEntitiesSync = ({
 
         const flow = activityFlows.find((f) => f.id === entity.id);
 
-        // If flow was removed in a newer applet version, fall back to stored metadata
+        // Prefer activity IDs from the server (matches the version the flow was started at),
+        // then fall back to local stored metadata, then current flow version
         const localFlowProgress = groupProgress as FlowProgress | undefined;
-        const flowActivityIds = flow?.activityIds ?? localFlowProgress?.flowActivityIds;
+        const flowActivityIds =
+          entity.flowActivityIds ?? localFlowProgress?.flowActivityIds ?? flow?.activityIds;
         const flowName = flow?.name ?? localFlowProgress?.flowName;
 
         if (!flowActivityIds) {

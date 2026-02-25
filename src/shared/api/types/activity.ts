@@ -244,6 +244,8 @@ export type CompletedEntityDTO = {
   localEndTime: string;
   isFlowCompleted: boolean | null;
   activityFlowOrder: number | null;
+  // Ordered activity IDs for the flow at the submitted version (only for in-progress flows)
+  flowActivityIds: string[] | null;
 };
 
 export type CompletedEntitiesDTO = {
