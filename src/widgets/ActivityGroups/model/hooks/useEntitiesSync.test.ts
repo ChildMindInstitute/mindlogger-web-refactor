@@ -51,6 +51,7 @@ const baseCompletedEntity: CompletedEntityDTO = {
   localEndTime: '02:20:00',
   isFlowCompleted: null,
   activityFlowOrder: null,
+  flowActivityIds: null,
 };
 
 // Base flow progress (local)

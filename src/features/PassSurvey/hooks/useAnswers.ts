@@ -52,6 +52,9 @@ export const useAnswerBuilder = (): AnswerBuilder => {
         throw new Error('[useAnswer:buildAnswer] Encryption is not found');
       }
 
+      const resolvedVersion =
+        params.appletVersion ?? groupProgress.appletVersion ?? context.appletVersion;
+
       const answerConstructService = new AnswersConstructService({
         groupProgress,
         userEvents: params.userEvents,
@@ -60,7 +63,7 @@ export const useAnswerBuilder = (): AnswerBuilder => {
         activityId: params.activityId,
         appletId: params.appletId ?? context.appletId,
         // Use the version stored in progress to match the version from when the session started
-        appletVersion: params.appletVersion ?? groupProgress.appletVersion ?? context.appletVersion,
+        appletVersion: resolvedVersion,
         flow: params.flow ?? context.flow,
         encryption,
         publicAppletKey: params.publicAppletKey ?? context.publicAppletKey,
