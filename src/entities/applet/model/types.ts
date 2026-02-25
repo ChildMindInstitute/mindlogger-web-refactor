@@ -285,4 +285,13 @@ export type FlowRestartedPayload = {
   flowName: string;
 };
 
+export type UpdateAppletVersionPayload = {
+  entityId: string;
+  eventId: string;
+  targetSubjectId: string | null;
+  appletVersion: string;
+  flowActivityIds?: string[];
+  flowName?: string;
+};
+
 export type MultiInformantPayload = Required<MultiInformantState>;

@@ -28,6 +28,8 @@ const WelcomeScreen = () => {
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
+  const { updateAppletVersion } = appletModel.hooks.useGroupProgressStateManager();
+
   const isFlow = !!context.flow;
   const targetSubjectId = context.targetSubject?.id ?? null;
 
@@ -38,6 +40,39 @@ const WelcomeScreen = () => {
   });
 
   const isTimedActivity = !!groupProgress?.event?.timers?.timer;
+
+  // When restarting, the restart reducer (flowRestarted/activityRestarted) may have set a stale
+  // applet version from the dashboard's cached applet data. Now that we have the fresh version
+  // from the API (via SurveyContext), update the group progress to use the correct version.
+  // This runs on mount (before user clicks Start) so the version is correct for answer submission.
+  useEffect(() => {
+    const isGroupStarted = groupProgress && groupProgress.startAt && !groupProgress.endAt;
+
+    if (
+      isGroupStarted &&
+      context.shouldRestart &&
+      groupProgress.appletVersion !== context.appletVersion
+    ) {
+      updateAppletVersion({
+        entityId: context.entityId,
+        eventId: context.eventId,
+        targetSubjectId,
+        appletVersion: context.appletVersion,
+        flowActivityIds: context.flow?.activityIds,
+        flowName: context.flow?.name,
+      });
+    }
+  }, [
+    context.shouldRestart,
+    context.appletVersion,
+    context.entityId,
+    context.eventId,
+    context.flow?.activityIds,
+    context.flow?.name,
+    targetSubjectId,
+    groupProgress,
+    updateAppletVersion,
+  ]);
 
   const startAssessment = useCallback(() => {
     const isGroupDefined = !!groupProgress;

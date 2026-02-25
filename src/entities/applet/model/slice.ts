@@ -28,6 +28,7 @@ import {
   FlowRestartedPayload,
   UpdateSubStepPayload,
   SaveItemCustomPropertyPayload,
+  UpdateAppletVersionPayload,
 } from './types';
 
 import {
@@ -95,6 +96,22 @@ const appletsSlice = createSlice({
       const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
 
       delete state.groupProgress[id];
+    },
+
+    updateAppletVersion: (state, { payload }: PayloadAction<UpdateAppletVersionPayload>) => {
+      const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
+
+      const groupProgress = state.groupProgress[id];
+      if (groupProgress) {
+        groupProgress.appletVersion = payload.appletVersion;
+        if (payload.flowActivityIds) {
+          (groupProgress as FlowProgress & EventProgressTimestampState).flowActivityIds =
+            payload.flowActivityIds;
+        }
+        if (payload.flowName) {
+          (groupProgress as FlowProgress & EventProgressTimestampState).flowName = payload.flowName;
+        }
+      }
     },
 
     saveSummaryDataInGroupContext: (
