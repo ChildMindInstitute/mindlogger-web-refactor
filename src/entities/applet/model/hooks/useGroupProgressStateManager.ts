@@ -10,6 +10,7 @@ import {
   RemoveGroupProgressPayload,
   SaveGroupProgressPayload,
   SaveSummaryDataInContext,
+  UpdateAppletVersionPayload,
 } from '../types';
 import { useActiveAssessment } from './useActiveAssessment';
 
@@ -27,6 +28,7 @@ type Return = {
 
   flowRestarted: (props: FlowRestartedPayload) => void;
   activityRestarted: (props: InProgressActivity) => void;
+  updateAppletVersion: (payload: UpdateAppletVersionPayload) => void;
 };
 
 export const useGroupProgressStateManager = (): Return => {
@@ -98,6 +100,13 @@ export const useGroupProgressStateManager = (): Return => {
     [dispatch],
   );
 
+  const updateAppletVersion = useCallback(
+    (payload: UpdateAppletVersionPayload) => {
+      dispatch(actions.updateAppletVersion(payload));
+    },
+    [dispatch],
+  );
+
   return {
     getGroupProgress,
 
@@ -110,5 +119,6 @@ export const useGroupProgressStateManager = (): Return => {
 
     activityRestarted,
     flowRestarted,
+    updateAppletVersion,
   };
 };
