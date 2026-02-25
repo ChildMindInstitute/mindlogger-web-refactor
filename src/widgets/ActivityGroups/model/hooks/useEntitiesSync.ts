@@ -31,6 +31,7 @@ export const useEntitiesSync = ({
   shouldRestart,
 }: EntitiesSyncProps) => {
   const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
+  const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
   // Create ref to exclude from callback dependencies to avoid infinite loop
   const getGroupProgressRef = useRef(getGroupProgress);
@@ -82,10 +83,12 @@ export const useEntitiesSync = ({
           }
         } else {
           // If submitIds are different, skip if local is in-progress and at or ahead of server
+          // AND local was started more recently (meaning local is genuinely newer, not stale)
           // ("Farthest along in-progress flow" in AnswerService._filter_activity_flows)
           if (
             !groupProgress?.endAt &&
-            (groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder
+            (groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder &&
+            (groupProgress?.startAt ?? 0) > entity.endTime
           ) {
             return false;
           }
@@ -100,6 +103,20 @@ export const useEntitiesSync = ({
         if (!nextActivityId) {
           console.warn(`[useEntitiesSync] No next activity found for flow: ${entity.id}`);
           return false;
+        }
+
+        // When replacing local progress with a different execution (different submitId),
+        // clear stale activity answers from the old execution to prevent them from being
+        // shown when the user resumes the new execution.
+        if (groupProgress && groupProgress.submitId !== entity.submitId) {
+          const activityId = (groupProgress as FlowProgress).currentActivityId;
+          if (activityId) {
+            removeActivityProgress({
+              activityId,
+              eventId,
+              targetSubjectId,
+            });
+          }
         }
 
         saveGroupProgress({
@@ -167,6 +184,20 @@ export const useEntitiesSync = ({
       ) {
         return false;
       }
+      // Clear stale activity answers when a completed entity replaces
+      // local in-progress state (same or different submitId, flow or standalone).
+      // For standalone activities, the entityId is the activityId.
+      if (!groupProgress.endAt) {
+        const activityId = isFlow ? (groupProgress as FlowProgress).currentActivityId : entityId;
+        if (activityId) {
+          removeActivityProgress({
+            activityId,
+            eventId,
+            targetSubjectId,
+          });
+        }
+      }
+
       saveGroupProgress({
         entityId,
         eventId,
@@ -193,7 +224,7 @@ export const useEntitiesSync = ({
       });
       return true;
     },
-    [respondentSubjectId, events, activityFlows, saveGroupProgress],
+    [respondentSubjectId, events, activityFlows, saveGroupProgress, removeActivityProgress],
   );
 
   // Legacy sync logic before flow resume was implemented (#690). Used when flow resume is disabled.
