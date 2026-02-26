@@ -85,7 +85,11 @@ const WelcomeScreen = () => {
       startFlow(event, context.flow, targetSubjectId, context.appletVersion);
     }
 
-    if (!context.flow) {
+    // Only start a standalone activity if we're NOT in a flow context.
+    // For deleted flows, context.flow is null but context.entityId still
+    // differs from context.activityId, indicating a flow-type entity.
+    const isFlowContext = context.entityId !== context.activityId;
+    if (!context.flow && !isFlowContext) {
       startActivity(context.activityId, event, targetSubjectId, context.appletVersion);
     }
 
@@ -98,6 +102,7 @@ const WelcomeScreen = () => {
     context.activity,
     context.activityId,
     context.appletVersion,
+    context.entityId,
     context.event,
     context.flow,
     targetSubjectId,
