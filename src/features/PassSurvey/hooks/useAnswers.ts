@@ -3,6 +3,7 @@ import { useCallback, useContext } from 'react';
 import { SurveyContext } from '../lib';
 import AnswersConstructService from '../model/AnswersConstructService';
 
+import { ActivityPipelineType } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { ProlificUrlParamsPayload as ProlificUrlParams } from '~/entities/applet/model';
 import { ActivityFlowDTO, AnswerPayload, EncryptionDTO, ScheduleEventDto } from '~/shared/api';
@@ -55,6 +56,14 @@ export const useAnswerBuilder = (): AnswerBuilder => {
       const resolvedVersion =
         params.appletVersion ?? groupProgress.appletVersion ?? context.appletVersion;
 
+      const resolvedFlow = params.flow ?? context.flow;
+
+      // For deleted flows, context.flow is null but context.entityId still
+      // holds the original flow ID (from the URL / groupProgress key).
+      const resolvedFlowId =
+        resolvedFlow?.id ??
+        (groupProgress.type === ActivityPipelineType.Flow ? context.entityId : null);
+
       const answerConstructService = new AnswersConstructService({
         groupProgress,
         userEvents: params.userEvents,
@@ -64,7 +73,8 @@ export const useAnswerBuilder = (): AnswerBuilder => {
         appletId: params.appletId ?? context.appletId,
         // Use the version stored in progress to match the version from when the session started
         appletVersion: resolvedVersion,
-        flow: params.flow ?? context.flow,
+        flow: resolvedFlow,
+        flowId: resolvedFlowId,
         encryption,
         publicAppletKey: params.publicAppletKey ?? context.publicAppletKey,
         isFlowCompleted: params.isFlowCompleted,
@@ -98,6 +108,7 @@ export const useAnswerBuilder = (): AnswerBuilder => {
       context.event,
       context.appletId,
       context.appletVersion,
+      context.entityId,
       context.flow,
       context.publicAppletKey,
       context.integrations,
