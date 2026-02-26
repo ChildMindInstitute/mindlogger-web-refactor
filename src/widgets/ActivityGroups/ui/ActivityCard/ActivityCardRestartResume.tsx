@@ -114,7 +114,10 @@ export const ActivityCardRestartResume = ({
         onHide={closeModal}
         title={t('additional.restart_activity')}
         footerPrimaryButton={t('additional.restart')}
-        onPrimaryButtonClick={onRestartClick}
+        onPrimaryButtonClick={() => {
+          closeModal();
+          onRestartClick();
+        }}
         footerSecondaryButton={t('additional.cancel')}
         onSecondaryButtonClick={closeModal}
         showCloseIcon
