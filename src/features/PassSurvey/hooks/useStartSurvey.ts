@@ -128,7 +128,20 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
 
     if (flowId) {
       const flow = flows?.find((x) => x.id === flowId);
-      const firstActivityId: string | null = flow?.activityIds[0] ?? null;
+
+      // Fall back to stored flowActivityIds from groupProgress when the flow
+      // has been deleted from the current applet version but progress still
+      // exists (synced from server).
+      const entityProgress = getGroupProgress({
+        entityId: flowId,
+        eventId,
+        targetSubjectId,
+      });
+      const storedFlowActivityIds = (entityProgress as Record<string, unknown> | null)
+        ?.flowActivityIds as string[] | undefined;
+
+      const resolvedActivityIds = flow?.activityIds ?? storedFlowActivityIds ?? [];
+      const firstActivityId: string | null = resolvedActivityIds[0] ?? null;
 
       if (!firstActivityId) {
         throw new Error(
@@ -147,18 +160,15 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
           targetSubjectId,
           activityId: firstActivityId,
           appletVersion: applet.version,
-          flowActivityIds: flow?.activityIds ?? [],
-          flowName: flow?.name ?? '',
+          flowActivityIds: resolvedActivityIds,
+          flowName:
+            flow?.name ??
+            ((entityProgress as Record<string, unknown> | null)?.flowName as string) ??
+            '',
         });
       } else {
         // Safety net: useEntitiesSync also clears stale progress, but may not
         // have fired yet when the user clicks "Start".
-        const entityProgress = getGroupProgress({
-          entityId: flowId,
-          eventId,
-          targetSubjectId,
-        });
-
         if (!entityProgress || entityProgress.endAt) {
           removeActivityProgress({ activityId, eventId, targetSubjectId });
         }

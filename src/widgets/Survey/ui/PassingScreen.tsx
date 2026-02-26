@@ -115,7 +115,7 @@ const PassingScreen = (props: Props) => {
     eventId: context.eventId,
     targetSubjectId,
     publicAppletKey: context.publicAppletKey,
-    flowId: context.flow?.id ?? null,
+    flowId: context.flow?.id ?? (context.entityId !== context.activityId ? context.entityId : null),
     appletId: context.appletId,
     flow: context.flow,
     shouldRestart: context.shouldRestart,
@@ -139,7 +139,11 @@ const PassingScreen = (props: Props) => {
 
     const nextActivityIndex = (groupProgress as FlowProgress).pipelineActivityOrder + 1;
 
-    const nextActivity = context.flow?.activityIds[nextActivityIndex] ?? null;
+    // For deleted flows, context.flow is null — fall back to stored activity IDs from groupProgress
+    const storedFlowActivityIds = (groupProgress as FlowProgress).flowActivityIds;
+    const flowActivityIds = context.flow?.activityIds ?? storedFlowActivityIds ?? [];
+
+    const nextActivity = flowActivityIds[nextActivityIndex] ?? null;
 
     const isLastActivity = nextActivity === null;
 
@@ -182,7 +186,7 @@ const PassingScreen = (props: Props) => {
       addSuccessBanner({ children: t('toast.answers_submitted'), duration: null });
     }
 
-    if (isFlowGroup && context.flow) {
+    if (isFlowGroup) {
       if (isLastActivity && hasAnySummaryScreenResults) {
         return openSummaryScreen({
           activityId: context.activityId,
