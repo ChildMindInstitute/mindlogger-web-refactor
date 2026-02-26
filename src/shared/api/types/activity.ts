@@ -246,6 +246,8 @@ export type CompletedEntityDTO = {
   activityFlowOrder: number | null;
   // Ordered activity IDs for the flow at the submitted version (only for in-progress flows)
   flowActivityIds: string[] | null;
+  // Name of the flow at the submitted version (only for in-progress flows)
+  flowName: string | null;
 };
 
 export type CompletedEntitiesDTO = {

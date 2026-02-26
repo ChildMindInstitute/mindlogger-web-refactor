@@ -57,12 +57,34 @@ export const useEntitiesSync = ({
         targetSubjectId,
       });
 
-      const event = events.find(({ id }) => id === eventId) ?? null;
+      let event: ScheduleEventDto | null = events.find(({ id }) => id === eventId) ?? null;
 
       // Case 1: In-progress flow (started on another device, not yet completed)
       // Create or update resumable progress so user can continue where they left off
       // Skip this case when shouldRestart=true (user wants to start fresh, not resume)
       if (isFlow && entity.isFlowCompleted === false) {
+        // If the flow was deleted from the current applet version, its schedule event
+        // no longer exists. Create a synthetic AlwaysAvailable event so that:
+        // 1. The groupProgress.event is populated (ActivityGroupsBuildManager skips entries without event)
+        // 2. The survey can render when the user resumes
+        if (!event) {
+          event = {
+            id: eventId,
+            entityId,
+            availabilityType: 'AlwaysAvailable',
+            availability: {
+              oneTimeCompletion: false,
+              periodicityType: 'ALWAYS',
+              timeFrom: null,
+              timeTo: null,
+              allowAccessBeforeFromTime: false,
+              startDate: null,
+              endDate: null,
+            },
+            selectedDate: null,
+            timers: { timer: null, idleTimer: null },
+          };
+        }
         // When restarting, skip in-progress syncing - user wants to start fresh
         if (shouldRestart) {
           return false;
@@ -75,14 +97,20 @@ export const useEntitiesSync = ({
         const localFlowProgress = groupProgress as FlowProgress | undefined;
         const flowActivityIds =
           entity.flowActivityIds ?? localFlowProgress?.flowActivityIds ?? flow?.activityIds;
-        const flowName = flow?.name ?? localFlowProgress?.flowName;
+        // Prefer the server-provided flow name (from flow_histories at the submitted version),
+        // then local stored name, then current flow version name
+        const flowName = entity.flowName ?? localFlowProgress?.flowName ?? flow?.name;
 
         if (!flowActivityIds) {
-          console.info(`[useEntitiesSync] Flow not found and no stored metadata: ${entity.id}`);
           return false;
         }
 
         if (groupProgress?.submitId === entity.submitId) {
+          // If local is already completed for this submitId, never overwrite with in-progress
+          // (the server may not have processed the final submission yet)
+          if (groupProgress.endAt) {
+            return false;
+          }
           // If submitIds match, only skip if local is at or ahead
           // ("Keep last activity in each submission" in AnswerService._filter_activity_flows)
           if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
@@ -108,7 +136,6 @@ export const useEntitiesSync = ({
 
         const nextActivityId = flowActivityIds[pipelineActivityOrder];
         if (!nextActivityId) {
-          console.info(`[useEntitiesSync] No next activity found for flow: ${entity.id}`);
           return false;
         }
 
