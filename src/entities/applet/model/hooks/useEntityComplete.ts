@@ -184,8 +184,9 @@ export const useEntityComplete = (props: Props) => {
     (input?: CompleteOptions) => {
       const isAutoCompletion = input?.type === 'autoCompletion';
 
+      const entityId = props.flowId ? props.flowId : props.activityId;
       const groupProgress = getGroupProgress({
-        entityId: props.flowId ? props.flowId : props.activityId,
+        entityId,
         eventId: props.eventId,
         targetSubjectId: props.targetSubjectId,
       });

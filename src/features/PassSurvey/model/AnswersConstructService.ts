@@ -39,6 +39,7 @@ type Input = {
   appletId: string;
   appletVersion: string;
   flow: ActivityFlowDTO | null;
+  flowId: string | null; // Resolved flowId — may differ from flow?.id when the flow was deleted
   encryption: EncryptionDTO;
 
   groupProgress: GroupProgress;
@@ -68,6 +69,8 @@ export default class AnswersConstructService implements ICompletionConstructServ
 
   private flow: ActivityFlowDTO | null;
 
+  private flowId: string | null;
+
   private encryption: EncryptionDTO;
 
   private items: ItemRecord[];
@@ -84,6 +87,7 @@ export default class AnswersConstructService implements ICompletionConstructServ
     this.groupProgress = input.groupProgress;
     this.publicAppletKey = input.publicAppletKey;
     this.flow = input.flow;
+    this.flowId = input.flowId ?? input.flow?.id ?? null;
     this.encryption = input.encryption;
     this.appletId = input.appletId;
     this.appletVersion = input.appletVersion;
@@ -125,7 +129,7 @@ export default class AnswersConstructService implements ICompletionConstructServ
     return {
       appletId: this.appletId,
       activityId: this.activityId,
-      flowId: this.flow?.id ?? null,
+      flowId: this.flowId,
       submitId: this.groupProgress.submitId,
       version: this.appletVersion,
       createdAt: new Date().getTime(),
@@ -257,7 +261,15 @@ export default class AnswersConstructService implements ICompletionConstructServ
     }
 
     if (!this.flow) {
-      throw new Error('[AnswersConstructBuilder] Flow is not defined');
+      // Flow was deleted from current applet version. Use stored activity IDs
+      // from groupProgress (synced from server) to determine completion.
+      const storedActivityIds = (this.groupProgress as FlowProgress).flowActivityIds;
+
+      if (!storedActivityIds?.length) {
+        throw new Error('[AnswersConstructBuilder] Flow is not defined and no stored activity IDs');
+      }
+
+      return storedActivityIds.length === this.groupProgress.pipelineActivityOrder + 1;
     }
 
     // Prefer stored activity IDs from when the flow was started (handles version changes)
