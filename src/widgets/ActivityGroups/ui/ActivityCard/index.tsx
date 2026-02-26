@@ -1,5 +1,6 @@
-import { useContext } from 'react';
+import { useCallback, useContext, useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { t } from 'i18next';
 
 import { ActivityCardBase } from './ActivityCardBase';
@@ -22,7 +23,11 @@ import { prolificParamsSelector } from '~/entities/applet/model/selectors';
 import { useBanners } from '~/entities/banner/model';
 import { useAutoCompletionRecord } from '~/features/AutoCompletion/model';
 import { useStartSurvey } from '~/features/PassSurvey';
+import appletService from '~/shared/api/services/applet.service';
+import { variables } from '~/shared/constants/theme/variables';
+import { MuiModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
+import Text from '~/shared/ui/Text';
 import {
   MixpanelEventType,
   Mixpanel,
@@ -40,6 +45,8 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   const { lessThanSM } = useCustomMediaQuery();
 
   const context = useContext(AppletDetailsContext);
+  const queryClient = useQueryClient();
+  const [isFlowDeletedAlertOpen, setIsFlowDeletedAlertOpen] = useState(false);
 
   const {
     title,
@@ -156,21 +163,62 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     startActivity(false);
   };
 
-  const startActivity = (shouldRestart: boolean) => {
-    if (!isEntitySupported) {
-      return openStoreLink();
+  const startActivity = useCallback(
+    (shouldRestart: boolean) => {
+      if (!isEntitySupported) {
+        return openStoreLink();
+      }
+
+      return startSurvey({
+        activityId: activityListItem.activityId,
+        eventId: activityListItem.eventId,
+        targetSubjectId: activityListItem.targetSubject?.id ?? null,
+        flowId: activityListItem.flowId,
+        shouldRestart,
+      });
+    },
+    [isEntitySupported, startSurvey, activityListItem],
+  );
+
+  const restartActivity = useCallback(async () => {
+    const flowId = activityListItem.flowId;
+
+    // If this is a flow, check whether the admin has deleted it since the UI was last refreshed
+    if (flowId) {
+      try {
+        const appletId = context.applet.id;
+        const response = context.isPublic
+          ? await appletService.getPublicBaseDetailsByKey(context.publicAppletKey)
+          : await appletService.getBaseDetailsById(appletId);
+
+        const freshFlows = response.data.result.activityFlows;
+        const flowStillExists = freshFlows.some((f) => f.id === flowId);
+
+        if (!flowStillExists) {
+          // Flow was deleted — show alert and refresh the cached applet data
+          setIsFlowDeletedAlertOpen(true);
+
+          // Update react-query cache so UI re-renders with fresh data after modal closes
+          queryClient.setQueryData(
+            [
+              'appletBaseDetailsById',
+              context.isPublic
+                ? { isPublic: true, publicAppletKey: context.publicAppletKey }
+                : { isPublic: false, appletId },
+            ],
+            response,
+          );
+
+          // Also invalidate events since the flow's schedule event was deleted too
+          void queryClient.invalidateQueries(['eventsByAppletId']);
+
+          return;
+        }
+      } catch {
+        // If the check fails, proceed with restart as normal
+      }
     }
 
-    return startSurvey({
-      activityId: activityListItem.activityId,
-      eventId: activityListItem.eventId,
-      targetSubjectId: activityListItem.targetSubject?.id ?? null,
-      flowId: activityListItem.flowId,
-      shouldRestart,
-    });
-  };
-
-  const restartActivity = () => {
     startActivity(true);
 
     Mixpanel.track(
@@ -183,7 +231,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
         },
       ),
     );
-  };
+  }, [activityListItem.flowId, activityListItem.activityId, context, queryClient, startActivity]);
 
   const resumeActivity = () => {
     startActivity(false);
@@ -260,6 +308,29 @@ export const ActivityCard = ({ activityListItem }: Props) => {
           isRestartDisabled={activityListItem.isDeletedFlow}
         />
       </Box>
+
+      <MuiModal
+        testId="flow-deleted-alert-modal"
+        isOpen={isFlowDeletedAlertOpen}
+        onHide={() => setIsFlowDeletedAlertOpen(false)}
+        title={t('additional.flow_deleted_title')}
+        titleProps={{
+          fontWeight: '400',
+          marginY: 2,
+        }}
+        labelComponent={
+          <Text color={variables.palette.onSurface} sx={{ textTransform: 'none' }}>
+            {t('additional.flow_deleted_body')}
+          </Text>
+        }
+        footerPrimaryButton={t('additional.okay')}
+        onPrimaryButtonClick={() => setIsFlowDeletedAlertOpen(false)}
+        footerWrapperSXProps={{
+          marginLeft: 'auto',
+          marginTop: 2,
+        }}
+        maxWidth="sm"
+      />
     </ActivityCardBase>
   );
 };
