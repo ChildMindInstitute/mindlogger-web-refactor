@@ -131,10 +131,10 @@ const createActivityGroupsBuildManager = () => {
       // If entity not found, check if it's a deleted flow with stored metadata
       if (!entity && groupProgressItem.type === ActivityPipelineType.Flow) {
         const flowProgress = groupProgressItem as FlowProgress;
-        if (flowProgress.flowActivityIds && flowProgress.flowName) {
+        if (flowProgress.flowActivityIds) {
           entity = {
             id: entityId,
-            name: flowProgress.flowName,
+            name: flowProgress.flowName || 'Activity Flow',
             description: '',
             image: null,
             isHidden: false,

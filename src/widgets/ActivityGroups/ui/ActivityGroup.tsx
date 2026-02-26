@@ -30,9 +30,10 @@ export const ActivityGroup = ({ group: { name, activities } }: Props) => {
       <Box display="flex" flex={1} flexDirection="column">
         {activities.length ? (
           activities.map((activity) => {
+            const entityId = activity.flowId ?? activity.activityId;
             return (
               <ActivityCard
-                key={`${activity.eventId}_${activity.targetSubject?.id}`}
+                key={`${activity.eventId}_${entityId}_${activity.targetSubject?.id}`}
                 activityListItem={activity}
               />
             );
