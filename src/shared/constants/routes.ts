@@ -43,6 +43,7 @@ const ROUTES = {
       eventId,
       flowId,
       publicAppletKey,
+      shouldRestart,
     }: {
       appletId: string;
       activityId: string;
@@ -50,8 +51,14 @@ const ROUTES = {
       entityType: 'regular' | 'flow';
       flowId: string | null;
       publicAppletKey: string;
-    }) =>
-      `/public/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}/publicAppletKey/${publicAppletKey}?${flowId ? `flowId=${flowId}` : ''}`,
+      shouldRestart?: boolean;
+    }) => {
+      const params = new URLSearchParams();
+      if (flowId) params.append('flowId', flowId);
+      if (shouldRestart) params.append('shouldRestart', 'true');
+
+      return `/public/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}/publicAppletKey/${publicAppletKey}?${params.toString()}`;
+    },
   },
   publicAutoCompletion: {
     path: '/public/auto-completion',
@@ -94,6 +101,7 @@ const ROUTES = {
       eventId,
       flowId,
       targetSubjectId,
+      shouldRestart,
     }: {
       appletId: string;
       activityId: string;
@@ -101,10 +109,12 @@ const ROUTES = {
       entityType: 'regular' | 'flow';
       flowId: string | null;
       targetSubjectId: string | null;
+      shouldRestart?: boolean;
     }) => {
       const params = new URLSearchParams();
       if (flowId) params.append('flowId', flowId);
       if (targetSubjectId) params.append('targetSubjectId', targetSubjectId);
+      if (shouldRestart) params.append('shouldRestart', 'true');
 
       return `/protected/applets/${appletId}/activityId/${activityId}/event/${eventId}/entityType/${entityType}?${params.toString()}`;
     },

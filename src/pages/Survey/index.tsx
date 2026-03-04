@@ -14,6 +14,7 @@ function SurveyPage() {
   const isFlow = entityType === 'flow';
   const flowId = isFlow ? searchParams.get('flowId') : null;
   const targetSubjectId = searchParams.get('targetSubjectId');
+  const shouldRestart = searchParams.get('shouldRestart') === 'true';
 
   if (!appletId || !activityId || !eventId) {
     return <div>{t('wrondLinkParametrError')}</div>;
@@ -28,6 +29,7 @@ function SurveyPage() {
         flowId={flowId}
         targetSubjectId={targetSubjectId}
         publicAppletKey={null}
+        shouldRestart={shouldRestart}
       />
     </Box>
   );

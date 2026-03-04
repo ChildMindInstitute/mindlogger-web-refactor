@@ -2,12 +2,14 @@ export enum FeatureFlag {
   EnableParticipantMultiInformant = 'EnableParticipantMultiInformant',
   EnablePhrasalTemplate = 'EnablePhrasalTemplate',
   EnableActivityAssign = 'EnableActivityAssign',
+  EnableFlowResume = 'EnableFlowResume',
 }
 
 export type FeatureFlagType = {
   [FeatureFlag.EnableParticipantMultiInformant]: boolean;
   [FeatureFlag.EnablePhrasalTemplate]: boolean;
   [FeatureFlag.EnableActivityAssign]: boolean;
+  [FeatureFlag.EnableFlowResume]: string[];
 };
 
 // Mapping between the feature flag we want to use in code, to the
@@ -25,4 +27,5 @@ export const LaunchDarkyFlagsMap = {
 
   // TODO: https://mindlogger.atlassian.net/browse/M2-6518 Assign Activity flag cleanup
   [FeatureFlag.EnableActivityAssign]: 'enableActivityAssign',
+  [FeatureFlag.EnableFlowResume]: 'enableFlowResume',
 };

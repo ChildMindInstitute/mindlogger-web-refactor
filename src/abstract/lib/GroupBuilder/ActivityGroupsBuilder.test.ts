@@ -1577,7 +1577,6 @@ describe('ActivityGroupsBuilder', () => {
           startAt: addMinutes(scheduledAt, 5).getTime(),
           endAt: null,
           currentActivityId: 'test-id-1',
-          currentActivityStartAt: addMinutes(scheduledAt, 5).getTime(),
           submitId: 'group-key-1',
           pipelineActivityOrder: 0,
           context: {

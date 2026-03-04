@@ -77,6 +77,8 @@ const WelcomeScreen = () => {
     }
 
     if (groupProgress?.type === ActivityPipelineType.Flow) {
+      // If flow is completed, the next start will be from Activity 1
+      if (groupProgress.endAt) return 1;
       return groupProgress.pipelineActivityOrder + 1;
     }
 

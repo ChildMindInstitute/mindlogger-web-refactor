@@ -36,6 +36,8 @@ export type SurveyContext = {
   flow: ActivityFlowDTO | null;
 
   integrations: AppletDTO['integrations'];
+
+  shouldRestart?: boolean; // Flag to indicate if the flow was restarted, used to skip sync during session
 };
 
 export const SurveyContext = createContext<SurveyContext>({} as SurveyContext);

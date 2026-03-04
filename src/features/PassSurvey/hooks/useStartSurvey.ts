@@ -24,6 +24,7 @@ type NavigateToEntityProps = {
   targetSubjectId: string | null;
   entityType: EntityType;
   eventId: string;
+  shouldRestart?: boolean;
 };
 
 type OnActivityCardClickProps = {
@@ -45,7 +46,8 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
   const appletId = applet?.id;
   const flows = applet?.activityFlows;
 
-  const { flowRestarted, activityRestarted } = appletModel.hooks.useGroupProgressStateManager();
+  const { flowRestarted, activityRestarted, getGroupProgress } =
+    appletModel.hooks.useGroupProgressStateManager();
 
   const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
@@ -59,7 +61,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
       return;
     }
 
-    const { activityId, flowId, eventId, targetSubjectId, entityType } = params;
+    const { activityId, flowId, eventId, targetSubjectId, entityType, shouldRestart } = params;
 
     if (isPublic && publicAppletKey) {
       return navigator.navigate(
@@ -70,6 +72,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
           entityType,
           publicAppletKey,
           flowId,
+          shouldRestart,
         }),
       );
     }
@@ -82,6 +85,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
         targetSubjectId,
         entityType,
         flowId,
+        shouldRestart,
       }),
     );
   }
@@ -138,6 +142,18 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
         // Update group progress rather than remove to preserve version of event that the flow was
         // started with
         flowRestarted({ flowId, eventId, targetSubjectId, activityId: firstActivityId });
+      } else {
+        // Safety net: useEntitiesSync also clears stale progress, but may not
+        // have fired yet when the user clicks "Start".
+        const entityProgress = getGroupProgress({
+          entityId: flowId,
+          eventId,
+          targetSubjectId,
+        });
+
+        if (!entityProgress || entityProgress.endAt) {
+          removeActivityProgress({ activityId, eventId, targetSubjectId });
+        }
       }
 
       const activityIdToNavigate = shouldRestart ? firstActivityId : activityId;
@@ -148,6 +164,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
         eventId,
         flowId,
         targetSubjectId,
+        shouldRestart,
       });
     }
 
@@ -157,6 +174,17 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
       // Update group progress rather than remove to preserve version of event that the activity was
       // started with
       activityRestarted({ activityId, eventId, targetSubjectId });
+    } else {
+      // Safety net: same as the flow branch above.
+      const entityProgress = getGroupProgress({
+        entityId: activityId,
+        eventId,
+        targetSubjectId,
+      });
+
+      if (!entityProgress || entityProgress.endAt) {
+        removeActivityProgress({ activityId, eventId, targetSubjectId });
+      }
     }
 
     return navigateToEntity({
@@ -165,6 +193,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
       eventId,
       flowId: null,
       targetSubjectId,
+      shouldRestart,
     });
   }
 

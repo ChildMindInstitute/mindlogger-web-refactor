@@ -1,9 +1,14 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+
+import { subMonths } from 'date-fns';
 
 import { ErrorScreen } from './ErrorScreen';
 import LoadingScreen from './LoadingScreen';
 import { ScreenManager } from './ScreenManager';
 
+import { FlowProgress, getProgressId } from '~/abstract/lib';
+import { useCompletedEntitiesQuery } from '~/entities/activity';
+import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
@@ -13,7 +18,18 @@ import {
 } from '~/features/PassSurvey';
 import ROUTES from '~/shared/constants/routes';
 import { MuiModal } from '~/shared/ui';
-import { useCustomNavigation, useCustomTranslation, useModal, useOnceEffect } from '~/shared/utils';
+import {
+  formatToDtoDate,
+  useAppSelector,
+  useCustomNavigation,
+  useCustomTranslation,
+  useModal,
+  useOnceEffect,
+} from '~/shared/utils';
+import { isFlowResumeEnabled } from '~/shared/utils/featureFlags';
+import { useFeatureFlags } from '~/shared/utils/hooks';
+import { FeatureFlag } from '~/shared/utils/types/featureFlags';
+import { useEntitiesSync } from '~/widgets/ActivityGroups/model/hooks';
 
 type Props = {
   publicAppletKey: string | null;
@@ -24,15 +40,18 @@ type Props = {
   targetSubjectId: string | null;
 
   flowId: string | null;
+
+  shouldRestart?: boolean;
 };
 
 export const SurveyWidget = (props: Props) => {
-  const { publicAppletKey, appletId, activityId, eventId, flowId, targetSubjectId } = props;
+  const { publicAppletKey, appletId, activityId, eventId, flowId, targetSubjectId, shouldRestart } =
+    props;
 
   const { t } = useCustomTranslation();
   const navigator = useCustomNavigation();
 
-  const { removeAllBanners } = useBanners();
+  const { removeAllBanners, addSuccessBanner } = useBanners();
 
   const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: props.flowId ?? props.activityId,
@@ -85,9 +104,80 @@ export const SurveyWidget = (props: Props) => {
     error,
   } = useSurveyDataQuery({ publicAppletKey, appletId, activityId, targetSubjectId });
 
+  const { featureFlag } = useFeatureFlags();
+  const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, []);
+  const flowResumeEnabled = isFlowResumeEnabled(flowResumeFlag, appletId);
+
+  const { data: completedEntities, isFetching } = useCompletedEntitiesQuery(
+    {
+      appletId,
+      fromDate: formatToDtoDate(subMonths(new Date(), 1)),
+      includeInProgress: true,
+    },
+    {
+      select: (data) => data.data.result,
+      enabled: flowResumeEnabled,
+    },
+  );
+
+  // Sync with server
+  // - gate on applet loading to ensure respondentMeta?.subjectId is available
+  // - gate on fresh data to avoid syncing with stale cache
+  // - pass shouldRestart to skip in-progress syncing but still check completion status
+  const { changes } = useEntitiesSync({
+    completedEntities:
+      flowResumeEnabled && !isLoading && !isFetching ? completedEntities : undefined,
+    respondentSubjectId: respondentMeta?.subjectId ?? null,
+    events: eventsDTO?.events ?? [],
+    activityFlows: appletBaseDTO?.activityFlows ?? [],
+    flowResumeEnabled,
+    shouldRestart,
+  });
+
+  // After server sync:
+  // - Redirect to activity list if entity was completed on another device
+  // - Redirect to latest activity if flow progressed on another device
+  const groupProgressChanged = changes.includes(flowId ?? activityId);
+  const groupProgressId = getProgressId(flowId ?? activityId, eventId, targetSubjectId);
+  const groupProgress = useAppSelector((state) =>
+    groupProgressId ? appletModel.selectors.selectGroupProgress(state, groupProgressId) : null,
+  );
+  const currentActivityId = !groupProgress?.endAt
+    ? (groupProgress as FlowProgress)?.currentActivityId
+    : null;
+
+  useEffect(() => {
+    // Only consider redirect if progress has changed
+    if (!flowResumeEnabled || !groupProgressChanged) return;
+
+    // If entity was completed on another device, redirect to activity list
+    if (groupProgress?.endAt) {
+      addSuccessBanner(t('additional.activity_already_completed'));
+      navigator.navigate(ROUTES.appletDetails.navigateTo(appletId), { replace: true });
+      return;
+    }
+
+    // If flow progressed on another device and this is not a restart, redirect to latest activity
+    if (!shouldRestart && currentActivityId && currentActivityId !== activityId) {
+      const navigateToProps = {
+        appletId,
+        activityId: currentActivityId,
+        entityType: 'flow' as const,
+        eventId,
+        flowId,
+      };
+      const screenToNavigate = publicAppletKey
+        ? ROUTES.publicSurvey.navigateTo({ ...navigateToProps, publicAppletKey })
+        : ROUTES.survey.navigateTo({ ...navigateToProps, targetSubjectId });
+      navigator.navigate(screenToNavigate, { replace: true });
+      return;
+    }
+  }, [activityId, currentActivityId, groupProgress?.endAt, groupProgressChanged]);
+
   const responseError = error?.evaluatedMessage ?? '';
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
+    // loading screen on initial load and when refetching completed entities
     return <LoadingScreen publicAppletKey={publicAppletKey} appletId={appletId} />;
   }
 
@@ -123,6 +213,7 @@ export const SurveyWidget = (props: Props) => {
         flowId,
         targetSubject,
         publicAppletKey,
+        shouldRestart,
       })}
     >
       <ScreenManager openTimesUpModal={openTimesUpModal} />
