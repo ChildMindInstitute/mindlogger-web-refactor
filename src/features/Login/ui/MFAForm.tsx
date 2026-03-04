@@ -12,17 +12,21 @@ import { MFATOTPSchema, TMFATOTPForm } from '../model/mfa.schema';
 import { variables } from '~/shared/constants/theme/variables';
 import { BaseButton, BasicFormProvider, Box, Text } from '~/shared/ui';
 import { useCustomForm, useCustomTranslation } from '~/shared/utils';
+import { Mixpanel } from '~/shared/utils/analytics';
+import { MixpanelEventType, MixpanelProps } from '~/shared/utils/analytics/mixpanel.types';
 
 interface MFAFormProps {
   /** MFA session from Redux (passed via props) */
   session: { token: string; sessionId: string };
   /**
    * Called on successful verification - tokens are already stored.
-   * Only receives user data since tokens are stored in useMFAVerification
+   * Only receives user data and MFA context since tokens are stored in useMFAVerification
    * before this callback to avoid race conditions with navigation.
    */
   onSuccess: (result: {
     user: { id: string; firstName: string; lastName: string; email: string };
+    mfaUsed: boolean;
+    mfaMethod: 'Authenticator App' | 'Backup Codes';
   }) => void;
   onSwitchToRecovery: () => void;
   onBackToLogin: () => void;
@@ -60,13 +64,29 @@ const MFAFormComponent = ({
 
   const totpCode = watch('totpCode');
 
+  // Track page view and challenge presented on mount
+  useEffect(() => {
+    Mixpanel.trackPageView('MFA Verification');
+    Mixpanel.track({
+      action: MixpanelEventType.MFAChallengePresented,
+      [MixpanelProps.MFAType]: 'totp',
+    });
+  }, []);
+
   // Sanitize TOTP input to digits only, max 6
   const sanitizeTotp = (raw: string) => raw.replace(/\D/g, '').slice(0, 6);
 
   const onSubmit = useCallback(
     async (data: TMFATOTPForm) => {
       if (isSessionExpired) return;
+      const wasAutoSubmit = isAutoSubmittingRef.current;
       isUserTypingRef.current = false;
+
+      Mixpanel.track({
+        action: MixpanelEventType.MFATOTPCodeSubmitted,
+        [MixpanelProps.MFAIsAutoSubmit]: wasAutoSubmit,
+      });
+
       const success = await verifyCode(data.totpCode);
       if (!success) {
         setValue('totpCode', '');
@@ -101,6 +121,16 @@ const MFAFormComponent = ({
     isUserTypingRef.current = true;
     const sanitized = sanitizeTotp(e.target.value);
     setValue('totpCode', sanitized);
+  };
+
+  const handleSwitchToRecovery = () => {
+    Mixpanel.track({ action: MixpanelEventType.MFASwitchToRecovery });
+    onSwitchToRecovery();
+  };
+
+  const handleBackToLogin = () => {
+    Mixpanel.track({ action: MixpanelEventType.MFABackToLogin });
+    onBackToLogin();
   };
 
   // Get error message for display
@@ -171,7 +201,7 @@ const MFAFormComponent = ({
             <Text
               variant="bodyLarge"
               color={variables.palette.primary}
-              onClick={onSwitchToRecovery}
+              onClick={handleSwitchToRecovery}
               sx={{
                 cursor: 'pointer',
                 '&:hover': { opacity: 0.8 },
@@ -185,7 +215,7 @@ const MFAFormComponent = ({
             <Text
               variant="bodyLarge"
               color={variables.palette.onSurfaceVariant}
-              onClick={onBackToLogin}
+              onClick={handleBackToLogin}
               sx={{
                 cursor: 'pointer',
                 '&:hover': { opacity: 0.8 },

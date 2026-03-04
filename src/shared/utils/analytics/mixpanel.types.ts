@@ -13,6 +13,21 @@ export enum MixpanelProps {
   StudyUserId = 'Study User ID',
   StudyReference = 'Study Reference',
   EHRStatus = 'EHR Status',
+
+  // MFA Props
+  MFAType = 'MFA Type',
+  MFAErrorCode = 'MFA Error Code',
+  MFAAttemptsRemaining = 'MFA Attempts Remaining',
+  MFAAttemptType = 'MFA Attempt Type',
+  MFAIsAutoSubmit = 'MFA Is Auto Submit',
+
+  // Login Props
+  MFARequired = 'MFA Required',
+  AuthMethod = 'Auth Method',
+  MFAUsed = 'MFA Used',
+  MFAMethodUsed = 'MFA Method Used',
+  UserId = 'User ID',
+  FailureStage = 'Failure Stage',
 }
 
 export enum MixpanelFeature {
@@ -39,6 +54,7 @@ export enum MixpanelEventType {
   EHRProviderShareSuccess = 'EHR Provider Share Success',
   InvitationAccepted = 'Invitation Accepted',
   LoginBtnClick = 'Login Button click',
+  LoginFailed = 'Login Failed',
   LoginScreenCreateAccountBtnClick = 'Create account button on login screen click',
   LoginSuccessful = 'Login Successful',
   Logout = 'logout',
@@ -49,6 +65,20 @@ export enum MixpanelEventType {
   SignupSuccessful = 'Signup Successful',
   TransferOwnershipAccepted = 'Transfer Ownership Accepted',
   TransferOwnershipDeclined = 'Transfer Ownership Declined',
+
+  // MFA Events
+  MFARequired = 'MFA Required',
+  MFAChallengePresented = 'MFA Challenge Presented',
+  MFATOTPCodeSubmitted = 'MFA TOTP Code Submitted',
+  MFARecoveryCodeSubmitted = 'MFA Recovery Code Submitted',
+  MFATOTPVerificationSuccess = 'MFA TOTP Verification Success',
+  MFARecoveryVerificationSuccess = 'MFA Recovery Verification Success',
+  MFATOTPVerificationFailed = 'MFA TOTP Verification Failed',
+  MFARecoveryVerificationFailed = 'MFA Recovery Verification Failed',
+  MFASwitchToRecovery = 'MFA Switch to Recovery',
+  MFASwitchToTOTP = 'MFA Switch to TOTP',
+  MFASessionExpired = 'MFA Session Expired',
+  MFABackToLogin = 'MFA Back to Login',
 }
 
 type WithAppletId<T> = T & { [MixpanelProps.AppletId]?: string | null };
@@ -144,10 +174,22 @@ export type ReturnToAdminAppEvent = WithFeature<
 
 export type LoginSuccessfulEvent = {
   action: MixpanelEventType.LoginSuccessful;
+  [MixpanelProps.MFAUsed]: boolean;
+  [MixpanelProps.MFAMethodUsed]: 'Authenticator App' | 'Backup Codes' | null;
+  [MixpanelProps.UserId]: string;
 };
 
 export type LoginBtnClickEvent = {
   action: MixpanelEventType.LoginBtnClick;
+  [MixpanelProps.MFARequired]: boolean;
+  [MixpanelProps.AuthMethod]: 'Password';
+};
+
+export type LoginFailedEvent = {
+  action: MixpanelEventType.LoginFailed;
+  [MixpanelProps.FailureStage]: 'Credentials' | 'MFA';
+  [MixpanelProps.MFARequired]: boolean;
+  [MixpanelProps.MFAMethodUsed]: 'Authenticator App' | 'Backup Codes' | null;
 };
 
 export type LogoutEvent = {
@@ -197,6 +239,52 @@ export type LoginScreenCreateAccountBtnClickEvent = {
   action: MixpanelEventType.LoginScreenCreateAccountBtnClick;
 };
 
+// MFA Event Types
+export type MFARequiredEvent = {
+  action: MixpanelEventType.MFARequired;
+};
+
+export type MFAChallengeEvent = {
+  action: MixpanelEventType.MFAChallengePresented;
+  [MixpanelProps.MFAType]: 'totp' | 'recovery';
+};
+
+export type MFATOTPSubmittedEvent = {
+  action: MixpanelEventType.MFATOTPCodeSubmitted;
+  [MixpanelProps.MFAIsAutoSubmit]: boolean;
+};
+
+export type MFARecoverySubmittedEvent = {
+  action: MixpanelEventType.MFARecoveryCodeSubmitted;
+};
+
+export type MFAVerificationSuccessEvent = {
+  action:
+    | MixpanelEventType.MFATOTPVerificationSuccess
+    | MixpanelEventType.MFARecoveryVerificationSuccess;
+};
+
+export type MFAVerificationFailedEvent = {
+  action:
+    | MixpanelEventType.MFATOTPVerificationFailed
+    | MixpanelEventType.MFARecoveryVerificationFailed;
+  [MixpanelProps.MFAErrorCode]?: string;
+  [MixpanelProps.MFAAttemptsRemaining]?: number | null;
+  [MixpanelProps.MFAAttemptType]?: 'session' | 'global' | null;
+};
+
+export type MFASessionExpiredEvent = {
+  action: MixpanelEventType.MFASessionExpired;
+  [MixpanelProps.MFAErrorCode]?: string;
+};
+
+export type MFANavigationEvent = {
+  action:
+    | MixpanelEventType.MFASwitchToRecovery
+    | MixpanelEventType.MFASwitchToTOTP
+    | MixpanelEventType.MFABackToLogin;
+};
+
 export type MixpanelEvent =
   | ActivityRestartedEvent
   | ActivityResumedEvent
@@ -208,9 +296,18 @@ export type MixpanelEvent =
   | EHRProviderShareSuccessEvent
   | InvitationAcceptedEvent
   | LoginBtnClickEvent
+  | LoginFailedEvent
   | LoginScreenCreateAccountBtnClickEvent
   | LoginSuccessfulEvent
   | LogoutEvent
+  | MFAChallengeEvent
+  | MFANavigationEvent
+  | MFARecoverySubmittedEvent
+  | MFARequiredEvent
+  | MFASessionExpiredEvent
+  | MFATOTPSubmittedEvent
+  | MFAVerificationFailedEvent
+  | MFAVerificationSuccessEvent
   | ResponseReportDownloadClickedEvent
   | ResponseReportGeneratedEvent
   | ReturnToAdminAppEvent

@@ -43,4 +43,9 @@ export const Mixpanel = {
   logout() {
     if (shouldEnableMixpanel) mixpanel.reset();
   },
+  setUserProperty(key: string, value: unknown) {
+    if (shouldEnableMixpanel) {
+      mixpanel.people.set({ [key]: value });
+    }
+  },
 };
