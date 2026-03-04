@@ -349,6 +349,7 @@ const appletsSlice = createSlice({
         groupProgress.currentActivityId = payload.activityId;
         groupProgress.pipelineActivityOrder = 0;
         groupProgress.startAt = new Date().getTime();
+        groupProgress.endAt = null;
         groupProgress.submitId = uuidV4();
       }
     },
