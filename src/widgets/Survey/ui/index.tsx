@@ -167,8 +167,21 @@ export const SurveyWidget = (props: Props) => {
     : null;
 
   useEffect(() => {
-    // Only consider redirect if progress has changed
-    if (!flowResumeEnabled || !groupProgressChanged) return;
+    // Only consider redirect if flow resume is enabled
+    if (!flowResumeEnabled) return;
+
+    // Gate on data being loaded: don't redirect before we have sync data
+    // (avoids spurious redirects when Redux has stale state from a prior session)
+    if (isLoading || isFetching) return;
+
+    // Redirect if the sync just changed progress, OR if fresh server data has loaded and the
+    // stored currentActivityId already differs from the URL (can happen when the activity list
+    // page synced server state into Redux before this Survey screen even mounted).
+    const hasFreshServerData = completedEntities !== undefined;
+    const shouldCheckRedirect =
+      groupProgressChanged ||
+      (hasFreshServerData && !!flowId && !!currentActivityId && currentActivityId !== activityId);
+    if (!shouldCheckRedirect) return;
 
     // If entity was completed on another device, redirect to activity list
     if (groupProgress?.endAt) {
@@ -192,7 +205,15 @@ export const SurveyWidget = (props: Props) => {
       navigator.navigate(screenToNavigate, { replace: true });
       return;
     }
-  }, [activityId, currentActivityId, groupProgress?.endAt, groupProgressChanged]);
+  }, [
+    activityId,
+    currentActivityId,
+    groupProgress?.endAt,
+    groupProgressChanged,
+    isLoading,
+    isFetching,
+    completedEntities,
+  ]);
 
   const responseError = error?.evaluatedMessage ?? '';
 
