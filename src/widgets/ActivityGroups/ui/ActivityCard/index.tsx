@@ -160,7 +160,25 @@ export const ActivityCard = ({ activityListItem }: Props) => {
       return;
     }
 
-    startActivity(false);
+    if (!isEntitySupported) {
+      return openStoreLink();
+    }
+
+    const flowId = activityListItem.flowId;
+    const freshResult = flowId
+      ? await fetchFreshFlowData(flowId).catch(() => undefined)
+      : undefined;
+
+    if (freshResult?.deleted) return;
+
+    startSurvey({
+      activityId: activityListItem.activityId,
+      eventId: activityListItem.eventId,
+      targetSubjectId: activityListItem.targetSubject?.id ?? null,
+      flowId,
+      shouldRestart: false,
+      freshFlowActivityIds: freshResult?.activityIds,
+    });
   };
 
   const startActivity = useCallback(
