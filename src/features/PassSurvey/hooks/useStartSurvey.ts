@@ -178,7 +178,12 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
         }
       }
 
-      const activityIdToNavigate = shouldRestart ? firstActivityId : activityId;
+      // When fresh flow data is available, always use the first activity from
+      // the resolved list so a stale activityId from the cache is never used.
+      // On restart we already use firstActivityId; on initial start we also
+      // prefer firstActivityId when freshFlowActivityIds were provided.
+      const activityIdToNavigate =
+        shouldRestart || freshFlowActivityIds ? firstActivityId : activityId;
 
       return navigateToEntity({
         activityId: activityIdToNavigate,
