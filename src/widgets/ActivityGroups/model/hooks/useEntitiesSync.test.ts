@@ -7,6 +7,7 @@ import { ActivityPipelineType, FlowProgress, GroupProgress } from '~/abstract/li
 import { CompletedEntityDTO } from '~/shared/api';
 import {
   mockActivityId1,
+  mockActivityId2,
   mockActivityId3,
   mockAppletId,
   mockEventsResponse,
@@ -290,6 +291,134 @@ describe('useEntitiesSync', () => {
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
       expect(mockSaveGroupProgress).not.toHaveBeenCalled();
+    });
+
+    it('should return empty changes when activity list page already synced (pre-empted sync)', () => {
+      // Bug scenario: Activity list page calls useEntitiesSync first and updates Redux.
+      // When the Survey page mounts and calls useEntitiesSync with the same data,
+      // local progress already matches server → syncEntity returns false → changes is empty.
+      // The SurveyWidget redirect useEffect must handle this via hasFreshServerData fallback.
+      const localProgress: GroupProgress = {
+        ...baseFlowProgress,
+        submitId: 'same-submit-id',
+        currentActivityId: mockActivityId2,
+        pipelineActivityOrder: 1,
+        startAt: new Date('2020-01-01T00:00:00').getTime(),
+        endAt: null,
+        context: { summaryData: {} },
+        event: mockFlowEvent,
+      };
+      mockGetGroupProgress.mockReturnValue(localProgress);
+
+      const serverCompletedEntities: EntitiesSyncProps = {
+        completedEntities: {
+          id: mockAppletId,
+          version: '1.0.0',
+          activities: [],
+          activityFlows: [
+            {
+              ...baseCompletedEntity,
+              id: mockFlowId1,
+              submitId: 'same-submit-id',
+              scheduledEventId: mockFlowEvent.id,
+              isFlowCompleted: false,
+              activityFlowOrder: 1,
+            },
+          ],
+        },
+        respondentSubjectId: null,
+        events: [mockFlowEvent],
+        activityFlows: mockFlows,
+        flowResumeEnabled: true,
+      };
+      const { result } = renderHook(() => useEntitiesSync(serverCompletedEntities));
+
+      // Sync skips because local submitId matches server and local order >= server order
+      expect(mockSaveGroupProgress).not.toHaveBeenCalled();
+      // changes is empty — the flow ID is NOT included
+      expect(result.current.changes).toEqual([]);
+    });
+
+    it('should return flow ID in changes when sync actually updates progress', () => {
+      // Normal sync scenario: server is ahead, so syncEntity returns true → flow ID in changes
+      const localProgress: GroupProgress = {
+        ...baseFlowProgress,
+        submitId: 'same-submit-id',
+        currentActivityId: mockActivityId1,
+        pipelineActivityOrder: 0,
+        startAt: new Date('2020-01-01T00:00:00').getTime(),
+        endAt: null,
+        context: { summaryData: {} },
+        event: mockFlowEvent,
+      };
+      mockGetGroupProgress.mockReturnValue(localProgress);
+
+      const serverCompletedEntities: EntitiesSyncProps = {
+        completedEntities: {
+          id: mockAppletId,
+          version: '1.0.0',
+          activities: [],
+          activityFlows: [
+            {
+              ...baseCompletedEntity,
+              id: mockFlowId1,
+              submitId: 'same-submit-id',
+              scheduledEventId: mockFlowEvent.id,
+              isFlowCompleted: false,
+              activityFlowOrder: 2,
+            },
+          ],
+        },
+        respondentSubjectId: null,
+        events: [mockFlowEvent],
+        activityFlows: mockFlows,
+        flowResumeEnabled: true,
+      };
+      const { result } = renderHook(() => useEntitiesSync(serverCompletedEntities));
+
+      // Sync updates because server is ahead (order 2 > local order 0)
+      expect(mockSaveGroupProgress).toHaveBeenCalled();
+      // changes contains the flow ID
+      expect(result.current.changes).toEqual([mockFlowId1]);
+    });
+
+    it('should skip in-progress syncing when shouldRestart is true', () => {
+      const localProgress: GroupProgress = {
+        ...baseFlowProgress,
+        pipelineActivityOrder: 0,
+        startAt: new Date('2020-01-01T00:00:00').getTime(),
+        endAt: null,
+        context: { summaryData: {} },
+        event: mockFlowEvent,
+      };
+      mockGetGroupProgress.mockReturnValue(localProgress);
+
+      const serverCompletedEntities: EntitiesSyncProps = {
+        completedEntities: {
+          id: mockAppletId,
+          version: '1.0.0',
+          activities: [],
+          activityFlows: [
+            {
+              ...baseCompletedEntity,
+              id: mockFlowId1,
+              scheduledEventId: mockFlowEvent.id,
+              isFlowCompleted: false,
+              activityFlowOrder: 2,
+            },
+          ],
+        },
+        respondentSubjectId: null,
+        events: [mockFlowEvent],
+        activityFlows: mockFlows,
+        flowResumeEnabled: true,
+        shouldRestart: true,
+      };
+      const { result } = renderHook(() => useEntitiesSync(serverCompletedEntities));
+
+      // shouldRestart=true skips in-progress flow syncing entirely
+      expect(mockSaveGroupProgress).not.toHaveBeenCalled();
+      expect(result.current.changes).toEqual([]);
     });
   });
 
