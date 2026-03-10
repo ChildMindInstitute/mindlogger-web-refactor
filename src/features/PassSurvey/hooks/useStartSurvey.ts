@@ -33,6 +33,8 @@ type OnActivityCardClickProps = {
   targetSubjectId: string | null;
   flowId: string | null;
   shouldRestart: boolean;
+  /** Fresh activity IDs fetched from the API at restart time, bypassing stale cache */
+  freshFlowActivityIds?: string[];
 };
 
 type Props = {
@@ -96,6 +98,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
     eventId,
     targetSubjectId,
     shouldRestart,
+    freshFlowActivityIds,
   }: OnActivityCardClickProps) {
     if (!applet) return;
 
@@ -140,7 +143,8 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
       const storedFlowActivityIds = (entityProgress as Record<string, unknown> | null)
         ?.flowActivityIds as string[] | undefined;
 
-      const resolvedActivityIds = flow?.activityIds ?? storedFlowActivityIds ?? [];
+      const resolvedActivityIds =
+        freshFlowActivityIds ?? flow?.activityIds ?? storedFlowActivityIds ?? [];
       const firstActivityId: string | null = resolvedActivityIds[0] ?? null;
 
       if (!firstActivityId) {
