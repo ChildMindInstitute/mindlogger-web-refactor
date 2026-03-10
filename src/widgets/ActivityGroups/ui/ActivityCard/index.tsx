@@ -180,46 +180,61 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     [isEntitySupported, startSurvey, activityListItem],
   );
 
+  const fetchFreshFlowData = useCallback(
+    async (flowId: string) => {
+      const appletId = context.applet.id;
+      const response = context.isPublic
+        ? await appletService.getPublicBaseDetailsByKey(context.publicAppletKey)
+        : await appletService.getBaseDetailsById(appletId);
+
+      const freshFlows = response.data.result.activityFlows;
+      const freshFlow = freshFlows.find((f) => f.id === flowId);
+
+      if (!freshFlow) {
+        // Flow was deleted — show alert and refresh the cached applet data
+        setIsFlowDeletedAlertOpen(true);
+
+        queryClient.setQueryData(
+          [
+            'appletBaseDetailsById',
+            context.isPublic
+              ? { isPublic: true, publicAppletKey: context.publicAppletKey }
+              : { isPublic: false, appletId },
+          ],
+          response,
+        );
+
+        void queryClient.invalidateQueries(['eventsByAppletId']);
+
+        return { deleted: true as const };
+      }
+
+      return { deleted: false as const, activityIds: freshFlow.activityIds };
+    },
+    [context, queryClient],
+  );
+
   const restartActivity = useCallback(async () => {
     const flowId = activityListItem.flowId;
 
-    // If this is a flow, check whether the admin has deleted it since the UI was last refreshed
-    if (flowId) {
-      try {
-        const appletId = context.applet.id;
-        const response = context.isPublic
-          ? await appletService.getPublicBaseDetailsByKey(context.publicAppletKey)
-          : await appletService.getBaseDetailsById(appletId);
+    const freshResult = flowId
+      ? await fetchFreshFlowData(flowId).catch(() => undefined)
+      : undefined;
 
-        const freshFlows = response.data.result.activityFlows;
-        const flowStillExists = freshFlows.some((f) => f.id === flowId);
+    if (freshResult?.deleted) return;
 
-        if (!flowStillExists) {
-          // Flow was deleted — show alert and refresh the cached applet data
-          setIsFlowDeletedAlertOpen(true);
-
-          // Update react-query cache so UI re-renders with fresh data after modal closes
-          queryClient.setQueryData(
-            [
-              'appletBaseDetailsById',
-              context.isPublic
-                ? { isPublic: true, publicAppletKey: context.publicAppletKey }
-                : { isPublic: false, appletId },
-            ],
-            response,
-          );
-
-          // Also invalidate events since the flow's schedule event was deleted too
-          void queryClient.invalidateQueries(['eventsByAppletId']);
-
-          return;
-        }
-      } catch {
-        // If the check fails, proceed with restart as normal
-      }
+    if (!isEntitySupported) {
+      return openStoreLink();
     }
 
-    startActivity(true);
+    startSurvey({
+      activityId: activityListItem.activityId,
+      eventId: activityListItem.eventId,
+      targetSubjectId: activityListItem.targetSubject?.id ?? null,
+      flowId: activityListItem.flowId,
+      shouldRestart: true,
+      freshFlowActivityIds: freshResult?.activityIds,
+    });
 
     Mixpanel.track(
       addSurveyPropsToEvent(
@@ -231,7 +246,16 @@ export const ActivityCard = ({ activityListItem }: Props) => {
         },
       ),
     );
-  }, [activityListItem.flowId, activityListItem.activityId, context, queryClient, startActivity]);
+  }, [
+    activityListItem.flowId,
+    activityListItem.activityId,
+    activityListItem.eventId,
+    activityListItem.targetSubject?.id,
+    context,
+    isEntitySupported,
+    startSurvey,
+    fetchFreshFlowData,
+  ]);
 
   const resumeActivity = () => {
     startActivity(false);
