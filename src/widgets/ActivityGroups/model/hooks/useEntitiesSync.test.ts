@@ -17,12 +17,17 @@ import {
 const mockSaveGroupProgress = vi.fn();
 const mockGetGroupProgress = vi.fn();
 
+const mockRemoveActivityProgress = vi.fn();
+
 vi.mock('~/entities/applet', () => ({
   appletModel: {
     hooks: {
       useGroupProgressStateManager: () => ({
         saveGroupProgress: mockSaveGroupProgress,
         getGroupProgress: mockGetGroupProgress,
+      }),
+      useActivityProgress: () => ({
+        removeActivityProgress: mockRemoveActivityProgress,
       }),
     },
   },
@@ -105,7 +110,7 @@ describe('useEntitiesSync', () => {
       );
     });
 
-    it('should use local progress when local is ahead of server', () => {
+    it('should use server progress when local is ahead but from an older execution (different submitId)', () => {
       const localProgress: GroupProgress = {
         ...baseFlowProgress,
         pipelineActivityOrder: 2,
@@ -138,7 +143,113 @@ describe('useEntitiesSync', () => {
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
+      // Server has a newer execution — local stale progress should be replaced
+      expect(mockSaveGroupProgress).toHaveBeenCalledWith(
+        expect.objectContaining({
+          progressPayload: expect.objectContaining({
+            pipelineActivityOrder: 1,
+            submitId: 'server-submit-id',
+          }),
+        }),
+      );
+
+      // Old activity progress should be cleared
+      expect(mockRemoveActivityProgress).toHaveBeenCalledWith({
+        activityId: mockActivityId1,
+        eventId: mockFlowEvent.id,
+        targetSubjectId: null,
+      });
+    });
+
+    it('should use local progress when local is ahead and genuinely newer (started after server)', () => {
+      const localProgress: GroupProgress = {
+        ...baseFlowProgress,
+        pipelineActivityOrder: 2,
+        startAt: new Date('2020-03-01T00:00:00').getTime(),
+        endAt: null,
+        context: { summaryData: {} },
+        event: mockFlowEvent,
+      };
+      mockGetGroupProgress.mockReturnValue(localProgress);
+
+      const serverCompletedEntities: EntitiesSyncProps = {
+        completedEntities: {
+          id: mockAppletId,
+          version: '1.0.0',
+          activities: [],
+          activityFlows: [
+            {
+              ...baseCompletedEntity,
+              id: mockFlowId1,
+              scheduledEventId: mockFlowEvent.id,
+              isFlowCompleted: false,
+              activityFlowOrder: 1,
+            },
+          ],
+        },
+        respondentSubjectId: null,
+        events: [mockFlowEvent],
+        activityFlows: mockFlows,
+        flowResumeEnabled: true,
+      };
+      renderHook(() => useEntitiesSync(serverCompletedEntities));
+
+      // Local started after server's endTime — local is genuinely newer, keep it
       expect(mockSaveGroupProgress).not.toHaveBeenCalled();
+    });
+
+    // Restart bug scenario (M2-10471): after a flow is completed and then restarted, the backend
+    // (with the companion fix) returns the new in-progress execution. Without clearing endAt in
+    // flowRestarted, the stale endAt from the prior completion causes this sync to be skipped.
+    it('should accept server in-progress entity even when local has stale endAt from a prior completion', () => {
+      // Simulates a device that has just restarted the flow: flowRestarted set a new submitId and
+      // pipelineActivityOrder=0 but (before the fix) left endAt from the previous completion.
+      const priorCompletionTime = new Date('2020-02-01T00:00:00').getTime();
+      const localProgress: GroupProgress = {
+        ...baseFlowProgress,
+        submitId: 'new-restart-submit-id',
+        pipelineActivityOrder: 0,
+        startAt: new Date('2020-02-05T00:00:00').getTime(),
+        endAt: priorCompletionTime, // stale — not cleared by flowRestarted before the fix
+        context: { summaryData: {} },
+        event: mockFlowEvent,
+      };
+      mockGetGroupProgress.mockReturnValue(localProgress);
+
+      // Server returns the same new in-progress execution at order 1
+      const serverCompletedEntities: EntitiesSyncProps = {
+        completedEntities: {
+          id: mockAppletId,
+          version: '1.0.0',
+          activities: [],
+          activityFlows: [
+            {
+              ...baseCompletedEntity,
+              id: mockFlowId1,
+              submitId: 'new-restart-submit-id',
+              scheduledEventId: mockFlowEvent.id,
+              isFlowCompleted: false,
+              activityFlowOrder: 1,
+              endTime: new Date('2020-02-06T00:00:00').getTime(),
+            },
+          ],
+        },
+        respondentSubjectId: null,
+        events: [mockFlowEvent],
+        activityFlows: mockFlows,
+        flowResumeEnabled: true,
+      };
+      renderHook(() => useEntitiesSync(serverCompletedEntities));
+
+      // Server is ahead (order 1 > 0) — sync must apply regardless of local endAt
+      expect(mockSaveGroupProgress).toHaveBeenCalledWith(
+        expect.objectContaining({
+          progressPayload: expect.objectContaining({
+            pipelineActivityOrder: 1,
+            endAt: null,
+          }),
+        }),
+      );
     });
 
     it('should use local progress when local is at the same position as server', () => {

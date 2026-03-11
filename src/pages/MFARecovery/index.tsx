@@ -19,9 +19,14 @@ function MFARecoveryPage() {
   // Get MFA session from Redux (blacklisted from persistence)
   const mfaSession = useSelector(selectMFASession);
 
-  const { onLoginSuccess } = userModel.hooks.useOnLogin({
-    backRedirectPath: location.state?.backRedirectPath as string,
-  });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- location.state is untyped in React Router
+  const backRedirectPath =
+    typeof location.state?.backRedirectPath === 'string'
+      ? location.state.backRedirectPath
+      : undefined;
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- useOnLogin hook needs proper return type annotation
+  const { onLoginSuccess } = userModel.hooks.useOnLogin({ backRedirectPath });
 
   // Route guard: redirect to login if no session
   useEffect(() => {
@@ -39,20 +44,33 @@ function MFARecoveryPage() {
    * Memoized with useCallback to ensure stable reference for useMFAVerification dependency.
    */
   const handleRecoverySuccess = useCallback(
-    (result: { user: { id: string; firstName: string; lastName: string; email: string } }) => {
+    (result: {
+      user: { id: string; firstName: string; lastName: string; email: string };
+      mfaUsed: boolean;
+      mfaMethod: 'Authenticator App' | 'Backup Codes';
+    }) => {
       // Clear MFA session after successful verification
       dispatch(mfaActions.clearMFASession());
 
       // Tokens already stored by useMFAVerification, just complete login
-      onLoginSuccess({ user: result.user });
+      onLoginSuccess({
+        user: result.user,
+        mfaUsed: result.mfaUsed,
+        mfaMethod: result.mfaMethod,
+      });
     },
     [dispatch, onLoginSuccess],
   );
 
   const handleSwitchToTOTP = useCallback(() => {
     // MFA session persists in Redux, no need to pass state
+    const backRedirectPath =
+      typeof location.state?.backRedirectPath === 'string'
+        ? (location.state.backRedirectPath as string)
+        : undefined;
+
     navigate(ROUTES.verifyMFA.path, {
-      state: { backRedirectPath: location.state?.backRedirectPath },
+      state: { backRedirectPath },
     });
   }, [navigate, location.state?.backRedirectPath]);
 

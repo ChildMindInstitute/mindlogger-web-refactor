@@ -5,6 +5,7 @@ import ROUTES from '~/shared/constants/routes';
 import {
   Mixpanel,
   MixpanelEventType,
+  MixpanelProps,
   secureTokensStorage,
   useCustomNavigation,
   useEncryption,
@@ -36,6 +37,11 @@ type OnLoginSuccessParams = {
     refreshToken: string;
     tokenType: string;
   };
+  /**
+   * MFA context for analytics tracking
+   */
+  mfaUsed?: boolean;
+  mfaMethod?: 'Authenticator App' | 'Backup Codes' | null;
 };
 
 /**
@@ -50,7 +56,7 @@ export const useOnLogin = (params: Params) => {
   const { setUser } = useUserState();
   const { generateUserPrivateKey } = useEncryption();
 
-  const onLoginSuccess = ({ user, tokens }: OnLoginSuccessParams) => {
+  const onLoginSuccess = ({ user, tokens, mfaUsed, mfaMethod }: OnLoginSuccessParams) => {
     // For non-MFA login: derive and store private key
     // For MFA login: private key is already stored (derived before MFA verification)
     if (user.password) {
@@ -75,7 +81,12 @@ export const useOnLogin = (params: Params) => {
     if (params.backRedirectPath !== undefined) {
       navigate(params.backRedirectPath, { replace: true });
     } else {
-      Mixpanel.track({ action: MixpanelEventType.LoginSuccessful });
+      Mixpanel.track({
+        action: MixpanelEventType.LoginSuccessful,
+        [MixpanelProps.MFAUsed]: mfaUsed ?? false,
+        [MixpanelProps.MFAMethodUsed]: mfaMethod ?? null,
+        [MixpanelProps.UserId]: user.id,
+      });
       Mixpanel.login(user.id);
       navigate(ROUTES.appletList.path);
       FeatureFlags.login(user.id);
