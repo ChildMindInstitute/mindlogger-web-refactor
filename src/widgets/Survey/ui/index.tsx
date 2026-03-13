@@ -53,18 +53,14 @@ export const SurveyWidget = (props: Props) => {
 
   const { removeAllBanners, addSuccessBanner } = useBanners();
 
-  // Read stored version from GroupProgress for version-aware activity fetch.
-  // This is needed before useSurveyDataQuery so deleted activities can be
-  // fetched from history using the version stored when the flow started.
-  // When shouldRestart is true, ignore the stored version — the user is starting fresh
-  // and should get the current/latest activity version, not the stale one from when the
-  // flow was originally started.
+  // Use stored version only for in-progress entities; skip for restarts or completed attempts.
   const entityProgressId = getProgressId(flowId ?? activityId, eventId, targetSubjectId);
   const storedAppletVersion = useAppSelector((state) => {
     if (shouldRestart) return undefined;
     if (!entityProgressId) return undefined;
     const progress = appletModel.selectors.selectGroupProgress(state, entityProgressId);
-    return progress?.appletVersion;
+    if (!progress || progress.endAt) return undefined;
+    return progress.appletVersion;
   });
 
   const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
