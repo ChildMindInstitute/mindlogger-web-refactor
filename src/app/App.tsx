@@ -14,6 +14,7 @@ import { FeatureFlags } from '~/shared/utils/featureFlags';
 
 const isProduction = import.meta.env.VITE_ENV === 'prod';
 const isUat = import.meta.env.VITE_ENV === 'uat';
+const isDev = import.meta.env.VITE_ENV === 'dev';
 
 if (import.meta.env.VITE_DD_CLIENT_TOKEN) {
   datadogLogs.init({
@@ -30,7 +31,7 @@ if (import.meta.env.VITE_DD_CLIENT_TOKEN) {
 if (
   import.meta.env.VITE_DD_APP_ID &&
   import.meta.env.VITE_DD_CLIENT_TOKEN &&
-  (isUat || isProduction)
+  (isUat || isProduction || isDev)
 ) {
   datadogRum.init({
     applicationId: import.meta.env.VITE_DD_APP_ID,
@@ -49,6 +50,7 @@ if (
     trackLongTasks: true,
     trackUserInteractions: false,
     allowedTracingUrls: [
+      (url) => url.indexOf('api-dev.cmiml.net') > -1,
       (url) => url.indexOf('api-uat.cmiml.net') > -1,
       (url) => url.indexOf('api-v2.gettingcurious.com') > -1,
     ],
