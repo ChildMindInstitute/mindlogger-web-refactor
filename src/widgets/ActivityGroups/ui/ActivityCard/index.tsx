@@ -47,6 +47,8 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   const context = useContext(AppletDetailsContext);
   const queryClient = useQueryClient();
   const [isFlowDeletedAlertOpen, setIsFlowDeletedAlertOpen] = useState(false);
+  const [isActivityDeletedAlertOpen, setIsActivityDeletedAlertOpen] = useState(false);
+  const [pendingFreshResponse, setPendingFreshResponse] = useState<unknown>(null);
 
   const {
     title,
@@ -165,20 +167,34 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     }
 
     const flowId = activityListItem.flowId;
-    const freshResult = flowId
-      ? await fetchFreshFlowData(flowId).catch(() => undefined)
-      : undefined;
 
-    if (freshResult?.deleted) return;
+    if (flowId) {
+      const freshResult = await fetchFreshEntityData(flowId, 'flow').catch(() => undefined);
+      if (!freshResult || freshResult.deleted) return;
 
-    startSurvey({
-      activityId: activityListItem.activityId,
-      eventId: activityListItem.eventId,
-      targetSubjectId: activityListItem.targetSubject?.id ?? null,
-      flowId,
-      shouldRestart: false,
-      freshFlowActivityIds: freshResult?.activityIds,
-    });
+      startSurvey({
+        activityId: activityListItem.activityId,
+        eventId: activityListItem.eventId,
+        targetSubjectId: activityListItem.targetSubject?.id ?? null,
+        flowId,
+        shouldRestart: false,
+        freshFlowActivityIds: freshResult.activityIds,
+      });
+    } else {
+      // For standalone activities, check if the activity still exists
+      const freshResult = await fetchFreshEntityData(activityListItem.activityId, 'activity').catch(
+        () => undefined,
+      );
+      if (!freshResult || freshResult.deleted) return;
+
+      startSurvey({
+        activityId: activityListItem.activityId,
+        eventId: activityListItem.eventId,
+        targetSubjectId: activityListItem.targetSubject?.id ?? null,
+        flowId: null,
+        shouldRestart: false,
+      });
+    }
   };
 
   const startActivity = useCallback(
@@ -198,20 +214,24 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     [isEntitySupported, startSurvey, activityListItem],
   );
 
-  const fetchFreshFlowData = useCallback(
-    async (flowId: string) => {
+  const fetchFreshEntityData = useCallback(
+    async (entityId: string, entityType: 'flow' | 'activity') => {
       const appletId = context.applet.id;
       const response = context.isPublic
         ? await appletService.getPublicBaseDetailsByKey(context.publicAppletKey)
         : await appletService.getBaseDetailsById(appletId);
 
-      const freshFlows = response.data.result.activityFlows;
-      const freshFlow = freshFlows.find((f) => f.id === flowId);
+      if (entityType === 'flow') {
+        const freshFlow = response.data.result.activityFlows.find((f) => f.id === entityId);
 
-      if (!freshFlow) {
-        // Flow was deleted — show alert and refresh the cached applet data
-        setIsFlowDeletedAlertOpen(true);
+        if (!freshFlow) {
+          // Stash the response — apply to cache only when user dismisses the modal
+          setPendingFreshResponse(response);
+          setIsFlowDeletedAlertOpen(true);
+          return { deleted: true as const, activityIds: undefined };
+        }
 
+        // Entity still exists — safe to refresh cache immediately
         queryClient.setQueryData(
           [
             'appletBaseDetailsById',
@@ -222,24 +242,65 @@ export const ActivityCard = ({ activityListItem }: Props) => {
           response,
         );
 
-        void queryClient.invalidateQueries(['eventsByAppletId']);
+        return { deleted: false as const, activityIds: freshFlow.activityIds };
+      } else {
+        const freshActivity = response.data.result.activities.find((a) => a.id === entityId);
 
-        return { deleted: true as const };
+        if (!freshActivity) {
+          // Stash the response — apply to cache only when user dismisses the modal
+          setPendingFreshResponse(response);
+          setIsActivityDeletedAlertOpen(true);
+          return { deleted: true as const, activityIds: undefined };
+        }
+
+        // Entity still exists — safe to refresh cache immediately
+        queryClient.setQueryData(
+          [
+            'appletBaseDetailsById',
+            context.isPublic
+              ? { isPublic: true, publicAppletKey: context.publicAppletKey }
+              : { isPublic: false, appletId },
+          ],
+          response,
+        );
+
+        return { deleted: false as const, activityIds: undefined };
       }
-
-      return { deleted: false as const, activityIds: freshFlow.activityIds };
     },
     [context, queryClient],
   );
+
+  const dismissDeletedEntityAlert = useCallback(() => {
+    setIsFlowDeletedAlertOpen(false);
+    setIsActivityDeletedAlertOpen(false);
+
+    // Now apply the stashed fresh response to the cache so the card disappears
+    if (pendingFreshResponse) {
+      const appletId = context.applet.id;
+
+      queryClient.setQueryData(
+        [
+          'appletBaseDetailsById',
+          context.isPublic
+            ? { isPublic: true, publicAppletKey: context.publicAppletKey }
+            : { isPublic: false, appletId },
+        ],
+        pendingFreshResponse,
+      );
+
+      void queryClient.invalidateQueries(['eventsByAppletId']);
+      setPendingFreshResponse(null);
+    }
+  }, [pendingFreshResponse, context, queryClient]);
 
   const restartActivity = useCallback(async () => {
     const flowId = activityListItem.flowId;
 
     const freshResult = flowId
-      ? await fetchFreshFlowData(flowId).catch(() => undefined)
+      ? await fetchFreshEntityData(flowId, 'flow').catch(() => undefined)
       : undefined;
 
-    if (freshResult?.deleted) return;
+    if (!freshResult || freshResult.deleted) return;
 
     if (!isEntitySupported) {
       return openStoreLink();
@@ -251,7 +312,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
       targetSubjectId: activityListItem.targetSubject?.id ?? null,
       flowId: activityListItem.flowId,
       shouldRestart: true,
-      freshFlowActivityIds: freshResult?.activityIds,
+      freshFlowActivityIds: freshResult.activityIds,
     });
 
     Mixpanel.track(
@@ -272,7 +333,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     context,
     isEntitySupported,
     startSurvey,
-    fetchFreshFlowData,
+    fetchFreshEntityData,
   ]);
 
   const resumeActivity = () => {
@@ -354,7 +415,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
       <MuiModal
         testId="flow-deleted-alert-modal"
         isOpen={isFlowDeletedAlertOpen}
-        onHide={() => setIsFlowDeletedAlertOpen(false)}
+        onHide={dismissDeletedEntityAlert}
         title={t('additional.flow_deleted_title')}
         titleProps={{
           fontWeight: '400',
@@ -366,7 +427,30 @@ export const ActivityCard = ({ activityListItem }: Props) => {
           </Text>
         }
         footerPrimaryButton={t('additional.okay')}
-        onPrimaryButtonClick={() => setIsFlowDeletedAlertOpen(false)}
+        onPrimaryButtonClick={dismissDeletedEntityAlert}
+        footerWrapperSXProps={{
+          marginLeft: 'auto',
+          marginTop: 2,
+        }}
+        maxWidth="sm"
+      />
+
+      <MuiModal
+        testId="activity-deleted-alert-modal"
+        isOpen={isActivityDeletedAlertOpen}
+        onHide={dismissDeletedEntityAlert}
+        title={t('additional.activity_deleted_title')}
+        titleProps={{
+          fontWeight: '400',
+          marginY: 2,
+        }}
+        labelComponent={
+          <Text color={variables.palette.onSurface} sx={{ textTransform: 'none' }}>
+            {t('additional.activity_deleted_body')}
+          </Text>
+        }
+        footerPrimaryButton={t('additional.okay')}
+        onPrimaryButtonClick={dismissDeletedEntityAlert}
         footerWrapperSXProps={{
           marginLeft: 'auto',
           marginTop: 2,
