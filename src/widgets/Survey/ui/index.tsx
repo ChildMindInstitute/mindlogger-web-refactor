@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { subMonths } from 'date-fns';
 
@@ -55,13 +55,21 @@ export const SurveyWidget = (props: Props) => {
 
   // Use stored version only for in-progress entities; skip for restarts or completed attempts.
   const entityProgressId = getProgressId(flowId ?? activityId, eventId, targetSubjectId);
-  const storedAppletVersion = useAppSelector((state) => {
+  const liveAppletVersion = useAppSelector((state) => {
     if (shouldRestart) return undefined;
     if (!entityProgressId) return undefined;
     const progress = appletModel.selectors.selectGroupProgress(state, entityProgressId);
     if (!progress || progress.endAt) return undefined;
     return progress.appletVersion;
   });
+
+  // Latch the version once resolved so it stays stable even after the entity
+  // is completed mid-survey (entityCompleted sets endAt, which would clear it).
+  const versionRef = useRef<string | undefined>(liveAppletVersion);
+  if (liveAppletVersion && !versionRef.current) {
+    versionRef.current = liveAppletVersion;
+  }
+  const storedAppletVersion = versionRef.current;
 
   const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: props.flowId ?? props.activityId,

@@ -46,18 +46,26 @@ export class ListItemsFactory {
     }
 
     if (!activity) {
-      // For deleted flows, the activity may not exist in the current applet version
-      if (activityEvent.isDeletedFlow) {
-        item.activityId = '';
+      // The activity may not exist in the current applet version when:
+      // 1. The flow is a "deleted flow" (reconstructed from stored progress)
+      // 2. The flow still exists but its activities were deleted from admin
+      // In both cases, preserve the real activity ID from progress so resume
+      // can fetch the activity by its stored version.
+      if (isInProgress && progressRecord) {
+        item.activityId = progressRecord.currentActivityId;
         item.activityFlowDetails.activityPositionInFlow = position;
         item.name = activityFlow.name;
         item.description = activityFlow.description;
         return;
       }
 
-      throw new Error(
-        '[ListItemsFactory:populateActivityFlowFields] Activity not found in activities list',
-      );
+      // Flow exists but its activities were removed (or it's a fully deleted flow).
+      // Render the card with the flow's own name/description and an empty activityId.
+      item.activityId = '';
+      item.activityFlowDetails.activityPositionInFlow = position;
+      item.name = activityFlow.name;
+      item.description = activityFlow.description;
+      return;
     }
 
     item.activityId = activity.id;
