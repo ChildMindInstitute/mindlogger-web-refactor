@@ -12,6 +12,7 @@ const targetSubjectId = null;
 const appletVersion = '1.0.0';
 const flowActivityIds = ['activity-first', 'activity-1', 'activity-2'];
 const flowName = 'Test Flow';
+const appletId = 'applet-1';
 
 const progressId = getProgressId(flowId, eventId, targetSubjectId);
 
@@ -53,6 +54,7 @@ describe('flowRestarted reducer', () => {
         targetSubjectId,
         activityId: firstActivityId,
         appletVersion,
+        appletId,
         flowActivityIds,
         flowName,
       }),
@@ -70,6 +72,7 @@ describe('flowRestarted reducer', () => {
         targetSubjectId,
         activityId: firstActivityId,
         appletVersion,
+        appletId,
         flowActivityIds,
         flowName,
       }),
@@ -89,6 +92,7 @@ describe('flowRestarted reducer', () => {
         targetSubjectId,
         activityId: firstActivityId,
         appletVersion,
+        appletId,
         flowActivityIds,
         flowName,
       }),
@@ -106,6 +110,7 @@ describe('flowRestarted reducer', () => {
         targetSubjectId,
         activityId: firstActivityId,
         appletVersion,
+        appletId,
         flowActivityIds,
         flowName,
       }),
@@ -126,6 +131,7 @@ describe('flowRestarted reducer', () => {
         targetSubjectId,
         activityId: firstActivityId,
         appletVersion,
+        appletId,
         flowActivityIds,
         flowName,
       }),
@@ -143,6 +149,7 @@ describe('flowRestarted reducer', () => {
         targetSubjectId,
         activityId: firstActivityId,
         appletVersion,
+        appletId,
         flowActivityIds,
         flowName,
       }),
@@ -161,6 +168,7 @@ describe('flowRestarted reducer', () => {
         targetSubjectId: null,
         activityId: firstActivityId,
         appletVersion,
+        appletId,
         flowActivityIds,
         flowName,
       }),

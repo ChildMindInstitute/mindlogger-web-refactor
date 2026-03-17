@@ -56,6 +56,8 @@ export type ProgressContext = {
 export type ActivityOrFlowProgress = {
   context: ProgressContext;
   event: ScheduleEventDto | null;
+  // Applet this progress entry belongs to (used to prevent cross-applet leaking)
+  appletId?: string;
 } & (FlowProgress | ActivityProgress);
 
 export type EventProgressTimestampState = {

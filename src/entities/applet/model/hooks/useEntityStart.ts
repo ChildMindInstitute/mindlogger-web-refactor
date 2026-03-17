@@ -23,6 +23,7 @@ export const useEntityStart = () => {
     event: ScheduleEventDto,
     targetSubjectId: string | null,
     appletVersion: string,
+    appletId: string,
   ): void {
     dispatch(
       actions.activityStarted({
@@ -30,6 +31,7 @@ export const useEntityStart = () => {
         event,
         targetSubjectId,
         appletVersion,
+        appletId,
       }),
     );
   }
@@ -43,6 +45,7 @@ export const useEntityStart = () => {
     appletVersion: string,
     flowActivityIds: string[],
     flowName: string,
+    appletId: string,
   ): void {
     dispatch(
       actions.flowStarted({
@@ -54,6 +57,7 @@ export const useEntityStart = () => {
         appletVersion,
         flowActivityIds,
         flowName,
+        appletId,
       }),
     );
   }
@@ -63,6 +67,7 @@ export const useEntityStart = () => {
     event: ScheduleEventDto,
     targetSubjectId: string | null,
     appletVersion: string,
+    appletId: string,
   ): void {
     const groupProgress = getProgress(activityId, event.id, targetSubjectId);
 
@@ -70,7 +75,7 @@ export const useEntityStart = () => {
       return;
     }
 
-    return activityStarted(activityId, event, targetSubjectId, appletVersion);
+    return activityStarted(activityId, event, targetSubjectId, appletVersion, appletId);
   }
 
   function startFlow(
@@ -78,6 +83,7 @@ export const useEntityStart = () => {
     flow: ActivityFlowDTO,
     targetSubjectId: string | null,
     appletVersion: string,
+    appletId: string,
   ): void {
     const flowId = flow.id;
 
@@ -106,6 +112,7 @@ export const useEntityStart = () => {
       appletVersion,
       flow.activityIds,
       flow.name,
+      appletId,
     );
   }
 

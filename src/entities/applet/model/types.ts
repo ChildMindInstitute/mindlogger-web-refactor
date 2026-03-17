@@ -266,11 +266,13 @@ export type InProgressFlow = {
 export type ActivityStartedPayload = {
   event: ScheduleEventDto;
   appletVersion: string;
+  appletId: string;
 } & Omit<InProgressActivity, 'eventId'>;
 
 export type FlowStartedPayload = {
   event: ScheduleEventDto;
   appletVersion: string;
+  appletId: string;
   flowActivityIds: string[];
   flowName: string;
 } & Omit<InProgressFlow, 'eventId'>;
@@ -281,6 +283,7 @@ export type FlowRestartedPayload = {
   targetSubjectId: string | null;
   activityId: string;
   appletVersion: string;
+  appletId: string;
   flowActivityIds: string[];
   flowName: string;
 };

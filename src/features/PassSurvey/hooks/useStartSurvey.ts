@@ -164,6 +164,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
           targetSubjectId,
           activityId: firstActivityId,
           appletVersion: applet.version,
+          appletId: applet.id,
           flowActivityIds: resolvedActivityIds,
           flowName:
             flow?.name ??

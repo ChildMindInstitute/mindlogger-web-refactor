@@ -130,6 +130,12 @@ const createActivityGroupsBuildManager = () => {
 
       // If entity not found, check if it's a deleted flow with stored metadata
       if (!entity && groupProgressItem.type === ActivityPipelineType.Flow) {
+        // If we know which applet this progress belongs to and it's not the current applet,
+        // skip it — it's from another applet, not a deleted flow in this one
+        if (groupProgressItem.appletId && groupProgressItem.appletId !== params.applet.id) {
+          continue;
+        }
+
         const flowProgress = groupProgressItem as FlowProgress;
         if (flowProgress.flowActivityIds) {
           entity = {

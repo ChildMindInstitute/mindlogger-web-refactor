@@ -309,6 +309,7 @@ const appletsSlice = createSlice({
         endAt: null,
         submitId: uuidV4(),
         appletVersion: payload.appletVersion,
+        appletId: payload.appletId,
         context: {
           summaryData: {},
         },
@@ -329,6 +330,7 @@ const appletsSlice = createSlice({
         submitId: uuidV4(),
         pipelineActivityOrder: payload.pipelineActivityOrder,
         appletVersion: payload.appletVersion,
+        appletId: payload.appletId,
         flowActivityIds: payload.flowActivityIds,
         flowName: payload.flowName,
         context: {
@@ -381,6 +383,8 @@ const appletsSlice = createSlice({
         groupProgress.appletVersion = payload.appletVersion;
         groupProgress.flowActivityIds = payload.flowActivityIds;
         groupProgress.flowName = payload.flowName;
+        // Ensure appletId is set on restart
+        state.groupProgress[id].appletId = payload.appletId;
       }
     },
 

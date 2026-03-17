@@ -82,7 +82,7 @@ const WelcomeScreen = () => {
     const event = groupProgress?.event ?? context.event;
 
     if (context.flow && !isGroupStarted) {
-      startFlow(event, context.flow, targetSubjectId, context.appletVersion);
+      startFlow(event, context.flow, targetSubjectId, context.appletVersion, context.appletId);
     }
 
     // Only start a standalone activity if we're NOT in a flow context.
@@ -90,7 +90,13 @@ const WelcomeScreen = () => {
     // differs from context.activityId, indicating a flow-type entity.
     const isFlowContext = context.entityId !== context.activityId;
     if (!context.flow && !isFlowContext) {
-      startActivity(context.activityId, event, targetSubjectId, context.appletVersion);
+      startActivity(
+        context.activityId,
+        event,
+        targetSubjectId,
+        context.appletVersion,
+        context.appletId,
+      );
     }
 
     return setInitialProgress({
@@ -101,6 +107,7 @@ const WelcomeScreen = () => {
   }, [
     context.activity,
     context.activityId,
+    context.appletId,
     context.appletVersion,
     context.entityId,
     context.event,

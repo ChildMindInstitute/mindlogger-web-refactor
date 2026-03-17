@@ -13,6 +13,7 @@ import {
 } from '~/shared/api';
 
 export type EntitiesSyncProps = {
+  appletId: string;
   completedEntities: CompletedEntitiesDTO | undefined;
   respondentSubjectId: string | null;
   events: ScheduleEventDto[];
@@ -23,6 +24,7 @@ export type EntitiesSyncProps = {
 };
 
 export const useEntitiesSync = ({
+  appletId,
   completedEntities,
   respondentSubjectId,
   events,
@@ -165,6 +167,7 @@ export const useEntitiesSync = ({
             appletVersion: entity.version,
             flowActivityIds,
             flowName,
+            appletId,
             startAt: groupProgress?.startAt ?? entity.startTime,
             endAt: null,
             context: groupProgress?.context ?? { summaryData: {} },
@@ -187,6 +190,7 @@ export const useEntitiesSync = ({
                 currentActivityId: '',
                 pipelineActivityOrder,
                 submitId: entity.submitId,
+                appletId,
                 startAt: entity.startTime,
                 endAt: entity.endTime,
                 context: { summaryData: {} },
@@ -195,6 +199,7 @@ export const useEntitiesSync = ({
             : {
                 type: ActivityPipelineType.Regular,
                 submitId: entity.submitId,
+                appletId,
                 startAt: entity.startTime,
                 endAt: entity.endTime,
                 context: { summaryData: {} },
@@ -246,6 +251,7 @@ export const useEntitiesSync = ({
               currentActivityId: '',
               pipelineActivityOrder,
               submitId: entity.submitId,
+              appletId,
               startAt: entity.startTime,
               endAt: entity.endTime,
               event,
@@ -254,6 +260,7 @@ export const useEntitiesSync = ({
               ...groupProgress,
               type: ActivityPipelineType.Regular,
               submitId: entity.submitId,
+              appletId,
               startAt: entity.startTime,
               endAt: entity.endTime,
               event,
@@ -261,7 +268,14 @@ export const useEntitiesSync = ({
       });
       return true;
     },
-    [respondentSubjectId, events, activityFlows, saveGroupProgress, removeActivityProgress],
+    [
+      respondentSubjectId,
+      events,
+      activityFlows,
+      saveGroupProgress,
+      removeActivityProgress,
+      appletId,
+    ],
   );
 
   // Legacy sync logic before flow resume was implemented (#690). Used when flow resume is disabled.
@@ -295,6 +309,7 @@ export const useEntitiesSync = ({
             startAt: null,
             endAt: endAtTimestamp,
             submitId: uuidV4(),
+            appletId,
             context: {
               summaryData: {},
             },
@@ -316,13 +331,14 @@ export const useEntitiesSync = ({
           targetSubjectId,
           progressPayload: {
             ...groupProgress,
+            appletId,
             endAt,
             event,
           },
         });
       }
     },
-    [respondentSubjectId, events, saveGroupProgress],
+    [respondentSubjectId, events, saveGroupProgress, appletId],
   );
 
   const [changes, setChanges] = useState<string[]>([]);
