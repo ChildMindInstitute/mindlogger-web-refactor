@@ -296,24 +296,37 @@ export const ActivityCard = ({ activityListItem }: Props) => {
   const restartActivity = useCallback(async () => {
     const flowId = activityListItem.flowId;
 
-    const freshResult = flowId
-      ? await fetchFreshEntityData(flowId, 'flow').catch(() => undefined)
-      : undefined;
-
-    if (!freshResult || freshResult.deleted) return;
-
     if (!isEntitySupported) {
       return openStoreLink();
     }
 
-    startSurvey({
-      activityId: activityListItem.activityId,
-      eventId: activityListItem.eventId,
-      targetSubjectId: activityListItem.targetSubject?.id ?? null,
-      flowId: activityListItem.flowId,
-      shouldRestart: true,
-      freshFlowActivityIds: freshResult.activityIds,
-    });
+    if (flowId) {
+      const freshResult = await fetchFreshEntityData(flowId, 'flow').catch(() => undefined);
+      if (!freshResult || freshResult.deleted) return;
+
+      startSurvey({
+        activityId: activityListItem.activityId,
+        eventId: activityListItem.eventId,
+        targetSubjectId: activityListItem.targetSubject?.id ?? null,
+        flowId,
+        shouldRestart: true,
+        freshFlowActivityIds: freshResult.activityIds,
+      });
+    } else {
+      // For standalone activities, check if the activity still exists
+      const freshResult = await fetchFreshEntityData(activityListItem.activityId, 'activity').catch(
+        () => undefined,
+      );
+      if (!freshResult || freshResult.deleted) return;
+
+      startSurvey({
+        activityId: activityListItem.activityId,
+        eventId: activityListItem.eventId,
+        targetSubjectId: activityListItem.targetSubject?.id ?? null,
+        flowId: null,
+        shouldRestart: true,
+      });
+    }
 
     Mixpanel.track(
       addSurveyPropsToEvent(
