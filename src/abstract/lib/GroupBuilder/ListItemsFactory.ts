@@ -60,8 +60,9 @@ export class ListItemsFactory {
       }
 
       // Flow exists but its activities were removed (or it's a fully deleted flow).
-      // Render the card with the flow's own name/description and an empty activityId.
-      item.activityId = '';
+      // Render the card with the flow's own name/description.
+      // Use the first known activity ID from the flow if available.
+      item.activityId = activityFlow.activityIds[0] ?? '';
       item.activityFlowDetails.activityPositionInFlow = position;
       item.name = activityFlow.name;
       item.description = activityFlow.description;

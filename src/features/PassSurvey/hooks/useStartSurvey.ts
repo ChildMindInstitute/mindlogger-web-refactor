@@ -1,3 +1,4 @@
+import { FlowProgress } from '~/abstract/lib';
 import { EntityType } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
 import { prolificParamsSelector } from '~/entities/applet/model/selectors';
@@ -140,8 +141,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
         eventId,
         targetSubjectId,
       });
-      const storedFlowActivityIds = (entityProgress as Record<string, unknown> | null)
-        ?.flowActivityIds as string[] | undefined;
+      const storedFlowActivityIds = (entityProgress as FlowProgress | null)?.flowActivityIds;
 
       const resolvedActivityIds =
         freshFlowActivityIds ?? flow?.activityIds ?? storedFlowActivityIds ?? [];

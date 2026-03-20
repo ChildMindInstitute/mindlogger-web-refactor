@@ -62,6 +62,7 @@ const WelcomeScreen = () => {
         flowName: context.flow?.name,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     context.shouldRestart,
     context.appletVersion,
@@ -70,7 +71,9 @@ const WelcomeScreen = () => {
     context.flow?.activityIds,
     context.flow?.name,
     targetSubjectId,
-    groupProgress,
+    groupProgress?.startAt,
+    groupProgress?.endAt,
+    groupProgress?.appletVersion,
     updateAppletVersion,
   ]);
 
