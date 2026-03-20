@@ -253,6 +253,9 @@ export default class AnswersConstructService implements ICompletionConstructServ
   private isSurveyCompleted(): boolean {
     // We use this flag to enforce the completion of the flow
     if (this.isFlowCompleted !== undefined) {
+      console.info(
+        `[DEBUG-FLOW] AnswersConstructService.isSurveyCompleted: forced by isFlowCompleted=${this.isFlowCompleted}`,
+      );
       return this.isFlowCompleted;
     }
 
@@ -269,7 +272,14 @@ export default class AnswersConstructService implements ICompletionConstructServ
         throw new Error('[AnswersConstructBuilder] Flow is not defined and no stored activity IDs');
       }
 
-      return storedActivityIds.length === this.groupProgress.pipelineActivityOrder + 1;
+      const result = storedActivityIds.length === this.groupProgress.pipelineActivityOrder + 1;
+      console.info(
+        `[DEBUG-FLOW] AnswersConstructService.isSurveyCompleted (deleted flow)\n` +
+          `  storedActivityIds.length=${storedActivityIds.length}\n` +
+          `  pipelineActivityOrder=${this.groupProgress.pipelineActivityOrder}\n` +
+          `  result=${result}`,
+      );
+      return result;
     }
 
     // Prefer stored activity IDs from when the flow was started (handles version changes)
@@ -278,7 +288,19 @@ export default class AnswersConstructService implements ICompletionConstructServ
 
     const pipelineActivityOrder = this.groupProgress.pipelineActivityOrder;
 
-    return activitiesInFlow === pipelineActivityOrder + 1;
+    const result = activitiesInFlow === pipelineActivityOrder + 1;
+    console.info(
+      `[DEBUG-FLOW] AnswersConstructService.isSurveyCompleted\n` +
+        `  storedActivityIds=${JSON.stringify(storedActivityIds ?? null)}\n` +
+        `  storedActivityIds.length=${storedActivityIds?.length ?? 'none'}\n` +
+        `  flow.activityIds.length=${this.flow.activityIds.length}\n` +
+        `  activitiesInFlow=${activitiesInFlow}\n` +
+        `  pipelineActivityOrder=${pipelineActivityOrder}\n` +
+        `  result (activitiesInFlow === order+1)=${result}\n` +
+        `  submitId=${this.groupProgress.submitId}\n` +
+        `  appletVersion=${this.appletVersion}`,
+    );
+    return result;
   }
 
   private getEventScheduledTime(): number | null {

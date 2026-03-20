@@ -28,6 +28,20 @@ export class ListItemsFactory {
     const effectiveActivityCount =
       progressRecord?.flowActivityIds?.length ?? activityFlow.activityIds.length;
 
+    console.info(
+      `[DEBUG-FLOW] ListItemsFactory: populateActivityFlowFields\n` +
+        `  flowId=${activityFlow.id}\n` +
+        `  flowName=${activityFlow.name}\n` +
+        `  isInProgress=${isInProgress}\n` +
+        `  progressRecord.submitId=${progressRecord?.submitId ?? 'none'}\n` +
+        `  progressRecord.pipelineActivityOrder=${progressRecord?.pipelineActivityOrder ?? 'none'}\n` +
+        `  progressRecord.flowActivityIds.length=${progressRecord?.flowActivityIds?.length ?? 'none'}\n` +
+        `  progressRecord.flowActivityIds=${JSON.stringify(progressRecord?.flowActivityIds ?? null)}\n` +
+        `  progressRecord.appletVersion=${progressRecord?.appletVersion ?? 'none'}\n` +
+        `  activityFlow.activityIds.length=${activityFlow.activityIds.length}\n` +
+        `  effectiveActivityCount=${effectiveActivityCount}`,
+    );
+
     item.activityFlowDetails = {
       showActivityFlowBadge: !activityFlow.hideBadge,
       activityFlowName: activityFlow.name,

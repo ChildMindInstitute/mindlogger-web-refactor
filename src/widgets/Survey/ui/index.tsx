@@ -71,6 +71,15 @@ export const SurveyWidget = (props: Props) => {
   }
   const storedAppletVersion = versionRef.current;
 
+  console.info(
+    `[DEBUG-FLOW] SurveyWidget render\n` +
+      `  activityId=${activityId}\n` +
+      `  flowId=${flowId}\n` +
+      `  shouldRestart=${shouldRestart}\n` +
+      `  liveAppletVersion=${liveAppletVersion ?? 'undefined'}\n` +
+      `  storedAppletVersion=${storedAppletVersion ?? 'undefined'}`,
+  );
+
   const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: props.flowId ?? props.activityId,
     eventId: props.eventId,
@@ -186,10 +195,29 @@ export const SurveyWidget = (props: Props) => {
     const shouldCheckRedirect =
       groupProgressChanged ||
       (hasFreshServerData && !!flowId && !!currentActivityId && currentActivityId !== activityId);
+
+    console.info(
+      `[DEBUG-FLOW] SurveyWidget redirect useEffect\n` +
+        `  flowResumeEnabled=${flowResumeEnabled}\n` +
+        `  isLoading=${isLoading}, isFetching=${isFetching}\n` +
+        `  groupProgressChanged=${groupProgressChanged}\n` +
+        `  hasFreshServerData=${hasFreshServerData}\n` +
+        `  shouldCheckRedirect=${shouldCheckRedirect}\n` +
+        `  currentActivityId=${currentActivityId ?? 'null'}\n` +
+        `  activityId (URL)=${activityId}\n` +
+        `  groupProgress.submitId=${groupProgress?.submitId ?? 'null'}\n` +
+        `  groupProgress.appletVersion=${groupProgress?.appletVersion ?? 'null'}\n` +
+        `  groupProgress.pipelineActivityOrder=${(groupProgress as FlowProgress)?.pipelineActivityOrder ?? 'null'}\n` +
+        `  groupProgress.flowActivityIds=${JSON.stringify((groupProgress as FlowProgress)?.flowActivityIds ?? null)}\n` +
+        `  groupProgress.endAt=${groupProgress?.endAt ?? 'null'}\n` +
+        `  shouldRestart=${shouldRestart}`,
+    );
+
     if (!shouldCheckRedirect) return;
 
     // If entity was completed on another device, redirect to activity list
     if (groupProgress?.endAt) {
+      console.info(`[DEBUG-FLOW] SurveyWidget redirect: entity completed, going to activity list`);
       addSuccessBanner(t('additional.activity_already_completed'));
       navigator.navigate(ROUTES.appletDetails.navigateTo(appletId), { replace: true });
       return;
@@ -197,6 +225,10 @@ export const SurveyWidget = (props: Props) => {
 
     // If flow progressed on another device and this is not a restart, redirect to latest activity
     if (!shouldRestart && currentActivityId && currentActivityId !== activityId) {
+      console.info(
+        `[DEBUG-FLOW] SurveyWidget redirect: activity mismatch, redirecting\n` +
+          `  from=${activityId} to=${currentActivityId}`,
+      );
       const navigateToProps = {
         appletId,
         activityId: currentActivityId,

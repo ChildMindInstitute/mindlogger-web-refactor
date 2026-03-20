@@ -65,6 +65,24 @@ export const useEntitiesSync = ({
       // Create or update resumable progress so user can continue where they left off
       // Skip this case when shouldRestart=true (user wants to start fresh, not resume)
       if (isFlow && entity.isFlowCompleted === false) {
+        console.info(
+          `[DEBUG-FLOW] syncEntity Case1: in-progress flow\n` +
+            `  entityId=${entityId}, eventId=${eventId}\n` +
+            `  server submitId=${entity.submitId}\n` +
+            `  server version=${entity.version}\n` +
+            `  server flowActivityIds=${JSON.stringify(entity.flowActivityIds)}\n` +
+            `  server flowName=${entity.flowName}\n` +
+            `  server pipelineActivityOrder=${pipelineActivityOrder}\n` +
+            `  server endTime=${entity.endTime}\n` +
+            `  local submitId=${groupProgress?.submitId ?? 'none'}\n` +
+            `  local pipelineActivityOrder=${(groupProgress as FlowProgress)?.pipelineActivityOrder ?? 'none'}\n` +
+            `  local flowActivityIds=${JSON.stringify((groupProgress as FlowProgress)?.flowActivityIds)}\n` +
+            `  local flowName=${(groupProgress as FlowProgress)?.flowName ?? 'none'}\n` +
+            `  local appletVersion=${groupProgress?.appletVersion ?? 'none'}\n` +
+            `  local startAt=${groupProgress?.startAt ?? 'none'}\n` +
+            `  local endAt=${groupProgress?.endAt ?? 'none'}\n` +
+            `  shouldRestart=${shouldRestart}`,
+        );
         // If the flow was deleted from the current applet version, its schedule event
         // no longer exists. Create a synthetic AlwaysAvailable event so that:
         // 1. The groupProgress.event is populated (ActivityGroupsBuildManager skips entries without event)
@@ -89,6 +107,7 @@ export const useEntitiesSync = ({
         }
         // When restarting, skip in-progress syncing - user wants to start fresh
         if (shouldRestart) {
+          console.info(`[DEBUG-FLOW] syncEntity Case1: SKIP — shouldRestart=true`);
           return false;
         }
 
@@ -103,7 +122,20 @@ export const useEntitiesSync = ({
         // then local stored name, then current flow version name
         const flowName = entity.flowName ?? localFlowProgress?.flowName ?? flow?.name;
 
+        let flowActivityIdsSource = 'NONE';
+        if (entity.flowActivityIds) flowActivityIdsSource = 'server';
+        else if (localFlowProgress?.flowActivityIds) flowActivityIdsSource = 'localProgress';
+        else if (flow?.activityIds) flowActivityIdsSource = 'currentFlow';
+        console.info(
+          `[DEBUG-FLOW] syncEntity Case1: resolved flowActivityIds\n` +
+            `  source=${flowActivityIdsSource}\n` +
+            `  flowActivityIds=${JSON.stringify(flowActivityIds)}\n` +
+            `  flowActivityIds.length=${flowActivityIds?.length ?? 0}\n` +
+            `  flowName=${flowName}`,
+        );
+
         if (!flowActivityIds) {
+          console.info(`[DEBUG-FLOW] syncEntity Case1: SKIP — no flowActivityIds resolved`);
           return false;
         }
 
@@ -111,13 +143,20 @@ export const useEntitiesSync = ({
           // If local is already completed for this submitId, never overwrite with in-progress
           // (the server may not have processed the final submission yet)
           if (groupProgress.endAt) {
+            console.info(
+              `[DEBUG-FLOW] syncEntity Case1: SKIP — same submitId, local is completed (endAt=${groupProgress.endAt})`,
+            );
             return false;
           }
           // If submitIds match, only skip if local is at or ahead
           // ("Keep last activity in each submission" in AnswerService._filter_activity_flows)
           if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
+            console.info(
+              `[DEBUG-FLOW] syncEntity Case1: SKIP — same submitId, local order (${(groupProgress as FlowProgress)?.pipelineActivityOrder}) >= server order (${pipelineActivityOrder})`,
+            );
             return false;
           }
+          console.info(`[DEBUG-FLOW] syncEntity Case1: ACCEPT — same submitId, server is ahead`);
         } else {
           // If submitIds are different, skip if local is in-progress and at or ahead of server
           // AND local was started more recently (meaning local is genuinely newer, not stale)
@@ -127,17 +166,32 @@ export const useEntitiesSync = ({
             (groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder &&
             (groupProgress?.startAt ?? 0) > entity.endTime
           ) {
+            console.info(
+              `[DEBUG-FLOW] syncEntity Case1: SKIP — different submitId, local in-progress is ahead and newer\n` +
+                `  local order=${(groupProgress as FlowProgress)?.pipelineActivityOrder}, server order=${pipelineActivityOrder}\n` +
+                `  local startAt=${groupProgress?.startAt}, server endTime=${entity.endTime}`,
+            );
             return false;
           }
           // If submitIds are different, skip if local is completed and as recent or more recent than server
           // ("More recent between best completed flow and best in-progress flow" in AnswerService._filter_activity_flows)
           if ((groupProgress?.endAt ?? 0) >= entity.endTime) {
+            console.info(
+              `[DEBUG-FLOW] syncEntity Case1: SKIP — different submitId, local completed (endAt=${groupProgress?.endAt}) >= server endTime (${entity.endTime})`,
+            );
             return false;
           }
+          console.info(
+            `[DEBUG-FLOW] syncEntity Case1: ACCEPT — different submitId, server wins\n` +
+              `  local submitId=${groupProgress?.submitId ?? 'none'}, server submitId=${entity.submitId}`,
+          );
         }
 
         const nextActivityId = flowActivityIds[pipelineActivityOrder];
         if (!nextActivityId) {
+          console.info(
+            `[DEBUG-FLOW] syncEntity Case1: SKIP — no activity at index ${pipelineActivityOrder} in flowActivityIds (length=${flowActivityIds.length})`,
+          );
           return false;
         }
 
@@ -174,6 +228,15 @@ export const useEntitiesSync = ({
             event,
           },
         });
+        console.info(
+          `[DEBUG-FLOW] syncEntity Case1: SAVED groupProgress\n` +
+            `  currentActivityId=${nextActivityId}\n` +
+            `  pipelineActivityOrder=${pipelineActivityOrder}\n` +
+            `  submitId=${entity.submitId}\n` +
+            `  appletVersion=${entity.version}\n` +
+            `  flowActivityIds=${JSON.stringify(flowActivityIds)}\n` +
+            `  flowActivityIds.length=${flowActivityIds.length}`,
+        );
         return true;
       }
 
@@ -345,6 +408,12 @@ export const useEntitiesSync = ({
 
   useEffect(() => {
     if (flowResumeEnabled) {
+      console.info(
+        `[DEBUG-FLOW] useEntitiesSync useEffect fired\n` +
+          `  shouldRestart=${shouldRestart}\n` +
+          `  activities count=${completedEntities?.activities?.length ?? 0}\n` +
+          `  activityFlows count=${completedEntities?.activityFlows?.length ?? 0}`,
+      );
       const changedIds: string[] = [];
       completedEntities?.activities.forEach((entity) => {
         if (syncEntity(entity, false)) changedIds.push(entity.id);
@@ -352,6 +421,7 @@ export const useEntitiesSync = ({
       completedEntities?.activityFlows.forEach((entity) => {
         if (syncEntity(entity, true)) changedIds.push(entity.id);
       });
+      console.info(`[DEBUG-FLOW] useEntitiesSync: changedIds=${JSON.stringify(changedIds)}`);
       setChanges(changedIds);
     } else {
       completedEntities?.activities.forEach(syncEntityLegacy);

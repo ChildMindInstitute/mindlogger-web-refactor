@@ -214,6 +214,19 @@ export const useEntityComplete = (props: Props) => {
 
       const nextActivityId = activityIds[currentPipelineActivityOrder + 1];
 
+      console.info(
+        `[DEBUG-FLOW] useEntityComplete.completeFlow\n` +
+          `  currentPipelineActivityOrder=${currentPipelineActivityOrder}\n` +
+          `  storedActivityIds=${JSON.stringify(storedActivityIds ?? null)}\n` +
+          `  storedActivityIds.length=${storedActivityIds?.length ?? 'none'}\n` +
+          `  props.flow?.activityIds=${JSON.stringify(props.flow?.activityIds ?? null)}\n` +
+          `  activityIds.length=${activityIds.length}\n` +
+          `  nextActivityIndex=${currentPipelineActivityOrder + 1}\n` +
+          `  nextActivityId=${nextActivityId ?? 'undefined (last activity)'}\n` +
+          `  groupProgress.submitId=${groupProgress.submitId}\n` +
+          `  groupProgress.appletVersion=${groupProgress.appletVersion ?? 'none'}`,
+      );
+
       flowUpdated({
         activityId: nextActivityId ? nextActivityId : activityIds[0],
         flowId,

@@ -147,6 +147,21 @@ const PassingScreen = (props: Props) => {
 
     const isLastActivity = nextActivity === null;
 
+    console.info(
+      `[DEBUG-FLOW] PassingScreen onSubmitSuccess\n` +
+        `  isFlowGroup=${isFlowGroup}\n` +
+        `  pipelineActivityOrder=${(groupProgress as FlowProgress).pipelineActivityOrder}\n` +
+        `  nextActivityIndex=${nextActivityIndex}\n` +
+        `  context.flow?.activityIds=${JSON.stringify(context.flow?.activityIds ?? null)}\n` +
+        `  storedFlowActivityIds=${JSON.stringify(storedFlowActivityIds ?? null)}\n` +
+        `  flowActivityIds.length=${flowActivityIds.length}\n` +
+        `  flowActivityIds=${JSON.stringify(flowActivityIds)}\n` +
+        `  nextActivity=${nextActivity ?? 'null'}\n` +
+        `  isLastActivity=${isLastActivity}\n` +
+        `  groupProgress.submitId=${groupProgress.submitId}\n` +
+        `  groupProgress.appletVersion=${groupProgress.appletVersion ?? 'none'}`,
+    );
+
     const summaryData = getSummaryForCurrentActivity();
 
     const isAlertsExist = summaryData.alerts.length > 0;

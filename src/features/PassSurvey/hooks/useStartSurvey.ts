@@ -156,6 +156,20 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
       if (shouldRestart) {
         removeActivityProgress({ activityId, eventId, targetSubjectId });
 
+        console.info(
+          `[DEBUG-FLOW] useStartSurvey: flowRestarted dispatch\n` +
+            `  flowId=${flowId}\n` +
+            `  firstActivityId=${firstActivityId}\n` +
+            `  appletVersion=${applet.version}\n` +
+            `  resolvedActivityIds=${JSON.stringify(resolvedActivityIds)}\n` +
+            `  resolvedActivityIds.length=${resolvedActivityIds.length}\n` +
+            `  freshFlowActivityIds=${JSON.stringify(freshFlowActivityIds ?? null)}\n` +
+            `  flow?.activityIds=${JSON.stringify(flow?.activityIds ?? null)}\n` +
+            `  storedFlowActivityIds=${JSON.stringify(storedFlowActivityIds ?? null)}\n` +
+            `  existingProgress.submitId=${entityProgress?.submitId ?? 'none'}\n` +
+            `  existingProgress.appletVersion=${entityProgress?.appletVersion ?? 'none'}`,
+        );
+
         // Update group progress rather than remove to preserve version of event that the flow was
         // started with
         flowRestarted({
@@ -172,6 +186,16 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
             '',
         });
       } else {
+        console.info(
+          `[DEBUG-FLOW] useStartSurvey: resume (not restart)\n` +
+            `  flowId=${flowId}\n` +
+            `  activityId=${activityId}\n` +
+            `  existingProgress.submitId=${entityProgress?.submitId ?? 'none'}\n` +
+            `  existingProgress.appletVersion=${entityProgress?.appletVersion ?? 'none'}\n` +
+            `  existingProgress.pipelineActivityOrder=${(entityProgress as FlowProgress | null)?.pipelineActivityOrder ?? 'none'}\n` +
+            `  existingProgress.flowActivityIds=${JSON.stringify((entityProgress as FlowProgress | null)?.flowActivityIds ?? null)}\n` +
+            `  existingProgress.endAt=${entityProgress?.endAt ?? 'none'}`,
+        );
         // Safety net: useEntitiesSync also clears stale progress, but may not
         // have fired yet when the user clicks "Start".
         if (!entityProgress || entityProgress.endAt) {
@@ -185,6 +209,13 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
       // prefer firstActivityId when freshFlowActivityIds were provided.
       const activityIdToNavigate =
         shouldRestart || freshFlowActivityIds ? firstActivityId : activityId;
+
+      console.info(
+        `[DEBUG-FLOW] useStartSurvey: navigating to activity\n` +
+          `  activityIdToNavigate=${activityIdToNavigate}\n` +
+          `  shouldRestart=${shouldRestart}\n` +
+          `  freshFlowActivityIds=${freshFlowActivityIds ? 'provided' : 'not provided'}`,
+      );
 
       return navigateToEntity({
         activityId: activityIdToNavigate,

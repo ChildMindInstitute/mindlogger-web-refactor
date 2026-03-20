@@ -3,7 +3,7 @@ import { useCallback, useContext } from 'react';
 import { SurveyContext } from '../lib';
 import AnswersConstructService from '../model/AnswersConstructService';
 
-import { ActivityPipelineType } from '~/abstract/lib';
+import { ActivityPipelineType, FlowProgress } from '~/abstract/lib';
 import { appletModel } from '~/entities/applet';
 import { ProlificUrlParamsPayload as ProlificUrlParams } from '~/entities/applet/model';
 import { ActivityFlowDTO, AnswerPayload, EncryptionDTO, ScheduleEventDto } from '~/shared/api';
@@ -63,6 +63,24 @@ export const useAnswerBuilder = (): AnswerBuilder => {
       const resolvedFlowId =
         resolvedFlow?.id ??
         (groupProgress.type === ActivityPipelineType.Flow ? context.entityId : null);
+
+      let versionSource = 'context';
+      if (params.appletVersion) versionSource = 'params';
+      else if (groupProgress.appletVersion) versionSource = 'groupProgress';
+      const flowProgress = groupProgress as FlowProgress;
+      console.info(
+        `[DEBUG-FLOW] useAnswerBuilder.build\n` +
+          `  activityId=${params.activityId}\n` +
+          `  resolvedVersion=${resolvedVersion}\n` +
+          `  versionSource=${versionSource}\n` +
+          `  resolvedFlowId=${resolvedFlowId ?? 'null'}\n` +
+          `  groupProgress.submitId=${groupProgress.submitId}\n` +
+          `  groupProgress.pipelineActivityOrder=${flowProgress?.pipelineActivityOrder ?? 'N/A'}\n` +
+          `  groupProgress.flowActivityIds=${JSON.stringify(flowProgress?.flowActivityIds ?? null)}\n` +
+          `  groupProgress.appletVersion=${groupProgress.appletVersion ?? 'none'}\n` +
+          `  context.appletVersion=${context.appletVersion}\n` +
+          `  isFlowCompleted param=${params.isFlowCompleted ?? 'undefined'}`,
+      );
 
       const answerConstructService = new AnswersConstructService({
         groupProgress,
