@@ -169,7 +169,10 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     const flowId = activityListItem.flowId;
 
     if (flowId) {
-      const freshResult = await fetchFreshEntityData(flowId, 'flow').catch(() => undefined);
+      const freshResult = await fetchFreshEntityData(flowId, 'flow').catch((error) => {
+        console.error(error);
+        return undefined;
+      });
       if (!freshResult || freshResult.deleted) return;
 
       startSurvey({
@@ -183,7 +186,10 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     } else {
       // For standalone activities, check if the activity still exists
       const freshResult = await fetchFreshEntityData(activityListItem.activityId, 'activity').catch(
-        () => undefined,
+        (error) => {
+          console.error(error);
+          return undefined;
+        },
       );
       if (!freshResult || freshResult.deleted) return;
 
@@ -301,7 +307,10 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     }
 
     if (flowId) {
-      const freshResult = await fetchFreshEntityData(flowId, 'flow').catch(() => undefined);
+      const freshResult = await fetchFreshEntityData(flowId, 'flow').catch((error) => {
+        console.error(error);
+        return undefined;
+      });
       if (!freshResult || freshResult.deleted) return;
 
       startSurvey({
@@ -315,7 +324,10 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     } else {
       // For standalone activities, check if the activity still exists
       const freshResult = await fetchFreshEntityData(activityListItem.activityId, 'activity').catch(
-        () => undefined,
+        (error) => {
+          console.error(error);
+          return undefined;
+        },
       );
       if (!freshResult || freshResult.deleted) return;
 
