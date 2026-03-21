@@ -358,6 +358,12 @@ const appletsSlice = createSlice({
 
       const groupProgress = state.groupProgress[id] as FlowProgress | undefined;
 
+      console.info(
+        `[DEBUG-FLOW] clearPendingRestart reducer\n` +
+          `  progressId=${id}\n` +
+          `  had pendingRestart=${groupProgress?.pendingRestart ?? false}`,
+      );
+
       if (groupProgress?.pendingRestart) {
         groupProgress.pendingRestart = undefined;
       }

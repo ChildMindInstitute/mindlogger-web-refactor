@@ -46,19 +46,17 @@ const WelcomeScreen = () => {
   // applet version from the dashboard's cached applet data. Now that we have the fresh version
   // from the API (via SurveyContext), update the group progress to use the correct version.
   // This runs on mount (before user clicks Start) so the version is correct for answer submission.
-  // Also clear the pendingRestart flag so the dashboard can sync normally if the user does
-  // save & exit without submitting (server's old version should prevail on resume).
+  // pendingRestart is cleared on unmount (cleanup) rather than on mount so that:
+  //   - During the initial transition (flowRestarted → survey), pendingRestart stays true
+  //     and the dashboard's brief sync is correctly skipped.
+  //   - When the user leaves (save & exit without submitting), pendingRestart is cleared
+  //     so the dashboard sync can run and the server's previous version prevails.
+  //   - If the user submits Activity 1, flowUpdated already clears pendingRestart,
+  //     so the cleanup is a harmless no-op.
   useEffect(() => {
     const isGroupStarted = groupProgress && groupProgress.startAt && !groupProgress.endAt;
 
     if (isGroupStarted && context.shouldRestart) {
-      // Clear pendingRestart now that the survey page has taken over.
-      clearPendingRestart({
-        entityId: context.entityId,
-        eventId: context.eventId,
-        targetSubjectId,
-      });
-
       if (groupProgress.appletVersion !== context.appletVersion) {
         updateAppletVersion({
           entityId: context.entityId,
@@ -70,6 +68,18 @@ const WelcomeScreen = () => {
         });
       }
     }
+
+    // Clear pendingRestart on unmount so the dashboard can sync normally.
+    return () => {
+      if (context.shouldRestart) {
+        console.info(`[DEBUG-FLOW] WelcomeScreen cleanup: clearing pendingRestart`);
+        clearPendingRestart({
+          entityId: context.entityId,
+          eventId: context.eventId,
+          targetSubjectId,
+        });
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     context.shouldRestart,
