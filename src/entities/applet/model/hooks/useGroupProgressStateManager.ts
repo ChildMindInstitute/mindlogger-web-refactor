@@ -29,6 +29,7 @@ type Return = {
   flowRestarted: (props: FlowRestartedPayload) => void;
   activityRestarted: (props: InProgressActivity) => void;
   updateAppletVersion: (payload: UpdateAppletVersionPayload) => void;
+  clearPendingRestart: (props: InProgressEntity) => void;
 };
 
 export const useGroupProgressStateManager = (): Return => {
@@ -107,6 +108,13 @@ export const useGroupProgressStateManager = (): Return => {
     [dispatch],
   );
 
+  const clearPendingRestart = useCallback(
+    (props: InProgressEntity) => {
+      dispatch(actions.clearPendingRestart(props));
+    },
+    [dispatch],
+  );
+
   return {
     getGroupProgress,
 
@@ -120,5 +128,6 @@ export const useGroupProgressStateManager = (): Return => {
     activityRestarted,
     flowRestarted,
     updateAppletVersion,
+    clearPendingRestart,
   };
 };

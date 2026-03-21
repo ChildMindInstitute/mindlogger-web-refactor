@@ -28,7 +28,8 @@ const WelcomeScreen = () => {
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
-  const { updateAppletVersion } = appletModel.hooks.useGroupProgressStateManager();
+  const { updateAppletVersion, clearPendingRestart } =
+    appletModel.hooks.useGroupProgressStateManager();
 
   const isFlow = !!context.flow;
   const targetSubjectId = context.targetSubject?.id ?? null;
@@ -45,22 +46,29 @@ const WelcomeScreen = () => {
   // applet version from the dashboard's cached applet data. Now that we have the fresh version
   // from the API (via SurveyContext), update the group progress to use the correct version.
   // This runs on mount (before user clicks Start) so the version is correct for answer submission.
+  // Also clear the pendingRestart flag so the dashboard can sync normally if the user does
+  // save & exit without submitting (server's old version should prevail on resume).
   useEffect(() => {
     const isGroupStarted = groupProgress && groupProgress.startAt && !groupProgress.endAt;
 
-    if (
-      isGroupStarted &&
-      context.shouldRestart &&
-      groupProgress.appletVersion !== context.appletVersion
-    ) {
-      updateAppletVersion({
+    if (isGroupStarted && context.shouldRestart) {
+      // Clear pendingRestart now that the survey page has taken over.
+      clearPendingRestart({
         entityId: context.entityId,
         eventId: context.eventId,
         targetSubjectId,
-        appletVersion: context.appletVersion,
-        flowActivityIds: context.flow?.activityIds,
-        flowName: context.flow?.name,
       });
+
+      if (groupProgress.appletVersion !== context.appletVersion) {
+        updateAppletVersion({
+          entityId: context.entityId,
+          eventId: context.eventId,
+          targetSubjectId,
+          appletVersion: context.appletVersion,
+          flowActivityIds: context.flow?.activityIds,
+          flowName: context.flow?.name,
+        });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -75,6 +83,7 @@ const WelcomeScreen = () => {
     groupProgress?.endAt,
     groupProgress?.appletVersion,
     updateAppletVersion,
+    clearPendingRestart,
   ]);
 
   const startAssessment = useCallback(() => {

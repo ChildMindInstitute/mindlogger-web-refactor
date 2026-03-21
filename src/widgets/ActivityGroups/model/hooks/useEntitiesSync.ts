@@ -158,6 +158,15 @@ export const useEntitiesSync = ({
           }
           console.info(`[DEBUG-FLOW] syncEntity Case1: ACCEPT — same submitId, server is ahead`);
         } else {
+          // If local has a pendingRestart flag (set by flowRestarted, cleared on first submit),
+          // skip sync to prevent overwriting the fresh restart with stale server data.
+          // This handles the window between flowRestarted dispatch and survey page mount.
+          if ((groupProgress as FlowProgress)?.pendingRestart) {
+            console.info(
+              `[DEBUG-FLOW] syncEntity Case1: SKIP — different submitId, local has pendingRestart`,
+            );
+            return false;
+          }
           // If submitIds are different, skip if local is in-progress and at or ahead of server
           // AND local was started more recently (meaning local is genuinely newer, not stale)
           // ("Farthest along in-progress flow" in AnswerService._filter_activity_flows)

@@ -349,6 +349,18 @@ const appletsSlice = createSlice({
 
       groupProgress.currentActivityId = payload.activityId;
       groupProgress.pipelineActivityOrder = payload.pipelineActivityOrder;
+      // First submit after restart — clear the guard so sync resumes normally
+      groupProgress.pendingRestart = undefined;
+    },
+
+    clearPendingRestart: (state, { payload }: PayloadAction<InProgressEntity>) => {
+      const id = getProgressId(payload.entityId, payload.eventId, payload.targetSubjectId);
+
+      const groupProgress = state.groupProgress[id] as FlowProgress | undefined;
+
+      if (groupProgress?.pendingRestart) {
+        groupProgress.pendingRestart = undefined;
+      }
     },
 
     activityRestarted: (state, { payload }: PayloadAction<InProgressActivity>) => {
@@ -398,6 +410,10 @@ const appletsSlice = createSlice({
         groupProgress.appletVersion = payload.appletVersion;
         groupProgress.flowActivityIds = payload.flowActivityIds;
         groupProgress.flowName = payload.flowName;
+        // Prevent the dashboard's useEntitiesSync from overwriting this fresh
+        // restart state with stale server data before the survey page mounts.
+        // Cleared on first activity submit.
+        groupProgress.pendingRestart = true;
         // Ensure appletId is set on restart
         state.groupProgress[id].appletId = payload.appletId;
       }
