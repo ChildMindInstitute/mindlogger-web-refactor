@@ -28,8 +28,7 @@ const WelcomeScreen = () => {
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
-  const { updateAppletVersion, clearPendingRestart } =
-    appletModel.hooks.useGroupProgressStateManager();
+  const { updateAppletVersion } = appletModel.hooks.useGroupProgressStateManager();
 
   const isFlow = !!context.flow;
   const targetSubjectId = context.targetSubject?.id ?? null;
@@ -46,13 +45,9 @@ const WelcomeScreen = () => {
   // applet version from the dashboard's cached applet data. Now that we have the fresh version
   // from the API (via SurveyContext), update the group progress to use the correct version.
   // This runs on mount (before user clicks Start) so the version is correct for answer submission.
-  // pendingRestart is cleared on unmount (cleanup) rather than on mount so that:
-  //   - During the initial transition (flowRestarted → survey), pendingRestart stays true
-  //     and the dashboard's brief sync is correctly skipped.
-  //   - When the user leaves (save & exit without submitting), pendingRestart is cleared
-  //     so the dashboard sync can run and the server's previous version prevails.
-  //   - If the user submits Activity 1, flowUpdated already clears pendingRestart,
-  //     so the cleanup is a harmless no-op.
+  // Note: pendingRestart is NOT cleared here. It is cleared by:
+  //   - flowUpdated (first activity submit)
+  //   - The survey page's useEntitiesSync (when shouldRestart=true)
   useEffect(() => {
     const isGroupStarted = groupProgress && groupProgress.startAt && !groupProgress.endAt;
 
@@ -68,18 +63,6 @@ const WelcomeScreen = () => {
         });
       }
     }
-
-    // Clear pendingRestart on unmount so the dashboard can sync normally.
-    return () => {
-      if (context.shouldRestart) {
-        console.info(`[DEBUG-FLOW] WelcomeScreen cleanup: clearing pendingRestart`);
-        clearPendingRestart({
-          entityId: context.entityId,
-          eventId: context.eventId,
-          targetSubjectId,
-        });
-      }
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     context.shouldRestart,
@@ -93,7 +76,6 @@ const WelcomeScreen = () => {
     groupProgress?.endAt,
     groupProgress?.appletVersion,
     updateAppletVersion,
-    clearPendingRestart,
   ]);
 
   const startAssessment = useCallback(() => {

@@ -32,7 +32,8 @@ export const useEntitiesSync = ({
   flowResumeEnabled,
   shouldRestart,
 }: EntitiesSyncProps) => {
-  const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
+  const { saveGroupProgress, getGroupProgress, clearPendingRestart } =
+    appletModel.hooks.useGroupProgressStateManager();
   const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
   // Create ref to exclude from callback dependencies to avoid infinite loop
@@ -105,9 +106,21 @@ export const useEntitiesSync = ({
             timers: { timer: null, idleTimer: null },
           };
         }
-        // When restarting, skip in-progress syncing - user wants to start fresh
+        // When restarting, skip in-progress syncing - user wants to start fresh.
+        // Also clear pendingRestart so that when the user navigates back to the dashboard
+        // (e.g. save & exit without submitting), the sync can run and let the server win.
+        // This is safe from React 18 Strict Mode double-firing because clearPendingRestart
+        // is idempotent (second call sees pendingRestart=false and is a no-op).
         if (shouldRestart) {
-          console.info(`[DEBUG-FLOW] syncEntity Case1: SKIP — shouldRestart=true`);
+          // Normalize targetSubjectId for the clear call (same normalization as above)
+          clearPendingRestart({
+            entityId,
+            eventId,
+            targetSubjectId,
+          });
+          console.info(
+            `[DEBUG-FLOW] syncEntity Case1: SKIP — shouldRestart=true, cleared pendingRestart`,
+          );
           return false;
         }
 
