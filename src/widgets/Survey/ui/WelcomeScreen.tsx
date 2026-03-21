@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 
 import { Avatar } from '@mui/material';
 
@@ -28,7 +28,8 @@ const WelcomeScreen = () => {
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
-  const { updateAppletVersion } = appletModel.hooks.useGroupProgressStateManager();
+  const { flowRestarted } = appletModel.hooks.useGroupProgressStateManager();
+  const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
   const isFlow = !!context.flow;
   const targetSubjectId = context.targetSubject?.id ?? null;
@@ -41,41 +42,66 @@ const WelcomeScreen = () => {
 
   const isTimedActivity = !!groupProgress?.event?.timers?.timer;
 
-  // When restarting, the restart reducer (flowRestarted/activityRestarted) may have set a stale
-  // applet version from the dashboard's cached applet data. Now that we have the fresh version
-  // from the API (via SurveyContext), update the group progress to use the correct version.
-  // This runs on mount (before user clicks Start) so the version is correct for answer submission.
-  // Note: pendingRestart is NOT cleared here. It is cleared by:
-  //   - flowUpdated (first activity submit)
-  //   - The survey page's useEntitiesSync (when shouldRestart=true)
-  useEffect(() => {
-    const isGroupStarted = groupProgress && groupProgress.startAt && !groupProgress.endAt;
+  // Guard: only re-dispatch flowRestarted once per WelcomeScreen mount.
+  const hasReappliedRestart = useRef(false);
 
-    if (isGroupStarted && context.shouldRestart) {
-      if (groupProgress.appletVersion !== context.appletVersion) {
-        updateAppletVersion({
-          entityId: context.entityId,
-          eventId: context.eventId,
-          targetSubjectId,
-          appletVersion: context.appletVersion,
-          flowActivityIds: context.flow?.activityIds,
-          flowName: context.flow?.name,
-        });
-      }
-    }
+  // When restarting a flow, the dashboard's useEntitiesSync may have overwritten the fresh
+  // restart state (from flowRestarted) with stale server data during the transition window.
+  // Re-dispatch flowRestarted here on the survey page to guarantee correct state.
+  // This is idempotent — if the state wasn't overwritten, it just generates a new submitId
+  // (harmless since no submission has been made yet).
+  // Also handles version updates: the fresh version from the API is applied here.
+  useEffect(() => {
+    if (!context.shouldRestart) return;
+    if (!context.flow) return;
+    if (hasReappliedRestart.current) return;
+
+    const isGroupStarted = groupProgress && groupProgress.startAt && !groupProgress.endAt;
+    if (!isGroupStarted) return;
+
+    hasReappliedRestart.current = true;
+
+    // Re-apply the restart to ensure correct state regardless of dashboard sync
+    removeActivityProgress({
+      activityId: context.activityId,
+      eventId: context.eventId,
+      targetSubjectId,
+    });
+
+    flowRestarted({
+      flowId: context.entityId,
+      eventId: context.eventId,
+      targetSubjectId,
+      activityId: context.activityId,
+      appletVersion: context.appletVersion,
+      appletId: context.appletId,
+      flowActivityIds: context.flow.activityIds,
+      flowName: context.flow.name,
+    });
+
+    console.info(
+      `[DEBUG-FLOW] WelcomeScreen: re-dispatched flowRestarted\n` +
+        `  flowId=${context.entityId}\n` +
+        `  activityId=${context.activityId}\n` +
+        `  appletVersion=${context.appletVersion}\n` +
+        `  flowActivityIds=${JSON.stringify(context.flow.activityIds)}\n` +
+        `  flowActivityIds.length=${context.flow.activityIds.length}`,
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     context.shouldRestart,
     context.appletVersion,
+    context.appletId,
     context.entityId,
+    context.activityId,
     context.eventId,
     context.flow?.activityIds,
     context.flow?.name,
     targetSubjectId,
     groupProgress?.startAt,
     groupProgress?.endAt,
-    groupProgress?.appletVersion,
-    updateAppletVersion,
+    flowRestarted,
+    removeActivityProgress,
   ]);
 
   const startAssessment = useCallback(() => {

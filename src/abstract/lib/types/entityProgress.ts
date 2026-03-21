@@ -40,9 +40,6 @@ export type FlowProgress = {
   flowActivityIds?: string[];
   // Flow name at start time (for deleted flow recovery)
   flowName?: string;
-  // Set by flowRestarted, cleared on first submit. Prevents the dashboard's
-  // useEntitiesSync from overwriting the fresh restart state with stale server data.
-  pendingRestart?: boolean;
 };
 
 export type ActivityProgress = {

@@ -32,8 +32,7 @@ export const useEntitiesSync = ({
   flowResumeEnabled,
   shouldRestart,
 }: EntitiesSyncProps) => {
-  const { saveGroupProgress, getGroupProgress, clearPendingRestart } =
-    appletModel.hooks.useGroupProgressStateManager();
+  const { saveGroupProgress, getGroupProgress } = appletModel.hooks.useGroupProgressStateManager();
   const { removeActivityProgress } = appletModel.hooks.useActivityProgress();
 
   // Create ref to exclude from callback dependencies to avoid infinite loop
@@ -106,21 +105,11 @@ export const useEntitiesSync = ({
             timers: { timer: null, idleTimer: null },
           };
         }
-        // When restarting, skip in-progress syncing - user wants to start fresh.
-        // Also clear pendingRestart so that when the user navigates back to the dashboard
-        // (e.g. save & exit without submitting), the sync can run and let the server win.
-        // This is safe from React 18 Strict Mode double-firing because clearPendingRestart
-        // is idempotent (second call sees pendingRestart=false and is a no-op).
+        // When restarting, skip in-progress syncing — user wants to start fresh.
+        // The survey page's WelcomeScreen will re-dispatch flowRestarted to ensure
+        // the restart state is correct even if this sync overwrote it during transition.
         if (shouldRestart) {
-          // Normalize targetSubjectId for the clear call (same normalization as above)
-          clearPendingRestart({
-            entityId,
-            eventId,
-            targetSubjectId,
-          });
-          console.info(
-            `[DEBUG-FLOW] syncEntity Case1: SKIP — shouldRestart=true, cleared pendingRestart`,
-          );
+          console.info(`[DEBUG-FLOW] syncEntity Case1: SKIP — shouldRestart=true`);
           return false;
         }
 
@@ -171,15 +160,6 @@ export const useEntitiesSync = ({
           }
           console.info(`[DEBUG-FLOW] syncEntity Case1: ACCEPT — same submitId, server is ahead`);
         } else {
-          // If local has a pendingRestart flag (set by flowRestarted, cleared on first submit),
-          // skip sync to prevent overwriting the fresh restart with stale server data.
-          // This handles the window between flowRestarted dispatch and survey page mount.
-          if ((groupProgress as FlowProgress)?.pendingRestart) {
-            console.info(
-              `[DEBUG-FLOW] syncEntity Case1: SKIP — different submitId, local has pendingRestart`,
-            );
-            return false;
-          }
           // If submitIds are different, skip if local is in-progress and at or ahead of server
           // AND local was started more recently (meaning local is genuinely newer, not stale)
           // ("Farthest along in-progress flow" in AnswerService._filter_activity_flows)
