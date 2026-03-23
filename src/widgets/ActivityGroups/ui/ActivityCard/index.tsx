@@ -313,6 +313,12 @@ export const ActivityCard = ({ activityListItem }: Props) => {
       });
       if (!freshResult || freshResult.deleted) return;
 
+      // Remove the completedEntities query cache before restarting.
+      // This prevents ActivityGroupList's useEntitiesSync from firing with
+      // stale server data and overwriting the fresh restart state.
+      // This mirrors what naturally happens on a page refresh (cold cache).
+      queryClient.removeQueries(['completedEntities']);
+
       startSurvey({
         activityId: activityListItem.activityId,
         eventId: activityListItem.eventId,
@@ -330,6 +336,10 @@ export const ActivityCard = ({ activityListItem }: Props) => {
         },
       );
       if (!freshResult || freshResult.deleted) return;
+
+      // Remove the completedEntities query cache before restarting.
+      // See flow branch above for rationale.
+      queryClient.removeQueries(['completedEntities']);
 
       startSurvey({
         activityId: activityListItem.activityId,
@@ -359,6 +369,7 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     isEntitySupported,
     startSurvey,
     fetchFreshEntityData,
+    queryClient,
   ]);
 
   const resumeActivity = () => {
