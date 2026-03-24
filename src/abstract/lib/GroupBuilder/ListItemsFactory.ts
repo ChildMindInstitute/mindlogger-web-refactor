@@ -17,20 +17,27 @@ export class ListItemsFactory {
     const activityFlow = activityEvent.entity as ActivityFlow;
 
     item.isInActivityFlow = true;
+    item.isDeletedFlow = activityEvent.isDeletedFlow ?? false;
+
+    const isInProgress = this.utility.isInProgress(activityEvent);
+    const progressRecord = isInProgress
+      ? (this.utility.getProgressRecord(activityEvent) as FlowProgress)
+      : undefined;
+
+    // Use stored activity IDs from progress if available (handles version changes)
+    const effectiveActivityCount =
+      progressRecord?.flowActivityIds?.length ?? activityFlow.activityIds.length;
+
     item.activityFlowDetails = {
       showActivityFlowBadge: !activityFlow.hideBadge,
       activityFlowName: activityFlow.name,
-      numberOfActivitiesInFlow: activityFlow.activityIds.length,
+      numberOfActivitiesInFlow: effectiveActivityCount,
       activityPositionInFlow: 0,
     };
 
-    const isInProgress = this.utility.isInProgress(activityEvent);
-
     let activity: Activity | undefined, position: number;
 
-    if (isInProgress) {
-      const progressRecord = this.utility.getProgressRecord(activityEvent) as FlowProgress;
-
+    if (isInProgress && progressRecord) {
       activity = this.utility.activities.find((x) => x.id === progressRecord.currentActivityId);
       position = progressRecord.pipelineActivityOrder + 1;
     } else {
@@ -39,9 +46,27 @@ export class ListItemsFactory {
     }
 
     if (!activity) {
-      throw new Error(
-        '[ListItemsFactory:populateActivityFlowFields] Activity not found in activities list',
-      );
+      // The activity may not exist in the current applet version when:
+      // 1. The flow is a "deleted flow" (reconstructed from stored progress)
+      // 2. The flow still exists but its activities were deleted from admin
+      // In both cases, preserve the real activity ID from progress so resume
+      // can fetch the activity by its stored version.
+      if (isInProgress && progressRecord) {
+        item.activityId = progressRecord.currentActivityId;
+        item.activityFlowDetails.activityPositionInFlow = position;
+        item.name = activityFlow.name;
+        item.description = activityFlow.description;
+        return;
+      }
+
+      // Flow exists but its activities were removed (or it's a fully deleted flow).
+      // Render the card with the flow's own name/description.
+      // Use the first known activity ID from the flow if available.
+      item.activityId = activityFlow.activityIds[0] ?? '';
+      item.activityFlowDetails.activityPositionInFlow = position;
+      item.name = activityFlow.name;
+      item.description = activityFlow.description;
+      return;
     }
 
     item.activityId = activity.id;

@@ -76,6 +76,7 @@ export const ActivityGroupList = () => {
   };
 
   useEntitiesSync({
+    appletId: applet.id,
     completedEntities,
     respondentSubjectId: applet.respondentMeta?.subjectId ?? null,
     events: events.events,

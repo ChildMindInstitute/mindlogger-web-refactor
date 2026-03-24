@@ -235,6 +235,7 @@ export type CompletedEntityDTO = {
   id: string;
   answerId: string;
   submitId: string;
+  version: string;
   targetSubjectId: string | null;
   scheduledEventId: string;
   startTime: number; // Milliseconds since Unix epoch
@@ -243,6 +244,10 @@ export type CompletedEntityDTO = {
   localEndTime: string;
   isFlowCompleted: boolean | null;
   activityFlowOrder: number | null;
+  // Ordered activity IDs for the flow at the submitted version (only for in-progress flows)
+  flowActivityIds: string[] | null;
+  // Name of the flow at the submitted version (only for in-progress flows)
+  flowName: string | null;
 };
 
 export type CompletedEntitiesDTO = {

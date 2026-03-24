@@ -9,6 +9,10 @@ const eventId = 'event-1';
 const activityId = 'activity-1';
 const firstActivityId = 'activity-first';
 const targetSubjectId = null;
+const appletVersion = '1.0.0';
+const flowActivityIds = ['activity-first', 'activity-1', 'activity-2'];
+const flowName = 'Test Flow';
+const appletId = 'applet-1';
 
 const progressId = getProgressId(flowId, eventId, targetSubjectId);
 
@@ -44,7 +48,16 @@ describe('flowRestarted reducer', () => {
     const state = stateWithFlowProgress();
     const next = reducer(
       state,
-      actions.flowRestarted({ flowId, eventId, targetSubjectId, activityId: firstActivityId }),
+      actions.flowRestarted({
+        flowId,
+        eventId,
+        targetSubjectId,
+        activityId: firstActivityId,
+        appletVersion,
+        appletId,
+        flowActivityIds,
+        flowName,
+      }),
     );
     expect((next.groupProgress[progressId] as FlowProgress).pipelineActivityOrder).toBe(0);
   });
@@ -53,7 +66,16 @@ describe('flowRestarted reducer', () => {
     const state = stateWithFlowProgress();
     const next = reducer(
       state,
-      actions.flowRestarted({ flowId, eventId, targetSubjectId, activityId: firstActivityId }),
+      actions.flowRestarted({
+        flowId,
+        eventId,
+        targetSubjectId,
+        activityId: firstActivityId,
+        appletVersion,
+        appletId,
+        flowActivityIds,
+        flowName,
+      }),
     );
     expect((next.groupProgress[progressId] as FlowProgress).currentActivityId).toBe(
       firstActivityId,
@@ -64,7 +86,16 @@ describe('flowRestarted reducer', () => {
     const state = stateWithFlowProgress();
     const next = reducer(
       state,
-      actions.flowRestarted({ flowId, eventId, targetSubjectId, activityId: firstActivityId }),
+      actions.flowRestarted({
+        flowId,
+        eventId,
+        targetSubjectId,
+        activityId: firstActivityId,
+        appletVersion,
+        appletId,
+        flowActivityIds,
+        flowName,
+      }),
     );
     expect((next.groupProgress[progressId] as FlowProgress).submitId).not.toBe('old-submit-id');
   });
@@ -73,7 +104,16 @@ describe('flowRestarted reducer', () => {
     const state = stateWithFlowProgress({ startAt: 1000 });
     const next = reducer(
       state,
-      actions.flowRestarted({ flowId, eventId, targetSubjectId, activityId: firstActivityId }),
+      actions.flowRestarted({
+        flowId,
+        eventId,
+        targetSubjectId,
+        activityId: firstActivityId,
+        appletVersion,
+        appletId,
+        flowActivityIds,
+        flowName,
+      }),
     );
     expect(next.groupProgress[progressId].startAt).toBeGreaterThan(1000);
   });
@@ -85,7 +125,16 @@ describe('flowRestarted reducer', () => {
     const state = stateWithFlowProgress({ endAt: completionTime });
     const next = reducer(
       state,
-      actions.flowRestarted({ flowId, eventId, targetSubjectId, activityId: firstActivityId }),
+      actions.flowRestarted({
+        flowId,
+        eventId,
+        targetSubjectId,
+        activityId: firstActivityId,
+        appletVersion,
+        appletId,
+        flowActivityIds,
+        flowName,
+      }),
     );
     expect(next.groupProgress[progressId].endAt).toBeNull();
   });
@@ -94,7 +143,16 @@ describe('flowRestarted reducer', () => {
     const state = stateWithFlowProgress({ endAt: null });
     const next = reducer(
       state,
-      actions.flowRestarted({ flowId, eventId, targetSubjectId, activityId: firstActivityId }),
+      actions.flowRestarted({
+        flowId,
+        eventId,
+        targetSubjectId,
+        activityId: firstActivityId,
+        appletVersion,
+        appletId,
+        flowActivityIds,
+        flowName,
+      }),
     );
     expect(next.groupProgress[progressId].endAt).toBeNull();
   });
@@ -109,6 +167,10 @@ describe('flowRestarted reducer', () => {
         eventId,
         targetSubjectId: null,
         activityId: firstActivityId,
+        appletVersion,
+        appletId,
+        flowActivityIds,
+        flowName,
       }),
     );
     expect(next.groupProgress[unknownProgressId]).toBeUndefined();

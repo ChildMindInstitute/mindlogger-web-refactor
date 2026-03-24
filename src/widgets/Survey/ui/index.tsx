@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { subMonths } from 'date-fns';
 
@@ -53,6 +53,24 @@ export const SurveyWidget = (props: Props) => {
 
   const { removeAllBanners, addSuccessBanner } = useBanners();
 
+  // Use stored version only for in-progress entities; skip for restarts or completed attempts.
+  const entityProgressId = getProgressId(flowId ?? activityId, eventId, targetSubjectId);
+  const liveAppletVersion = useAppSelector((state) => {
+    if (shouldRestart) return undefined;
+    if (!entityProgressId) return undefined;
+    const progress = appletModel.selectors.selectGroupProgress(state, entityProgressId);
+    if (!progress || progress.endAt) return undefined;
+    return progress.appletVersion;
+  });
+
+  // Latch the version once resolved so it stays stable even after the entity
+  // is completed mid-survey (entityCompleted sets endAt, which would clear it).
+  const versionRef = useRef<string | undefined>(liveAppletVersion);
+  if (liveAppletVersion && !versionRef.current) {
+    versionRef.current = liveAppletVersion;
+  }
+  const storedAppletVersion = versionRef.current;
+
   const autoCompletionState = AutoCompletionModel.useAutoCompletionRecord({
     entityId: props.flowId ?? props.activityId,
     eventId: props.eventId,
@@ -102,7 +120,13 @@ export const SurveyWidget = (props: Props) => {
     isLoading,
     isError,
     error,
-  } = useSurveyDataQuery({ publicAppletKey, appletId, activityId, targetSubjectId });
+  } = useSurveyDataQuery({
+    publicAppletKey,
+    appletId,
+    activityId,
+    targetSubjectId,
+    activityVersion: storedAppletVersion,
+  });
 
   const { featureFlag } = useFeatureFlags();
   const flowResumeFlag = featureFlag(FeatureFlag.EnableFlowResume, []);
@@ -125,6 +149,7 @@ export const SurveyWidget = (props: Props) => {
   // - gate on fresh data to avoid syncing with stale cache
   // - pass shouldRestart to skip in-progress syncing but still check completion status
   const { changes } = useEntitiesSync({
+    appletId,
     completedEntities:
       flowResumeEnabled && !isLoading && !isFetching ? completedEntities : undefined,
     respondentSubjectId: respondentMeta?.subjectId ?? null,
@@ -147,8 +172,21 @@ export const SurveyWidget = (props: Props) => {
     : null;
 
   useEffect(() => {
-    // Only consider redirect if progress has changed
-    if (!flowResumeEnabled || !groupProgressChanged) return;
+    // Only consider redirect if flow resume is enabled
+    if (!flowResumeEnabled) return;
+
+    // Gate on data being loaded: don't redirect before we have sync data
+    // (avoids spurious redirects when Redux has stale state from a prior session)
+    if (isLoading || isFetching) return;
+
+    // Redirect if the sync just changed progress, OR if fresh server data has loaded and the
+    // stored currentActivityId already differs from the URL (can happen when the activity list
+    // page synced server state into Redux before this Survey screen even mounted).
+    const hasFreshServerData = completedEntities !== undefined;
+    const shouldCheckRedirect =
+      groupProgressChanged ||
+      (hasFreshServerData && !!flowId && !!currentActivityId && currentActivityId !== activityId);
+    if (!shouldCheckRedirect) return;
 
     // If entity was completed on another device, redirect to activity list
     if (groupProgress?.endAt) {
@@ -172,7 +210,15 @@ export const SurveyWidget = (props: Props) => {
       navigator.navigate(screenToNavigate, { replace: true });
       return;
     }
-  }, [activityId, currentActivityId, groupProgress?.endAt, groupProgressChanged]);
+  }, [
+    activityId,
+    currentActivityId,
+    groupProgress?.endAt,
+    groupProgressChanged,
+    isLoading,
+    isFetching,
+    completedEntities,
+  ]);
 
   const responseError = error?.evaluatedMessage ?? '';
 

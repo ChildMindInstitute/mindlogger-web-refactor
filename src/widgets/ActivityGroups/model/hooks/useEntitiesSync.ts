@@ -13,6 +13,7 @@ import {
 } from '~/shared/api';
 
 export type EntitiesSyncProps = {
+  appletId: string;
   completedEntities: CompletedEntitiesDTO | undefined;
   respondentSubjectId: string | null;
   events: ScheduleEventDto[];
@@ -23,6 +24,7 @@ export type EntitiesSyncProps = {
 };
 
 export const useEntitiesSync = ({
+  appletId,
   completedEntities,
   respondentSubjectId,
   events,
@@ -57,12 +59,34 @@ export const useEntitiesSync = ({
         targetSubjectId,
       });
 
-      const event = events.find(({ id }) => id === eventId) ?? null;
+      let event: ScheduleEventDto | null = events.find(({ id }) => id === eventId) ?? null;
 
       // Case 1: In-progress flow (started on another device, not yet completed)
       // Create or update resumable progress so user can continue where they left off
       // Skip this case when shouldRestart=true (user wants to start fresh, not resume)
       if (isFlow && entity.isFlowCompleted === false) {
+        // If the flow was deleted from the current applet version, its schedule event
+        // no longer exists. Create a synthetic AlwaysAvailable event so that:
+        // 1. The groupProgress.event is populated (ActivityGroupsBuildManager skips entries without event)
+        // 2. The survey can render when the user resumes
+        if (!event) {
+          event = {
+            id: eventId,
+            entityId,
+            availabilityType: 'AlwaysAvailable',
+            availability: {
+              oneTimeCompletion: false,
+              periodicityType: 'ALWAYS',
+              timeFrom: null,
+              timeTo: null,
+              allowAccessBeforeFromTime: false,
+              startDate: null,
+              endDate: null,
+            },
+            selectedDate: null,
+            timers: { timer: null, idleTimer: null },
+          };
+        }
         // When restarting, skip in-progress syncing - user wants to start fresh
         if (shouldRestart) {
           return false;
@@ -70,12 +94,25 @@ export const useEntitiesSync = ({
 
         const flow = activityFlows.find((f) => f.id === entity.id);
 
-        if (!flow) {
-          console.warn(`[useEntitiesSync] Flow not found for entity ID: ${entity.id}`);
+        // Prefer activity IDs from the server (matches the version the flow was started at),
+        // then fall back to local stored metadata, then current flow version
+        const localFlowProgress = groupProgress as FlowProgress | undefined;
+        const flowActivityIds =
+          entity.flowActivityIds ?? localFlowProgress?.flowActivityIds ?? flow?.activityIds;
+        // Prefer the server-provided flow name (from flow_histories at the submitted version),
+        // then local stored name, then current flow version name
+        const flowName = entity.flowName ?? localFlowProgress?.flowName ?? flow?.name;
+
+        if (!flowActivityIds) {
           return false;
         }
 
         if (groupProgress?.submitId === entity.submitId) {
+          // If local is already completed for this submitId, never overwrite with in-progress
+          // (the server may not have processed the final submission yet)
+          if (groupProgress.endAt) {
+            return false;
+          }
           // If submitIds match, only skip if local is at or ahead
           // ("Keep last activity in each submission" in AnswerService._filter_activity_flows)
           if ((groupProgress as FlowProgress)?.pipelineActivityOrder >= pipelineActivityOrder) {
@@ -99,9 +136,8 @@ export const useEntitiesSync = ({
           }
         }
 
-        const nextActivityId = flow.activityIds[pipelineActivityOrder];
+        const nextActivityId = flowActivityIds[pipelineActivityOrder];
         if (!nextActivityId) {
-          console.warn(`[useEntitiesSync] No next activity found for flow: ${entity.id}`);
           return false;
         }
 
@@ -128,6 +164,10 @@ export const useEntitiesSync = ({
             currentActivityId: nextActivityId,
             pipelineActivityOrder,
             submitId: entity.submitId,
+            appletVersion: entity.version,
+            flowActivityIds,
+            flowName,
+            appletId,
             startAt: groupProgress?.startAt ?? entity.startTime,
             endAt: null,
             context: groupProgress?.context ?? { summaryData: {} },
@@ -150,6 +190,7 @@ export const useEntitiesSync = ({
                 currentActivityId: '',
                 pipelineActivityOrder,
                 submitId: entity.submitId,
+                appletId,
                 startAt: entity.startTime,
                 endAt: entity.endTime,
                 context: { summaryData: {} },
@@ -158,6 +199,7 @@ export const useEntitiesSync = ({
             : {
                 type: ActivityPipelineType.Regular,
                 submitId: entity.submitId,
+                appletId,
                 startAt: entity.startTime,
                 endAt: entity.endTime,
                 context: { summaryData: {} },
@@ -209,6 +251,7 @@ export const useEntitiesSync = ({
               currentActivityId: '',
               pipelineActivityOrder,
               submitId: entity.submitId,
+              appletId,
               startAt: entity.startTime,
               endAt: entity.endTime,
               event,
@@ -217,6 +260,7 @@ export const useEntitiesSync = ({
               ...groupProgress,
               type: ActivityPipelineType.Regular,
               submitId: entity.submitId,
+              appletId,
               startAt: entity.startTime,
               endAt: entity.endTime,
               event,
@@ -224,7 +268,14 @@ export const useEntitiesSync = ({
       });
       return true;
     },
-    [respondentSubjectId, events, activityFlows, saveGroupProgress, removeActivityProgress],
+    [
+      respondentSubjectId,
+      events,
+      activityFlows,
+      saveGroupProgress,
+      removeActivityProgress,
+      appletId,
+    ],
   );
 
   // Legacy sync logic before flow resume was implemented (#690). Used when flow resume is disabled.
@@ -258,6 +309,7 @@ export const useEntitiesSync = ({
             startAt: null,
             endAt: endAtTimestamp,
             submitId: uuidV4(),
+            appletId,
             context: {
               summaryData: {},
             },
@@ -279,13 +331,14 @@ export const useEntitiesSync = ({
           targetSubjectId,
           progressPayload: {
             ...groupProgress,
+            appletId,
             endAt,
             event,
           },
         });
       }
     },
-    [respondentSubjectId, events, saveGroupProgress],
+    [respondentSubjectId, events, saveGroupProgress, appletId],
   );
 
   const [changes, setChanges] = useState<string[]>([]);

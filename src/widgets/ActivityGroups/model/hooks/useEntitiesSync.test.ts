@@ -7,6 +7,7 @@ import { ActivityPipelineType, FlowProgress, GroupProgress } from '~/abstract/li
 import { CompletedEntityDTO } from '~/shared/api';
 import {
   mockActivityId1,
+  mockActivityId2,
   mockActivityId3,
   mockAppletId,
   mockEventsResponse,
@@ -42,6 +43,7 @@ const baseCompletedEntity: CompletedEntityDTO = {
   id: mockActivityId1,
   answerId: 'answer-id',
   submitId: 'server-submit-id', // test with different submit ID
+  version: '1.0.0',
   targetSubjectId: null,
   scheduledEventId: mockActivityEvent.id,
   startTime: new Date('2020-01-01T00:00:00').getTime(),
@@ -50,6 +52,8 @@ const baseCompletedEntity: CompletedEntityDTO = {
   localEndTime: '02:20:00',
   isFlowCompleted: null,
   activityFlowOrder: null,
+  flowActivityIds: null,
+  flowName: null,
 };
 
 // Base flow progress (local)
@@ -93,6 +97,7 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        appletId: mockAppletId,
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
@@ -105,6 +110,7 @@ describe('useEntitiesSync', () => {
           progressPayload: expect.objectContaining({
             pipelineActivityOrder: 2,
             currentActivityId: mockActivityId3,
+            appletVersion: '1.0.0',
           }),
         }),
       );
@@ -136,6 +142,7 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        appletId: mockAppletId,
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
@@ -187,6 +194,7 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        appletId: mockAppletId,
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
@@ -198,12 +206,14 @@ describe('useEntitiesSync', () => {
       expect(mockSaveGroupProgress).not.toHaveBeenCalled();
     });
 
-    // Restart bug scenario (M2-10471): after a flow is completed and then restarted, the backend
-    // (with the companion fix) returns the new in-progress execution. Without clearing endAt in
-    // flowRestarted, the stale endAt from the prior completion causes this sync to be skipped.
-    it('should accept server in-progress entity even when local has stale endAt from a prior completion', () => {
+    // Restart bug scenario (M2-10471): after a flow is completed and then restarted, the
+    // flowRestarted reducer clears endAt and assigns a new submitId. This test verifies that
+    // if local somehow still has a stale endAt (from before the flowRestarted fix), syncEntity
+    // correctly skips — because the real fix is in flowRestarted (which now clears endAt).
+    it('should skip sync when local has stale endAt from a prior completion (same submitId)', () => {
       // Simulates a device that has just restarted the flow: flowRestarted set a new submitId and
       // pipelineActivityOrder=0 but (before the fix) left endAt from the previous completion.
+      // After the flowRestarted fix, this state can't occur — endAt is always cleared on restart.
       const priorCompletionTime = new Date('2020-02-01T00:00:00').getTime();
       const localProgress: GroupProgress = {
         ...baseFlowProgress,
@@ -234,6 +244,7 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        appletId: mockAppletId,
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
@@ -241,15 +252,10 @@ describe('useEntitiesSync', () => {
       };
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
-      // Server is ahead (order 1 > 0) — sync must apply regardless of local endAt
-      expect(mockSaveGroupProgress).toHaveBeenCalledWith(
-        expect.objectContaining({
-          progressPayload: expect.objectContaining({
-            pipelineActivityOrder: 1,
-            endAt: null,
-          }),
-        }),
-      );
+      // Local has endAt (completed) for same submitId — syncEntity skips to avoid overwriting
+      // a completed state with in-progress. This is safe because flowRestarted now clears endAt,
+      // so this stale state won't occur in practice.
+      expect(mockSaveGroupProgress).not.toHaveBeenCalled();
     });
 
     it('should use local progress when local is at the same position as server', () => {
@@ -278,6 +284,7 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        appletId: mockAppletId,
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
@@ -286,6 +293,137 @@ describe('useEntitiesSync', () => {
       renderHook(() => useEntitiesSync(serverCompletedEntities));
 
       expect(mockSaveGroupProgress).not.toHaveBeenCalled();
+    });
+
+    it('should return empty changes when activity list page already synced (pre-empted sync)', () => {
+      // Bug scenario: Activity list page calls useEntitiesSync first and updates Redux.
+      // When the Survey page mounts and calls useEntitiesSync with the same data,
+      // local progress already matches server → syncEntity returns false → changes is empty.
+      // The SurveyWidget redirect useEffect must handle this via hasFreshServerData fallback.
+      const localProgress: GroupProgress = {
+        ...baseFlowProgress,
+        submitId: 'same-submit-id',
+        currentActivityId: mockActivityId2,
+        pipelineActivityOrder: 1,
+        startAt: new Date('2020-01-01T00:00:00').getTime(),
+        endAt: null,
+        context: { summaryData: {} },
+        event: mockFlowEvent,
+      };
+      mockGetGroupProgress.mockReturnValue(localProgress);
+
+      const serverCompletedEntities: EntitiesSyncProps = {
+        completedEntities: {
+          id: mockAppletId,
+          version: '1.0.0',
+          activities: [],
+          activityFlows: [
+            {
+              ...baseCompletedEntity,
+              id: mockFlowId1,
+              submitId: 'same-submit-id',
+              scheduledEventId: mockFlowEvent.id,
+              isFlowCompleted: false,
+              activityFlowOrder: 1,
+            },
+          ],
+        },
+        appletId: mockAppletId,
+        respondentSubjectId: null,
+        events: [mockFlowEvent],
+        activityFlows: mockFlows,
+        flowResumeEnabled: true,
+      };
+      const { result } = renderHook(() => useEntitiesSync(serverCompletedEntities));
+
+      // Sync skips because local submitId matches server and local order >= server order
+      expect(mockSaveGroupProgress).not.toHaveBeenCalled();
+      // changes is empty — the flow ID is NOT included
+      expect(result.current.changes).toEqual([]);
+    });
+
+    it('should return flow ID in changes when sync actually updates progress', () => {
+      // Normal sync scenario: server is ahead, so syncEntity returns true → flow ID in changes
+      const localProgress: GroupProgress = {
+        ...baseFlowProgress,
+        submitId: 'same-submit-id',
+        currentActivityId: mockActivityId1,
+        pipelineActivityOrder: 0,
+        startAt: new Date('2020-01-01T00:00:00').getTime(),
+        endAt: null,
+        context: { summaryData: {} },
+        event: mockFlowEvent,
+      };
+      mockGetGroupProgress.mockReturnValue(localProgress);
+
+      const serverCompletedEntities: EntitiesSyncProps = {
+        completedEntities: {
+          id: mockAppletId,
+          version: '1.0.0',
+          activities: [],
+          activityFlows: [
+            {
+              ...baseCompletedEntity,
+              id: mockFlowId1,
+              submitId: 'same-submit-id',
+              scheduledEventId: mockFlowEvent.id,
+              isFlowCompleted: false,
+              activityFlowOrder: 2,
+            },
+          ],
+        },
+        appletId: mockAppletId,
+        respondentSubjectId: null,
+        events: [mockFlowEvent],
+        activityFlows: mockFlows,
+        flowResumeEnabled: true,
+      };
+      const { result } = renderHook(() => useEntitiesSync(serverCompletedEntities));
+
+      // Sync updates because server is ahead (order 2 > local order 0)
+      expect(mockSaveGroupProgress).toHaveBeenCalled();
+      // changes contains the flow ID
+      expect(result.current.changes).toEqual([mockFlowId1]);
+    });
+
+    it('should skip in-progress syncing when shouldRestart is true', () => {
+      const localProgress: GroupProgress = {
+        ...baseFlowProgress,
+        pipelineActivityOrder: 0,
+        startAt: new Date('2020-01-01T00:00:00').getTime(),
+        endAt: null,
+        context: { summaryData: {} },
+        event: mockFlowEvent,
+      };
+      mockGetGroupProgress.mockReturnValue(localProgress);
+
+      const serverCompletedEntities: EntitiesSyncProps = {
+        completedEntities: {
+          id: mockAppletId,
+          version: '1.0.0',
+          activities: [],
+          activityFlows: [
+            {
+              ...baseCompletedEntity,
+              id: mockFlowId1,
+              scheduledEventId: mockFlowEvent.id,
+              isFlowCompleted: false,
+              activityFlowOrder: 2,
+            },
+          ],
+        },
+        appletId: mockAppletId,
+        respondentSubjectId: null,
+        events: [mockFlowEvent],
+        activityFlows: mockFlows,
+        flowResumeEnabled: true,
+        shouldRestart: true,
+      };
+      const { result } = renderHook(() => useEntitiesSync(serverCompletedEntities));
+
+      // shouldRestart=true skips in-progress flow syncing entirely
+      expect(mockSaveGroupProgress).not.toHaveBeenCalled();
+      expect(result.current.changes).toEqual([]);
     });
   });
 
@@ -305,6 +443,7 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        appletId: mockAppletId,
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
@@ -339,6 +478,7 @@ describe('useEntitiesSync', () => {
           ],
           activityFlows: [],
         },
+        appletId: mockAppletId,
         respondentSubjectId: null,
         events: [mockActivityEvent],
         activityFlows: mockFlows,
@@ -385,6 +525,7 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        appletId: mockAppletId,
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
@@ -426,6 +567,7 @@ describe('useEntitiesSync', () => {
           ],
           activityFlows: [],
         },
+        appletId: mockAppletId,
         respondentSubjectId: null,
         events: [mockActivityEvent],
         activityFlows: mockFlows,
@@ -467,6 +609,7 @@ describe('useEntitiesSync', () => {
             },
           ],
         },
+        appletId: mockAppletId,
         respondentSubjectId: null,
         events: [mockFlowEvent],
         activityFlows: mockFlows,
@@ -508,6 +651,7 @@ describe('useEntitiesSync', () => {
           ],
           activityFlows: [],
         },
+        appletId: mockAppletId,
         respondentSubjectId: null,
         events: [mockActivityEvent],
         activityFlows: mockFlows,
