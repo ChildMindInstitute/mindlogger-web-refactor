@@ -295,6 +295,11 @@ export const ActivityCard = ({ activityListItem }: Props) => {
       );
 
       void queryClient.invalidateQueries(['eventsByAppletId']);
+      // Invalidate completedEntities so useEntitiesSync refetches from the server.
+      // This allows it to discover in-progress flow data and create a GroupProgress
+      // entry with flowActivityIds, enabling the "deleted flow" recovery path in
+      // ActivityGroupsBuildManager to show the card as in-progress.
+      void queryClient.invalidateQueries(['completedEntities']);
       setPendingFreshResponse(null);
     }
   }, [pendingFreshResponse, context, queryClient]);
@@ -372,7 +377,29 @@ export const ActivityCard = ({ activityListItem }: Props) => {
     queryClient,
   ]);
 
-  const resumeActivity = () => {
+  const resumeActivity = async () => {
+    if (!isEntitySupported) {
+      return openStoreLink();
+    }
+
+    const flowId = activityListItem.flowId;
+
+    if (flowId) {
+      const freshResult = await fetchFreshEntityData(flowId, 'flow').catch((error) => {
+        console.error(error);
+        return undefined;
+      });
+      if (!freshResult || freshResult.deleted) return;
+    } else {
+      const freshResult = await fetchFreshEntityData(activityListItem.activityId, 'activity').catch(
+        (error) => {
+          console.error(error);
+          return undefined;
+        },
+      );
+      if (!freshResult || freshResult.deleted) return;
+    }
+
     startActivity(false);
 
     Mixpanel.track(
