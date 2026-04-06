@@ -1,14 +1,15 @@
-import { test, expect } from '../../../../fixtures/pages.fixture'
-import { requirePlaywrightAuthCredentials } from '../../../../utils/credentials';
+import { test, expect } from '../../fixtures/test';
+import { requirePlaywrightAuthCredentials } from '../../../utils/credentials';
 
 test.describe('Activity Completion', () => {
-  test('User can complete an assessment and submit answers', async ({
-    appletListPage,
-    appletDetailsPage,
+  test('User can complete an assessment and submit answers', async ({ 
+    appletListPage, 
+    appletDetailsPage, 
     loginPage,
     page,
     baseURL,
   }) => {
+    // Navigate to applets list
     const { email, password } = requirePlaywrightAuthCredentials();
 
     await loginPage.goto(baseURL);

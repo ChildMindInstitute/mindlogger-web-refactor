@@ -1,4 +1,6 @@
-// TODO Perhaps a better implementation
+/**
+ * API helper for applet-related operations in the curious API client.
+ */
 import { expect } from '@playwright/test';
 import {CuriousApi} from "./api";
 
@@ -22,6 +24,12 @@ interface createAppletPayload {
 
 export class AppletAPI extends CuriousApi {
 
+    /**
+     * Create a new applet via the API.
+     *
+     * @param appletData - The applet payload.
+     * @returns The API response.
+     */
     async createApplet(appletData: createAppletPayload): Promise<any> {
         const response = await this.apiContext.post('/applets', { data: appletData });
         console.log(response);
@@ -29,6 +37,13 @@ export class AppletAPI extends CuriousApi {
         return await response.json();
     }
 
+    /**
+     * Create a manager invitation for an applet.
+     *
+     * @param inviteData - The invitation payload.
+     * @param appletID - The applet identifier.
+     * @returns The API response.
+     */
     async createManagerInvite(inviteData: { email: string; firstName: string; lastName: string; language: string; role: string; workspacePrefix: string; title: string; }, appletID: string): Promise<any> {
         const response = await this.apiContext.post(`/invitations/${appletID}/managers`, { data: inviteData });
         console.log(response);
@@ -36,6 +51,12 @@ export class AppletAPI extends CuriousApi {
         return await response.json();
     }
 
+    /**
+     * Retrieve invitations for a specific applet.
+     *
+     * @param appletID - The applet identifier.
+     * @returns The API response.
+     */
     async getAppletInvitations(appletID: string): Promise<any> {
         const response = await this.apiContext.get(`/invitations?page=1&limit=10&ordering=-id&appletId=${appletID}`);
         console.log(response);
