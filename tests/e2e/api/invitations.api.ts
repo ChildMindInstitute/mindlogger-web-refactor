@@ -6,9 +6,18 @@ import type {
   GetInvitationSuccessResponse,
 } from '../../../src/shared/api/types/invitation';
 
+/**
+ * API helper for invitation lifecycle operations.
+ */
 export class InvitationsApi {
   constructor(private readonly api: APIRequestContext) {}
 
+  /**
+   * Fetch the invitation details for a given invitation ID.
+   *
+   * @param invitationId - The invitation identifier.
+   * @returns The invitation response object.
+   */
   async getInvitation(invitationId: string): Promise<GetInvitationSuccessResponse> {
     const res = await this.api.get(`/invitations/${invitationId}`);
     if (!res.ok()) {
@@ -18,6 +27,11 @@ export class InvitationsApi {
     return res.json() as Promise<GetInvitationSuccessResponse>;
   }
 
+  /**
+   * Accept an invitation by ID.
+   *
+   * @param invitationId - The invitation identifier.
+   */
   async acceptInvitation(invitationId: string): Promise<void> {
     const payload: AcceptInvitationByIdPayload = { invitationId };
     const res = await this.api.post(`/invitations/${payload.invitationId}/accept`);
@@ -27,6 +41,11 @@ export class InvitationsApi {
     }
   }
 
+  /**
+   * Decline an invitation by ID.
+   *
+   * @param invitationId - The invitation identifier.
+   */
   async declineInvitation(invitationId: string): Promise<void> {
     const payload: DeclineInvitationByIdPayload = { invitationId };
     const res = await this.api.delete(`/invitations/${payload.invitationId}/decline`);
@@ -36,6 +55,12 @@ export class InvitationsApi {
     }
   }
 
+  /**
+   * Fetch a private invitation by ID.
+   *
+   * @param invitationId - The invitation identifier.
+   * @returns The invitation response object.
+   */
   async getPrivateInvitation(invitationId: string): Promise<GetInvitationSuccessResponse> {
     const res = await this.api.get(`/invitations/private/${invitationId}`);
     if (!res.ok()) {
@@ -45,6 +70,11 @@ export class InvitationsApi {
     return res.json() as Promise<GetInvitationSuccessResponse>;
   }
 
+  /**
+   * Accept a private invitation by ID.
+   *
+   * @param invitationId - The invitation identifier.
+   */
   async acceptPrivateInvitation(invitationId: string): Promise<void> {
     const payload: AcceptInvitationByIdPayload = { invitationId };
     const res = await this.api.post(`/invitations/private/${payload.invitationId}/accept`);

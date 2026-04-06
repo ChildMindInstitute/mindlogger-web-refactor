@@ -1,8 +1,18 @@
 import type { APIRequestContext } from '@playwright/test';
 
+/**
+ * API helper for applet invitation operations.
+ */
 export class AppletsApi {
   constructor(private readonly api: APIRequestContext) {}
 
+  /**
+   * Create a manager invitation for an applet.
+   *
+   * @param inviteData - The invitation payload.
+   * @param appletID - The target applet identifier.
+   * @returns The created invitation response.
+   */
   /**
    * Create a manager invitation for an applet.
    *

@@ -2,6 +2,11 @@ import dotenv from "dotenv";
 
 import {generateStorageFilename} from './utils/file'
 
+/**
+ * Read environment variables from file.
+ * https://github.com/motdotla/dotenv
+ * See https://playwright.dev/docs/test-configuration.
+ */
 dotenv.config({
   path: `.env`,
 });

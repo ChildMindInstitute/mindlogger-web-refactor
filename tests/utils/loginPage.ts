@@ -1,6 +1,14 @@
 import { Page } from '@playwright/test';
 import { UserAPI } from './userApi'; // Import the improved class
 
+/**
+ * Perform a UI login flow by navigating to the login page and submitting credentials.
+ *
+ * @param page - The Playwright page instance.
+ * @param url - The login page URL.
+ * @param email - The email address to sign in with.
+ * @param password - The corresponding password.
+ */
 export const UIlogin = async (page: Page, url: any, email: string, password: string) => {
     await page.goto(url);
     // Fill in login form
@@ -9,6 +17,14 @@ export const UIlogin = async (page: Page, url: any, email: string, password: str
     // Submit the form
     await page.click('button[type="submit"]');
 };
+/**
+ * Perform an admin login via API and inject the auth token into the browser context.
+ *
+ * @param page - The Playwright page instance.
+ * @param email - The admin email address.
+ * @param password - The admin password.
+ * @returns The access token string.
+ */
 export const apiAdminLogin = async (page: Page, email: string, password: string) => {
     const userApi = new UserAPI();
     await userApi.init();
@@ -36,6 +52,13 @@ export const apiAdminLogin = async (page: Page, email: string, password: string)
     }
 };
 
+/**
+ * Walk through the UI flow to create a new user account.
+ *
+ * @param page - The Playwright page instance.
+ * @param email - The email address for the new account.
+ * @param password - The password for the new account.
+ */
 export const createAccountForm = async (page: Page, email: string, password: string) => {
     await page.goto('/login');
     await page.getByText('Create an account').click();
