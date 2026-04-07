@@ -4,6 +4,8 @@ import { getMfaErrorResult, MfaVerificationType } from './mfaErrorHandler';
 
 import { useMFAVerifyMutation, useMFARecoveryMutation } from '~/entities/user';
 import { secureTokensStorage } from '~/shared/utils';
+import { Mixpanel } from '~/shared/utils/analytics';
+import { MixpanelEventType, MixpanelProps } from '~/shared/utils/analytics/mixpanel.types';
 
 export type { MfaVerificationType };
 
@@ -31,10 +33,14 @@ interface UseMFAVerificationArgs {
   session: MFASessionData | null;
   /**
    * Called on successful verification - tokens are already stored before this callback.
-   * Only receives user data since tokens are stored directly in useMFAVerification
+   * Only receives user data and MFA context since tokens are stored directly in useMFAVerification
    * to avoid race conditions with navigation.
    */
-  onSuccess: (result: { user: UserData }) => void;
+  onSuccess: (result: {
+    user: UserData;
+    mfaUsed: boolean;
+    mfaMethod: 'Authenticator App' | 'Backup Codes';
+  }) => void;
 }
 
 /**
@@ -98,8 +104,24 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
         // Navigation happens sync after callback, so tokens must be in storage first
         secureTokensStorage.setTokens(result.token);
 
-        // Trigger success callback with user only (tokens already stored)
-        onSuccess({ user: result.user });
+        // Track successful verification
+        Mixpanel.track({
+          action:
+            type === 'totp'
+              ? MixpanelEventType.MFATOTPVerificationSuccess
+              : MixpanelEventType.MFARecoveryVerificationSuccess,
+        });
+
+        // Set user properties for MFA-enabled user
+        Mixpanel.login(result.user.id);
+        Mixpanel.setUserProperty('Has MFA Enabled', true);
+
+        // Trigger success callback with user and MFA context (tokens already stored)
+        onSuccess({
+          user: result.user,
+          mfaUsed: true,
+          mfaMethod: type === 'totp' ? 'Authenticator App' : 'Backup Codes',
+        });
 
         return true;
       } catch (error: unknown) {
@@ -115,6 +137,38 @@ export const useMFAVerification = ({ type, session, onSuccess }: UseMFAVerificat
         if (expired && !hasSessionExpiredRef.current) {
           hasSessionExpiredRef.current = true;
           setIsSessionExpired(true);
+
+          // Track session expired event
+          Mixpanel.track({
+            action: MixpanelEventType.MFASessionExpired,
+            [MixpanelProps.MFAErrorCode]: translationKey,
+          });
+        } else if (!expired) {
+          // Track verification failed (only if not session expired)
+          const getAttemptType = (): 'global' | 'session' | null => {
+            if (globalAttemptsRemaining !== null) return 'global';
+            if (sessionAttemptsRemaining !== null) return 'session';
+            return null;
+          };
+
+          Mixpanel.track({
+            action:
+              type === 'totp'
+                ? MixpanelEventType.MFATOTPVerificationFailed
+                : MixpanelEventType.MFARecoveryVerificationFailed,
+            [MixpanelProps.MFAErrorCode]: translationKey,
+            [MixpanelProps.MFAAttemptsRemaining]:
+              globalAttemptsRemaining ?? sessionAttemptsRemaining,
+            [MixpanelProps.MFAAttemptType]: getAttemptType(),
+          });
+
+          // Track login failed at MFA stage
+          Mixpanel.track({
+            action: MixpanelEventType.LoginFailed,
+            [MixpanelProps.FailureStage]: 'MFA',
+            [MixpanelProps.MFARequired]: true,
+            [MixpanelProps.MFAMethodUsed]: type === 'totp' ? 'Authenticator App' : 'Backup Codes',
+          });
         }
 
         // Set display error with priority-based warning

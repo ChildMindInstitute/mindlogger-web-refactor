@@ -6,6 +6,7 @@ type Options<TData> = QueryOptions<FetchFn, TData>;
 type Params = {
   isPublic: boolean;
   activityId: string;
+  version?: string;
 };
 
 export const useActivityByIdQuery = <TData = ReturnAwaited<FetchFn>>(
@@ -14,7 +15,11 @@ export const useActivityByIdQuery = <TData = ReturnAwaited<FetchFn>>(
 ) => {
   return useBaseQuery(
     ['activityById', params],
-    () => ActivityApiProxyService.getActivityById(params.activityId, { isPublic: params.isPublic }),
+    () =>
+      ActivityApiProxyService.getActivityById(params.activityId, {
+        isPublic: params.isPublic,
+        version: params.version,
+      }),
     options,
   );
 };

@@ -22,12 +22,16 @@ export const useEntityStart = () => {
     activityId: string,
     event: ScheduleEventDto,
     targetSubjectId: string | null,
+    appletVersion: string,
+    appletId: string,
   ): void {
     dispatch(
       actions.activityStarted({
         activityId,
         event,
         targetSubjectId,
+        appletVersion,
+        appletId,
       }),
     );
   }
@@ -38,6 +42,10 @@ export const useEntityStart = () => {
     event: ScheduleEventDto,
     targetSubjectId: string | null,
     pipelineActivityOrder: number,
+    appletVersion: string,
+    flowActivityIds: string[],
+    flowName: string,
+    appletId: string,
   ): void {
     dispatch(
       actions.flowStarted({
@@ -46,6 +54,10 @@ export const useEntityStart = () => {
         event,
         targetSubjectId,
         pipelineActivityOrder,
+        appletVersion,
+        flowActivityIds,
+        flowName,
+        appletId,
       }),
     );
   }
@@ -54,6 +66,8 @@ export const useEntityStart = () => {
     activityId: string,
     event: ScheduleEventDto,
     targetSubjectId: string | null,
+    appletVersion: string,
+    appletId: string,
   ): void {
     const groupProgress = getProgress(activityId, event.id, targetSubjectId);
 
@@ -61,13 +75,15 @@ export const useEntityStart = () => {
       return;
     }
 
-    return activityStarted(activityId, event, targetSubjectId);
+    return activityStarted(activityId, event, targetSubjectId, appletVersion, appletId);
   }
 
   function startFlow(
     event: ScheduleEventDto,
     flow: ActivityFlowDTO,
     targetSubjectId: string | null,
+    appletVersion: string,
+    appletId: string,
   ): void {
     const flowId = flow.id;
 
@@ -87,7 +103,17 @@ export const useEntityStart = () => {
 
     const firstActivityId: string = flowActivities[0];
 
-    return flowStarted(flowId, firstActivityId, event, targetSubjectId, 0);
+    return flowStarted(
+      flowId,
+      firstActivityId,
+      event,
+      targetSubjectId,
+      0,
+      appletVersion,
+      flow.activityIds,
+      flow.name,
+      appletId,
+    );
   }
 
   return { startActivity, startFlow };

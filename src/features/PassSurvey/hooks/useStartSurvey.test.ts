@@ -147,6 +147,10 @@ describe('useStartSurvey', () => {
         eventId: mockEventId,
         targetSubjectId: null,
         activityId: mockFlows[0].activityIds[0], // first activity in flow
+        appletVersion: '1.0.0',
+        appletId: 'applet-1',
+        flowActivityIds: mockFlows[0].activityIds,
+        flowName: 'Test Flow',
       });
     });
 
@@ -259,6 +263,7 @@ describe('useStartSurvey', () => {
         activityId: mockActivityId1,
         eventId: activityEventId,
         targetSubjectId: null,
+        appletVersion: '1.0.0',
       });
     });
 

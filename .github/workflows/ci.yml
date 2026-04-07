@@ -15,7 +15,7 @@ jobs:
         run: |
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -50,7 +50,7 @@ jobs:
         run: |
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -87,7 +87,7 @@ jobs:
         run: |
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -110,9 +110,9 @@ jobs:
       - name: Install Playwright dependencies
         run: yarn playwright install
       - name: Configure aws credentials for secrets
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: arn:aws:iam::917902836630:role/cmiml-devops-oidc-github-role
+          role-to-assume: arn:aws:iam::917902836630:role/github-oidc-build-secrets2026031712184557570000000a
           role-session-name: OIDC-GHA-Build-Secrets
           aws-region: us-east-1
       - name: Load Playwright environment
@@ -138,7 +138,7 @@ jobs:
         run: |
           echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'

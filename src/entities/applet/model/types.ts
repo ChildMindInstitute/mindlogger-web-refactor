@@ -252,6 +252,7 @@ export type InProgressActivity = {
   activityId: string;
   eventId: string;
   targetSubjectId: string | null;
+  appletVersion?: string;
 };
 
 export type InProgressFlow = {
@@ -264,10 +265,16 @@ export type InProgressFlow = {
 
 export type ActivityStartedPayload = {
   event: ScheduleEventDto;
+  appletVersion: string;
+  appletId: string;
 } & Omit<InProgressActivity, 'eventId'>;
 
 export type FlowStartedPayload = {
   event: ScheduleEventDto;
+  appletVersion: string;
+  appletId: string;
+  flowActivityIds: string[];
+  flowName: string;
 } & Omit<InProgressFlow, 'eventId'>;
 
 export type FlowRestartedPayload = {
@@ -275,6 +282,19 @@ export type FlowRestartedPayload = {
   eventId: string;
   targetSubjectId: string | null;
   activityId: string;
+  appletVersion: string;
+  appletId: string;
+  flowActivityIds: string[];
+  flowName: string;
+};
+
+export type UpdateAppletVersionPayload = {
+  entityId: string;
+  eventId: string;
+  targetSubjectId: string | null;
+  appletVersion: string;
+  flowActivityIds?: string[];
+  flowName?: string;
 };
 
 export type MultiInformantPayload = Required<MultiInformantState>;

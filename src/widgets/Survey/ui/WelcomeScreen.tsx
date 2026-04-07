@@ -28,6 +28,8 @@ const WelcomeScreen = () => {
 
   const { setInitialProgress } = appletModel.hooks.useActivityProgress();
 
+  const { updateAppletVersion } = appletModel.hooks.useGroupProgressStateManager();
+
   const isFlow = !!context.flow;
   const targetSubjectId = context.targetSubject?.id ?? null;
 
@@ -39,6 +41,42 @@ const WelcomeScreen = () => {
 
   const isTimedActivity = !!groupProgress?.event?.timers?.timer;
 
+  // When restarting, the restart reducer (flowRestarted/activityRestarted) may have set a stale
+  // applet version from the dashboard's cached applet data. Now that we have the fresh version
+  // from the API (via SurveyContext), update the group progress to use the correct version.
+  // This runs on mount (before user clicks Start) so the version is correct for answer submission.
+  useEffect(() => {
+    const isGroupStarted = groupProgress && groupProgress.startAt && !groupProgress.endAt;
+
+    if (
+      isGroupStarted &&
+      context.shouldRestart &&
+      groupProgress.appletVersion !== context.appletVersion
+    ) {
+      updateAppletVersion({
+        entityId: context.entityId,
+        eventId: context.eventId,
+        targetSubjectId,
+        appletVersion: context.appletVersion,
+        flowActivityIds: context.flow?.activityIds,
+        flowName: context.flow?.name,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    context.shouldRestart,
+    context.appletVersion,
+    context.entityId,
+    context.eventId,
+    context.flow?.activityIds,
+    context.flow?.name,
+    targetSubjectId,
+    groupProgress?.startAt,
+    groupProgress?.endAt,
+    groupProgress?.appletVersion,
+    updateAppletVersion,
+  ]);
+
   const startAssessment = useCallback(() => {
     const isGroupDefined = !!groupProgress;
 
@@ -47,11 +85,21 @@ const WelcomeScreen = () => {
     const event = groupProgress?.event ?? context.event;
 
     if (context.flow && !isGroupStarted) {
-      startFlow(event, context.flow, targetSubjectId);
+      startFlow(event, context.flow, targetSubjectId, context.appletVersion, context.appletId);
     }
 
-    if (!context.flow) {
-      startActivity(context.activityId, event, targetSubjectId);
+    // Only start a standalone activity if we're NOT in a flow context.
+    // For deleted flows, context.flow is null but context.entityId still
+    // differs from context.activityId, indicating a flow-type entity.
+    const isFlowContext = context.entityId !== context.activityId;
+    if (!context.flow && !isFlowContext) {
+      startActivity(
+        context.activityId,
+        event,
+        targetSubjectId,
+        context.appletVersion,
+        context.appletId,
+      );
     }
 
     return setInitialProgress({
@@ -62,6 +110,9 @@ const WelcomeScreen = () => {
   }, [
     context.activity,
     context.activityId,
+    context.appletId,
+    context.appletVersion,
+    context.entityId,
     context.event,
     context.flow,
     targetSubjectId,

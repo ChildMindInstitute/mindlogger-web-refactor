@@ -12,17 +12,21 @@ import { MFARecoveryCodeSchema, TMFARecoveryCodeForm } from '../model/mfa.schema
 import { variables } from '~/shared/constants/theme/variables';
 import { BaseButton, BasicFormProvider, Box, Text } from '~/shared/ui';
 import { useCustomForm, useCustomTranslation } from '~/shared/utils';
+import { Mixpanel } from '~/shared/utils/analytics';
+import { MixpanelEventType, MixpanelProps } from '~/shared/utils/analytics/mixpanel.types';
 
 interface RecoveryCodeFormProps {
   /** MFA session from Redux (passed via props) */
   session: { token: string; sessionId: string };
   /**
    * Called on successful verification - tokens are already stored.
-   * Only receives user data since tokens are stored in useMFAVerification
+   * Only receives user data and MFA context since tokens are stored in useMFAVerification
    * before this callback to avoid race conditions with navigation.
    */
   onSuccess: (result: {
     user: { id: string; firstName: string; lastName: string; email: string };
+    mfaUsed: boolean;
+    mfaMethod: 'Authenticator App' | 'Backup Codes';
   }) => void;
   onSwitchToTOTP: () => void;
   onBackToLogin: () => void;
@@ -60,6 +64,15 @@ const RecoveryCodeFormComponent = ({
 
   const code = watch('code');
 
+  // Track page view and challenge presented on mount
+  useEffect(() => {
+    Mixpanel.trackPageView('MFA Recovery');
+    Mixpanel.track({
+      action: MixpanelEventType.MFAChallengePresented,
+      [MixpanelProps.MFAType]: 'recovery',
+    });
+  }, []);
+
   // Auto-format recovery code: XXXXX-XXXXX
   const formatRecoveryCode = (value: string): string => {
     const cleaned = value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
@@ -79,6 +92,9 @@ const RecoveryCodeFormComponent = ({
   const onSubmit = async (data: TMFARecoveryCodeForm) => {
     if (isSessionExpired) return;
     isUserTypingRef.current = false;
+
+    Mixpanel.track({ action: MixpanelEventType.MFARecoveryCodeSubmitted });
+
     const success = await verifyCode(data.code);
     if (!success) {
       setValue('code', '');
@@ -89,6 +105,16 @@ const RecoveryCodeFormComponent = ({
     isUserTypingRef.current = true;
     const formatted = formatRecoveryCode(e.target.value);
     setValue('code', formatted);
+  };
+
+  const handleSwitchToTOTP = () => {
+    Mixpanel.track({ action: MixpanelEventType.MFASwitchToTOTP });
+    onSwitchToTOTP();
+  };
+
+  const handleBackToLogin = () => {
+    Mixpanel.track({ action: MixpanelEventType.MFABackToLogin });
+    onBackToLogin();
   };
 
   // Get error message for display
@@ -161,7 +187,7 @@ const RecoveryCodeFormComponent = ({
               <Text
                 variant="bodyLarge"
                 color={variables.palette.onSurfaceVariant}
-                onClick={onSwitchToTOTP}
+                onClick={handleSwitchToTOTP}
                 sx={{
                   cursor: 'pointer',
                   '&:hover': { opacity: 0.8 },
@@ -178,7 +204,7 @@ const RecoveryCodeFormComponent = ({
               <Text
                 variant="bodyLarge"
                 color={variables.palette.onSurfaceVariant}
-                onClick={onBackToLogin}
+                onClick={handleBackToLogin}
                 sx={{
                   cursor: 'pointer',
                   '&:hover': { opacity: 0.8 },

@@ -1,3 +1,4 @@
+import { FlowProgress } from '~/abstract/lib';
 import { EntityType } from '~/abstract/lib/GroupBuilder';
 import { appletModel } from '~/entities/applet';
 import { prolificParamsSelector } from '~/entities/applet/model/selectors';
@@ -33,6 +34,8 @@ type OnActivityCardClickProps = {
   targetSubjectId: string | null;
   flowId: string | null;
   shouldRestart: boolean;
+  /** Fresh activity IDs fetched from the API at restart time, bypassing stale cache */
+  freshFlowActivityIds?: string[];
 };
 
 type Props = {
@@ -96,6 +99,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
     eventId,
     targetSubjectId,
     shouldRestart,
+    freshFlowActivityIds,
   }: OnActivityCardClickProps) {
     if (!applet) return;
 
@@ -128,7 +132,20 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
 
     if (flowId) {
       const flow = flows?.find((x) => x.id === flowId);
-      const firstActivityId: string | null = flow?.activityIds[0] ?? null;
+
+      // Fall back to stored flowActivityIds from groupProgress when the flow
+      // has been deleted from the current applet version but progress still
+      // exists (synced from server).
+      const entityProgress = getGroupProgress({
+        entityId: flowId,
+        eventId,
+        targetSubjectId,
+      });
+      const storedFlowActivityIds = (entityProgress as FlowProgress | null)?.flowActivityIds;
+
+      const resolvedActivityIds =
+        freshFlowActivityIds ?? flow?.activityIds ?? storedFlowActivityIds ?? [];
+      const firstActivityId: string | null = resolvedActivityIds[0] ?? null;
 
       if (!firstActivityId) {
         throw new Error(
@@ -141,22 +158,33 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
 
         // Update group progress rather than remove to preserve version of event that the flow was
         // started with
-        flowRestarted({ flowId, eventId, targetSubjectId, activityId: firstActivityId });
+        flowRestarted({
+          flowId,
+          eventId,
+          targetSubjectId,
+          activityId: firstActivityId,
+          appletVersion: applet.version,
+          appletId: applet.id,
+          flowActivityIds: resolvedActivityIds,
+          flowName:
+            flow?.name ??
+            ((entityProgress as Record<string, unknown> | null)?.flowName as string) ??
+            '',
+        });
       } else {
         // Safety net: useEntitiesSync also clears stale progress, but may not
         // have fired yet when the user clicks "Start".
-        const entityProgress = getGroupProgress({
-          entityId: flowId,
-          eventId,
-          targetSubjectId,
-        });
-
         if (!entityProgress || entityProgress.endAt) {
           removeActivityProgress({ activityId, eventId, targetSubjectId });
         }
       }
 
-      const activityIdToNavigate = shouldRestart ? firstActivityId : activityId;
+      // When fresh flow data is available, always use the first activity from
+      // the resolved list so a stale activityId from the cache is never used.
+      // On restart we already use firstActivityId; on initial start we also
+      // prefer firstActivityId when freshFlowActivityIds were provided.
+      const activityIdToNavigate =
+        shouldRestart || freshFlowActivityIds ? firstActivityId : activityId;
 
       return navigateToEntity({
         activityId: activityIdToNavigate,
@@ -173,7 +201,7 @@ export const useStartSurvey = ({ applet, isPublic, publicAppletKey }: Props) => 
 
       // Update group progress rather than remove to preserve version of event that the activity was
       // started with
-      activityRestarted({ activityId, eventId, targetSubjectId });
+      activityRestarted({ activityId, eventId, targetSubjectId, appletVersion: applet.version });
     } else {
       // Safety net: same as the flow branch above.
       const entityProgress = getGroupProgress({

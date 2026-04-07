@@ -33,10 +33,11 @@ type Props = {
   appletId: string;
   activityId: string;
   targetSubjectId: string | null;
+  activityVersion?: string;
 };
 
 export const useSurveyDataQuery = (props: Props): Return => {
-  const { appletId, activityId, publicAppletKey, targetSubjectId } = props;
+  const { appletId, activityId, publicAppletKey, targetSubjectId, activityVersion } = props;
   const { featureFlag } = useFeatureFlags();
 
   const isAssignmentsEnabled =
@@ -68,7 +69,7 @@ export const useSurveyDataQuery = (props: Props): Return => {
     isLoading: isActivityLoading,
     error: activityError,
   } = useActivityByIdQuery(
-    { isPublic: !!publicAppletKey, activityId },
+    { isPublic: !!publicAppletKey, activityId, version: activityVersion },
     { select: ({ data }) => data.result },
   );
 

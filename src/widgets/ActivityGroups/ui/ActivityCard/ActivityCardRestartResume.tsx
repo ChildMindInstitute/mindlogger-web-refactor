@@ -19,6 +19,7 @@ type Props = {
   onStartClick: () => void;
   isDisabled: boolean;
   isAutoCompletionRecordDefined: boolean;
+  isRestartDisabled?: boolean;
 };
 
 export const ActivityCardRestartResume = ({
@@ -29,6 +30,7 @@ export const ActivityCardRestartResume = ({
   activityName,
   isDisabled,
   isAutoCompletionRecordDefined,
+  isRestartDisabled,
 }: Props) => {
   const [isRestartConfirmationModalOpen, setIsRestartConfirmationModalOpen] = useState(false);
 
@@ -74,22 +76,24 @@ export const ActivityCardRestartResume = ({
             onClick={onResumeClick}
             text={t('additional.resume')}
           />
-          <ButtonBase
-            disabled={isDisabled}
-            onClick={openModal}
-            data-testid="assessment-restart-button"
-            sx={{
-              borderRadius: '100px',
-              padding: '10px 10px',
-              transition: 'all 0.2s',
-              minWidth: '120px',
-              mt: '20px',
-            }}
-          >
-            <img src={ActivityRestartIcon} alt={String(t('additional.restart'))} />
+          {!isRestartDisabled && (
+            <ButtonBase
+              disabled={isDisabled}
+              onClick={openModal}
+              data-testid="assessment-restart-button"
+              sx={{
+                borderRadius: '100px',
+                padding: '10px 10px',
+                transition: 'all 0.2s',
+                minWidth: '120px',
+                mt: '20px',
+              }}
+            >
+              <img src={ActivityRestartIcon} alt={String(t('additional.restart'))} />
 
-            <Text sx={{ marginLeft: 1 }}>{t('additional.restart')}</Text>
-          </ButtonBase>
+              <Text sx={{ marginLeft: 1 }}>{t('additional.restart')}</Text>
+            </ButtonBase>
+          )}
         </Box>
       ) : (
         <Box data-testid="assessment-buttons" alignSelf="center" width="120px">
@@ -110,7 +114,10 @@ export const ActivityCardRestartResume = ({
         onHide={closeModal}
         title={t('additional.restart_activity')}
         footerPrimaryButton={t('additional.restart')}
-        onPrimaryButtonClick={onRestartClick}
+        onPrimaryButtonClick={() => {
+          closeModal();
+          onRestartClick();
+        }}
         footerSecondaryButton={t('additional.cancel')}
         onSecondaryButtonClick={closeModal}
         showCloseIcon

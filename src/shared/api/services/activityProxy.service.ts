@@ -3,12 +3,15 @@ import { AnswerPayload, GetCompletedEntitiesPayload } from '../types';
 
 type Options = {
   isPublic: boolean;
+  version?: string;
 };
 
 function ActivityApiProxyService() {
   return {
     getActivityById: (id: string, options: Options) =>
-      options.isPublic ? ActivityService.getPublicById(id) : ActivityService.getById(id),
+      options.isPublic
+        ? ActivityService.getPublicById(id)
+        : ActivityService.getById(id, options.version ? { version: options.version } : undefined),
 
     submitAnswer: (payload: AnswerPayload, options: Options) =>
       options.isPublic
