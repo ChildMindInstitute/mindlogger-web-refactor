@@ -238,13 +238,39 @@ export class GroupUtility {
 
   public isInsideValidDatesInterval(event: ScheduleEvent) {
     const { startDate, endDate } = event.availability;
+    const { timeFrom, timeTo } = event.availability;
 
     const now = this.getNow();
 
+    // Time must be added to start date and end date if they are defined, otherwise the interval will be invalid.
+    const from =
+      startDate && timeFrom
+        ? new Date(
+            startDate.getFullYear(),
+            startDate.getMonth(),
+            startDate.getDate(),
+            timeFrom.hours,
+            timeFrom.minutes,
+          )
+        : (startDate ?? undefined);
+    const to =
+      endDate && timeTo
+        ? new Date(
+            endDate.getFullYear(),
+            endDate.getMonth(),
+            endDate.getDate(),
+            timeTo.hours,
+            timeTo.minutes,
+          )
+        : (endDate ?? undefined);
+
+    console.log('from', from);
+    console.log('to', to);
+
     return this.isInInterval(
       {
-        from: startDate ?? undefined,
-        to: endDate ?? undefined,
+        from,
+        to,
       },
       now,
       'both',
