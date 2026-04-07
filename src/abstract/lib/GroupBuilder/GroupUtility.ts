@@ -264,9 +264,6 @@ export class GroupUtility {
           )
         : (endDate ?? undefined);
 
-    console.log('from', from);
-    console.log('to', to);
-
     return this.isInInterval(
       {
         from,
