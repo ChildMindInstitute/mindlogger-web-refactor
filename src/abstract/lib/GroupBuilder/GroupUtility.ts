@@ -237,8 +237,7 @@ export class GroupUtility {
   }
 
   public isInsideValidDatesInterval(event: ScheduleEvent) {
-    const { startDate, endDate } = event.availability;
-    const { timeFrom, timeTo } = event.availability;
+    const { startDate, endDate, timeFrom, timeTo } = event.availability;
 
     const now = this.getNow();
 
