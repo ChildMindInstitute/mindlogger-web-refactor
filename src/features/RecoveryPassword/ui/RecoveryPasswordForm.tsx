@@ -68,22 +68,22 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
         </Box>
 
         <Box display="flex" flex={1} gap={2} flexDirection="column">
-          <Box display="flex" alignItems="center" gap="8px">
-            <Input
-              id="recovery-password-new-password"
-              type={newPasswordType}
-              name="new"
-              placeholder={t('newPassword') || ''}
-              autoComplete="new-password"
-              Icon={
+          <Input
+            id="recovery-password-new-password"
+            type={newPasswordType}
+            name="new"
+            placeholder={t('newPassword') || ''}
+            autoComplete="new-password"
+            Icon={
+              <>
                 <PasswordIcon
                   isSecure={newPasswordType === 'password'}
                   onClick={onNewPasswordIconClick}
                 />
-              }
-            />
-            <PasswordRequirementsTooltip password={newPasswordValue || ''} />
-          </Box>
+                <PasswordRequirementsTooltip password={newPasswordValue || ''} />
+              </>
+            }
+          />
           <Input
             id="recovery-password-confirm-new-password"
             type={confirmNewPasswordType}

@@ -52,6 +52,7 @@ export const StyledInfoIcon = styled('span')`
   display: inline-flex;
   align-items: center;
   cursor: pointer;
+  margin-left: 4px;
 
   && svg {
     fill: ${variables.palette.outline};

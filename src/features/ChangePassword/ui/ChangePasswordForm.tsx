@@ -73,22 +73,22 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
               />
             }
           />
-          <Box display="flex" alignItems="center" gap="8px">
-            <Input
-              id="change-password-form-new-password"
-              type={newPasswordType}
-              name="new"
-              placeholder={t('newPassword') || ''}
-              autoComplete="new-password"
-              Icon={
+          <Input
+            id="change-password-form-new-password"
+            type={newPasswordType}
+            name="new"
+            placeholder={t('newPassword') || ''}
+            autoComplete="new-password"
+            Icon={
+              <>
                 <PasswordIcon
                   isSecure={newPasswordType === 'password'}
                   onClick={onNewPasswordIconClick}
                 />
-              }
-            />
-            <PasswordRequirementsTooltip password={newPasswordValue || ''} />
-          </Box>
+                <PasswordRequirementsTooltip password={newPasswordValue || ''} />
+              </>
+            }
+          />
           <Input
             id="change-password-form-confirm-password"
             type={confirmNewPasswordType}

@@ -125,19 +125,19 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
           name="lastName"
           placeholder={t('lastName') || ''}
         />
-        <Box display="flex" alignItems="center" gap="8px">
-          <Input
-            id="signup-form-new-password"
-            type={passwordType}
-            name="password"
-            placeholder={t('password') || ''}
-            autoComplete="new-password"
-            Icon={
+        <Input
+          id="signup-form-new-password"
+          type={passwordType}
+          name="password"
+          placeholder={t('password') || ''}
+          autoComplete="new-password"
+          Icon={
+            <>
               <PasswordIcon isSecure={passwordType === 'password'} onClick={onPasswordIconClick} />
-            }
-          />
-          <PasswordRequirementsTooltip password={passwordValue || ''} />
-        </Box>
+              <PasswordRequirementsTooltip password={passwordValue || ''} />
+            </>
+          }
+        />
         <Input
           id="signup-form-confirm-password"
           type={confirmPasswordType}
