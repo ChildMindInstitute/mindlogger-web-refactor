@@ -17,3 +17,4 @@ export { default as useTimer } from './useTimer';
 export * from './matchPaths';
 export * from './getLanguage';
 export * from './Calculator';
+export * from './passwordPatterns';
