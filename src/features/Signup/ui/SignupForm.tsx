@@ -46,7 +46,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
     {
       defaultValues: { email: '', firstName: '', lastName: '', password: '', confirmPassword: '' },
     },
-    SignupFormSchema,
+    SignupFormSchema(),
   );
   const { handleSubmit } = form;
 

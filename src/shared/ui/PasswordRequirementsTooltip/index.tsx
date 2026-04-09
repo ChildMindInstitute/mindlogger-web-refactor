@@ -9,6 +9,7 @@ import {
   StyledInfoIcon,
 } from './PasswordRequirementsTooltip.styles';
 
+import { ACCOUNT_PASSWORD_MIN_LENGTH, ACCOUNT_PASSWORD_MIN_CHAR_TYPES } from '~/shared/constants';
 import { useCustomTranslation } from '~/shared/utils';
 import { checkPassword } from '~/shared/utils/passwordValidation';
 
@@ -38,12 +39,17 @@ export const PasswordRequirementsTooltip = ({ password }: PasswordRequirementsTo
       <StyledSection>
         <StyledSectionTitle>{t('passwordMustInclude')}</StyledSectionTitle>
         <StyledGrid>
-          <RequirementItem met={result.meetsLength} label={t('passwordReqLength')} />
+          <RequirementItem
+            met={result.meetsLength}
+            label={t('passwordReqLength', { chars: ACCOUNT_PASSWORD_MIN_LENGTH })}
+          />
           <RequirementItem met={result.hasNoSpaces} label={t('passwordReqNoSpaces')} />
         </StyledGrid>
       </StyledSection>
       <StyledSection>
-        <StyledSectionTitle>{t('passwordReqCharTypesHeading')}</StyledSectionTitle>
+        <StyledSectionTitle>
+          {t('passwordReqCharTypesHeading', { types: ACCOUNT_PASSWORD_MIN_CHAR_TYPES })}
+        </StyledSectionTitle>
         <StyledGrid>
           <RequirementItem met={result.hasUppercase} label={t('passwordReqUppercase')} />
           <RequirementItem met={result.hasLowercase} label={t('passwordReqLowercase')} />

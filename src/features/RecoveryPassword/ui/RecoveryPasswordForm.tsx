@@ -28,7 +28,7 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
   const navigate = useNavigate();
   const { t } = useRecoveryPasswordTranslation();
 
-  const form = useCustomForm({ defaultValues: { new: '', confirm: '' } }, RecoveryPasswordSchema);
+  const form = useCustomForm({ defaultValues: { new: '', confirm: '' } }, RecoveryPasswordSchema());
   const { handleSubmit, reset } = form;
 
   const newPasswordValue = useWatch({ control: form.control, name: 'new' });

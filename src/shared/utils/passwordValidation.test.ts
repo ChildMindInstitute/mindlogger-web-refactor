@@ -135,6 +135,21 @@ describe('checkPassword', () => {
       // 8 ASCII + 1 emoji = 9 code points (below 10)
       expect(checkPassword('abcdefg!😀').meetsLength).toBe(false);
     });
+
+    it('uses custom minLength when provided', () => {
+      expect(checkPassword('abc', 3).meetsLength).toBe(true);
+      expect(checkPassword('ab', 3).meetsLength).toBe(false);
+    });
+
+    it('uses custom minLength of 6 for legacy passwords', () => {
+      expect(checkPassword('abcdef', 6).meetsLength).toBe(true);
+      expect(checkPassword('abcde', 6).meetsLength).toBe(false);
+    });
+
+    it('counts emoji correctly with custom minLength', () => {
+      // 5 ASCII + 1 emoji = 6 code points
+      expect(checkPassword('abcde😀', 6).meetsLength).toBe(true);
+    });
   });
 
   describe('charTypeCount', () => {

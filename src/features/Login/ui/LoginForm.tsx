@@ -30,7 +30,7 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
 
   const [passwordType, onPasswordIconClick] = usePasswordType();
 
-  const form = useCustomForm({ defaultValues: { email: '', password: '' } }, LoginSchema);
+  const form = useCustomForm({ defaultValues: { email: '', password: '' } }, LoginSchema());
   const { handleSubmit } = form;
 
   const { onLoginSuccess } = userModel.hooks.useOnLogin({

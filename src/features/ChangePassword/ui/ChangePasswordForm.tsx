@@ -31,7 +31,7 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
 
   const form = useCustomForm(
     { defaultValues: { old: '', new: '', confirm: '' } },
-    ChangePasswordSchema,
+    ChangePasswordSchema(),
   );
   const { handleSubmit, reset } = form;
 
