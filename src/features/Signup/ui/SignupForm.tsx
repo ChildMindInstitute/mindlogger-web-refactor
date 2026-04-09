@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useWatch } from 'react-hook-form';
 
@@ -45,12 +45,27 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
   const form = useCustomForm(
     {
       defaultValues: { email: '', firstName: '', lastName: '', password: '', confirmPassword: '' },
+      mode: 'onTouched',
     },
     SignupFormSchema(),
   );
-  const { handleSubmit } = form;
+  const { handleSubmit, trigger, clearErrors } = form;
 
   const passwordValue = useWatch({ control: form.control, name: 'password' });
+
+  useEffect(() => {
+    clearErrors('password');
+
+    if (!passwordValue) {
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      await trigger('password');
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [passwordValue, trigger, clearErrors]);
 
   const { mutate: login, isLoading: isLoginLoading } = useLoginMutation({
     onSuccess(data, variables) {

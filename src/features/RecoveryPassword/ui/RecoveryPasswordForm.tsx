@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -28,10 +30,27 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
   const navigate = useNavigate();
   const { t } = useRecoveryPasswordTranslation();
 
-  const form = useCustomForm({ defaultValues: { new: '', confirm: '' } }, RecoveryPasswordSchema());
-  const { handleSubmit, reset } = form;
+  const form = useCustomForm(
+    { defaultValues: { new: '', confirm: '' }, mode: 'onTouched' },
+    RecoveryPasswordSchema(),
+  );
+  const { handleSubmit, reset, trigger, clearErrors } = form;
 
   const newPasswordValue = useWatch({ control: form.control, name: 'new' });
+
+  useEffect(() => {
+    clearErrors('new');
+
+    if (!newPasswordValue) {
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      await trigger('new');
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [newPasswordValue, trigger, clearErrors]);
 
   const {
     mutate: approveRecoveryPassword,

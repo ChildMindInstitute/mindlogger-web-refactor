@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { useWatch } from 'react-hook-form';
 
 import { useChangePasswordTranslation } from '../lib/useChangePasswordTranslation';
@@ -30,12 +32,26 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
   const [confirmNewPasswordType, onConfirmNewPasswordIconClick] = usePasswordType();
 
   const form = useCustomForm(
-    { defaultValues: { old: '', new: '', confirm: '' } },
+    { defaultValues: { old: '', new: '', confirm: '' }, mode: 'onTouched' },
     ChangePasswordSchema(),
   );
-  const { handleSubmit, reset } = form;
+  const { handleSubmit, reset, trigger, clearErrors } = form;
 
   const newPasswordValue = useWatch({ control: form.control, name: 'new' });
+
+  useEffect(() => {
+    clearErrors('new');
+
+    if (!newPasswordValue) {
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      await trigger('new');
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [newPasswordValue, trigger, clearErrors]);
 
   const {
     mutate: updatePassword,
