@@ -9,6 +9,8 @@ export const Dictionary = {
       minLength: 'validation.passwordMinLength',
       notMatch: 'validation.passwordsUnmatched',
       shouldNotContainSpaces: 'validation.passwordShouldNotContainSpaces',
+      blankSpaces: 'validation.passwordBlankSpaces',
+      characterTypes: 'validation.passwordCharacterTypes',
     },
     firstName: {
       required: 'validation.firstNameRequired',
