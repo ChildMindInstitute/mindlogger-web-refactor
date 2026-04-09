@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { useWatch } from 'react-hook-form';
+
 import { TERMS_URL } from '../lib/constants';
 import { useSignupTranslation } from '../lib/useSignupTranslation';
 import { SignupFormSchema, TSignupForm } from '../model/signup.schema';
@@ -15,6 +17,7 @@ import {
   CheckboxWithLabel,
   Input,
   PasswordIcon,
+  PasswordRequirementsTooltip,
   Text,
 } from '~/shared/ui';
 import { Mixpanel, MixpanelEventType, useCustomForm, usePasswordType } from '~/shared/utils';
@@ -46,6 +49,8 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
     SignupFormSchema,
   );
   const { handleSubmit } = form;
+
+  const passwordValue = useWatch({ control: form.control, name: 'password' });
 
   const { mutate: login, isLoading: isLoginLoading } = useLoginMutation({
     onSuccess(data, variables) {
@@ -120,16 +125,19 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
           name="lastName"
           placeholder={t('lastName') || ''}
         />
-        <Input
-          id="signup-form-new-password"
-          type={passwordType}
-          name="password"
-          placeholder={t('password') || ''}
-          autoComplete="new-password"
-          Icon={
-            <PasswordIcon isSecure={passwordType === 'password'} onClick={onPasswordIconClick} />
-          }
-        />
+        <Box display="flex" alignItems="center" gap="8px">
+          <Input
+            id="signup-form-new-password"
+            type={passwordType}
+            name="password"
+            placeholder={t('password') || ''}
+            autoComplete="new-password"
+            Icon={
+              <PasswordIcon isSecure={passwordType === 'password'} onClick={onPasswordIconClick} />
+            }
+          />
+          <PasswordRequirementsTooltip password={passwordValue || ''} />
+        </Box>
         <Input
           id="signup-form-confirm-password"
           type={confirmPasswordType}

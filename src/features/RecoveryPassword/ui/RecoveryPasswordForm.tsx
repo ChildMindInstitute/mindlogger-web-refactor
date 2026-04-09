@@ -1,3 +1,4 @@
+import { useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import { useRecoveryPasswordTranslation } from '../lib/useRecoveryPasswordTranslation';
@@ -13,6 +14,7 @@ import {
   DisplaySystemMessage,
   Input,
   PasswordIcon,
+  PasswordRequirementsTooltip,
 } from '~/shared/ui';
 import { useCustomForm, usePasswordType } from '~/shared/utils';
 
@@ -28,6 +30,8 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
 
   const form = useCustomForm({ defaultValues: { new: '', confirm: '' } }, RecoveryPasswordSchema);
   const { handleSubmit, reset } = form;
+
+  const newPasswordValue = useWatch({ control: form.control, name: 'new' });
 
   const {
     mutate: approveRecoveryPassword,
@@ -64,19 +68,22 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
         </Box>
 
         <Box display="flex" flex={1} gap={2} flexDirection="column">
-          <Input
-            id="recovery-password-new-password"
-            type={newPasswordType}
-            name="new"
-            placeholder={t('newPassword') || ''}
-            autoComplete="new-password"
-            Icon={
-              <PasswordIcon
-                isSecure={newPasswordType === 'password'}
-                onClick={onNewPasswordIconClick}
-              />
-            }
-          />
+          <Box display="flex" alignItems="center" gap="8px">
+            <Input
+              id="recovery-password-new-password"
+              type={newPasswordType}
+              name="new"
+              placeholder={t('newPassword') || ''}
+              autoComplete="new-password"
+              Icon={
+                <PasswordIcon
+                  isSecure={newPasswordType === 'password'}
+                  onClick={onNewPasswordIconClick}
+                />
+              }
+            />
+            <PasswordRequirementsTooltip password={newPasswordValue || ''} />
+          </Box>
           <Input
             id="recovery-password-confirm-new-password"
             type={confirmNewPasswordType}

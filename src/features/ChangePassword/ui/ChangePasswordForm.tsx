@@ -1,3 +1,5 @@
+import { useWatch } from 'react-hook-form';
+
 import { useChangePasswordTranslation } from '../lib/useChangePasswordTranslation';
 import { ChangePasswordSchema, TChangePassword } from '../model/schema';
 
@@ -10,6 +12,7 @@ import {
   DisplaySystemMessage,
   Input,
   PasswordIcon,
+  PasswordRequirementsTooltip,
 } from '~/shared/ui';
 import { useCustomForm, usePasswordType } from '~/shared/utils';
 
@@ -31,6 +34,8 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
     ChangePasswordSchema,
   );
   const { handleSubmit, reset } = form;
+
+  const newPasswordValue = useWatch({ control: form.control, name: 'new' });
 
   const {
     mutate: updatePassword,
@@ -68,19 +73,22 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
               />
             }
           />
-          <Input
-            id="change-password-form-new-password"
-            type={newPasswordType}
-            name="new"
-            placeholder={t('newPassword') || ''}
-            autoComplete="new-password"
-            Icon={
-              <PasswordIcon
-                isSecure={newPasswordType === 'password'}
-                onClick={onNewPasswordIconClick}
-              />
-            }
-          />
+          <Box display="flex" alignItems="center" gap="8px">
+            <Input
+              id="change-password-form-new-password"
+              type={newPasswordType}
+              name="new"
+              placeholder={t('newPassword') || ''}
+              autoComplete="new-password"
+              Icon={
+                <PasswordIcon
+                  isSecure={newPasswordType === 'password'}
+                  onClick={onNewPasswordIconClick}
+                />
+              }
+            />
+            <PasswordRequirementsTooltip password={newPasswordValue || ''} />
+          </Box>
           <Input
             id="change-password-form-confirm-password"
             type={confirmNewPasswordType}
