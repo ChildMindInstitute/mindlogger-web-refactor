@@ -20,7 +20,6 @@ export const RecoveryPasswordSchema = () => {
     .object({
       new: z
         .string()
-        .trim()
         .refine((value) => checkPassword(value).meetsLength, {
           message: passwordMinLength,
         })
@@ -30,7 +29,7 @@ export const RecoveryPasswordSchema = () => {
         .refine((value) => checkPassword(value).meetsCharTypeRequirement, {
           message: passwordCharacterTypes,
         }),
-      confirm: z.string().trim().min(1, { message: passwordRequired }),
+      confirm: z.string().min(1, { message: passwordRequired }),
     })
     .refine((data) => data.new === data.confirm, {
       message: passwordsNotMatch,

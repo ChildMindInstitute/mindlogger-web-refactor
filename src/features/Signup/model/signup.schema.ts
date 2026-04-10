@@ -29,7 +29,6 @@ export const SignupFormSchema = () => {
       lastName: z.string().trim().min(1, lastNameRequired),
       password: z
         .string()
-        .trim()
         .refine((value) => checkPassword(value).meetsLength, {
           message: passwordMinLength,
         })
@@ -39,7 +38,7 @@ export const SignupFormSchema = () => {
         .refine((value) => checkPassword(value).meetsCharTypeRequirement, {
           message: passwordCharacterTypes,
         }),
-      confirmPassword: z.string().trim().min(1, passwordRequired),
+      confirmPassword: z.string().min(1, passwordRequired),
     })
     .refine((data) => data.confirmPassword === data.password, {
       message: passwordsNotMatch,
