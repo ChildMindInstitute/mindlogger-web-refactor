@@ -18,17 +18,15 @@ export const RecoveryPasswordSchema = () => {
 
   return z
     .object({
-      new: z
-        .string()
-        .refine((value) => checkPassword(value).meetsLength, {
-          message: passwordMinLength,
-        })
-        .refine((value) => checkPassword(value).hasNoSpaces, {
-          message: passwordBlankSpaces,
-        })
-        .refine((value) => checkPassword(value).meetsCharTypeRequirement, {
-          message: passwordCharacterTypes,
-        }),
+      new: z.string().superRefine((value, ctx) => {
+        const result = checkPassword(value);
+        if (!result.meetsLength)
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: passwordMinLength });
+        if (!result.hasNoSpaces)
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: passwordBlankSpaces });
+        if (!result.meetsCharTypeRequirement)
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: passwordCharacterTypes });
+      }),
       confirm: z.string().min(1, { message: passwordRequired }),
     })
     .refine((data) => data.new === data.confirm, {

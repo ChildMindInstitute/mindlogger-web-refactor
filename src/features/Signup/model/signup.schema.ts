@@ -27,17 +27,15 @@ export const SignupFormSchema = () => {
     .extend({
       firstName: z.string().trim().min(1, firstNameRequired),
       lastName: z.string().trim().min(1, lastNameRequired),
-      password: z
-        .string()
-        .refine((value) => checkPassword(value).meetsLength, {
-          message: passwordMinLength,
-        })
-        .refine((value) => checkPassword(value).hasNoSpaces, {
-          message: passwordBlankSpaces,
-        })
-        .refine((value) => checkPassword(value).meetsCharTypeRequirement, {
-          message: passwordCharacterTypes,
-        }),
+      password: z.string().superRefine((value, ctx) => {
+        const result = checkPassword(value);
+        if (!result.meetsLength)
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: passwordMinLength });
+        if (!result.hasNoSpaces)
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: passwordBlankSpaces });
+        if (!result.meetsCharTypeRequirement)
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: passwordCharacterTypes });
+      }),
       confirmPassword: z.string().min(1, passwordRequired),
     })
     .refine((data) => data.confirmPassword === data.password, {
