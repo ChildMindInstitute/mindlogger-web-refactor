@@ -33,7 +33,7 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
 
   const form = useCustomForm(
     { defaultValues: { old: '', new: '', confirm: '' }, mode: 'onTouched' },
-    ChangePasswordSchema(),
+    ChangePasswordSchema,
   );
   const { handleSubmit, reset, trigger, clearErrors } = form;
 

@@ -32,7 +32,7 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
 
   const form = useCustomForm(
     { defaultValues: { new: '', confirm: '' }, mode: 'onTouched' },
-    RecoveryPasswordSchema(),
+    RecoveryPasswordSchema,
   );
   const { handleSubmit, reset, trigger, clearErrors } = form;
 

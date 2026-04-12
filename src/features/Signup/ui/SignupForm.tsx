@@ -47,7 +47,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
       defaultValues: { email: '', firstName: '', lastName: '', password: '', confirmPassword: '' },
       mode: 'onTouched',
     },
-    SignupFormSchema(),
+    SignupFormSchema,
   );
   const { handleSubmit, trigger, clearErrors } = form;
 

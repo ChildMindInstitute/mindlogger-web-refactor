@@ -1,19 +1,26 @@
 import { toNestError, validateFieldsNatively } from '@hookform/resolvers';
-import { appendErrors, FieldError as BaseFieldError, FieldErrors } from 'react-hook-form';
-import { z } from 'zod';
+import { appendErrors, FieldError, FieldErrors } from 'react-hook-form';
+import { z, ZodCustomIssue } from 'zod';
 
 import type { Resolver } from '../types';
 
-type FieldError = BaseFieldError & {
+export type ZodFieldError = FieldError & {
   params: Record<string, unknown>;
 };
 
 const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boolean) => {
-  const errors: Record<string, FieldError> = {};
+  const errors: Record<string, ZodFieldError> = {};
 
   for (; zodErrors.length; ) {
     const error = zodErrors[0];
-    const { code, message, path, ...params } = error;
+    const {
+      code,
+      message,
+      path,
+      params: customParams = {},
+      ...otherParams
+    } = error as ZodCustomIssue;
+    const params = { ...customParams, ...otherParams };
     const _path = path.join('.');
 
     if (!errors[_path]) {
@@ -48,7 +55,7 @@ const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boo
         messages
           ? ([] as string[]).concat(messages as unknown as string[], error.message)
           : error.message,
-      ) as FieldError;
+      ) as ZodFieldError;
     }
 
     zodErrors.shift();

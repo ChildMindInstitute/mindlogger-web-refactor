@@ -1,15 +1,10 @@
-import i18n from 'i18next';
 import { z } from 'zod';
 
 import { BaseUserSchema } from '~/entities/user';
+import { Dictionary } from '~/shared/utils';
 
-export const LoginSchema = () => {
-  const { t } = i18n;
-  const passwordRequired = t('validation.passwordRequired');
+export const LoginSchema = BaseUserSchema.pick({ email: true }).extend({
+  password: z.string().min(1, Dictionary.validation.password.required),
+});
 
-  return BaseUserSchema.pick({ email: true }).extend({
-    password: z.string().min(1, passwordRequired),
-  });
-};
-
-export type TLoginForm = z.infer<ReturnType<typeof LoginSchema>>;
+export type TLoginForm = z.infer<typeof LoginSchema>;

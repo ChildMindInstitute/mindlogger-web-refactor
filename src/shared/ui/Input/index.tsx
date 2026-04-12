@@ -8,6 +8,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { useCustomTranslation } from '../../utils';
+import type { ZodFieldError } from '../../utils/validation/zodResolver';
 
 import { variables } from '~/shared/constants/theme/variables';
 
@@ -60,7 +61,9 @@ const Input = (props: IInputCommonProps) => {
         endAdornment={<InputAdornment position="end">{Icon}</InputAdornment>}
         sx={{ backgroundColor: variables.palette.onPrimary }}
       />
-      {error?.message && <FormHelperText id={id}>{t(error.message)}</FormHelperText>}
+      {error?.message && (
+        <FormHelperText id={id}>{t(error.message, (error as ZodFieldError).params)}</FormHelperText>
+      )}
     </FormControl>
   );
 };
