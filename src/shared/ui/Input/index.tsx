@@ -16,7 +16,7 @@ interface IInputCommonProps {
   id: string;
   type: HTMLInputTypeAttribute;
   autoComplete?: string;
-
+  showError?: boolean;
   name: string;
   placeholder?: string;
   onChange?: (e: string | number) => void;
@@ -26,7 +26,7 @@ interface IInputCommonProps {
 }
 
 const Input = (props: IInputCommonProps) => {
-  const { type, name, placeholder, onChange, className, Icon, id } = props;
+  const { type, name, placeholder, onChange, className, Icon, id, showError = true } = props;
   const { t } = useCustomTranslation();
 
   const { control } = useFormContext();
@@ -61,7 +61,7 @@ const Input = (props: IInputCommonProps) => {
         endAdornment={<InputAdornment position="end">{Icon}</InputAdornment>}
         sx={{ backgroundColor: variables.palette.onPrimary }}
       />
-      {error?.message && (
+      {showError && error?.message && (
         <FormHelperText id={id}>{t(error.message, (error as ZodFieldError).params)}</FormHelperText>
       )}
     </FormControl>
