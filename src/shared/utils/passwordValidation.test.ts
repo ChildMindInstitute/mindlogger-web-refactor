@@ -1,4 +1,4 @@
-import { checkPassword } from './passwordValidation';
+import { checkPassword, isAccountPasswordPolicySatisfied } from './passwordValidation';
 
 describe('checkPassword', () => {
   describe('hasUppercase', () => {
@@ -294,5 +294,16 @@ describe('checkPassword', () => {
       expect(result.charTypeCount).toBe(2);
       expect(result.meetsCharTypeRequirement).toBe(false);
     });
+  });
+});
+
+describe('isAccountPasswordPolicySatisfied', () => {
+  it('returns false when any policy field fails', () => {
+    expect(isAccountPasswordPolicySatisfied(checkPassword('short'))).toBe(false);
+    expect(isAccountPasswordPolicySatisfied(checkPassword('onlyletterslongenough'))).toBe(false);
+  });
+
+  it('returns true when length, spaces, and character-type rules all pass', () => {
+    expect(isAccountPasswordPolicySatisfied(checkPassword('Goodpass1!'))).toBe(true);
   });
 });
