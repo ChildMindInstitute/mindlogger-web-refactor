@@ -14,7 +14,7 @@ import {
   DisplaySystemMessage,
   Input,
   PasswordIcon,
-  PasswordRequirementsTooltip,
+  PasswordRequirementsSection,
 } from '~/shared/ui';
 import { useCustomForm, usePasswordType } from '~/shared/utils';
 
@@ -89,22 +89,25 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
               />
             }
           />
-          <Input
-            id="change-password-form-new-password"
-            type={newPasswordType}
-            name="new"
-            placeholder={t('newPassword') || ''}
-            autoComplete="new-password"
-            Icon={
-              <>
-                <PasswordIcon
-                  isSecure={newPasswordType === 'password'}
-                  onClick={onNewPasswordIconClick}
-                />
-                <PasswordRequirementsTooltip password={newPasswordValue || ''} />
-              </>
-            }
-          />
+          <PasswordRequirementsSection password={newPasswordValue || ''}>
+            <Input
+              id="change-password-form-new-password"
+              type={newPasswordType}
+              name="new"
+              placeholder={t('newPassword') || ''}
+              autoComplete="new-password"
+              showError={false}
+              Icon={
+                <>
+                  <PasswordIcon
+                    isSecure={newPasswordType === 'password'}
+                    onClick={onNewPasswordIconClick}
+                  />
+                </>
+              }
+            />
+          </PasswordRequirementsSection>
+
           <Input
             id="change-password-form-confirm-password"
             type={confirmNewPasswordType}

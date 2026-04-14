@@ -18,4 +18,8 @@ export * from './matchPaths';
 export * from './getLanguage';
 export * from './Calculator';
 export * from './passwordPatterns';
-export { checkPassword, type PasswordCheckResult } from './passwordValidation';
+export {
+  checkPassword,
+  isAccountPasswordPolicySatisfied,
+  type PasswordCheckResult,
+} from './passwordValidation';

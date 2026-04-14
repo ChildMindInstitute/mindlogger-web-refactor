@@ -16,7 +16,7 @@ import {
   DisplaySystemMessage,
   Input,
   PasswordIcon,
-  PasswordRequirementsTooltip,
+  PasswordRequirementsSection,
 } from '~/shared/ui';
 import { useCustomForm, usePasswordType } from '~/shared/utils';
 
@@ -86,23 +86,25 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
           <p>{title}</p>
         </Box>
 
-        <Box display="flex" flex={1} gap={2} flexDirection="column">
-          <Input
-            id="recovery-password-new-password"
-            type={newPasswordType}
-            name="new"
-            placeholder={t('newPassword') || ''}
-            autoComplete="new-password"
-            Icon={
-              <>
-                <PasswordIcon
-                  isSecure={newPasswordType === 'password'}
-                  onClick={onNewPasswordIconClick}
-                />
-                <PasswordRequirementsTooltip password={newPasswordValue || ''} />
-              </>
-            }
-          />
+        <Box display="flex" flex={1} gap="24px" flexDirection="column">
+          <PasswordRequirementsSection password={newPasswordValue || ''}>
+            <Input
+              id="recovery-password-new-password"
+              type={newPasswordType}
+              name="new"
+              placeholder={t('newPassword') || ''}
+              autoComplete="new-password"
+              showError={false}
+              Icon={
+                <>
+                  <PasswordIcon
+                    isSecure={newPasswordType === 'password'}
+                    onClick={onNewPasswordIconClick}
+                  />
+                </>
+              }
+            />
+          </PasswordRequirementsSection>
           <Input
             id="recovery-password-confirm-new-password"
             type={confirmNewPasswordType}

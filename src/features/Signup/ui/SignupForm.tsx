@@ -17,7 +17,7 @@ import {
   CheckboxWithLabel,
   Input,
   PasswordIcon,
-  PasswordRequirementsTooltip,
+  PasswordRequirementsSection,
   Text,
 } from '~/shared/ui';
 import { Mixpanel, MixpanelEventType, useCustomForm, usePasswordType } from '~/shared/utils';
@@ -140,19 +140,24 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
           name="lastName"
           placeholder={t('lastName') || ''}
         />
-        <Input
-          id="signup-form-new-password"
-          type={passwordType}
-          name="password"
-          placeholder={t('password') || ''}
-          autoComplete="new-password"
-          Icon={
-            <>
-              <PasswordIcon isSecure={passwordType === 'password'} onClick={onPasswordIconClick} />
-              <PasswordRequirementsTooltip password={passwordValue || ''} />
-            </>
-          }
-        />
+        <PasswordRequirementsSection password={passwordValue || ''}>
+          <Input
+            id="signup-form-new-password"
+            type={passwordType}
+            name="password"
+            placeholder={t('password') || ''}
+            autoComplete="new-password"
+            showError={false}
+            Icon={
+              <>
+                <PasswordIcon
+                  isSecure={passwordType === 'password'}
+                  onClick={onPasswordIconClick}
+                />
+              </>
+            }
+          />
+        </PasswordRequirementsSection>
         <Input
           id="signup-form-confirm-password"
           type={confirmPasswordType}
