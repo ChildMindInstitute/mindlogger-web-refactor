@@ -54,8 +54,6 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
   const passwordValue = useWatch({ control: form.control, name: 'password' });
 
   useEffect(() => {
-    clearErrors('password');
-
     if (!passwordValue) {
       return;
     }
