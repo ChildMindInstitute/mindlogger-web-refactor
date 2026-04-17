@@ -29,7 +29,7 @@ function getPasswordRequirementsSectionState(
   if (firstFocusWithin || isPasswordEmpty) {
     return PasswordRequirementsSectionState.FOCUSED;
   }
-  return PasswordRequirementsSectionState.INITIAL;
+  return PasswordRequirementsSectionState.ERROR;
 }
 
 const RequirementItem = ({ met, label }: { met: boolean; label: string }) => (
@@ -48,11 +48,13 @@ interface PasswordRequirementsSectionProps {
    * follow a short debounce after `password` stops changing.
    */
   children?: ReactNode;
+  delayMs: number;
 }
 
 export const PasswordRequirementsSection = ({
   password,
   children,
+  delayMs,
 }: PasswordRequirementsSectionProps) => {
   // If focusWithin is true, the user is inside the component and the checklist should be visible.
   const [focusWithin, setFocusWithin] = useState(false);
@@ -62,8 +64,13 @@ export const PasswordRequirementsSection = ({
 
   const { t } = useCustomTranslation({ keyPrefix: 'validation' });
 
-  const { result, hideCharTypesGrid, displayPolicySatisfied, passwordRequirementsSectionTitleKey } =
-    usePasswordRequirementsChecklistDisplay(password);
+  const {
+    result,
+    hideCharTypesGrid,
+    displayPolicySatisfied,
+    passwordRequirementsSectionTitleKey,
+    isEmptyForDisplay,
+  } = usePasswordRequirementsChecklistDisplay(password, delayMs);
 
   const checklist = (
     <div data-testid="password-requirements-section">
@@ -71,7 +78,7 @@ export const PasswordRequirementsSection = ({
         <StyledSectionTitle
           state={getPasswordRequirementsSectionState(
             firstFocusWithin,
-            password.length === 0,
+            isEmptyForDisplay,
             displayPolicySatisfied,
           )}
         >
@@ -94,7 +101,7 @@ export const PasswordRequirementsSection = ({
 
   if (children !== undefined) {
     // Open panel without focus if they typed something invalid (uses live rules, not debounced UI).
-    const keepChecklistVisible = password.length > 0 && !isAccountPasswordPolicySatisfied(result);
+    const keepChecklistVisible = !isEmptyForDisplay && !isAccountPasswordPolicySatisfied(result);
     const showPasswordPanel = keepChecklistVisible || focusWithin;
 
     const handleBlurCapture = (e: FocusEvent<HTMLDivElement>) => {

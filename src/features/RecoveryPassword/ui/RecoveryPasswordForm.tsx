@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { useRecoveryPasswordTranslation } from '../lib/useRecoveryPasswordTransl
 import { RecoveryPassword, RecoveryPasswordSchema } from '../model/schema';
 
 import { useApproveRecoveryPasswordMutation } from '~/entities/user';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from '~/shared/constants';
 import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
 import {
@@ -38,16 +39,19 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
 
   const newPasswordValue = useWatch({ control: form.control, name: 'new' });
 
+  const [isFirstTimeTyping, setIsFirstTimeTyping] = useState<boolean>(true);
+
   useEffect(() => {
-    clearErrors('new');
-
-    if (!newPasswordValue) {
-      return;
-    }
-
     const timer = setTimeout(async () => {
-      await trigger('new');
-    }, 500);
+      if (!newPasswordValue) {
+        clearErrors('new');
+        return;
+      }
+
+      if (!isFirstTimeTyping) {
+        await trigger('new');
+      }
+    }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
 
     return () => clearTimeout(timer);
   }, [newPasswordValue, trigger, clearErrors]);
@@ -87,7 +91,10 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
         </Box>
 
         <Box display="flex" flex={1} gap="24px" flexDirection="column">
-          <PasswordRequirementsSection password={newPasswordValue || ''}>
+          <PasswordRequirementsSection
+            password={newPasswordValue || ''}
+            delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+          >
             <Input
               id="recovery-password-new-password"
               type={newPasswordType}
@@ -95,6 +102,12 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
               placeholder={t('newPassword') || ''}
               autoComplete="new-password"
               showError={false}
+              onBlur={() => {
+                if (isFirstTimeTyping) {
+                  trigger('new');
+                }
+                setIsFirstTimeTyping(false);
+              }}
               Icon={
                 <>
                   <PasswordIcon

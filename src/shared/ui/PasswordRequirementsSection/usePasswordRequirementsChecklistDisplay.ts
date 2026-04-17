@@ -6,8 +6,6 @@ import {
   type PasswordCheckResult,
 } from '~/shared/utils/passwordValidation';
 
-export const DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS = 500;
-
 function passwordRequirementsSectionTitleKey(
   displayCheck: PasswordCheckResult,
   displayPolicySatisfied: boolean,
@@ -29,47 +27,36 @@ function passwordRequirementsSectionTitleKey(
  * `debounceMs` with no `password` change (immediate reset when those conditions become false).
  * Title copy uses the same debounced snapshot so it stays in sync with grid visibility and “met”.
  */
-export function usePasswordRequirementsChecklistDisplay(
-  password: string,
-  debounceMs: number = DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS,
-) {
+export function usePasswordRequirementsChecklistDisplay(password: string, debounceMs: number) {
   const result = checkPassword(password);
-  const meetsCharTypeRequirement = result.meetsCharTypeRequirement;
-  const livePolicySatisfied = isAccountPasswordPolicySatisfied(result);
 
-  const [hideCharTypesGrid, setHideCharTypesGrid] = useState(() => meetsCharTypeRequirement);
-  const [displayPolicySatisfied, setDisplayPolicySatisfied] = useState(() => livePolicySatisfied);
-  const [displayCheckResult, setDisplayCheckResult] = useState(() => checkPassword(password));
+  const [hideCharTypesGrid, setHideCharTypesGrid] = useState(() => result.meetsCharTypeRequirement);
+  const [displayPolicySatisfied, setDisplayPolicySatisfied] = useState(() =>
+    isAccountPasswordPolicySatisfied(result),
+  );
+  const [displayCheckResult, setDisplayCheckResult] = useState(() => result);
+  const [isEmptyForDisplay, setIsEmptyForDisplay] = useState(() => password.length === 0);
 
   const passwordRef = useRef(password);
   passwordRef.current = password;
 
   useEffect(() => {
-    const live = checkPassword(passwordRef.current);
-
-    if (!meetsCharTypeRequirement) {
-      setHideCharTypesGrid(false);
-      setDisplayCheckResult(live);
-    }
-    if (!livePolicySatisfied) {
-      setDisplayPolicySatisfied(false);
-      setDisplayCheckResult(live);
-    }
-
     const id = window.setTimeout(() => {
       const latest = checkPassword(passwordRef.current);
       setHideCharTypesGrid(latest.meetsCharTypeRequirement);
       setDisplayPolicySatisfied(isAccountPasswordPolicySatisfied(latest));
       setDisplayCheckResult(latest);
+      setIsEmptyForDisplay(passwordRef.current.length === 0);
     }, debounceMs);
 
     return () => window.clearTimeout(id);
-  }, [password, meetsCharTypeRequirement, livePolicySatisfied, debounceMs]);
+  }, [password, debounceMs]);
 
   return {
     result,
     hideCharTypesGrid,
     displayPolicySatisfied,
+    isEmptyForDisplay,
     passwordRequirementsSectionTitleKey: passwordRequirementsSectionTitleKey(
       displayCheckResult,
       displayPolicySatisfied,

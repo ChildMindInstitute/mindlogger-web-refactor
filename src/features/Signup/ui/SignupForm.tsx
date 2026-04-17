@@ -10,6 +10,7 @@ import { useBanners } from '~/entities/banner/model';
 import { useLoginMutation, userModel, useSignupMutation } from '~/entities/user';
 import { isMFARequiredResponse } from '~/features/Login/model/mfa.types';
 import { LoginResult } from '~/shared/api';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from '~/shared/constants';
 import {
   BaseButton,
   BasicFormProvider,
@@ -53,14 +54,19 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
 
   const passwordValue = useWatch({ control: form.control, name: 'password' });
 
-  useEffect(() => {
-    if (!passwordValue) {
-      return;
-    }
+  const [isFirstTimeTyping, setIsFirstTimeTyping] = useState<boolean>(true);
 
+  useEffect(() => {
     const timer = setTimeout(async () => {
-      await trigger('password');
-    }, 500);
+      if (!passwordValue) {
+        clearErrors('password');
+        return;
+      }
+
+      if (!isFirstTimeTyping) {
+        await trigger('password');
+      }
+    }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
 
     return () => clearTimeout(timer);
   }, [passwordValue, trigger, clearErrors]);
@@ -138,7 +144,10 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
           name="lastName"
           placeholder={t('lastName') || ''}
         />
-        <PasswordRequirementsSection password={passwordValue || ''}>
+        <PasswordRequirementsSection
+          password={passwordValue || ''}
+          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+        >
           <Input
             id="signup-form-new-password"
             type={passwordType}
@@ -146,6 +155,12 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
             placeholder={t('password') || ''}
             autoComplete="new-password"
             showError={false}
+            onBlur={() => {
+              if (isFirstTimeTyping) {
+                trigger('password');
+              }
+              setIsFirstTimeTyping(false);
+            }}
             Icon={
               <>
                 <PasswordIcon

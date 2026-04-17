@@ -21,12 +21,22 @@ interface IInputCommonProps {
   placeholder?: string;
   onChange?: (e: string | number) => void;
   className?: string;
-
+  onBlur?: () => void;
   Icon?: JSX.Element;
 }
 
 const Input = (props: IInputCommonProps) => {
-  const { type, name, placeholder, onChange, className, Icon, id, showError = true } = props;
+  const {
+    type,
+    name,
+    placeholder,
+    onChange,
+    className,
+    Icon,
+    id,
+    onBlur,
+    showError = true,
+  } = props;
   const { t } = useCustomTranslation();
 
   const { control } = useFormContext();
@@ -56,6 +66,7 @@ const Input = (props: IInputCommonProps) => {
         placeholder={placeholder}
         value={field.value as string}
         onChange={onInputChange}
+        onBlur={onBlur}
         className={className}
         error={!!error}
         endAdornment={<InputAdornment position="end">{Icon}</InputAdornment>}

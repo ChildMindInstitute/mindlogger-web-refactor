@@ -4,13 +4,13 @@ import Box from '@mui/material/Box';
 import { variables } from '~/shared/constants/theme/variables';
 
 export enum PasswordRequirementsSectionState {
-  INITIAL = 'initial',
+  ERROR = 'error',
   FOCUSED = 'focused',
   MET = 'met',
 }
 
 const titleColorByState: Record<PasswordRequirementsSectionState, string> = {
-  [PasswordRequirementsSectionState.INITIAL]: variables.palette.error60,
+  [PasswordRequirementsSectionState.ERROR]: variables.palette.error60,
   [PasswordRequirementsSectionState.FOCUSED]: variables.palette.onSurface,
   [PasswordRequirementsSectionState.MET]: variables.palette.green,
 };
