@@ -57,7 +57,10 @@ export const useUserEvents = (props: Props) => {
 
       const activityItemScreenId = getActivityItemScreenId(props.activityId, item.id);
 
-      if (item.responseType === 'text' && userEvents.length > 0) {
+      if (
+        (item.responseType === 'text' || item.responseType === 'paragraphText') &&
+        userEvents.length > 0
+      ) {
         const lastUserEvent = userEvents[userEvents.length - 1];
 
         // We're only interested in updated the previous event if it is a text item
