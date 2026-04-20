@@ -34,6 +34,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
 
   const [passwordType, onPasswordIconClick] = usePasswordType();
   const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType();
+  const [showPasswordError, setShowPasswordError] = useState<boolean>(false);
 
   const [terms, setTerms] = useState<boolean>(false);
   const { onLoginSuccess } = userModel.hooks.useOnLogin({
@@ -62,6 +63,9 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
         clearErrors('password');
         return;
       }
+
+      // We only want to show the input's error if the user has not typed anything yet, otherwise all errors are shown using the password requirements section
+      setShowPasswordError(false);
 
       if (!isFirstTimeTyping) {
         await trigger('password');
@@ -154,7 +158,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
             name="password"
             placeholder={t('password') || ''}
             autoComplete="new-password"
-            showError={false}
+            showError={showPasswordError}
             onBlur={() => {
               if (isFirstTimeTyping) {
                 trigger('password');
@@ -200,6 +204,9 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
           type="submit"
           variant="contained"
           text={t('create')}
+          onClick={() => {
+            setShowPasswordError(true);
+          }}
           isLoading={isSignupLoading || isLoginLoading}
         />
       </Box>
