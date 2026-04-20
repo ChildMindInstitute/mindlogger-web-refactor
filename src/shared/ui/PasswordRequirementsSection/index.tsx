@@ -15,6 +15,7 @@ import {
 } from './PasswordRequirementsSection.styles';
 import { usePasswordRequirementsChecklistDisplay } from './usePasswordRequirementsChecklistDisplay';
 
+import { ACCOUNT_PASSWORD_MIN_CHAR_TYPES, ACCOUNT_PASSWORD_MIN_LENGTH } from '~/shared/constants';
 import { useCustomTranslation } from '~/shared/utils';
 import { isAccountPasswordPolicySatisfied } from '~/shared/utils/passwordValidation';
 
@@ -82,7 +83,10 @@ export const PasswordRequirementsSection = ({
             displayPolicySatisfied,
           )}
         >
-          {t(passwordRequirementsSectionTitleKey)}
+          {t(passwordRequirementsSectionTitleKey, {
+            minLength: ACCOUNT_PASSWORD_MIN_LENGTH,
+            types: ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
+          })}
         </StyledSectionTitle>
       </StyledSection>
 
