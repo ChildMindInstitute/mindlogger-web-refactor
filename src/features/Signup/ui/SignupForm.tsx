@@ -208,7 +208,9 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
           variant="contained"
           text={t('create')}
           onClick={() => {
-            setShowPasswordError(true);
+            if (!passwordValue) {
+              setShowPasswordError(true);
+            }
           }}
           isLoading={isSignupLoading || isLoginLoading}
         />
