@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useWatch } from 'react-hook-form';
 
@@ -6,6 +6,7 @@ import { useChangePasswordTranslation } from '../lib/useChangePasswordTranslatio
 import { ChangePasswordSchema, TChangePassword } from '../model/schema';
 
 import { useUpdatePasswordMutation } from '~/entities/user';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from '~/shared/constants';
 import { Box } from '~/shared/ui';
 import {
   BaseButton,
@@ -30,6 +31,7 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
   const [oldPasswordType, onOldPasswordIconClick] = usePasswordType();
   const [newPasswordType, onNewPasswordIconClick] = usePasswordType();
   const [confirmNewPasswordType, onConfirmNewPasswordIconClick] = usePasswordType();
+  const [showPasswordError, setShowPasswordError] = useState<boolean>(false);
 
   const form = useCustomForm(
     { defaultValues: { old: '', new: '', confirm: '' }, mode: 'onTouched' },
@@ -45,6 +47,8 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
     if (!newPasswordValue) {
       return;
     }
+
+    setShowPasswordError(false);
 
     const timer = setTimeout(async () => {
       await trigger('new');
@@ -82,6 +86,9 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
             name="old"
             placeholder={t('oldPassword') || ''}
             autoComplete="current-password"
+            onFocus={() => {
+              setShowPasswordError(false);
+            }}
             Icon={
               <PasswordIcon
                 isSecure={oldPasswordType === 'password'}
@@ -89,14 +96,17 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
               />
             }
           />
-          <PasswordRequirementsSection password={newPasswordValue || ''}>
+          <PasswordRequirementsSection
+            password={newPasswordValue || ''}
+            delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+          >
             <Input
               id="change-password-form-new-password"
               type={newPasswordType}
               name="new"
               placeholder={t('newPassword') || ''}
               autoComplete="new-password"
-              showError={false}
+              showError={showPasswordError}
               Icon={
                 <>
                   <PasswordIcon
@@ -127,7 +137,15 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
             successMessage={isSuccess ? t('success') : null}
           />
 
-          <BaseButton type="submit" variant="contained" isLoading={isLoading} text={t('submit')} />
+          <BaseButton
+            type="submit"
+            variant="contained"
+            isLoading={isLoading}
+            text={t('submit')}
+            onClick={() => {
+              setShowPasswordError(true);
+            }}
+          />
         </Box>
       </BasicFormProvider>
     </Container>

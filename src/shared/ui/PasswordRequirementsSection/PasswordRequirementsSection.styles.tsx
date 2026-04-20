@@ -10,7 +10,7 @@ export enum PasswordRequirementsSectionState {
 }
 
 const titleColorByState: Record<PasswordRequirementsSectionState, string> = {
-  [PasswordRequirementsSectionState.ERROR]: variables.palette.error60,
+  [PasswordRequirementsSectionState.ERROR]: variables.palette.error,
   [PasswordRequirementsSectionState.FOCUSED]: variables.palette.onSurface,
   [PasswordRequirementsSectionState.MET]: variables.palette.green,
 };

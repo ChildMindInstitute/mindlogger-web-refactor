@@ -23,6 +23,7 @@ interface IInputCommonProps {
   className?: string;
   onBlur?: () => void;
   Icon?: JSX.Element;
+  onFocus?: () => void;
 }
 
 const Input = (props: IInputCommonProps) => {
@@ -36,6 +37,7 @@ const Input = (props: IInputCommonProps) => {
     id,
     onBlur,
     showError = true,
+    onFocus,
   } = props;
   const { t } = useCustomTranslation();
 
@@ -69,6 +71,7 @@ const Input = (props: IInputCommonProps) => {
         onBlur={onBlur}
         className={className}
         error={!!error}
+        onFocus={onFocus}
         endAdornment={<InputAdornment position="end">{Icon}</InputAdornment>}
         sx={{ backgroundColor: variables.palette.onPrimary }}
       />

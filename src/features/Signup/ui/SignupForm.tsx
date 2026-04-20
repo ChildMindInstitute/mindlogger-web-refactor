@@ -158,6 +158,9 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
             name="password"
             placeholder={t('password') || ''}
             autoComplete="new-password"
+            onFocus={() => {
+              setShowPasswordError(false);
+            }}
             showError={showPasswordError}
             onBlur={() => {
               if (isFirstTimeTyping) {
