@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import { useRecoveryPasswordTranslation } from '../lib/useRecoveryPasswordTranslation';
@@ -35,26 +34,9 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
     { defaultValues: { new: '', confirm: '' }, mode: 'onTouched' },
     RecoveryPasswordSchema,
   );
-  const { handleSubmit, reset, trigger, clearErrors } = form;
+  const { handleSubmit, reset } = form;
 
-  const newPasswordValue = useWatch({ control: form.control, name: 'new' });
-
-  const [isFirstTimeTyping, setIsFirstTimeTyping] = useState<boolean>(true);
-
-  useEffect(() => {
-    const timer = setTimeout(async () => {
-      if (!newPasswordValue) {
-        clearErrors('new');
-        return;
-      }
-
-      if (!isFirstTimeTyping) {
-        await trigger('new');
-      }
-    }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
-
-    return () => clearTimeout(timer);
-  }, [newPasswordValue, trigger, clearErrors]);
+  const [showPasswordError, setShowPasswordError] = useState<boolean>(false);
 
   const {
     mutate: approveRecoveryPassword,
@@ -92,8 +74,9 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
 
         <Box display="flex" flex={1} gap="24px" flexDirection="column">
           <PasswordRequirementsSection
-            password={newPasswordValue || ''}
+            fieldName="new"
             delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+            setShowPasswordError={setShowPasswordError}
           >
             <Input
               id="recovery-password-new-password"
@@ -101,13 +84,7 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
               name="new"
               placeholder={t('newPassword') || ''}
               autoComplete="new-password"
-              showError={false}
-              onBlur={() => {
-                if (isFirstTimeTyping) {
-                  trigger('new');
-                }
-                setIsFirstTimeTyping(false);
-              }}
+              showError={showPasswordError}
               Icon={
                 <>
                   <PasswordIcon

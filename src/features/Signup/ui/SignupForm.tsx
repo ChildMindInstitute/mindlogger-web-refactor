@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
-
-import { useWatch } from 'react-hook-form';
+import { useState } from 'react';
 
 import { TERMS_URL } from '../lib/constants';
 import { useSignupTranslation } from '../lib/useSignupTranslation';
@@ -51,29 +49,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
     },
     SignupFormSchema,
   );
-  const { handleSubmit, trigger, clearErrors } = form;
-
-  const passwordValue = useWatch({ control: form.control, name: 'password' });
-
-  const [isFirstTimeTyping, setIsFirstTimeTyping] = useState<boolean>(true);
-
-  useEffect(() => {
-    const timer = setTimeout(async () => {
-      if (!passwordValue) {
-        clearErrors('password');
-        return;
-      }
-
-      // We only want to show the input's error if the user has not typed anything yet, otherwise all errors are shown using the password requirements section
-      setShowPasswordError(false);
-
-      if (!isFirstTimeTyping) {
-        await trigger('password');
-      }
-    }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
-
-    return () => clearTimeout(timer);
-  }, [passwordValue, trigger, clearErrors]);
+  const { handleSubmit } = form;
 
   const { mutate: login, isLoading: isLoginLoading } = useLoginMutation({
     onSuccess(data, variables) {
@@ -149,8 +125,9 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
           placeholder={t('lastName') || ''}
         />
         <PasswordRequirementsSection
-          password={passwordValue || ''}
+          setShowPasswordError={setShowPasswordError}
           delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+          fieldName="password"
         >
           <Input
             id="signup-form-new-password"
@@ -162,12 +139,6 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
               setShowPasswordError(false);
             }}
             showError={showPasswordError}
-            onBlur={() => {
-              if (isFirstTimeTyping) {
-                void trigger('password');
-              }
-              setIsFirstTimeTyping(false);
-            }}
             Icon={
               <>
                 <PasswordIcon
@@ -207,11 +178,6 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
           type="submit"
           variant="contained"
           text={t('create')}
-          onClick={() => {
-            if (!passwordValue) {
-              setShowPasswordError(true);
-            }
-          }}
           isLoading={isSignupLoading || isLoginLoading}
         />
       </Box>

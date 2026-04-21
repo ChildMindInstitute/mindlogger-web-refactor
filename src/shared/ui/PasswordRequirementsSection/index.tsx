@@ -1,9 +1,10 @@
 import type { FocusEvent, ReactNode } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import {
   StyledSection,
@@ -15,7 +16,11 @@ import {
 } from './PasswordRequirementsSection.styles';
 import { usePasswordRequirementsChecklistDisplay } from './usePasswordRequirementsChecklistDisplay';
 
-import { ACCOUNT_PASSWORD_MIN_CHAR_TYPES, ACCOUNT_PASSWORD_MIN_LENGTH } from '~/shared/constants';
+import {
+  ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
+  ACCOUNT_PASSWORD_MIN_LENGTH,
+  DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS,
+} from '~/shared/constants';
 import { useCustomTranslation } from '~/shared/utils';
 import { isAccountPasswordPolicySatisfied } from '~/shared/utils/passwordValidation';
 
@@ -43,19 +48,21 @@ const RequirementItem = ({ met, label }: { met: boolean; label: string }) => (
 );
 
 interface PasswordRequirementsSectionProps {
-  password: string;
   /**
    * If passed, wraps fields + checklist. The panel uses live policy; title / grid hide / “met” copy
    * follow a short debounce after `password` stops changing.
    */
   children?: ReactNode;
   delayMs: number;
+  setShowPasswordError: (showPasswordError: boolean) => void;
+  fieldName: string;
 }
 
 export const PasswordRequirementsSection = ({
-  password,
   children,
   delayMs,
+  setShowPasswordError,
+  fieldName,
 }: PasswordRequirementsSectionProps) => {
   // If focusWithin is true, the user is inside the component and the checklist should be visible.
   const [focusWithin, setFocusWithin] = useState(false);
@@ -66,12 +73,44 @@ export const PasswordRequirementsSection = ({
   const { t } = useCustomTranslation({ keyPrefix: 'validation' });
 
   const {
+    trigger,
+    clearErrors,
+    formState: { isSubmitting },
+  } = useFormContext();
+
+  const passwordValue = useWatch({ name: fieldName });
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (!passwordValue) {
+        clearErrors(fieldName);
+        return;
+      }
+
+      // We only want to show the input's error if the user has not typed anything yet, otherwise all errors are shown using the password requirements section
+      setShowPasswordError(false);
+
+      if (!firstFocusWithin) {
+        await trigger(fieldName);
+      }
+    }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
+
+    return () => clearTimeout(timer);
+  }, [passwordValue, trigger, clearErrors, firstFocusWithin]);
+
+  useEffect(() => {
+    if (isSubmitting && !passwordValue) {
+      setShowPasswordError(true);
+    }
+  }, [isSubmitting, passwordValue, setShowPasswordError]);
+
+  const {
     result,
     hideCharTypesGrid,
     displayPolicySatisfied,
     passwordRequirementsSectionTitleKey,
     isEmptyForDisplay,
-  } = usePasswordRequirementsChecklistDisplay(password, delayMs);
+  } = usePasswordRequirementsChecklistDisplay(passwordValue, delayMs);
 
   const checklist = (
     <div data-testid="password-requirements-section">
@@ -121,7 +160,10 @@ export const PasswordRequirementsSection = ({
       <PasswordRequirementsFieldGroup
         data-testid="password-requirements-field-group"
         showPasswordPanel={showPasswordPanel}
-        onFocusCapture={() => setFocusWithin(true)}
+        onFocusCapture={() => {
+          setFocusWithin(true);
+          setShowPasswordError(false);
+        }}
         onBlurCapture={handleBlurCapture}
       >
         <Box display="flex" flexDirection="column" gap="24px">

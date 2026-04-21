@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { useWatch } from 'react-hook-form';
 
 import { useChangePasswordTranslation } from '../lib/useChangePasswordTranslation';
 import { ChangePasswordSchema, TChangePassword } from '../model/schema';
@@ -37,25 +36,7 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
     { defaultValues: { old: '', new: '', confirm: '' }, mode: 'onTouched' },
     ChangePasswordSchema,
   );
-  const { handleSubmit, reset, trigger, clearErrors } = form;
-
-  const newPasswordValue = useWatch({ control: form.control, name: 'new' });
-
-  useEffect(() => {
-    clearErrors('new');
-
-    if (!newPasswordValue) {
-      return;
-    }
-
-    setShowPasswordError(false);
-
-    const timer = setTimeout(async () => {
-      await trigger('new');
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [newPasswordValue, trigger, clearErrors]);
+  const { handleSubmit, reset } = form;
 
   const {
     mutate: updatePassword,
@@ -97,8 +78,9 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
             }
           />
           <PasswordRequirementsSection
-            password={newPasswordValue || ''}
+            fieldName="new"
             delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+            setShowPasswordError={setShowPasswordError}
           >
             <Input
               id="change-password-form-new-password"
@@ -107,6 +89,9 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
               placeholder={t('newPassword') || ''}
               autoComplete="new-password"
               showError={showPasswordError}
+              onFocus={() => {
+                setShowPasswordError(false);
+              }}
               Icon={
                 <>
                   <PasswordIcon
@@ -137,15 +122,7 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
             successMessage={isSuccess ? t('success') : null}
           />
 
-          <BaseButton
-            type="submit"
-            variant="contained"
-            isLoading={isLoading}
-            text={t('submit')}
-            onClick={() => {
-              setShowPasswordError(true);
-            }}
-          />
+          <BaseButton type="submit" variant="contained" isLoading={isLoading} text={t('submit')} />
         </Box>
       </BasicFormProvider>
     </Container>
