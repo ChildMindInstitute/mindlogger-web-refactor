@@ -31,7 +31,7 @@ describe('PasswordRequirementsSection', () => {
 
   describe('without wrapper (no children)', () => {
     it('renders the checklist visible', () => {
-      renderWithTheme(<PasswordRequirementsSection password="" />);
+      renderWithTheme(<PasswordRequirementsSection password="" delayMs={0} />);
       expect(screen.getByTestId('password-requirements-section')).toBeVisible();
     });
   });
@@ -39,7 +39,7 @@ describe('PasswordRequirementsSection', () => {
   describe('with wrapper (children)', () => {
     it('hides the checklist when password is empty and nothing is focused', () => {
       renderWithTheme(
-        <PasswordRequirementsSection password="">
+        <PasswordRequirementsSection password="" delayMs={0}>
           <input aria-label="New password" />
         </PasswordRequirementsSection>,
       );
@@ -49,7 +49,7 @@ describe('PasswordRequirementsSection', () => {
     it('shows the checklist when the wrapped field is focused', async () => {
       const user = userEvent.setup();
       renderWithTheme(
-        <PasswordRequirementsSection password="">
+        <PasswordRequirementsSection password="" delayMs={0}>
           <input aria-label="New password" />
         </PasswordRequirementsSection>,
       );
@@ -65,7 +65,7 @@ describe('PasswordRequirementsSection', () => {
       const user = userEvent.setup();
       renderWithTheme(
         <Box display="flex" flexDirection="column" gap={2}>
-          <PasswordRequirementsSection password="">
+          <PasswordRequirementsSection password="" delayMs={0}>
             <input aria-label="New password" />
           </PasswordRequirementsSection>
           <input aria-label="Field outside password section" />
@@ -83,7 +83,7 @@ describe('PasswordRequirementsSection', () => {
 
     it('keeps the checklist visible without focus when password fails length', () => {
       renderWithTheme(
-        <PasswordRequirementsSection password="short">
+        <PasswordRequirementsSection password="short" delayMs={0}>
           <input aria-label="New password" />
         </PasswordRequirementsSection>,
       );
@@ -92,7 +92,7 @@ describe('PasswordRequirementsSection', () => {
 
     it('keeps the checklist visible without focus when password fails character-type rules', () => {
       renderWithTheme(
-        <PasswordRequirementsSection password="onlyletterslongenough">
+        <PasswordRequirementsSection password="onlyletterslongenough" delayMs={0}>
           <input aria-label="New password" />
         </PasswordRequirementsSection>,
       );
@@ -101,7 +101,7 @@ describe('PasswordRequirementsSection', () => {
 
     it('hides the checklist when password meets policy and nothing is focused', () => {
       renderWithTheme(
-        <PasswordRequirementsSection password="Goodpass1!">
+        <PasswordRequirementsSection password="Goodpass1!" delayMs={0}>
           <input aria-label="New password" />
         </PasswordRequirementsSection>,
       );
@@ -111,7 +111,7 @@ describe('PasswordRequirementsSection', () => {
     it('shows the checklist when password meets policy but the field is focused', async () => {
       const user = userEvent.setup();
       renderWithTheme(
-        <PasswordRequirementsSection password="Goodpass1!">
+        <PasswordRequirementsSection password="Goodpass1!" delayMs={0}>
           <input aria-label="New password" />
         </PasswordRequirementsSection>,
       );

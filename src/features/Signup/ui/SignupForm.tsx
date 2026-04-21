@@ -164,7 +164,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
             showError={showPasswordError}
             onBlur={() => {
               if (isFirstTimeTyping) {
-                trigger('password');
+                void trigger('password');
               }
               setIsFirstTimeTyping(false);
             }}
