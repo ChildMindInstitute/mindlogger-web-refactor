@@ -100,18 +100,6 @@ describe('checkPassword', () => {
       expect(checkPassword('abc😀123').hasNoSpaces).toBe(true);
     });
 
-    it('returns true for ZWJ-composed emoji (woman technologist)', () => {
-      expect(checkPassword('👩‍💻').hasNoSpaces).toBe(true);
-    });
-
-    it('returns true when space only sits between extended pictographics (split emoji input)', () => {
-      expect(checkPassword('😀\u0020😀').hasNoSpaces).toBe(true);
-    });
-
-    it('collapses multiple pictographic-adjacent spaces in one pass', () => {
-      expect(checkPassword('😀 \t 😀').hasNoSpaces).toBe(true);
-    });
-
     it('returns false for space between letter and pictographic', () => {
       expect(checkPassword('a 😀').hasNoSpaces).toBe(false);
     });

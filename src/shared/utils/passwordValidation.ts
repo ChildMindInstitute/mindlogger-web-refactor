@@ -13,20 +13,6 @@ import { ACCOUNT_PASSWORD_MIN_LENGTH, ACCOUNT_PASSWORD_MIN_CHAR_TYPES } from '~/
 
 export type { PasswordCheckResult };
 
-// Some inputs insert ASCII space between pictographic code points; treat as one emoji for policy checks.
-const WHITESPACE_BETWEEN_EXTENDED_PICTOGRAPHICS =
-  /(\p{Extended_Pictographic})\s+(\p{Extended_Pictographic})/gu;
-
-const collapseWhitespaceBetweenExtendedPictographics = (s: string): string => {
-  let prev: string;
-  let out = s;
-  do {
-    prev = out;
-    out = out.replace(WHITESPACE_BETWEEN_EXTENDED_PICTOGRAPHICS, '$1$2');
-  } while (out !== prev);
-  return out;
-};
-
 // Count user-perceived characters (grapheme clusters), so each emoji = 1.
 const graphemeLength = (str: string): number => [...new Intl.Segmenter().segment(str)].length;
 
@@ -34,7 +20,7 @@ export const checkPassword = (
   password: string,
   minLength: number = ACCOUNT_PASSWORD_MIN_LENGTH,
 ): PasswordCheckResult => {
-  const normalized = collapseWhitespaceBetweenExtendedPictographics(password.normalize('NFKC'));
+  const normalized = password.normalize('NFKC');
   const hasCaselessLetter = CASELESS_LETTER_REGEXP.test(normalized);
   const hasUppercase = UPPERCASE_REGEXP.test(normalized) || hasCaselessLetter;
   const hasLowercase = LOWERCASE_REGEXP.test(normalized) || hasCaselessLetter;
