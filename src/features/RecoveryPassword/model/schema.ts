@@ -19,6 +19,11 @@ export const RecoveryPasswordSchema = z
           code: z.ZodIssueCode.custom,
           message: Dictionary.validation.password.blankSpaces,
         });
+      if (!result.hasNoEmoji)
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: Dictionary.validation.password.cannotContainEmojis,
+        });
       if (!result.meetsCharTypeRequirement)
         ctx.addIssue({
           code: z.ZodIssueCode.custom,

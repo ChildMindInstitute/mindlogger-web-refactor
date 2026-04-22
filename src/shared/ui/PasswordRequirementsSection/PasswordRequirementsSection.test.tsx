@@ -124,6 +124,28 @@ describe('PasswordRequirementsSection', () => {
       expect(screen.getByTestId('password-requirements-section')).toBeVisible();
     });
 
+    it('shows emoji error title when password contains emoji', () => {
+      renderWithTheme(
+        <FormHarness defaultValues={{ new: 'Goodpas1😀!' }}>
+          <PasswordRequirementsSection fieldName="new" delayMs={0} setShowPasswordError={() => {}}>
+            <input aria-label="New password" />
+          </PasswordRequirementsSection>
+        </FormHarness>,
+      );
+      expect(screen.getByText('passwordCannotContainEmojis')).toBeInTheDocument();
+    });
+
+    it('keeps the checklist visible without focus when password contains emoji', () => {
+      renderWithTheme(
+        <FormHarness defaultValues={{ new: 'Goodpas1😀!' }}>
+          <PasswordRequirementsSection fieldName="new" delayMs={0} setShowPasswordError={() => {}}>
+            <input aria-label="New password" />
+          </PasswordRequirementsSection>
+        </FormHarness>,
+      );
+      expect(screen.getByTestId('password-requirements-section')).toBeVisible();
+    });
+
     it('keeps the checklist visible without focus when password fails character-type rules', () => {
       renderWithTheme(
         <FormHarness defaultValues={{ new: 'onlyletterslongenough' }}>

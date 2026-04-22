@@ -10,6 +10,7 @@ export const Dictionary = {
       notMatch: 'validation.passwordsUnmatched',
       shouldNotContainSpaces: 'validation.passwordShouldNotContainSpaces',
       blankSpaces: 'validation.passwordBlankSpaces',
+      cannotContainEmojis: 'validation.passwordCannotContainEmojis',
       characterTypes: 'validation.passwordCharacterTypes',
     },
     firstName: {
