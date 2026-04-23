@@ -34,23 +34,15 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
   };
 
   if (command === 'serve') {
-    baseConfig.plugins = [
-      react(),
+    baseConfig.plugins.push(
       Checker({
         overlay: false,
         eslint: {
           lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
         },
       }),
-      nodePolyfills(),
-    ];
-
-    return baseConfig;
-  } else if (command === 'build') {
-    baseConfig.plugins = [react(), nodePolyfills()];
-
-    return baseConfig;
-  } else {
-    return baseConfig;
+    );
   }
+
+  return baseConfig;
 });
