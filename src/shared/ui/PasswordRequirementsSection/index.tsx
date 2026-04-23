@@ -1,5 +1,5 @@
 import type { FocusEvent, ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
@@ -69,6 +69,7 @@ export const PasswordRequirementsSection = ({
 
   // Tracks if this is the first time the user has focused within the component.
   const [firstFocusWithin, setFirstFocusWithin] = useState(true);
+  const firstFocusWithinRef = useRef(true);
 
   const { t } = useCustomTranslation({ keyPrefix: 'validation' });
 
@@ -90,13 +91,13 @@ export const PasswordRequirementsSection = ({
       // We only want to show the input's error if the user has not typed anything yet, otherwise all errors are shown using the password requirements section
       setShowPasswordError(false);
 
-      if (!firstFocusWithin) {
+      if (!firstFocusWithinRef.current) {
         await trigger(fieldName);
       }
     }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
 
     return () => clearTimeout(timer);
-  }, [passwordValue, trigger, clearErrors, firstFocusWithin]);
+  }, [passwordValue, trigger, clearErrors]);
 
   useEffect(() => {
     if (isSubmitting && !passwordValue) {
@@ -153,6 +154,7 @@ export const PasswordRequirementsSection = ({
       setFocusWithin(false);
 
       // Set to false so the checklist shows error status when the user focuses back in.
+      firstFocusWithinRef.current = false;
       setFirstFocusWithin(false);
     };
 
