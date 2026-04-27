@@ -16,11 +16,7 @@ import {
 } from './PasswordRequirementsSection.styles';
 import { usePasswordRequirementsChecklistDisplay } from './usePasswordRequirementsChecklistDisplay';
 
-import {
-  ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
-  ACCOUNT_PASSWORD_MIN_LENGTH,
-  DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS,
-} from '~/shared/constants';
+import { ACCOUNT_PASSWORD_MIN_CHAR_TYPES, ACCOUNT_PASSWORD_MIN_LENGTH } from '~/shared/constants';
 import { useCustomTranslation } from '~/shared/utils';
 import { isAccountPasswordPolicySatisfied } from '~/shared/utils/passwordValidation';
 
@@ -76,7 +72,7 @@ export const PasswordRequirementsSection = ({
   const {
     trigger,
     clearErrors,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isSubmitted },
   } = useFormContext();
 
   const passwordValue = useWatch({ name: fieldName });
@@ -84,7 +80,7 @@ export const PasswordRequirementsSection = ({
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (!passwordValue) {
-        clearErrors(fieldName);
+        if (!isSubmitted) clearErrors(fieldName);
         return;
       }
 
@@ -94,10 +90,10 @@ export const PasswordRequirementsSection = ({
       if (!firstFocusWithinRef.current) {
         await trigger(fieldName);
       }
-    }, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS);
+    }, delayMs);
 
     return () => clearTimeout(timer);
-  }, [passwordValue, trigger, clearErrors]);
+  }, [passwordValue, trigger, clearErrors, isSubmitted]);
 
   useEffect(() => {
     if (isSubmitting && !passwordValue) {
