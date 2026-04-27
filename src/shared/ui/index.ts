@@ -6,6 +6,7 @@ export { default as Input } from './Input';
 export * from './Card';
 export { DisplaySystemMessage } from './DisplaySystemMessage';
 export { PasswordIcon } from './PasswordIcon';
+export { PasswordRequirementsSection } from './PasswordRequirementsSection';
 export { PageMessage } from './PageMessage';
 export { Markdown } from './Markdown';
 export { ItemMarkdown } from './ItemMarkdown';

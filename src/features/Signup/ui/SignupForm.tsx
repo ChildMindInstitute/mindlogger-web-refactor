@@ -8,6 +8,7 @@ import { useBanners } from '~/entities/banner/model';
 import { useLoginMutation, userModel, useSignupMutation } from '~/entities/user';
 import { isMFARequiredResponse } from '~/features/Login/model/mfa.types';
 import { LoginResult } from '~/shared/api';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from '~/shared/constants';
 import {
   BaseButton,
   BasicFormProvider,
@@ -15,6 +16,7 @@ import {
   CheckboxWithLabel,
   Input,
   PasswordIcon,
+  PasswordRequirementsSection,
   Text,
 } from '~/shared/ui';
 import { Mixpanel, MixpanelEventType, useCustomForm, usePasswordType } from '~/shared/utils';
@@ -30,6 +32,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
 
   const [passwordType, onPasswordIconClick] = usePasswordType();
   const [confirmPasswordType, onConfirmPasswordIconClick] = usePasswordType();
+  const [showPasswordError, setShowPasswordError] = useState<boolean>(false);
 
   const [terms, setTerms] = useState<boolean>(false);
   const { onLoginSuccess } = userModel.hooks.useOnLogin({
@@ -42,6 +45,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
   const form = useCustomForm(
     {
       defaultValues: { email: '', firstName: '', lastName: '', password: '', confirmPassword: '' },
+      mode: 'onTouched',
     },
     SignupFormSchema,
   );
@@ -120,16 +124,31 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
           name="lastName"
           placeholder={t('lastName') || ''}
         />
-        <Input
-          id="signup-form-new-password"
-          type={passwordType}
-          name="password"
-          placeholder={t('password') || ''}
-          autoComplete="new-password"
-          Icon={
-            <PasswordIcon isSecure={passwordType === 'password'} onClick={onPasswordIconClick} />
-          }
-        />
+        <PasswordRequirementsSection
+          setShowPasswordError={setShowPasswordError}
+          delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+          fieldName="password"
+        >
+          <Input
+            id="signup-form-new-password"
+            type={passwordType}
+            name="password"
+            placeholder={t('password') || ''}
+            autoComplete="new-password"
+            onFocus={() => {
+              setShowPasswordError(false);
+            }}
+            showError={showPasswordError}
+            Icon={
+              <>
+                <PasswordIcon
+                  isSecure={passwordType === 'password'}
+                  onClick={onPasswordIconClick}
+                />
+              </>
+            }
+          />
+        </PasswordRequirementsSection>
         <Input
           id="signup-form-confirm-password"
           type={confirmPasswordType}

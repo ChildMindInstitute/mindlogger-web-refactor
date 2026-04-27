@@ -1,9 +1,12 @@
+import { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
 import { useRecoveryPasswordTranslation } from '../lib/useRecoveryPasswordTranslation';
 import { RecoveryPassword, RecoveryPasswordSchema } from '../model/schema';
 
 import { useApproveRecoveryPasswordMutation } from '~/entities/user';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from '~/shared/constants';
 import ROUTES from '~/shared/constants/routes';
 import { Box } from '~/shared/ui';
 import {
@@ -13,6 +16,7 @@ import {
   DisplaySystemMessage,
   Input,
   PasswordIcon,
+  PasswordRequirementsSection,
 } from '~/shared/ui';
 import { useCustomForm, usePasswordType } from '~/shared/utils';
 
@@ -26,8 +30,13 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
   const navigate = useNavigate();
   const { t } = useRecoveryPasswordTranslation();
 
-  const form = useCustomForm({ defaultValues: { new: '', confirm: '' } }, RecoveryPasswordSchema);
+  const form = useCustomForm(
+    { defaultValues: { new: '', confirm: '' }, mode: 'onTouched' },
+    RecoveryPasswordSchema,
+  );
   const { handleSubmit, reset } = form;
+
+  const [showPasswordError, setShowPasswordError] = useState<boolean>(false);
 
   const {
     mutate: approveRecoveryPassword,
@@ -63,20 +72,29 @@ export const RecoveryPasswordForm = ({ title, token, email }: RecoveryPasswordFo
           <p>{title}</p>
         </Box>
 
-        <Box display="flex" flex={1} gap={2} flexDirection="column">
-          <Input
-            id="recovery-password-new-password"
-            type={newPasswordType}
-            name="new"
-            placeholder={t('newPassword') || ''}
-            autoComplete="new-password"
-            Icon={
-              <PasswordIcon
-                isSecure={newPasswordType === 'password'}
-                onClick={onNewPasswordIconClick}
-              />
-            }
-          />
+        <Box display="flex" flex={1} gap="24px" flexDirection="column">
+          <PasswordRequirementsSection
+            fieldName="new"
+            delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+            setShowPasswordError={setShowPasswordError}
+          >
+            <Input
+              id="recovery-password-new-password"
+              type={newPasswordType}
+              name="new"
+              placeholder={t('newPassword') || ''}
+              autoComplete="new-password"
+              showError={showPasswordError}
+              Icon={
+                <>
+                  <PasswordIcon
+                    isSecure={newPasswordType === 'password'}
+                    onClick={onNewPasswordIconClick}
+                  />
+                </>
+              }
+            />
+          </PasswordRequirementsSection>
           <Input
             id="recovery-password-confirm-new-password"
             type={confirmNewPasswordType}
