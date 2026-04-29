@@ -4,7 +4,7 @@
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 import { UserConfig, defineConfig, loadEnv } from 'vite';
-import eslint from 'vite-plugin-eslint';
+import Checker from 'vite-plugin-checker';
 import nodePolyfills from 'vite-plugin-node-stdlib-browser';
 
 // https://vitejs.dev/config/
@@ -34,14 +34,15 @@ export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
   };
 
   if (command === 'serve') {
-    baseConfig.plugins = [react(), eslint(), nodePolyfills()];
-
-    return baseConfig;
-  } else if (command === 'build') {
-    baseConfig.plugins = [react(), nodePolyfills()];
-
-    return baseConfig;
-  } else {
-    return baseConfig;
+    baseConfig.plugins.push(
+      Checker({
+        overlay: false,
+        eslint: {
+          lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
+        },
+      }),
+    );
   }
+
+  return baseConfig;
 });
