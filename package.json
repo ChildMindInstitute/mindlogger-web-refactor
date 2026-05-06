@@ -16,13 +16,13 @@
     "prettier:check": "prettier src --check",
     "prettier:fix": "prettier src --write",
     "prepare": "husky install",
-    "test:watch": "TZ=UTC vitest",
-    "test": "TZ=UTC vitest run",
-    "test:e2e": "TZ=UTC playwright test --project=e2e",
-    "test:user": "TZ=UTC playwright test --project=user",
-    "test:smoke": "TZ=UTC playwright test --project=smoke",
-    "test:ui": "TZ=UTC vitest --ui",
-    "coverage": "TZ=UTC vitest run --coverage"
+    "test:watch": "cross-env TZ=UTC vitest",
+    "test": "cross-env TZ=UTC vitest run",
+    "test:e2e": "cross-env TZ=UTC playwright test --project=e2e",
+    "test:user": "cross-env TZ=UTC playwright test --project=user",
+    "test:smoke": "cross-env TZ=UTC playwright test --project=smoke",
+    "test:ui": "cross-env TZ=UTC vitest --ui",
+    "coverage": "cross-env TZ=UTC vitest run --coverage"
   },
   "dependencies": {
     "@datadog/browser-logs": "^6.5.0",
@@ -106,7 +106,8 @@
     "vite-plugin-checker": "^0.13.0",
     "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vitest": "^4.0.8",
-    "vitest-canvas-mock": "^0.3.3"
+    "vitest-canvas-mock": "^0.3.3",
+    "cross-env": "^7.0.3"
   },
   "resolutions": {
     "qs": ">=6.14.1",

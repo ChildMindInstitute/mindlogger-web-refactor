@@ -1,14 +1,37 @@
 import { test, expect } from '../../../../fixtures/pages.fixture'
+import { requirePlaywrightAuthCredentials } from '../../../../utils/credentials';
 
 test.describe('Activity Completion', () => {
   test('User can complete an assessment and submit answers', async ({
     appletListPage,
     appletDetailsPage,
-    page
+    loginPage,
+    page,
+    baseURL,
   }) => {
-    // Navigate to applets list
+    const { email, password } = requirePlaywrightAuthCredentials();
+
+    await loginPage.goto(baseURL);
+    await loginPage.login(email, password);
+    await page.waitForURL(/.*\/protected\/applets/, { timeout: 15000 });
+
     await page.goto('/protected/applets');
     await expect(page).toHaveURL(/.*\/protected\/applets/);
+
+    const appletListExists = await page
+      .waitForSelector('[data-testid="applet-list"]', { timeout: 10000 })
+      .catch(() => null);
+
+    if (!appletListExists) {
+      const noAppletsVisible = await page
+        .waitForSelector('text=/no applets/i', { timeout: 10000 })
+        .catch(() => null);
+
+      if (noAppletsVisible) {
+        test.skip('No applets available in this environment to complete an assessment');
+      }
+    }
+
     // Give the applet list more time to load and become visible
     await expect(appletListPage.appletList).toBeVisible({ timeout: 10000 });
 

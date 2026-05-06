@@ -1,6 +1,7 @@
 import {request, test as base} from '@playwright/test';
 import {UserAPI} from "../utils/api-client/user-api";
 import {AppletAPI} from "../utils/api-client/applet-api";
+import {InvitationsAPI} from "../utils/api-client/invitations-api";
 import {runtimeConfig} from "../config";
 import {readStorageFile} from "../utils/file";
 
@@ -9,6 +10,8 @@ type Fixtures = {
   adminUserApi: UserAPI
   appletApi: AppletAPI
   adminAppletApi: AppletAPI
+  invitationsApi: InvitationsAPI
+  adminInvitationsApi: InvitationsAPI
 };
 
 
@@ -56,6 +59,22 @@ export const test = base.extend<Fixtures>({
     const context = await initContext(runtimeConfig.adminTokenFile)
 
     const api = new AppletAPI(context);
+    await use(api);
+    await api.dispose();
+  },
+
+  invitationsApi: async ({}: any, use) => {
+    const context = await initContext(runtimeConfig.userTokenFile)
+
+    const api = new InvitationsAPI(context);
+    await use(api);
+    await api.dispose();
+  },
+
+  adminInvitationsApi: async ({}: any, use) => {
+    const context = await initContext(runtimeConfig.adminTokenFile)
+
+    const api = new InvitationsAPI(context);
     await use(api);
     await api.dispose();
   }

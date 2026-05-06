@@ -15,7 +15,7 @@ dotenv.config({
 
 export const runtimeConfig = {
   storageRoot: 'storage',
-  storageState: process.env.PLAYWRIGHT_STORAGE_STATE || 'storage/default.json',
+  storageState: process.env.PLAYWRIGHT_STORAGE_STATE || 'tests/.auth/admin.json',
   baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000',
   apiBaseURL: process.env.PLAYWRIGHT_API_BASE_URL || 'http://localhost:3000',
 

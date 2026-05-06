@@ -1,5 +1,8 @@
 import {CuriousApi} from "./api";
 
+/**
+ * Payload used to create a user through the curious API client.
+ */
 interface CreateUserPayload {
   confirmPassword?: string;
   email: string;
@@ -8,6 +11,9 @@ interface CreateUserPayload {
   password: string;
 }
 
+/**
+ * Response shape returned from the create user endpoint.
+ */
 interface CreateUserResponse {
   result: {
     email: string;
@@ -18,7 +24,12 @@ interface CreateUserResponse {
 }
 
 export class UserAPI extends CuriousApi {
-
+  /**
+   * Create a user through the API client.
+   *
+   * @param payload - The new user details.
+   * @returns The created user response.
+   */
   async createUser(payload: CreateUserPayload): Promise<CreateUserResponse> {
     try {
       this.log(`Creating user: ${payload.email}`);
@@ -39,6 +50,14 @@ export class UserAPI extends CuriousApi {
     }
   }
 
+  /**
+   * Authenticate a user with retry support.
+   *
+   * @param email - The user email.
+   * @param password - The user password.
+   * @param retries - The number of times to retry on failure.
+   * @param delayMs - Delay between retries in milliseconds.
+   */
   async login(email: string, password: string, retries = 3, delayMs = 1000) {
     this.log(`Attempting login for ${email} with ${retries} retries`);
     for (let attempt = 1; attempt <= retries; attempt++) {
@@ -68,6 +87,9 @@ export class UserAPI extends CuriousApi {
     }
   }
 
+  /**
+   * Dispose the underlying API request context.
+   */
   async dispose() {
     try {
       await this.apiContext.dispose();
