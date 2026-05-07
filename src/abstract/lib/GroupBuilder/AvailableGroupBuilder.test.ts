@@ -1667,4 +1667,66 @@ describe('AvailableGroupEvaluator cross-day tests when access before start time 
       expect(result).toEqual([]);
     });
   });
+
+  describe('AvailableGroupEvaluator when startDate equals scheduled day and now is before TimeFrom and allowAccessBeforeFromTime is true', () => {
+    const startAt = getFridayInSeptember();
+    let now = buildDateTime(startAt, TimeFrom);
+    now = subMinutes(now, 1);
+
+    it.each([
+      PeriodicityType.Once,
+      PeriodicityType.Daily,
+      PeriodicityType.Weekly,
+      PeriodicityType.Monthly,
+      PeriodicityType.Weekdays,
+    ] as const)('Test %s', (periodicity: PeriodicityType) => {
+      const input: GroupsBuildContext = {
+        allAppletActivities: [],
+        progress: getEmptyProgress(),
+      };
+      const eventEntity = getScheduledEventEntity({
+        scheduledAtDay: startAt,
+        startDate: startAt,
+        endDate: addDays(startAt, 2),
+      });
+      eventEntity.event.availability.periodicityType = periodicity;
+      eventEntity.event.availability.allowAccessBeforeFromTime = true;
+
+      const evaluator = new AvailableGroupEvaluator(input);
+      mockGetNow(evaluator, now);
+
+      expect(evaluator.evaluate([eventEntity])).toEqual([eventEntity]);
+    });
+  });
+
+  describe('AvailableGroupEvaluator when startDate equals scheduled day and now is before TimeFrom and allowAccessBeforeFromTime is false', () => {
+    const startAt = getFridayInSeptember();
+    let now = buildDateTime(startAt, TimeFrom);
+    now = subMinutes(now, 1);
+
+    it.each([
+      PeriodicityType.Once,
+      PeriodicityType.Daily,
+      PeriodicityType.Weekly,
+      PeriodicityType.Monthly,
+      PeriodicityType.Weekdays,
+    ] as const)('Test %s', (periodicity: PeriodicityType) => {
+      const input: GroupsBuildContext = {
+        allAppletActivities: [],
+        progress: getEmptyProgress(),
+      };
+      const eventEntity = getScheduledEventEntity({
+        scheduledAtDay: startAt,
+        startDate: startAt,
+        endDate: addDays(startAt, 2),
+      });
+      eventEntity.event.availability.periodicityType = periodicity;
+      eventEntity.event.availability.allowAccessBeforeFromTime = false;
+
+      const evaluator = new AvailableGroupEvaluator(input);
+      mockGetNow(evaluator, now);
+
+      expect(evaluator.evaluate([eventEntity])).toEqual([]);
+    });
+  });
 });
