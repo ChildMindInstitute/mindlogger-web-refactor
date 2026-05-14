@@ -15,6 +15,9 @@ const theme = createTheme({
     secondary: {
       main: variables.palette.secondary,
     },
+    error: {
+      main: variables.palette.error,
+    },
   },
   typography: {
     fontFamily: variables.font.family.body,

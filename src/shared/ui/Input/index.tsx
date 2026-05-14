@@ -8,6 +8,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { useCustomTranslation } from '../../utils';
+import type { ZodFieldError } from '../../utils/validation/zodResolver';
 
 import { variables } from '~/shared/constants/theme/variables';
 
@@ -15,17 +16,29 @@ interface IInputCommonProps {
   id: string;
   type: HTMLInputTypeAttribute;
   autoComplete?: string;
-
+  showError?: boolean;
   name: string;
   placeholder?: string;
   onChange?: (e: string | number) => void;
   className?: string;
-
+  onBlur?: () => void;
   Icon?: JSX.Element;
+  onFocus?: () => void;
 }
 
 const Input = (props: IInputCommonProps) => {
-  const { type, name, placeholder, onChange, className, Icon, id } = props;
+  const {
+    type,
+    name,
+    placeholder,
+    onChange,
+    className,
+    Icon,
+    id,
+    onBlur,
+    showError = true,
+    onFocus,
+  } = props;
   const { t } = useCustomTranslation();
 
   const { control } = useFormContext();
@@ -55,12 +68,16 @@ const Input = (props: IInputCommonProps) => {
         placeholder={placeholder}
         value={field.value as string}
         onChange={onInputChange}
+        onBlur={onBlur}
         className={className}
         error={!!error}
+        onFocus={onFocus}
         endAdornment={<InputAdornment position="end">{Icon}</InputAdornment>}
         sx={{ backgroundColor: variables.palette.onPrimary }}
       />
-      {error?.message && <FormHelperText id={id}>{t(error.message)}</FormHelperText>}
+      {showError && error?.message && (
+        <FormHelperText id={id}>{t(error.message, (error as ZodFieldError).params)}</FormHelperText>
+      )}
     </FormControl>
   );
 };

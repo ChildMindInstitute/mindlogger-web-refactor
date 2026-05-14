@@ -1,7 +1,10 @@
+import { useState } from 'react';
+
 import { useChangePasswordTranslation } from '../lib/useChangePasswordTranslation';
 import { ChangePasswordSchema, TChangePassword } from '../model/schema';
 
 import { useUpdatePasswordMutation } from '~/entities/user';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from '~/shared/constants';
 import { Box } from '~/shared/ui';
 import {
   BaseButton,
@@ -10,6 +13,7 @@ import {
   DisplaySystemMessage,
   Input,
   PasswordIcon,
+  PasswordRequirementsSection,
 } from '~/shared/ui';
 import { useCustomForm, usePasswordType } from '~/shared/utils';
 
@@ -25,9 +29,10 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
   const [oldPasswordType, onOldPasswordIconClick] = usePasswordType();
   const [newPasswordType, onNewPasswordIconClick] = usePasswordType();
   const [confirmNewPasswordType, onConfirmNewPasswordIconClick] = usePasswordType();
+  const [showPasswordError, setShowPasswordError] = useState<boolean>(false);
 
   const form = useCustomForm(
-    { defaultValues: { old: '', new: '', confirm: '' } },
+    { defaultValues: { old: '', new: '', confirm: '' }, mode: 'onTouched' },
     ChangePasswordSchema,
   );
   const { handleSubmit, reset } = form;
@@ -61,6 +66,9 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
             name="old"
             placeholder={t('oldPassword') || ''}
             autoComplete="current-password"
+            onFocus={() => {
+              setShowPasswordError(false);
+            }}
             Icon={
               <PasswordIcon
                 isSecure={oldPasswordType === 'password'}
@@ -68,19 +76,32 @@ export const ChangePasswordForm = ({ title }: ChangePasswordFormProps) => {
               />
             }
           />
-          <Input
-            id="change-password-form-new-password"
-            type={newPasswordType}
-            name="new"
-            placeholder={t('newPassword') || ''}
-            autoComplete="new-password"
-            Icon={
-              <PasswordIcon
-                isSecure={newPasswordType === 'password'}
-                onClick={onNewPasswordIconClick}
-              />
-            }
-          />
+          <PasswordRequirementsSection
+            fieldName="new"
+            delayMs={DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS}
+            setShowPasswordError={setShowPasswordError}
+          >
+            <Input
+              id="change-password-form-new-password"
+              type={newPasswordType}
+              name="new"
+              placeholder={t('newPassword') || ''}
+              autoComplete="new-password"
+              showError={showPasswordError}
+              onFocus={() => {
+                setShowPasswordError(false);
+              }}
+              Icon={
+                <>
+                  <PasswordIcon
+                    isSecure={newPasswordType === 'password'}
+                    onClick={onNewPasswordIconClick}
+                  />
+                </>
+              }
+            />
+          </PasswordRequirementsSection>
+
           <Input
             id="change-password-form-confirm-password"
             type={confirmNewPasswordType}
