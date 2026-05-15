@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-
 import { useChangePasswordTranslation } from '../lib/useChangePasswordTranslation';
 import { ChangePasswordSchema, TChangePassword } from '../model/schema';
 
