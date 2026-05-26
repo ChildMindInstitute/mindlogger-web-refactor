@@ -6,4 +6,7 @@ export enum SupportableLanguage {
   Greek = 'el',
   Spanish = 'es',
   Portuguese = 'pt',
+  Afrikaans = 'af',
+  Xhosa = 'xh',
+  Zulu = 'zu',
 }
