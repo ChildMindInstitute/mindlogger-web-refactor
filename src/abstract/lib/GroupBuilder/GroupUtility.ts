@@ -194,6 +194,17 @@ export class GroupUtility {
     return { from, to };
   }
 
+  /**
+   * Returns true when a ScheduledAccess window crosses midnight.
+   *
+   * Example:
+   * - 09:00 -> 17:00  => false (same-day window)
+   * - 22:00 -> 06:00  => true  (overnight window)
+   *
+   * Why this exists:
+   * Evaluators use this to switch from single-day checks to cross-day logic
+   * (today + yesterday intervals, completion checks, and "void" interval handling).
+   */
   public isSpreadToNextDay(event: ScheduleEvent): boolean {
     if (event.availability.timeFrom === null) {
       throw new Error('[isSpreadToNextDay] timeFrom is null');
@@ -236,15 +247,38 @@ export class GroupUtility {
     }
   }
 
-  public isInsideValidDatesInterval(event: ScheduleEvent) {
-    const { startDate, endDate } = event.availability;
+  public isInsideAvailabilityDatesInterval(event: ScheduleEvent, isAccessBeforeTimeFrom: boolean) {
+    const { startDate, endDate, timeFrom, timeTo } = event.availability;
 
     const now = this.getNow();
 
+    // If the event can be accessed before the timeFrom, the timeFrom need not be included in the interval.
+    const includeFromTime = startDate && timeFrom && !isAccessBeforeTimeFrom;
+
+    const from = includeFromTime
+      ? new Date(
+          startDate.getFullYear(),
+          startDate.getMonth(),
+          startDate.getDate(),
+          timeFrom.hours,
+          timeFrom.minutes,
+        )
+      : (startDate ?? undefined);
+    const to =
+      endDate && timeTo
+        ? new Date(
+            endDate.getFullYear(),
+            endDate.getMonth(),
+            endDate.getDate(),
+            timeTo.hours,
+            timeTo.minutes,
+          )
+        : (endDate ?? undefined);
+
     return this.isInInterval(
       {
-        from: startDate ?? undefined,
-        to: endDate ?? undefined,
+        from,
+        to,
       },
       now,
       'both',
