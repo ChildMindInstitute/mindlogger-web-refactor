@@ -121,7 +121,9 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
     for (const eventEntity of notInProgress) {
       const { event } = eventEntity;
 
-      if (!this.utility.isInsideValidDatesInterval(event)) {
+      const isAccessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime;
+
+      if (!this.utility.isInsideAvailabilityDatesInterval(event, isAccessBeforeTimeFrom)) {
         continue;
       }
 
@@ -140,8 +142,6 @@ export class AvailableGroupEvaluator implements IEvaluator<EventEntity> {
       }
 
       const isSpreadToNextDay = this.utility.isSpreadToNextDay(event);
-
-      const isAccessBeforeTimeFrom = event.availability.allowAccessBeforeFromTime;
 
       if (
         !isSpreadToNextDay &&
