@@ -34,6 +34,11 @@ describe('useLanguageList', () => {
       result.current.map((item) => [item.eventKey, item.localizationPath]),
     );
 
+    expect(pathsByKey[SupportableLanguage.English]).toBe('english');
+    expect(pathsByKey[SupportableLanguage.French]).toBe('french');
+    expect(pathsByKey[SupportableLanguage.Greek]).toBe('greek');
+    expect(pathsByKey[SupportableLanguage.Spanish]).toBe('spanish');
+    expect(pathsByKey[SupportableLanguage.Portuguese]).toBe('portuguese');
     expect(pathsByKey[SupportableLanguage.Afrikaans]).toBe('afrikaans');
     expect(pathsByKey[SupportableLanguage.Xhosa]).toBe('xhosa');
     expect(pathsByKey[SupportableLanguage.Zulu]).toBe('zulu');
