@@ -2,11 +2,14 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
+import afResources from '~/i18n/af/translation.json';
 import elResources from '~/i18n/el/translation.json';
 import enResources from '~/i18n/en/translation.json';
 import esResources from '~/i18n/es/translation.json';
 import frResources from '~/i18n/fr/translation.json';
 import ptResources from '~/i18n/pt/translation.json';
+import xhResources from '~/i18n/xh/translation.json';
+import zuResources from '~/i18n/zu/translation.json';
 
 const i18nManager = {
   async initialize() {
@@ -21,8 +24,11 @@ const i18nManager = {
           el: elResources,
           es: esResources,
           pt: ptResources,
+          af: afResources,
+          xh: xhResources,
+          zu: zuResources,
         },
-        supportedLngs: ['en', 'fr', 'el', 'es', 'pt'],
+        supportedLngs: ['en', 'fr', 'el', 'es', 'pt', 'af', 'xh', 'zu'],
         interpolation: {
           escapeValue: false,
         },
