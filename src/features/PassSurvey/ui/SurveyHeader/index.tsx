@@ -103,7 +103,7 @@ const SurveyHeader = (props: Props) => {
 
         {greaterThanSM && props.isSaveAndExitButtonShown && (
           <Box
-            width="140px"
+            minWidth="140px"
             height="100%"
             gridColumn="3/3"
             display="flex"
