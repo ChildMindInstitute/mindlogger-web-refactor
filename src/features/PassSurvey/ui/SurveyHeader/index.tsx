@@ -55,7 +55,7 @@ const SurveyHeader = (props: Props) => {
         gridAutoFlow="column"
         alignItems="center"
         justifyContent="center"
-        gridTemplateColumns="1fr minmax(300px, 900px) 1fr"
+        gridTemplateColumns="minmax(0, 1fr) minmax(300px, 900px) minmax(max-content, 1fr)"
         gap={1.5}
       >
         {greaterThanSM && props.entityTimer && (
