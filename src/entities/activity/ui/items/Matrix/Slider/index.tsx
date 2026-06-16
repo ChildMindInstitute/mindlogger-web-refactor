@@ -35,7 +35,7 @@ export const SliderRows = (props: Props) => {
           <SliderRow
             key={row.id}
             label={row.label}
-            value={value ? value : row.minValue}
+            value={value ?? undefined}
             minValue={row.minValue}
             minLabel={row.minLabel}
             minImage={row.minImage}
