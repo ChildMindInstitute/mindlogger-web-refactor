@@ -133,7 +133,7 @@ describe('SliderItemBase', () => {
 
       fireEvent.mouseDown(sliderRoot, { clientX: 0 });
       fireEvent.mouseUp(sliderRoot);
-      expect(onChange.mock.calls.length).toBeLessThanOrEqual(1);
+      expect(onChange).toHaveBeenCalledTimes(1);
     });
   });
 
