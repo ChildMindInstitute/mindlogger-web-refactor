@@ -4,7 +4,7 @@ import { Box, SliderItemBase, Text } from '~/shared/ui';
 type Props = {
   label: string;
 
-  value: number;
+  value: number | undefined;
   minValue: number;
   maxValue: number;
 
@@ -43,7 +43,7 @@ export const SliderRow = ({
       </Text>
 
       <SliderItemBase
-        value={String(value)}
+        value={value !== undefined ? String(value) : undefined}
         minValue={minValue}
         minLabel={minLabel}
         minImage={minImage}
