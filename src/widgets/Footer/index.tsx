@@ -44,7 +44,7 @@ export default function Footer() {
             &#169; {currentYear}
           </span>
         )}
-        <a href="https://mindlogger.org/terms" target="_blank" rel="noreferrer">
+        <a href="https://www.gettingcurious.com/terms" target="_blank" rel="noreferrer">
           {t('termsOfService')}
         </a>
         <a href="https://mindlogger.org/privacy-policy" target="_blank" rel="noreferrer">
