@@ -141,6 +141,7 @@ export const MuiModal = (props: Props) => {
                 text={footerSecondaryButton}
                 borderColor={variables.palette.outline}
                 sx={{
+                  whiteSpace: 'nowrap',
                   '&:hover': {
                     border: 'none',
                   },
