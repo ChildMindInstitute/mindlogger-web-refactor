@@ -117,8 +117,8 @@ describe('SliderItemBase', () => {
 
   // Do we need to check if passes a string value?
 
-  describe('onChangeCommited behavior', () => {
-    it('calls onChange via onChangeCommited when value is undefined', () => {
+  describe('onChangeCommitted behavior', () => {
+    it('calls onChange via onChangeCommitted when value is undefined', () => {
       const { onChange, container } = renderSlider({ value: undefined });
 
       const sliderRoot = container.querySelector('.MuiSlider-root')!;
@@ -127,7 +127,7 @@ describe('SliderItemBase', () => {
       expect(onChange).toHaveBeenCalled();
     });
 
-    it('does not call onChange from onChangeCommited when value is already set', () => {
+    it('does not call onChange from onChangeCommitted when value is already set', () => {
       const { onChange, container } = renderSlider({ value: '3' });
       const sliderRoot = container.querySelector('.MuiSlider-root')!;
 
