@@ -61,7 +61,7 @@ export const SliderItemBase = (props: Props) => {
     <Box
       width="100%"
       margin="auto"
-      className={`slider-widget ${value ? 'no-value' : ''}`}
+      className={`slider-widget ${!value ? 'no-value' : ''}`}
       data-testid="slider-container"
     >
       <Slider
@@ -74,6 +74,16 @@ export const SliderItemBase = (props: Props) => {
         step={continiusSlider ? 0.1 : defaultStep}
         valueLabelDisplay={continiusSlider ? 'off' : 'auto'}
         onChange={(e, value) => onChange(String(value))}
+        // When no value is selected, MUI's controlled value defaults to minValue.
+        // Clicking at minValue position won't fire onChange since MUI sees no change.
+        // onChangeCommitted fires on mouseup regardless, catching that case.
+        // The !value guard ensures this only runs on the first interaction (when no value is set),
+        // preventing duplicate events on subsequent interactions where onChange already fires.
+        onChangeCommitted={(e, newValue) => {
+          if (!value) {
+            onChange(String(newValue));
+          }
+        }}
         sx={{
           height: '8px',
           opacity: 1,
@@ -82,6 +92,7 @@ export const SliderItemBase = (props: Props) => {
             backgroundColor: variables.palette.primary,
             width: '24px',
             height: '24px',
+            ...(!value && { display: 'none' }),
           },
           '& .MuiSlider-rail': {
             width: '102%',
@@ -92,6 +103,7 @@ export const SliderItemBase = (props: Props) => {
             opacity: 1,
             color: variables.palette.primary,
             left: '-1% !important',
+            ...(!value && { display: 'none' }),
           },
           '& .MuiSlider-mark': {
             width: '4px',
@@ -100,6 +112,11 @@ export const SliderItemBase = (props: Props) => {
             borderRadius: '50%',
             opacity: showStickMarks ? 1 : 0,
           },
+          ...(!value && {
+            '& .MuiSlider-mark.MuiSlider-markActive': {
+              backgroundColor: variables.palette.outline,
+            },
+          }),
           '& .MuiSlider-markLabel': {
             opacity: showStickLabel ? 1 : 0,
           },
