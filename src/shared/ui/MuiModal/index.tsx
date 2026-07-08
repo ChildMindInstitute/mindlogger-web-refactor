@@ -130,7 +130,7 @@ export const MuiModal = (props: Props) => {
         >
           {footerSecondaryButton && (
             <Box
-              width={{ xs: canStackButtons ? '100%' : '120px', sm: '120px' }}
+              minWidth={{ xs: canStackButtons ? '100%' : '120px', sm: '120px' }}
               sx={{ order: { xs: canStackButtons ? 2 : 'initial', sm: 'initial' } }}
               data-testid="assessment-back-button"
             >
@@ -141,6 +141,7 @@ export const MuiModal = (props: Props) => {
                 text={footerSecondaryButton}
                 borderColor={variables.palette.outline}
                 sx={{
+                  whiteSpace: 'nowrap',
                   '&:hover': {
                     border: 'none',
                   },
