@@ -15,7 +15,7 @@ Running the app:
 
 ### 1. Prerequisites
 
-* NodeJS `20.11.0` or higher, recommend using `asdf` or `nvm` to manage local node version
+* NodeJS `24` or higher, recommend using `asdf` or `nvm` to manage local node version
   #### 🔧 Node Version Management (with `nvm`)
   To install:
 

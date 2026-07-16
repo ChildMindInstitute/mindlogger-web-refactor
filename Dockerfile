@@ -1,5 +1,5 @@
 
-FROM node:20.11.0
+FROM node:24
 
 WORKDIR /home/node
 
