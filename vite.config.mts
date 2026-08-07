@@ -11,14 +11,23 @@ import nodePolyfills from 'vite-plugin-node-stdlib-browser';
 export default defineConfig(async ({ command, mode }): Promise<UserConfig> => {
   const env = loadEnv(mode, process.cwd(), '');
 
+  // Error if missing required environment variable
+  if (command === 'build') {
+    if (!env.VITE_SECURE_LOCAL_STORAGE_HASH_KEY) {
+      throw new Error('Missing required environment variable VITE_SECURE_LOCAL_STORAGE_HASH_KEY');
+    }
+  }
+
   const baseConfig: UserConfig = {
     optimizeDeps: {
       exclude: ['vite', 'tests/*'],
     },
     define: {
       global: 'globalThis',
+      // Pass through environment variable to react-secure-storage
+      // https://www.npmjs.com/package/react-secure-storage#how-to-use-with-vite
       'process.env': {
-        REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY: env.REACT_APP_SECURE_LOCAL_STORAGE_HASH_KEY,
+        VITE_SECURE_LOCAL_STORAGE_HASH_KEY: env.VITE_SECURE_LOCAL_STORAGE_HASH_KEY,
       },
     },
     plugins: [react(), nodePolyfills()],
