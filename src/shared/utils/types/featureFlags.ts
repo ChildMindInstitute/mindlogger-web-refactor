@@ -3,6 +3,7 @@ export enum FeatureFlag {
   EnablePhrasalTemplate = 'EnablePhrasalTemplate',
   EnableActivityAssign = 'EnableActivityAssign',
   EnableFlowResume = 'EnableFlowResume',
+  EnableSessionKeepAlive = 'EnableSessionKeepAlive',
 }
 
 export type FeatureFlagType = {
@@ -10,6 +11,7 @@ export type FeatureFlagType = {
   [FeatureFlag.EnablePhrasalTemplate]: boolean;
   [FeatureFlag.EnableActivityAssign]: boolean;
   [FeatureFlag.EnableFlowResume]: string[];
+  [FeatureFlag.EnableSessionKeepAlive]: boolean;
 };
 
 // Mapping between the feature flag we want to use in code, to the
@@ -28,4 +30,5 @@ export const LaunchDarkyFlagsMap = {
   // TODO: https://mindlogger.atlassian.net/browse/M2-6518 Assign Activity flag cleanup
   [FeatureFlag.EnableActivityAssign]: 'enableActivityAssign',
   [FeatureFlag.EnableFlowResume]: 'enableFlowResume',
+  [FeatureFlag.EnableSessionKeepAlive]: 'enableSessionKeepAlive',
 };
