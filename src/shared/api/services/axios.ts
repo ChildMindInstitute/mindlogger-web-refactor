@@ -32,10 +32,40 @@ axiosService.interceptors.request.use(
     return config;
   },
   (error) => {
-    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+     
     return Promise.reject(error);
   },
 );
+
+const requestNewTokens = async () => {
+  const tokens = secureTokensStorage.getTokens();
+
+  if (!tokens?.refreshToken) {
+    throw new Error('No refresh token to refresh with.');
+  }
+
+  const { data } = await authorizationService.refreshToken({
+    refreshToken: tokens.refreshToken,
+  });
+
+  secureTokensStorage.setTokens(data.result);
+
+  return data.result;
+};
+
+let pendingRefresh: ReturnType<typeof requestNewTokens> | null = null;
+
+// Callers that overlap share one request instead of each rotating the token separately. Under
+// refresh-token rotation the second rotation would be spending a token the first already retired.
+export const refreshTokens = () => {
+  if (!pendingRefresh) {
+    pendingRefresh = requestNewTokens().finally(() => {
+      pendingRefresh = null;
+    });
+  }
+
+  return pendingRefresh;
+};
 
 axiosService.interceptors.response.use(
   (response) => response,
@@ -52,17 +82,13 @@ axiosService.interceptors.response.use(
       }
 
       try {
-        const { data } = await authorizationService.refreshToken({
-          refreshToken: tokens?.refreshToken,
-        });
-
-        secureTokensStorage.setTokens(data.result);
+        const result = await refreshTokens();
 
         if (!config.headers) {
           config.headers = {};
         }
 
-        config.headers.Authorization = `${data.result.tokenType} ${data.result.accessToken}`;
+        config.headers.Authorization = `${result.tokenType} ${result.accessToken}`;
       } catch (e) {
         // Skip global logout for MFA endpoints - they handle errors in the MFA flow
         const url = config?.url || '';
@@ -71,7 +97,7 @@ axiosService.interceptors.response.use(
         if (!isMFAEndpoint) {
           eventEmitter.emit('onLogout');
         }
-        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+         
         await Promise.reject(e);
       }
 
