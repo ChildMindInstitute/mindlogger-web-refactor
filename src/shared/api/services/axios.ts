@@ -32,7 +32,6 @@ axiosService.interceptors.request.use(
     return config;
   },
   (error) => {
-     
     return Promise.reject(error);
   },
 );
@@ -97,7 +96,7 @@ axiosService.interceptors.response.use(
         if (!isMFAEndpoint) {
           eventEmitter.emit('onLogout');
         }
-         
+
         await Promise.reject(e);
       }
 
