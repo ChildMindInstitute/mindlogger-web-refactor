@@ -4,6 +4,7 @@ export * from './types';
 export * from './store';
 export * from './validation';
 export * from './storage';
+export * from './session';
 export * from './string';
 export * from './convert';
 export * from './validate';
