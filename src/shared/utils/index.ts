@@ -16,6 +16,7 @@ export * from './analytics';
 export { default as useTimer } from './useTimer';
 export * from './matchPaths';
 export * from './getLanguage';
+export * from './jwt';
 export * from './Calculator';
 export * from './passwordPatterns';
 export {
