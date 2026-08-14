@@ -168,6 +168,22 @@ describe('useSessionKeepAlive', () => {
     expect(mockLogout).toHaveBeenCalledTimes(1);
   });
 
+  it('starts a fresh deadline for a session signed in after the last one ended', async () => {
+    // What a logout leaves behind: no clock. The previous session's deadline must not carry over,
+    // or signing back in ends immediately and takes the first request down with it.
+    localStorage.removeItem('lastActivityAt');
+
+    renderHook(() => useSessionKeepAlive());
+
+    expect(mockLogout).not.toHaveBeenCalled();
+
+    await vi.advanceTimersByTimeAsync(9 * MIN);
+    expect(mockLogout).not.toHaveBeenCalled();
+
+    await vi.advanceTimersByTimeAsync(2 * MIN);
+    expect(mockLogout).toHaveBeenCalledTimes(1);
+  });
+
   it('stops its timers once the route unmounts', async () => {
     setLastActivityAt(START);
     const { unmount } = renderHook(() => useSessionKeepAlive());

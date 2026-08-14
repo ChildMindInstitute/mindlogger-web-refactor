@@ -8,6 +8,7 @@ import { useLogoutMutation, userModel } from '~/entities/user';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import ROUTES from '~/shared/constants/routes';
 import {
+  clearSessionState,
   Mixpanel,
   MixpanelEventType,
   secureTokensStorage,
@@ -43,6 +44,9 @@ export const useLogout = (): UseLogoutReturn => {
     queryClient.clear();
     secureTokensStorage.clearTokens();
     userModel.secureUserPrivateKeyStorage.clearUserPrivateKey();
+    // Left behind, the next sign-in reads a deadline that passed while nobody was signed in, and
+    // ends the session it has only just started.
+    clearSessionState();
 
     Mixpanel.track({ action: MixpanelEventType.Logout });
     Mixpanel.logout();
