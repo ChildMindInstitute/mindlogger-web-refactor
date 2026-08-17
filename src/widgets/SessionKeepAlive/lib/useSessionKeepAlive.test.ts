@@ -4,7 +4,13 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useSessionKeepAlive } from './useSessionKeepAlive';
 
 import { refreshTokens } from '~/shared/api/services/axios';
-import { closeSessionSync, SESSION_CHANNEL_NAME, setLastActivityAt } from '~/shared/utils';
+import {
+  closeSessionSync,
+  SESSION_CHANNEL_NAME,
+  SESSION_REQUEST_WINDOW_MS,
+  SessionMessage,
+  setLastActivityAt,
+} from '~/shared/utils';
 import { secureTokensStorage } from '~/shared/utils/storage/secureTokensStorage';
 import { InMemoryBroadcastChannel, resetInMemoryBroadcastChannels } from '~/test/utils';
 
@@ -78,6 +84,21 @@ describe('useSessionKeepAlive', () => {
     type: 'TOKENS_UPDATED',
     payload: { sessionId, accessToken, refreshToken: refreshTokenFor(sessionId) },
   });
+
+  // A sibling tab still in use, answering every request with the token it holds.
+  const answerRequestsWith = (accessToken: string) => {
+    const sibling = openSiblingTab();
+    sibling.onmessage = ({ data }) => {
+      if ((data as SessionMessage).type !== 'SESSION_REQUEST') return;
+
+      sibling.postMessage({
+        type: 'SESSION_STATE',
+        payload: { sessionId: SESSION_ID, accessToken, refreshToken: refreshTokenFor(SESSION_ID) },
+      });
+    };
+  };
+
+  const wake = () => document.dispatchEvent(new Event('visibilitychange'));
 
   it('ends a session whose deadline already passed before this tab looked', () => {
     setLastActivityAt(START - 11 * MIN);
@@ -305,6 +326,84 @@ describe('useSessionKeepAlive', () => {
     sibling.postMessage({ type: 'SESSION_REQUEST' });
 
     expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  it('asks on start whether its tokens were replaced while it was away', () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    const sibling = openSiblingTab();
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    renderHook(() => useSessionKeepAlive());
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({ data: { type: 'SESSION_REQUEST' } });
+  });
+
+  it('adopts a sibling fresher tokens on wake instead of spending its own', async () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    vi.mocked(secureTokensStorage.setTokens).mockImplementation((pair) =>
+      vi.mocked(secureTokensStorage.getTokens).mockReturnValue(pair),
+    );
+    renderHook(() => useSessionKeepAlive());
+
+    const rotated = tokenExpiringAt(START + 120 * MIN);
+    answerRequestsWith(rotated);
+    // The tab slept: the token it still holds was replaced long ago.
+    setAccessTokenExpiringAt(START - MIN);
+    vi.mocked(refreshTokens).mockClear();
+
+    wake();
+
+    expect(secureTokensStorage.setTokens).toHaveBeenCalledWith(
+      expect.objectContaining({ accessToken: rotated }),
+    );
+
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+    expect(refreshTokens).not.toHaveBeenCalled();
+  });
+
+  it('keeps its own tokens when a sibling offers no newer generation', () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    answerRequestsWith(tokenExpiringAt(START + 5 * MIN));
+    wake();
+
+    expect(secureTokensStorage.setTokens).not.toHaveBeenCalled();
+  });
+
+  it('ignores a session offered by another account', () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    openSiblingTab().postMessage({
+      type: 'SESSION_STATE',
+      payload: {
+        sessionId: 'family-2',
+        accessToken: tokenExpiringAt(START + 120 * MIN),
+        refreshToken: refreshTokenFor('family-2'),
+      },
+    });
+
+    expect(secureTokensStorage.setTokens).not.toHaveBeenCalled();
+  });
+
+  it('holds the deadline check back on wake, so a handover can beat a zero-delay refresh', async () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    // The shared clock ran out while this tab was asleep.
+    setLastActivityAt(START - 11 * MIN);
+    wake();
+    expect(mockLogout).not.toHaveBeenCalled();
+
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+    expect(mockLogout).toHaveBeenCalledTimes(1);
   });
 
   it('tears down when a sibling ends the session, without revoking it again', () => {

@@ -9,7 +9,9 @@ import {
   publishSessionMessage,
   resolveSessionConfig,
   secureTokensStorage,
+  SESSION_REQUEST_WINDOW_MS,
   SessionMessage,
+  SessionState,
   startActivityTracking,
   stopActivityTracking,
   subscribeSessionSync,
@@ -35,6 +37,7 @@ export const useSessionKeepAlive = () => {
     const { idleTimeoutMs, refreshLeadMs } = resolveSessionConfig();
     let refreshTimer: ReturnType<typeof setTimeout>;
     let logoutTimer: ReturnType<typeof setTimeout>;
+    let catchUpTimer: ReturnType<typeof setTimeout>;
     let hasEnded = false;
 
     const endSession = (options?: Parameters<typeof logout>[0]) => {
@@ -80,8 +83,13 @@ export const useSessionKeepAlive = () => {
     // than waiting for a timer the browser may have parked.
     const handleVisibilityChange = () => {
       if (document.visibilityState !== 'visible') return;
+      if (!isRefreshEnabled) return schedule();
 
-      schedule();
+      // Ask first and give the answer a beat: a token gone stale during sleep would otherwise
+      // refresh at zero delay, losing the race against a sibling handing over fresher ones.
+      publishSessionMessage({ type: 'SESSION_REQUEST' });
+      clearTimeout(catchUpTimer);
+      catchUpTimer = setTimeout(schedule, SESSION_REQUEST_WINDOW_MS);
     };
 
     // Only tabs with a live session run this hook, which is what keeps a logged-out one silent.
@@ -100,8 +108,33 @@ export const useSessionKeepAlive = () => {
       });
     };
 
+    // Spread over what this tab holds, so tokenType survives: the message carries only the pair.
+    // Rescheduling re-arms the refresh from the new expiry instead of the one just replaced.
+    const adoptTokens = ({ accessToken, refreshToken }: SessionState) => {
+      const tokens = secureTokensStorage.getTokens();
+      if (!tokens) return;
+
+      secureTokensStorage.setTokens({ ...tokens, accessToken, refreshToken });
+      schedule();
+    };
+
     const handleSyncMessage = (message: SessionMessage) => {
       if (message.type === 'SESSION_REQUEST') return announceSession();
+
+      // A sibling's answer may carry tokens that replaced this tab's while it slept. Every rotation
+      // mints a later expiry, so the further-off one is the newer generation.
+      if (message.type === 'SESSION_STATE') {
+        const { sessionId, accessToken } = message.payload;
+        if (sessionId !== getSessionId()) return;
+
+        const offered = getTokenExpiration(accessToken);
+        const held = getTokenExpiration(secureTokensStorage.getTokens()?.accessToken);
+        if (offered === null || (held !== null && offered <= held)) return;
+
+        adoptTokens(message.payload);
+
+        return;
+      }
 
       // A sibling ended the session for all of us, so tear down without revoking it again.
       if (message.type === 'LOGOUT') {
@@ -114,15 +147,9 @@ export const useSessionKeepAlive = () => {
 
       // Adopting a sibling's rotation keeps this tab from spending a token it has already replaced.
       if (message.type !== 'TOKENS_UPDATED') return;
+      if (message.payload.sessionId !== getSessionId()) return;
 
-      const { sessionId, accessToken, refreshToken } = message.payload;
-      if (sessionId !== getSessionId()) return;
-
-      const tokens = secureTokensStorage.getTokens();
-      if (!tokens) return;
-
-      secureTokensStorage.setTokens({ ...tokens, accessToken, refreshToken });
-      schedule();
+      adoptTokens(message.payload);
     };
 
     // Only while the flag is on, which is also what keeps the publishers above silent: nothing is
@@ -132,13 +159,20 @@ export const useSessionKeepAlive = () => {
     startActivityTracking(schedule);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     schedule();
-    // Unprompted, because a tab still on the login page has no session to ask with. This is how it
-    // hears that one has just begun.
-    announceSession();
+
+    if (isRefreshEnabled) {
+      // A tab frozen past a rotation falls back in step the moment it starts, rather than waiting
+      // for its next refresh and spending a token that has already been replaced.
+      publishSessionMessage({ type: 'SESSION_REQUEST' });
+      // Unprompted, because a tab still on the login page has no session to ask with. This is how
+      // it hears that one has just begun.
+      announceSession();
+    }
 
     return () => {
       clearTimeout(refreshTimer);
       clearTimeout(logoutTimer);
+      clearTimeout(catchUpTimer);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       stopActivityTracking();
       unsubscribe?.();
