@@ -3,7 +3,15 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { useSessionAdoption } from './useSessionAdoption';
 
-import { closeSessionSync, SESSION_CHANNEL_NAME, SESSION_REQUEST_WINDOW_MS } from '~/shared/utils';
+import {
+  clearSessionState,
+  closeSessionSync,
+  MS_IN_MIN,
+  RELOAD_ATTEMPTED_KEY,
+  SESSION_CHANNEL_NAME,
+  SESSION_REQUEST_WINDOW_MS,
+  setLastActivityAt,
+} from '~/shared/utils';
 import { secureTokensStorage } from '~/shared/utils/storage/secureTokensStorage';
 import { InMemoryBroadcastChannel, resetInMemoryBroadcastChannels } from '~/test/utils';
 
@@ -23,6 +31,7 @@ const ANNOUNCED = {
 };
 
 const reload = vi.fn();
+const START = 1893456000000;
 
 const enableSync = (enabled: boolean) =>
   vi.mocked(useFlags).mockReturnValue({ enableSessionKeepAlive: enabled });
@@ -39,18 +48,26 @@ const openSiblingTab = () => new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
 describe('useSessionAdoption', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    localStorage.clear();
+    sessionStorage.clear();
     vi.useFakeTimers();
+    vi.setSystemTime(START);
+    // Pinned here rather than inherited from .env, which vitest also loads.
+    vi.stubEnv('VITE_IDLE_TIMEOUT_MIN', '10');
     vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
     vi.stubGlobal('location', { ...window.location, reload });
     enableSync(true);
     // What a signed-out tab reads: its snapshot was taken before anyone signed in.
     vi.mocked(secureTokensStorage.getTokens).mockReturnValue(null);
+    // A live session always has one, written by the tracker in whichever tab is signed in.
+    setLastActivityAt(START);
   });
 
   afterEach(() => {
     closeSessionSync();
     resetInMemoryBroadcastChannels();
     vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
     vi.useRealTimers();
   });
 
@@ -113,6 +130,56 @@ describe('useSessionAdoption', () => {
     document.dispatchEvent(new Event('visibilitychange'));
 
     expect(onSiblingMessage).toHaveBeenCalledWith({ data: { type: 'SESSION_REQUEST' } });
+  });
+
+  // Nobody replies, so the fallback window runs out.
+  const wakeUnanswered = async () => {
+    document.dispatchEvent(new Event('visibilitychange'));
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+  };
+
+  it('reloads into a live session when the last tab holding it has closed', async () => {
+    renderHook(() => useSessionAdoption());
+
+    await wakeUnanswered();
+
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not reload when no session was ever left behind', async () => {
+    clearSessionState();
+    renderHook(() => useSessionAdoption());
+
+    await wakeUnanswered();
+
+    expect(reload).not.toHaveBeenCalled();
+  });
+
+  it('does not reload for a session already past its idle deadline', async () => {
+    setLastActivityAt(START - 11 * MS_IN_MIN);
+    renderHook(() => useSessionAdoption());
+
+    await wakeUnanswered();
+
+    expect(reload).not.toHaveBeenCalled();
+  });
+
+  it('reloads only once, so a session it cannot read does not loop', async () => {
+    renderHook(() => useSessionAdoption());
+
+    await wakeUnanswered();
+    await wakeUnanswered();
+
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
+
+  it('forgets the attempt once it holds a session, so a later gap can reload again', () => {
+    sessionStorage.setItem(RELOAD_ATTEMPTED_KEY, 'true');
+    holdSession();
+
+    renderHook(() => useSessionAdoption());
+
+    expect(sessionStorage.getItem(RELOAD_ATTEMPTED_KEY)).toBeNull();
   });
 
   it('stays quiet on focus once it holds a session, leaving catch-up to the engine', () => {

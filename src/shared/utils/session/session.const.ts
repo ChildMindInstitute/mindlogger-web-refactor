@@ -24,3 +24,6 @@ export const ACTIVITY_EVENTS = [
 
 // Plain, unencrypted, and read live by every tab. See sessionStore.
 export const LAST_ACTIVITY_AT_KEY = 'lastActivityAt';
+
+// In session storage, so it is per tab and survives the reload it guards against repeating.
+export const RELOAD_ATTEMPTED_KEY = 'reloadAttempted';
