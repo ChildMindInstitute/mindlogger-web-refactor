@@ -36,10 +36,10 @@ export const useSessionKeepAlive = () => {
     let logoutTimer: ReturnType<typeof setTimeout>;
     let hasEnded = false;
 
-    const endSession = () => {
+    const endSession = (options?: Parameters<typeof logout>[0]) => {
       if (hasEnded) return;
       hasEnded = true;
-      logoutRef.current();
+      logoutRef.current(options);
     };
 
     const schedule = () => {
@@ -49,7 +49,7 @@ export const useSessionKeepAlive = () => {
 
       const idleDeadline = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs;
       const msUntilLogout = idleDeadline - Date.now();
-      if (msUntilLogout <= 0) return endSession();
+      if (msUntilLogout <= 0) return endSession({ reason: 'idle' });
 
       // Re-enters schedule rather than ending outright: the clock is shared, so another tab may
       // have pushed the deadline out while this one sat idle.
@@ -71,7 +71,7 @@ export const useSessionKeepAlive = () => {
         await refreshTokens();
         schedule();
       } catch {
-        endSession();
+        endSession({ reason: 'refresh-failed' });
       }
     };
 
@@ -83,8 +83,17 @@ export const useSessionKeepAlive = () => {
       schedule();
     };
 
-    // Adopting a sibling's rotation keeps this tab from spending a token it has already replaced.
     const handleSyncMessage = (message: SessionMessage) => {
+      // A sibling ended the session for all of us, so tear down without revoking it again.
+      if (message.type === 'LOGOUT') {
+        if (message.payload.sessionId !== getSessionId()) return;
+
+        endSession({ isRemote: true });
+
+        return;
+      }
+
+      // Adopting a sibling's rotation keeps this tab from spending a token it has already replaced.
       if (message.type !== 'TOKENS_UPDATED') return;
 
       const { sessionId, accessToken, refreshToken } = message.payload;

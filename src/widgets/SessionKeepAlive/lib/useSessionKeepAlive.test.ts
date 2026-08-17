@@ -246,6 +246,32 @@ describe('useSessionKeepAlive', () => {
     expect(onSiblingMessage).not.toHaveBeenCalled();
   });
 
+  it('tears down when a sibling ends the session, without revoking it again', () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    openSiblingTab().postMessage({
+      type: 'LOGOUT',
+      payload: { sessionId: SESSION_ID, reason: 'manual' },
+    });
+
+    expect(mockLogout).toHaveBeenCalledWith({ isRemote: true });
+  });
+
+  it('stays signed in when another account session ends', () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    openSiblingTab().postMessage({
+      type: 'LOGOUT',
+      payload: { sessionId: 'family-2', reason: 'manual' },
+    });
+
+    expect(mockLogout).not.toHaveBeenCalled();
+  });
+
   it('does not listen for a sibling rotation while the flag is off', () => {
     setLastActivityAt(START);
     renderHook(() => useSessionKeepAlive());
