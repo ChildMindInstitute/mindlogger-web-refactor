@@ -4,8 +4,9 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useSessionKeepAlive } from './useSessionKeepAlive';
 
 import { refreshTokens } from '~/shared/api/services/axios';
-import { setLastActivityAt } from '~/shared/utils';
+import { closeSessionSync, SESSION_CHANNEL_NAME, setLastActivityAt } from '~/shared/utils';
 import { secureTokensStorage } from '~/shared/utils/storage/secureTokensStorage';
+import { InMemoryBroadcastChannel, resetInMemoryBroadcastChannels } from '~/test/utils';
 
 const mockLogout = vi.fn();
 
@@ -34,10 +35,15 @@ const tokenExpiringAt = (at: number) => {
   return `header.${payload}.signature`;
 };
 
+const SESSION_ID = 'family-1';
+
+const refreshTokenFor = (sessionId: string) =>
+  `header.${window.btoa(JSON.stringify({ family: sessionId }))}.signature`;
+
 const setAccessTokenExpiringAt = (at: number) =>
   vi.mocked(secureTokensStorage.getTokens).mockReturnValue({
     accessToken: tokenExpiringAt(at),
-    refreshToken: 'refresh-1',
+    refreshToken: refreshTokenFor(SESSION_ID),
     tokenType: 'Bearer',
   });
 
@@ -55,11 +61,22 @@ describe('useSessionKeepAlive', () => {
     vi.stubEnv('VITE_REFRESH_LEAD_SEC', '60');
     enableRefresh(false);
     setAccessTokenExpiringAt(START + 60 * MIN);
+    vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
   });
 
   afterEach(() => {
     vi.useRealTimers();
     vi.unstubAllEnvs();
+    closeSessionSync();
+    resetInMemoryBroadcastChannels();
+    vi.unstubAllGlobals();
+  });
+
+  const openSiblingTab = () => new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+
+  const rotationOf = (accessToken: string, sessionId = SESSION_ID) => ({
+    type: 'TOKENS_UPDATED',
+    payload: { sessionId, accessToken, refreshToken: refreshTokenFor(sessionId) },
   });
 
   it('ends a session whose deadline already passed before this tab looked', () => {
@@ -182,6 +199,60 @@ describe('useSessionKeepAlive', () => {
 
     await vi.advanceTimersByTimeAsync(2 * MIN);
     expect(mockLogout).toHaveBeenCalledTimes(1);
+  });
+
+  it('adopts tokens a sibling rotated and re-arms from them', async () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    setAccessTokenExpiringAt(START + 5 * MIN);
+    // The re-arm reads the token back out of storage, so the store has to move with the adoption.
+    vi.mocked(secureTokensStorage.setTokens).mockImplementation((pair) =>
+      vi.mocked(secureTokensStorage.getTokens).mockReturnValue(pair),
+    );
+    renderHook(() => useSessionKeepAlive());
+
+    const rotated = tokenExpiringAt(START + 60 * MIN);
+    openSiblingTab().postMessage(rotationOf(rotated));
+
+    expect(secureTokensStorage.setTokens).toHaveBeenCalledWith(
+      expect.objectContaining({ accessToken: rotated, tokenType: 'Bearer' }),
+    );
+
+    // The replaced token's refresh moment passes without this tab rotating a second time.
+    await vi.advanceTimersByTimeAsync(5 * MIN);
+    expect(refreshTokens).not.toHaveBeenCalled();
+  });
+
+  it('ignores tokens rotated in another account session', () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    openSiblingTab().postMessage(rotationOf('their-access', 'family-2'));
+
+    expect(secureTokensStorage.setTokens).not.toHaveBeenCalled();
+  });
+
+  it('does not rebroadcast the tokens it adopted', () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+    const sibling = openSiblingTab();
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    sibling.postMessage(rotationOf(tokenExpiringAt(START + 60 * MIN)));
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  it('does not listen for a sibling rotation while the flag is off', () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    openSiblingTab().postMessage(rotationOf(tokenExpiringAt(START + 60 * MIN)));
+
+    expect(secureTokensStorage.setTokens).not.toHaveBeenCalled();
   });
 
   it('stops its timers once the route unmounts', async () => {

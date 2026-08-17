@@ -3,8 +3,14 @@ import { AxiosRequestConfig } from 'axios';
 import authorizationService from './authorization.service';
 import axiosService, { refreshTokens } from './axios';
 
-import { eventEmitter } from '~/shared/utils';
+import {
+  closeSessionSync,
+  eventEmitter,
+  SESSION_CHANNEL_NAME,
+  subscribeSessionSync,
+} from '~/shared/utils';
 import { secureTokensStorage } from '~/shared/utils/storage/secureTokensStorage';
+import { InMemoryBroadcastChannel, resetInMemoryBroadcastChannels } from '~/test/utils';
 
 vi.mock('./authorization.service', () => ({
   default: { refreshToken: vi.fn() },
@@ -178,5 +184,84 @@ describe('the 401 interceptor', () => {
     await expect(axiosService.get('/applets')).rejects.toBeDefined();
     expect(calls()).toBe(2);
     expect(mockRefreshToken).toHaveBeenCalledTimes(1);
+  });
+});
+
+const tokenWithClaims = (claims: Record<string, unknown>) =>
+  `header.${window.btoa(JSON.stringify(claims))}.signature`;
+
+const heldPair = (refreshToken: string) => ({
+  accessToken: 'access-1',
+  refreshToken,
+  tokenType: 'Bearer',
+});
+
+describe('the rotation broadcast', () => {
+  // Listens as a second tab would. The subscriber stands in for this tab's engine, without which
+  // nothing is broadcast at all.
+  const openSiblingTab = () => {
+    subscribeSessionSync(vi.fn());
+    const sibling = new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    return onSiblingMessage;
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
+    // The session id is read out of storage, so the store has to move with the refresh.
+    mockSetTokens.mockImplementation((pair) => mockGetTokens.mockReturnValue(pair));
+  });
+
+  afterEach(() => {
+    closeSessionSync();
+    resetInMemoryBroadcastChannels();
+    vi.unstubAllGlobals();
+  });
+
+  it('tells same-session tabs about the pair it just rotated', async () => {
+    const onSiblingMessage = openSiblingTab();
+    const rotated = { ...newPair, refreshToken: tokenWithClaims({ family: 'family-1' }) };
+    mockGetTokens.mockReturnValue(heldPair(tokenWithClaims({ family: 'family-1' })));
+    mockRefreshToken.mockResolvedValue({ data: { result: rotated } } as never);
+
+    await refreshTokens();
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({
+      data: {
+        type: 'TOKENS_UPDATED',
+        payload: {
+          sessionId: 'family-1',
+          accessToken: rotated.accessToken,
+          refreshToken: rotated.refreshToken,
+        },
+      },
+    });
+  });
+
+  it('names the session by the token it is replacing, not the one it just minted', async () => {
+    const onSiblingMessage = openSiblingTab();
+    // Without a family claim the id is the jti, which every rotation renews. Siblings still hold
+    // the outgoing generation, so that is the one they have to be addressed by.
+    mockGetTokens.mockReturnValue(heldPair(tokenWithClaims({ jti: 'jti-1' })));
+    mockRefreshToken.mockResolvedValue({
+      data: { result: { ...newPair, refreshToken: tokenWithClaims({ jti: 'jti-2' }) } },
+    } as never);
+
+    await refreshTokens();
+
+    expect(onSiblingMessage.mock.calls[0][0].data.payload.sessionId).toBe('jti-1');
+  });
+
+  it('stays silent when the token carries no session id, leaving sync inert', async () => {
+    const onSiblingMessage = openSiblingTab();
+    mockGetTokens.mockReturnValue(heldPair(tokenWithClaims({ sub: 'user-1' })));
+    mockRefreshToken.mockResolvedValue({ data: { result: newPair } } as never);
+
+    await refreshTokens();
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
   });
 });

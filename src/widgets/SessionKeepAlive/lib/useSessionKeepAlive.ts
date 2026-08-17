@@ -4,11 +4,14 @@ import { useLogout } from '~/features/Logout';
 import { refreshTokens } from '~/shared/api';
 import {
   getLastActivityAt,
+  getSessionId,
   getTokenExpiration,
   resolveSessionConfig,
   secureTokensStorage,
+  SessionMessage,
   startActivityTracking,
   stopActivityTracking,
+  subscribeSessionSync,
   useFeatureFlags,
 } from '~/shared/utils';
 import { FeatureFlag } from '~/shared/utils/types/featureFlags';
@@ -80,6 +83,24 @@ export const useSessionKeepAlive = () => {
       schedule();
     };
 
+    // Adopting a sibling's rotation keeps this tab from spending a token it has already replaced.
+    const handleSyncMessage = (message: SessionMessage) => {
+      if (message.type !== 'TOKENS_UPDATED') return;
+
+      const { sessionId, accessToken, refreshToken } = message.payload;
+      if (sessionId !== getSessionId()) return;
+
+      const tokens = secureTokensStorage.getTokens();
+      if (!tokens) return;
+
+      secureTokensStorage.setTokens({ ...tokens, accessToken, refreshToken });
+      schedule();
+    };
+
+    // Only while the flag is on, which is also what keeps the publishers above silent: nothing is
+    // broadcast at all when no tab is listening.
+    const unsubscribe = isRefreshEnabled ? subscribeSessionSync(handleSyncMessage) : undefined;
+
     startActivityTracking(schedule);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     schedule();
@@ -89,6 +110,7 @@ export const useSessionKeepAlive = () => {
       clearTimeout(logoutTimer);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       stopActivityTracking();
+      unsubscribe?.();
     };
   }, [isRefreshEnabled]);
 };

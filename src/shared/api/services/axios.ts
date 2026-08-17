@@ -1,7 +1,14 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 import authorizationService from './authorization.service';
-import { Any, eventEmitter, getLanguage, secureTokensStorage } from '../../utils';
+import {
+  Any,
+  eventEmitter,
+  getLanguage,
+  getSessionId,
+  publishSessionMessage,
+  secureTokensStorage,
+} from '../../utils';
 
 type RequestConfig = AxiosRequestConfig<Any> & {
   retry?: boolean;
@@ -47,7 +54,19 @@ const requestNewTokens = async () => {
     refreshToken: tokens.refreshToken,
   });
 
+  // Read before the tokens change, since siblings identify by the one they still hold.
+  const sessionId = getSessionId();
+
   secureTokensStorage.setTokens(data.result);
+
+  if (sessionId) {
+    const { accessToken, refreshToken } = data.result;
+
+    publishSessionMessage({
+      type: 'TOKENS_UPDATED',
+      payload: { sessionId, accessToken, refreshToken },
+    });
+  }
 
   return data.result;
 };
