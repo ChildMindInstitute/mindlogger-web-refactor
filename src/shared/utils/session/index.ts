@@ -3,3 +3,7 @@ export * from './session.const';
 export * from './session.types';
 export * from './sessionConfig';
 export * from './sessionStore';
+export * from './sessionSync';
+export * from './sessionSync.const';
+export * from './sessionSync.types';
+export * from './sessionSync.utils';
