@@ -5,6 +5,7 @@ import { useSessionKeepAlive } from './useSessionKeepAlive';
 
 import { refreshTokens } from '~/shared/api/services/axios';
 import {
+  clearSessionState,
   closeSessionSync,
   SESSION_CHANNEL_NAME,
   SESSION_REQUEST_WINDOW_MS,
@@ -390,6 +391,28 @@ describe('useSessionKeepAlive', () => {
     });
 
     expect(secureTokensStorage.setTokens).not.toHaveBeenCalled();
+  });
+
+  it('tears down on focus when the session ended while it was frozen', () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    // What a logout elsewhere leaves behind: the shared clock gone, this tab's snapshot untouched.
+    clearSessionState();
+    wake();
+
+    expect(mockLogout).toHaveBeenCalledWith({ isRemote: true });
+  });
+
+  it('leaves a missing clock to the usual fresh deadline while the flag is off', () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    clearSessionState();
+    wake();
+
+    expect(mockLogout).not.toHaveBeenCalled();
   });
 
   it('holds the deadline check back on wake, so a handover can beat a zero-delay refresh', async () => {
