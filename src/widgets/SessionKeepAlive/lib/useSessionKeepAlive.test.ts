@@ -246,6 +246,67 @@ describe('useSessionKeepAlive', () => {
     expect(onSiblingMessage).not.toHaveBeenCalled();
   });
 
+  it('announces itself on start, so a tab still on the login page hears it', () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    const sibling = openSiblingTab();
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    renderHook(() => useSessionKeepAlive());
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({
+      data: {
+        type: 'SESSION_STATE',
+        payload: {
+          sessionId: SESSION_ID,
+          accessToken: tokenExpiringAt(START + 60 * MIN),
+          refreshToken: refreshTokenFor(SESSION_ID),
+        },
+      },
+    });
+  });
+
+  it('answers a session request with the tokens it holds', () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+    const sibling = openSiblingTab();
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    sibling.postMessage({ type: 'SESSION_REQUEST' });
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({
+      data: {
+        type: 'SESSION_STATE',
+        payload: {
+          sessionId: SESSION_ID,
+          accessToken: tokenExpiringAt(START + 60 * MIN),
+          refreshToken: refreshTokenFor(SESSION_ID),
+        },
+      },
+    });
+  });
+
+  it('stays silent when its token carries no session id, leaving sync inert', () => {
+    enableRefresh(true);
+    setLastActivityAt(START);
+    vi.mocked(secureTokensStorage.getTokens).mockReturnValue({
+      accessToken: tokenExpiringAt(START + 60 * MIN),
+      refreshToken: 'opaque-token',
+      tokenType: 'Bearer',
+    });
+    renderHook(() => useSessionKeepAlive());
+    const sibling = openSiblingTab();
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    sibling.postMessage({ type: 'SESSION_REQUEST' });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
   it('tears down when a sibling ends the session, without revoking it again', () => {
     enableRefresh(true);
     setLastActivityAt(START);

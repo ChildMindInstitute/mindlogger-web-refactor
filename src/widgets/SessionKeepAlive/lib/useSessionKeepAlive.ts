@@ -6,6 +6,7 @@ import {
   getLastActivityAt,
   getSessionId,
   getTokenExpiration,
+  publishSessionMessage,
   resolveSessionConfig,
   secureTokensStorage,
   SessionMessage,
@@ -83,7 +84,25 @@ export const useSessionKeepAlive = () => {
       schedule();
     };
 
+    // Only tabs with a live session run this hook, which is what keeps a logged-out one silent.
+    const announceSession = () => {
+      const sessionId = getSessionId();
+      const tokens = secureTokensStorage.getTokens();
+      if (!sessionId || !tokens?.accessToken || !tokens.refreshToken) return;
+
+      publishSessionMessage({
+        type: 'SESSION_STATE',
+        payload: {
+          sessionId,
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+        },
+      });
+    };
+
     const handleSyncMessage = (message: SessionMessage) => {
+      if (message.type === 'SESSION_REQUEST') return announceSession();
+
       // A sibling ended the session for all of us, so tear down without revoking it again.
       if (message.type === 'LOGOUT') {
         if (message.payload.sessionId !== getSessionId()) return;
@@ -113,6 +132,9 @@ export const useSessionKeepAlive = () => {
     startActivityTracking(schedule);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     schedule();
+    // Unprompted, because a tab still on the login page has no session to ask with. This is how it
+    // hears that one has just begun.
+    announceSession();
 
     return () => {
       clearTimeout(refreshTimer);
