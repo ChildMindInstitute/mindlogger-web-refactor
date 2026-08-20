@@ -2,6 +2,7 @@ import { renderHook } from '@testing-library/react';
 
 import { useSessionAdoption } from './useSessionAdoption';
 
+import ROUTES from '~/shared/constants/routes';
 import {
   clearSessionState,
   closeSessionSync,
@@ -28,7 +29,12 @@ const ANNOUNCED = {
 };
 
 const reload = vi.fn();
+const replace = vi.fn();
 const START = 1893456000000;
+
+// The tab's own address, which decides whether reloading in place is any use.
+const standingOn = (pathname: string) =>
+  vi.stubGlobal('location', { ...window.location, pathname, reload, replace });
 
 const holdSession = () =>
   vi.mocked(secureTokensStorage.getTokens).mockReturnValue({
@@ -49,7 +55,7 @@ describe('useSessionAdoption', () => {
     // Pinned here rather than inherited from .env, which vitest also loads.
     vi.stubEnv('VITE_IDLE_TIMEOUT_MIN', '10');
     vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
-    vi.stubGlobal('location', { ...window.location, reload });
+    standingOn('/protected/applets/some-applet');
     // What a signed-out tab reads: its snapshot was taken before anyone signed in.
     vi.mocked(secureTokensStorage.getTokens).mockReturnValue(null);
     // A live session always has one, written by the tracker in whichever tab is signed in.
@@ -62,6 +68,19 @@ describe('useSessionAdoption', () => {
     vi.unstubAllGlobals();
     vi.unstubAllEnvs();
     vi.useRealTimers();
+  });
+
+  it('leaves the login page rather than reloading back onto it', async () => {
+    standingOn(ROUTES.login.path);
+    renderHook(() => useSessionAdoption());
+
+    openSiblingTab().postMessage(ANNOUNCED);
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+    // The login route renders its form to signed-in tabs too, so a reload would sit there holding
+    // a session it never shows.
+    expect(replace).toHaveBeenCalledWith('/');
+    expect(reload).not.toHaveBeenCalled();
   });
 
   it('reloads into a session another tab announces', async () => {
