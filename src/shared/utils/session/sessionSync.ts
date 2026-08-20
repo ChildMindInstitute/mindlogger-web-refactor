@@ -21,7 +21,7 @@ const openChannel = () => {
   return channel;
 };
 
-// A tab only speaks while it is listening, so the flag-gated subscribers gate sending too.
+// A tab only speaks while it is listening, so a signed-out one stays silent without checking.
 export const publishSessionMessage = (message: SessionMessage) => {
   if (!handlers.size) return;
 

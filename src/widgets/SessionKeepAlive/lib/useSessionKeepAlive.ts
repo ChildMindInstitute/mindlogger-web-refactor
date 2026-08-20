@@ -15,23 +15,16 @@ import {
   startActivityTracking,
   stopActivityTracking,
   subscribeSessionSync,
-  useFeatureFlags,
 } from '~/shared/utils';
-import { FeatureFlag } from '~/shared/utils/types/featureFlags';
 
 // Mounted inside ProtectedRoute, which already refuses to render without a token, so there is no
 // authorization check here. Logging out unmounts the route and the cleanup below runs.
 export const useSessionKeepAlive = () => {
-  const { featureFlag } = useFeatureFlags();
   const { logout } = useLogout();
 
   // Refreshed every render so the logout never closes over a stale route.
   const logoutRef = useRef(logout);
   logoutRef.current = logout;
-
-  // The idle timer is not flagged: it replaces the only idle logout this app has, and gating it
-  // would leave the session running unbounded until someone flips a switch.
-  const isRefreshEnabled = featureFlag(FeatureFlag.EnableSessionKeepAlive, false);
 
   useEffect(() => {
     const { idleTimeoutMs, refreshLeadMs } = resolveSessionConfig();
@@ -59,8 +52,6 @@ export const useSessionKeepAlive = () => {
       // have pushed the deadline out while this one sat idle.
       logoutTimer = setTimeout(schedule, msUntilLogout);
 
-      if (!isRefreshEnabled) return;
-
       // Read at decision time, since an earlier refresh may have replaced the token.
       const expiresAt = getTokenExpiration(secureTokensStorage.getTokens()?.accessToken);
       if (expiresAt === null) return;
@@ -83,7 +74,6 @@ export const useSessionKeepAlive = () => {
     // than waiting for a timer the browser may have parked.
     const handleVisibilityChange = () => {
       if (document.visibilityState !== 'visible') return;
-      if (!isRefreshEnabled) return schedule();
 
       // Tracking keeps this clock while the tab is signed in, and only a teardown removes it. Gone
       // means the session ended somewhere a frozen tab could not hear, and no message is coming.
@@ -156,22 +146,18 @@ export const useSessionKeepAlive = () => {
       adoptTokens(message.payload);
     };
 
-    // Only while the flag is on, which is also what keeps the publishers above silent: nothing is
-    // broadcast at all when no tab is listening.
-    const unsubscribe = isRefreshEnabled ? subscribeSessionSync(handleSyncMessage) : undefined;
+    const unsubscribe = subscribeSessionSync(handleSyncMessage);
 
     startActivityTracking(schedule);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     schedule();
 
-    if (isRefreshEnabled) {
-      // A tab frozen past a rotation falls back in step the moment it starts, rather than waiting
-      // for its next refresh and spending a token that has already been replaced.
-      publishSessionMessage({ type: 'SESSION_REQUEST' });
-      // Unprompted, because a tab still on the login page has no session to ask with. This is how
-      // it hears that one has just begun.
-      announceSession();
-    }
+    // A tab frozen past a rotation falls back in step the moment it starts, rather than waiting
+    // for its next refresh and spending a token that has already been replaced.
+    publishSessionMessage({ type: 'SESSION_REQUEST' });
+    // Unprompted, because a tab still on the login page has no session to ask with. This is how
+    // it hears that one has just begun.
+    announceSession();
 
     return () => {
       clearTimeout(refreshTimer);
@@ -179,7 +165,7 @@ export const useSessionKeepAlive = () => {
       clearTimeout(catchUpTimer);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       stopActivityTracking();
-      unsubscribe?.();
+      unsubscribe();
     };
-  }, [isRefreshEnabled]);
+  }, []);
 };

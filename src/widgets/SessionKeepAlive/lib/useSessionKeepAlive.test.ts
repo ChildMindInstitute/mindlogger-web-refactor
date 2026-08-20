@@ -1,5 +1,4 @@
 import { renderHook } from '@testing-library/react';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { useSessionKeepAlive } from './useSessionKeepAlive';
 
@@ -20,8 +19,6 @@ const mockLogout = vi.fn();
 vi.mock('~/features/Logout', () => ({
   useLogout: () => ({ logout: mockLogout, isLoading: false }),
 }));
-
-vi.mock('launchdarkly-react-client-sdk', () => ({ useFlags: vi.fn() }));
 
 vi.mock('~/shared/api/services/axios', () => ({ default: {}, refreshTokens: vi.fn() }));
 
@@ -54,9 +51,6 @@ const setAccessTokenExpiringAt = (at: number) =>
     tokenType: 'Bearer',
   });
 
-const enableRefresh = (enabled: boolean) =>
-  vi.mocked(useFlags).mockReturnValue({ enableSessionKeepAlive: enabled });
-
 describe('useSessionKeepAlive', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -66,7 +60,6 @@ describe('useSessionKeepAlive', () => {
     // Pinned here rather than inherited from .env, which vitest also loads.
     vi.stubEnv('VITE_IDLE_TIMEOUT_MIN', '10');
     vi.stubEnv('VITE_REFRESH_LEAD_SEC', '60');
-    enableRefresh(false);
     setAccessTokenExpiringAt(START + 60 * MIN);
     vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
   });
@@ -137,19 +130,7 @@ describe('useSessionKeepAlive', () => {
     expect(mockLogout).not.toHaveBeenCalled();
   });
 
-  it('re-checks the deadline on return rather than trusting a parked timer', async () => {
-    setLastActivityAt(START);
-    renderHook(() => useSessionKeepAlive());
-
-    // Stands in for a suspended tab: the clock moved on, its timer never fired.
-    setLastActivityAt(START - 11 * MIN);
-    document.dispatchEvent(new Event('visibilitychange'));
-
-    expect(mockLogout).toHaveBeenCalledTimes(1);
-  });
-
   it('refreshes ahead of expiry once the flag is on', async () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     setAccessTokenExpiringAt(START + 5 * MIN);
 
@@ -163,7 +144,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('waits out a token shorter-lived than the lead instead of refreshing on every tick', async () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     setAccessTokenExpiringAt(START + 30000);
     // A real refresh hands back a long-lived token; the mock has to as well, or the retry that
@@ -184,19 +164,7 @@ describe('useSessionKeepAlive', () => {
     expect(refreshTokens).toHaveBeenCalledTimes(1);
   });
 
-  it('does not refresh while the flag is off', async () => {
-    setLastActivityAt(START);
-    setAccessTokenExpiringAt(START + 5 * MIN);
-
-    renderHook(() => useSessionKeepAlive());
-
-    await vi.advanceTimersByTimeAsync(9 * MIN);
-    expect(refreshTokens).not.toHaveBeenCalled();
-    expect(mockLogout).not.toHaveBeenCalled();
-  });
-
   it('ends the session when the refresh it was counting on fails', async () => {
-    enableRefresh(true);
     vi.mocked(refreshTokens).mockRejectedValue(new Error('revoked'));
     setLastActivityAt(START);
     setAccessTokenExpiringAt(START + 5 * MIN);
@@ -224,7 +192,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('adopts tokens a sibling rotated and re-arms from them', async () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     setAccessTokenExpiringAt(START + 5 * MIN);
     // The re-arm reads the token back out of storage, so the store has to move with the adoption.
@@ -246,7 +213,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('ignores tokens rotated in another account session', () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     renderHook(() => useSessionKeepAlive());
 
@@ -256,7 +222,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('does not rebroadcast the tokens it adopted', () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     renderHook(() => useSessionKeepAlive());
     const sibling = openSiblingTab();
@@ -269,7 +234,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('announces itself on start, so a tab still on the login page hears it', () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     const sibling = openSiblingTab();
     const onSiblingMessage = vi.fn();
@@ -290,7 +254,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('answers a session request with the tokens it holds', () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     renderHook(() => useSessionKeepAlive());
     const sibling = openSiblingTab();
@@ -312,7 +275,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('stays silent when its token carries no session id, leaving sync inert', () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     vi.mocked(secureTokensStorage.getTokens).mockReturnValue({
       accessToken: tokenExpiringAt(START + 60 * MIN),
@@ -330,7 +292,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('asks on start whether its tokens were replaced while it was away', () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     const sibling = openSiblingTab();
     const onSiblingMessage = vi.fn();
@@ -342,7 +303,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('adopts a sibling fresher tokens on wake instead of spending its own', async () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     vi.mocked(secureTokensStorage.setTokens).mockImplementation((pair) =>
       vi.mocked(secureTokensStorage.getTokens).mockReturnValue(pair),
@@ -366,7 +326,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('keeps its own tokens when a sibling offers no newer generation', () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     renderHook(() => useSessionKeepAlive());
 
@@ -377,7 +336,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('ignores a session offered by another account', () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     renderHook(() => useSessionKeepAlive());
 
@@ -394,7 +352,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('tears down on focus when the session ended while it was frozen', () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     renderHook(() => useSessionKeepAlive());
 
@@ -405,18 +362,7 @@ describe('useSessionKeepAlive', () => {
     expect(mockLogout).toHaveBeenCalledWith({ isRemote: true });
   });
 
-  it('leaves a missing clock to the usual fresh deadline while the flag is off', () => {
-    setLastActivityAt(START);
-    renderHook(() => useSessionKeepAlive());
-
-    clearSessionState();
-    wake();
-
-    expect(mockLogout).not.toHaveBeenCalled();
-  });
-
   it('holds the deadline check back on wake, so a handover can beat a zero-delay refresh', async () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     renderHook(() => useSessionKeepAlive());
 
@@ -430,7 +376,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('tears down when a sibling ends the session, without revoking it again', () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     renderHook(() => useSessionKeepAlive());
 
@@ -443,7 +388,6 @@ describe('useSessionKeepAlive', () => {
   });
 
   it('stays signed in when another account session ends', () => {
-    enableRefresh(true);
     setLastActivityAt(START);
     renderHook(() => useSessionKeepAlive());
 
@@ -453,15 +397,6 @@ describe('useSessionKeepAlive', () => {
     });
 
     expect(mockLogout).not.toHaveBeenCalled();
-  });
-
-  it('does not listen for a sibling rotation while the flag is off', () => {
-    setLastActivityAt(START);
-    renderHook(() => useSessionKeepAlive());
-
-    openSiblingTab().postMessage(rotationOf(tokenExpiringAt(START + 60 * MIN)));
-
-    expect(secureTokensStorage.setTokens).not.toHaveBeenCalled();
   });
 
   it('stops its timers once the route unmounts', async () => {
