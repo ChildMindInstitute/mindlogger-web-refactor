@@ -1,5 +1,4 @@
 import { renderHook } from '@testing-library/react';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { useSessionAdoption } from './useSessionAdoption';
 
@@ -14,8 +13,6 @@ import {
 } from '~/shared/utils';
 import { secureTokensStorage } from '~/shared/utils/storage/secureTokensStorage';
 import { InMemoryBroadcastChannel, resetInMemoryBroadcastChannels } from '~/test/utils';
-
-vi.mock('launchdarkly-react-client-sdk', () => ({ useFlags: vi.fn() }));
 
 vi.mock('~/shared/utils/storage/secureTokensStorage', () => ({
   secureTokensStorage: { getTokens: vi.fn(), setTokens: vi.fn(), clearTokens: vi.fn() },
@@ -32,9 +29,6 @@ const ANNOUNCED = {
 
 const reload = vi.fn();
 const START = 1893456000000;
-
-const enableSync = (enabled: boolean) =>
-  vi.mocked(useFlags).mockReturnValue({ enableSessionKeepAlive: enabled });
 
 const holdSession = () =>
   vi.mocked(secureTokensStorage.getTokens).mockReturnValue({
@@ -56,7 +50,6 @@ describe('useSessionAdoption', () => {
     vi.stubEnv('VITE_IDLE_TIMEOUT_MIN', '10');
     vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
     vi.stubGlobal('location', { ...window.location, reload });
-    enableSync(true);
     // What a signed-out tab reads: its snapshot was taken before anyone signed in.
     vi.mocked(secureTokensStorage.getTokens).mockReturnValue(null);
     // A live session always has one, written by the tracker in whichever tab is signed in.
@@ -103,16 +96,6 @@ describe('useSessionAdoption', () => {
 
   it('leaves a tab that already holds a session alone', async () => {
     holdSession();
-    renderHook(() => useSessionAdoption());
-
-    openSiblingTab().postMessage(ANNOUNCED);
-    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
-
-    expect(reload).not.toHaveBeenCalled();
-  });
-
-  it('ignores announcements while the flag is off', async () => {
-    enableSync(false);
     renderHook(() => useSessionAdoption());
 
     openSiblingTab().postMessage(ANNOUNCED);

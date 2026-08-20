@@ -8,20 +8,14 @@ import {
   secureTokensStorage,
   SESSION_REQUEST_WINDOW_MS,
   subscribeSessionSync,
-  useFeatureFlags,
 } from '~/shared/utils';
-import { FeatureFlag } from '~/shared/utils/types/featureFlags';
 
 // A tab that loaded signed-out cannot see a sign-in that happens afterwards: its view of the
 // encrypted store is a snapshot taken when the page loaded, and there is no way to re-read it. So
 // it listens for a session being announced, and reloads, which is also the only way to reach the
 // private key a submitted answer is encrypted with.
 export const useSessionAdoption = () => {
-  const { featureFlag } = useFeatureFlags();
-
-  const isListening =
-    featureFlag(FeatureFlag.EnableSessionKeepAlive, false) &&
-    !secureTokensStorage.getTokens()?.refreshToken;
+  const isListening = !secureTokensStorage.getTokens()?.refreshToken;
 
   useEffect(() => {
     if (!isListening) {
