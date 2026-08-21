@@ -1,17 +1,22 @@
 import { resolveSessionConfig } from './sessionConfig';
 
 describe('resolveSessionConfig', () => {
-  it('falls back to 30 minutes idle and 90 seconds of refresh lead', () => {
-    expect(resolveSessionConfig({})).toEqual({ idleTimeoutMs: 1800000, refreshLeadMs: 90000 });
+  it('falls back to 30 minutes idle, 90 seconds of refresh lead and a 5 minute warning', () => {
+    expect(resolveSessionConfig({})).toEqual({
+      idleTimeoutMs: 1800000,
+      refreshLeadMs: 90000,
+      warningLeadMs: 300000,
+    });
   });
 
   it('converts the env values from minutes and seconds to milliseconds', () => {
     const config = resolveSessionConfig({
       VITE_IDLE_TIMEOUT_MIN: '3',
       VITE_REFRESH_LEAD_SEC: '20',
+      VITE_IDLE_WARNING_MIN: '1',
     });
 
-    expect(config).toEqual({ idleTimeoutMs: 180000, refreshLeadMs: 20000 });
+    expect(config).toEqual({ idleTimeoutMs: 180000, refreshLeadMs: 20000, warningLeadMs: 60000 });
   });
 
   it.each(['0', '-5', 'soon', ''])(
@@ -20,9 +25,34 @@ describe('resolveSessionConfig', () => {
       const config = resolveSessionConfig({
         VITE_IDLE_TIMEOUT_MIN: raw,
         VITE_REFRESH_LEAD_SEC: raw,
+        VITE_IDLE_WARNING_MIN: raw,
       });
 
-      expect(config).toEqual({ idleTimeoutMs: 1800000, refreshLeadMs: 90000 });
+      expect(config).toEqual({
+        idleTimeoutMs: 1800000,
+        refreshLeadMs: 90000,
+        warningLeadMs: 300000,
+      });
     },
   );
+
+  // Both values passed explicitly rather than leaning on the default, so shortening the default
+  // for a test build cannot quietly stop this from exercising the cap.
+  it('caps the warning at half the idle timeout', () => {
+    const config = resolveSessionConfig({
+      VITE_IDLE_TIMEOUT_MIN: '3',
+      VITE_IDLE_WARNING_MIN: '5',
+    });
+
+    expect(config.warningLeadMs).toBe(90000);
+  });
+
+  it('leaves a warning shorter than half the timeout alone', () => {
+    const config = resolveSessionConfig({
+      VITE_IDLE_TIMEOUT_MIN: '30',
+      VITE_IDLE_WARNING_MIN: '5',
+    });
+
+    expect(config.warningLeadMs).toBe(300000);
+  });
 });
