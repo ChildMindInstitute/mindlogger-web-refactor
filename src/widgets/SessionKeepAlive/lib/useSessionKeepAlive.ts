@@ -13,6 +13,7 @@ import {
   SESSION_REQUEST_WINDOW_MS,
   SessionMessage,
   SessionState,
+  setActivityTrackingPaused,
   setLastActivityAt,
   startActivityTracking,
   stopActivityTracking,
@@ -34,6 +35,13 @@ export const useSessionKeepAlive = () => {
 
   // Milliseconds left to answer in, or null while the deadline is still far off.
   const [msRemaining, setMsRemaining] = useState<number | null>(null);
+  const isWarningOpen = msRemaining !== null;
+
+  // The warning is answered, not waved away: while it is open, reaching for the mouse must not
+  // push the deadline out on its own. stopActivityTracking clears this on teardown.
+  useEffect(() => {
+    setActivityTrackingPaused(isWarningOpen);
+  }, [isWarningOpen]);
 
   useEffect(() => {
     const { idleTimeoutMs, refreshLeadMs, warningLeadMs } = resolveSessionConfig();

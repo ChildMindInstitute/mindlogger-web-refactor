@@ -1,4 +1,8 @@
-import { startActivityTracking, stopActivityTracking } from './activityTracker';
+import {
+  setActivityTrackingPaused,
+  startActivityTracking,
+  stopActivityTracking,
+} from './activityTracker';
 import { ACTIVITY_THROTTLE_MS } from './session.const';
 import { getLastActivityAt } from './sessionStore';
 
@@ -59,5 +63,57 @@ describe('activityTracker', () => {
     window.dispatchEvent(new Event('keydown'));
 
     expect(getLastActivityAt()).toBe(1893456000000);
+  });
+  describe('while paused', () => {
+    // The warning pauses tracking so the countdown it shows cannot be answered by mouse movement.
+    const moveTheMouse = () => {
+      vi.advanceTimersByTime(ACTIVITY_THROTTLE_MS + 1);
+      window.dispatchEvent(new Event('mousemove'));
+    };
+
+    it('ignores activity', () => {
+      startActivityTracking();
+      const beforePause = getLastActivityAt();
+
+      setActivityTrackingPaused(true);
+      moveTheMouse();
+
+      expect(getLastActivityAt()).toBe(beforePause);
+    });
+
+    it('does not tell the caller either', () => {
+      const onActivity = vi.fn();
+      startActivityTracking(onActivity);
+
+      setActivityTrackingPaused(true);
+      moveTheMouse();
+
+      expect(onActivity).not.toHaveBeenCalled();
+    });
+
+    it('records again once it is released', () => {
+      startActivityTracking();
+      const beforePause = getLastActivityAt();
+
+      setActivityTrackingPaused(true);
+      moveTheMouse();
+      setActivityTrackingPaused(false);
+      moveTheMouse();
+
+      expect(getLastActivityAt()).not.toBe(beforePause);
+    });
+
+    // Otherwise a session that ended mid-warning would leave the next one unable to record at all.
+    it('stopping tracking releases the pause', () => {
+      startActivityTracking();
+      setActivityTrackingPaused(true);
+      stopActivityTracking();
+
+      startActivityTracking();
+      const beforeEvent = getLastActivityAt();
+      moveTheMouse();
+
+      expect(getLastActivityAt()).not.toBe(beforeEvent);
+    });
   });
 });

@@ -4,6 +4,7 @@ import { useSessionKeepAlive } from './useSessionKeepAlive';
 
 import { refreshTokens } from '~/shared/api/services/axios';
 import {
+  ACTIVITY_THROTTLE_MS,
   clearSessionState,
   closeSessionSync,
   COUNTDOWN_TICK_MS,
@@ -126,10 +127,11 @@ describe('useSessionKeepAlive', () => {
     setLastActivityAt(START);
     renderHook(() => useSessionKeepAlive());
 
-    await vi.advanceTimersByTimeAsync(9 * MIN);
+    // Short of the warning, which opens at nine minutes and stops activity counting.
+    await vi.advanceTimersByTimeAsync(8 * MIN);
     window.dispatchEvent(new Event('keydown'));
 
-    await vi.advanceTimersByTimeAsync(2 * MIN);
+    await vi.advanceTimersByTimeAsync(3 * MIN);
     expect(mockLogout).not.toHaveBeenCalled();
   });
 
@@ -491,6 +493,22 @@ describe('useSessionKeepAlive', () => {
 
       expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle' });
       expect(result.current.msRemaining).toBeNull();
+    });
+
+    // Tracking is paused for exactly this: the mouse has to travel to the buttons, and that
+    // journey must not count as the answer.
+    it('mouse movement while it is open does not answer the countdown', async () => {
+      const { result } = renderAtStart();
+      const clockBefore = getLastActivityAt();
+
+      await idleUntilTheWarning();
+      await vi.advanceTimersByTimeAsync(ACTIVITY_THROTTLE_MS + COUNTDOWN_TICK_MS);
+      window.dispatchEvent(new Event('mousemove'));
+
+      expect(getLastActivityAt()).toBe(clockBefore);
+      expect(result.current.msRemaining).toBe(
+        WARNING_MS - ACTIVITY_THROTTLE_MS - COUNTDOWN_TICK_MS,
+      );
     });
 
     it('staying logged in moves the clock every tab reads', async () => {
