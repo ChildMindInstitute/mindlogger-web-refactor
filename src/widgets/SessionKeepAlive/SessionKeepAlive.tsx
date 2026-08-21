@@ -1,8 +1,18 @@
 import { useSessionKeepAlive } from './lib/useSessionKeepAlive';
+import { SessionTimeoutModal } from './ui/SessionTimeoutModal';
 
-// Renders nothing. It exists so the engine sits inside the router, which useLogout depends on.
+// Sits inside the router, which useLogout depends on. Renders nothing until the session is close
+// enough to its deadline to be worth warning about.
 export const SessionKeepAlive = () => {
-  useSessionKeepAlive();
+  const { msRemaining, stayLoggedIn, logOutNow } = useSessionKeepAlive();
 
-  return null;
+  if (msRemaining === null) return null;
+
+  return (
+    <SessionTimeoutModal
+      msRemaining={msRemaining}
+      onStayLoggedIn={stayLoggedIn}
+      onLogOut={logOutNow}
+    />
+  );
 };
