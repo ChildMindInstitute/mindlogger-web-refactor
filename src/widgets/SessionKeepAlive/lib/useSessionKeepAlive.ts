@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useLogout } from '~/features/Logout';
 import { refreshTokens } from '~/shared/api';
 import {
+  COUNTDOWN_TICK_MS,
   getLastActivityAt,
   getSessionId,
   getTokenExpiration,
@@ -12,6 +13,7 @@ import {
   SESSION_REQUEST_WINDOW_MS,
   SessionMessage,
   SessionState,
+  setLastActivityAt,
   startActivityTracking,
   stopActivityTracking,
   subscribeSessionSync,
@@ -26,16 +28,25 @@ export const useSessionKeepAlive = () => {
   const logoutRef = useRef(logout);
   logoutRef.current = logout;
 
+  // Reached by the warning's buttons, which answer the countdown without owning the timers.
+  const extendRef = useRef<(() => void) | null>(null);
+  const endRef = useRef<((options?: Parameters<typeof logout>[0]) => void) | null>(null);
+
+  // Milliseconds left to answer in, or null while the deadline is still far off.
+  const [msRemaining, setMsRemaining] = useState<number | null>(null);
+
   useEffect(() => {
-    const { idleTimeoutMs, refreshLeadMs } = resolveSessionConfig();
+    const { idleTimeoutMs, refreshLeadMs, warningLeadMs } = resolveSessionConfig();
     let refreshTimer: ReturnType<typeof setTimeout>;
     let logoutTimer: ReturnType<typeof setTimeout>;
+    let warningTimer: ReturnType<typeof setTimeout>;
     let catchUpTimer: ReturnType<typeof setTimeout>;
     let hasEnded = false;
 
     const endSession = (options?: Parameters<typeof logout>[0]) => {
       if (hasEnded) return;
       hasEnded = true;
+      setMsRemaining(null);
       logoutRef.current(options);
     };
 
@@ -43,10 +54,21 @@ export const useSessionKeepAlive = () => {
       if (hasEnded) return;
       clearTimeout(refreshTimer);
       clearTimeout(logoutTimer);
+      clearTimeout(warningTimer);
 
       const idleDeadline = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs;
       const msUntilLogout = idleDeadline - Date.now();
       if (msUntilLogout <= 0) return endSession({ reason: 'idle' });
+
+      // The last stretch belongs to the countdown, not to another pass through here: re-deriving
+      // the capped refresh lead every second would halve it away to nothing.
+      if (msUntilLogout <= warningLeadMs) {
+        setMsRemaining(msUntilLogout);
+        warningTimer = setTimeout(tick, COUNTDOWN_TICK_MS);
+      } else {
+        setMsRemaining(null);
+        warningTimer = setTimeout(tick, msUntilLogout - warningLeadMs);
+      }
 
       // Re-enters schedule rather than ending outright: the clock is shared, so another tab may
       // have pushed the deadline out while this one sat idle.
@@ -59,6 +81,27 @@ export const useSessionKeepAlive = () => {
       // Capped so a token shorter-lived than the lead does not refresh on every tick.
       const lead = Math.min(refreshLeadMs, (expiresAt - Date.now()) / 2);
       refreshTimer = setTimeout(refresh, Math.max(expiresAt - lead - Date.now(), 0));
+    };
+
+    // Redraws the countdown off the shared clock, which is how a sibling answering the warning
+    // closes this tab's copy of it too.
+    const tick = () => {
+      const msLeft = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs - Date.now();
+      if (msLeft <= 0) return endSession({ reason: 'idle' });
+
+      // The deadline moved out from under us, so hand back to the scheduler and stop counting.
+      if (msLeft > warningLeadMs) return schedule();
+
+      setMsRemaining(msLeft);
+      warningTimer = setTimeout(tick, COUNTDOWN_TICK_MS);
+    };
+
+    // Answering counts as activity, so siblings showing the same warning close it on their next tick.
+    const extendSession = () => {
+      if (hasEnded) return;
+
+      setLastActivityAt(Date.now());
+      schedule();
     };
 
     const refresh = async () => {
@@ -149,6 +192,8 @@ export const useSessionKeepAlive = () => {
     const unsubscribe = subscribeSessionSync(handleSyncMessage);
 
     startActivityTracking(schedule);
+    extendRef.current = extendSession;
+    endRef.current = endSession;
     document.addEventListener('visibilitychange', handleVisibilityChange);
     schedule();
 
@@ -162,10 +207,19 @@ export const useSessionKeepAlive = () => {
     return () => {
       clearTimeout(refreshTimer);
       clearTimeout(logoutTimer);
+      clearTimeout(warningTimer);
       clearTimeout(catchUpTimer);
+      setMsRemaining(null);
+      extendRef.current = null;
+      endRef.current = null;
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       stopActivityTracking();
       unsubscribe();
     };
   }, []);
+
+  const stayLoggedIn = useCallback(() => extendRef.current?.(), []);
+  const logOutNow = useCallback(() => endRef.current?.({ reason: 'manual' }), []);
+
+  return { msRemaining, stayLoggedIn, logOutNow };
 };

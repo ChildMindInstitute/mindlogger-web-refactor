@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 
 import { useSessionKeepAlive } from './useSessionKeepAlive';
 
@@ -6,6 +6,8 @@ import { refreshTokens } from '~/shared/api/services/axios';
 import {
   clearSessionState,
   closeSessionSync,
+  COUNTDOWN_TICK_MS,
+  getLastActivityAt,
   SESSION_CHANNEL_NAME,
   SESSION_REQUEST_WINDOW_MS,
   SessionMessage,
@@ -60,6 +62,7 @@ describe('useSessionKeepAlive', () => {
     // Pinned here rather than inherited from .env, which vitest also loads.
     vi.stubEnv('VITE_IDLE_TIMEOUT_MIN', '10');
     vi.stubEnv('VITE_REFRESH_LEAD_SEC', '60');
+    vi.stubEnv('VITE_IDLE_WARNING_MIN', '1');
     setAccessTokenExpiringAt(START + 60 * MIN);
     vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
   });
@@ -407,5 +410,116 @@ describe('useSessionKeepAlive', () => {
 
     await vi.advanceTimersByTimeAsync(20 * MIN);
     expect(mockLogout).not.toHaveBeenCalled();
+  });
+  describe('idle warning', () => {
+    const IDLE_MS = 10 * MIN;
+    const WARNING_MS = 1 * MIN;
+
+    // Every case has to reach the lead first, so this is the shared opening move.
+    const idleUntilTheWarning = () => vi.advanceTimersByTimeAsync(IDLE_MS - WARNING_MS);
+
+    const renderAtStart = () => {
+      setLastActivityAt(START);
+
+      return renderHook(() => useSessionKeepAlive());
+    };
+
+    it('stays shut while the deadline is still far off', async () => {
+      const { result } = renderAtStart();
+
+      await vi.advanceTimersByTimeAsync(IDLE_MS - WARNING_MS - COUNTDOWN_TICK_MS);
+
+      expect(result.current.msRemaining).toBeNull();
+    });
+
+    it('opens one lead interval before the deadline', async () => {
+      const { result } = renderAtStart();
+
+      await idleUntilTheWarning();
+
+      expect(result.current.msRemaining).toBe(WARNING_MS);
+    });
+
+    it('counts down once a second', async () => {
+      const { result } = renderAtStart();
+
+      await idleUntilTheWarning();
+      await vi.advanceTimersByTimeAsync(3 * COUNTDOWN_TICK_MS);
+
+      expect(result.current.msRemaining).toBe(WARNING_MS - 3 * COUNTDOWN_TICK_MS);
+    });
+
+    // A rotation re-enters the scheduler, which has to recognise it is already inside the warning
+    // rather than treating the countdown as still ahead of it.
+    it('keeps counting through a token rotation', async () => {
+      const { result } = renderAtStart();
+
+      await idleUntilTheWarning();
+      act(() => openSiblingTab().postMessage(rotationOf(tokenExpiringAt(START + 60 * MIN))));
+
+      expect(result.current.msRemaining).toBe(WARNING_MS);
+    });
+
+    // The countdown must not tick back through schedule(). That re-derives the halving refresh
+    // lead every second, sliding the refresh later each time until the session ends without one.
+    it('still refreshes when the token expires during the countdown', async () => {
+      setLastActivityAt(START);
+      setAccessTokenExpiringAt(START + IDLE_MS + 0.5 * MIN);
+
+      renderHook(() => useSessionKeepAlive());
+
+      await vi.advanceTimersByTimeAsync(IDLE_MS - COUNTDOWN_TICK_MS);
+
+      expect(refreshTokens).toHaveBeenCalledTimes(1);
+    });
+
+    it('closes when another tab pushes the shared clock out', async () => {
+      const { result } = renderAtStart();
+
+      await idleUntilTheWarning();
+      // What a sibling answering its own copy of the warning leaves behind for this one to read.
+      setLastActivityAt(Date.now());
+      await vi.advanceTimersByTimeAsync(COUNTDOWN_TICK_MS);
+
+      expect(result.current.msRemaining).toBeNull();
+    });
+
+    it('leaves the countdown behind once the session ends', async () => {
+      const { result } = renderAtStart();
+
+      await vi.advanceTimersByTimeAsync(IDLE_MS);
+
+      expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle' });
+      expect(result.current.msRemaining).toBeNull();
+    });
+
+    it('staying logged in moves the clock every tab reads', async () => {
+      const { result } = renderAtStart();
+
+      await idleUntilTheWarning();
+      act(() => result.current.stayLoggedIn());
+
+      expect(result.current.msRemaining).toBeNull();
+      expect(getLastActivityAt()).toBe(Date.now());
+    });
+
+    it('staying logged in carries the session past the deadline it was heading for', async () => {
+      const { result } = renderAtStart();
+
+      await idleUntilTheWarning();
+      act(() => result.current.stayLoggedIn());
+      await vi.advanceTimersByTimeAsync(WARNING_MS);
+
+      expect(mockLogout).not.toHaveBeenCalled();
+    });
+
+    it('logging out from the warning is deliberate rather than idle', async () => {
+      const { result } = renderAtStart();
+
+      await idleUntilTheWarning();
+      act(() => result.current.logOutNow());
+
+      expect(mockLogout).toHaveBeenCalledWith({ reason: 'manual' });
+    });
   });
 });
