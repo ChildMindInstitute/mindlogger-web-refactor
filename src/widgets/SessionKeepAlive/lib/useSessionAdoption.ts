@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 
-import ROUTES from '~/shared/constants/routes';
 import {
   getLastActivityAt,
   publishSessionMessage,
@@ -41,14 +40,6 @@ export const useSessionAdoption = () => {
       // reloading is attempted once rather than forever. Cleared above once the tab has one.
       if (sessionStorage.getItem(RELOAD_ATTEMPTED_KEY)) return;
       sessionStorage.setItem(RELOAD_ATTEMPTED_KEY, 'true');
-
-      // The login route renders its form to signed-in tabs too, so reloading in place would land
-      // back on it holding a session it cannot show. Anywhere else reloads where it stands.
-      if (window.location.pathname === ROUTES.login.path) {
-        window.location.replace('/');
-
-        return;
-      }
 
       window.location.reload();
     };
