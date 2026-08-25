@@ -7,7 +7,9 @@ import {
   getLastActivityAt,
   getSessionId,
   getTokenExpiration,
+  ownsActiveSession,
   publishSessionMessage,
+  rejoinActiveSession,
   resolveSessionConfig,
   secureTokensStorage,
   SESSION_REQUEST_WINDOW_MS,
@@ -141,6 +143,11 @@ export const useSessionKeepAlive = () => {
       // Tracking keeps this clock while the tab is signed in, and only a teardown removes it. Gone
       // means the session ended somewhere a frozen tab could not hear, and no message is coming.
       if (!getLastActivityAt()) return endSession({ isRemote: true });
+
+      // A session that began while this tab slept owns the browser now, so this one is over. It
+      // cannot tear down or adopt its way across: everything it holds, storage snapshot included,
+      // belongs to the old user. Only a reload gets it there.
+      if (!ownsActiveSession()) return rejoinActiveSession();
 
       // Ask first and give the answer a beat: a token gone stale during sleep would otherwise
       // refresh at zero delay, losing the race against a sibling handing over fresher ones.

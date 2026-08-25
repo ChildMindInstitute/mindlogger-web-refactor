@@ -430,6 +430,33 @@ describe('useSessionKeepAlive', () => {
     expect(mockLogout).toHaveBeenCalledWith({ isRemote: true });
   });
 
+  // The same freeze, but someone signed in after the logout. The clock is back, so the check above
+  // no longer catches it, and the tab would otherwise sit on the old user's dashboard.
+  it('rejoins on focus when another session took the browser while it was frozen', () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    setActiveSessionId('family-2');
+    wake();
+
+    expect(reload).toHaveBeenCalledTimes(1);
+    expect(mockLogout).not.toHaveBeenCalled();
+  });
+
+  it('stays put on focus when the browser is still its own', () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    wake();
+
+    expect(reload).not.toHaveBeenCalled();
+    expect(mockLogout).not.toHaveBeenCalled();
+  });
+
   it('holds the deadline check back on wake, so a handover can beat a zero-delay refresh', async () => {
     setLastActivityAt(START);
     renderHook(() => useSessionKeepAlive());
