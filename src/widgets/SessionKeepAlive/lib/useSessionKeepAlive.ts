@@ -13,6 +13,7 @@ import {
   SESSION_REQUEST_WINDOW_MS,
   SessionMessage,
   SessionState,
+  setActiveSessionId,
   setActivityTrackingPaused,
   setLastActivityAt,
   startActivityTracking,
@@ -207,6 +208,11 @@ export const useSessionKeepAlive = () => {
 
       adoptTokens(message.payload);
     };
+
+    // Claimed once, here: a tab woken from a freeze never remounts, so it can never overwrite the
+    // id of a session that started while it slept. That is what lets it recognise it is stale.
+    const ownSessionId = getSessionId();
+    if (ownSessionId) setActiveSessionId(ownSessionId);
 
     const unsubscribe = subscribeSessionSync(handleSyncMessage);
 

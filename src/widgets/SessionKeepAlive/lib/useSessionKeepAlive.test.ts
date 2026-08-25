@@ -6,12 +6,14 @@ import { refreshTokens } from '~/shared/api/services/axios';
 import {
   ACTIVITY_THROTTLE_MS,
   clearSessionState,
+  getActiveSessionId,
   closeSessionSync,
   COUNTDOWN_TICK_MS,
   getLastActivityAt,
   SESSION_CHANNEL_NAME,
   SESSION_REQUEST_WINDOW_MS,
   SessionMessage,
+  setActiveSessionId,
   setLastActivityAt,
 } from '~/shared/utils';
 import { secureTokensStorage } from '~/shared/utils/storage/secureTokensStorage';
@@ -133,6 +135,26 @@ describe('useSessionKeepAlive', () => {
 
     await vi.advanceTimersByTimeAsync(3 * MIN);
     expect(mockLogout).not.toHaveBeenCalled();
+  });
+
+  it('claims the browser for its session on mount', () => {
+    renderHook(() => useSessionKeepAlive());
+
+    expect(getActiveSessionId()).toBe(SESSION_ID);
+  });
+
+  // Claiming has to happen once, on mount. Doing it on every pass would let a tab woken from a
+  // freeze overwrite the id of the session that replaced it, and never notice it was stale.
+  it('does not reclaim the browser once another session has taken it', async () => {
+    renderHook(() => useSessionKeepAlive());
+    setActiveSessionId('family-2');
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(ACTIVITY_THROTTLE_MS);
+      window.dispatchEvent(new Event('keydown'));
+    });
+
+    expect(getActiveSessionId()).toBe('family-2');
   });
 
   it('refreshes ahead of expiry once the flag is on', async () => {
