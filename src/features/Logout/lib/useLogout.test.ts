@@ -3,9 +3,11 @@ import { renderHook } from '@testing-library/react';
 import { useLogout } from './useLogout';
 
 import { useLogoutMutation } from '~/entities/user';
+import { userModel } from '~/entities/user';
 import {
   closeSessionSync,
   SESSION_CHANNEL_NAME,
+  setActiveSessionId,
   setLastActivityAt,
   subscribeSessionSync,
 } from '~/shared/utils';
@@ -123,5 +125,94 @@ describe('useLogout', () => {
     expect(secureTokensStorage.clearTokens).toHaveBeenCalled();
     expect(localStorage.getItem('lastActivityAt')).toBeNull();
     expect(navigate).toHaveBeenCalled();
+  });
+});
+
+// What a tab duplicated before a logout wakes up to: its own snapshot still names the old session,
+// while the browser has moved on to whoever signed in next.
+describe('useLogout in a tab whose session was replaced', () => {
+  const reload = vi.fn();
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    localStorage.clear();
+    sessionStorage.clear();
+    vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
+    vi.stubGlobal('location', { ...window.location, reload });
+    vi.mocked(useLogoutMutation).mockReturnValue({
+      mutate: logoutMutate,
+      isLoading: false,
+    } as never);
+    vi.mocked(secureTokensStorage.getTokens).mockReturnValue({
+      accessToken: 'access-1',
+      refreshToken: refreshTokenFor(SESSION_ID),
+      tokenType: 'Bearer',
+    });
+    // Written by the tab that signed in after this one went to sleep.
+    setActiveSessionId('family-2');
+    setLastActivityAt(Date.now());
+  });
+
+  afterEach(() => {
+    closeSessionSync();
+    resetInMemoryBroadcastChannels();
+    localStorage.clear();
+    sessionStorage.clear();
+    vi.unstubAllGlobals();
+  });
+
+  it('reloads into the live session instead of tearing down', () => {
+    const { result } = renderHook(() => useLogout());
+    result.current.logout();
+
+    expect(reload).toHaveBeenCalledTimes(1);
+    expect(navigate).not.toHaveBeenCalled();
+  });
+
+  // The bug this exists for: clearing here signs out whoever now holds the browser, and takes the
+  // key their answers are encrypted with.
+  it('leaves the tokens, key and clock of the session that replaced it alone', () => {
+    const { result } = renderHook(() => useLogout());
+    result.current.logout();
+
+    expect(secureTokensStorage.clearTokens).not.toHaveBeenCalled();
+    expect(userModel.secureUserPrivateKeyStorage.clearUserPrivateKey).not.toHaveBeenCalled();
+    expect(localStorage.getItem('lastActivityAt')).not.toBeNull();
+  });
+
+  it('does not ask the server to revoke a session it no longer holds', () => {
+    const { result } = renderHook(() => useLogout());
+    result.current.logout();
+
+    expect(logoutMutate).not.toHaveBeenCalled();
+  });
+
+  // Refusing has to come first of all: a session nobody holds has no business being announced.
+  it("does not announce a logout for a session that is no longer the browser's", () => {
+    const onSiblingMessage = openSiblingTab();
+
+    const { result } = renderHook(() => useLogout());
+    result.current.logout();
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  it('drops the per-tab state of the session it is leaving behind', () => {
+    sessionStorage.setItem('persist:banners', '{}');
+
+    const { result } = renderHook(() => useLogout());
+    result.current.logout();
+
+    expect(sessionStorage.getItem('persist:banners')).toBeNull();
+  });
+
+  it('tears down as usual once it owns the session again', () => {
+    setActiveSessionId(SESSION_ID);
+
+    const { result } = renderHook(() => useLogout());
+    result.current.logout();
+
+    expect(reload).not.toHaveBeenCalled();
+    expect(secureTokensStorage.clearTokens).toHaveBeenCalled();
   });
 });

@@ -13,7 +13,9 @@ import {
   LogoutReason,
   Mixpanel,
   MixpanelEventType,
+  ownsActiveSession,
   publishSessionMessage,
+  rejoinActiveSession,
   secureTokensStorage,
   useCustomNavigation,
 } from '~/shared/utils';
@@ -42,6 +44,12 @@ export const useLogout = (): UseLogoutReturn => {
 
   const logout = useCallback(
     ({ isRemote = false, reason = 'manual' }: LogoutOptions = {}) => {
+      // Every teardown funnels through here, so this is the one place that has to refuse. A tab
+      // that slept through a logout and someone else signing in would clear a store that is theirs
+      // now — tokens, encryption key, answers in progress — signing them out of every tab. It
+      // rebuilds itself into the live session instead.
+      if (!ownsActiveSession()) return rejoinActiveSession();
+
       const tokens = secureTokensStorage.getTokens();
 
       if (!isRemote) {
