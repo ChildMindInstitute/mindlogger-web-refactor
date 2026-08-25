@@ -148,6 +148,47 @@ describe('useSessionKeepAlive', () => {
     expect(refreshTokens).toHaveBeenCalledTimes(1);
   });
 
+  it('keeps the full lead while the user stays active', async () => {
+    const expiresAt = START + 5 * MIN;
+    setLastActivityAt(START);
+    setAccessTokenExpiringAt(expiresAt);
+
+    renderHook(() => useSessionKeepAlive());
+
+    // Every throttled event re-enters schedule. The refresh has to stay pinned to the token's
+    // expiry rather than being re-derived from what is left, which walks it towards expiry.
+    let msLeftWhenRefreshed: number | null = null;
+    while (msLeftWhenRefreshed === null && Date.now() < expiresAt) {
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(ACTIVITY_THROTTLE_MS);
+        window.dispatchEvent(new Event('keydown'));
+      });
+      if (vi.mocked(refreshTokens).mock.calls.length) msLeftWhenRefreshed = expiresAt - Date.now();
+    }
+
+    expect(msLeftWhenRefreshed).toBe(60000);
+  });
+
+  // Arming is skipped for a token already scheduled for, so a replacement that happens to carry
+  // the same expiry has to reset that or nothing would ever refresh again.
+  it('re-arms even when the replacement expires at the same moment', async () => {
+    setLastActivityAt(START);
+    setAccessTokenExpiringAt(START + 5 * MIN);
+    vi.mocked(refreshTokens).mockImplementation(() => {
+      setAccessTokenExpiringAt(START + 5 * MIN);
+
+      return Promise.resolve({ accessToken: 'a', refreshToken: 'r', tokenType: 'Bearer' });
+    });
+
+    renderHook(() => useSessionKeepAlive());
+
+    await vi.advanceTimersByTimeAsync(4 * MIN);
+    expect(refreshTokens).toHaveBeenCalledTimes(1);
+
+    await vi.advanceTimersByTimeAsync(60000);
+    expect(vi.mocked(refreshTokens).mock.calls.length).toBeGreaterThan(1);
+  });
+
   it('waits out a token shorter-lived than the lead instead of refreshing on every tick', async () => {
     setLastActivityAt(START);
     setAccessTokenExpiringAt(START + 30000);
