@@ -156,4 +156,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build web app
+        env:
+          # Placeholder for CI build
+          VITE_SECURE_LOCAL_STORAGE_HASH_KEY: ci-build
         run: yarn build

@@ -114,7 +114,6 @@ See the documentation on [Vitest](https://vitest.dev/guide/) for more informatio
 | `VITE_API_HOST`                      | yes      | `http://localhost:8000/` | Curious Backend API base URL                                            |
 | `VITE_ADMIN_PANEL_HOST`              | no       | `http://localhost:3000/` | Curious Admin URL                                                       |
 | `VITE_SECURE_LOCAL_STORAGE_HASH_KEY` | yes      | `ML_SECURE`              | Secure local storage hash key                                           |
-| `VITE_SECURE_LOCAL_STORAGE_PREFIX`   | yes      | `ML_SECURE`              | Secure local storage prefix                                             |
 | `VITE_IV_LENGTH`                     | yes      | `16`                     | Encryption initialization vector length                                 |
 | `VITE_BUILD_VERSION`                 | yes      | `dev-build`              | Build version                                                           |
 | `VITE_MIXPANEL_TOKEN`                | yes      | null                     | Mixpanel client ID, refer to Confluence for correct environment key     |
