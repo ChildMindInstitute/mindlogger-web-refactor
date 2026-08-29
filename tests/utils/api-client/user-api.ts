@@ -68,6 +68,15 @@ export class UserAPI extends CuriousApi {
     }
   }
 
+  async getMe(): Promise<{ result: { id: string; email: string } }> {
+    const response = await this.apiContext.get('/users/me');
+
+    if (!response.ok()) {
+      throw new Error(`Failed to fetch current user: ${response.status()} ${await response.text()}`);
+    }
+    return await response.json();
+  }
+
   async dispose() {
     try {
       await this.apiContext.dispose();

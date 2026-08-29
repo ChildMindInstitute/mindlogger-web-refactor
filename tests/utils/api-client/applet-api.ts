@@ -29,6 +29,39 @@ export class AppletAPI extends CuriousApi {
         return await response.json();
     }
 
+    // Applet creation lives under the workspace router on the backend.
+    async createWorkspaceApplet(ownerId: string, appletData: object): Promise<any> {
+        const response = await this.apiContext.post(`/workspaces/${ownerId}/applets`, { data: appletData });
+        if (!response.ok()) {
+            throw new Error(`Failed to create applet: ${response.status()} ${await response.text()}`);
+        }
+        return await response.json();
+    }
+
+    async getAppletDetail(appletId: string): Promise<any> {
+        const response = await this.apiContext.get(`/applets/${appletId}`);
+        if (!response.ok()) {
+            throw new Error(`Failed to fetch applet: ${response.status()} ${await response.text()}`);
+        }
+        return await response.json();
+    }
+
+    // Activity detail (incl. items) is a separate endpoint from applet detail.
+    async getActivity(activityId: string): Promise<any> {
+        const response = await this.apiContext.get(`/activities/${activityId}`);
+        if (!response.ok()) {
+            throw new Error(`Failed to fetch activity: ${response.status()} ${await response.text()}`);
+        }
+        return await response.json();
+    }
+
+    async deleteApplet(appletId: string): Promise<void> {
+        const response = await this.apiContext.delete(`/applets/${appletId}`);
+        if (!response.ok()) {
+            throw new Error(`Failed to delete applet: ${response.status()} ${await response.text()}`);
+        }
+    }
+
     async createManagerInvite(inviteData: { email: string; firstName: string; lastName: string; language: string; role: string; workspacePrefix: string; title: string; }, appletID: string): Promise<any> {
         const response = await this.apiContext.post(`/invitations/${appletID}/managers`, { data: inviteData });
         console.log(response);
