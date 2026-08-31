@@ -1,3 +1,5 @@
+import { BaseSyntheticEvent, useState } from 'react';
+
 import { Link } from 'react-router-dom';
 
 import { useLoginTranslation } from '../lib/useLoginTranslation';
@@ -13,6 +15,7 @@ import {
   Mixpanel,
   MixpanelEventType,
   MixpanelProps,
+  SESSION_ELSEWHERE_KEY,
   useCustomForm,
   usePasswordType,
 } from '~/shared/utils';
@@ -29,6 +32,10 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
   const { addErrorBanner, removeErrorBanner } = useBanners();
 
   const [passwordType, onPasswordIconClick] = usePasswordType();
+
+  // Enabled until it is pressed, then quiet. This tab cannot start a second session, and the
+  // banner above says the way on is to reload into the one already running.
+  const [isSignInBlocked, setIsSignInBlocked] = useState(false);
 
   const form = useCustomForm({ defaultValues: { email: '', password: '' } }, LoginSchema);
   const { handleSubmit } = form;
@@ -97,8 +104,20 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
     login(data as ILoginPayload);
   };
 
+  const handleFormSubmit = (event?: BaseSyntheticEvent) => {
+    // Ahead of validation, so Enter on an empty field is turned away the same way a click is.
+    if (sessionStorage.getItem(SESSION_ELSEWHERE_KEY)) {
+      event?.preventDefault();
+      setIsSignInBlocked(true);
+
+      return;
+    }
+
+    void handleSubmit(onLoginSubmit)(event);
+  };
+
   return (
-    <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
+    <BasicFormProvider {...form} onSubmit={handleFormSubmit}>
       <Box display="flex" flex={1} flexDirection="column" gap="24px">
         <Input
           id="login-form-email-input"
@@ -130,7 +149,13 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
           </Text>
         </Box>
 
-        <BaseButton type="submit" variant="contained" isLoading={isLoading} text={t('button')} />
+        <BaseButton
+          type="submit"
+          variant="contained"
+          isLoading={isLoading}
+          disabled={isSignInBlocked}
+          text={t('button')}
+        />
       </Box>
     </BasicFormProvider>
   );
