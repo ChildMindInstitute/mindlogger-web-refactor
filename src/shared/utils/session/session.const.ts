@@ -37,3 +37,7 @@ export const ACTIVE_SESSION_ID_KEY = 'activeSessionId';
 
 // In session storage, so it is per tab and survives the reload it guards against repeating.
 export const RELOAD_ATTEMPTED_KEY = 'reloadAttempted';
+
+// Per tab: a live session exists that this tab is not in. Signing in from here is refused while it
+// is set, so it has to outlive the banner, which the user can dismiss.
+export const SESSION_ELSEWHERE_KEY = 'sessionElsewhere';

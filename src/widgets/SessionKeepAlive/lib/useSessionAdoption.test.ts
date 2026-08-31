@@ -1,18 +1,22 @@
-import { renderHook } from '@testing-library/react';
-
 import { useSessionAdoption } from './useSessionAdoption';
 
+import { BannerOrder } from '~/entities/banner/model';
+import { ROUTES } from '~/shared/constants';
 import {
   clearSessionState,
   closeSessionSync,
   MS_IN_MIN,
-  RELOAD_ATTEMPTED_KEY,
   SESSION_CHANNEL_NAME,
+  SESSION_ELSEWHERE_KEY,
   SESSION_REQUEST_WINDOW_MS,
   setLastActivityAt,
 } from '~/shared/utils';
 import { secureTokensStorage } from '~/shared/utils/storage/secureTokensStorage';
-import { InMemoryBroadcastChannel, resetInMemoryBroadcastChannels } from '~/test/utils';
+import {
+  InMemoryBroadcastChannel,
+  renderHookWithProviders,
+  resetInMemoryBroadcastChannels,
+} from '~/test/utils';
 
 vi.mock('~/shared/utils/storage/secureTokensStorage', () => ({
   secureTokensStorage: { getTokens: vi.fn(), setTokens: vi.fn(), clearTokens: vi.fn() },
@@ -39,6 +43,13 @@ const holdSession = () =>
 
 const openSiblingTab = () => new InMemoryBroadcastChannel(SESSION_CHANNEL_NAME);
 
+const renderAdoption = (route?: string) =>
+  renderHookWithProviders(() => useSessionAdoption(), route ? { route, routePath: route } : {});
+
+type Store = ReturnType<typeof renderAdoption>['store'];
+
+const bannersIn = (store: Store) => store.getState().banners.banners;
+
 describe('useSessionAdoption', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -64,105 +75,136 @@ describe('useSessionAdoption', () => {
     vi.useRealTimers();
   });
 
-  it('reloads into a session another tab announces', async () => {
-    renderHook(() => useSessionAdoption());
+  it('raises the banner when another tab announces a session', async () => {
+    const { store } = renderAdoption();
 
     openSiblingTab().postMessage(ANNOUNCED);
     await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
 
-    expect(reload).toHaveBeenCalledTimes(1);
+    expect(bannersIn(store)).toHaveLength(1);
+    expect(bannersIn(store)[0].key).toBe('SessionElsewhereBanner');
+    expect(sessionStorage.getItem(SESSION_ELSEWHERE_KEY)).toBe('true');
   });
 
-  it('reloads once when several announcements land together', async () => {
-    renderHook(() => useSessionAdoption());
+  it('never takes itself into the session', async () => {
+    renderAdoption();
+
+    openSiblingTab().postMessage(ANNOUNCED);
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+    expect(reload).not.toHaveBeenCalled();
+  });
+
+  it('raises the banner once when several announcements land together', async () => {
+    const { store } = renderAdoption();
     const sibling = openSiblingTab();
 
     sibling.postMessage(ANNOUNCED);
     sibling.postMessage(ANNOUNCED);
     await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
 
-    expect(reload).toHaveBeenCalledTimes(1);
+    expect(bannersIn(store)).toHaveLength(1);
   });
 
-  it('ignores a request from another tab that is also signed out', async () => {
-    renderHook(() => useSessionAdoption());
+  it('does not treat a request from another signed-out tab as an answer', async () => {
+    // No clock either, so the fallback below cannot speak up on the session's behalf.
+    clearSessionState();
+    const { store } = renderAdoption();
 
-    // Two login-page tabs both listening. Reloading on this would bounce them off each other.
+    // Two login-page tabs both listening. Answering this would bounce them off each other.
     openSiblingTab().postMessage({ type: 'SESSION_REQUEST' });
     await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
 
-    expect(reload).not.toHaveBeenCalled();
+    expect(bannersIn(store)).toHaveLength(0);
   });
 
   it('leaves a tab that already holds a session alone', async () => {
     holdSession();
-    renderHook(() => useSessionAdoption());
+    const { store } = renderAdoption();
 
     openSiblingTab().postMessage(ANNOUNCED);
     await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
 
-    expect(reload).not.toHaveBeenCalled();
+    expect(bannersIn(store)).toHaveLength(0);
   });
 
-  it('asks for a session when the tab comes back into focus', () => {
+  // A tab reloaded out of a session it no longer owns is already visible, so no visibilitychange
+  // is coming. Without this it would sit there silently, waiting for an announcement.
+  it('asks for a session as soon as it mounts', () => {
     const sibling = openSiblingTab();
     const onSiblingMessage = vi.fn();
     sibling.onmessage = onSiblingMessage;
-    renderHook(() => useSessionAdoption());
+
+    renderAdoption();
+
+    expect(onSiblingMessage).toHaveBeenCalledWith({ data: { type: 'SESSION_REQUEST' } });
+  });
+
+  it('asks again when the tab comes back into focus', () => {
+    const sibling = openSiblingTab();
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+    renderAdoption();
+    onSiblingMessage.mockClear();
 
     document.dispatchEvent(new Event('visibilitychange'));
 
     expect(onSiblingMessage).toHaveBeenCalledWith({ data: { type: 'SESSION_REQUEST' } });
   });
 
-  // Nobody replies, so the fallback window runs out.
-  const wakeUnanswered = async () => {
+  it('raises the banner when the last tab holding the session has closed', async () => {
+    const { store } = renderAdoption();
+
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+    expect(bannersIn(store)).toHaveLength(1);
+    expect(reload).not.toHaveBeenCalled();
+  });
+
+  it('stays quiet when no session was ever left behind', async () => {
+    clearSessionState();
+    const { store } = renderAdoption();
+
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+    expect(bannersIn(store)).toHaveLength(0);
+    expect(sessionStorage.getItem(SESSION_ELSEWHERE_KEY)).toBeNull();
+  });
+
+  it('stays quiet for a session already past its idle deadline', async () => {
+    setLastActivityAt(START - 11 * MS_IN_MIN);
+    const { store } = renderAdoption();
+
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+    expect(bannersIn(store)).toHaveLength(0);
+  });
+
+  it('raises the banner once however often the tab is woken', async () => {
+    const { store } = renderAdoption();
+
     document.dispatchEvent(new Event('visibilitychange'));
     await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
-  };
+    document.dispatchEvent(new Event('visibilitychange'));
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
 
-  it('reloads into a live session when the last tab holding it has closed', async () => {
-    renderHook(() => useSessionAdoption());
-
-    await wakeUnanswered();
-
-    expect(reload).toHaveBeenCalledTimes(1);
+    expect(bannersIn(store)).toHaveLength(1);
   });
 
-  it('does not reload when no session was ever left behind', async () => {
-    clearSessionState();
-    renderHook(() => useSessionAdoption());
-
-    await wakeUnanswered();
-
-    expect(reload).not.toHaveBeenCalled();
-  });
-
-  it('does not reload for a session already past its idle deadline', async () => {
-    setLastActivityAt(START - 11 * MS_IN_MIN);
-    renderHook(() => useSessionAdoption());
-
-    await wakeUnanswered();
-
-    expect(reload).not.toHaveBeenCalled();
-  });
-
-  it('reloads only once, so a session it cannot read does not loop', async () => {
-    renderHook(() => useSessionAdoption());
-
-    await wakeUnanswered();
-    await wakeUnanswered();
-
-    expect(reload).toHaveBeenCalledTimes(1);
-  });
-
-  it('forgets the attempt once it holds a session, so a later gap can reload again', () => {
-    sessionStorage.setItem(RELOAD_ATTEMPTED_KEY, 'true');
+  // Both outlive a reload, so a tab that has reached the session would otherwise carry them in.
+  it('clears the banner and the marker once it holds a session', () => {
+    sessionStorage.setItem(SESSION_ELSEWHERE_KEY, 'true');
     holdSession();
 
-    renderHook(() => useSessionAdoption());
+    // What the tab was showing before the reload took it into the session.
+    const { store } = renderHookWithProviders(() => useSessionAdoption(), {
+      preloadedState: {
+        banners: { banners: [{ key: 'SessionElsewhereBanner', order: BannerOrder.Top }] },
+      },
+    });
 
-    expect(sessionStorage.getItem(RELOAD_ATTEMPTED_KEY)).toBeNull();
+    expect(sessionStorage.getItem(SESSION_ELSEWHERE_KEY)).toBeNull();
+    expect(bannersIn(store)).toHaveLength(0);
   });
 
   it('stays quiet on focus once it holds a session, leaving catch-up to the engine', () => {
@@ -170,10 +212,22 @@ describe('useSessionAdoption', () => {
     const sibling = openSiblingTab();
     const onSiblingMessage = vi.fn();
     sibling.onmessage = onSiblingMessage;
-    renderHook(() => useSessionAdoption());
+    renderAdoption();
 
     document.dispatchEvent(new Event('visibilitychange'));
 
     expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  // Whoever is filling this in has no account, so a message about somebody else's sign-in in this
+  // browser would mean nothing to them.
+  it('stays out of it entirely on a public-link survey', async () => {
+    const { store } = renderAdoption(ROUTES.publicSurvey.path);
+
+    openSiblingTab().postMessage(ANNOUNCED);
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+    expect(bannersIn(store)).toHaveLength(0);
+    expect(reload).not.toHaveBeenCalled();
   });
 });
