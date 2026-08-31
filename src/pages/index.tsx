@@ -5,6 +5,7 @@ const UnauthorizedRoutes = lazy(() => import('./UnauthorizedRoutes'));
 
 // import { useDefaultBanners } from '~/entities/defaultBanners/model/hooks/useDefaultBanners';
 import { userModel } from '~/entities/user';
+import { SESSION_ENDED_KEY } from '~/shared/utils';
 import { useSessionBanners } from '~/shared/utils/hooks/useSessionBanners';
 import { useSessionAdoption } from '~/widgets/SessionKeepAlive';
 
@@ -15,10 +16,14 @@ function ApplicationRouter(): JSX.Element | null {
 
   const { isAuthorized, tokens } = userModel.hooks.useAuthorization();
 
+  // A tab whose session ended while it slept still reads that session's tokens and user from
+  // storage. The marker is what tells this boot to ignore them and show the login page instead.
+  const hasSessionEnded = !!sessionStorage.getItem(SESSION_ENDED_KEY);
+
   // useDefaultBanners();
   useSessionBanners();
 
-  if (isAuthorized) {
+  if (isAuthorized && !hasSessionEnded) {
     return <AuthorizedRoutes refreshToken={tokens.refreshToken} />;
   }
 

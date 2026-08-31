@@ -41,3 +41,7 @@ export const RELOAD_ATTEMPTED_KEY = 'reloadAttempted';
 // Per tab: a live session exists that this tab is not in. Signing in from here is refused while it
 // is set, so it has to outlive the banner, which the user can dismiss.
 export const SESSION_ELSEWHERE_KEY = 'sessionElsewhere';
+
+// Per tab, and survives the reload that sets it: the tokens this tab can still read belong to a
+// session that has ended, so this boot has to ignore them.
+export const SESSION_ENDED_KEY = 'sessionEnded';
