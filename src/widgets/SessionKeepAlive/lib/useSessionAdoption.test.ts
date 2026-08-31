@@ -8,6 +8,7 @@ import {
   MS_IN_MIN,
   SESSION_CHANNEL_NAME,
   SESSION_ELSEWHERE_KEY,
+  SESSION_ENDED_KEY,
   SESSION_REQUEST_WINDOW_MS,
   setLastActivityAt,
 } from '~/shared/utils';
@@ -204,7 +205,21 @@ describe('useSessionAdoption', () => {
     });
 
     expect(sessionStorage.getItem(SESSION_ELSEWHERE_KEY)).toBeNull();
+    expect(sessionStorage.getItem(SESSION_ENDED_KEY)).toBeNull();
     expect(bannersIn(store)).toHaveLength(0);
+  });
+
+  // Sent here by leaveEndedSession: the tokens it can still read belong to the session that
+  // replaced it, so it behaves as a signed-out tab despite holding them.
+  it('speaks up for a tab whose session ended, even though it still holds tokens', async () => {
+    holdSession();
+    sessionStorage.setItem(SESSION_ENDED_KEY, 'true');
+    const { store } = renderAdoption();
+
+    openSiblingTab().postMessage(ANNOUNCED);
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+    expect(bannersIn(store)).toHaveLength(1);
   });
 
   it('stays quiet on focus once it holds a session, leaving catch-up to the engine', () => {

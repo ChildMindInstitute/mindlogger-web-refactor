@@ -2,7 +2,7 @@ export * from './activityTracker';
 export * from './session.const';
 export * from './session.types';
 export * from './sessionConfig';
-export * from './rejoinActiveSession';
+export * from './leaveEndedSession';
 export * from './sessionCountdown';
 export * from './sessionStore';
 export * from './sessionSync';

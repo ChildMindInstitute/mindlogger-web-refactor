@@ -11,6 +11,7 @@ import {
   resolveSessionConfig,
   secureTokensStorage,
   SESSION_ELSEWHERE_KEY,
+  SESSION_ENDED_KEY,
   SESSION_REQUEST_WINDOW_MS,
   subscribeSessionSync,
   useAppDispatch,
@@ -30,13 +31,18 @@ export const useSessionAdoption = () => {
   const location = useLocation();
 
   const isExcludedRoute = matchPaths(EXCLUDED_ROUTES, location.pathname).some(Boolean);
-  const isListening = !secureTokensStorage.getTokens()?.refreshToken && !isExcludedRoute;
+  // A tab sent here by leaveEndedSession can still read tokens, but they are not its own, so it
+  // listens like any signed-out tab.
+  const hasSessionEnded = !!sessionStorage.getItem(SESSION_ENDED_KEY);
+  const hasOwnSession = !hasSessionEnded && !!secureTokensStorage.getTokens()?.refreshToken;
+  const isListening = !hasOwnSession && !isExcludedRoute;
 
   useEffect(() => {
     if (!isListening) {
       // Both outlive the reload that reaches the session: the marker sits in session storage, and
       // the banner sits in a store persisted to it. Left behind, they would follow the tab in.
       sessionStorage.removeItem(SESSION_ELSEWHERE_KEY);
+      sessionStorage.removeItem(SESSION_ENDED_KEY);
       dispatch(actions.removeBanner({ key: 'SessionElsewhereBanner' }));
 
       return;

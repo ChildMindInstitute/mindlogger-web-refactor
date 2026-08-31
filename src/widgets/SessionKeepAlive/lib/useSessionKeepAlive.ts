@@ -9,7 +9,7 @@ import {
   getTokenExpiration,
   ownsActiveSession,
   publishSessionMessage,
-  rejoinActiveSession,
+  leaveEndedSession,
   resolveSessionConfig,
   secureTokensStorage,
   SESSION_REQUEST_WINDOW_MS,
@@ -146,8 +146,8 @@ export const useSessionKeepAlive = () => {
 
       // A session that began while this tab slept owns the browser now, so this one is over. It
       // cannot tear down or adopt its way across: everything it holds, storage snapshot included,
-      // belongs to the old user. Only a reload gets it there.
-      if (!ownsActiveSession()) return rejoinActiveSession();
+      // belongs to the old user. It leaves for the login page, where the banner offers the way in.
+      if (!ownsActiveSession()) return leaveEndedSession();
 
       // Ask first and give the answer a beat: a token gone stale during sleep would otherwise
       // refresh at zero delay, losing the race against a sibling handing over fresher ones.

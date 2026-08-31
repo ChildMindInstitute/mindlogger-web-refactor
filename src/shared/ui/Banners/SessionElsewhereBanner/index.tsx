@@ -3,9 +3,15 @@ import { Trans } from 'react-i18next';
 import { StyledReloadButton } from './SessionElsewhereBanner.styles';
 import { Banner, BannerProps } from '../Banner';
 
+import { SESSION_ENDED_KEY } from '~/shared/utils/session/session.const';
+
 // Reloading is how this tab reaches a session it can see but is not in: the encrypted store is only
-// re-read when the page loads.
-const reloadIntoSession = () => window.location.reload();
+// re-read when the page loads. The note that kept this boot out of the session goes with it —
+// going in is the choice being made here.
+const reloadIntoSession = () => {
+  sessionStorage.removeItem(SESSION_ENDED_KEY);
+  window.location.reload();
+};
 
 export const SessionElsewhereBanner = (props: BannerProps) => (
   <Banner duration={null} severity="warning" data-testid="session-elsewhere-banner" {...props}>
