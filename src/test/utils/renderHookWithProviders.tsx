@@ -6,8 +6,8 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import { ExtendedRenderOptions, setupStore } from '~/app/store';
 
-export const renderHookWithProviders = (
-  hook: () => unknown,
+export const renderHookWithProviders = <TResult,>(
+  hook: () => TResult,
   {
     route = '/',
     routePath = '/',
