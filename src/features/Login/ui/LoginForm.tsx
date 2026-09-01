@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent } from 'react';
+import { BaseSyntheticEvent, MouseEvent } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ import { useBanners } from '~/entities/banner/model';
 import { ILoginPayload, useLoginMutation, userModel } from '~/entities/user';
 import { LoginResult } from '~/shared/api';
 import { ROUTES } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { BaseButton, BasicFormProvider, Box, Input, PasswordIcon, Text } from '~/shared/ui';
 import {
   Mixpanel,
@@ -102,6 +103,11 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
     login(data as ILoginPayload);
   };
 
+  const handleForgotPasswordClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    // No session is started here, but leaving would leave the banner explaining it behind.
+    if (refuse()) event.preventDefault();
+  };
+
   const handleFormSubmit = (event?: BaseSyntheticEvent) => {
     // Ahead of validation, so Enter on an empty field is turned away the same way a click is.
     if (refuse()) return event?.preventDefault();
@@ -135,7 +141,17 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
             <Link
               to={ROUTES.forgotPassword.path}
               relative="path"
-              style={{ textDecoration: 'underline' }}
+              aria-disabled={isBlocked}
+              onClick={handleForgotPasswordClick}
+              data-testid="login-form-forgot-password"
+              style={{
+                textDecoration: 'underline',
+                // An anchor has no disabled state, so it is spelled out here.
+                ...(isBlocked && {
+                  color: variables.palette.onSurfaceVariant,
+                  pointerEvents: 'none',
+                }),
+              }}
             >
               {t('forgotPassword')}
             </Link>

@@ -22,6 +22,7 @@ vi.mock('~/entities/user', async () => {
 });
 
 const signInButton = () => screen.getByRole('button', { name: /button/i });
+const forgotPasswordLink = () => screen.getByTestId('login-form-forgot-password');
 
 const fillIn = () => {
   fireEvent.change(screen.getByPlaceholderText('email'), {
@@ -68,7 +69,26 @@ describe('LoginForm', () => {
       renderLoginForm();
 
       expect(signInButton()).toBeEnabled();
+      expect(forgotPasswordLink()).toHaveAttribute('aria-disabled', 'false');
     });
+
+    // An anchor cannot be disabled, so refusing has to leave its own mark.
+    it('turns the forgot password link away and marks it disabled', () => {
+      renderLoginForm();
+
+      fireEvent.click(forgotPasswordLink());
+
+      expect(forgotPasswordLink()).toHaveAttribute('aria-disabled', 'true');
+    });
+  });
+
+  it('leaves the forgot password link working when no other session is running', () => {
+    renderLoginForm();
+
+    fireEvent.click(forgotPasswordLink());
+
+    // Navigating away is what working looks like here: the form goes with it.
+    expect(screen.queryByTestId('login-form-forgot-password')).not.toBeInTheDocument();
   });
 
   it('signs in as usual when no other session is running', async () => {
