@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, useState } from 'react';
+import { BaseSyntheticEvent } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -15,10 +15,10 @@ import {
   Mixpanel,
   MixpanelEventType,
   MixpanelProps,
-  SESSION_ELSEWHERE_KEY,
   useCustomForm,
   usePasswordType,
 } from '~/shared/utils';
+import { useSessionElsewhereGuard } from '~/shared/utils/hooks/useSessionElsewhereGuard';
 
 interface LoginFormProps {
   locationState?: Record<string, unknown>;
@@ -33,9 +33,7 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
 
   const [passwordType, onPasswordIconClick] = usePasswordType();
 
-  // Enabled until it is pressed, then quiet. This tab cannot start a second session, and the
-  // banner above says the way on is to reload into the one already running.
-  const [isSignInBlocked, setIsSignInBlocked] = useState(false);
+  const { isBlocked, refuse } = useSessionElsewhereGuard();
 
   const form = useCustomForm({ defaultValues: { email: '', password: '' } }, LoginSchema);
   const { handleSubmit } = form;
@@ -106,12 +104,7 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
 
   const handleFormSubmit = (event?: BaseSyntheticEvent) => {
     // Ahead of validation, so Enter on an empty field is turned away the same way a click is.
-    if (sessionStorage.getItem(SESSION_ELSEWHERE_KEY)) {
-      event?.preventDefault();
-      setIsSignInBlocked(true);
-
-      return;
-    }
+    if (refuse()) return event?.preventDefault();
 
     void handleSubmit(onLoginSubmit)(event);
   };
@@ -153,7 +146,7 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
           type="submit"
           variant="contained"
           isLoading={isLoading}
-          disabled={isSignInBlocked}
+          disabled={isBlocked}
           text={t('button')}
         />
       </Box>
