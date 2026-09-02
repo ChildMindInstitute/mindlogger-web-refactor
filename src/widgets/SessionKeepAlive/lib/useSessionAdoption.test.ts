@@ -234,6 +234,64 @@ describe('useSessionAdoption', () => {
     expect(onSiblingMessage).not.toHaveBeenCalled();
   });
 
+  // The marker and the banner both outlive a reload, but the session they describe does not.
+  it('retracts a banner left over from a session that has since ended', async () => {
+    sessionStorage.setItem(SESSION_ELSEWHERE_KEY, 'true');
+    // Signed out elsewhere while this tab sat on the login page, so the clock is gone with it.
+    clearSessionState();
+
+    const { store } = renderHookWithProviders(() => useSessionAdoption(), {
+      preloadedState: {
+        banners: { banners: [{ key: 'SessionElsewhereBanner', order: BannerOrder.Top }] },
+      },
+    });
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+    expect(bannersIn(store)).toHaveLength(0);
+    expect(sessionStorage.getItem(SESSION_ELSEWHERE_KEY)).toBeNull();
+  });
+
+  it('retracts it when the session it named has passed its idle deadline', async () => {
+    sessionStorage.setItem(SESSION_ELSEWHERE_KEY, 'true');
+    setLastActivityAt(START - 11 * MS_IN_MIN);
+
+    const { store } = renderHookWithProviders(() => useSessionAdoption(), {
+      preloadedState: {
+        banners: { banners: [{ key: 'SessionElsewhereBanner', order: BannerOrder.Top }] },
+      },
+    });
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+    expect(bannersIn(store)).toHaveLength(0);
+    expect(sessionStorage.getItem(SESSION_ELSEWHERE_KEY)).toBeNull();
+  });
+
+  // A live session still answers, so nothing is retracted from under a tab that can still join.
+  it('leaves the banner alone while the session is still running', async () => {
+    const { store } = renderAdoption();
+
+    openSiblingTab().postMessage(ANNOUNCED);
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+    expect(bannersIn(store)).toHaveLength(1);
+    expect(sessionStorage.getItem(SESSION_ELSEWHERE_KEY)).toBe('true');
+  });
+
+  // Without this the banner sits there until the tab is reloaded or comes back into focus.
+  it('takes the banner down as soon as the session is signed out elsewhere', async () => {
+    const { store } = renderAdoption();
+    openSiblingTab().postMessage(ANNOUNCED);
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+    openSiblingTab().postMessage({
+      type: 'LOGOUT',
+      payload: { sessionId: 'family-1', reason: 'manual' },
+    });
+
+    expect(bannersIn(store)).toHaveLength(0);
+    expect(sessionStorage.getItem(SESSION_ELSEWHERE_KEY)).toBeNull();
+  });
+
   // Whoever is filling this in has no account, so a message about somebody else's sign-in in this
   // browser would mean nothing to them.
   it('stays out of it entirely on a public-link survey', async () => {

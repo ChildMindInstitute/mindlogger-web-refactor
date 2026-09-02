@@ -75,6 +75,20 @@ describe('useSessionElsewhereGuard', () => {
     expect(result.current.isBlocked).toBe(false);
   });
 
+  // The session can end while the page sits open, and a grey control with no banner reads as broken.
+  it('lets a refused control work again once the session elsewhere has ended', () => {
+    markSessionElsewhere();
+    const { result, rerender } = renderGuard();
+
+    act(() => {
+      result.current.refuse();
+    });
+    sessionStorage.clear();
+    rerender();
+
+    expect(result.current.isBlocked).toBe(false);
+  });
+
   // A dismissed message plus a control that quietly stops working reads as the page being broken.
   it('brings the banner back when it has been dismissed', () => {
     markSessionElsewhere();

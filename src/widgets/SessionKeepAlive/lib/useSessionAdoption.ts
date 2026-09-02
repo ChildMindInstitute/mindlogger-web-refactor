@@ -62,25 +62,36 @@ export const useSessionAdoption = () => {
       dispatch(actions.addBanner({ key: 'SessionElsewhereBanner', order: BannerOrder.Top }));
     };
 
-    // Nobody answered, so no live tab is left to hand the session over — the last one was closed.
-    // The activity clock is the only witness left that there is anything to go back to.
-    const raiseBannerFromClock = () => {
+    // Both outlive a reload, so a session that has ended has to be retracted.
+    const clearBanner = () => {
+      hasRaised = false;
+
+      sessionStorage.removeItem(SESSION_ELSEWHERE_KEY);
+      dispatch(actions.removeBanner({ key: 'SessionElsewhereBanner' }));
+    };
+
+    // Nobody answered, so the activity clock is the only witness left either way.
+    const resolveFromClock = () => {
       const lastActivityAt = getLastActivityAt();
-      if (!lastActivityAt) return;
 
-      // Past its deadline the session is over anyway, and the boot check clears it. Reloading
-      // would only land on the same login page.
-      if (Date.now() - lastActivityAt >= resolveSessionConfig().idleTimeoutMs) return;
+      // Past its deadline there is nothing to reload into.
+      const isSessionLive =
+        !!lastActivityAt && Date.now() - lastActivityAt < resolveSessionConfig().idleTimeoutMs;
 
-      raiseBanner();
+      if (isSessionLive) return raiseBanner();
+
+      clearBanner();
     };
 
     const armFallback = () => {
       clearTimeout(fallbackTimer);
-      fallbackTimer = setTimeout(raiseBannerFromClock, SESSION_REQUEST_WINDOW_MS);
+      fallbackTimer = setTimeout(resolveFromClock, SESSION_REQUEST_WINDOW_MS);
     };
 
     const unsubscribe = subscribeSessionSync((message) => {
+      // The session it was told about has ended, so the message about it goes now.
+      if (message.type === 'LOGOUT') return clearBanner();
+
       if (message.type !== 'SESSION_STATE') return;
 
       // No session id check: a tab with no session of its own has nothing to compare against, and
