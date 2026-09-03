@@ -3,6 +3,7 @@ import { useSessionAdoption } from './useSessionAdoption';
 import { BannerOrder } from '~/entities/banner/model';
 import { ROUTES } from '~/shared/constants';
 import {
+  clearSessionEnded,
   clearSessionState,
   closeSessionSync,
   MS_IN_MIN,
@@ -56,6 +57,8 @@ describe('useSessionAdoption', () => {
     vi.clearAllMocks();
     localStorage.clear();
     sessionStorage.clear();
+    // The note is read once per boot, and each test is a fresh one.
+    clearSessionEnded();
     vi.useFakeTimers();
     vi.setSystemTime(START);
     // Pinned here rather than inherited from .env, which vitest also loads.

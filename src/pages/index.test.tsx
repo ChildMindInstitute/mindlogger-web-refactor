@@ -4,7 +4,7 @@ import { screen, waitFor } from '@testing-library/react';
 
 import ApplicationRouter from './index';
 
-import { SESSION_ENDED_KEY } from '~/shared/utils';
+import { clearSessionEnded, SESSION_ENDED_KEY } from '~/shared/utils';
 import { renderWithProviders } from '~/test/utils';
 
 vi.mock('./AuthorizedRoutes', () => ({
@@ -50,6 +50,8 @@ describe('ApplicationRouter', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     sessionStorage.clear();
+    // The note is read once per boot, and each test is a fresh one.
+    clearSessionEnded();
     useAuthorization.mockReturnValue({ isAuthorized: false, user: null, tokens: null });
   });
 

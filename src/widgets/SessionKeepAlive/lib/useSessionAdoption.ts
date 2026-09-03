@@ -5,13 +5,13 @@ import { useLocation } from 'react-router-dom';
 import { BannerOrder, actions } from '~/entities/banner/model';
 import { ROUTES } from '~/shared/constants';
 import {
+  consumeSessionEnded,
   getLastActivityAt,
   matchPaths,
   publishSessionMessage,
   resolveSessionConfig,
   secureTokensStorage,
   SESSION_ELSEWHERE_KEY,
-  SESSION_ENDED_KEY,
   SESSION_REQUEST_WINDOW_MS,
   subscribeSessionSync,
   useAppDispatch,
@@ -33,7 +33,7 @@ export const useSessionAdoption = () => {
   const isExcludedRoute = matchPaths(EXCLUDED_ROUTES, location.pathname).some(Boolean);
   // A tab sent here by leaveEndedSession can still read tokens, but they are not its own, so it
   // listens like any signed-out tab.
-  const hasSessionEnded = !!sessionStorage.getItem(SESSION_ENDED_KEY);
+  const hasSessionEnded = consumeSessionEnded();
   const hasOwnSession = !hasSessionEnded && !!secureTokensStorage.getTokens()?.refreshToken;
   const isListening = !hasOwnSession && !isExcludedRoute;
 
@@ -42,7 +42,6 @@ export const useSessionAdoption = () => {
       // Both outlive the reload that reaches the session: the marker sits in session storage, and
       // the banner sits in a store persisted to it. Left behind, they would follow the tab in.
       sessionStorage.removeItem(SESSION_ELSEWHERE_KEY);
-      sessionStorage.removeItem(SESSION_ENDED_KEY);
       dispatch(actions.removeBanner({ key: 'SessionElsewhereBanner' }));
 
       return;
