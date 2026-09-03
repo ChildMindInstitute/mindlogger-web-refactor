@@ -2,6 +2,7 @@ import { renderHook } from '@testing-library/react';
 
 import { useLogout } from './useLogout';
 
+import { persistor } from '~/app/store';
 import { useLogoutMutation } from '~/entities/user';
 import { userModel } from '~/entities/user';
 import {
@@ -18,6 +19,7 @@ const navigate = vi.fn();
 const logoutMutate = vi.fn();
 
 vi.mock('~/app/providers/react-query', () => ({ queryClient: { clear: vi.fn() } }));
+vi.mock('~/app/store', () => ({ persistor: { flush: vi.fn() } }));
 vi.mock('~/entities/applet', () => ({
   appletModel: { hooks: { useClearStore: () => ({ clearStore: vi.fn() }) } },
 }));
@@ -114,6 +116,22 @@ describe('useLogout', () => {
 
     expect(logoutMutate).not.toHaveBeenCalled();
     expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  // Persisting is left to a timer that a frozen tab never runs. Waking after someone else has
+  // signed in, it would write this cleared user over theirs and sign them out of every tab.
+  it('writes the cleared user out now rather than leaving it to a timer', () => {
+    const { result } = renderHook(() => useLogout());
+    result.current.logout();
+
+    expect(persistor.flush).toHaveBeenCalled();
+  });
+
+  it('writes it out on a logout that came from another tab too', () => {
+    const { result } = renderHook(() => useLogout());
+    result.current.logout({ isRemote: true });
+
+    expect(persistor.flush).toHaveBeenCalled();
   });
 
   it('still tears this tab down when the logout came from another tab', () => {

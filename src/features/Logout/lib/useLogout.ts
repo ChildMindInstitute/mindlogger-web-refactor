@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { queryClient } from '~/app/providers/react-query';
+import { persistor } from '~/app/store';
 import { appletModel } from '~/entities/applet';
 import { useLogoutMutation, userModel } from '~/entities/user';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
@@ -67,6 +68,9 @@ export const useLogout = (): UseLogoutReturn => {
       clearUser();
       clearStore();
       clearAutoCompletionState();
+      // Persisting is normally left to a timer, which a frozen tab does not run. The write would
+      // then land on the next sign-in's user rather than this one, signing them out everywhere.
+      void persistor.flush();
       queryClient.clear();
       secureTokensStorage.clearTokens();
       userModel.secureUserPrivateKeyStorage.clearUserPrivateKey();
