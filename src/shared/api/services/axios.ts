@@ -54,6 +54,11 @@ const requestNewTokens = async () => {
     refreshToken: tokens.refreshToken,
   });
 
+  // A logout landed while this was in flight, so storing would put the session back on its feet.
+  if (!secureTokensStorage.getTokens()?.refreshToken) {
+    throw new Error('Session ended before the refreshed token could be stored.');
+  }
+
   // Read before the tokens change, since siblings identify by the one they still hold.
   const sessionId = getSessionId();
 

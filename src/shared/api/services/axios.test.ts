@@ -94,6 +94,21 @@ describe('refreshTokens', () => {
     await expect(refreshTokens()).rejects.toThrow('No refresh token');
     expect(mockRefreshToken).not.toHaveBeenCalled();
   });
+
+  // Logging out mid-flight, here or in a sibling that broadcast it, clears the store. Storing the
+  // answer that arrives afterwards would put the session back on its feet.
+  it('discards tokens that arrive after the session has ended', async () => {
+    const pending = deferred();
+    mockRefreshToken.mockReturnValue(pending.promise as never);
+
+    const refreshing = refreshTokens();
+    // The logout lands while the request is still out.
+    mockGetTokens.mockReturnValue(null);
+    pending.resolve({ data: { result: newPair } });
+
+    await expect(refreshing).rejects.toThrow('Session ended before');
+    expect(mockSetTokens).not.toHaveBeenCalled();
+  });
 });
 
 // Drives the interceptor by answering from a scripted list rather than the network. Capped, because
@@ -262,6 +277,20 @@ describe('the rotation broadcast', () => {
 
     await refreshTokens();
 
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  it('stays silent about a rotation it discarded', async () => {
+    const onSiblingMessage = openSiblingTab();
+    mockGetTokens.mockReturnValue(heldPair(tokenWithClaims({ family: 'family-1' })));
+    const pending = deferred();
+    mockRefreshToken.mockReturnValue(pending.promise as never);
+
+    const refreshing = refreshTokens();
+    mockGetTokens.mockReturnValue(null);
+    pending.resolve({ data: { result: newPair } });
+
+    await expect(refreshing).rejects.toThrow('Session ended before');
     expect(onSiblingMessage).not.toHaveBeenCalled();
   });
 });
