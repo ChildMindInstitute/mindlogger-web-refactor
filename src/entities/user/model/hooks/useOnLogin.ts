@@ -3,6 +3,7 @@ import { secureUserPrivateKeyStorage } from '../secureUserPrivateKeyStorage';
 
 import ROUTES from '~/shared/constants/routes';
 import {
+  clearSessionEnded,
   Mixpanel,
   MixpanelEventType,
   MixpanelProps,
@@ -67,6 +68,10 @@ export const useOnLogin = (params: Params) => {
       });
       secureUserPrivateKeyStorage.setUserPrivateKey(userPrivateKey);
     }
+
+    // A tab sent to the login page by leaveEndedSession is still carrying its note. Signing in here
+    // answers it, and leaving it set would turn this session away as well.
+    clearSessionEnded();
 
     // Set user in Redux
     setUser({ id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName });

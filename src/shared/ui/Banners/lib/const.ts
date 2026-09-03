@@ -7,6 +7,7 @@ import { ROUTES } from '~/shared/constants';
 import { AnnouncementBanner } from '~/shared/ui/Banners/AnnouncementBanner';
 import { ErrorBanner } from '~/shared/ui/Banners/ErrorBanner';
 import { InfoBanner } from '~/shared/ui/Banners/InfoBanner';
+import { SessionElsewhereBanner } from '~/shared/ui/Banners/SessionElsewhereBanner';
 import { SuccessBanner } from '~/shared/ui/Banners/SuccessBanner';
 import { WarningBanner } from '~/shared/ui/Banners/WarningBanner';
 
@@ -16,6 +17,7 @@ export const BannerComponents: Record<BannerType, ComponentType<BannerProps>> = 
   ErrorBanner,
   InfoBanner,
   AnnouncementBanner,
+  SessionElsewhereBanner,
 };
 
 export const ANNOUNCEMENT_BANNER_EXCLUDED_ROUTES = [

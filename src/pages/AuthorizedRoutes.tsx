@@ -5,7 +5,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import AppletDetailsPage from './AppletDetailsPage';
 import AppletListPage from './AppletListPage';
 import AutoCompletion from './AutoCompletion';
-import LoginPage from './Login';
 import ProfilePage from './Profile';
 import PublicAutoCompletion from './PublicAutoCompletion';
 import SettingsPage from './Settings';
@@ -60,8 +59,13 @@ function AuthorizedRoutes({ refreshToken }: Props) {
             />
           </Route>
         </Route>
-        <Route path={ROUTES.login.path} element={<LoginPage />} />
-        <Route path="*" element={<Navigate to={ROUTES.appletList.path} />} />
+        {/* Signing in navigates before this ever renders, so reaching the login route while
+            authorized means arriving at it from outside: a bookmark, a typed URL, the back button. */}
+        <Route
+          path={ROUTES.login.path}
+          element={<Navigate to={ROUTES.appletList.path} replace />}
+        />
+        <Route path="*" element={<Navigate to={ROUTES.appletList.path} replace />} />
       </Routes>
     </LogoutTracker>
   );
