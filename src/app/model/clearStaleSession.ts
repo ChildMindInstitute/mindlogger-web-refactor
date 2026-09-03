@@ -1,7 +1,9 @@
 import { userModel } from '~/entities/user';
+import { authorizationService } from '~/shared/api';
 import {
   clearSessionState,
   getLastActivityAt,
+  getTokenExpiration,
   resolveSessionConfig,
   secureTokensStorage,
 } from '~/shared/utils';
@@ -32,13 +34,23 @@ const clearPersistedSlices = () => {
 // Tokens live in local storage, so a session outlives its tab and closing the browser no longer
 // ends one. Without this, a session left idle for days comes back looking signed in and only falls
 // over on its first request.
-export const clearStaleSession = () => {
+export const clearStaleSession = async () => {
   const lastActivityAt = getLastActivityAt();
   // Nothing has tracked this session, so there is no deadline to judge it against. Leave it to the
   // usual 401 path.
   if (!lastActivityAt) return;
 
   if (Date.now() - lastActivityAt < resolveSessionConfig().idleTimeoutMs) return;
+
+  const tokens = secureTokensStorage.getTokens();
+  // Today the refresh token expires as the session goes stale, so this is skipped. It matters if
+  // the idle timeout is ever shortened below the token's lifetime, leaving a live one behind.
+  const refreshTokenExpiresAt = getTokenExpiration(tokens?.refreshToken);
+
+  if (tokens?.accessToken && refreshTokenExpiresAt !== null && refreshTokenExpiresAt > Date.now()) {
+    // Revokes the whole family, so the refresh token goes with it.
+    await authorizationService.logout({ accessToken: tokens.accessToken }).catch(() => undefined);
+  }
 
   // Everything a logout clears, so a session that ends here ends the same way as one ended by hand.
   secureTokensStorage.clearTokens();
