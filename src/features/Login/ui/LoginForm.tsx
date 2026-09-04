@@ -1,3 +1,5 @@
+import { BaseSyntheticEvent, MouseEvent } from 'react';
+
 import { Link } from 'react-router-dom';
 
 import { useLoginTranslation } from '../lib/useLoginTranslation';
@@ -8,6 +10,7 @@ import { useBanners } from '~/entities/banner/model';
 import { ILoginPayload, useLoginMutation, userModel } from '~/entities/user';
 import { LoginResult } from '~/shared/api';
 import { ROUTES } from '~/shared/constants';
+import { variables } from '~/shared/constants/theme/variables';
 import { BaseButton, BasicFormProvider, Box, Input, PasswordIcon, Text } from '~/shared/ui';
 import {
   Mixpanel,
@@ -16,6 +19,7 @@ import {
   useCustomForm,
   usePasswordType,
 } from '~/shared/utils';
+import { useSessionElsewhereGuard } from '~/shared/utils/hooks/useSessionElsewhereGuard';
 
 interface LoginFormProps {
   locationState?: Record<string, unknown>;
@@ -29,6 +33,8 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
   const { addErrorBanner, removeErrorBanner } = useBanners();
 
   const [passwordType, onPasswordIconClick] = usePasswordType();
+
+  const { isBlocked, refuse } = useSessionElsewhereGuard();
 
   const form = useCustomForm({ defaultValues: { email: '', password: '' } }, LoginSchema);
   const { handleSubmit } = form;
@@ -97,8 +103,20 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
     login(data as ILoginPayload);
   };
 
+  const handleForgotPasswordClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    // No session is started here, but leaving would leave the banner explaining it behind.
+    if (refuse()) event.preventDefault();
+  };
+
+  const handleFormSubmit = (event?: BaseSyntheticEvent) => {
+    // Ahead of validation, so Enter on an empty field is turned away the same way a click is.
+    if (refuse()) return event?.preventDefault();
+
+    void handleSubmit(onLoginSubmit)(event);
+  };
+
   return (
-    <BasicFormProvider {...form} onSubmit={handleSubmit(onLoginSubmit)}>
+    <BasicFormProvider {...form} onSubmit={handleFormSubmit}>
       <Box display="flex" flex={1} flexDirection="column" gap="24px">
         <Input
           id="login-form-email-input"
@@ -123,14 +141,30 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
             <Link
               to={ROUTES.forgotPassword.path}
               relative="path"
-              style={{ textDecoration: 'underline' }}
+              aria-disabled={isBlocked}
+              onClick={handleForgotPasswordClick}
+              data-testid="login-form-forgot-password"
+              style={{
+                textDecoration: 'underline',
+                // An anchor has no disabled state, so it is spelled out here.
+                ...(isBlocked && {
+                  color: variables.palette.onSurfaceVariant,
+                  pointerEvents: 'none',
+                }),
+              }}
             >
               {t('forgotPassword')}
             </Link>
           </Text>
         </Box>
 
-        <BaseButton type="submit" variant="contained" isLoading={isLoading} text={t('button')} />
+        <BaseButton
+          type="submit"
+          variant="contained"
+          isLoading={isLoading}
+          disabled={isBlocked}
+          text={t('button')}
+        />
       </Box>
     </BasicFormProvider>
   );

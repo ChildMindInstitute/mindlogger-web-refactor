@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, ChangeEvent } from 'react';
+import { memo, useEffect, useRef, BaseSyntheticEvent, ChangeEvent } from 'react';
 
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -14,6 +14,7 @@ import { BaseButton, BasicFormProvider, Box, Text } from '~/shared/ui';
 import { useCustomForm, useCustomTranslation } from '~/shared/utils';
 import { Mixpanel } from '~/shared/utils/analytics';
 import { MixpanelEventType, MixpanelProps } from '~/shared/utils/analytics/mixpanel.types';
+import { useSessionElsewhereGuard } from '~/shared/utils/hooks/useSessionElsewhereGuard';
 
 interface RecoveryCodeFormProps {
   /** MFA session from Redux (passed via props) */
@@ -61,6 +62,7 @@ const RecoveryCodeFormComponent = ({
       session,
       onSuccess,
     });
+  const { isBlocked, refuse } = useSessionElsewhereGuard();
 
   const code = watch('code');
 
@@ -88,6 +90,13 @@ const RecoveryCodeFormComponent = ({
       clearError();
     }
   }, [code, displayError, clearError]);
+
+  const handleFormSubmit = (event?: BaseSyntheticEvent) => {
+    // Ahead of validation, so Enter on an empty field is turned away the same way a click is.
+    if (refuse()) return event?.preventDefault();
+
+    void handleSubmit(onSubmit)(event);
+  };
 
   const onSubmit = async (data: TMFARecoveryCodeForm) => {
     if (isSessionExpired) return;
@@ -162,7 +171,7 @@ const RecoveryCodeFormComponent = ({
         </Text>
       </Box>
 
-      <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
+      <BasicFormProvider {...form} onSubmit={handleFormSubmit}>
         <Box display="flex" flexDirection="column" alignItems="center" gap="24px" width="100%">
           <RecoveryInput
             control={control}
@@ -176,7 +185,7 @@ const RecoveryCodeFormComponent = ({
             type="submit"
             variant="contained"
             isLoading={isSubmitting}
-            disabled={isSessionExpired}
+            disabled={isSessionExpired || isBlocked}
             text={t('continue')}
             sx={{ width: '300px', height: '48px' }}
           />
