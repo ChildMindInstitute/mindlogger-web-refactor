@@ -54,9 +54,8 @@ export const clearStaleSession = async () => {
   ) {
     // logout2 revokes the whole family, so the access token goes with it. Asked for by refresh
     // token, since the access token is long expired by the time a session has gone stale.
-    await authorizationService
-      .logout2({ refreshToken: tokens.refreshToken })
-      .catch(() => undefined);
+    // Not awaited: the token travels on the request, so the clear below cannot empty it.
+    void authorizationService.logout2({ refreshToken: tokens.refreshToken }).catch(() => undefined);
   }
 
   // Everything a logout clears, so a session that ends here ends the same way as one ended by hand.
