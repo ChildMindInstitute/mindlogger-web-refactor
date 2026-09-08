@@ -1,4 +1,4 @@
-import axiosService from './axios';
+import axiosService, { RequestConfig } from './axios';
 import {
   LoginPayload,
   LoginSuccessResponse,
@@ -39,6 +39,7 @@ function authorizationService() {
     },
 
     // Takes the refresh token, which outlives the access one, and revokes the whole family with it.
+    // Given here rather than read from the store, so a clear that follows cannot empty the request.
     logout2(data: Logout2Payload) {
       const headers = {
         Authorization: `Bearer ${data.refreshToken}`,
@@ -48,7 +49,9 @@ function authorizationService() {
         deviceId: null,
       };
 
-      return axiosService.post('/auth/logout2', body, { headers });
+      // Marked as already retried, so a refusal falls straight through: a revoke that fails is the
+      // end of the session, not something to refresh and replay.
+      return axiosService.post('/auth/logout2', body, { headers, retry: true } as RequestConfig);
     },
 
     signup(data: SignupPayload) {

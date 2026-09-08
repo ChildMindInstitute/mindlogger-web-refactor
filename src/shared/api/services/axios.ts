@@ -10,7 +10,7 @@ import {
   secureTokensStorage,
 } from '../../utils';
 
-type RequestConfig = AxiosRequestConfig<Any> & {
+export type RequestConfig = AxiosRequestConfig<Any> & {
   retry?: boolean;
 };
 
@@ -26,7 +26,9 @@ axiosService.interceptors.request.use(
   (config) => {
     const tokens = secureTokensStorage.getTokens();
 
-    if (tokens?.accessToken && tokens?.tokenType) {
+    // A caller that set its own leaves it alone: revoking asks with the refresh token, and the
+    // access one would be turned away.
+    if (!config.headers.Authorization && tokens?.accessToken && tokens?.tokenType) {
       config.headers.Authorization = `${tokens.tokenType} ${tokens.accessToken}`;
     }
 
