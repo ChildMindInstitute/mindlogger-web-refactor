@@ -2,6 +2,7 @@ import axiosService from './axios';
 import {
   LoginPayload,
   LoginSuccessResponse,
+  Logout2Payload,
   LogoutPayload,
   MFAVerifyRecoveryPayload,
   MFAVerifySuccessResponse,
@@ -35,6 +36,19 @@ function authorizationService() {
       };
 
       return axiosService.post('/auth/logout', body, { headers });
+    },
+
+    // Takes the refresh token, which outlives the access one, and revokes the whole family with it.
+    logout2(data: Logout2Payload) {
+      const headers = {
+        Authorization: `Bearer ${data.refreshToken}`,
+      };
+
+      const body = {
+        deviceId: null,
+      };
+
+      return axiosService.post('/auth/logout2', body, { headers });
     },
 
     signup(data: SignupPayload) {

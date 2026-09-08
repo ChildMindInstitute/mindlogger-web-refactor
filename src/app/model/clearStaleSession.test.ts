@@ -13,12 +13,12 @@ vi.mock('~/entities/user', () => ({
   userModel: { secureUserPrivateKeyStorage: { clearUserPrivateKey: vi.fn() } },
 }));
 
-vi.mock('~/shared/api', () => ({ authorizationService: { logout: vi.fn() } }));
+vi.mock('~/shared/api', () => ({ authorizationService: { logout2: vi.fn() } }));
 
 const clearUserPrivateKey = vi.mocked(userModel.secureUserPrivateKeyStorage.clearUserPrivateKey);
 const clearTokens = vi.mocked(secureTokensStorage.clearTokens);
 const getTokens = vi.mocked(secureTokensStorage.getTokens);
-const logout = vi.mocked(authorizationService.logout);
+const logout2 = vi.mocked(authorizationService.logout2);
 
 const MIN = 60000;
 const START = 1893456000000;
@@ -40,7 +40,7 @@ describe('clearStaleSession', () => {
     vi.useFakeTimers();
     vi.setSystemTime(START);
     vi.stubEnv('VITE_IDLE_TIMEOUT_MIN', '10');
-    logout.mockResolvedValue({} as never);
+    logout2.mockResolvedValue({} as never);
   });
 
   afterEach(() => {
@@ -120,13 +120,13 @@ describe('clearStaleSession', () => {
 
     await clearStaleSession();
 
-    expect(logout).toHaveBeenCalledWith({ accessToken: 'access-1' });
+    expect(logout2).toHaveBeenCalledWith({ refreshToken: tokenExpiringAt(START + 5 * MIN) });
   });
 
   it('asks first, while the tokens the call needs are still there', async () => {
     setLastActivityAt(START - 11 * MIN);
     getTokens.mockReturnValue(heldTokens(START + 5 * MIN));
-    logout.mockImplementation(() => {
+    logout2.mockImplementation(() => {
       expect(clearTokens).not.toHaveBeenCalled();
 
       return Promise.resolve({} as never);
@@ -134,7 +134,7 @@ describe('clearStaleSession', () => {
 
     await clearStaleSession();
 
-    expect(logout).toHaveBeenCalled();
+    expect(logout2).toHaveBeenCalled();
   });
 
   it('spends no call on a token the server would turn away anyway', async () => {
@@ -143,7 +143,7 @@ describe('clearStaleSession', () => {
 
     await clearStaleSession();
 
-    expect(logout).not.toHaveBeenCalled();
+    expect(logout2).not.toHaveBeenCalled();
     expect(clearTokens).toHaveBeenCalledTimes(1);
   });
 
@@ -151,7 +151,7 @@ describe('clearStaleSession', () => {
   it('ends the session locally even when the server cannot be told', async () => {
     setLastActivityAt(START - 11 * MIN);
     getTokens.mockReturnValue(heldTokens(START + 5 * MIN));
-    logout.mockRejectedValue(new Error('network'));
+    logout2.mockRejectedValue(new Error('network'));
 
     await clearStaleSession();
 
