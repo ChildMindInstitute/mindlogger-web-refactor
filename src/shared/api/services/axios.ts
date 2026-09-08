@@ -50,17 +50,19 @@ const requestNewTokens = async () => {
     throw new Error('No refresh token to refresh with.');
   }
 
+  // Read before the request, so the check below can tell the browser changed hands while it was in
+  // flight. Also the id siblings identify by, since they hold the token this is about to replace.
+  const sessionId = getSessionId();
+
   const { data } = await authorizationService.refreshToken({
     refreshToken: tokens.refreshToken,
   });
 
-  // A logout landed while this was in flight, so storing would put the session back on its feet.
-  if (!secureTokensStorage.getTokens()?.refreshToken) {
+  // A logout, or a different user signing in, landed while this was in flight. Storing now would
+  // put the old session back on its feet, over whoever holds the browser.
+  if (!secureTokensStorage.getTokens()?.refreshToken || getSessionId() !== sessionId) {
     throw new Error('Session ended before the refreshed token could be stored.');
   }
-
-  // Read before the tokens change, since siblings identify by the one they still hold.
-  const sessionId = getSessionId();
 
   secureTokensStorage.setTokens(data.result);
 

@@ -109,6 +109,22 @@ describe('refreshTokens', () => {
     await expect(refreshing).rejects.toThrow('Session ended before');
     expect(mockSetTokens).not.toHaveBeenCalled();
   });
+
+  // A different user signing in leaves a refresh token in the store too, so its presence alone
+  // says nothing. Storing here would put the old session back over whoever holds the browser now.
+  it('discards tokens that arrive after the browser changed hands', async () => {
+    const pending = deferred();
+    mockGetTokens.mockReturnValue(heldPair(tokenWithClaims({ family: 'family-1' })));
+    mockRefreshToken.mockReturnValue(pending.promise as never);
+
+    const refreshing = refreshTokens();
+    // Someone else signed in while the request was still out.
+    mockGetTokens.mockReturnValue(heldPair(tokenWithClaims({ family: 'family-2' })));
+    pending.resolve({ data: { result: newPair } });
+
+    await expect(refreshing).rejects.toThrow('Session ended before');
+    expect(mockSetTokens).not.toHaveBeenCalled();
+  });
 });
 
 // Drives the interceptor by answering from a scripted list rather than the network. Capped, because
