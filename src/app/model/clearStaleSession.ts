@@ -34,7 +34,7 @@ const clearPersistedSlices = () => {
 // Tokens live in local storage, so a session outlives its tab and closing the browser no longer
 // ends one. Without this, a session left idle for days comes back looking signed in and only falls
 // over on its first request.
-export const clearStaleSession = async () => {
+export const clearStaleSession = () => {
   const lastActivityAt = getLastActivityAt();
   // Nothing has tracked this session, so there is no deadline to judge it against. Leave it to the
   // usual 401 path.
