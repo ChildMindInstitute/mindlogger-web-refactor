@@ -39,10 +39,12 @@ export const useSessionAdoption = () => {
 
   useEffect(() => {
     if (!isListening) {
-      // Both outlive the reload that reaches the session: the marker sits in session storage, and
-      // the banner sits in a store persisted to it. Left behind, they would follow the tab in.
+      // All of these outlive the reload that reaches the session: the marker sits in session
+      // storage, and the banners sit in a store persisted to it. Left behind, they would follow the
+      // tab in and explain a session that is running again.
       sessionStorage.removeItem(SESSION_ELSEWHERE_KEY);
       dispatch(actions.removeBanner({ key: 'SessionElsewhereBanner' }));
+      dispatch(actions.removeBanner({ key: 'SoftLockWarningBanner' }));
 
       return;
     }

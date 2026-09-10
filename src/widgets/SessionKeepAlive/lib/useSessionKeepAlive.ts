@@ -8,6 +8,7 @@ import {
   getLastActivityAt,
   getSessionId,
   getTokenExpiration,
+  LogoutReason,
   ownsActiveSession,
   publishSessionMessage,
   leaveEndedSession,
@@ -35,7 +36,7 @@ export const useSessionKeepAlive = () => {
 
   // Reached by the warning's buttons, which answer the countdown without owning the timers.
   const extendRef = useRef<(() => void) | null>(null);
-  const endRef = useRef<((options?: Parameters<typeof logout>[0]) => void) | null>(null);
+  const endRef = useRef<((reason: LogoutReason, isRemote?: boolean) => void) | null>(null);
 
   // Milliseconds left to answer in, or null while the deadline is still far off.
   const [msRemaining, setMsRemaining] = useState<number | null>(null);
@@ -55,11 +56,13 @@ export const useSessionKeepAlive = () => {
     let catchUpTimer: ReturnType<typeof setTimeout>;
     let hasEnded = false;
 
-    const endSession = (options?: Parameters<typeof logout>[0]) => {
+    // The reason is spelled out at every call: it decides whether the page this tab is on is
+    // offered back on the way in, and a default would quietly answer that for callers.
+    const endSession = (reason: LogoutReason, isRemote = false) => {
       if (hasEnded) return;
       hasEnded = true;
       setMsRemaining(null);
-      logoutRef.current(options);
+      logoutRef.current({ reason, isRemote });
     };
 
     // Armed once per token rather than on every pass: the cap below measures what is left right
@@ -85,7 +88,7 @@ export const useSessionKeepAlive = () => {
 
       const idleDeadline = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs;
       const msUntilLogout = idleDeadline - Date.now();
-      if (msUntilLogout <= 0) return endSession({ reason: 'idle' });
+      if (msUntilLogout <= 0) return endSession('idle');
 
       // The last stretch belongs to the countdown, not to another pass through here, which would
       // tear down and re-arm every timer once a second for nothing.
@@ -108,7 +111,7 @@ export const useSessionKeepAlive = () => {
     // closes this tab's copy of it too.
     const tick = () => {
       const msLeft = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs - Date.now();
-      if (msLeft <= 0) return endSession({ reason: 'idle' });
+      if (msLeft <= 0) return endSession('idle');
 
       // The deadline moved out from under us, so hand back to the scheduler and stop counting.
       if (msLeft > warningLeadMs) return schedule();
@@ -132,7 +135,7 @@ export const useSessionKeepAlive = () => {
         refreshArmedFor = null;
         schedule();
       } catch {
-        endSession({ reason: 'refresh-failed' });
+        endSession('refresh-failed');
       }
     };
 
@@ -143,7 +146,7 @@ export const useSessionKeepAlive = () => {
 
       // Tracking keeps this clock while the tab is signed in, and only a teardown removes it. Gone
       // means the session ended somewhere a frozen tab could not hear, and no message is coming.
-      if (!getLastActivityAt()) return endSession({ isRemote: true });
+      if (!getLastActivityAt()) return endSession('idle', true);
 
       // A session that began while this tab slept owns the browser now, so this one is over. It
       // cannot tear down or adopt its way across: everything it holds, storage snapshot included,
@@ -205,7 +208,9 @@ export const useSessionKeepAlive = () => {
       if (message.type === 'LOGOUT') {
         if (message.payload.sessionId !== getSessionId()) return;
 
-        endSession({ isRemote: true });
+        // Carried by the message rather than assumed: a sibling that timed out has to end this tab
+        // the same way, or only the tab whose timer fired is offered its page back.
+        endSession(message.payload.reason, true);
 
         return;
       }
@@ -256,7 +261,7 @@ export const useSessionKeepAlive = () => {
   }, []);
 
   const stayLoggedIn = useCallback(() => extendRef.current?.(), []);
-  const logOutNow = useCallback(() => endRef.current?.({ reason: 'manual' }), []);
+  const logOutNow = useCallback(() => endRef.current?.('manual'), []);
 
   return { msRemaining, stayLoggedIn, logOutNow };
 };

@@ -212,6 +212,26 @@ describe('useSessionAdoption', () => {
     expect(bannersIn(store)).toHaveLength(0);
   });
 
+  // The reported bug: it is persisted to session storage like the one above, so reloading into the
+  // session brought it back, explaining a logout beside a session that is running again.
+  it('clears the soft lock warning once it holds a session too', () => {
+    holdSession();
+
+    const { store } = renderHookWithProviders(() => useSessionAdoption(), {
+      preloadedState: {
+        banners: {
+          banners: [
+            { key: 'SoftLockWarningBanner', order: BannerOrder.Top },
+            { key: 'AnnouncementBanner', bannerProps: { children: 'rebrand' }, order: 1 },
+          ],
+        },
+      },
+    });
+
+    // Only what described the session that ended goes; the rest of the page is left alone.
+    expect(bannersIn(store).map(({ key }) => key)).toEqual(['AnnouncementBanner']);
+  });
+
   // Sent here by leaveEndedSession: the tokens it can still read belong to the session that
   // replaced it, so it behaves as a signed-out tab despite holding them.
   it('speaks up for a tab whose session ended, even though it still holds tokens', async () => {
