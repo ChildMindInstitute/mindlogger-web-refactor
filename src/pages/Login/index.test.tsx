@@ -5,6 +5,7 @@ import { fireEvent, screen } from '@testing-library/react';
 import LoginPage from './index';
 
 import { SESSION_ELSEWHERE_KEY } from '~/shared/utils/session/session.const';
+import { getSessionReturn, setSessionReturn } from '~/shared/utils/session/sessionReturn';
 import { renderWithProviders } from '~/test/utils';
 
 vi.mock('~/features/Login', async () => {
@@ -57,5 +58,35 @@ describe('LoginPage', () => {
 
     // Navigating away is what working looks like here: the page goes with it.
     expect(screen.queryByTestId('login-page-create-account')).not.toBeInTheDocument();
+  });
+
+  describe('after a session that ended on its own', () => {
+    beforeEach(() =>
+      setSessionReturn({ path: '/protected/profile', userId: 'user-1', email: 'a@example.com' }),
+    );
+
+    // Otherwise the user is looking at a login page with no idea why.
+    it('explains why the login page is showing', () => {
+      const { store } = renderLoginPage();
+
+      expect(store.getState().banners.banners.map(({ key }) => key)).toEqual([
+        'SoftLockWarningBanner',
+      ]);
+    });
+
+    it('withdraws the offer when the user heads off to make a new account', async () => {
+      const { store } = renderLoginPage();
+
+      fireEvent.click(await createAccountLink());
+
+      expect(store.getState().banners.banners).toEqual([]);
+      expect(getSessionReturn()).toBeNull();
+    });
+  });
+
+  it('says nothing on a login page nobody was thrown out onto', () => {
+    const { store } = renderLoginPage();
+
+    expect(store.getState().banners.banners).toEqual([]);
   });
 });
