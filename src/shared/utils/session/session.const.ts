@@ -44,3 +44,7 @@ export const SESSION_ELSEWHERE_KEY = 'sessionElsewhere';
 // Per tab, and survives the reload that sets it: the tokens this tab can still read belong to a
 // session that has ended, so this boot has to ignore them.
 export const SESSION_ENDED_KEY = 'sessionEnded';
+
+// Per tab: where a session that ended on its own left off, and who it belonged to. A logout the
+// user asked for records nothing, so signing back in starts at the applet list.
+export const SESSION_RETURN_KEY = 'sessionReturn';

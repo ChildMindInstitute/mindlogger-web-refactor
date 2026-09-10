@@ -7,6 +7,7 @@ import { useLogoutMutation } from '~/entities/user';
 import { userModel } from '~/entities/user';
 import {
   closeSessionSync,
+  getSessionReturn,
   SESSION_CHANNEL_NAME,
   setActiveSessionId,
   setLastActivityAt,
@@ -31,11 +32,18 @@ vi.mock('~/features/AutoCompletion', () => ({
 vi.mock('~/entities/user', () => ({
   useLogoutMutation: vi.fn(),
   userModel: {
-    hooks: { useUserState: () => ({ clearUser: vi.fn() }) },
+    hooks: {
+      useUserState: () => ({
+        user: { id: 'user-1', email: 'a@example.com' },
+        clearUser: vi.fn(),
+      }),
+    },
     secureUserPrivateKeyStorage: { clearUserPrivateKey: vi.fn() },
   },
 }));
-vi.mock('react-router-dom', () => ({ useLocation: () => ({ pathname: '/', search: '' }) }));
+vi.mock('react-router-dom', () => ({
+  useLocation: () => ({ pathname: '/protected/profile', search: '?tab=1' }),
+}));
 
 vi.mock('~/shared/utils/storage/secureTokensStorage', () => ({
   secureTokensStorage: { getTokens: vi.fn(() => null), setTokens: vi.fn(), clearTokens: vi.fn() },
@@ -65,6 +73,7 @@ describe('useLogout', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
+    sessionStorage.clear();
     vi.stubGlobal('BroadcastChannel', InMemoryBroadcastChannel);
     vi.mocked(useLogoutMutation).mockReturnValue({
       mutate: logoutMutate,
@@ -85,6 +94,33 @@ describe('useLogout', () => {
     closeSessionSync();
     resetInMemoryBroadcastChannels();
     vi.unstubAllGlobals();
+  });
+
+  // Signing back in resumes where the session stopped, which is only offered when it stopped on
+  // its own. Asking to leave means leaving.
+  it('remembers the page a session that ended on its own was left on', () => {
+    const { result } = renderHook(() => useLogout());
+    result.current.logout({ reason: 'idle' });
+
+    expect(getSessionReturn()).toEqual({
+      path: '/protected/profile?tab=1',
+      userId: 'user-1',
+      email: 'a@example.com',
+    });
+  });
+
+  it('remembers nothing when the user asked to log out', () => {
+    const { result } = renderHook(() => useLogout());
+    result.current.logout({ reason: 'manual' });
+
+    expect(getSessionReturn()).toBeNull();
+  });
+
+  it('remembers the page when another tab ended the session for it', () => {
+    const { result } = renderHook(() => useLogout());
+    result.current.logout({ isRemote: true, reason: 'idle' });
+
+    expect(getSessionReturn()?.path).toBe('/protected/profile?tab=1');
   });
 
   it('clears the activity clock, so the next sign-in is not judged by the last session', () => {

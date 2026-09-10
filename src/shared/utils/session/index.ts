@@ -4,6 +4,7 @@ export * from './session.types';
 export * from './sessionConfig';
 export * from './leaveEndedSession';
 export * from './sessionCountdown';
+export * from './sessionReturn';
 export * from './sessionStore';
 export * from './sessionSync';
 export * from './sessionSync.const';

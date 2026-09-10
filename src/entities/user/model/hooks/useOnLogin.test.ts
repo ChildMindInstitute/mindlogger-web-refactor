@@ -2,7 +2,12 @@ import { act, renderHook } from '@testing-library/react';
 
 import { useOnLogin } from './useOnLogin';
 
-import { clearSessionEnded, consumeSessionEnded, SESSION_ENDED_KEY } from '~/shared/utils';
+import {
+  clearSessionEnded,
+  consumeSessionEnded,
+  SESSION_ENDED_KEY,
+  setSessionReturn,
+} from '~/shared/utils';
 
 const navigate = vi.fn();
 const setUser = vi.fn();
@@ -27,8 +32,8 @@ vi.mock('~/shared/utils', async () => {
   };
 });
 
-const signIn = () => {
-  const { result } = renderHook(() => useOnLogin({}));
+const signIn = (params: Parameters<typeof useOnLogin>[0] = {}) => {
+  const { result } = renderHook(() => useOnLogin(params));
 
   act(() => {
     result.current.onLoginSuccess({
@@ -67,5 +72,38 @@ describe('useOnLogin', () => {
       lastName: 'B',
     });
     expect(navigate).toHaveBeenCalled();
+  });
+
+  it('starts at the applet list when nothing was left behind', () => {
+    signIn();
+
+    expect(navigate).toHaveBeenCalledWith('/protected/applets');
+  });
+
+  // What a session ending on its own is meant to feel like: the page is still there afterwards.
+  it('resumes the page the last session was ended on', () => {
+    setSessionReturn({ path: '/protected/profile', userId: 'user-2', email: 'b@example.com' });
+
+    signIn();
+
+    expect(navigate).toHaveBeenCalledWith('/protected/profile', { replace: true });
+  });
+
+  it('leaves that page alone for anybody but the user it belonged to', () => {
+    setSessionReturn({ path: '/protected/profile', userId: 'user-1', email: 'a@example.com' });
+
+    signIn();
+
+    expect(navigate).toHaveBeenCalledWith('/protected/applets');
+  });
+
+  // The link is the more recent ask: it is why the user opened the app at all, while the recorded
+  // page is only where they happened to be standing when the session ran out.
+  it('follows the link the user came in on ahead of the page they left', () => {
+    setSessionReturn({ path: '/protected/profile', userId: 'user-2', email: 'b@example.com' });
+
+    signIn({ backRedirectPath: '/invitation/abc' });
+
+    expect(navigate).toHaveBeenCalledWith('/invitation/abc', { replace: true });
   });
 });

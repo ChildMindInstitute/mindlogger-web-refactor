@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLogout } from '~/features/Logout';
 import { refreshTokens } from '~/shared/api';
 import {
+  clearSessionReturn,
   COUNTDOWN_TICK_MS,
   getLastActivityAt,
   getSessionId,
@@ -220,6 +221,10 @@ export const useSessionKeepAlive = () => {
     // id of a session that started while it slept. That is what lets it recognise it is stale.
     const ownSessionId = getSessionId();
     if (ownSessionId) setActiveSessionId(ownSessionId);
+
+    // The page a previous session ended on has been offered by now, and a session is running again.
+    // Left behind, it would be offered a second time after a logout the user asked for.
+    clearSessionReturn();
 
     const unsubscribe = subscribeSessionSync(handleSyncMessage);
 
