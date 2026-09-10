@@ -26,7 +26,7 @@ export const getSessionReturn = (): SessionReturn | null => {
 };
 
 // The user is named as well as the page: someone else signing in at this tab starts fresh.
-export const getSessionReturnPath = (userId: string): string | null => {
+export const getSessionReturnPath = (userId: string | null): string | null => {
   const stored = getSessionReturn();
 
   return stored && userId && stored.userId === userId ? stored.path : null;
