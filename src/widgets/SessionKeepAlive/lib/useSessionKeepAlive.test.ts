@@ -10,11 +10,13 @@ import {
   closeSessionSync,
   COUNTDOWN_TICK_MS,
   getLastActivityAt,
+  getSessionReturn,
   SESSION_CHANNEL_NAME,
   SESSION_REQUEST_WINDOW_MS,
   SessionMessage,
   setActiveSessionId,
   setLastActivityAt,
+  setSessionReturn,
 } from '~/shared/utils';
 import { secureTokensStorage } from '~/shared/utils/storage/secureTokensStorage';
 import { InMemoryBroadcastChannel, resetInMemoryBroadcastChannels } from '~/test/utils';
@@ -141,6 +143,16 @@ describe('useSessionKeepAlive', () => {
     renderHook(() => useSessionKeepAlive());
 
     expect(getActiveSessionId()).toBe(SESSION_ID);
+  });
+
+  // The page a previous session ended on has been offered by now. Left behind, it would be offered
+  // again after the next logout, which the user asked for and expects nothing back from.
+  it('forgets the page an earlier session ended on', () => {
+    setSessionReturn({ path: '/protected/profile', userId: 'user-1', email: 'a@example.com' });
+
+    renderHook(() => useSessionKeepAlive());
+
+    expect(getSessionReturn()).toBeNull();
   });
 
   // Claiming has to happen once, on mount. Doing it on every pass would let a tab woken from a

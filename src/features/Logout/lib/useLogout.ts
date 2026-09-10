@@ -18,6 +18,7 @@ import {
   publishSessionMessage,
   leaveEndedSession,
   secureTokensStorage,
+  setSessionReturn,
   useCustomNavigation,
 } from '~/shared/utils';
 import { FeatureFlags } from '~/shared/utils/featureFlags';
@@ -37,7 +38,7 @@ export const useLogout = (): UseLogoutReturn => {
   const navigator = useCustomNavigation();
   const location = useLocation();
 
-  const { clearUser } = userModel.hooks.useUserState();
+  const { user, clearUser } = userModel.hooks.useUserState();
   const { clearStore } = appletModel.hooks.useClearStore();
   const { clearAutoCompletionState } = AutoCompletionModel.useAutoCompletionStateManager();
 
@@ -50,6 +51,16 @@ export const useLogout = (): UseLogoutReturn => {
       // now — tokens, encryption key, answers in progress — signing them out of every tab. It
       // leaves for the login page instead.
       if (!ownsActiveSession()) return leaveEndedSession();
+
+      // Only a session that ended on its own comes back here. Asking to leave means leaving, and
+      // the next sign-in starts at the applet list.
+      if (reason !== 'manual' && user.id) {
+        setSessionReturn({
+          path: `${location.pathname}${location.search}`,
+          userId: user.id,
+          email: user.email,
+        });
+      }
 
       const tokens = secureTokensStorage.getTokens();
 
@@ -84,10 +95,11 @@ export const useLogout = (): UseLogoutReturn => {
       Mixpanel.logout();
       FeatureFlags.logout();
 
-      const backRedirectPath = `${location.pathname}${location.search}`;
-      return navigator.navigate(ROUTES.login.path, { state: { backRedirectPath } });
+      return navigator.navigate(ROUTES.login.path);
     },
     [
+      user.id,
+      user.email,
       clearUser,
       clearStore,
       clearAutoCompletionState,
