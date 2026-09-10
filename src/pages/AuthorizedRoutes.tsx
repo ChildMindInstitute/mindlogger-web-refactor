@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import AppletDetailsPage from './AppletDetailsPage';
 import AppletListPage from './AppletListPage';
@@ -17,6 +17,7 @@ import Footer from '~/widgets/Footer';
 import Header from '~/widgets/Header';
 import LogoutTracker from '~/widgets/LogoutTracker';
 import ProtectedRoute from '~/widgets/ProtectedRoute';
+import RedirectIntoApp from '~/widgets/RedirectIntoApp';
 
 const PublicSurvey = lazy(() => import('./PublicSurvey'));
 const PublicAppletDetailsPage = lazy(() => import('./PublicJoin'));
@@ -59,13 +60,8 @@ function AuthorizedRoutes({ refreshToken }: Props) {
             />
           </Route>
         </Route>
-        {/* Signing in navigates before this ever renders, so reaching the login route while
-            authorized means arriving at it from outside: a bookmark, a typed URL, the back button. */}
-        <Route
-          path={ROUTES.login.path}
-          element={<Navigate to={ROUTES.appletList.path} replace />}
-        />
-        <Route path="*" element={<Navigate to={ROUTES.appletList.path} replace />} />
+        <Route path={ROUTES.login.path} element={<RedirectIntoApp />} />
+        <Route path="*" element={<RedirectIntoApp />} />
       </Routes>
     </LogoutTracker>
   );
