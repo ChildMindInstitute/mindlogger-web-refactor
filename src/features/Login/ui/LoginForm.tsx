@@ -23,11 +23,20 @@ import { useSessionElsewhereGuard } from '~/shared/utils/hooks/useSessionElsewhe
 
 interface LoginFormProps {
   locationState?: Record<string, unknown>;
+  /** Email of the session that ended on its own, so the user only has to give a password */
+  softLockEmail?: string;
+  /** Withdraws that offer when the user heads somewhere other than back into their session */
+  onDismissSoftLock?: () => void;
   /** Callback when MFA is required - receives MFA session data and password for encryption */
   onMFARequired: (mfaData: MFARequiredResponse, password: string) => void;
 }
 
-export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
+export const LoginForm = ({
+  locationState,
+  softLockEmail = '',
+  onDismissSoftLock,
+  onMFARequired,
+}: LoginFormProps) => {
   const { t } = useLoginTranslation();
 
   const { addErrorBanner, removeErrorBanner } = useBanners();
@@ -36,7 +45,10 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
 
   const { isBlocked, refuse } = useSessionElsewhereGuard();
 
-  const form = useCustomForm({ defaultValues: { email: '', password: '' } }, LoginSchema);
+  const form = useCustomForm(
+    { defaultValues: { email: softLockEmail, password: '' } },
+    LoginSchema,
+  );
   const { handleSubmit } = form;
 
   const { onLoginSuccess } = userModel.hooks.useOnLogin({
@@ -105,7 +117,10 @@ export const LoginForm = ({ locationState, onMFARequired }: LoginFormProps) => {
 
   const handleForgotPasswordClick = (event: MouseEvent<HTMLAnchorElement>) => {
     // No session is started here, but leaving would leave the banner explaining it behind.
-    if (refuse()) event.preventDefault();
+    if (refuse()) return event.preventDefault();
+
+    // Resetting a password is not resuming the session that ended.
+    onDismissSoftLock?.();
   };
 
   const handleFormSubmit = (event?: BaseSyntheticEvent) => {

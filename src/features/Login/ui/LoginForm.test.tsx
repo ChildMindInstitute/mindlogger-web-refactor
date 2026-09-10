@@ -1,3 +1,5 @@
+import { ComponentProps } from 'react';
+
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { LoginForm } from './LoginForm';
@@ -31,8 +33,8 @@ const fillIn = () => {
   fireEvent.change(screen.getByPlaceholderText('password'), { target: { value: 'Password1!' } });
 };
 
-const renderLoginForm = () =>
-  renderWithProviders(<LoginForm onMFARequired={vi.fn()} />, { disableRouter: false });
+const renderLoginForm = (props: Partial<ComponentProps<typeof LoginForm>> = {}) =>
+  renderWithProviders(<LoginForm onMFARequired={vi.fn()} {...props} />, { disableRouter: false });
 
 describe('LoginForm', () => {
   beforeEach(() => {
@@ -99,5 +101,32 @@ describe('LoginForm', () => {
 
     await waitFor(() => expect(login).toHaveBeenCalledTimes(1));
     expect(signInButton()).toBeEnabled();
+  });
+
+  // The session that ended was this user's, so they are asked for a password and nothing more.
+  it('fills in the email of the session that ended on its own', () => {
+    renderLoginForm({ softLockEmail: 'a@example.com' });
+
+    expect(screen.getByPlaceholderText('email')).toHaveValue('a@example.com');
+  });
+
+  it('withdraws that offer when the user heads for a password reset', () => {
+    const onDismissSoftLock = vi.fn();
+    renderLoginForm({ softLockEmail: 'a@example.com', onDismissSoftLock });
+
+    fireEvent.click(forgotPasswordLink());
+
+    expect(onDismissSoftLock).toHaveBeenCalled();
+  });
+
+  // The press never gets as far as leaving, so there is nothing to withdraw.
+  it('leaves the offer alone when that press was refused', () => {
+    sessionStorage.setItem(SESSION_ELSEWHERE_KEY, 'true');
+    const onDismissSoftLock = vi.fn();
+    renderLoginForm({ softLockEmail: 'a@example.com', onDismissSoftLock });
+
+    fireEvent.click(forgotPasswordLink());
+
+    expect(onDismissSoftLock).not.toHaveBeenCalled();
   });
 });
