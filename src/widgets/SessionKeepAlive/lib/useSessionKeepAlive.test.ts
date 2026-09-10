@@ -439,7 +439,7 @@ describe('useSessionKeepAlive', () => {
     clearSessionState();
     wake();
 
-    expect(mockLogout).toHaveBeenCalledWith({ isRemote: true });
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: true });
   });
 
   // The same freeze, but someone signed in after the logout. The clock is back, so the check above
@@ -491,7 +491,21 @@ describe('useSessionKeepAlive', () => {
       payload: { sessionId: SESSION_ID, reason: 'manual' },
     });
 
-    expect(mockLogout).toHaveBeenCalledWith({ isRemote: true });
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'manual', isRemote: true });
+  });
+
+  // The reported bug: every tab but the one whose timer fired ended as a manual logout, so only
+  // that tab was offered its page back on the way in.
+  it('ends the same way the sibling did, not as a logout the user asked for', () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    openSiblingTab().postMessage({
+      type: 'LOGOUT',
+      payload: { sessionId: SESSION_ID, reason: 'idle' },
+    });
+
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: true });
   });
 
   it('stays signed in when another account session ends', () => {
@@ -593,7 +607,7 @@ describe('useSessionKeepAlive', () => {
 
       await vi.advanceTimersByTimeAsync(IDLE_MS);
 
-      expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle' });
+      expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: false });
       expect(result.current.msRemaining).toBeNull();
     });
 
@@ -639,7 +653,7 @@ describe('useSessionKeepAlive', () => {
       await idleUntilTheWarning();
       act(() => result.current.logOutNow());
 
-      expect(mockLogout).toHaveBeenCalledWith({ reason: 'manual' });
+      expect(mockLogout).toHaveBeenCalledWith({ reason: 'manual', isRemote: false });
     });
   });
 });

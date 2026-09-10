@@ -119,7 +119,7 @@ describe('SessionKeepAlive', () => {
       fireEvent.click(screen.getByRole('button', { name: 'logOut' }));
     });
 
-    expect(mockLogout).toHaveBeenCalledWith({ reason: 'manual' });
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'manual', isRemote: false });
   });
 
   it('an unanswered countdown runs out into an idle logout', async () => {
@@ -128,6 +128,6 @@ describe('SessionKeepAlive', () => {
     await vi.advanceTimersByTimeAsync(IDLE_MS);
 
     expect(warning()).not.toBeInTheDocument();
-    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle' });
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: false });
   });
 });

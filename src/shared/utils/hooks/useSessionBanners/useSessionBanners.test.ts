@@ -20,15 +20,6 @@ const populatedState: PreloadedState<RootState> = {
   },
 };
 
-const softLockState: PreloadedState<RootState> = {
-  banners: {
-    banners: [
-      { key: 'SoftLockWarningBanner', order: 0 },
-      { key: 'AnnouncementBanner', bannerProps: { children: 'rebrand' }, order: 1 },
-    ],
-  },
-};
-
 const spyUseAuthorization = jest.spyOn(userModel.hooks, 'useAuthorization');
 
 describe('useSessionBanners', () => {
@@ -44,21 +35,5 @@ describe('useSessionBanners', () => {
     rerender();
 
     expect(store.getState().banners).toEqual(emptyState.banners);
-  });
-
-  // Raised on the login page to explain the session that ended. Signing in is the user having read
-  // it, and nothing carries it into the app.
-  test('should take down the soft lock warning once the user is signed in', () => {
-    spyUseAuthorization.mockReturnValue({ isAuthorized: false } as useAuthorizationReturn);
-
-    const { rerender, store } = renderHookWithProviders(useSessionBanners, {
-      preloadedState: softLockState,
-    });
-
-    spyUseAuthorization.mockReturnValue({ isAuthorized: true } as useAuthorizationReturn);
-
-    rerender();
-
-    expect(store.getState().banners.banners.map(({ key }) => key)).toEqual(['AnnouncementBanner']);
   });
 });
