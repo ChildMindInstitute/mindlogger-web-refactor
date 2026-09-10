@@ -8,9 +8,9 @@ type LogoutTrackerProps = PropsWithChildren<unknown>;
 function LogoutTracker({ children }: LogoutTrackerProps) {
   const { logout } = useLogout();
 
-  // Wrapped rather than passed straight through: the emitter calls its listeners with an event
-  // payload, which would arrive as logout's options.
-  const handleLogout = useCallback(() => logout(), [logout]);
+  // Only the token refresh failing gets here, which is a session ending on its own rather than the
+  // user asking to leave. Saying so is what offers them back the page they were on.
+  const handleLogout = useCallback(() => logout({ reason: 'refresh-failed' }), [logout]);
 
   useEffect(() => {
     eventEmitter.on('onLogout', handleLogout);
