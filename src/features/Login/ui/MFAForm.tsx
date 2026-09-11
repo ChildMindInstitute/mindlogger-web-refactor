@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useCallback, ChangeEvent } from 'react';
+import { memo, useEffect, useRef, useCallback, BaseSyntheticEvent, ChangeEvent } from 'react';
 
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -14,6 +14,7 @@ import { BaseButton, BasicFormProvider, Box, Text } from '~/shared/ui';
 import { useCustomForm, useCustomTranslation } from '~/shared/utils';
 import { Mixpanel } from '~/shared/utils/analytics';
 import { MixpanelEventType, MixpanelProps } from '~/shared/utils/analytics/mixpanel.types';
+import { useSessionElsewhereGuard } from '~/shared/utils/hooks/useSessionElsewhereGuard';
 
 interface MFAFormProps {
   /** MFA session from Redux (passed via props) */
@@ -61,6 +62,7 @@ const MFAFormComponent = ({
       session,
       onSuccess,
     });
+  const { isBlocked, refuse } = useSessionElsewhereGuard();
 
   const totpCode = watch('totpCode');
 
@@ -79,6 +81,8 @@ const MFAFormComponent = ({
   const onSubmit = useCallback(
     async (data: TMFATOTPForm) => {
       if (isSessionExpired) return;
+      // Six digits auto-submit by calling this directly, so the form guard below never sees it.
+      if (refuse()) return;
       const wasAutoSubmit = isAutoSubmittingRef.current;
       isUserTypingRef.current = false;
 
@@ -93,8 +97,15 @@ const MFAFormComponent = ({
       }
       isAutoSubmittingRef.current = false;
     },
-    [isSessionExpired, verifyCode, setValue],
+    [isSessionExpired, refuse, verifyCode, setValue],
   );
+
+  const handleFormSubmit = (event?: BaseSyntheticEvent) => {
+    // Ahead of validation, so Enter on an empty field is turned away the same way a click is.
+    if (refuse()) return event?.preventDefault();
+
+    void handleSubmit(onSubmit)(event);
+  };
 
   // Auto-submit when 6 digits entered
   useEffect(() => {
@@ -178,7 +189,7 @@ const MFAFormComponent = ({
         </Text>
       </Box>
 
-      <BasicFormProvider {...form} onSubmit={handleSubmit(onSubmit)}>
+      <BasicFormProvider {...form} onSubmit={handleFormSubmit}>
         <Box display="flex" flexDirection="column" alignItems="center" gap="24px" width="100%">
           <TOTPInput
             control={control}
@@ -192,7 +203,7 @@ const MFAFormComponent = ({
             type="submit"
             variant="contained"
             isLoading={isSubmitting}
-            disabled={isSessionExpired}
+            disabled={isSessionExpired || isBlocked}
             text={t('continue')}
             sx={{ width: '300px', height: '48px' }}
           />

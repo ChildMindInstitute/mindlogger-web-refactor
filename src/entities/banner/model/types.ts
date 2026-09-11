@@ -6,6 +6,8 @@ export const Banners = [
   'WarningBanner',
   'InfoBanner',
   'AnnouncementBanner',
+  'SessionElsewhereBanner',
+  'SoftLockWarningBanner',
 ] as const;
 export type BannerType = (typeof Banners)[number];
 
