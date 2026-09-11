@@ -11,7 +11,9 @@ import {
   SESSION_ELSEWHERE_KEY,
   SESSION_ENDED_KEY,
   SESSION_REQUEST_WINDOW_MS,
+  SESSION_RETURN_KEY,
   setLastActivityAt,
+  setSessionReturn,
 } from '~/shared/utils';
 import { secureTokensStorage } from '~/shared/utils/storage/secureTokensStorage';
 import {
@@ -88,6 +90,24 @@ describe('useSessionAdoption', () => {
     expect(bannersIn(store)).toHaveLength(1);
     expect(bannersIn(store)[0].key).toBe('SessionElsewhereBanner');
     expect(sessionStorage.getItem(SESSION_ELSEWHERE_KEY)).toBe('true');
+  });
+
+  // Two banners at once told the user to sign in here and that signing in here is refused.
+  it('drops the soft lock warning when a session is announced, whoever it belongs to', async () => {
+    setSessionReturn({ path: '/protected/applets', userId: 'someone', email: 'a@b.com' });
+
+    const { store } = renderHookWithProviders(() => useSessionAdoption(), {
+      preloadedState: {
+        banners: { banners: [{ key: 'SoftLockWarningBanner', order: BannerOrder.Top }] },
+      },
+    });
+
+    openSiblingTab().postMessage(ANNOUNCED);
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+    expect(bannersIn(store).map(({ key }) => key)).toEqual(['SessionElsewhereBanner']);
+    // The record goes with it, so a reload cannot raise the offer a second time.
+    expect(sessionStorage.getItem(SESSION_RETURN_KEY)).toBeNull();
   });
 
   it('never takes itself into the session', async () => {

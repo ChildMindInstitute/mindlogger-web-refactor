@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { BannerOrder, actions } from '~/entities/banner/model';
 import { ROUTES } from '~/shared/constants';
 import {
+  clearSessionReturn,
   consumeSessionEnded,
   getLastActivityAt,
   matchPaths,
@@ -61,6 +62,13 @@ export const useSessionAdoption = () => {
       // can dismiss — dismissing a message is not consent to start a second session.
       sessionStorage.setItem(SESSION_ELSEWHERE_KEY, 'true');
       dispatch(actions.addBanner({ key: 'SessionElsewhereBanner', order: BannerOrder.Top }));
+
+      // A session is running again, so the logout that came before it is history, whoever it
+      // belonged to. Left up, its offer to sign in here contradicts the banner just raised — and
+      // the sign-in it asks for is one the form now refuses. The tab holding the session clears
+      // the same record on the way in; a signed-out tab never runs that hook, so it clears here.
+      clearSessionReturn();
+      dispatch(actions.removeBanner({ key: 'SoftLockWarningBanner' }));
     };
 
     // Both outlive a reload, so a session that has ended has to be retracted.
