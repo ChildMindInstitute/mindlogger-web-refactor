@@ -7,8 +7,8 @@ import { Banner, BannerProps } from '../Banner';
 export const SoftLockWarningBanner = (props: BannerProps) => (
   <Banner duration={null} severity="warning" data-testid="soft-lock-warning-banner" {...props}>
     <Trans i18nKey="softLockWarningBanner">
-      <strong>To keep your account secure, you were automatically logged out. </strong>
-      <>Enter your password below to resume where you left off.</>
+      <strong>To keep your account secure, you were automatically logged out.</strong>
+      <div>Please enter your password below to resume where you left off.</div>
     </Trans>
   </Banner>
 );
