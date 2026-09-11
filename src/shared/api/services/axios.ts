@@ -1,9 +1,16 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 import authorizationService from './authorization.service';
-import { Any, eventEmitter, getLanguage, secureTokensStorage } from '../../utils';
+import {
+  Any,
+  eventEmitter,
+  getLanguage,
+  getSessionId,
+  publishSessionMessage,
+  secureTokensStorage,
+} from '../../utils';
 
-type RequestConfig = AxiosRequestConfig<Any> & {
+export type RequestConfig = AxiosRequestConfig<Any> & {
   retry?: boolean;
 };
 
@@ -19,7 +26,9 @@ axiosService.interceptors.request.use(
   (config) => {
     const tokens = secureTokensStorage.getTokens();
 
-    if (tokens?.accessToken && tokens?.tokenType) {
+    // A caller that set its own leaves it alone: revoking asks with the refresh token, and the
+    // access one would be turned away.
+    if (!config.headers.Authorization && tokens?.accessToken && tokens?.tokenType) {
       config.headers.Authorization = `${tokens.tokenType} ${tokens.accessToken}`;
     }
 
@@ -32,10 +41,58 @@ axiosService.interceptors.request.use(
     return config;
   },
   (error) => {
-    // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
     return Promise.reject(error);
   },
 );
+
+const requestNewTokens = async () => {
+  const tokens = secureTokensStorage.getTokens();
+
+  if (!tokens?.refreshToken) {
+    throw new Error('No refresh token to refresh with.');
+  }
+
+  // Read before the request, so the check below can tell the browser changed hands while it was in
+  // flight. Also the id siblings identify by, since they hold the token this is about to replace.
+  const sessionId = getSessionId();
+
+  const { data } = await authorizationService.refreshToken({
+    refreshToken: tokens.refreshToken,
+  });
+
+  // A logout, or a different user signing in, landed while this was in flight. Storing now would
+  // put the old session back on its feet, over whoever holds the browser.
+  if (!secureTokensStorage.getTokens()?.refreshToken || getSessionId() !== sessionId) {
+    throw new Error('Session ended before the refreshed token could be stored.');
+  }
+
+  secureTokensStorage.setTokens(data.result);
+
+  if (sessionId) {
+    const { accessToken, refreshToken } = data.result;
+
+    publishSessionMessage({
+      type: 'TOKENS_UPDATED',
+      payload: { sessionId, accessToken, refreshToken },
+    });
+  }
+
+  return data.result;
+};
+
+let pendingRefresh: ReturnType<typeof requestNewTokens> | null = null;
+
+// Callers that overlap share one request instead of each rotating the token separately. Under
+// refresh-token rotation the second rotation would be spending a token the first already retired.
+export const refreshTokens = () => {
+  if (!pendingRefresh) {
+    pendingRefresh = requestNewTokens().finally(() => {
+      pendingRefresh = null;
+    });
+  }
+
+  return pendingRefresh;
+};
 
 axiosService.interceptors.response.use(
   (response) => response,
@@ -52,17 +109,13 @@ axiosService.interceptors.response.use(
       }
 
       try {
-        const { data } = await authorizationService.refreshToken({
-          refreshToken: tokens?.refreshToken,
-        });
-
-        secureTokensStorage.setTokens(data.result);
+        const result = await refreshTokens();
 
         if (!config.headers) {
           config.headers = {};
         }
 
-        config.headers.Authorization = `${data.result.tokenType} ${data.result.accessToken}`;
+        config.headers.Authorization = `${result.tokenType} ${result.accessToken}`;
       } catch (e) {
         // Skip global logout for MFA endpoints - they handle errors in the MFA flow
         const url = config?.url || '';
@@ -71,7 +124,7 @@ axiosService.interceptors.response.use(
         if (!isMFAEndpoint) {
           eventEmitter.emit('onLogout');
         }
-        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+
         await Promise.reject(e);
       }
 
