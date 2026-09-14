@@ -51,6 +51,10 @@ export interface LogoutPayload {
   accessToken: string;
 }
 
+export interface Logout2Payload {
+  refreshToken: string;
+}
+
 export interface SignupPayload {
   email: string;
   firstName: string;

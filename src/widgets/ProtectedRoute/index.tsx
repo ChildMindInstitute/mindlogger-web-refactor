@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
 import ROUTES from '~/shared/constants/routes';
-import { InactivityTracker } from '~/widgets/InactivityTracker/InactivityTracker';
+import { SessionKeepAlive } from '~/widgets/SessionKeepAlive';
 
 export interface ProtectedRouteProps {
   redirectUrl?: string;
@@ -12,9 +12,10 @@ function ProtectedRoute({ redirectUrl = ROUTES.login.path, token }: ProtectedRou
   if (!token) return <Navigate to={redirectUrl} replace />;
 
   return (
-    <InactivityTracker>
+    <>
+      <SessionKeepAlive />
       <Outlet />
-    </InactivityTracker>
+    </>
   );
 }
 

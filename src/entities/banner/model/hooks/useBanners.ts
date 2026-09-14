@@ -62,8 +62,8 @@ export const useBanners = () => {
     removeBanner('InfoBanner');
   };
 
-  const removeAllBanners = () => {
-    dispatch(actions.removeAllBanners());
+  const removeAllBanners = (keep?: BannerType[]) => {
+    dispatch(actions.removeAllBanners(keep ? { keep } : undefined));
   };
 
   return {
