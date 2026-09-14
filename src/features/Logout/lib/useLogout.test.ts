@@ -19,6 +19,23 @@ import { InMemoryBroadcastChannel, resetInMemoryBroadcastChannels } from '~/test
 const navigate = vi.fn();
 const logoutMutate = vi.fn();
 
+vi.mock('~/shared/utils/analytics', async () => {
+  const actual = await vi.importActual<typeof import('~/shared/utils/analytics')>(
+    '~/shared/utils/analytics',
+  );
+
+  return {
+    ...actual,
+    Mixpanel: {
+      track: vi.fn(),
+      trackPageView: vi.fn(),
+      login: vi.fn(),
+      logout: vi.fn(),
+      setUserProperty: vi.fn(),
+    },
+  };
+});
+
 vi.mock('~/app/providers/react-query', () => ({ queryClient: { clear: vi.fn() } }));
 vi.mock('~/app/store', () => ({ persistor: { flush: vi.fn() } }));
 vi.mock('~/entities/applet', () => ({
