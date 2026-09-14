@@ -14,7 +14,9 @@ const bannersSlice = createSlice({
   name: 'banners',
   initialState,
   reducers: {
+    // One per key, as everywhere else treats it: the latest replaces any earlier copy.
     addBanner: (state, { payload }: PayloadAction<BannerPayload>): void => {
+      state.banners = state.banners.filter(({ key }) => key !== payload.key);
       state.banners.push(payload);
     },
     removeBanner: (state, { payload }: PayloadAction<Pick<BannerPayload, 'key'>>): void => {
