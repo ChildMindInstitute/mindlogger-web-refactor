@@ -6,6 +6,7 @@ import {
   eventEmitter,
   getLanguage,
   getSessionId,
+  ownsActiveSession,
   publishSessionMessage,
   secureTokensStorage,
 } from '../../utils';
@@ -52,6 +53,12 @@ const requestNewTokens = async () => {
     throw new Error('No refresh token to refresh with.');
   }
 
+  // A stale tab reads its own tokens from memory, so only the stored session id shows that another
+  // session took the browser. Refreshing would revive the old session on the server.
+  if (!ownsActiveSession()) {
+    throw new Error('Session ended before the refresh could be sent.');
+  }
+
   // Read before the request, so the check below can tell the browser changed hands while it was in
   // flight. Also the id siblings identify by, since they hold the token this is about to replace.
   const sessionId = getSessionId();
@@ -62,7 +69,11 @@ const requestNewTokens = async () => {
 
   // A logout, or a different user signing in, landed while this was in flight. Storing now would
   // put the old session back on its feet, over whoever holds the browser.
-  if (!secureTokensStorage.getTokens()?.refreshToken || getSessionId() !== sessionId) {
+  if (
+    !secureTokensStorage.getTokens()?.refreshToken ||
+    getSessionId() !== sessionId ||
+    !ownsActiveSession()
+  ) {
     throw new Error('Session ended before the refreshed token could be stored.');
   }
 

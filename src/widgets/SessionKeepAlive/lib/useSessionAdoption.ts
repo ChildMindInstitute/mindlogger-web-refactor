@@ -51,6 +51,7 @@ export const useSessionAdoption = () => {
     }
 
     let fallbackTimer: ReturnType<typeof setTimeout>;
+    let deadlineTimer: ReturnType<typeof setTimeout>;
     // Two tabs can answer in the same tick, and nothing re-renders in between.
     let hasRaised = false;
 
@@ -74,9 +75,25 @@ export const useSessionAdoption = () => {
     // Both outlive a reload, so a session that has ended has to be retracted.
     const clearBanner = () => {
       hasRaised = false;
+      clearTimeout(deadlineTimer);
 
       sessionStorage.removeItem(SESSION_ELSEWHERE_KEY);
       dispatch(actions.removeBanner({ key: 'SessionElsewhereBanner' }));
+    };
+
+    // The tab holding the session may be in the background with its logout running late, so this
+    // tab reads the shared clock at the deadline itself.
+    const watchDeadline = () => {
+      clearTimeout(deadlineTimer);
+
+      const lastActivityAt = getLastActivityAt();
+      if (!lastActivityAt) return clearBanner();
+
+      const msLeft = lastActivityAt + resolveSessionConfig().idleTimeoutMs - Date.now();
+      if (msLeft <= 0) return clearBanner();
+
+      // Re-reads rather than clearing outright: activity elsewhere may push the deadline out.
+      deadlineTimer = setTimeout(watchDeadline, msLeft);
     };
 
     // Nobody answered, so the activity clock is the only witness left either way.
@@ -87,9 +104,10 @@ export const useSessionAdoption = () => {
       const isSessionLive =
         !!lastActivityAt && Date.now() - lastActivityAt < resolveSessionConfig().idleTimeoutMs;
 
-      if (isSessionLive) return raiseBanner();
+      if (!isSessionLive) return clearBanner();
 
-      clearBanner();
+      raiseBanner();
+      watchDeadline();
     };
 
     const armFallback = () => {
@@ -107,6 +125,7 @@ export const useSessionAdoption = () => {
       // the announcement is by definition the one it would be joining.
       clearTimeout(fallbackTimer);
       raiseBanner();
+      watchDeadline();
     });
 
     const handleVisibilityChange = () => {
@@ -126,6 +145,7 @@ export const useSessionAdoption = () => {
 
     return () => {
       clearTimeout(fallbackTimer);
+      clearTimeout(deadlineTimer);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       unsubscribe();
     };

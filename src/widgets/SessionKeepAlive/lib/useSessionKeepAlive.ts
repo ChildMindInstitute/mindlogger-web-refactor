@@ -81,13 +81,29 @@ export const useSessionKeepAlive = () => {
       refreshTimer = setTimeout(refresh, Math.max(expiresAt - lead - Date.now(), 0));
     };
 
+    // A background tab's timers can fire before its focus check, after another session has taken the
+    // browser. Acting on that session's clock or tokens would keep this tab alive or put the old
+    // session back over theirs, so it leaves for the login page instead.
+    const hasLostBrowser = () => {
+      if (ownsActiveSession()) return false;
+
+      hasEnded = true;
+      leaveEndedSession();
+
+      return true;
+    };
+
     const schedule = () => {
       if (hasEnded) return;
       clearTimeout(logoutTimer);
       clearTimeout(warningTimer);
 
-      const idleDeadline = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs;
-      const msUntilLogout = idleDeadline - Date.now();
+      const lastActivityAt = getLastActivityAt();
+      // Tracking seeds the clock before this first runs, so gone means another tab ended the session.
+      if (!lastActivityAt) return endSession('idle', true);
+      if (hasLostBrowser()) return;
+
+      const msUntilLogout = lastActivityAt + idleTimeoutMs - Date.now();
       if (msUntilLogout <= 0) return endSession('idle');
 
       // The last stretch belongs to the countdown, not to another pass through here, which would
@@ -110,7 +126,11 @@ export const useSessionKeepAlive = () => {
     // Redraws the countdown off the shared clock, which is how a sibling answering the warning
     // closes this tab's copy of it too.
     const tick = () => {
-      const msLeft = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs - Date.now();
+      const lastActivityAt = getLastActivityAt();
+      if (!lastActivityAt) return endSession('idle', true);
+      if (hasLostBrowser()) return;
+
+      const msLeft = lastActivityAt + idleTimeoutMs - Date.now();
       if (msLeft <= 0) return endSession('idle');
 
       // The deadline moved out from under us, so hand back to the scheduler and stop counting.
@@ -129,6 +149,8 @@ export const useSessionKeepAlive = () => {
     };
 
     const refresh = async () => {
+      if (hasEnded || hasLostBrowser()) return;
+
       try {
         await refreshTokens();
         // Always re-arms, even if the replacement happens to carry the same expiry.
@@ -162,6 +184,14 @@ export const useSessionKeepAlive = () => {
 
     // Only tabs with a live session run this hook, which is what keeps a logged-out one silent.
     const announceSession = () => {
+      if (hasEnded) return;
+
+      // A background tab's timers can run late, so the clock is checked before vouching for it.
+      const lastActivityAt = getLastActivityAt();
+      if (!lastActivityAt) return endSession('idle', true);
+      if (hasLostBrowser()) return;
+      if (Date.now() - lastActivityAt >= idleTimeoutMs) return endSession('idle');
+
       const sessionId = getSessionId();
       const tokens = secureTokensStorage.getTokens();
       if (!sessionId || !tokens?.accessToken || !tokens.refreshToken) return;

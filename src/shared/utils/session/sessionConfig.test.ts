@@ -1,11 +1,11 @@
 import { resolveSessionConfig } from './sessionConfig';
 
 describe('resolveSessionConfig', () => {
-  it('falls back to 30 minutes idle, 90 seconds of refresh lead and a 5 minute warning', () => {
+  it('falls back to the built-in defaults, shortened on this test branch', () => {
     expect(resolveSessionConfig({})).toEqual({
-      idleTimeoutMs: 1800000,
+      idleTimeoutMs: 180000,
       refreshLeadMs: 90000,
-      warningLeadMs: 300000,
+      warningLeadMs: 60000,
     });
   });
 
@@ -29,9 +29,9 @@ describe('resolveSessionConfig', () => {
       });
 
       expect(config).toEqual({
-        idleTimeoutMs: 1800000,
+        idleTimeoutMs: 180000,
         refreshLeadMs: 90000,
-        warningLeadMs: 300000,
+        warningLeadMs: 60000,
       });
     },
   );

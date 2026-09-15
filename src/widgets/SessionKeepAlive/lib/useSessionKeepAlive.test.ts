@@ -158,6 +158,7 @@ describe('useSessionKeepAlive', () => {
   // Claiming has to happen once, on mount. Doing it on every pass would let a tab woken from a
   // freeze overwrite the id of the session that replaced it, and never notice it was stale.
   it('does not reclaim the browser once another session has taken it', async () => {
+    vi.stubGlobal('location', { ...window.location, reload: vi.fn() });
     renderHook(() => useSessionKeepAlive());
     setActiveSessionId('family-2');
 
@@ -371,6 +372,37 @@ describe('useSessionKeepAlive', () => {
     expect(onSiblingMessage).not.toHaveBeenCalled();
   });
 
+  // Mobile browsers hold back a background tab's timers but still deliver its messages.
+  it('ends instead of answering once its deadline passed while its timers were held back', () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+    const sibling = openSiblingTab();
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    // The clock moves on without the logout timer firing.
+    vi.setSystemTime(START + 11 * MIN);
+    sibling.postMessage({ type: 'SESSION_REQUEST' });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: false });
+  });
+
+  it('ends quietly instead of answering once another tab cleared the clock', () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+    const sibling = openSiblingTab();
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    // What a login-page tab booting past the deadline leaves behind.
+    clearSessionState();
+    sibling.postMessage({ type: 'SESSION_REQUEST' });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: true });
+  });
+
   it('asks on start whether its tokens were replaced while it was away', () => {
     setLastActivityAt(START);
     const sibling = openSiblingTab();
@@ -442,6 +474,16 @@ describe('useSessionKeepAlive', () => {
     expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: true });
   });
 
+  it('does not restart the deadline once another tab cleared the clock', async () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    clearSessionState();
+    await vi.advanceTimersByTimeAsync(10 * MIN);
+
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: true });
+  });
+
   // The same freeze, but someone signed in after the logout. The clock is back, so the check above
   // no longer catches it, and the tab would otherwise sit on the old user's dashboard.
   it('rejoins on focus when another session took the browser while it was frozen', () => {
@@ -455,6 +497,52 @@ describe('useSessionKeepAlive', () => {
 
     expect(reload).toHaveBeenCalledTimes(1);
     expect(mockLogout).not.toHaveBeenCalled();
+  });
+
+  // Mobile browsers can run a background tab's timers before its focus check does.
+  describe('once another session took the browser while it was in the background', () => {
+    const reload = vi.fn();
+
+    beforeEach(() => {
+      vi.stubGlobal('location', { ...window.location, reload });
+      setLastActivityAt(START);
+    });
+
+    it('leaves instead of refreshing the old session', async () => {
+      setAccessTokenExpiringAt(START + 5 * MIN);
+      renderHook(() => useSessionKeepAlive());
+
+      setActiveSessionId('family-2');
+      await vi.advanceTimersByTimeAsync(5 * MIN);
+
+      expect(refreshTokens).not.toHaveBeenCalled();
+      expect(reload).toHaveBeenCalledTimes(1);
+    });
+
+    it('leaves instead of staying alive on that session clock', async () => {
+      renderHook(() => useSessionKeepAlive());
+
+      // The new session is in use, so its clock keeps moving.
+      setActiveSessionId('family-2');
+      setLastActivityAt(START + 8 * MIN);
+      await vi.advanceTimersByTimeAsync(10 * MIN);
+
+      expect(reload).toHaveBeenCalledTimes(1);
+      expect(mockLogout).not.toHaveBeenCalled();
+    });
+
+    it('does not vouch for the old session', () => {
+      renderHook(() => useSessionKeepAlive());
+      const sibling = openSiblingTab();
+      const onSiblingMessage = vi.fn();
+      sibling.onmessage = onSiblingMessage;
+
+      setActiveSessionId('family-2');
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+
+      expect(onSiblingMessage).not.toHaveBeenCalled();
+      expect(reload).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('stays put on focus when the browser is still its own', () => {
