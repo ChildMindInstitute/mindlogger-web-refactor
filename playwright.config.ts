@@ -39,6 +39,14 @@ export default defineConfig({
         storageState: runtimeConfig.storageState,
       }
     },
+    {
+      name: 'af-resume',
+      testMatch: 'af-resume/**/*.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: runtimeConfig.storageState,
+      }
+    },
 
     //TODO: Enable other browsers when needed.
     //At the moment all browsers but Chrome fail.

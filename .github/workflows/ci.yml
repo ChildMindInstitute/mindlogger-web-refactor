@@ -125,6 +125,16 @@ jobs:
         run: |
           yarn test:smoke
 
+      # Non-blocking: coverage is still partial (CR1 only), letting this fail
+      # softly until the suite has proven itself stable in CI.
+      - name: Running af-resume tests
+        continue-on-error: true
+        env:
+          PLAYWRIGHT_BASE_URL: https://web-uat.cmiml.net
+          PLAYWRIGHT_API_BASE_URL: https://api-uat.cmiml.net
+        run: |
+          yarn test:af-resume
+
 
   build:
     runs-on: ubuntu-latest
