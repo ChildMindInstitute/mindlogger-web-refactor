@@ -8,6 +8,23 @@ import { SESSION_ELSEWHERE_KEY } from '~/shared/utils/session/session.const';
 import { getSessionReturn, setSessionReturn } from '~/shared/utils/session/sessionReturn';
 import { renderWithProviders } from '~/test/utils';
 
+vi.mock('~/shared/utils/analytics', async () => {
+  const actual = await vi.importActual<typeof import('~/shared/utils/analytics')>(
+    '~/shared/utils/analytics',
+  );
+
+  return {
+    ...actual,
+    Mixpanel: {
+      track: vi.fn(),
+      trackPageView: vi.fn(),
+      login: vi.fn(),
+      logout: vi.fn(),
+      setUserProperty: vi.fn(),
+    },
+  };
+});
+
 vi.mock('~/features/Login', async () => {
   const actual = await vi.importActual<typeof import('~/features/Login')>('~/features/Login');
 
