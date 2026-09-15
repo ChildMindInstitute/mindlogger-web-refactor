@@ -7,6 +7,7 @@ import {
   closeSessionSync,
   COUNTDOWN_TICK_MS,
   getLastActivityAt,
+  SESSION_REQUEST_WINDOW_MS,
   setLastActivityAt,
 } from '~/shared/utils';
 import { secureTokensStorage } from '~/shared/utils/storage/secureTokensStorage';
@@ -125,7 +126,8 @@ describe('SessionKeepAlive', () => {
   it('an unanswered countdown runs out into an idle logout', async () => {
     render(<SessionKeepAlive />);
 
-    await vi.advanceTimersByTimeAsync(IDLE_MS);
+    // The extra window is the deadline being put to the siblings before it is acted on.
+    await vi.advanceTimersByTimeAsync(IDLE_MS + SESSION_REQUEST_WINDOW_MS);
 
     expect(warning()).not.toBeInTheDocument();
     expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: false });
