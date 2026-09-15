@@ -335,6 +335,50 @@ describe('useSessionAdoption', () => {
     expect(sessionStorage.getItem(SESSION_ELSEWHERE_KEY)).toBeNull();
   });
 
+  // Mobile browsers hold back the signed-in tab's timers, so its logout message can arrive late.
+  it('takes the banner down at the deadline when no logout arrives', async () => {
+    const { store } = renderAdoption();
+    openSiblingTab().postMessage(ANNOUNCED);
+
+    await vi.advanceTimersByTimeAsync(10 * MS_IN_MIN);
+
+    expect(bannersIn(store)).toHaveLength(0);
+    expect(sessionStorage.getItem(SESSION_ELSEWHERE_KEY)).toBeNull();
+  });
+
+  it('keeps the banner while activity elsewhere pushes the deadline out', async () => {
+    const { store } = renderAdoption();
+    openSiblingTab().postMessage(ANNOUNCED);
+
+    await vi.advanceTimersByTimeAsync(5 * MS_IN_MIN);
+    setLastActivityAt(START + 5 * MS_IN_MIN);
+    await vi.advanceTimersByTimeAsync(5 * MS_IN_MIN);
+
+    expect(bannersIn(store)).toHaveLength(1);
+
+    await vi.advanceTimersByTimeAsync(5 * MS_IN_MIN);
+
+    expect(bannersIn(store)).toHaveLength(0);
+  });
+
+  it('takes down a banner carried over a reload once its deadline passes', async () => {
+    sessionStorage.setItem(SESSION_ELSEWHERE_KEY, 'true');
+
+    const { store } = renderHookWithProviders(() => useSessionAdoption(), {
+      preloadedState: {
+        banners: { banners: [{ key: 'SessionElsewhereBanner', order: BannerOrder.Top }] },
+      },
+    });
+
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+    expect(bannersIn(store)).toHaveLength(1);
+
+    await vi.advanceTimersByTimeAsync(10 * MS_IN_MIN);
+
+    expect(bannersIn(store)).toHaveLength(0);
+    expect(sessionStorage.getItem(SESSION_ELSEWHERE_KEY)).toBeNull();
+  });
+
   // Whoever is filling this in has no account, so a message about somebody else's sign-in in this
   // browser would mean nothing to them.
   it('stays out of it entirely on a public-link survey', async () => {
