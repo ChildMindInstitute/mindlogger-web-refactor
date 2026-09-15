@@ -102,10 +102,11 @@ describe('useSessionKeepAlive', () => {
 
   const wake = () => document.dispatchEvent(new Event('visibilitychange'));
 
-  it('ends a session whose deadline already passed before this tab looked', () => {
+  it('ends a session whose deadline already passed before this tab looked', async () => {
     setLastActivityAt(START - 11 * MIN);
 
     renderHook(() => useSessionKeepAlive());
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
 
     expect(mockLogout).toHaveBeenCalledTimes(1);
   });
@@ -122,8 +123,9 @@ describe('useSessionKeepAlive', () => {
     await vi.advanceTimersByTimeAsync(5 * MIN);
     expect(mockLogout).not.toHaveBeenCalled();
 
-    // Nothing has touched the clock since, so the extended deadline does end it.
-    await vi.advanceTimersByTimeAsync(5 * MIN);
+    // Nothing has touched the clock since, so the extended deadline does end it, once the
+    // deadline has been put to the siblings and nobody has answered.
+    await vi.advanceTimersByTimeAsync(5 * MIN + SESSION_REQUEST_WINDOW_MS);
     expect(mockLogout).toHaveBeenCalledTimes(1);
   });
 
@@ -327,6 +329,7 @@ describe('useSessionKeepAlive', () => {
         type: 'SESSION_STATE',
         payload: {
           sessionId: SESSION_ID,
+          lastActivityAt: START,
           accessToken: tokenExpiringAt(START + 60 * MIN),
           refreshToken: refreshTokenFor(SESSION_ID),
         },
@@ -348,6 +351,7 @@ describe('useSessionKeepAlive', () => {
         type: 'SESSION_STATE',
         payload: {
           sessionId: SESSION_ID,
+          lastActivityAt: START,
           accessToken: tokenExpiringAt(START + 60 * MIN),
           refreshToken: refreshTokenFor(SESSION_ID),
         },
@@ -545,6 +549,63 @@ describe('useSessionKeepAlive', () => {
     });
   });
 
+  // The reported bug: answering the warning is only written to the shared clock, so a tab that
+  // slept through it woke reading the deadline it was heading for, and ended the session for
+  // everyone — the sibling that had just answered included.
+  describe('once a sibling answers the warning while this tab is asleep', () => {
+    // What a frozen tab reads: the clock its process last saw, already past the deadline.
+    const wakeStale = () => {
+      setLastActivityAt(START - 11 * MIN);
+      renderHook(() => useSessionKeepAlive());
+    };
+
+    // The sibling still in use, answering with the clock it pushed out.
+    const answerWithClock = (lastActivityAt: number) => {
+      const sibling = openSiblingTab();
+      sibling.onmessage = ({ data }) => {
+        if ((data as SessionMessage).type !== 'SESSION_REQUEST') return;
+
+        sibling.postMessage({
+          type: 'SESSION_STATE',
+          payload: {
+            sessionId: SESSION_ID,
+            lastActivityAt,
+            accessToken: tokenExpiringAt(START + 60 * MIN),
+            refreshToken: refreshTokenFor(SESSION_ID),
+          },
+        });
+      };
+    };
+
+    it('takes the sibling reading of the clock instead of ending the session', async () => {
+      answerWithClock(START);
+      wakeStale();
+
+      await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+      expect(mockLogout).not.toHaveBeenCalled();
+      expect(getLastActivityAt()).toBe(START);
+    });
+
+    it('still ends the session when nobody answers', async () => {
+      wakeStale();
+
+      await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+      expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: false });
+    });
+
+    it('keeps its own reading when the answer is the older of the two', async () => {
+      setLastActivityAt(START);
+      answerWithClock(START - 5 * MIN);
+      renderHook(() => useSessionKeepAlive());
+
+      await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+      expect(getLastActivityAt()).toBe(START);
+    });
+  });
+
   it('stays put on focus when the browser is still its own', () => {
     const reload = vi.fn();
     vi.stubGlobal('location', { ...window.location, reload });
@@ -566,7 +627,8 @@ describe('useSessionKeepAlive', () => {
     wake();
     expect(mockLogout).not.toHaveBeenCalled();
 
-    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+    // One window for the catch-up, another for the deadline this tab then puts to the siblings.
+    await vi.advanceTimersByTimeAsync(2 * SESSION_REQUEST_WINDOW_MS);
     expect(mockLogout).toHaveBeenCalledTimes(1);
   });
 
@@ -693,7 +755,7 @@ describe('useSessionKeepAlive', () => {
     it('leaves the countdown behind once the session ends', async () => {
       const { result } = renderAtStart();
 
-      await vi.advanceTimersByTimeAsync(IDLE_MS);
+      await vi.advanceTimersByTimeAsync(IDLE_MS + SESSION_REQUEST_WINDOW_MS);
 
       expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: false });
       expect(result.current.msRemaining).toBeNull();

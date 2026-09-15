@@ -54,7 +54,9 @@ export const useSessionKeepAlive = () => {
     let logoutTimer: ReturnType<typeof setTimeout>;
     let warningTimer: ReturnType<typeof setTimeout>;
     let catchUpTimer: ReturnType<typeof setTimeout>;
+    let confirmTimer: ReturnType<typeof setTimeout>;
     let hasEnded = false;
+    let isConfirming = false;
 
     // The reason is spelled out at every call: it decides whether the page this tab is on is
     // offered back on the way in, and a default would quietly answer that for callers.
@@ -93,6 +95,29 @@ export const useSessionKeepAlive = () => {
       return true;
     };
 
+    // The deadline is put to the siblings before it is acted on. A tab woken from a freeze reads the
+    // clock its process last saw, which is the deadline it was heading for when it went under, not
+    // the one a sibling has since pushed out. A live sibling answers with its own reading; nobody
+    // answering means there is no one left to contradict this tab.
+    const confirmIdleEnd = () => {
+      if (hasEnded || isConfirming) return;
+      isConfirming = true;
+
+      publishSessionMessage({ type: 'SESSION_REQUEST' });
+
+      clearTimeout(confirmTimer);
+      confirmTimer = setTimeout(() => {
+        isConfirming = false;
+
+        const lastActivityAt = getLastActivityAt();
+        if (!lastActivityAt) return endSession('idle', true);
+        // An answer landed and moved the deadline out, so the session is still someone's.
+        if (lastActivityAt + idleTimeoutMs > Date.now()) return schedule();
+
+        endSession('idle');
+      }, SESSION_REQUEST_WINDOW_MS);
+    };
+
     const schedule = () => {
       if (hasEnded) return;
       clearTimeout(logoutTimer);
@@ -104,7 +129,7 @@ export const useSessionKeepAlive = () => {
       if (hasLostBrowser()) return;
 
       const msUntilLogout = lastActivityAt + idleTimeoutMs - Date.now();
-      if (msUntilLogout <= 0) return endSession('idle');
+      if (msUntilLogout <= 0) return confirmIdleEnd();
 
       // The last stretch belongs to the countdown, not to another pass through here, which would
       // tear down and re-arm every timer once a second for nothing.
@@ -131,7 +156,7 @@ export const useSessionKeepAlive = () => {
       if (hasLostBrowser()) return;
 
       const msLeft = lastActivityAt + idleTimeoutMs - Date.now();
-      if (msLeft <= 0) return endSession('idle');
+      if (msLeft <= 0) return confirmIdleEnd();
 
       // The deadline moved out from under us, so hand back to the scheduler and stop counting.
       if (msLeft > warningLeadMs) return schedule();
@@ -200,6 +225,7 @@ export const useSessionKeepAlive = () => {
         type: 'SESSION_STATE',
         payload: {
           sessionId,
+          lastActivityAt,
           accessToken: tokens.accessToken,
           refreshToken: tokens.refreshToken,
         },
@@ -222,8 +248,16 @@ export const useSessionKeepAlive = () => {
       // A sibling's answer may carry tokens that replaced this tab's while it slept. Every rotation
       // mints a later expiry, so the further-off one is the newer generation.
       if (message.type === 'SESSION_STATE') {
-        const { sessionId, accessToken } = message.payload;
+        const { sessionId, accessToken, lastActivityAt } = message.payload;
         if (sessionId !== getSessionId()) return;
+
+        // Answering "Stay logged in" is only written to the shared clock, so a tab that slept
+        // through it can wake reading the deadline it was heading for. The sibling still in use
+        // holds the later reading, and taking it is what keeps this tab from ending a live session.
+        if (lastActivityAt > (getLastActivityAt() ?? 0)) {
+          setLastActivityAt(lastActivityAt);
+          schedule();
+        }
 
         const offered = getTokenExpiration(accessToken);
         const held = getTokenExpiration(secureTokensStorage.getTokens()?.accessToken);
@@ -281,6 +315,7 @@ export const useSessionKeepAlive = () => {
       clearTimeout(logoutTimer);
       clearTimeout(warningTimer);
       clearTimeout(catchUpTimer);
+      clearTimeout(confirmTimer);
       setMsRemaining(null);
       extendRef.current = null;
       endRef.current = null;
