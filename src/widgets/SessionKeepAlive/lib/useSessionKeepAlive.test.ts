@@ -371,6 +371,37 @@ describe('useSessionKeepAlive', () => {
     expect(onSiblingMessage).not.toHaveBeenCalled();
   });
 
+  // Mobile browsers hold back a background tab's timers but still deliver its messages.
+  it('ends instead of answering once its deadline passed while its timers were held back', () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+    const sibling = openSiblingTab();
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    // The clock moves on without the logout timer firing.
+    vi.setSystemTime(START + 11 * MIN);
+    sibling.postMessage({ type: 'SESSION_REQUEST' });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: false });
+  });
+
+  it('ends quietly instead of answering once another tab cleared the clock', () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+    const sibling = openSiblingTab();
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    // What a login-page tab booting past the deadline leaves behind.
+    clearSessionState();
+    sibling.postMessage({ type: 'SESSION_REQUEST' });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: true });
+  });
+
   it('asks on start whether its tokens were replaced while it was away', () => {
     setLastActivityAt(START);
     const sibling = openSiblingTab();
@@ -438,6 +469,16 @@ describe('useSessionKeepAlive', () => {
     // What a logout elsewhere leaves behind: the shared clock gone, this tab's snapshot untouched.
     clearSessionState();
     wake();
+
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: true });
+  });
+
+  it('does not restart the deadline once another tab cleared the clock', async () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    clearSessionState();
+    await vi.advanceTimersByTimeAsync(10 * MIN);
 
     expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: true });
   });

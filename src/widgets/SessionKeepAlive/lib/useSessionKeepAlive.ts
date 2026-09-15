@@ -86,8 +86,11 @@ export const useSessionKeepAlive = () => {
       clearTimeout(logoutTimer);
       clearTimeout(warningTimer);
 
-      const idleDeadline = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs;
-      const msUntilLogout = idleDeadline - Date.now();
+      const lastActivityAt = getLastActivityAt();
+      // Tracking seeds the clock before this first runs, so gone means another tab ended the session.
+      if (!lastActivityAt) return endSession('idle', true);
+
+      const msUntilLogout = lastActivityAt + idleTimeoutMs - Date.now();
       if (msUntilLogout <= 0) return endSession('idle');
 
       // The last stretch belongs to the countdown, not to another pass through here, which would
@@ -110,7 +113,10 @@ export const useSessionKeepAlive = () => {
     // Redraws the countdown off the shared clock, which is how a sibling answering the warning
     // closes this tab's copy of it too.
     const tick = () => {
-      const msLeft = (getLastActivityAt() ?? Date.now()) + idleTimeoutMs - Date.now();
+      const lastActivityAt = getLastActivityAt();
+      if (!lastActivityAt) return endSession('idle', true);
+
+      const msLeft = lastActivityAt + idleTimeoutMs - Date.now();
       if (msLeft <= 0) return endSession('idle');
 
       // The deadline moved out from under us, so hand back to the scheduler and stop counting.
@@ -162,6 +168,13 @@ export const useSessionKeepAlive = () => {
 
     // Only tabs with a live session run this hook, which is what keeps a logged-out one silent.
     const announceSession = () => {
+      if (hasEnded) return;
+
+      // A background tab's timers can run late, so the clock is checked before vouching for it.
+      const lastActivityAt = getLastActivityAt();
+      if (!lastActivityAt) return endSession('idle', true);
+      if (Date.now() - lastActivityAt >= idleTimeoutMs) return endSession('idle');
+
       const sessionId = getSessionId();
       const tokens = secureTokensStorage.getTokens();
       if (!sessionId || !tokens?.accessToken || !tokens.refreshToken) return;
