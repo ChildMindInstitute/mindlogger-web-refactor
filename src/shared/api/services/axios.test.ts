@@ -4,9 +4,11 @@ import authorizationService from './authorization.service';
 import axiosService, { refreshTokens } from './axios';
 
 import {
+  clearSessionState,
   closeSessionSync,
   eventEmitter,
   SESSION_CHANNEL_NAME,
+  setActiveSessionId,
   subscribeSessionSync,
 } from '~/shared/utils';
 import { secureTokensStorage } from '~/shared/utils/storage/secureTokensStorage';
@@ -124,6 +126,37 @@ describe('refreshTokens', () => {
 
     await expect(refreshing).rejects.toThrow('Session ended before');
     expect(mockSetTokens).not.toHaveBeenCalled();
+  });
+
+  // A stale tab still reads its own tokens from memory, so only the stored session id gives it away.
+  describe('once another session owns the browser', () => {
+    beforeEach(() => {
+      mockGetTokens.mockReturnValue(heldPair(tokenWithClaims({ family: 'family-1' })));
+      setActiveSessionId('family-1');
+    });
+
+    afterEach(() => {
+      clearSessionState();
+    });
+
+    it('does not revive the old session with a refresh', async () => {
+      setActiveSessionId('family-2');
+
+      await expect(refreshTokens()).rejects.toThrow('Session ended before');
+      expect(mockRefreshToken).not.toHaveBeenCalled();
+    });
+
+    it('discards tokens that arrive after it claimed the browser', async () => {
+      const pending = deferred();
+      mockRefreshToken.mockReturnValue(pending.promise as never);
+
+      const refreshing = refreshTokens();
+      setActiveSessionId('family-2');
+      pending.resolve({ data: { result: newPair } });
+
+      await expect(refreshing).rejects.toThrow('Session ended before');
+      expect(mockSetTokens).not.toHaveBeenCalled();
+    });
   });
 });
 

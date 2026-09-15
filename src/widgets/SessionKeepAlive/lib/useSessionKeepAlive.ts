@@ -81,6 +81,18 @@ export const useSessionKeepAlive = () => {
       refreshTimer = setTimeout(refresh, Math.max(expiresAt - lead - Date.now(), 0));
     };
 
+    // A background tab's timers can fire before its focus check, after another session has taken the
+    // browser. Acting on that session's clock or tokens would keep this tab alive or put the old
+    // session back over theirs, so it leaves for the login page instead.
+    const hasLostBrowser = () => {
+      if (ownsActiveSession()) return false;
+
+      hasEnded = true;
+      leaveEndedSession();
+
+      return true;
+    };
+
     const schedule = () => {
       if (hasEnded) return;
       clearTimeout(logoutTimer);
@@ -89,6 +101,7 @@ export const useSessionKeepAlive = () => {
       const lastActivityAt = getLastActivityAt();
       // Tracking seeds the clock before this first runs, so gone means another tab ended the session.
       if (!lastActivityAt) return endSession('idle', true);
+      if (hasLostBrowser()) return;
 
       const msUntilLogout = lastActivityAt + idleTimeoutMs - Date.now();
       if (msUntilLogout <= 0) return endSession('idle');
@@ -115,6 +128,7 @@ export const useSessionKeepAlive = () => {
     const tick = () => {
       const lastActivityAt = getLastActivityAt();
       if (!lastActivityAt) return endSession('idle', true);
+      if (hasLostBrowser()) return;
 
       const msLeft = lastActivityAt + idleTimeoutMs - Date.now();
       if (msLeft <= 0) return endSession('idle');
@@ -135,6 +149,8 @@ export const useSessionKeepAlive = () => {
     };
 
     const refresh = async () => {
+      if (hasEnded || hasLostBrowser()) return;
+
       try {
         await refreshTokens();
         // Always re-arms, even if the replacement happens to carry the same expiry.
@@ -173,6 +189,7 @@ export const useSessionKeepAlive = () => {
       // A background tab's timers can run late, so the clock is checked before vouching for it.
       const lastActivityAt = getLastActivityAt();
       if (!lastActivityAt) return endSession('idle', true);
+      if (hasLostBrowser()) return;
       if (Date.now() - lastActivityAt >= idleTimeoutMs) return endSession('idle');
 
       const sessionId = getSessionId();
