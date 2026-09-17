@@ -102,10 +102,11 @@ describe('useSessionKeepAlive', () => {
 
   const wake = () => document.dispatchEvent(new Event('visibilitychange'));
 
-  it('ends a session whose deadline already passed before this tab looked', () => {
+  it('ends a session whose deadline already passed before this tab looked', async () => {
     setLastActivityAt(START - 11 * MIN);
 
     renderHook(() => useSessionKeepAlive());
+    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
 
     expect(mockLogout).toHaveBeenCalledTimes(1);
   });
@@ -122,8 +123,9 @@ describe('useSessionKeepAlive', () => {
     await vi.advanceTimersByTimeAsync(5 * MIN);
     expect(mockLogout).not.toHaveBeenCalled();
 
-    // Nothing has touched the clock since, so the extended deadline does end it.
-    await vi.advanceTimersByTimeAsync(5 * MIN);
+    // Nothing has touched the clock since, so the extended deadline does end it, once the
+    // deadline has been put to the siblings and nobody has answered.
+    await vi.advanceTimersByTimeAsync(5 * MIN + SESSION_REQUEST_WINDOW_MS);
     expect(mockLogout).toHaveBeenCalledTimes(1);
   });
 
@@ -158,6 +160,7 @@ describe('useSessionKeepAlive', () => {
   // Claiming has to happen once, on mount. Doing it on every pass would let a tab woken from a
   // freeze overwrite the id of the session that replaced it, and never notice it was stale.
   it('does not reclaim the browser once another session has taken it', async () => {
+    vi.stubGlobal('location', { ...window.location, reload: vi.fn() });
     renderHook(() => useSessionKeepAlive());
     setActiveSessionId('family-2');
 
@@ -326,6 +329,7 @@ describe('useSessionKeepAlive', () => {
         type: 'SESSION_STATE',
         payload: {
           sessionId: SESSION_ID,
+          lastActivityAt: START,
           accessToken: tokenExpiringAt(START + 60 * MIN),
           refreshToken: refreshTokenFor(SESSION_ID),
         },
@@ -347,6 +351,7 @@ describe('useSessionKeepAlive', () => {
         type: 'SESSION_STATE',
         payload: {
           sessionId: SESSION_ID,
+          lastActivityAt: START,
           accessToken: tokenExpiringAt(START + 60 * MIN),
           refreshToken: refreshTokenFor(SESSION_ID),
         },
@@ -369,6 +374,37 @@ describe('useSessionKeepAlive', () => {
     sibling.postMessage({ type: 'SESSION_REQUEST' });
 
     expect(onSiblingMessage).not.toHaveBeenCalled();
+  });
+
+  // Mobile browsers hold back a background tab's timers but still deliver its messages.
+  it('ends instead of answering once its deadline passed while its timers were held back', () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+    const sibling = openSiblingTab();
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    // The clock moves on without the logout timer firing.
+    vi.setSystemTime(START + 11 * MIN);
+    sibling.postMessage({ type: 'SESSION_REQUEST' });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: false });
+  });
+
+  it('ends quietly instead of answering once another tab cleared the clock', () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+    const sibling = openSiblingTab();
+    const onSiblingMessage = vi.fn();
+    sibling.onmessage = onSiblingMessage;
+
+    // What a login-page tab booting past the deadline leaves behind.
+    clearSessionState();
+    sibling.postMessage({ type: 'SESSION_REQUEST' });
+
+    expect(onSiblingMessage).not.toHaveBeenCalled();
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: true });
   });
 
   it('asks on start whether its tokens were replaced while it was away', () => {
@@ -442,6 +478,16 @@ describe('useSessionKeepAlive', () => {
     expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: true });
   });
 
+  it('does not restart the deadline once another tab cleared the clock', async () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+
+    clearSessionState();
+    await vi.advanceTimersByTimeAsync(10 * MIN);
+
+    expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: true });
+  });
+
   // The same freeze, but someone signed in after the logout. The clock is back, so the check above
   // no longer catches it, and the tab would otherwise sit on the old user's dashboard.
   it('rejoins on focus when another session took the browser while it was frozen', () => {
@@ -455,6 +501,109 @@ describe('useSessionKeepAlive', () => {
 
     expect(reload).toHaveBeenCalledTimes(1);
     expect(mockLogout).not.toHaveBeenCalled();
+  });
+
+  // Mobile browsers can run a background tab's timers before its focus check does.
+  describe('once another session took the browser while it was in the background', () => {
+    const reload = vi.fn();
+
+    beforeEach(() => {
+      vi.stubGlobal('location', { ...window.location, reload });
+      setLastActivityAt(START);
+    });
+
+    it('leaves instead of refreshing the old session', async () => {
+      setAccessTokenExpiringAt(START + 5 * MIN);
+      renderHook(() => useSessionKeepAlive());
+
+      setActiveSessionId('family-2');
+      await vi.advanceTimersByTimeAsync(5 * MIN);
+
+      expect(refreshTokens).not.toHaveBeenCalled();
+      expect(reload).toHaveBeenCalledTimes(1);
+    });
+
+    it('leaves instead of staying alive on that session clock', async () => {
+      renderHook(() => useSessionKeepAlive());
+
+      // The new session is in use, so its clock keeps moving.
+      setActiveSessionId('family-2');
+      setLastActivityAt(START + 8 * MIN);
+      await vi.advanceTimersByTimeAsync(10 * MIN);
+
+      expect(reload).toHaveBeenCalledTimes(1);
+      expect(mockLogout).not.toHaveBeenCalled();
+    });
+
+    it('does not vouch for the old session', () => {
+      renderHook(() => useSessionKeepAlive());
+      const sibling = openSiblingTab();
+      const onSiblingMessage = vi.fn();
+      sibling.onmessage = onSiblingMessage;
+
+      setActiveSessionId('family-2');
+      sibling.postMessage({ type: 'SESSION_REQUEST' });
+
+      expect(onSiblingMessage).not.toHaveBeenCalled();
+      expect(reload).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  // The reported bug: answering the warning is only written to the shared clock, so a tab that
+  // slept through it woke reading the deadline it was heading for, and ended the session for
+  // everyone — the sibling that had just answered included.
+  describe('once a sibling answers the warning while this tab is asleep', () => {
+    // What a frozen tab reads: the clock its process last saw, already past the deadline.
+    const wakeStale = () => {
+      setLastActivityAt(START - 11 * MIN);
+      renderHook(() => useSessionKeepAlive());
+    };
+
+    // The sibling still in use, answering with the clock it pushed out.
+    const answerWithClock = (lastActivityAt: number) => {
+      const sibling = openSiblingTab();
+      sibling.onmessage = ({ data }) => {
+        if ((data as SessionMessage).type !== 'SESSION_REQUEST') return;
+
+        sibling.postMessage({
+          type: 'SESSION_STATE',
+          payload: {
+            sessionId: SESSION_ID,
+            lastActivityAt,
+            accessToken: tokenExpiringAt(START + 60 * MIN),
+            refreshToken: refreshTokenFor(SESSION_ID),
+          },
+        });
+      };
+    };
+
+    it('takes the sibling reading of the clock instead of ending the session', async () => {
+      answerWithClock(START);
+      wakeStale();
+
+      await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+      expect(mockLogout).not.toHaveBeenCalled();
+      expect(getLastActivityAt()).toBe(START);
+    });
+
+    it('still ends the session when nobody answers', async () => {
+      wakeStale();
+
+      await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+      expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: false });
+    });
+
+    it('keeps its own reading when the answer is the older of the two', async () => {
+      setLastActivityAt(START);
+      answerWithClock(START - 5 * MIN);
+      renderHook(() => useSessionKeepAlive());
+
+      await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+
+      expect(getLastActivityAt()).toBe(START);
+    });
   });
 
   it('stays put on focus when the browser is still its own', () => {
@@ -478,7 +627,8 @@ describe('useSessionKeepAlive', () => {
     wake();
     expect(mockLogout).not.toHaveBeenCalled();
 
-    await vi.advanceTimersByTimeAsync(SESSION_REQUEST_WINDOW_MS);
+    // One window for the catch-up, another for the deadline this tab then puts to the siblings.
+    await vi.advanceTimersByTimeAsync(2 * SESSION_REQUEST_WINDOW_MS);
     expect(mockLogout).toHaveBeenCalledTimes(1);
   });
 
@@ -605,7 +755,7 @@ describe('useSessionKeepAlive', () => {
     it('leaves the countdown behind once the session ends', async () => {
       const { result } = renderAtStart();
 
-      await vi.advanceTimersByTimeAsync(IDLE_MS);
+      await vi.advanceTimersByTimeAsync(IDLE_MS + SESSION_REQUEST_WINDOW_MS);
 
       expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: false });
       expect(result.current.msRemaining).toBeNull();

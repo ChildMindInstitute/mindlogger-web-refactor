@@ -5,12 +5,16 @@ import { useOnLogin } from './useOnLogin';
 import {
   clearSessionEnded,
   consumeSessionEnded,
+  getLastActivityAt,
+  MS_IN_MIN,
   SESSION_ENDED_KEY,
+  setLastActivityAt,
   setSessionReturn,
 } from '~/shared/utils';
 
 const navigate = vi.fn();
 const setUser = vi.fn();
+const START = 1893456000000;
 
 vi.mock('./useUserState', () => ({ useUserState: () => ({ setUser }) }));
 
@@ -47,7 +51,12 @@ describe('useOnLogin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     sessionStorage.clear();
+    localStorage.clear();
     clearSessionEnded();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   // A tab sent to the login page by leaveEndedSession still carries the note. Left set, it turns
@@ -60,6 +69,18 @@ describe('useOnLogin', () => {
 
     expect(sessionStorage.getItem(SESSION_ENDED_KEY)).toBeNull();
     expect(consumeSessionEnded()).toBe(false);
+  });
+
+  // A backgrounded tab can miss its idle logout, leaving its clock behind. Read by the new session,
+  // it ended the sign-in as soon as it landed.
+  it('starts a fresh clock over one left by a session that never logged out', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(START);
+    setLastActivityAt(START - 60 * MS_IN_MIN);
+
+    signIn();
+
+    expect(getLastActivityAt()).toBe(START);
   });
 
   it('signs the user in as usual', () => {
