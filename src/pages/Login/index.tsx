@@ -1,4 +1,4 @@
-import { lazy, useCallback, useEffect } from 'react';
+import { lazy, MouseEvent, useCallback, useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -13,6 +13,8 @@ import { variables } from '~/shared/constants/theme/variables';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
 import { Mixpanel, MixpanelEventType, useEncryption, useOnceEffect } from '~/shared/utils';
+import { useSessionElsewhereGuard } from '~/shared/utils/hooks/useSessionElsewhereGuard';
+import { useSoftLockBanner } from '~/shared/utils/hooks/useSoftLockBanner';
 
 const DownloadMobileLinks = lazy(() => import('~/widgets/DownloadMobileLinks'));
 
@@ -23,13 +25,21 @@ function LoginPage() {
   const dispatch = useDispatch();
   const { addSuccessBanner } = useBanners();
   const { generateUserPrivateKey } = useEncryption();
+  const { isBlocked, refuse } = useSessionElsewhereGuard();
+  const { softLockEmail, dismiss: dismissSoftLock } = useSoftLockBanner();
 
   // Clear any existing MFA session when login page mounts
   useEffect(() => {
     dispatch(mfaActions.clearMFASession());
   }, [dispatch]);
 
-  const onCreateAccountClick = () => {
+  const onCreateAccountClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    // Signing up ends in a sign-in, so it would start the second session this tab is refused.
+    if (refuse()) return event.preventDefault();
+
+    // A new account is not the account the last session belonged to.
+    dismissSoftLock();
+
     Mixpanel.track({ action: MixpanelEventType.LoginScreenCreateAccountBtnClick });
   };
 
@@ -103,6 +113,8 @@ function LoginPage() {
         <Box className="loginForm" maxWidth="400px" margin="0 auto">
           <LoginForm
             locationState={location.state as Record<string, unknown>}
+            softLockEmail={softLockEmail}
+            onDismissSoftLock={dismissSoftLock}
             onMFARequired={handleMFARequired}
           />
         </Box>
@@ -111,7 +123,19 @@ function LoginPage() {
           <Text>{t('or')},</Text>
           &nbsp;
           <Text>
-            <Link to={ROUTES.signup.path} relative="path" onClick={onCreateAccountClick}>
+            <Link
+              to={ROUTES.signup.path}
+              relative="path"
+              aria-disabled={isBlocked}
+              onClick={onCreateAccountClick}
+              data-testid="login-page-create-account"
+              // An anchor has no disabled state, so it is spelled out here.
+              style={
+                isBlocked
+                  ? { color: variables.palette.onSurfaceVariant, pointerEvents: 'none' }
+                  : undefined
+              }
+            >
               {t('create')}
             </Link>
           </Text>
