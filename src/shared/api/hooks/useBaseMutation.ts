@@ -5,9 +5,9 @@ import { BaseError } from '../types';
 
 const useBaseMutation = <TRequest, TResponse>(
   key: string[],
-  mutationFn: MutationFunction<AxiosResponse<TResponse, BaseError>, TRequest>,
+  mutationFn: MutationFunction<AxiosResponse<TResponse>, TRequest>,
   options?: Omit<
-    UseMutationOptions<AxiosResponse<TResponse, BaseError>, BaseError, TRequest>,
+    UseMutationOptions<AxiosResponse<TResponse>, BaseError, TRequest>,
     'mutationKey' | 'mutationFn'
   >,
 ) => {

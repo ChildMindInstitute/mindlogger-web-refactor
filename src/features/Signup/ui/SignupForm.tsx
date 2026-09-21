@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { BaseSyntheticEvent, useState } from 'react';
 
 import { TERMS_URL } from '../lib/constants';
 import { useSignupTranslation } from '../lib/useSignupTranslation';
@@ -20,6 +20,7 @@ import {
   Text,
 } from '~/shared/ui';
 import { Mixpanel, MixpanelEventType, useCustomForm, usePasswordType } from '~/shared/utils';
+import { useSessionElsewhereGuard } from '~/shared/utils/hooks/useSessionElsewhereGuard';
 
 interface SignupFormProps {
   locationState?: Record<string, unknown>;
@@ -35,6 +36,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
   const [showPasswordError, setShowPasswordError] = useState<boolean>(false);
 
   const [terms, setTerms] = useState<boolean>(false);
+  const { isBlocked, refuse } = useSessionElsewhereGuard();
   const { onLoginSuccess } = userModel.hooks.useOnLogin({
     backRedirectPath:
       typeof locationState?.backRedirectPath === 'string'
@@ -102,8 +104,16 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
     return signup(data);
   };
 
+  const handleFormSubmit = (event?: BaseSyntheticEvent) => {
+    // Signing up ends in a sign-in, so this would start the second session this browser refuses.
+    // Ahead of validation, so Enter on an empty field is turned away the same way a click is.
+    if (refuse()) return event?.preventDefault();
+
+    void handleSubmit(onSignupSubmit)(event);
+  };
+
   return (
-    <BasicFormProvider {...form} onSubmit={handleSubmit(onSignupSubmit)}>
+    <BasicFormProvider {...form} onSubmit={handleFormSubmit}>
       <Box display="flex" flexDirection="column" gap="24px">
         <Input
           id="signup-form-email"
@@ -179,6 +189,7 @@ export const SignupForm = ({ locationState }: SignupFormProps) => {
           variant="contained"
           text={t('create')}
           isLoading={isSignupLoading || isLoginLoading}
+          disabled={isBlocked}
         />
       </Box>
     </BasicFormProvider>

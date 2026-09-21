@@ -3,10 +3,13 @@ import { secureUserPrivateKeyStorage } from '../secureUserPrivateKeyStorage';
 
 import ROUTES from '~/shared/constants/routes';
 import {
+  clearSessionEnded,
+  getSessionReturnPath,
   Mixpanel,
   MixpanelEventType,
   MixpanelProps,
   secureTokensStorage,
+  setLastActivityAt,
   useCustomNavigation,
   useEncryption,
 } from '~/shared/utils';
@@ -68,6 +71,14 @@ export const useOnLogin = (params: Params) => {
       secureUserPrivateKeyStorage.setUserPrivateKey(userPrivateKey);
     }
 
+    // A tab sent to the login page by leaveEndedSession is still carrying its note. Signing in here
+    // answers it, and leaving it set would turn this session away as well.
+    clearSessionEnded();
+
+    // A new session starts its own clock. One left by a session whose tab never logged out would
+    // put this one past its deadline, and the keep-alive only writes a clock when there is none.
+    setLastActivityAt(Date.now());
+
     // Set user in Redux
     setUser({ id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName });
 
@@ -77,9 +88,13 @@ export const useOnLogin = (params: Params) => {
       secureTokensStorage.setTokens(tokens);
     }
 
+    // A page held open by a link the user followed comes first; after that, the page a session of
+    // their own was ended on. Someone else signing in at this tab matches neither and starts fresh.
+    const redirectPath = params.backRedirectPath ?? getSessionReturnPath(user.id) ?? undefined;
+
     // Navigate
-    if (params.backRedirectPath !== undefined) {
-      navigate(params.backRedirectPath, { replace: true });
+    if (redirectPath !== undefined) {
+      navigate(redirectPath, { replace: true });
     } else {
       Mixpanel.track({
         action: MixpanelEventType.LoginSuccessful,
