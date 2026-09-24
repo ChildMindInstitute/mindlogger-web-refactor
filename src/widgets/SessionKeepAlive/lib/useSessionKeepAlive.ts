@@ -64,6 +64,8 @@ export const useSessionKeepAlive = () => {
       if (hasEnded) return;
       hasEnded = true;
       setMsRemaining(null);
+      // This tab's own logout already ran; the hook outlives it while the login chunk loads.
+      if (!secureTokensStorage.getTokens()) return;
       logoutRef.current({ reason, isRemote });
     };
 
