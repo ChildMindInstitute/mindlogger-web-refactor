@@ -1,10 +1,7 @@
-import { useMemo } from 'react';
-
 import { RegularCheckboxOption } from './RegularCheckboxOption';
 import { CheckboxItem } from '../../../lib/types/item';
 
 import { Box } from '~/shared/ui';
-import { splitList, useCustomMediaQuery } from '~/shared/utils';
 
 type Props = {
   options: CheckboxItem['responseValues']['options'];
@@ -24,61 +21,29 @@ export const RegularGrid = ({
   options,
   itemId,
 }: Props) => {
-  const { lessThanSM } = useCustomMediaQuery();
-
-  const [evenColumn, oddColumn] = useMemo(() => {
-    return splitList(options);
-  }, [options]);
-
   return (
-    <Box display="flex" flex={1} gap="16px" flexDirection={lessThanSM ? 'column' : 'row'}>
-      <Box display="flex" flex={1} gap="16px" flexDirection="column">
-        {evenColumn.map((option) => {
-          const isChecked = values.includes(String(option.value));
-          const isNoneAbove = option.isNoneAbove;
+    <Box display="flex" flex={1} gap="16px" flexDirection="column">
+      {options.map((option) => {
+        const isChecked = values.includes(String(option.value));
+        const isNoneAbove = option.isNoneAbove;
 
-          return (
-            <RegularCheckboxOption
-              key={option.id}
-              id={option.id}
-              name={itemId}
-              value={option.value}
-              label={option.text}
-              onChange={() => onValueChange(String(option.value), isNoneAbove)}
-              description={option.tooltip}
-              image={option.image}
-              disabled={isDisabled}
-              defaultChecked={isChecked}
-              color={option.color}
-              replaceText={replaceText}
-            />
-          );
-        })}
-      </Box>
-
-      <Box display="flex" flex={1} gap="16px" flexDirection="column">
-        {oddColumn.map((option) => {
-          const isChecked = values.includes(String(option.value));
-          const isNoneAbove = option.isNoneAbove;
-
-          return (
-            <RegularCheckboxOption
-              key={option.id}
-              id={option.id}
-              name={itemId}
-              value={option.value}
-              label={option.text}
-              onChange={() => onValueChange(String(option.value), isNoneAbove)}
-              description={option.tooltip}
-              image={option.image}
-              disabled={isDisabled}
-              defaultChecked={isChecked}
-              color={option.color}
-              replaceText={replaceText}
-            />
-          );
-        })}
-      </Box>
+        return (
+          <RegularCheckboxOption
+            key={option.id}
+            id={option.id}
+            name={itemId}
+            value={option.value}
+            label={option.text}
+            onChange={() => onValueChange(String(option.value), isNoneAbove)}
+            description={option.tooltip}
+            image={option.image}
+            disabled={isDisabled}
+            defaultChecked={isChecked}
+            color={option.color}
+            replaceText={replaceText}
+          />
+        );
+      })}
     </Box>
   );
 };
