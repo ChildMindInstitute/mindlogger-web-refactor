@@ -5,11 +5,13 @@ import { Page, expect } from '@playwright/test';
 import { AfApi, AfApplet } from '../../fixtures/af-applet.fixture';
 import { AfUser, afApiContext, createTestUser } from '../../fixtures/af-session.fixture';
 import { ActivityCardPage } from '../../pages/activity-card.page';
+import { SurveyPage } from '../../pages/survey.page';
 import { AnswerAPI } from '../../utils/api-client/answer-api';
 import { AssignmentAPI } from '../../utils/api-client/assignment-api';
 import { InvitationAPI } from '../../utils/api-client/invitation-api';
 import { AF_FLOW_NAME } from '../../utils/data/af-resume-applet';
 import { getPrivateKey } from '../../utils/encryption';
+import { getEntityProgress } from '../../utils/local-progress';
 
 export { AF_FLOW_NAME, AF_MANUAL_FLOW_NAME } from '../../utils/data/af-resume-applet';
 
@@ -112,4 +114,73 @@ export const resumeAndExpectActivity = async (
   await expect(page.getByText(`Activity ${activityNumber} • 1 Question`)).toBeVisible({
     timeout: 15000,
   });
+};
+
+// Starts the flow from its card in the UI and waits for the survey to open.
+export const startFlowInUi = async (
+  page: Page,
+  cards: ActivityCardPage,
+  survey: SurveyPage,
+  flowName: string = AF_FLOW_NAME,
+) => {
+  const startButton = cards.startButton(cards.flowCard(flowName));
+  // Retry the click: React may not have attached handlers on first paint.
+  await expect(async () => {
+    await startButton.click();
+    await expect(survey.saveAndExitButton).toBeVisible({ timeout: 2000 });
+  }).toPass({ timeout: 15000 });
+};
+
+// Completes `count` flow activities in the UI, starting from activity `from`.
+export const completeFlowActivitiesInUi = async (
+  page: Page,
+  survey: SurveyPage,
+  count: number,
+  from = 1,
+) => {
+  for (let i = from; i < from + count; i++) {
+    await survey.completeCurrentActivity();
+    await expect(page.getByText(`Activity ${i + 1} • 1 Question`)).toBeVisible({ timeout: 15000 });
+  }
+};
+
+// Returns this browser's saved progress for the flow.
+export const getLocalFlowProgress = async (page: Page, afApplet: AfApplet, eventId: string) => {
+  const progress = await getEntityProgress(page, afApplet.flowId, eventId);
+  expect(progress, 'flow progress should be saved locally').toBeTruthy();
+
+  return progress as { submitId: string; pipelineActivityOrder: number; endAt: number | null };
+};
+
+// Posts answers for flow activities [from, to) under an existing submitId.
+// With `complete`, the last one marks the flow as completed.
+export const submitFlowSteps = async (
+  afApi: AfApi,
+  afApplet: AfApplet,
+  flowEvent: { id: string; version: string },
+  options: { submitId: string; from: number; to: number; complete?: boolean; endTime?: number },
+) => {
+  const endTime = options.endTime ?? Date.now();
+  for (let i = options.from; i < options.to; i++) {
+    await afApi.answers.submitActivityAnswer(afApplet, afApplet.flowActivityIds[i], {
+      submitId: options.submitId,
+      flowId: afApplet.flowId,
+      eventId: flowEvent.id,
+      eventVersion: flowEvent.version,
+      isFlowCompleted: !!options.complete && i === options.to - 1,
+      endTime: endTime - (options.to - 1 - i) * 1000,
+    });
+  }
+};
+
+// Returns the server's chosen submission for the flow (the one the web syncs with).
+export const getServerFlowEntry = async (afApi: AfApi, afApplet: AfApplet) => {
+  const fromDate = new Date(Date.now() - 24 * 3600 * 1000).toISOString().slice(0, 10);
+  const completions = (
+    await afApi.answers.getCompletedEntities(afApplet.appletId, afApplet.version, fromDate)
+  ).result;
+
+  return completions.activityFlows.find((f: { id: string }) => f.id === afApplet.flowId) as
+    | { submitId: string; activityFlowOrder: number | null; isFlowCompleted: boolean | null }
+    | undefined;
 };
