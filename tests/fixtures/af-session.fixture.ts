@@ -91,7 +91,12 @@ export const openWebDevice = async (
   options: { timezoneId?: string; flags?: MockedFlagValues } = {},
 ) => {
   const { flags, ...contextOptions } = options;
-  const context = await browser.newContext({ ...devices['Desktop Chrome'], ...contextOptions });
+  // Empty session: test contexts otherwise inherit the worker's saved login.
+  const context = await browser.newContext({
+    ...devices['Desktop Chrome'],
+    storageState: { cookies: [], origins: [] },
+    ...contextOptions,
+  });
   await mockFeatureFlags(context, flags);
   const page = await context.newPage();
   await performUiLogin(page, `${runtimeConfig.baseURL}/login`, afUser.email, afUser.password);
