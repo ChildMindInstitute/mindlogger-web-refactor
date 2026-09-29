@@ -256,3 +256,17 @@ export const loginInUi = async (page: Page, user: AfUser) => {
   await performUiLogin(page, `${runtimeConfig.baseURL}/login`, user.email, user.password);
   await expect(page).toHaveURL(/protected/, { timeout: 15000 });
 };
+
+// Makes the flow's default event one-time (Always Available, completable once).
+export const makeFlowOneTime = async (afApi: AfApi, afApplet: AfApplet, flowId?: string) => {
+  const event = await getFlowEvent(afApi, afApplet, flowId);
+  await afApi.events.updateEvent(afApplet.appletId, event.id, {
+    periodicity: { type: 'ALWAYS' },
+    oneTimeCompletion: true,
+    timerType: 'NOT_SET',
+    startTime: '00:00:00',
+    endTime: '23:59:00',
+  });
+
+  return await getFlowEvent(afApi, afApplet, flowId);
+};
