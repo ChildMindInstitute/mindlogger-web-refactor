@@ -1,9 +1,14 @@
 import crypto from 'node:crypto';
 
-import { Page, expect } from '@playwright/test';
+import { Page, expect, test } from '@playwright/test';
 
 import { AfApi, AfApplet } from '../../fixtures/af-applet.fixture';
-import { AfUser, afApiContext, createTestUser } from '../../fixtures/af-session.fixture';
+import {
+  AfUser,
+  afAccountEmail,
+  afApiContext,
+  getOrCreateUser,
+} from '../../fixtures/af-session.fixture';
 import { ActivityCardPage } from '../../pages/activity-card.page';
 import { SurveyPage } from '../../pages/survey.page';
 import { AnswerAPI } from '../../utils/api-client/answer-api';
@@ -61,7 +66,8 @@ export const setupAssignedRespondent = async (
   afApplet: AfApplet,
   target: { activityFlowId?: string; activityId?: string },
 ): Promise<AssignedRespondent> => {
-  const user = await createTestUser('af-respondent');
+  const slot = test.info().parallelIndex;
+  const user = await getOrCreateUser(afAccountEmail('resp-w', slot), `Respondent${slot}`);
   const key = await ownerApi.invitations.inviteRespondent(afApplet.appletId, {
     email: user.email,
     firstName: 'AF',

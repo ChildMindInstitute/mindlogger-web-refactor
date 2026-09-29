@@ -38,6 +38,14 @@ export class AppletAPI extends CuriousApi {
         return await response.json();
     }
 
+    async getWorkspaceApplets(ownerId: string): Promise<any> {
+        const response = await this.apiContext.get(`/workspaces/${ownerId}/applets`, { params: { limit: 100 } });
+        if (!response.ok()) {
+            throw new Error(`Failed to list applets: ${response.status()} ${await response.text()}`);
+        }
+        return await response.json();
+    }
+
     async getAppletDetail(appletId: string): Promise<any> {
         const response = await this.apiContext.get(`/applets/${appletId}`);
         if (!response.ok()) {

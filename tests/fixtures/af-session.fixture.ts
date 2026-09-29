@@ -4,7 +4,9 @@ import { runtimeConfig } from '../config';
 import { mockFeatureFlags, MockedFlagValues } from '../utils/feature-flags';
 import { performUiLogin } from '../utils/ui';
 
-// Each worker gets its own user, so logging in on one worker doesn't log out another.
+// Fixed accounts, one per parallel slot, so logging in on one worker doesn't log out another.
+
+const AF_RESUME_PASSWORD = 'AfResumeSuite123!';
 
 export type AfUser = {
   id: string;
@@ -18,23 +20,31 @@ type AfSessionWorkerFixtures = {
   afStorageState: string;
 };
 
-// Creates and logs in a fresh backend user; returns its identity + token.
-export const createTestUser = async (
-  namePrefix: string,
-  lastName = 'User',
-): Promise<AfUser> => {
-  const api = await request.newContext({ baseURL: runtimeConfig.apiBaseURL });
-  const email = `${namePrefix}-${Date.now()}-${Math.floor(Math.random() * 1e6)}@example.com`;
-  const password = 'AfResumeSuite123!';
-
-  const created = await api.post('/users', {
-    data: { email, firstName: 'AF', lastName, password },
-  });
-  if (!created.ok()) {
-    throw new Error(`Failed to create test user: ${created.status()} ${await created.text()}`);
+// Email of the fixed account for a role ('w' or 'resp-w') and parallel slot.
+export const afAccountEmail = (role: string, slot: number): string => {
+  if (slot >= runtimeConfig.afResumePoolSize) {
+    throw new Error(
+      `Parallel slot ${slot} has no af-resume account; run with --workers=${runtimeConfig.afResumePoolSize} or fewer`,
+    );
   }
+  return `${runtimeConfig.afResumeUserPrefix}-${role}${slot}@example.com`;
+};
 
-  const login = await api.post('/auth/login', { data: { email, password } });
+// Logs in a fixed test account, creating it on first use.
+export const getOrCreateUser = async (email: string, lastName: string): Promise<AfUser> => {
+  const api = await request.newContext({ baseURL: runtimeConfig.apiBaseURL });
+  const password = AF_RESUME_PASSWORD;
+
+  let login = await api.post('/auth/login', { data: { email, password } });
+  if (!login.ok()) {
+    const created = await api.post('/users', {
+      data: { email, firstName: 'AF', lastName, password },
+    });
+    if (!created.ok()) {
+      throw new Error(`Failed to create test user: ${created.status()} ${await created.text()}`);
+    }
+    login = await api.post('/auth/login', { data: { email, password } });
+  }
   if (!login.ok()) {
     throw new Error(`Failed to log in test user: ${login.status()} ${await login.text()}`);
   }
@@ -47,7 +57,8 @@ export const createTestUser = async (
 export const test = base.extend<object, AfSessionWorkerFixtures>({
   afUser: [
     async ({}, use, workerInfo) => {
-      await use(await createTestUser(`af-resume-w${workerInfo.workerIndex}`, `Worker${workerInfo.workerIndex}`));
+      const slot = workerInfo.parallelIndex;
+      await use(await getOrCreateUser(afAccountEmail('w', slot), `Worker${slot}`));
     },
     { scope: 'worker' },
   ],
@@ -60,7 +71,7 @@ export const test = base.extend<object, AfSessionWorkerFixtures>({
       await performUiLogin(page, `${runtimeConfig.baseURL}/login`, afUser.email, afUser.password);
       await page.waitForURL(/protected/, { timeout: 30000 });
 
-      const path = `storage/.auth/af-resume-w${workerInfo.workerIndex}.json`;
+      const path = `storage/.auth/af-resume-w${workerInfo.parallelIndex}.json`;
       await context.storageState({ path });
       await context.close();
       await use(path);

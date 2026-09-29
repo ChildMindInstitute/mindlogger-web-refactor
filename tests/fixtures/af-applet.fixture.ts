@@ -56,8 +56,18 @@ export const test = sessionTest.extend<AfTestFixtures, AfWorkerApiFixtures>({
         getPrivateKey({ userId: afUser.id, email: afUser.email, password: afUser.password }),
       );
 
+      const applets = new AppletAPI(context);
+
+      // Remove applets a crashed run left behind in this fixed account.
+      const existing = (await applets.getWorkspaceApplets(afUser.id)).result;
+      for (const applet of existing) {
+        if (applet.displayName?.startsWith('AF Resume w')) {
+          await applets.deleteApplet(applet.id);
+        }
+      }
+
       await use({
-        applets: new AppletAPI(context),
+        applets,
         events: new EventAPI(context),
         answers,
         assignments: new AssignmentAPI(context),
