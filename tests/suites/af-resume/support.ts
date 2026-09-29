@@ -17,6 +17,8 @@ import { InvitationAPI } from '../../utils/api-client/invitation-api';
 import { AF_FLOW_NAME } from '../../utils/data/af-resume-applet';
 import { getPrivateKey } from '../../utils/encryption';
 import { getEntityProgress } from '../../utils/local-progress';
+import { performUiLogin } from '../../utils/ui';
+import { runtimeConfig } from '../../config';
 
 export { AF_FLOW_NAME, AF_MANUAL_FLOW_NAME } from '../../utils/data/af-resume-applet';
 
@@ -60,11 +62,10 @@ export type AssignedRespondent = {
   answers: AnswerAPI;
 };
 
-// Invites a separate user, has them accept, then assigns the flow to them.
-export const setupAssignedRespondent = async (
+// Invites the slot's respondent account and has it accept (no assignment).
+export const addRespondent = async (
   ownerApi: AfApi,
   afApplet: AfApplet,
-  target: { activityFlowId?: string; activityId?: string },
 ): Promise<AssignedRespondent> => {
   const slot = test.info().parallelIndex;
   const user = await getOrCreateUser(afAccountEmail('resp-w', slot), `Respondent${slot}`);
@@ -78,14 +79,24 @@ export const setupAssignedRespondent = async (
   await new InvitationAPI(respondentContext).acceptInvite(key);
   const subjectId = await new AssignmentAPI(respondentContext).getMySubjectId(afApplet.appletId);
 
-  await ownerApi.assignments.createAssignments(afApplet.appletId, [
-    { ...target, respondentSubjectId: subjectId, targetSubjectId: subjectId },
-  ]);
-
   const answers = new AnswerAPI(respondentContext);
   answers.setRespondent(getPrivateKey({ userId: user.id, email: user.email, password: user.password }));
 
   return { user, subjectId, answers };
+};
+
+// Invites a separate user, has them accept, then assigns the flow to them.
+export const setupAssignedRespondent = async (
+  ownerApi: AfApi,
+  afApplet: AfApplet,
+  target: { activityFlowId?: string; activityId?: string },
+): Promise<AssignedRespondent> => {
+  const respondent = await addRespondent(ownerApi, afApplet);
+  await ownerApi.assignments.createAssignments(afApplet.appletId, [
+    { ...target, respondentSubjectId: respondent.subjectId, targetSubjectId: respondent.subjectId },
+  ]);
+
+  return respondent;
 };
 
 // Opens the applet details page from the home screen (client-side navigation).
@@ -208,4 +219,40 @@ export const scheduleFlowDaily = async (afApi: AfApi, afApplet: AfApplet, count 
     id: string;
     version: string;
   }[];
+};
+
+// Restarts the flow from its card, confirming the dialog, and waits for the survey.
+export const restartFlowInUi = async (
+  page: Page,
+  cards: ActivityCardPage,
+  survey: SurveyPage,
+  flowName: string = AF_FLOW_NAME,
+) => {
+  await cards.restartButton(cards.flowCard(flowName)).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Restart' }).click();
+  await expect(survey.saveAndExitButton).toBeVisible({ timeout: 15000 });
+};
+
+// Logs out through the header menu. Logout ends that login's session, so only
+// call it in a browser from openWebDevice, never on the worker's shared `page`.
+export const logoutInUi = async (page: Page) => {
+  await page.goto('/protected/applets');
+  await page.getByRole('button', { name: /^AF / }).click();
+  await page.getByText(/log ?out/i).click();
+  await expect(page).toHaveURL(/login/, { timeout: 10000 });
+};
+
+// Leaves the survey with Save & Exit and waits for the applet page.
+export const saveAndExitInUi = async (page: Page, survey: SurveyPage) => {
+  // Retry the click: React may not have attached handlers on first paint.
+  await expect(async () => {
+    await survey.saveAndExitButton.click();
+    await expect(page.getByRole('heading', { name: 'Available' })).toBeVisible({ timeout: 2000 });
+  }).toPass({ timeout: 15000 });
+};
+
+// Logs a user in through the login form.
+export const loginInUi = async (page: Page, user: AfUser) => {
+  await performUiLogin(page, `${runtimeConfig.baseURL}/login`, user.email, user.password);
+  await expect(page).toHaveURL(/protected/, { timeout: 15000 });
 };
