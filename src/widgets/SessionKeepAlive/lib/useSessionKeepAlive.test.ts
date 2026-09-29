@@ -407,6 +407,19 @@ describe('useSessionKeepAlive', () => {
     expect(mockLogout).toHaveBeenCalledWith({ reason: 'idle', isRemote: true });
   });
 
+  // A manual logout clears the clock too, and the hook stays mounted while the login page loads.
+  it('does not end the session again once this tab has logged out', () => {
+    setLastActivityAt(START);
+    renderHook(() => useSessionKeepAlive());
+    const sibling = openSiblingTab();
+
+    clearSessionState();
+    vi.mocked(secureTokensStorage.getTokens).mockReturnValue(null);
+    sibling.postMessage({ type: 'SESSION_REQUEST' });
+
+    expect(mockLogout).not.toHaveBeenCalled();
+  });
+
   it('asks on start whether its tokens were replaced while it was away', () => {
     setLastActivityAt(START);
     const sibling = openSiblingTab();
