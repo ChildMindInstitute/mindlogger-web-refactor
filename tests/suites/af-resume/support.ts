@@ -190,3 +190,22 @@ export const getServerFlowEntry = async (afApi: AfApi, afApplet: AfApplet) => {
     | { submitId: string; activityFlowOrder: number | null; isFlowCompleted: boolean | null }
     | undefined;
 };
+
+// Replaces the flow's default Always Available event with `count` all-day daily events.
+export const scheduleFlowDaily = async (afApi: AfApi, afApplet: AfApplet, count = 1) => {
+  const ids: string[] = [];
+  for (let i = 0; i < count; i++) {
+    const created = await afApi.events.createScheduledEvent(
+      afApplet.appletId,
+      { flowId: afApplet.flowId },
+      { type: 'DAILY' },
+    );
+    ids.push(created.result.id);
+  }
+  const events = (await afApi.events.getEvents(afApplet.appletId)).result;
+
+  return ids.map((id) => events.find((e: { id: string }) => e.id === id)) as {
+    id: string;
+    version: string;
+  }[];
+};

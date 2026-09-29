@@ -17,6 +17,23 @@ export class AssignmentAPI extends CuriousApi {
     return (await response.json()).result.id;
   }
 
+  // Limited account: a subject with no login, answered about by someone else.
+  async createLimitedSubject(appletId: string, firstName: string, lastName: string): Promise<string> {
+    const response = await this.apiContext.post('/subjects', {
+      data: {
+        appletId,
+        language: 'en',
+        firstName,
+        lastName,
+        secretUserId: `af-limited-${Date.now()}`,
+      },
+    });
+    if (!response.ok()) {
+      throw new Error(`Failed to create subject: ${response.status()} ${await response.text()}`);
+    }
+    return (await response.json()).result.id;
+  }
+
   async createAssignments(appletId: string, assignments: AssignmentCreate[]): Promise<any> {
     // This endpoint expects snake_case (no camelCase aliasing on the backend model).
     const response = await this.apiContext.post(`/assignments/applet/${appletId}`, {
