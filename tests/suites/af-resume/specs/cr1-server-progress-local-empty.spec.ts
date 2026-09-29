@@ -9,6 +9,8 @@ import {
   AF_MANUAL_FLOW_NAME,
   expectFlowResumeAt,
   getFlowEvent,
+  loginInUi,
+  logoutInUi,
   openApplet,
   resumeAndExpectActivity,
   seedFlowProgress,
@@ -64,20 +66,20 @@ test.describe('CR1: server in-progress, local empty', () => {
 
   test('CR1.4: progress appears after logging out and back in on the same device', {
     tag: '@CR1.4',
-  }, async ({ afApplet, afApi, afUser, cards, page, loginPage }) => {
+  }, async ({ afApplet, afApi, afUser, browser }) => {
     await seedFlowProgress(afApi, afApplet, 2);
 
-    // App-level logout, then a fresh login in the same browser context.
-    await page.goto('/protected/applets');
-    await page.getByRole('button', { name: /AF Worker/ }).click();
-    await page.getByText(/log ?out/i).click();
-    await expect(page).toHaveURL(/login/, { timeout: 10000 });
+    // Own browser: logging out here must not end the worker's shared session.
+    const web = await openWebDevice(browser, afUser);
+    try {
+      await logoutInUi(web.page);
+      await loginInUi(web.page, afUser);
 
-    await loginPage.login(afUser.email, afUser.password);
-    await expect(page).toHaveURL(/protected/, { timeout: 15000 });
-
-    await page.getByText(afApplet.displayName).click();
-    await expectFlowResumeAt(cards, 2);
+      await openApplet(web.page, afApplet);
+      await expectFlowResumeAt(new ActivityCardPage(web.page), 2);
+    } finally {
+      await web.context.close();
+    }
   });
 
   test('CR1.5: progress appears when logging in on a different device', {
