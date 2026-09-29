@@ -5,6 +5,8 @@ export type MockedFlagValues = Record<string, unknown>;
 
 export const AF_RESUME_ALL_APPLETS: MockedFlagValues = {
   enableFlowResume: ['*'],
+  // Without it the app ignores assignments and shows every flow to everyone.
+  enableActivityAssign: true,
 };
 
 const toEvalxBody = (flags: MockedFlagValues) =>
