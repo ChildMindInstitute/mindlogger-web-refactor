@@ -72,6 +72,23 @@ test.describe('Schedule and flag changes', () => {
     await resumeAndExpectActivity(page, cards, 2);
   });
 
+  test('X45: resume still works after the schedule event is removed mid-flow', {
+    tag: '@X45',
+  }, async ({ afApplet, afApi, cards, survey, page }) => {
+    const [event] = await scheduleFlowDaily(afApi, afApplet);
+
+    await openApplet(page, afApplet);
+    await startFlowInUi(page, cards, survey);
+    await completeFlowActivitiesInUi(page, survey, 1);
+
+    // Owner deletes the event the run was started on.
+    await afApi.events.deleteEvent(afApplet.appletId, event.id);
+
+    await openApplet(page, afApplet);
+    await expectFlowResumeAt(cards, 1);
+    await resumeAndExpectActivity(page, cards, 2);
+  });
+
   test('R2.7: idle timer expiring (AA) ends the run; the flow can only be started again', {
     tag: '@R2.7',
   }, async ({ afApplet, afApi, cards, survey, page }) => {
