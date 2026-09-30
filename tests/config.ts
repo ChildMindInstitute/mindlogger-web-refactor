@@ -28,6 +28,10 @@ export const runtimeConfig = {
   genericEmail: process.env.PLAYWRIGHT_GENERIC_PASSWORD || "someuser@email.com",
   genericUserPassword: process.env.PLAYWRIGHT_GENERIC_PASSWORD || 'DefaultPassword123!',
 
+  // Fixed af-resume accounts: `${prefix}-w<slot>@example.com`, one pair per parallel slot.
+  afResumeUserPrefix: process.env.PLAYWRIGHT_AF_RESUME_USER_PREFIX || 'af-resume-local',
+  afResumePoolSize: 4,
+
   userTokenFile: generateStorageFilename('storage','.auth', 'usertoken.json'),
   adminTokenFile: generateStorageFilename('storage','.auth', 'admintoken.json')
 }
