@@ -32,6 +32,35 @@ const isoDate = (offsetDays = 0): string => {
   return d.toISOString().slice(0, 10);
 };
 
+const buildScheduledPayload = (options: ScheduledEventOptions) => {
+  const {
+    type = 'DAILY',
+    startTime = '00:00:00',
+    endTime = '23:59:00',
+    startDate = isoDate(-1),
+    endDate = isoDate(365),
+    selectedDate,
+    accessBeforeSchedule = false,
+    timerType = 'NOT_SET',
+    timer,
+  } = options;
+
+  return {
+    periodicity: {
+      type,
+      // ONCE uses selectedDate only; recurring types use the date range.
+      ...(type === 'ONCE'
+        ? { selectedDate: selectedDate ?? isoDate() }
+        : { startDate, endDate, ...(type === 'MONTHLY' && { selectedDate: selectedDate ?? isoDate() }) }),
+    },
+    startTime,
+    endTime,
+    accessBeforeSchedule,
+    timerType,
+    ...(timer && { timer }),
+  };
+};
+
 export class EventAPI extends CuriousApi {
   async getEvents(appletId: string): Promise<any> {
     const response = await this.apiContext.get(`/applets/${appletId}/events`);
@@ -59,33 +88,15 @@ export class EventAPI extends CuriousApi {
     target: EventTarget,
     options: ScheduledEventOptions = {},
   ): Promise<any> {
-    const {
-      type = 'DAILY',
-      startTime = '00:00:00',
-      endTime = '23:59:00',
-      startDate = isoDate(-1),
-      endDate = isoDate(365),
-      selectedDate,
-      accessBeforeSchedule = false,
-      timerType = 'NOT_SET',
-      timer,
-    } = options;
+    return this.createEvent(appletId, { ...target, ...buildScheduledPayload(options) });
+  }
 
-    return this.createEvent(appletId, {
-      ...target,
-      periodicity: {
-        type,
-        // ONCE uses selectedDate only; recurring types use the date range.
-        ...(type === 'ONCE'
-          ? { selectedDate: selectedDate ?? isoDate() }
-          : { startDate, endDate, ...(type === 'MONTHLY' && { selectedDate: selectedDate ?? isoDate() }) }),
-      },
-      startTime,
-      endTime,
-      accessBeforeSchedule,
-      timerType,
-      ...(timer && { timer }),
-    });
+  async updateScheduledEvent(
+    appletId: string,
+    eventId: string,
+    options: ScheduledEventOptions = {},
+  ): Promise<any> {
+    return this.updateEvent(appletId, eventId, buildScheduledPayload(options));
   }
 
   async createEvent(appletId: string, payload: object): Promise<any> {
