@@ -24,6 +24,8 @@ export type AfApplet = {
   standaloneActivityIds: string[];
   // Item ids keyed by activity id, needed for answer submissions.
   itemIdsByActivityId: Record<string, string[]>;
+  // Payload the applet was created with; the base for content updates.
+  createPayload: ReturnType<typeof buildAfResumeAppletPayload>;
   // Owner key material, needed to encrypt seeded answers.
   ownerPrivateKey: number[];
   appletPublicKey: number[];
@@ -84,10 +86,8 @@ export const test = sessionTest.extend<AfTestFixtures, AfWorkerApiFixtures>({
     const encryption = buildAppletEncryption(owner);
 
     const displayName = `AF Resume w${testInfo.workerIndex} ${Date.now()}`;
-    const created = await afApi.applets.createWorkspaceApplet(
-      afUser.id,
-      buildAfResumeAppletPayload({ displayName, encryption }),
-    );
+    const createPayload = buildAfResumeAppletPayload({ displayName, encryption });
+    const created = await afApi.applets.createWorkspaceApplet(afUser.id, createPayload);
 
     const detail = (await afApi.applets.getAppletDetail(created.result.id)).result;
     const activityIdByName = new Map<string, string>(
@@ -117,6 +117,7 @@ export const test = sessionTest.extend<AfTestFixtures, AfWorkerApiFixtures>({
         (name) => activityIdByName.get(name)!,
       ),
       itemIdsByActivityId,
+      createPayload,
       ownerPrivateKey,
       appletPublicKey: JSON.parse(encryption.publicKey),
     });

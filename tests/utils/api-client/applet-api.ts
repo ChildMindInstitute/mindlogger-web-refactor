@@ -46,6 +46,14 @@ export class AppletAPI extends CuriousApi {
         return await response.json();
     }
 
+    async updateApplet(appletId: string, appletData: object): Promise<any> {
+        const response = await this.apiContext.put(`/applets/${appletId}`, { data: appletData });
+        if (!response.ok()) {
+            throw new Error(`Failed to update applet: ${response.status()} ${await response.text()}`);
+        }
+        return await response.json();
+    }
+
     async getAppletDetail(appletId: string): Promise<any> {
         const response = await this.apiContext.get(`/applets/${appletId}`);
         if (!response.ok()) {

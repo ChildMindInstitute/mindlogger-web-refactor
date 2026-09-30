@@ -270,3 +270,27 @@ export const makeFlowOneTime = async (afApi: AfApi, afApplet: AfApplet, flowId?:
 
   return await getFlowEvent(afApi, afApplet, flowId);
 };
+
+// Publishes a new applet version with the flow's activity at `index` removed from the flow.
+export const removeFlowActivity = async (afApi: AfApi, afApplet: AfApplet, index: number) => {
+  const detail = (await afApi.applets.getAppletDetail(afApplet.appletId)).result;
+  const activityIdByName = new Map<string, string>(
+    detail.activities.map((a: { name: string; id: string }) => [a.name, a.id]),
+  );
+  const flowIdByName = new Map<string, string>(
+    detail.activityFlows.map((f: { name: string; id: string }) => [f.name, f.id]),
+  );
+  const { createPayload } = afApplet;
+  const removedKey = createPayload.activityFlows[0].items[index].activityKey;
+
+  await afApi.applets.updateApplet(afApplet.appletId, {
+    ...createPayload,
+    activities: createPayload.activities.map((a) => ({ ...a, id: activityIdByName.get(a.name) })),
+    activityFlows: createPayload.activityFlows.map((f) => ({
+      ...f,
+      id: flowIdByName.get(f.name),
+      items:
+        f.name === AF_FLOW_NAME ? f.items.filter((i) => i.activityKey !== removedKey) : f.items,
+    })),
+  });
+};
