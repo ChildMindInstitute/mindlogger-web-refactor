@@ -8,6 +8,7 @@ type Props = {
 
 export const SelectBaseText = (props: Props) => {
   const { processedWords } = useCustomWordWrap(props.text);
+  const hasLongWord = processedWords.some(({ needsWrap }) => needsWrap);
 
   return (
     <Text
@@ -27,15 +28,17 @@ export const SelectBaseText = (props: Props) => {
         webkitBoxOrient: 'vertical',
       }}
     >
-      {processedWords.map(({ word, needsWrap, ref }, index) => {
-        return needsWrap ? (
-          <span ref={ref} style={{ wordBreak: 'break-word' }} key={index}>
-            {`${word} `}
-          </span>
-        ) : (
-          `${word} `
-        );
-      })}
+      {hasLongWord
+        ? processedWords.map(({ word, needsWrap, ref }, index) =>
+            needsWrap ? (
+              <span ref={ref} style={{ wordBreak: 'break-word' }} key={index}>
+                {`${word} `}
+              </span>
+            ) : (
+              `${word} `
+            ),
+          )
+        : props.text}
     </Text>
   );
 };
