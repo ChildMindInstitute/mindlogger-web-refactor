@@ -22,7 +22,8 @@
     "test:user": "TZ=UTC playwright test --project=user",
     "test:smoke": "TZ=UTC playwright test --project=smoke",
     "test:ui": "TZ=UTC vitest --ui",
-    "coverage": "TZ=UTC vitest run --coverage"
+    "coverage": "TZ=UTC vitest run --coverage",
+    "translations:report": "node scripts/translations-report.js"
   },
   "dependencies": {
     "@datadog/browser-logs": "^6.5.0",
@@ -106,7 +107,8 @@
     "vite-plugin-checker": "^0.13.0",
     "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vitest": "^4.1.8",
-    "vitest-canvas-mock": "^0.3.3"
+    "vitest-canvas-mock": "^0.3.3",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "resolutions": {
     "@babel/core": "^7.29.6",

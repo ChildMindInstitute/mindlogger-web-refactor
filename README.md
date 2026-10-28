@@ -105,6 +105,13 @@ See the documentation on [Vitest](https://vitest.dev/guide/) for more informatio
 * `yarn prettier:check` - Check that source code follows prettier rules
 * `yarn prettier:fix` - Automatically fix problems detected by prettier
 
+### Translation report
+
+* `yarn translations:report` - Compares each `src/i18n/<lang>/translation.json` against English
+  and writes `translations-report.xlsx` to a new folder under `translation-reports/` (ignored by Git).
+  The workbook has Summary, Missing, Empty, and Same as English sheets; filter by the Language column.
+  Same as English matches can be intentional. Source translation files are never changed.
+
 ## Environment Variables
 
 | Key                                  | Required | Default value            | Description                                                             |
