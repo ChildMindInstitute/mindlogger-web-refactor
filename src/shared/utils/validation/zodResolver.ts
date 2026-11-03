@@ -24,8 +24,8 @@ const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boo
     const _path = path.join('.');
 
     if (!errors[_path]) {
-      if ('unionErrors' in error) {
-        const unionError = error.unionErrors[0].errors[0];
+      if (error.code === 'invalid_union' && error.errors[0]?.[0]) {
+        const unionError = error.errors[0][0];
 
         errors[_path] = {
           message: unionError.message,
@@ -37,10 +37,8 @@ const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boo
       }
     }
 
-    if ('unionErrors' in error) {
-      error.unionErrors.forEach((unionError) =>
-        unionError.errors.forEach((e) => zodErrors.push(e)),
-      );
+    if (error.code === 'invalid_union') {
+      error.errors.forEach((unionErrors) => unionErrors.forEach((e) => zodErrors.push(e)));
     }
 
     if (validateAllFieldCriteria) {
@@ -67,7 +65,6 @@ const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boo
 const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
   return async (values, _, options) => {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const data = await schema[resolverOptions.mode === 'sync' ? 'parse' : 'parseAsync'](
         values,
         schemaOptions,
@@ -79,7 +76,6 @@ const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
 
       return {
         errors: {} as FieldErrors,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         values: resolverOptions.rawValues ? values : data,
       };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
