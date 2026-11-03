@@ -12,7 +12,7 @@ const schema = z
     confirmPassword: z.string(),
   })
   .refine((data) => data.confirmPassword === data.password, {
-    message: 'password.notMatch',
+    error: 'password.notMatch',
     path: ['confirmPassword'],
   });
 

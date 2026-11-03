@@ -17,23 +17,23 @@ export const SignupFormSchema = BaseUserSchema.pick({
       const result = checkPassword(value);
       if (!result.meetsLength)
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: Dictionary.validation.password.minLength,
           params: { chars: ACCOUNT_PASSWORD_MIN_LENGTH },
         });
       if (!result.hasNoSpaces)
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: Dictionary.validation.password.blankSpaces,
         });
       if (!result.hasNoEmoji)
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: Dictionary.validation.password.cannotContainEmojis,
         });
       if (!result.meetsCharTypeRequirement)
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: Dictionary.validation.password.characterTypes,
           params: { types: ACCOUNT_PASSWORD_MIN_CHAR_TYPES },
         });
@@ -41,7 +41,7 @@ export const SignupFormSchema = BaseUserSchema.pick({
     confirmPassword: z.string().min(1, Dictionary.validation.password.required),
   })
   .refine((data) => data.confirmPassword === data.password, {
-    message: Dictionary.validation.password.notMatch,
+    error: Dictionary.validation.password.notMatch,
     path: ['confirmPassword'],
   });
 
