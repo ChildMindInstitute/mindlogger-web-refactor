@@ -4,12 +4,12 @@ import { Dictionary } from '~/shared/utils';
 
 // User
 export const BaseUserSchema = z.object({
-  email: z
-    .string({
-      error: (issue) =>
-        issue.input === undefined ? Dictionary.validation.email.required : undefined,
-    })
-    .email(Dictionary.validation.email.invalid),
+  email: z.email({
+    error: (issue) =>
+      issue.input === undefined
+        ? Dictionary.validation.email.required
+        : Dictionary.validation.email.invalid,
+  }),
   id: z.string(),
   firstName: z.string(),
   lastName: z.string(),
