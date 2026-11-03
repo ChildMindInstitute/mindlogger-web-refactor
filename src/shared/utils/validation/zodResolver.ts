@@ -1,6 +1,6 @@
 import { toNestError, validateFieldsNatively } from '@hookform/resolvers';
 import { appendErrors, FieldError, FieldErrors } from 'react-hook-form';
-import { z, ZodCustomIssue } from 'zod';
+import { z } from 'zod';
 
 import type { Resolver } from '../types';
 
@@ -19,7 +19,7 @@ const parseErrorSchema = (zodErrors: z.ZodIssue[], validateAllFieldCriteria: boo
       path,
       params: customParams = {},
       ...otherParams
-    } = error as ZodCustomIssue;
+    } = error as z.ZodIssue & { params?: Record<string, unknown> };
     const params = { ...customParams, ...otherParams };
     const _path = path.join('.');
 
