@@ -94,7 +94,7 @@ const zodResolver: Resolver = (schema, schemaOptions, resolverOptions = {}) => {
           values: {},
           errors: toNestError(
             parseErrorSchema(
-              error?.errors as z.ZodIssue[],
+              error?.issues as z.ZodIssue[],
               !options.shouldUseNativeValidation && options.criteriaMode === 'all',
             ),
             options,
