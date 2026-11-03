@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { t } from 'i18next';
-import type { NavigateOptions } from 'react-router/dist/lib/context';
+import type { NavigateOptions } from 'react-router-dom';
 
 import { useProlific } from './useProlific';
 
