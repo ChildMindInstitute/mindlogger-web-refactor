@@ -1,15 +1,16 @@
 import { useState } from 'react';
 
 import ButtonBase from '@mui/material/ButtonBase';
+import { onlineManager } from '@tanstack/react-query';
 
 import { ActivityStatus } from '~/abstract/lib/GroupBuilder';
 import ActivityRestartIcon from '~/assets/activity-restart-icon.svg';
 import { useBanners } from '~/entities/banner/model';
 import { variables } from '~/shared/constants/theme/variables';
-import { BaseButton, MuiModal } from '~/shared/ui';
+import { BaseButton, MuiModal, NoInternetModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import Text from '~/shared/ui/Text';
-import { useCustomMediaQuery, useCustomTranslation } from '~/shared/utils';
+import { useCustomMediaQuery, useCustomTranslation, useModal } from '~/shared/utils';
 
 type Props = {
   activityStatus: ActivityStatus;
@@ -50,6 +51,15 @@ export const ActivityCardRestartResume = ({
     setIsRestartConfirmationModalOpen(true);
   };
 
+  const [isOfflineModalOpen, openOfflineModal, closeOfflineModal] = useModal();
+
+  // Starting needs the network; offline it would spin forever
+  const runIfOnline = (action: () => void) => () => {
+    if (!onlineManager.isOnline()) return openOfflineModal();
+
+    action();
+  };
+
   return (
     <>
       {activityStatus === ActivityStatus.InProgress ? (
@@ -73,13 +83,13 @@ export const ActivityCardRestartResume = ({
             }}
             type="button"
             variant="contained"
-            onClick={onResumeClick}
+            onClick={runIfOnline(onResumeClick)}
             text={t('additional.resume')}
           />
           {!isRestartDisabled && (
             <ButtonBase
               disabled={isDisabled}
-              onClick={openModal}
+              onClick={runIfOnline(openModal)}
               data-testid="assessment-restart-button"
               sx={{
                 borderRadius: '100px',
@@ -101,7 +111,7 @@ export const ActivityCardRestartResume = ({
             disabled={isDisabled}
             type="button"
             variant="contained"
-            onClick={onStartClick}
+            onClick={runIfOnline(onStartClick)}
             text={t('start')}
             data-testid="assessment-start-button"
           />
@@ -136,6 +146,8 @@ export const ActivityCardRestartResume = ({
         }}
         maxWidth="sm"
       />
+
+      <NoInternetModal isOpen={isOfflineModalOpen} onDismiss={closeOfflineModal} />
     </>
   );
 };
