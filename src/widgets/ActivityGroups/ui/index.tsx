@@ -13,9 +13,11 @@ import { useMyAssignmentsQuery } from '~/entities/assignment';
 import { useEventsbyAppletIdQuery } from '~/entities/event';
 import { TakeNowSuccessModalProps } from '~/features/TakeNow/lib/types';
 import { TakeNowSuccessModal } from '~/features/TakeNow/ui/TakeNowSuccessModal';
+import ROUTES from '~/shared/constants/routes';
+import { NoInternetModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import Loader from '~/shared/ui/Loader';
-import { useCustomTranslation, useOnceEffect } from '~/shared/utils';
+import { useCustomTranslation, useModal, useOnceEffect } from '~/shared/utils';
 import { useFeatureFlags } from '~/shared/utils/hooks';
 import { FeatureFlag } from '~/shared/utils/types/featureFlags';
 
@@ -60,12 +62,14 @@ export const ActivityGroups = (props: Props) => {
   const {
     isError: isAppletError,
     isLoading: isAppletLoading,
+    isPaused: isAppletPaused,
     data: applet,
   } = useAppletBaseInfoByIdQuery(props, { select: (data) => data.data.result });
 
   const {
     isError: isEventsError,
     isLoading: isEventsLoading,
+    isPaused: isEventsPaused,
     data: events,
   } = useEventsbyAppletIdQuery(props, {
     select: (data) => data.data.result,
@@ -74,11 +78,20 @@ export const ActivityGroups = (props: Props) => {
   const {
     isError: isAssignmentsError,
     isLoading: isAssignmentsLoading,
+    isPaused: isAssignmentsPaused,
     data: assignments = null,
   } = useMyAssignmentsQuery(isAssignmentsEnabled ? appletId : undefined, {
     select: (data) => data.data.result.assignments,
     enabled: isAssignmentsEnabled,
   });
+
+  // Queries pause while offline, so the loader would otherwise spin forever
+  const isPaused = isAppletPaused || isEventsPaused || isAssignmentsPaused;
+  const [isOfflineModalOpen, , closeOfflineModal] = useModal(true);
+
+  // Public applets have no list to go back to
+  const onOfflineDismiss = () =>
+    isPublic ? closeOfflineModal() : navigate(ROUTES.appletList.path);
 
   const {
     isInMultiInformantFlow,
@@ -147,7 +160,12 @@ export const ActivityGroups = (props: Props) => {
   });
 
   if (isAppletLoading || isEventsLoading || (isAssignmentsEnabled && isAssignmentsLoading)) {
-    return <Loader />;
+    return (
+      <>
+        <Loader />
+        <NoInternetModal isOpen={isPaused && isOfflineModalOpen} onDismiss={onOfflineDismiss} />
+      </>
+    );
   }
 
   if (
