@@ -5,7 +5,7 @@ export default defineConfig({
   test: {
       setupFiles: ['./src/test/vitest.setup.ts'],
       environment: 'jsdom',
-      include: ['src/**/*.test.ts', 'src/**/*.test.tsx'], // only include unit/integration tests
+      include: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'scripts/**/*.test.js'], // only include unit/integration tests
       exclude: ['e2e', 'node_modules', 'dist'],           // exclude E2E and build folders
       server: {
         deps: {
