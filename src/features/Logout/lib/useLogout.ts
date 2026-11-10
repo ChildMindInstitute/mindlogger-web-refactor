@@ -27,6 +27,8 @@ type LogoutOptions = {
   // Set when another tab already ended this session, so the parts it has done are not repeated.
   isRemote?: boolean;
   reason?: LogoutReason;
+  // Where the next sign-in should land, for a link meant for another user.
+  backRedirectPath?: string;
 };
 
 type UseLogoutReturn = {
@@ -45,7 +47,7 @@ export const useLogout = (): UseLogoutReturn => {
   const { mutate: logoutMutation, isLoading } = useLogoutMutation();
 
   const logout = useCallback(
-    ({ isRemote = false, reason = 'manual' }: LogoutOptions = {}) => {
+    ({ isRemote = false, reason = 'manual', backRedirectPath }: LogoutOptions = {}) => {
       // Every teardown funnels through here, so this is the one place that has to refuse. A tab
       // that slept through a logout and someone else signing in would clear a store that is theirs
       // now — tokens, encryption key, answers in progress — signing them out of every tab. It
@@ -95,7 +97,7 @@ export const useLogout = (): UseLogoutReturn => {
       Mixpanel.logout();
       FeatureFlags.logout();
 
-      return navigator.navigate(ROUTES.login.path);
+      return navigator.navigate(ROUTES.login.path, { state: { backRedirectPath } });
     },
     [
       user.id,

@@ -3,7 +3,8 @@ import { z } from 'zod';
 
 import zodResolver from '../validation/zodResolver';
 
-type CustomZodSchema = z.ZodTypeAny;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type CustomZodSchema = z.ZodType<any, any>;
 
 export const useCustomForm = <TSchema extends CustomZodSchema>(
   props: UseFormProps<z.infer<TSchema>>,

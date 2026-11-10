@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+import { useLocation } from 'react-router-dom';
+
 import { appletModel } from '~/entities/applet';
 import { useBanners } from '~/entities/banner/model';
 import { useLogout } from '~/features/Logout';
@@ -23,6 +25,7 @@ function ValidateTakeNowParams({
     appletModel.hooks.useMultiInformantState();
   const { navigate } = useCustomNavigation();
   const { logout } = useLogout();
+  const location = useLocation();
 
   const { isError, isLoading, isSuccess, error, data } = useTakeNowValidation({
     appletId,
@@ -66,7 +69,8 @@ function ValidateTakeNowParams({
       let duration: number | null = 15000;
 
       if (error.type === 'mismatchedRespondent') {
-        logout();
+        // Sends the right user on to this link once they sign in.
+        logout({ backRedirectPath: `${location.pathname}${location.search}` });
         duration = null;
       } else if (error.type === 'invalidApplet') {
         navigate(ROUTES.appletList.path);
@@ -79,7 +83,7 @@ function ValidateTakeNowParams({
         }),
       );
     }
-  }, [error, addErrorBanner, logout, navigate]);
+  }, [error, addErrorBanner, logout, navigate, location.pathname, location.search]);
 
   if (isLoading) {
     return <Loader />;

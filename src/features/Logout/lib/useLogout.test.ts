@@ -133,6 +133,17 @@ describe('useLogout', () => {
     expect(getSessionReturn()).toBeNull();
   });
 
+  // A Take Now link opened as the wrong user still reaches the right one after they sign in.
+  it('hands a given page to the login page without offering it back as a soft lock', () => {
+    const { result } = renderHook(() => useLogout());
+    result.current.logout({ backRedirectPath: '/protected/applets/a1?startActivityOrFlow=x' });
+
+    expect(navigate).toHaveBeenCalledWith('/login', {
+      state: { backRedirectPath: '/protected/applets/a1?startActivityOrFlow=x' },
+    });
+    expect(getSessionReturn()).toBeNull();
+  });
+
   it('remembers the page when another tab ended the session for it', () => {
     const { result } = renderHook(() => useLogout());
     result.current.logout({ isRemote: true, reason: 'idle' });
