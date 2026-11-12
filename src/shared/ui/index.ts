@@ -20,6 +20,7 @@ export * from './Banners';
 
 export * from './BootstrapModal';
 export * from './MuiModal';
+export * from './NoInternetModal';
 
 // Common - UI
 export * from './Container';
