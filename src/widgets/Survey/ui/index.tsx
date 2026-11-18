@@ -9,6 +9,7 @@ import { ScreenManager } from './ScreenManager';
 import { FlowProgress, getProgressId } from '~/abstract/lib';
 import { useCompletedEntitiesQuery } from '~/entities/activity';
 import { appletModel } from '~/entities/applet';
+import { prolificParamsSelector } from '~/entities/applet/model/selectors';
 import { useBanners } from '~/entities/banner/model';
 import { AutoCompletionModel } from '~/features/AutoCompletion';
 import {
@@ -17,7 +18,7 @@ import {
   useSurveyDataQuery,
 } from '~/features/PassSurvey';
 import ROUTES from '~/shared/constants/routes';
-import { MuiModal } from '~/shared/ui';
+import { MuiModal, NoInternetModal } from '~/shared/ui';
 import {
   formatToDtoDate,
   useAppSelector,
@@ -118,6 +119,7 @@ export const SurveyWidget = (props: Props) => {
     respondentMeta,
     targetSubject,
     isLoading,
+    isPaused,
     isError,
     error,
   } = useSurveyDataQuery({
@@ -220,11 +222,27 @@ export const SurveyWidget = (props: Props) => {
     completedEntities,
   ]);
 
+  const prolificParams = useAppSelector(prolificParamsSelector);
+
+  // Same destination as Save & Exit
+  const goToActivityList = () =>
+    navigator.navigate(
+      publicAppletKey
+        ? ROUTES.publicJoin.navigateTo(publicAppletKey, prolificParams)
+        : ROUTES.appletDetails.navigateTo(appletId),
+    );
+
   const responseError = error?.evaluatedMessage ?? '';
 
   if (isLoading || isFetching) {
     // loading screen on initial load and when refetching completed entities
-    return <LoadingScreen publicAppletKey={publicAppletKey} appletId={appletId} />;
+    return (
+      <>
+        <LoadingScreen publicAppletKey={publicAppletKey} appletId={appletId} />
+        {/* Queries pause while offline, so the loader would otherwise spin forever */}
+        <NoInternetModal isOpen={isLoading && isPaused} onDismiss={goToActivityList} />
+      </>
+    );
   }
 
   if (isError) {

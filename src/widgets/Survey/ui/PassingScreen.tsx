@@ -1,5 +1,6 @@
 import { useCallback, useContext, useEffect, useMemo } from 'react';
 
+import { onlineManager } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 import { validateBeforeMoveForward } from '../model';
@@ -21,7 +22,7 @@ import {
   useSummaryData,
 } from '~/features/PassSurvey';
 import { interactionEvents } from '~/shared/constants';
-import { MuiModal } from '~/shared/ui';
+import { MuiModal, NoInternetModal } from '~/shared/ui';
 import Box from '~/shared/ui/Box';
 import { useAppSelector, useCustomTranslation, useModal, usePrevious } from '~/shared/utils';
 import { useIdleTimer } from '~/widgets/InactivityTracker';
@@ -34,6 +35,7 @@ const PassingScreen = (props: Props) => {
   const { t } = useCustomTranslation();
 
   const [isSubmitModalOpen, openSubmitModal, closeSubmitModal] = useModal();
+  const [isOfflineModalOpen, openOfflineModal, closeOfflineModal] = useModal();
 
   const { addWarningBanner, addSuccessBanner, removeWarningBanner, addErrorBanner } = useBanners();
 
@@ -227,6 +229,9 @@ const PassingScreen = (props: Props) => {
   const answerBuilder = useAnswerBuilder();
 
   const onSubmit = () => {
+    // Offline the submit would pause and spin forever
+    if (!onlineManager.isOnline()) return openOfflineModal();
+
     const doneEvent = saveUserEventByType('DONE', item);
 
     const answer = answerBuilder.build({
@@ -453,6 +458,8 @@ const PassingScreen = (props: Props) => {
         onSecondaryButtonClick={canGoBack ? closeSubmitModal : undefined}
         testId="submit-response-modal"
       />
+
+      <NoInternetModal isOpen={isOfflineModalOpen} onDismiss={closeOfflineModal} />
     </>
   );
 };

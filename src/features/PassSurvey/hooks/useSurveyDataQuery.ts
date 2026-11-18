@@ -25,6 +25,7 @@ type Return = {
   targetSubject: SubjectDTO | null;
   isError: boolean;
   isLoading: boolean;
+  isPaused: boolean;
   error: BaseError | null;
 };
 
@@ -47,6 +48,7 @@ export const useSurveyDataQuery = (props: Props): Return => {
     data: appletById,
     isError: isAppletError,
     isLoading: isAppletLoading,
+    isPaused: isAppletPaused,
     error: appletError,
   } = useAppletByIdQuery(
     publicAppletKey ? { isPublic: true, publicAppletKey } : { isPublic: false, appletId },
@@ -57,6 +59,7 @@ export const useSurveyDataQuery = (props: Props): Return => {
     data: appletBaseInfo,
     isError: isAppletBaseInfoError,
     isLoading: isAppletBaseInfoLoading,
+    isPaused: isAppletBaseInfoPaused,
     error: appletBaseInfoError,
   } = useAppletBaseInfoByIdQuery(
     publicAppletKey ? { isPublic: true, publicAppletKey } : { isPublic: false, appletId },
@@ -67,6 +70,7 @@ export const useSurveyDataQuery = (props: Props): Return => {
     data: activityById,
     isError: isActivityError,
     isLoading: isActivityLoading,
+    isPaused: isActivityPaused,
     error: activityError,
   } = useActivityByIdQuery(
     { isPublic: !!publicAppletKey, activityId, version: activityVersion },
@@ -77,6 +81,7 @@ export const useSurveyDataQuery = (props: Props): Return => {
     data: eventsByIdData,
     isError: isEventsError,
     isLoading: isEventsLoading,
+    isPaused: isEventsPaused,
     error: eventsError,
   } = useEventsbyAppletIdQuery(
     publicAppletKey ? { isPublic: true, publicAppletKey } : { isPublic: false, appletId },
@@ -99,6 +104,7 @@ export const useSurveyDataQuery = (props: Props): Return => {
     data: targetSubject,
     isError: isSubjectError,
     isLoading: isSubjectLoading,
+    isPaused: isSubjectPaused,
     error: subjectError,
   } = isAssignmentsEnabled ? assignmentsResult : ({} as UseQueryResult<SubjectDTO, BaseError>);
 
@@ -117,6 +123,12 @@ export const useSurveyDataQuery = (props: Props): Return => {
       isActivityLoading ||
       isEventsLoading ||
       isSubjectLoading,
+    isPaused:
+      isAppletPaused ||
+      isAppletBaseInfoPaused ||
+      isActivityPaused ||
+      isEventsPaused ||
+      isSubjectPaused,
     error: appletError ?? appletBaseInfoError ?? activityError ?? eventsError ?? subjectError,
   };
 };
